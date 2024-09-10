@@ -1,7 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
-
-namespace StarLab.Commands
+﻿namespace StarLab.Commands
 {
     /// <summary>
     /// A class for performing unit tests on the <see cref="AggregateCommand"/> class.
@@ -9,6 +6,9 @@ namespace StarLab.Commands
     [TestClass]
     public class AggregateCommandTests
     {
+
+        // TODO - Add tests for ComponentCommand version of AggregateCommand
+
         /// <summary>
         /// Test that the AggregateCommand(IEnumerable<ICommand>commands) constructor works correctly.
         /// </summary>

@@ -1,7 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.ComponentModel;
-using System.Windows.Forms;
+﻿using System.ComponentModel;
 
 namespace StarLab.Commands
 {
