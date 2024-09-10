@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>net8.0-windows8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>StarLab.UI</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\StarLab.Commands\StarLab.Commands.csproj" />
+    <ProjectReference Include="..\StarLab.Presentation.Core\StarLab.Presentation.Core.csproj" />
+    <ProjectReference Include="..\StarLab.Shared.Resources\StarLab.Shared.Resources.csproj" />
+    <ProjectReference Include="..\StarLab.UI.Controls\StarLab.UI.Controls.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DockPanelSuite" Version="3.1.0" />
+    <PackageReference Include="DockPanelSuite.ThemeVS2015" Version="3.1.0" />
+    <PackageReference Include="ScottPlot.WinForms" Version="5.0.37" />
+  </ItemGroup>
+
+</Project>

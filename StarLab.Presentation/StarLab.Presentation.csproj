@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>net8.0-windows7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\StarLab.Application\StarLab.Application.csproj" />
+    <ProjectReference Include="..\StarLab.Commands\StarLab.Commands.csproj" />
+    <ProjectReference Include="..\StarLab.Presentation.Core\StarLab.Presentation.Core.csproj" />
+    <ProjectReference Include="..\StarLab.Shared.Resources\StarLab.Shared.Resources.csproj" />
+  </ItemGroup>
+
+</Project>
