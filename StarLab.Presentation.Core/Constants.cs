@@ -5,10 +5,18 @@
     /// </summary>
     public static class Constants
     {
+        public const string ADD = "Add";
+        public const string ADD_CHART = "AddChart";
+        public const string ADD_FOLDER = "AddFolder";
+        public const string ADD_TABLE = "AddTable";
+
         public const string COLLAPSE_ALL = "CollapseAll";
         public const string COLOUR_MAGNITUDE_DIAGRAM = "ColourMagnitudeDiagram";
         public const string CONTROLLER = "Controller";
+        public const string COPY = "Copy";
+        public const string CUT = "Cut";
 
+        public const string DELETE = "delete";
         public const string DOCUMENT = "Document";
         public const string DOCK_BOTTOM = "DockBottom";
         public const string DOCK_LEFT = "DockLeft";
@@ -35,6 +43,12 @@
         public const string HELP_ABOUT = "HelpAbout";
         public const string HELP_VIEW = "HelpView";
         public const string HELP_VIEW_HELP = "HelpViewHelp";
+
+        public const string OPEN = "Open";
+
+        public const string PASTE = "Paste";
+
+        public const string RENAME = "Rename";
 
         public const string SHOW_SETTINGS = "ShowSettings";
         public const string SPLIT_VIEW = "StarLab.UI.SplitView";

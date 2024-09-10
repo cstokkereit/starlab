@@ -123,6 +123,12 @@
   <data name="AboutStarLab" xml:space="preserve">
     <value>About StarLab</value>
   </data>
+  <data name="Add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="Chart" xml:space="preserve">
+    <value>Chart</value>
+  </data>
   <data name="Close" xml:space="preserve">
     <value>Close</value>
   </data>
@@ -131,6 +137,9 @@
   </data>
   <data name="CollapseAll" xml:space="preserve">
     <value>Collapse All</value>
+  </data>
+  <data name="CollapseAllDescendants" xml:space="preserve">
+    <value>Collapse All Descendants</value>
   </data>
   <data name="CompanyName" xml:space="preserve">
     <value>Stratosoft</value>
@@ -168,6 +177,9 @@
   <data name="New" xml:space="preserve">
     <value>New</value>
   </data>
+  <data name="NewFolder" xml:space="preserve">
+    <value>New Folder</value>
+  </data>
   <data name="Open" xml:space="preserve">
     <value>Open</value>
   </data>
@@ -180,6 +192,9 @@
   <data name="PageSetup" xml:space="preserve">
     <value>Page Setup</value>
   </data>
+  <data name="Paste" xml:space="preserve">
+    <value>Paste</value>
+  </data>
   <data name="Print" xml:space="preserve">
     <value>Print</value>
   </data>
@@ -188,6 +203,9 @@
   </data>
   <data name="ProductDescription" xml:space="preserve">
     <value>Its a thing</value>
+  </data>
+  <data name="Rename" xml:space="preserve">
+    <value>Rename</value>
   </data>
   <data name="Save" xml:space="preserve">
     <value>Save</value>
@@ -209,6 +227,9 @@
   </data>
   <data name="SyncWithActiveDocument" xml:space="preserve">
     <value>Sync With Active Document</value>
+  </data>
+  <data name="Table" xml:space="preserve">
+    <value>Table</value>
   </data>
   <data name="Tools" xml:space="preserve">
     <value>Tools</value>

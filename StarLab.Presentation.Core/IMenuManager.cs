@@ -77,5 +77,10 @@ namespace StarLab.Presentation
         /// </summary>
         /// <param name="parent">The name of the parent menu item.</param>
         void AddMenuSeparator(string parent);
+
+        /// <summary>
+        /// Adds a separator to the menu.
+        /// </summary>
+        void AddMenuSeparator();
     }
 }

@@ -149,6 +149,14 @@ namespace StarLab.UI.Controls
             }
         }
 
+        /// <summary>
+        /// Adds a separator to the menu.
+        /// </summary>
+        public void AddSeparator()
+        {
+            // Do Nothing
+        }
+
         #endregion
 
         #region Private Members

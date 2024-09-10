@@ -3,7 +3,7 @@ using StarLab.UI.Controls;
 
 namespace StarLab.UI.Workspaces.WorkspaceExplorer
 {
-    internal class WorkspaceMenuManager : MenuStateManager
+    internal class WorkspaceMenuManager : MenuStateManager, IMenuManager
     {
         protected override bool IsTargetNode(TreeNode node)
         {

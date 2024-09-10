@@ -23,6 +23,8 @@ namespace StarLab.UI.Workspaces.WorkspaceExplorer
 
             presenter = (IWorkspaceExplorerViewPresenter)presenterFactory.CreatePresenter(this);
 
+            treeView.ContextMenuStrip = new Controls.ContextMenuStrip();
+
             AttachEventHandlers();
         }
 
@@ -82,6 +84,27 @@ namespace StarLab.UI.Workspaces.WorkspaceExplorer
             if (nodes.ContainsKey(key)) nodes[key].Collapse();
         }
 
+        public IMenuManager CreateDocumentMenuManager()
+        {
+            var manager = new DocumentMenuManager();
+            treeView.ContextMenuManager.Add(manager);
+            return manager;
+        }
+
+        public IMenuManager CreateFolderMenuManager()
+        {
+            var manager = new FolderMenuManager();
+            treeView.ContextMenuManager.Add(manager);
+            return manager;
+        }
+
+        public IMenuManager CreateWorkspaceMenuManager()
+        {
+            var manager = new WorkspaceMenuManager();
+            treeView.ContextMenuManager.Add(manager);
+            return manager;
+        }
+
         public void EditNodeLabel(string key)
         {
             if (nodes.ContainsKey(key)) nodes[key].BeginEdit();
@@ -104,12 +127,6 @@ namespace StarLab.UI.Workspaces.WorkspaceExplorer
         public override void Initialise(IApplicationController controller)
         {
             presenter.Initialise(controller);
-
-            treeView.ContextMenuStrip = new Controls.ContextMenuStrip();
-
-            treeView.ContextMenuManager.Add(new WorkspaceMenuManager());
-            treeView.ContextMenuManager.Add(new DocumentMenuManager());
-            treeView.ContextMenuManager.Add(new FolderMenuManager());
         }
 
         #endregion

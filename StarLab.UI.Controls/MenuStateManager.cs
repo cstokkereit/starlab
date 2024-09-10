@@ -53,7 +53,12 @@ namespace StarLab.UI.Controls
             if (menuStrip != null) commands.Add(new AddSeparatorCommand(menuStrip, parent));
         }
 
-        public void Update(TreeNode node)
+        public void AddMenuSeparator()
+        {
+            if (menuStrip != null) commands.Add(new AddSeparatorCommand(menuStrip));
+        }
+
+        public virtual void Update(TreeNode node)
         {
             if (menuStrip != null && IsTargetNode(node))
             {
@@ -193,15 +198,22 @@ namespace StarLab.UI.Controls
 
         private class AddSeparatorCommand : AddMenuItemCommand
         {
-            public AddSeparatorCommand(ContextMenuStrip menuStrip, string parent)
-                : base(menuStrip)
-            {
-                this.parent = parent;
-            }
+            public AddSeparatorCommand(ContextMenuStrip menuStrip, string? parent)
+                : base(menuStrip) { }
+
+            public AddSeparatorCommand(ContextMenuStrip menuStrip)
+                : this(menuStrip, null) { }
 
             public override void Execute()
             {
-                if (parent != null) menuStrip.AddSeparator(parent);
+                if (parent != null)
+                {
+                    menuStrip.AddSeparator(parent);
+                }
+                else
+                {
+                    menuStrip.AddSeparator();
+                }
             }
         }
     }

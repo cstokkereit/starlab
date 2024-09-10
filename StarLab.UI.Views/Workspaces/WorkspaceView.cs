@@ -134,6 +134,15 @@ namespace StarLab.UI.Workspaces
         }
 
         /// <summary>
+        /// Adds a separator to the menu.
+        /// </summary>
+        /// <param name="parent">The name of the parent menu item.</param>
+        public void AddMenuSeparator()
+        {
+            menuStrip.AddSeparator();
+        }
+
+        /// <summary>
         /// Adds a button to the tool bar.
         /// </summary>
         /// <param name="name">The name of the button.</param>

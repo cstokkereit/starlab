@@ -18,6 +18,12 @@ namespace StarLab.Presentation.Workspaces.WorkspaceExplorer
 
         void Collapse(string key);
 
+        IMenuManager CreateDocumentMenuManager();
+
+        IMenuManager CreateFolderMenuManager();
+
+        IMenuManager CreateWorkspaceMenuManager();
+
         void EditNodeLabel(string key);
 
         void Expand(string key);

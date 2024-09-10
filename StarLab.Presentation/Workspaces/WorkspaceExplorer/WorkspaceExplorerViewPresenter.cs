@@ -64,10 +64,12 @@ namespace StarLab.Presentation.Workspaces.WorkspaceExplorer
         {
             base.Initialise(controller);
 
-            CreateToolbar(controller);
-
             AddImages();
             CreateFolders();
+            CreateDocumentMenuManager();
+            CreateFolderMenuManager();
+            CreateWorkspaceMenuManager();
+            CreateToolbar(controller);
 
             Events.Subsribe(this);
         }
@@ -112,12 +114,43 @@ namespace StarLab.Presentation.Workspaces.WorkspaceExplorer
             View.AddToolbarButton(name, tooltip, image, command);
         }
 
+        private void CreateDocumentMenuManager()
+        {
+            var manager = View.CreateDocumentMenuManager();
+
+            manager.AddMenuItem(Constants.OPEN, StringResources.Open);
+            manager.AddMenuSeparator();
+            manager.AddMenuItem(Constants.CUT, StringResources.Cut, ImageResources.Cut);
+            manager.AddMenuItem(Constants.COPY, StringResources.Copy, ImageResources.Copy);
+            manager.AddMenuItem(Constants.PASTE, StringResources.Paste, ImageResources.Paste);
+            manager.AddMenuItem(Constants.DELETE, StringResources.Delete);
+            manager.AddMenuItem(Constants.RENAME, StringResources.Rename);
+        }
+
         private void CreateDocuments()
         {
             foreach (var document in workspace.Documents)
             {
                 View.AddDocumentNode(document.FullName, document.Path, document.Name, document.Type);
             }
+        }
+
+        private void CreateFolderMenuManager()
+        {
+            var manager = View.CreateFolderMenuManager();
+
+            manager.AddMenuItem(Constants.ADD, StringResources.Add);
+            manager.AddMenuItem(Constants.ADD, Constants.ADD_CHART, StringResources.Chart + Constants.ELLIPSIS);
+            manager.AddMenuItem(Constants.ADD, Constants.ADD_TABLE, StringResources.Table + Constants.ELLIPSIS);
+            manager.AddMenuItem(Constants.ADD, Constants.ADD_FOLDER, StringResources.NewFolder, ImageResources.NewFolder);
+            manager.AddMenuSeparator();
+            manager.AddMenuItem(Constants.COLLAPSE_ALL, StringResources.CollapseAllDescendants, ImageResources.Collapse);
+            manager.AddMenuSeparator();
+            manager.AddMenuItem(Constants.CUT, StringResources.Cut, ImageResources.Cut);
+            manager.AddMenuItem(Constants.COPY, StringResources.Copy, ImageResources.Copy);
+            manager.AddMenuItem(Constants.PASTE, StringResources.Paste, ImageResources.Paste);
+            manager.AddMenuItem(Constants.DELETE, StringResources.Delete);
+            manager.AddMenuItem(Constants.RENAME, StringResources.Rename);
         }
 
         private void CreateFolders()
@@ -141,6 +174,13 @@ namespace StarLab.Presentation.Workspaces.WorkspaceExplorer
         {
             AddToolbarButton(controller, Constants.SYNCHRONISE, StringResources.SyncWithActiveDocument, ImageResources.Synchronise, Verbs.SYNCHRONISE, true);
             AddToolbarButton(controller, Constants.COLLAPSE_ALL, StringResources.CollapseAll, ImageResources.CollapseAll, Verbs.COLLAPSE_ALL, false);
+        }
+
+        private void CreateWorkspaceMenuManager()
+        {
+            var manager = View.CreateWorkspaceMenuManager();
+
+            manager.AddMenuItem(Constants.RENAME, StringResources.Rename);
         }
 
         private void ExpandNodes()
