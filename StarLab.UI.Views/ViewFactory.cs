@@ -1,36 +1,59 @@
-﻿using StarLab.Presentation;
-using StarLab.Presentation.Docking;
+﻿using StarLab.Application;
+using StarLab.Application.Workspace;
+using StarLab.Presentation;
 using StarLab.Presentation.Model;
 using StarLab.Shared.Properties;
 
-namespace StarLab.UI
+namespace StarLab
 {
     public class ViewFactory : IViewFactory
     {
-        private readonly ViewTypeResolver types = new ViewTypeResolver();
+        private readonly Dictionary<string, string> views = new Dictionary<string, string>();
 
         private readonly IPresenterFactory presenterFactory;
 
         public ViewFactory(IPresenterFactory presenterFactory)
         {
             this.presenterFactory = presenterFactory;
+
+            Initialise();
         }
 
         #region IViewFactory Members
 
-        public IDockableView CreateView(IViewContext context)
+        public IDockableView CreateDocumentView(IDocument document)
         {
             IDockableView? view = null;
 
-            var typeName = types.Resolve(context.View);
+            var typeName = views[Views.DOCUMENT];
 
             var type = Type.GetType(typeName);
 
             if (type != null)
             {
-                var content = CreateContent(context.Content);
+                var content = CreateContent(document.Content);
 
-                view = Activator.CreateInstance(type, new object[] { context, content, presenterFactory }) as IDockableView;
+                view = Activator.CreateInstance(type, new object[] { document, content, presenterFactory }) as IDockableView;
+            }
+
+            if (view == null) throw new Exception(string.Format(Resources.MessageCouldNotBeCreated, typeName));
+
+            return view;
+        }
+
+        public IDockableView CreateToolView(string name)
+        {
+            IDockableView? view = null;
+
+            var typeName = views[Views.TOOL];
+
+            var type = Type.GetType(typeName);
+
+            if (type != null)
+            {
+                var content = CreateContent(name);
+
+                view = Activator.CreateInstance(type, new object[] { name, content, presenterFactory }) as IDockableView;
             }
 
             if (view == null)
@@ -45,7 +68,7 @@ namespace StarLab.UI
         {
             IFormView? view = null;
 
-            var typeName = types.Resolve(name);
+            var typeName = views[name];
 
             var type = Type.GetType(typeName);
 
@@ -64,28 +87,11 @@ namespace StarLab.UI
 
         #endregion
 
-        private IControlView CreateContent(string typeName, IContent content)
+        private IControlView CreateContent(string name)
         {
             IControlView? view = null;
 
-            var type = Type.GetType(typeName);
-
-            if (type != null)
-            {
-                view = Activator.CreateInstance(type, new object[] { content, presenterFactory }) as IControlView;
-            }
-
-            if (view == null)
-            {
-                throw new Exception(string.Format(Resources.MessageCouldNotBeCreated, typeName));
-            }
-
-            return view;
-        }
-
-        private IControlView CreateContent(string typeName)
-        {
-            IControlView? view = null;
+            var typeName = views[name];
 
             var type = Type.GetType(typeName);
 
@@ -106,9 +112,7 @@ namespace StarLab.UI
         {
             IControlView? view = null;
 
-            var typeName = types.Resolve(content.View);
-
-            view = CreateContent(typeName);
+            view = CreateContent(content.View);
 
             if (view is ISplitView splitView)
             {
@@ -119,6 +123,19 @@ namespace StarLab.UI
             }
 
             return view;
+        }
+
+        private void Initialise()
+        {
+            views.Add(Views.ABOUT, "StarLab.Application.Help.AboutView");
+            views.Add(Views.COLOUR_MAGNITUDE_CHART, "StarLab.Application.Workspace.Documents.Charts.ColourMagnitudeChartView");
+            views.Add(Views.CHART_SETTINGS, "StarLab.Application.Workspace.Documents.Charts.ChartSettingsView");
+            views.Add(Views.DOCUMENT, "StarLab.Application.Workspace.Documents.DocumentView");
+            views.Add(Views.OPTIONS, "StarLab.Application.Options.OptionsView");
+            views.Add(Views.SPLIT_CONTAINER, "StarLab.Application.SplitView");
+            views.Add(Views.TOOL, "StarLab.Application.Workspace.ToolView");
+            views.Add(Views.WORKSPACE, "StarLab.Application.Workspace.WorkspaceView");
+            views.Add(Views.WORKSPACE_EXPLORER, "StarLab.Application.Workspace.WorkspaceExplorer.WorkspaceExplorerView");
         }
     }
 }

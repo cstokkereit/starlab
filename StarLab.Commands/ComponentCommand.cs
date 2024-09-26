@@ -6,7 +6,7 @@ namespace StarLab.Commands
     /// Abstract base class for commands that are invoked by a user interface component e.g. System.Windows.Forms.Button and act on the specified type of receiver.
     /// </summary>
     /// <typeparam name="TReceiver">The type of receiver that this command acts on.</typeparam>
-    public abstract class ComponentCommand<TReceiver> : Command<TReceiver>, IComponentCommand
+    public abstract class ComponentCommand<TReceiver> : Command<TReceiver>, ICommand, IComponentCommand
     {
         private readonly List<Component> instances = new List<Component>(); // A list containing the instances of components that can invoke this command.
 

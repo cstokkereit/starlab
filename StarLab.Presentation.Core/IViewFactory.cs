@@ -1,10 +1,14 @@
-﻿using StarLab.Presentation.Docking;
+﻿using StarLab.Application;
+using StarLab.Application.Workspace;
+using StarLab.Presentation.Model;
 
-namespace StarLab.Presentation
+namespace StarLab
 {
     public interface IViewFactory
     {
-        IDockableView CreateView(IViewContext context);
+        IDockableView CreateDocumentView(IDocument document);
+
+        IDockableView CreateToolView(string name);
 
         IFormView CreateView(string name);
     }

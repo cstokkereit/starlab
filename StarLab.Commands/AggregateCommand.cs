@@ -7,6 +7,9 @@ namespace StarLab.Commands
     /// </summary>
     public class AggregateCommand : ICommand, IComponentCommand
     {
+
+        // TODO - Change to Chain of command pattern
+
         protected readonly List<ICommand> commands = new List<ICommand>(); // A list containing the commands to be executed.
 
         private readonly List<Component> instances = new List<Component>(); // A list containing the instances of components that can invoke this command.

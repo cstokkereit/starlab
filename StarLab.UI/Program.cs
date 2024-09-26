@@ -1,8 +1,8 @@
 using Castle.MicroKernel.Resolvers.SpecializedResolvers;
 using Castle.Windsor;
-using StarLab.Presentation;
+using StarLab.Application;
 
-namespace StarLab.UI
+namespace StarLab
 {
     internal static class Program
     {

@@ -6,18 +6,21 @@ namespace StarLab.Serialisation.Model
     public class Document
     {
         [XmlElement]
-        public Content Content;
+        public Content? Content;
+
+        [XmlAttribute("id")]
+        public string? ID;
 
         [XmlAttribute("name")]
-        public string Name;
+        public string? Name;
 
         [XmlAttribute("path")]
-        public string Path;
+        public string? Path;
 
         [XmlAttribute("type")]
-        public string Type;
+        public string? Type;
 
         [XmlAttribute("view")]
-        public string View;
+        public string? View;
     }
 }

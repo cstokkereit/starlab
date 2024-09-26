@@ -1,10 +1,10 @@
 ﻿namespace StarLab.Commands
 {
     /// <summary>
-    /// Represents a command that can be executed without needing any arguments.
+    /// Represents a command that can be executed with arguments.
     /// </summary>
     /// <typeparam name="TArguments">The type of the arguments required by this command.</typeparam>
-    public interface IParameterisedCommand<TArguments> : ICommand
+    public interface IParameterisedCommand<TArguments>
     {
         /// <summary>
         /// Executes the command with the arguments provided.

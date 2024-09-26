@@ -1,7 +1,7 @@
 ﻿namespace StarLab.Commands
 {
     /// <summary>
-    /// Represents a command that can be executed without needing any arguments.
+    /// Represents a command that can be executed without any arguments.
     /// </summary>
     public interface ICommand
     {
