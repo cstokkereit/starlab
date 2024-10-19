@@ -4,7 +4,7 @@
     {
         public event EventHandler<string>? NameChanged;
 
-        IContent Content { get; }
+        IEnumerable<IContent> Contents { get; }
 
         string FullName { get; }
 
@@ -13,8 +13,6 @@
         string Name { get; set; }
 
         string Path { get; }
-
-        string Type { get; }
 
         string View { get; }
     }

@@ -1,52 +1,63 @@
 ﻿using AutoMapper;
 using StarLab.Application.Events;
+using StarLab.Commands;
 using StarLab.Presentation;
-
-using StringResources = StarLab.Shared.Properties.Resources;
 
 namespace StarLab.Application.Workspace
 {
-    public class ToolViewPresenter : Presenter, IDockableViewPresenter
+    public class ToolViewPresenter : Presenter, IDockableViewPresenter, IFormController
     {
         private readonly IDockableView view;
 
-        public ToolViewPresenter(IDockableView view, IUseCaseFactory useCaseFactory, IConfiguration configuration, IMapper mapper, IEventAggregator events)
-            : base(useCaseFactory, configuration, mapper, events)
+        private readonly string name;
+
+        private readonly string id;
+
+        public ToolViewPresenter(IDockableView view, string id, string name, ICommandManager commands, IUseCaseFactory useCaseFactory, IConfiguration configuration, IMapper mapper, IEventAggregator events)
+            : base(commands, useCaseFactory, configuration, mapper, events)
         {
+            this.name = name;
             this.view = view;
+            this.id = id;
+
+            Location = Constants.DOCK_RIGHT; // TODO
         }
 
-        #region IDockableViewPresenter Members
-
         public string Location { get; set; }
+
+        public override string Name => id + Constants.CONTROLLER;
 
         public override void Initialise(IApplicationController controller)
         {
             base.Initialise(controller);
 
-            switch (view.Name)
-            {
-                case Views.WORKSPACE_EXPLORER:
-                    view.Text = StringResources.WorkspaceExplorer;
-                    Location = Constants.DOCK_RIGHT;
-                    break;
-
-                default:
-                    Location = Constants.DOCK_LEFT;
-                    break;
-            }
+            view.Text = name;
+            view.Name = id;
         }
 
         public void Show(IView view)
         {
-            throw new NotImplementedException();
+            this.view.Show(view);
         }
 
-        #endregion
-
-        protected override string GetName()
+        public DialogResult ShowMessage(string caption, string message, MessageBoxButtons buttons, MessageBoxIcon icon)
         {
-            return view.Name + Constants.CONTROLLER; // TODO - This wont be valid after a name change
+            return view.ShowMessage(caption, message, buttons, icon);
+        }
+
+        public void ShowMessage(string caption, string message, MessageBoxIcon icon)
+        {
+            view.ShowMessage(caption, message, icon);
+        }
+
+        public string ShowOpenFileDialog(string title, string filter)
+        {
+            return view.ShowOpenFileDialog(title, filter);
+        }
+
+        public string ShowSaveFileDialog(string title, string filter, string extension)
+        {
+            return view.ShowSaveFileDialog(title, filter, extension);
         }
     }
 }

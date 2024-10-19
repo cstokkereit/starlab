@@ -4,6 +4,8 @@
     {
         bool Expanded { get; }
 
+        bool IsNew { get; }
+
         string Key { get; }
 
         string Name { get; }

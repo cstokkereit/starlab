@@ -4,11 +4,9 @@ namespace StarLab.Presentation.Model
 {
     public class Document : IDocument
     {
-        private readonly Content content;
+        private readonly List<IContent> contents = new List<IContent>();
 
         private readonly string path;
-
-        private readonly string type;
 
         private readonly string view;
 
@@ -18,18 +16,17 @@ namespace StarLab.Presentation.Model
 
         public Document(DocumentDTO dto)
         {
-            content = new Content(dto.Content);
-
             name = dto.Name;
             path = dto.Path;
-            type = dto.Type;
             view = dto.View;
             id = dto.ID;
+
+            if (dto.Contents != null) CreateContents(dto.Contents);
         }
 
         public event EventHandler<string>? NameChanged;
 
-        public IContent Content => content;
+        public IEnumerable<IContent> Contents => contents;
 
         public string FullName => Path + '/' + Name;
 
@@ -49,8 +46,15 @@ namespace StarLab.Presentation.Model
 
         public string Path => path;
 
-        public string Type => type;
-
         public string View => view;
+
+        private void CreateContents(IEnumerable<ContentDTO> dtos)
+        {
+            foreach (var dto in dtos)
+            {
+                var content = new Content(dto);
+                contents.Add(content);
+            }
+        }
     }
 }

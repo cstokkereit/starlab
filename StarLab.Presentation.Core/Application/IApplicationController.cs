@@ -5,19 +5,23 @@ namespace StarLab.Application
 {
     public interface IApplicationController : IController
     {
-        ICommand CreateAggregateCommand(IEnumerable<ICommand> commands, string view);
+        //ICommand CreateAggregateCommand(IEnumerable<ICommand> commands, string view);
 
-        ICommand GetCommand(IController controller, string verb, string target);
+        ICommand GetCommand(ICommandManager commands, IController controller, string action, string target);
 
-        ICommand GetCommand(IController controller, string verb);
+        ICommand GetCommand(ICommandManager commands, IController controller, string action);
 
-        ICommand GetShowCommand(IViewController controller, string view);
+        ICommand GetCommand(ICommandManager commands, IViewController controller, string view);
 
         IWorkspaceController GetWorkspaceController();
+
+        void RegisterCommandInvokers(ICommandManager commands);
 
         /// <summary>
         /// Starts the application.
         /// </summary>
         void Run();
+
+        void Show(string id);
     }
 }

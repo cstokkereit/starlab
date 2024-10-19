@@ -4,6 +4,8 @@
     {
         public bool Expanded;
 
+        public bool IsNew;
+
         public string? Path;
     }
 }

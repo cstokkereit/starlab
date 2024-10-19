@@ -88,6 +88,15 @@ namespace StarLab.Shared.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cannot rename &apos;{0}&apos; to &apos;{1}&apos; because a {2} with that name already exists..
+        /// </summary>
+        public static string CannotRenameBecauseNameAlreadyExists {
+            get {
+                return ResourceManager.GetString("CannotRenameBecauseNameAlreadyExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Chart.
         /// </summary>
         public static string Chart {
@@ -160,6 +169,15 @@ namespace StarLab.Shared.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} could not be created..
+        /// </summary>
+        public static string CouldNotBeCreated {
+            get {
+                return ResourceManager.GetString("CouldNotBeCreated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cut.
         /// </summary>
         public static string Cut {
@@ -169,11 +187,29 @@ namespace StarLab.Shared.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to NewFolder.
+        /// </summary>
+        public static string DefaultFolderName {
+            get {
+                return ResourceManager.GetString("DefaultFolderName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete.
         /// </summary>
         public static string Delete {
             get {
                 return ResourceManager.GetString("Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Document.
+        /// </summary>
+        public static string Document {
+            get {
+                return ResourceManager.GetString("Document", resourceCulture);
             }
         }
         
@@ -196,6 +232,15 @@ namespace StarLab.Shared.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Folder.
+        /// </summary>
+        public static string Folder {
+            get {
+                return ResourceManager.GetString("Folder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Help.
         /// </summary>
         public static string Help {
@@ -205,29 +250,24 @@ namespace StarLab.Shared.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} could not be created..
-        /// </summary>
-        public static string MessageCouldNotBeCreated {
-            get {
-                return ResourceManager.GetString("MessageCouldNotBeCreated", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to This object has not been properly initialised..
-        /// </summary>
-        public static string MessageNotInitialised {
-            get {
-                return ResourceManager.GetString("MessageNotInitialised", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Initialisation complete. Starting the application..
         /// </summary>
-        public static string MessageStartingStarLab {
+        public static string InitialisationComplete {
             get {
-                return ResourceManager.GetString("MessageStartingStarLab", resourceCulture);
+                return ResourceManager.GetString("InitialisationComplete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} names cannot include any of the following:
+        ///
+        ///                               {1}
+        ///
+        ///Please enter a valid name..
+        /// </summary>
+        public static string NameContainsIllegalCharacters {
+            get {
+                return ResourceManager.GetString("NameContainsIllegalCharacters", resourceCulture);
             }
         }
         
@@ -246,6 +286,15 @@ namespace StarLab.Shared.Properties {
         public static string NewFolder {
             get {
                 return ResourceManager.GetString("NewFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This object has not been properly initialised..
+        /// </summary>
+        public static string ObjectNotInitialised {
+            get {
+                return ResourceManager.GetString("ObjectNotInitialised", resourceCulture);
             }
         }
         

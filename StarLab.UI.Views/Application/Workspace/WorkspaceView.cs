@@ -8,26 +8,37 @@ namespace StarLab.Application.Workspace
     /// <summary>
     /// 
     /// </summary>
-    public partial class WorkspaceView : View, IWorkspaceView
+    public sealed partial class WorkspaceView : Form, IWorkspaceView
     {
         private readonly IWorkspaceViewPresenter presenter;
+
+        private readonly string id;
 
         /// <summary>
         /// Initialises a new instance of the <see cref="WorkspaceView"/> class.
         /// </summary>
         /// <param name="presenterFactory">An <see cref="IPresenterFactory"/> that is used to create the <see cref="IPresenter"/> that controls this view.</param>
-        public WorkspaceView(IPresenterFactory presenterFactory)
+        public WorkspaceView(string id, string name, IPresenterFactory factory)
         {
+            ArgumentNullException.ThrowIfNull(nameof(factory));
+
             InitializeComponent();
 
-            presenter = (IWorkspaceViewPresenter)presenterFactory.CreatePresenter(this);
+            this.id = id;
+
+            Text = name;
+            Name = id;
+            
+            presenter = (IWorkspaceViewPresenter)factory.CreatePresenter(this);
 
             dockPanel.Theme = new VS2015LightTheme();
 
             dockPanel.Theme.Extender.FloatWindowFactory = new FloatWindowFactory();
         }
 
-        #region IMainView Members
+        public IViewController Controller => presenter;
+
+        public string ID => id;
 
         /// <summary>
         /// Adds a menu item to the menu.
@@ -151,13 +162,18 @@ namespace StarLab.Application.Workspace
             toolStrip.AddButton(name, tooltip, image, command);
         }
 
+        public void CloseActiveDocument()
+        {
+            if (dockPanel.ActiveDocument != null) dockPanel.ActiveDocument.DockHandler.Close();
+        }
+
         public void CloseAll()
         {
-            List<IDockContent> documents = new List<IDockContent>(dockPanel.Documents);
+            List<IDockContent> documents = new List<IDockContent>(dockPanel.Contents);
 
             foreach (var document in documents)
             {
-                document.DockHandler.Close();
+                document.DockHandler.DockPanel = null;
             }
         }
 
@@ -186,8 +202,6 @@ namespace StarLab.Application.Workspace
 
         public void Initialise(IApplicationController controller, IDockableViewFactory factory)
         {
-            Initialise(controller);
-
             presenter.Initialise(controller, factory);
         }
 
@@ -195,9 +209,9 @@ namespace StarLab.Application.Workspace
         /// 
         /// </summary>
         /// <param name="controller"></param>
-        public override void Initialise(IApplicationController controller)
+        public void Initialise(IApplicationController controller)
         {
-            base.Initialise(controller);
+            throw new NotImplementedException(); // This should not be called
         }
 
         /// <summary>
@@ -221,22 +235,72 @@ namespace StarLab.Application.Workspace
         /// <param name="view"></param>
         public void Show(IDockableView view)
         {
-            if (view is DockableView dockable)
-            {
-                dockable.Show(dockPanel);
-            }
+            if (view is DockContent dockable) dockable.Show(dockPanel);
         }
 
-        #endregion
-
-        protected override IViewController GetController()
+        public void Show(IView view)
         {
-            return presenter;
+            if (view is Form form) form.Show(this);
         }
 
-        #region Event Handlers
+        /// <summary>
+        /// Displays a message box with the specified text, caption, buttons and icon.
+        /// </summary>
+        /// <param name="caption">The message box caption.</param>
+        /// <param name="message">The message text.</param>
+        /// <param name="buttons">A <see cref="MessageBoxButtons"/> that specifies which buttons to include on the meeage box.</param>
+        /// <param name="icon">A <see cref="MessageBoxIcon"/> that specifies the icon to include on the meeage box.</param>
+        /// <returns>A <see cref="DialogResult"/> that identifies the button that was clicked.</returns>
+        public DialogResult ShowMessage(string caption, string message, MessageBoxButtons buttons, MessageBoxIcon icon)
+        {
+            return DialogController.ShowMessage(this, caption, message, buttons, icon);
+        }
+
+        /// <summary>
+        /// Displays a message box with the specified text, caption and icon.
+        /// </summary>
+        /// <param name="caption">The message box caption.</param>
+        /// <param name="message">The message text.</param>
+        /// <param name="icon">A <see cref="MessageBoxIcon"/> that specifies the icon to include on the meeage box.</param>
+        public void ShowMessage(string caption, string message, MessageBoxIcon icon)
+        {
+            DialogController.ShowMessage(this, caption, message, icon);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        public string ShowOpenFileDialog(string title, string filter)
+        {
+            return DialogController.ShowOpenFileDialog(this, title, filter);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="filter"></param>
+        /// <param name="extension"></param>
+        /// <returns></returns>
+        public string ShowSaveFileDialog(string title, string filter, string extension)
+        {
+            return DialogController.ShowSaveFileDialog(this, title, filter, extension);
+        }
 
         private void dockPanel_ActiveDocumentChanged(object sender, EventArgs e)
+        {
+            UpdateActiveDocument();
+        }
+
+        private void dockPanel_DockContentRemoved(object sender, DockContentEventArgs e)
+        {
+            UpdateActiveDocument();
+        }
+
+        private void UpdateActiveDocument()
         {
             if (dockPanel.ActiveDocument is IDockableView view)
             {
@@ -247,15 +311,5 @@ namespace StarLab.Application.Workspace
                 presenter.ClearActiveDocument();
             }
         }
-
-        private void dockPanel_DockContentRemoved(object sender, DockContentEventArgs e)
-        {
-            if (dockPanel.DocumentsCount == 0)
-            {
-                presenter.ClearActiveDocument();
-            }
-        }
-
-        #endregion
     }
 }

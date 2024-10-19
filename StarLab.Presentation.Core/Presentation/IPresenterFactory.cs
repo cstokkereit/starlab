@@ -1,21 +1,20 @@
 ﻿using StarLab.Application;
 using StarLab.Application.Workspace;
+using StarLab.Application.Workspace.Documents;
 using StarLab.Presentation.Model;
 
 namespace StarLab.Presentation
 {
     public interface IPresenterFactory
     {
-        IControlViewPresenter CreatePresenter(IControlView view, string presenterTypeName);
-
         IControlViewPresenter CreatePresenter(IControlView view);
 
-        IDockableViewPresenter CreatePresenter(IDockableView view, IDocument document);
+        IDockableViewPresenter CreatePresenter(IDockableView view, string id, string name);
 
-        IDockableViewPresenter CreatePresenter(IDockableView view);
+        IDockableViewPresenter CreatePresenter(IDocumentView view, IDocument document);
 
-        IFormViewPresenter CreatePresenter(IView view);
+        IFormViewPresenter CreatePresenter(IFormView view);
 
-        ISplitViewPresenter CreatePresenter(ISplitView view);
+        IWorkspaceViewPresenter CreatePresenter(IWorkspaceView view);
     }
 }

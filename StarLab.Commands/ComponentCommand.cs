@@ -27,8 +27,6 @@ namespace StarLab.Commands
             this.manager = manager ?? throw new ArgumentNullException("manager");
         }
 
-        #region IComponentCommand Members
-
         /// <summary>
         /// Gets or sets the Checked property of the controls that can execute this command.
         /// </summary>
@@ -86,7 +84,5 @@ namespace StarLab.Commands
             invoker.UpdateCheckedState(instance, Checked);
             invoker.UpdateEnabledState(instance, Enabled);
         }
-
-        #endregion
     }
 }

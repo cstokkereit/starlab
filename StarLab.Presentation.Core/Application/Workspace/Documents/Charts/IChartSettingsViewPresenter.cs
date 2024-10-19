@@ -2,6 +2,6 @@
 {
     public interface IChartSettingsViewPresenter : IControlViewPresenter
     {
-        void AttachCommands(IApplicationController controller, ISplitViewController viewController);
+        void Initialise(IApplicationController controller, IDocumentController parentController);
     }
 }

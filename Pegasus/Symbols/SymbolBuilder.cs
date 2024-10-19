@@ -5,8 +5,6 @@
     /// </summary>
     public static class SymbolBuilder
     {
-        #region Constructors
-        
         /// <summary>
         /// Static constructor.
         /// </summary>
@@ -14,9 +12,7 @@
         {
             Cross = new Symbol("×");
             Dot = new Symbol("·");
-        } 
-
-        #endregion
+        }
 
         /// <summary>
         /// Gets a cross symbol for use in products.

@@ -2,16 +2,14 @@
 {
     public class DocumentDTO
     {
-        public ContentDTO Content;
+        public List<ContentDTO> Contents = new List<ContentDTO>();
 
-        public string ID;
+        public string? ID;
 
-        public string Name;
+        public string? Name;
 
-        public string Path;
+        public string? Path;
 
-        public string Type;
-
-        public string View;
+        public string? View;
     }
 }

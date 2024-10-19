@@ -1,8 +1,6 @@
-﻿using StarLab.Application;
-
-namespace StarLab.Application.Options
+﻿namespace StarLab.Application.Options
 {
-    public interface IOptionsView : IFormView
+    public interface IOptionsView : IControlView, IFormContent<IFormController>
     {
 
     }

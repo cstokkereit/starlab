@@ -2,7 +2,7 @@
 
 namespace StarLab.Application
 {
-    public class UseCaseInteractor<T>
+    public abstract class UseCaseInteractor<T>
     {
         private readonly IMapper mapper;
 

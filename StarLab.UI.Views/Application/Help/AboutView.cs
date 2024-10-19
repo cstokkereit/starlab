@@ -2,61 +2,52 @@
 
 namespace StarLab.Application.Help
 {
-    public partial class AboutView : View, IAboutView
+    public partial class AboutView : UserControl, IAboutView
     {
         private readonly IAboutViewPresenter presenter;
 
-        public AboutView(IPresenterFactory presenterFactory)
+        public AboutView(IPresenterFactory factory)
         {
             InitializeComponent();
 
-            presenter = (IAboutViewPresenter)presenterFactory.CreatePresenter(this);
+            Name = Views.ABOUT;
+
+            presenter = (IAboutViewPresenter)factory.CreatePresenter(this);
         }
 
-        #region IAboutView Members
-
-        public override void Initialise(IApplicationController controller)
+        public void Initialise(IApplicationController controller, IFormController parentController)
         {
-            base.Initialise(controller);
-
             presenter.Initialise(controller);
         }
 
         public void SetCompanyName(string companyName)
         {
-            labelCompanyName.Text = companyName;
+            throw new NotImplementedException();
         }
 
         public void SetCopyright(string copyright)
         {
-            labelCopyright.Text = copyright;
+            throw new NotImplementedException();
         }
 
         public void SetDescription(string description)
         {
-            textDescription.Text = description;
+            throw new NotImplementedException();
         }
 
         public void SetLogo(Image image)
         {
-            pictureLogo.Image = image;
+            throw new NotImplementedException();
         }
 
         public void SetProductName(string productName)
         {
-            labelProductName.Text = productName;
+            throw new NotImplementedException();
         }
 
         public void SetVersion(string version)
         {
-            labelVersion.Text = version;
-        }
-
-        #endregion
-
-        protected override IViewController GetController()
-        {
-            return presenter;
+            throw new NotImplementedException();
         }
     }
 }

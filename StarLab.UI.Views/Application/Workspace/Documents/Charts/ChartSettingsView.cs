@@ -1,9 +1,9 @@
-﻿using StarLab.Commands;
-using StarLab.Presentation;
+﻿using StarLab.Presentation;
+using StarLab.Commands;
 
 namespace StarLab.Application.Workspace.Documents.Charts
 {
-    public partial class ChartSettingsView : ControlView, IChartSettingsView, ISplitViewContent
+    public partial class ChartSettingsView : UserControl, IChartSettingsView
     {
         private readonly IChartSettingsViewPresenter presenter;
 
@@ -12,11 +12,16 @@ namespace StarLab.Application.Workspace.Documents.Charts
             InitializeComponent();
 
             presenter = (IChartSettingsViewPresenter)presenterFactory.CreatePresenter(this);
+
+            Name = Views.CHART_SETTINGS;
         }
 
-        #region IChartSettingsView Members
+        public void Initialise(IApplicationController controller, IDocumentController parentController)
+        {
+            presenter.Initialise(controller, parentController);
+        }
 
-        public override void Initialise(IApplicationController controller)
+        public void Initialise(IApplicationController controller)
         {
             presenter.Initialise(controller);
         }
@@ -36,17 +41,6 @@ namespace StarLab.Application.Workspace.Documents.Charts
                 componentCommand.AddInstance(buttonOK);
             }
         }
-
-        #endregion
-
-        #region ISplitViewContent Members
-
-        public void AttachCommands(IApplicationController controller, ISplitViewController viewController)
-        {
-            presenter.AttachCommands(controller, viewController);
-        }
-
-        #endregion
 
         public void SetMinimumSize(Size size)
         {

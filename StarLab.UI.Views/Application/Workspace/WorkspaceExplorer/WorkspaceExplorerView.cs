@@ -1,13 +1,13 @@
 ﻿using StarLab.Commands;
 using StarLab.Presentation;
-using System.Xml.Linq;
+using StarLab.Shared.Properties;
 
 namespace StarLab.Application.Workspace.WorkspaceExplorer
 {
     /// <summary>
     /// 
     /// </summary>
-    public partial class WorkspaceExplorerView : ControlView, IWorkspaceExplorerView
+    public partial class WorkspaceExplorerView : UserControl, IWorkspaceExplorerView
     {
         private readonly Dictionary<string, TreeNode> nodes = new Dictionary<string, TreeNode>();
 
@@ -23,10 +23,12 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
 
             presenter = (IWorkspaceExplorerViewPresenter)presenterFactory.CreatePresenter(this);
 
+            Name = Views.WORKSPACE_EXPLORER;
+
             treeView.ContextMenuStrip = new ContextMenuStrip();
         }
 
-        #region IWorkspaceExplorerView Members
+        public string DefaultLocation => Constants.DOCK_RIGHT;
 
         public int AddImage(Image image)
         {
@@ -132,13 +134,17 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
             return treeView.SelectedNode == null ? string.Empty : treeView.SelectedNode.Name;
         }
 
-        /// <summary>
-        /// Initialises the view.
-        /// </summary>
-        /// <param name="controller">The <see cref="IApplicationController"/> </param>
-        public override void Initialise(IApplicationController controller)
+        public void Initialise(IApplicationController controller, IFormController parentController)
         {
-            presenter.Initialise(controller);
+            presenter.Initialise(controller, parentController);
+        }
+
+        public void SelectNode(string key)
+        {
+            if (nodes.ContainsKey(key))
+            {
+                treeView.SelectedNode = nodes[key];
+            }
         }
 
         public void UpdateNodeState(string key, int imageIndex, int selectedImageIndex)
@@ -146,17 +152,12 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
             if (nodes.ContainsKey(key))
             {
                 var node = nodes[key];
-
                 node.SelectedImageIndex = selectedImageIndex;
                 node.ImageIndex = imageIndex;
             }
         }
 
-        #endregion
-
-        #region Event Handlers
-
-        private void treeView_AfterCollapse(object sender, TreeViewEventArgs e)
+        private void TreeView_AfterCollapse(object sender, TreeViewEventArgs e)
         {
             if (e != null && e.Node != null)
             {
@@ -177,7 +178,7 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
             }
         }
 
-        private void treeView_AfterExpand(object sender, TreeViewEventArgs e)
+        private void TreeView_AfterExpand(object sender, TreeViewEventArgs e)
         {
             if (e != null && e.Node != null)
             {
@@ -198,38 +199,50 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
             }
         }
 
-        private void treeView_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)
+        private void TreeView_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)
         {
             if (e != null && e.Label != null && e.Node != null)
             {
-                var node = e.Node;
-
-                switch (GetNodeType(node))
+                try
                 {
-                    case Constants.DOCUMENT:
-                        presenter.RenameDocument(e.Node.Name, e.Label);
-                        break;
+                    var node = e.Node;
 
-                    case Constants.FOLDER:
-                        presenter.RenameFolder(e.Node.Name, e.Label);
-                        break;
+                    switch (GetNodeType(node))
+                    {
+                        case Constants.DOCUMENT:
+                            presenter.RenameDocument(e.Node.Name, e.Label);
+                            break;
+
+                        case Constants.FOLDER:
+                            presenter.RenameFolder(e.Node.Name, e.Label);
+                            break;
+                    }
+
+                    treeView.LabelEdit = false;
                 }
-                
-                treeView.LabelEdit = false;
+                catch (Exception ex)
+                {
+                    e.CancelEdit = true;
+
+                    if (!string.IsNullOrEmpty(e.Label)) 
+                        presenter.ShowErrorMessage(ex.Message);
+
+                    e.Node.BeginEdit();
+                }
             }
         }
 
-        private void treeView_Enter(object sender, EventArgs e)
+        private void TreeView_Enter(object sender, EventArgs e)
         {
             presenter.ViewActivated();
         }
 
-        private void treeView_Leave(object sender, EventArgs e)
+        private void TreeView_Leave(object sender, EventArgs e)
         {
             presenter.ViewDeactivated();
         }
 
-        private void treeView_MouseDown(object sender, MouseEventArgs e)
+        private void TreeView_MouseDown(object sender, MouseEventArgs e)
         {
             if (e != null)
             {
@@ -252,15 +265,13 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
             }
         }
 
-        private void treeView_NodeDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        private void TreeView_NodeDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
         {
             if (e != null && e.Node != null)
             {
                 if (GetNodeType(e.Node) == Constants.DOCUMENT) presenter.OpenDocument(e.Node.Name);
             }
         }
-
-        #endregion
 
         private string GetNodeType(TreeNode node)
         {

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using StarLab.Commands;
-using StarLab.Application.Events;
 using StarLab.Application;
+using StarLab.Application.Events;
+using StarLab.Commands;
 using StarLab.Shared.Properties;
 
 namespace StarLab.Presentation
@@ -11,25 +11,21 @@ namespace StarLab.Presentation
     /// </summary>
     public abstract class Presenter : Controller, IPresenter
     {
-        private readonly IDictionary<string, ICommand> commands = new Dictionary<string, ICommand>();
-
         private readonly IConfiguration configuration;
 
-        private readonly IEventAggregator events;
+        private readonly ICommandManager commands;
 
         private readonly IMapper mapper;
 
         private IApplicationController? controller;
 
-        public Presenter(IUseCaseFactory useCaseFactory, IConfiguration configuration, IMapper mapper, IEventAggregator events)
-            : base(useCaseFactory)
+        public Presenter(ICommandManager commands, IUseCaseFactory useCaseFactory, IConfiguration configuration, IMapper mapper, IEventAggregator events)
+            : base(useCaseFactory, events)
         {
-            this.configuration = configuration;
-            this.events = events;
-            this.mapper = mapper;
+            this.configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            this.commands = commands ?? throw new ArgumentNullException(nameof(commands));
+            this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
-
-        #region IPresenter Members
 
         /// <summary>
         /// Initialises the presenter.
@@ -37,16 +33,18 @@ namespace StarLab.Presentation
         /// <param name="controller">The application controller.</param>
         public virtual void Initialise(IApplicationController controller)
         {
-            this.controller = controller;
-        }
+            this.controller = controller ?? throw new ArgumentNullException(nameof(controller));
 
-        #endregion
+            controller.RegisterCommandInvokers(commands);
+
+            Events.Subsribe(this);
+        }
 
         protected IApplicationController AppController 
         { 
             get
             {
-                if (controller == null) throw new InvalidOperationException(Resources.MessageNotInitialised);
+                if (controller == null) throw new InvalidOperationException(Resources.ObjectNotInitialised);
 
                 return controller;
             }
@@ -54,18 +52,77 @@ namespace StarLab.Presentation
 
         protected IConfiguration Configuration => configuration;
 
-        protected IEventAggregator Events => events;
-
         protected IMapper Mapper => mapper;
 
-        protected ICommand GetCommand(string name)
+        protected ICommand GetCommand(IController controller, string action, string target) // Consider changing controller to its typename and let AppController resolve it
         {
-            return commands[name];
+            var name = action + target;
+
+            if (!commands.ContainsCommand(name))
+            {
+                commands.AddCommand(name, AppController.GetCommand(commands, controller, action, target));
+            }
+
+            return commands.GetCommand(name);
         }
 
-        protected void SaveCommand(string name, ICommand command)
+        protected ICommand GetCommand(string action, string target)
         {
-            commands.Add(name, command);
+            var name = action + target;
+
+            if (!commands.ContainsCommand(name))
+            {
+                commands.AddCommand(name, AppController.GetCommand(commands, this, action, target));
+            }
+
+            return commands.GetCommand(name);
+        }
+
+        protected ICommand GetCommand(IController controller, string action) // Consider changing controller to its typename and let AppController resolve it
+        {
+            if (!commands.ContainsCommand(action))
+            {
+                commands.AddCommand(action, AppController.GetCommand(commands, controller, action));
+            }
+
+            return commands.GetCommand(action);
+        }
+
+        protected ICommand GetCommand(string action)
+        {
+            if (!commands.ContainsCommand(action))
+            {
+                commands.AddCommand(action, AppController.GetCommand(commands, this, action));
+            }
+
+            return commands.GetCommand(action);
+        }
+
+        protected ICommandChain GetCommandChain(string name)
+        {
+            if (!commands.ContainsCommand(name))
+            {
+                commands.AddCommand(name, new CommandChain(commands));
+            }
+
+            return (ICommandChain)commands.GetCommand(name);
+        }
+
+        protected ICommandChain GetCommandChain()
+        {
+            return new CommandChain(commands);
+        }
+
+        protected ICommand GetShowViewCommand(string view)
+        {
+            var name = Actions.SHOW + view;
+
+            if (!commands.ContainsCommand(name))
+            {
+                commands.AddCommand(name, AppController.GetCommand(commands, (IViewController)this, view));
+            }
+
+            return commands.GetCommand(name);
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace StarLab.Application.Workspace
 {
-    public interface IDockableViewPresenter : IPresenter, IViewController
+    public interface IDockableViewPresenter : IPresenter, IDialogController, IViewController
     {
         string Location { get; set; }
     }

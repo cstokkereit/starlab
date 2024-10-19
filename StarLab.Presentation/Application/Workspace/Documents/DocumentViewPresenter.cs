@@ -1,35 +1,44 @@
 ﻿using AutoMapper;
 using StarLab.Application.Events;
+using StarLab.Commands;
 using StarLab.Presentation;
 using StarLab.Presentation.Model;
 
 namespace StarLab.Application.Workspace.Documents
 {
-    public class DocumentViewPresenter : Presenter, IDockableViewPresenter
+    public sealed class DocumentViewPresenter : Presenter, IDockableViewPresenter, IDocumentController
     {
-        private readonly IDockableView view;
+        private readonly IDocumentView view;
 
         private readonly IDocument document;
 
-        public DocumentViewPresenter(IDockableView view, IDocument document, IUseCaseFactory useCaseFactory, IConfiguration configuration, IMapper mapper, IEventAggregator events)
-            : base(useCaseFactory, configuration, mapper, events)
+        public DocumentViewPresenter(IDocumentView view, IDocument document, ICommandManager commands, IUseCaseFactory useCaseFactory, IConfiguration configuration, IMapper mapper, IEventAggregator events)
+            : base(commands, useCaseFactory, configuration, mapper, events)
         {
             this.document = document;
             this.view = view;
+
+            Location = Constants.DOCUMENT;
         }
 
-        #region IDockableViewPresenter Members
-
         public string Location { get; set; }
+
+        public override string Name => string.Format(Constants.DOCUMENT_CONTROLLER, document.ID);
+
+
+        public void AddToolbarButton(string name, string tooltip, Image image, ICommand command)
+        {
+            view.AddToolbarButton(name, tooltip, image, command);
+        }
+
+        public void HideSplitContent(string name)
+        {
+            view.HideSplitContent(name);
+        }
 
         public override void Initialise(IApplicationController controller)
         {
             base.Initialise(controller);
-
-            Location = Constants.DOCUMENT;
-            
-            view.Name = document.FullName;
-            view.Text = document.Name;
 
             AttachEventHandlers();
         }
@@ -39,11 +48,29 @@ namespace StarLab.Application.Workspace.Documents
             throw new NotImplementedException();
         }
 
-        #endregion
-
-        protected override string GetName()
+        public DialogResult ShowMessage(string caption, string message, MessageBoxButtons buttons, MessageBoxIcon icon)
         {
-            return document.Name + Constants.CONTROLLER;
+            throw new NotImplementedException();
+        }
+
+        public void ShowMessage(string caption, string message, MessageBoxIcon icon)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string ShowOpenFileDialog(string title, string filter)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string ShowSaveFileDialog(string title, string filter, string extension)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ShowSplitContent(string name)
+        {
+            view.ShowSplitContent(name);
         }
 
         private void AttachEventHandlers()

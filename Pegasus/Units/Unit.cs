@@ -10,8 +10,6 @@ namespace Pegasus.Units
 
         private readonly string name;
 
-        #region Constructors
-
         public Unit(string name, ISymbol symbol, IFormatter formatter)
         {
             this.formatter = formatter;
@@ -27,8 +25,6 @@ namespace Pegasus.Units
 
         public Unit(string name, string symbol)
             : this(name, new Symbol(symbol)) { } 
-
-        #endregion
 
         public override string ToString()
         {

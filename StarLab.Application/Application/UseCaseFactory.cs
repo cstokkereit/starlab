@@ -15,24 +15,38 @@ namespace StarLab.Application
             this.mapper = mapper;
         }
 
+        public IAddFolderUseCase CreateAddFolderUseCase(IWorkspaceOutputPort outputPort)
+        {
+            return new AddFolderInteractor(outputPort, mapper);
+        }
+
+        public IDeleteItemUseCase CreateDeleteDocumentUseCase(IWorkspaceOutputPort outputPort)
+        {
+            return new DeleteDocumentInteractor(outputPort, mapper);
+        }
+
+        public IDeleteItemUseCase CreateDeleteFolderUseCase(IWorkspaceOutputPort outputPort)
+        {
+            return new DeleteFolderInteractor(outputPort, mapper);
+        }
+
         public IOpenWorkspaceUseCase CreateOpenWorkspaceUseCase(IWorkspaceOutputPort outputPort)
         {
             return new OpenWorkspaceInteractor(serialisationService, outputPort, mapper);
         }
 
-        public IRenameDocumentUseCase CreateRenameDocumentUseCase(IWorkspaceOutputPort outputPort)
+        public IRenameItemUseCase CreateRenameDocumentUseCase(IWorkspaceOutputPort outputPort)
         {
             return new RenameDocumentInteractor(outputPort, mapper);
         }
 
-        public IRenameDocumentUseCase CreateRenameFolderUseCase(IWorkspaceOutputPort outputPort)
+        public IRenameItemUseCase CreateRenameFolderUseCase(IWorkspaceOutputPort outputPort)
         {
             return new RenameFolderInteractor(outputPort, mapper);
         }
 
         public ISaveWorkspaceUseCase CreateSaveWorkspaceUseCase(IWorkspaceOutputPort outputPort)
         {
-
             return new SaveWorkspaceInteractor(serialisationService, outputPort, mapper);
         }
     }

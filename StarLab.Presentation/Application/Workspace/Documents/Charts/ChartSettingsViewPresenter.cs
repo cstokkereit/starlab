@@ -9,31 +9,29 @@ namespace StarLab.Application.Workspace.Documents.Charts
 {
     internal class ChartSettingsViewPresenter : ControlViewPresenter<IChartSettingsView>, IChartSettingsViewPresenter, IChartSettingsController
     {
-        public ChartSettingsViewPresenter(IChartSettingsView view, IUseCaseFactory useCaseFactory, IConfiguration configuration, IMapper mapper, IEventAggregator events)
-            : base(view, useCaseFactory, configuration, mapper, events) { }
+        public ChartSettingsViewPresenter(IChartSettingsView view, ICommandManager commands, IUseCaseFactory useCaseFactory, IConfiguration configuration, IMapper mapper, IEventAggregator events)
+            : base(view, commands, useCaseFactory, configuration, mapper, events) { }
 
-        public void AttachCommands(IApplicationController controller, ISplitViewController viewController)
+        public override string Name => throw new NotImplementedException();
+
+        public void Initialise(IApplicationController appController, IDocumentController docController)
         {
-            CreateToolbarButton(string.Format(Constants.SHOW_SETTINGS, View.Name), StringResources.Settings, ImageResources.Settings, AppController.GetCommand(viewController, Verbs.EXPAND, View.Name));
+            base.Initialise(appController);
 
-            View.AttachCancelButtonCommand(AppController.GetCommand(viewController, Verbs.COLLAPSE, View.Name));
-            View.AttachOKButtonCommand(GetOKButtonCommand(viewController));
+            docController.AddToolbarButton(string.Format(Constants.SHOW_SETTINGS, View.Name), StringResources.Settings, ImageResources.Settings, GetCommand(docController, Actions.SHOW_SPLIT_CONTENT, View.Name));
+
+            View.AttachCancelButtonCommand(GetCommand(docController, Actions.HIDE_SPLIT_CONTENT, View.Name));
+
+            var chain = GetCommandChain();
+            chain.Add(GetCommand(this, Actions.APPLY_SETTINGS));
+            chain.Add(GetCommand(docController, Actions.HIDE_SPLIT_CONTENT, View.Name));
+
+            View.AttachOKButtonCommand(chain);
         }
 
         public override void Initialise(IApplicationController controller)
         {
             base.Initialise(controller);
-        }
-
-        private ICommand GetOKButtonCommand(ISplitViewController viewController)
-        {
-            List<ICommand> commands =
-            [
-                AppController.GetCommand(this, Verbs.APPLY),
-                AppController.GetCommand(viewController, Verbs.COLLAPSE, View.Name) // Could chain commands - Commnd(ChartSettingsController.ApplyChanges) -> Command(SplitViewController.Collapse)
-            ];
-
-            return AppController.CreateAggregateCommand(commands, View.Name);
         }
     }
 }

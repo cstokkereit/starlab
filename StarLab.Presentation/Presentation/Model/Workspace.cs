@@ -12,23 +12,15 @@ namespace StarLab.Presentation.Model
 
         private readonly List<IFolder> folders = new List<IFolder>();
 
-        #region Constructors
-
         public Workspace(WorkspaceDTO dto)
         {
             Layout = dto.Layout == null ? string.Empty : dto.Layout;
 
             Name = Path.GetFileNameWithoutExtension(dto.FileName);
 
-            if (dto.Folders != null)
-            {
-                CreateFolders(dto.Folders);
-            }
+            if (dto.Folders != null) CreateFolders(dto.Folders);
 
-            if (dto.Documents != null)
-            {
-                CreateDocuments(dto.Documents);
-            }
+            if (dto.Documents != null) CreateDocuments(dto.Documents);
 
             AddChildFolders(foldersByPath.Values);
 
@@ -41,10 +33,6 @@ namespace StarLab.Presentation.Model
         {
             // Do Nothing
         }
-
-        #endregion
-
-        #region IWorkspace Members
 
         public IDocument? ActiveDocument { get; private set; }
 
@@ -101,8 +89,6 @@ namespace StarLab.Presentation.Model
         {
             Layout = layout;
         }
-
-        #endregion
 
         /// <summary>
         /// 

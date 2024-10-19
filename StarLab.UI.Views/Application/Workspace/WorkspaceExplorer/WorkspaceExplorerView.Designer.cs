@@ -76,13 +76,13 @@
             treeView.ShowPlusMinus = false;
             treeView.Size = new Size(300, 525);
             treeView.TabIndex = 5;
-            treeView.AfterLabelEdit += treeView_AfterLabelEdit;
-            treeView.AfterCollapse += treeView_AfterCollapse;
-            treeView.AfterExpand += treeView_AfterExpand;
-            treeView.NodeMouseDoubleClick += treeView_NodeDoubleClick;
-            treeView.Enter += treeView_Enter;
-            treeView.Leave += treeView_Leave;
-            treeView.MouseDown += treeView_MouseDown;
+            treeView.AfterLabelEdit += TreeView_AfterLabelEdit;
+            treeView.AfterCollapse += TreeView_AfterCollapse;
+            treeView.AfterExpand += TreeView_AfterExpand;
+            treeView.NodeMouseDoubleClick += TreeView_NodeDoubleClick;
+            treeView.Enter += TreeView_Enter;
+            treeView.Leave += TreeView_Leave;
+            treeView.MouseDown += TreeView_MouseDown;
             // 
             // imageList
             // 

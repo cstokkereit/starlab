@@ -12,8 +12,6 @@ namespace StarLab.Presentation.Model
 
         private readonly string key;
 
-        #region Constructors
-
         public Folder(FolderDTO dto)
         {
             if (string.IsNullOrEmpty(dto.Path))
@@ -36,13 +34,12 @@ namespace StarLab.Presentation.Model
             }
 
             Expanded = dto.Expanded;
+            IsNew = dto.IsNew;
         }
 
-        #endregion
-
-        #region IFolder Members
-
         public bool Expanded { get; private set; }
+
+        public bool IsNew { get; private set; }
 
         public string Key => key;
 
@@ -51,8 +48,6 @@ namespace StarLab.Presentation.Model
         public string ParentKey => parentKey;
 
         public string Path => parentKey + '/' + name;
-
-        #endregion
 
         public void Collapse()
         {

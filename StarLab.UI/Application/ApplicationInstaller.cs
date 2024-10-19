@@ -4,9 +4,8 @@ using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Services.Logging.Log4netIntegration;
 using Castle.Windsor;
-using StarLab.Commands;
-using StarLab.Application;
 using StarLab.Application.Events;
+using StarLab.Commands;
 
 namespace StarLab.Application
 {
@@ -67,6 +66,7 @@ namespace StarLab.Application
         private void InstallPresentationClasses(IWindsorContainer container)
         {
             container.Register(
+                Component.For<IWindsorContainer>().Instance(container),
                 Component.For<ICommandManager>().ImplementedBy<CommandManager>().LifestyleTransient(),
                 Classes.FromAssemblyNamed("StarLab.Presentation").Where(t => t.Name.EndsWith("Factory")).WithServiceDefaultInterfaces(),
                 Classes.FromAssemblyNamed("StarLab.Presentation").BasedOn<Profile>().WithServiceBase()
@@ -76,7 +76,6 @@ namespace StarLab.Application
         private void InstallUserInterfaceClasses(IWindsorContainer container)
         {
             container.Register(
-                Classes.FromAssemblyNamed("StarLab.UI").Where(t => t.Name.EndsWith("Factory")).WithServiceDefaultInterfaces(),
                 Classes.FromAssemblyNamed("StarLab.UI.Views").Where(t => t.Name.EndsWith("Factory")).WithServiceDefaultInterfaces(),
                 Component.For<IApplicationController>().ImplementedBy<ApplicationController>().LifestyleTransient(),
                 Component.For<IConfiguration>().ImplementedBy<Configuration>().LifestyleTransient()

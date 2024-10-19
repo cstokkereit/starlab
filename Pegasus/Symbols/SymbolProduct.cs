@@ -11,8 +11,6 @@ namespace Pegasus.Symbols
 
         private readonly ISymbol separator; // The symbol used to separate the symbols in the string representation of this symbol product.
 
-        #region Constructors
-
         /// <summary>
         /// Initialises a new instance of the <see cref="SymbolProduct"/> class.
         /// </summary>
@@ -38,10 +36,6 @@ namespace Pegasus.Symbols
         /// <param name="symbols">A collection containing the symbols that comprise this symbol product.</param>
         public SymbolProduct(IEnumerable<ISymbol> symbols)
             : this(symbols, " ") { }
-
-        #endregion
-
-        #region ISymbol Members
 
         /// <summary>
         /// Determines whether this instance and a specified object, which must also be an <see cref="ISymbol"/> object, have the same value.
@@ -88,10 +82,6 @@ namespace Pegasus.Symbols
             return buffer.ToString();
         }
 
-        #endregion
-
-        #region Object Overrides
-
         /// <summary>
         /// Determines whether this instance and a specified object have the same value.
         /// </summary>
@@ -130,18 +120,12 @@ namespace Pegasus.Symbols
             return ToString(new HtmlFormatter());
         }
 
-        #endregion
-
-        #region Public Members
-        
         /// <summary>
         /// Gets the number of symbols in this <see cref="SymbolProduct"/>
         /// </summary>
         public int Count
         {
             get { return symbols.Count; }
-        } 
-
-        #endregion
+        }
     }
 }

@@ -2,44 +2,60 @@
 using StarLab.Application.Events;
 using StarLab.Commands;
 using StarLab.Presentation;
-using StarLab.Presentation.Model;
+
+using StarLab.Shared.Properties;
 
 namespace StarLab.Application
 {
-    public abstract class ControlViewPresenter<T> : Presenter, IControlViewPresenter where T : IControlView
+    public abstract class ControlViewPresenter<T> : Presenter where T : IControlView
     {
         private readonly T view;
 
-        public ControlViewPresenter(T view, IUseCaseFactory useCaseFactory, IConfiguration configuration, IMapper mapper, IEventAggregator events)
-            : base(useCaseFactory, configuration, mapper, events)
+        private IDialogController? dialogs;
+
+        public ControlViewPresenter(T view, ICommandManager commands, IUseCaseFactory useCaseFactory, IConfiguration configuration, IMapper mapper, IEventAggregator events)
+            : base(commands, useCaseFactory, configuration, mapper, events)
         {
-            this.view = view;
+            this.view = view ?? throw new ArgumentNullException(nameof(view));
         }
 
-        #region IControlViewPresenter Members
+        public override string Name => throw new NotImplementedException();
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="controller"></param>
-        /// <param name="splitViewController"></param>
-        public virtual void Initialise(IApplicationController controller, ISplitViewController splitViewController)
+        protected T View => view;
+
+        protected void Initialise(IApplicationController controller, IDialogController dialogs)
         {
             base.Initialise(controller);
+
+            this.dialogs = dialogs;
         }
 
-        #endregion
-
-        protected T View { get => view; }
-
-        protected void CreateToolbarButton(string name, string tooltip, Image image, ICommand command)
+        protected DialogResult ShowMessage(string caption, string message, MessageBoxButtons buttons, MessageBoxIcon icon)
         {
-            View.AddButton(new ToolbarButton(name, tooltip, image, command));
+            if (dialogs == null) throw new Exception(Resources.ObjectNotInitialised);
+
+            return dialogs.ShowMessage(caption, message, buttons, icon);
         }
 
-        protected override string GetName()
+        protected void ShowMessage(string caption, string message, MessageBoxIcon icon)
         {
-            return View.Name + Constants.CONTROLLER;
+            if (dialogs == null) throw new Exception(Resources.ObjectNotInitialised);
+
+            dialogs.ShowMessage(caption, message, icon);
+        }
+
+        protected string ShowOpenFileDialog(string title, string filter)
+        {
+            if (dialogs == null) throw new Exception(Resources.ObjectNotInitialised);
+
+            return dialogs.ShowOpenFileDialog(title, filter);
+        }
+
+        protected string ShowSaveFileDialog(string title, string filter, string extension)
+        {
+            if (dialogs == null) throw new Exception(Resources.ObjectNotInitialised);
+
+            return dialogs.ShowSaveFileDialog(title, filter, extension);
         }
     }
 }

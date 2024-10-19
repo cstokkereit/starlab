@@ -1,8 +1,6 @@
-﻿using StarLab.Application;
-
-namespace StarLab.Application.Options
+﻿namespace StarLab.Application.Options
 {
-    public interface IOptionsViewPresenter : IFormViewPresenter
+    public interface IOptionsViewPresenter : IControlViewPresenter
     {
     }
 }

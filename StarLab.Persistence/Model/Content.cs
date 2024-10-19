@@ -5,9 +5,6 @@ namespace StarLab.Serialisation.Model
     [XmlType]
     public class Content
     {
-        [XmlElement("Content")]
-        public List<Content>? Contents;
-
         [XmlAttribute("name")]
         public string? Name;
 

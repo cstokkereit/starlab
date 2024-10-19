@@ -6,37 +6,57 @@ namespace StarLab.Application.Model
     {
         private const string PATH = "{0}/{1}";
 
-        private readonly IList<IDocument> documents = new List<IDocument>();
+        private const string WORKSPACE = "Workspace";
+        
+        private readonly List<IDocument> documents = new List<IDocument>();
 
-        private readonly IList<IFolder> folders = new List<IFolder>();
+        private readonly List<IFolder> folders = new List<IFolder>();
 
-        private string name = string.Empty;
+        private readonly bool expanded;
 
-        #region Constructors
+        private readonly bool isNew = false;
 
         public Folder(FolderDTO dto, IFolder parent)
         {
-            Name = dto.Path == null ? string.Empty : dto.Path.Substring(dto.Path.LastIndexOf('/') + 1);
+            if (string.IsNullOrEmpty(dto.Path)) throw new ArgumentException(); // TODO
 
-            if (parent != null)
-            {
-                parent.AddFolder(this);
-                Parent = parent;
-            }
+            ArgumentNullException.ThrowIfNull(nameof(parent));
+
+            Name = dto.Path.Substring(dto.Path.LastIndexOf('/') + 1);
+
+            expanded = dto.Expanded;
+
+            Parent = parent;
+
+            parent.AddFolder(this);
         }
 
         public Folder(FolderDTO dto)
         {
-            Name = dto.Path == null ? string.Empty : dto.Path;
+            if (string.IsNullOrEmpty(dto.Path)) throw new ArgumentException(); // TODO
+
+            Name = dto.Path.Substring(dto.Path.LastIndexOf('/') + 1);
+            
+            expanded = dto.Expanded;
         }
 
-        #endregion
+        public Folder(string name, IFolder parent)
+        {
+            Parent = parent;
+            Name = name;
 
-        #region IFolder Members
+            isNew = true;
+
+            parent.AddFolder(this);
+        }
 
         public IEnumerable<IDocument> Documents => documents;
 
+        public bool Expanded => expanded;
+
         public IEnumerable<IFolder> Folders => folders;
+
+        public bool IsNew => isNew;
 
         public string Name { get; set; }
 
@@ -44,7 +64,7 @@ namespace StarLab.Application.Model
 
         public string Path
         {
-            get { return Parent == null ? Name : string.Format(PATH, Parent.Path, Name); }
+            get { return string.Format(PATH, Parent == null ? WORKSPACE : Parent.Path, Name); }
         }
 
         public void AddDocument(IDocument document)
@@ -57,6 +77,11 @@ namespace StarLab.Application.Model
             folders.Add(folder);
         }
 
-        #endregion
+        public void DeleteContents()
+        {
+            documents.Clear();
+            folders.Clear();
+            Parent = null;
+        }
     }
 }

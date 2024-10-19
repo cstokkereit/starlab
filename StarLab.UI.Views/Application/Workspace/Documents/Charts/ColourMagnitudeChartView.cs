@@ -1,7 +1,5 @@
 ﻿using ScottPlot;
 using ScottPlot.Plottables;
-using StarLab.Application;
-using StarLab.Application.Workspace.Documents.Charts;
 using StarLab.Presentation;
 using System.Text.RegularExpressions;
 
@@ -10,7 +8,7 @@ namespace StarLab.Application.Workspace.Documents.Charts
     //https://scottplot.net/cookbook/5.0/
     // https://astronomy.stackexchange.com/questions/39610/is-there-a-formula-for-absolute-magnitude-that-does-not-contain-an-apparent-magn
     // https://github.com/casaluca/bolometric-corrections
-    public partial class ColourMagnitudeChartView : ControlView, IChartView
+    public partial class ColourMagnitudeChartView : UserControl, IChartView
     {
         private readonly IChartViewPresenter presenter;
 
@@ -29,9 +27,13 @@ namespace StarLab.Application.Workspace.Documents.Charts
 
             InitializeComponent();
 
-
             presenter = (IChartViewPresenter)presenterFactory.CreatePresenter(this);
 
+            Name = Views.COLOUR_MAGNITUDE_CHART;
+
+
+
+            // This is all temporary
 
             // add a rectangle we can use as a selection indicator
             RectanglePlot = formsPlot.Plot.Add.Rectangle(0, 0, 0, 0);
@@ -41,25 +43,20 @@ namespace StarLab.Application.Workspace.Documents.Charts
             formsPlot.MouseMove += FormsPlot1_MouseMove;
             formsPlot.MouseDown += FormsPlot1_MouseDown;
             formsPlot.MouseUp += FormsPlot1_MouseUp;
-
-
-            
         }
 
-        #region IChartView Members
-
-        /// <summary>
-        /// Initialises the view.
-        /// </summary>
-        /// <param name="controller">The <see cref="IApplicationController"/> </param>
-        public void Initialise(IApplicationController controller, ISplitViewController splitViewController)
+        public void Initialise(IApplicationController appController, IDocumentController docController)
         {
-            Initialise(controller);
+            Initialise(appController);
         }
 
-        public override void Initialise(IApplicationController controller)
+        public void Initialise(IApplicationController controller)
         {
             presenter.Initialise(controller);
+
+
+
+
 
             // This is all temporary
 
@@ -149,15 +146,7 @@ namespace StarLab.Application.Workspace.Documents.Charts
             formsPlot.Plot.Axes.Rules.Clear();
             formsPlot.Plot.Axes.Rules.Add(new LockAxisRule());
 
-
-            
-
-
-
         }
-
-        #endregion
-
 
         readonly Coordinates[] DataPoints;
         Coordinates MouseDownCoordinates;

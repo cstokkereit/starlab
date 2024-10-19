@@ -9,8 +9,6 @@
 
         private readonly object lockSubscriberDictionary = new object();
 
-        #region IEventAggregator Members
-
         /// <summary>
         /// Publish an event.
         /// </summary>
@@ -72,8 +70,6 @@
                 }
             }
         }
-
-        #endregion
 
         /// <summary>
         /// 

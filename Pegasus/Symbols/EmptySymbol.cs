@@ -5,8 +5,6 @@
     /// </summary>
     internal class EmptySymbol : ISymbol
     {
-        #region ISymbol Members
-        
         /// <summary>
         /// Determines whether this instance and a specified object, which must also be an <see cref="ISymbol"/> object, have the same value.
         /// </summary>
@@ -26,10 +24,6 @@
         {
             return string.Empty;
         } 
-
-        #endregion
-
-        #region Object Overrides
 
         /// <summary>
         /// Determines whether this instance and a specified object have the same value.
@@ -57,8 +51,6 @@
         public override string ToString()
         {
             return string.Empty;
-        } 
-
-        #endregion
+        }
     }
 }

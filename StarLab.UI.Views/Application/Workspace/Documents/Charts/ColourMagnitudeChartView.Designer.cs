@@ -40,7 +40,7 @@
             formsPlot.Size = new Size(625, 570);
             formsPlot.TabIndex = 0;
             // 
-            // ChartView
+            // ColourMagnitudeChartView
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;

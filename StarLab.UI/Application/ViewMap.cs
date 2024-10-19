@@ -1,6 +1,8 @@
 ﻿using StarLab.Application.Workspace;
 using StarLab.Presentation.Model;
 
+using StarLab.Shared.Properties;
+
 namespace StarLab.Application
 {
     internal class ViewMap : IDockableViewFactory, IViewMap
@@ -13,8 +15,6 @@ namespace StarLab.Application
         {
             this.factory = factory;
         }
-
-        #region IDockableViewFactory Members
 
         public event EventHandler<IView>? ViewCreated;
 
@@ -46,10 +46,6 @@ namespace StarLab.Application
             return (IDockableView)views[id];
         }
 
-        #endregion
-
-        #region IViewMap Members
-
         public IView this[string id] => views[id];
 
         public int Count => views.Count;
@@ -61,13 +57,13 @@ namespace StarLab.Application
 
         public void Initialise()
         {
-            CreateView(Views.ABOUT);
-            CreateView(Views.OPTIONS);
+            CreateFormView(Views.ABOUT, Resources.AboutStarLab);
+            CreateFormView(Views.OPTIONS, Resources.Options);
 
-            CreateToolView(Views.WORKSPACE_EXPLORER);
+            CreateToolView(Views.WORKSPACE_EXPLORER, Resources.WorkspaceExplorer);
 
             // NOTE - This must be the last view to be created.
-            CreateView(Views.WORKSPACE);
+            CreateFormView(Views.WORKSPACE, Resources.StarLab);
         }
 
         public void Remove(string id)
@@ -75,18 +71,16 @@ namespace StarLab.Application
             views.Remove(id);
         }
 
-        #endregion
-
-        private void CreateToolView(string name)
+        private void CreateFormView(string id, string name)
         {
-            var view = factory.CreateToolView(name);
+            var view = factory.CreateFormView(id, name);
             ViewCreated?.Invoke(this, view);
             views.Add(view.ID, view);
         }
 
-        private void CreateView(string name)
+        private void CreateToolView(string id, string name)
         {
-            var view = factory.CreateView(name);
+            var view = factory.CreateToolView(id, name);
             ViewCreated?.Invoke(this, view);
             views.Add(view.ID, view);
         }

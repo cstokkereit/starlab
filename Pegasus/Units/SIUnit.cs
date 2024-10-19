@@ -8,8 +8,6 @@ namespace Pegasus.Units
 
         private readonly ISymbol prefix;
 
-        #region Constructors
-
         public SIUnit(string name, ISymbol symbol, SIUnitPrefixes prefix, IFormatter formatter)
             : base(name, symbol, formatter)
         {
@@ -35,8 +33,6 @@ namespace Pegasus.Units
 
         public SIUnit(string name, string symbol)
             : this(name, new Symbol(symbol)) { }
-
-        #endregion
 
         public double Multiplier => multiplier;
 

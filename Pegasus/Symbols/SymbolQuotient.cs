@@ -11,8 +11,6 @@ namespace Pegasus.Symbols
 
         private readonly ISymbol numerator; // The numerator of this symbol quotient.
 
-        #region Constructors
-
         /// <summary>
         /// Initialises a new instance of the <see cref="SymbolQuotient"/> class.
         /// </summary>
@@ -41,10 +39,6 @@ namespace Pegasus.Symbols
         /// <param name="denominator">A collection containing the symbols that comprise the denominator of this symbol quotient.</param>
         public SymbolQuotient(IEnumerable<ISymbol> numerator, IEnumerable<ISymbol> denominator)
             : this(new SymbolProduct(numerator), new SymbolProduct(denominator)) { }
-
-        #endregion
-
-        #region ISymbol Members
 
         /// <summary>
         /// Determines whether this instance and a specified object, which must also be an <see cref="ISymbol"/> object, have the same value.
@@ -80,10 +74,6 @@ namespace Pegasus.Symbols
             return buffer.ToString();
         }
 
-        #endregion
-
-        #region Object Overrides
-
         /// <summary>
         /// Determines whether this instance and a specified object have the same value.
         /// </summary>
@@ -118,10 +108,6 @@ namespace Pegasus.Symbols
             return ToString(new HtmlFormatter());
         }
 
-        #endregion
-
-        #region Private Members
-
         /// <summary>
         /// Generates a string representation of the specified symbol using the formatter provided.
         /// </summary>
@@ -139,7 +125,5 @@ namespace Pegasus.Symbols
 
             return text;
         }
-
-        #endregion
     }
 }

@@ -4,13 +4,7 @@ namespace StarLab.Application
 {
     public class MenuStrip : System.Windows.Forms.MenuStrip
     {
-        #region Member Variables
-
         private Dictionary<string, ToolStripMenuItem> menuItems = new Dictionary<string, ToolStripMenuItem>(); // A dictionary containing the menu items indexed by name.
-
-        #endregion
-
-        #region IMenuView Members
 
         /// <summary>
         /// Adds a menu item to the menu.
@@ -157,10 +151,6 @@ namespace StarLab.Application
             // Do Nothing
         }
 
-        #endregion
-
-        #region Private Members
-
         /// <summary>
         /// Adds a menu item to the menu.
         /// </summary>
@@ -218,7 +208,5 @@ namespace StarLab.Application
 
             return item;
         }
-
-        #endregion
     }
 }

@@ -4,11 +4,7 @@ namespace StarLab.Application
 {
     public class ContextMenuStrip : System.Windows.Forms.ContextMenuStrip
     {
-        #region Member Variables
-
         private Dictionary<string, ToolStripMenuItem> menuItems = new Dictionary<string, ToolStripMenuItem>(); // A dictionary containing the menu items indexed by name.
-
-        #endregion
 
         /// <summary>
         /// Adds a menu item to the menu.
@@ -159,8 +155,6 @@ namespace StarLab.Application
             Items.Clear();
         }
 
-        #region Private Members
-
         /// <summary>
         /// Adds a menu item to the menu.
         /// </summary>
@@ -208,7 +202,5 @@ namespace StarLab.Application
 
             return item;
         }
-
-        #endregion
     }
 }

@@ -2,7 +2,7 @@
 
 namespace StarLab.Application.Workspace.WorkspaceExplorer
 {
-    public interface IWorkspaceExplorerView : IControlView
+    public interface IWorkspaceExplorerView : IControlView, IFormContent<IFormController>
     {
         int AddImage(Image image);
 
@@ -24,11 +24,15 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
 
         IMenuManager CreateWorkspaceMenuManager();
 
+        string DefaultLocation { get; }
+
         void EditNodeLabel(string key);
 
         void ExpandNode(string key);
 
         string GetSelectedNode();
+
+        void SelectNode(string key);
 
         void UpdateNodeState(string key, int imageIndex, int selectedImageIndex);
     }

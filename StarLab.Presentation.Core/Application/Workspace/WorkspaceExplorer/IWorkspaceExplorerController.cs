@@ -4,7 +4,7 @@
     {
         void CollapseAll();
 
-        void Rename(string document);
+        void Rename(string key);
 
         void OpenDocument(string name);
 

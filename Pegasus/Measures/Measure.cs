@@ -19,8 +19,6 @@ namespace Pegasus.Measures
 
         public Unit Unit => units;
 
-        #region IComparable Members
-
         public int CompareTo(Measure other)
         {
             var otherValue = other.GetDoubleValue();
@@ -50,18 +48,10 @@ namespace Pegasus.Measures
             throw new ArgumentException("other", Resources.ExceptionCompareMeasures);
         }
 
-        #endregion
-
-        #region IEquatable Members
-
         public bool Equals(Measure other)
         {
             return other.value == value && other.units == units;
         }
-
-        #endregion
-
-        #region Object Overrides
 
         public override bool Equals(object? other)
         {
@@ -81,8 +71,6 @@ namespace Pegasus.Measures
         {
             return value.ToString() + " " + units.ToString();
         } 
-
-        #endregion
 
         private double GetDoubleValue()
         {

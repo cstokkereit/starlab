@@ -19,108 +19,70 @@ namespace StarLab
             Initialise();
         }
 
-        #region IViewFactory Members
+        public IControlView CreateControlView(string typeName)
+        {
+            IControlView? view = null;
+
+            var type = Type.GetType(typeName);
+
+            if (type != null)
+                view = Activator.CreateInstance(type, new object[] { presenterFactory }) as IControlView;
+
+            if (view == null)
+                throw new Exception(string.Format(Resources.CouldNotBeCreated, typeName));
+
+            return view;
+        }
 
         public IDockableView CreateDocumentView(IDocument document)
         {
             IDockableView? view = null;
 
-            var typeName = views[Views.DOCUMENT];
-
-            var type = Type.GetType(typeName);
+            var type = Type.GetType(document.View);
 
             if (type != null)
-            {
-                var content = CreateContent(document.Content);
-
-                view = Activator.CreateInstance(type, new object[] { document, content, presenterFactory }) as IDockableView;
-            }
-
-            if (view == null) throw new Exception(string.Format(Resources.MessageCouldNotBeCreated, typeName));
+                view = Activator.CreateInstance(type, new object[] { document, this, presenterFactory }) as IDockableView;
+            
+            if (view == null) 
+                throw new Exception(string.Format(Resources.CouldNotBeCreated, document.View));
 
             return view;
         }
 
-        public IDockableView CreateToolView(string name)
-        {
-            IDockableView? view = null;
-
-            var typeName = views[Views.TOOL];
-
-            var type = Type.GetType(typeName);
-
-            if (type != null)
-            {
-                var content = CreateContent(name);
-
-                view = Activator.CreateInstance(type, new object[] { name, content, presenterFactory }) as IDockableView;
-            }
-
-            if (view == null)
-            {
-                throw new Exception(string.Format(Resources.MessageCouldNotBeCreated, typeName));
-            }
-
-            return view;
-        }
-
-        public IFormView CreateView(string name)
+        public IFormView CreateFormView(string id, string name)
         {
             IFormView? view = null;
 
-            var typeName = views[name];
-
-            var type = Type.GetType(typeName);
-
-            if (type != null)
+            if (id == Views.WORKSPACE)
             {
-                view = Activator.CreateInstance(type, new object[] { presenterFactory }) as IFormView;
+                view = new WorkspaceView(id, name, presenterFactory);
             }
-
-            if (view == null)
+            else
             {
-                throw new Exception(string.Format(Resources.MessageCouldNotBeCreated, typeName));
+                view = new View(id, name, CreateContent(id), presenterFactory);
             }
 
             return view;
         }
 
-        #endregion
+        public IDockableView CreateToolView(string id, string name)
+        {
+            return new ToolView(id, name, CreateContent(id), presenterFactory);
+        }
 
-        private IControlView CreateContent(string name)
+        private IControlView CreateContent(string id)
         {
             IControlView? view = null;
 
-            var typeName = views[name];
+            var typeName = views[id];
 
             var type = Type.GetType(typeName);
 
             if (type != null)
-            {
                 view = Activator.CreateInstance(type, new object[] { presenterFactory }) as IControlView;
-            }
 
             if (view == null)
-            {
-                throw new Exception(string.Format(Resources.MessageCouldNotBeCreated, typeName));
-            }
-
-            return view;
-        }
-
-        private IControlView CreateContent(IContent content)
-        {
-            IControlView? view = null;
-
-            view = CreateContent(content.View);
-
-            if (view is ISplitView splitView)
-            {
-                foreach (var childContent in content.Contents)
-                {
-                    splitView.AddChild(CreateContent(childContent), childContent.Panel);
-                }
-            }
+                throw new Exception(string.Format(Resources.CouldNotBeCreated, typeName));
 
             return view;
         }
@@ -128,12 +90,9 @@ namespace StarLab
         private void Initialise()
         {
             views.Add(Views.ABOUT, "StarLab.Application.Help.AboutView");
-            views.Add(Views.COLOUR_MAGNITUDE_CHART, "StarLab.Application.Workspace.Documents.Charts.ColourMagnitudeChartView");
             views.Add(Views.CHART_SETTINGS, "StarLab.Application.Workspace.Documents.Charts.ChartSettingsView");
-            views.Add(Views.DOCUMENT, "StarLab.Application.Workspace.Documents.DocumentView");
+            views.Add(Views.COLOUR_MAGNITUDE_CHART, "StarLab.Application.Workspace.Documents.Charts.ColourMagnitudeChartView");
             views.Add(Views.OPTIONS, "StarLab.Application.Options.OptionsView");
-            views.Add(Views.SPLIT_CONTAINER, "StarLab.Application.SplitView");
-            views.Add(Views.TOOL, "StarLab.Application.Workspace.ToolView");
             views.Add(Views.WORKSPACE, "StarLab.Application.Workspace.WorkspaceView");
             views.Add(Views.WORKSPACE_EXPLORER, "StarLab.Application.Workspace.WorkspaceExplorer.WorkspaceExplorerView");
         }

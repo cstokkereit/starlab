@@ -1,6 +1,4 @@
-﻿using StarLab.Presentation.Model;
-
-namespace StarLab.Application
+﻿namespace StarLab.Application
 {
     public interface IControlView
     {
@@ -18,27 +16,5 @@ namespace StarLab.Application
         /// 
         /// </summary>
         Size Size { get; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        IEnumerable<IToolbarButton> ToolbarButtons { get; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="button"></param>
-        void AddButton(IToolbarButton button);
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="controller"></param>
-        void Initialise(IApplicationController controller);
-
-        /// <summary>
-        /// 
-        /// </summary>
-        void Refresh();
     }
 }

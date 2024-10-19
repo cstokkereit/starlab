@@ -2,7 +2,7 @@
 
 namespace StarLab.Application.Workspace.Documents.Charts
 {
-    public interface IChartSettingsView : IControlView
+    public interface IChartSettingsView : IControlView, IFormContent<IDocumentController>
     {
         void AttachCancelButtonCommand(ICommand command);
 

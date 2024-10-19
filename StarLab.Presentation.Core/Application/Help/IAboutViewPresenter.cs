@@ -1,8 +1,6 @@
-﻿using StarLab.Application;
-
-namespace StarLab.Application.Help
+﻿namespace StarLab.Application.Help
 {
-    public interface IAboutViewPresenter : IFormViewPresenter
+    public interface IAboutViewPresenter : IControlViewPresenter
     {
     }
 }

@@ -5,50 +5,32 @@ namespace StarLab.Presentation.Model
 {
     public class Content : IContent
     {
-        private readonly List<IContent> contents = new List<IContent>();
-
         private readonly string name;
 
         private readonly SplitViewPanels panel;
 
         private readonly string view;
 
-        public Content(string? view, string? name, SplitViewPanels panel)
+        public Content(string view, string name, SplitViewPanels panel)
         {
-            this.name = name ?? throw new ArgumentNullException();
-            this.view = view ?? throw new ArgumentNullException();
+            this.name = name ?? throw new ArgumentNullException(nameof(name));
+            this.view = view ?? throw new ArgumentNullException(nameof(view));
 
             this.panel = panel;
         }
 
-        public Content(string view)
-        {
-            this.view = view ?? throw new ArgumentNullException();
-        }
-
         public Content(ContentDTO dto)
-            : this(dto.View, dto.Name, (SplitViewPanels)dto.Panel)
         {
-            if (dto.Contents != null)
-            {
-                CreateContents(dto.Contents);
-            }
-        }
+            name = dto.Name ?? throw new ArgumentException();
+            view = dto.View ?? throw new ArgumentException();
 
-        public IReadOnlyList<IContent> Contents => contents;
+            panel = (SplitViewPanels)dto.Panel;
+        }
 
         public string Name => name;
 
         public SplitViewPanels Panel => panel;
 
         public string View => view;
-
-        private void CreateContents(IEnumerable<ContentDTO> dtos)
-        {
-            foreach (var dto in dtos)
-            {
-                contents.Add(new Content(dto));
-            }
-        }
     }
 }

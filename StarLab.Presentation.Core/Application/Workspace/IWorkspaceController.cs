@@ -2,7 +2,15 @@
 {
     public interface IWorkspaceController : IController
     {
+        void CloseActiveDocument();
+
         void CloseWorkspace();
+
+        void DeleteDocument(string id);
+
+        void DeleteFolder(string path);
+
+        void AddFolder(string path);
 
         void NewWorkspace();
 

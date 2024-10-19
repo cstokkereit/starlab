@@ -1,10 +1,8 @@
 ﻿using Castle.Core.Logging;
-using Castle.MicroKernel.SubSystems.Conversion;
+using StarLab.Application.Events;
 using StarLab.Application.Workspace;
 using StarLab.Commands;
-using StarLab.Presentation;
 using StarLab.Shared.Properties;
-using System.Windows.Forms;
 
 namespace StarLab.Application
 {
@@ -12,103 +10,62 @@ namespace StarLab.Application
 
     // https://www.youtube.com/watch?v=280HyyLF-wU
 
-    public class ApplicationController : Controller, IApplicationController
+    public class ApplicationController : Controller, IApplicationController, ISubscriber<WorkspaceClosedEvent>
     {
-        private const string COMMAND_NAME = "{0}.{1}({2})";
-
         private readonly IDictionary<string, IViewController> controllers = new Dictionary<string, IViewController>();
-
-        private readonly ICommandManager commands;
 
         private readonly IViewMap views;
 
         private readonly ILogger logger;
 
-        public ApplicationController(IViewMap views, IUseCaseFactory factory, ICommandManager commands, ILogger logger)
-            : base(factory)
+        public ApplicationController(IViewMap views, IUseCaseFactory factory, IEventAggregator events, ILogger logger)
+            : base(factory, events)
         {
-            this.commands = commands;
+            ArgumentNullException.ThrowIfNull(nameof(factory));
+            ArgumentNullException.ThrowIfNull(nameof(logger));
+            ArgumentNullException.ThrowIfNull(nameof(views));
+
             this.logger = logger;
             this.views = views;
         }
 
-        #region IApplicationController Members
+        public override string Name => Constants.APPLICATION + Constants.CONTROLLER;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="commands"></param>
-        /// <param name="view"></param>
-        /// <returns></returns>
-        public ICommand CreateAggregateCommand(IEnumerable<ICommand> commands, string view)
+        public ICommand GetCommand(ICommandManager commands, IController controller, string action, string target)
         {
-            var name = "DocumentName.ChartSettings"; // use view
+            ICommand? command = null;
 
-            if (!this.commands.ContainsCommand(name))
+            var type = GetCommandType(controller, action);
+
+            if (type != null)
             {
-                this.commands.AddCommand(name, new AggregateCommand(this.commands, commands));
+                command = Activator.CreateInstance(type, new object[] { commands, controller, target }) as ICommand;
             }
 
-            return this.commands.GetCommand(name);
+            if (command == null) throw new NotImplementedException(); // TODO - Custom Exception
+
+            return command;
         }
 
-        //public ICommand GetCommand(ControllerAction<IChartSettingsController> action)
-        //{
-        //    if (!commands.ContainsCommand(action.Name))
-        //    {
-        //        commands.AddCommand(action.Name, new ChartSettingsCommand(commands, action));
-        //    }
-
-        //    return commands.GetCommand(action.Name);
-        //}
-
-        //public ICommand GetCommand(ControllerAction<ISplitViewController> action)
-        //{
-        //    if (!commands.ContainsCommand(action.Name))
-        //    {
-        //        commands.AddCommand(action.Name, new SplitViewCommand(commands, action));
-        //    }
-
-        //    return commands.GetCommand(action.Name);
-        //}
-
-        //public ICommand GetCommand(ControllerAction<IWorkspaceController> action)
-        //{
-        //    if (!commands.ContainsCommand(action.Name))
-        //    {
-        //        commands.AddCommand(action.Name, new WorkspaceCommand(commands, action));
-        //    }
-
-        //    return commands.GetCommand(action.Name);
-        //}
-
-        public ICommand GetCommand(IController controller, string verb, string target)
+        public ICommand GetCommand(ICommandManager commands, IController controller, string action)
         {
-            var name = string.Format(COMMAND_NAME, controller.Name, verb, target);
+            ICommand? command = null;
 
-            if (!commands.ContainsCommand(name))
+            var type = GetCommandType(controller, action);
+
+            if (type != null)
             {
-                commands.AddCommand(name, CreateCommand(controller, verb, target));
+                command = Activator.CreateInstance(type, new object[] { commands, controller }) as ICommand;
             }
 
-            return commands.GetCommand(name);
+            if (command == null) throw new NotImplementedException(); // TODO - Custom Exception
+
+            return command;
         }
 
-        public ICommand GetCommand(IController controller, string verb)
+        public ICommand GetCommand(ICommandManager commands, IViewController controller, string view)
         {
-            return GetCommand(controller, verb, string.Empty);
-        }
-
-        public ICommand GetShowCommand(IViewController controller, string view)
-        {
-            var name = string.Format(COMMAND_NAME, controller.Name, Verbs.SHOW, view);
-
-            if (!commands.ContainsCommand(name))
-            {
-                commands.AddCommand(name, new ShowCommand(commands, controller, views[view]));
-            }
-
-            return commands.GetCommand(name);
+            return new ShowViewCommand(commands, controller, views[view]);
         }
 
         public IWorkspaceController GetWorkspaceController()
@@ -116,65 +73,47 @@ namespace StarLab.Application
             return (IWorkspaceController)controllers[Constants.WORKSPACE_VIEW_CONTROLLER];
         }
 
-        private ICommand CreateCommand(IController controller, string verb, string target)
+        public void OnEvent(WorkspaceClosedEvent args)
         {
-            ICommand? command = null;
-
-            var type = GetCommandType(controller.GetType().FullName);
-
-            if (type != null)
+            foreach (var document in args.Workspace.Documents)
             {
-                command = Activator.CreateInstance(type, new object[] { commands, controller, verb, target }) as ICommand;
+                controllers.Remove(string.Format(Constants.DOCUMENT_CONTROLLER, document.ID));
+                views.Remove(document.ID);
             }
-
-            return command;
         }
 
-        private Type GetCommandType(string? controller)
-        {
-            ArgumentNullException.ThrowIfNull(controller);
-
-            Type? type = null;
-            
-            switch (controller)
-            {
-                case "StarLab.Application.SplitViewPresenter":
-                    type = Type.GetType("StarLab.Application.SplitViewCommand");
-                    break;
-
-                default:
-                    type = Type.GetType(controller.Replace("ViewPresenter", Constants.COMMAND));
-                    break;
-            }
-
-            if (type == null) throw new NotImplementedException();
-
-            return type;
-        }
-
-        #endregion
-
-        public void Run()
+        public void RegisterCommandInvokers(ICommandManager commands)
         {
             commands.RegisterCommandInvoker(new ToolStripMenuItemCommandInvoker());
             commands.RegisterCommandInvoker(new ToolStripButtonCommandInvoker());
             commands.RegisterCommandInvoker(new ButtonCommandInvoker());
+        }
+
+        public void Run()
+        {
+            logger.Info(Resources.InitialisationComplete);
 
             views.ViewCreated += OnViewCreated;
 
+            Events.Subsribe(this);
+
             views.Initialise();
 
-            logger.Info(Resources.MessageStartingStarLab);
+            if (views[Views.WORKSPACE] is Form form)
+                System.Windows.Forms.Application.Run(form);
+        }
 
-            if (views[Views.WORKSPACE] is View view)
+        public void Show(string id)
+        {
+            if (views.Contains(id) && controllers.ContainsKey(Constants.WORKSPACE_VIEW_CONTROLLER))
             {
-                System.Windows.Forms.Application.Run(view);
+                controllers[Constants.WORKSPACE_VIEW_CONTROLLER].Show(views[id]);
             }
         }
 
-        protected override string GetName()
+        private Type? GetCommandType(IController controller, string action)
         {
-            return Constants.APPLICATION + Constants.CONTROLLER;
+            return Type.GetType(controller.GetType().Namespace + '.' + action + Constants.COMMAND);
         }
 
         private void OnViewCreated(object? sender, IView? view)

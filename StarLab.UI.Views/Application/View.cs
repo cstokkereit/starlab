@@ -1,18 +1,36 @@
 ﻿using StarLab.Application;
+using StarLab.Presentation;
 
 namespace StarLab
 {
     /// <summary>
     /// The base class for all <see cref="Form"/> views.
     /// </summary>
-    public abstract partial class View : Form
+    public partial class View : Form, IFormView
     { 
+        private readonly IFormViewPresenter presenter;
+
+        private readonly string id;
+
         /// <summary>
         /// Initialises a new instance of the <see cref="View"> class.
         /// </summary>
-        public View()
+        public View(string id, string name, IControlView content, IPresenterFactory factory)
         {
+            ArgumentNullException.ThrowIfNull(nameof(content));
+            ArgumentNullException.ThrowIfNull(nameof(factory));
+            
             InitializeComponent();
+
+            if (content is UserControl control) Controls.Add(control);
+
+            this.id = id;
+
+            Name = name;
+
+            presenter = factory.CreatePresenter(this);
+
+            StartPosition = FormStartPosition.CenterParent;
         }
 
         /// <summary>
@@ -22,14 +40,12 @@ namespace StarLab
         /// <param name="controller">The <see cref="IApplicationController"/>.</param>
         public virtual void Initialise(IApplicationController controller)
         {
-            StartPosition = FormStartPosition.CenterParent;
+            presenter.Initialise(controller);
         }
 
-        #region IView Members
+        public IViewController Controller => presenter;
 
-        public IViewController Controller => GetController();
-
-        public string ID => Name;
+        public string ID => id;
 
         /// <summary>
         /// Shows the specified view.
@@ -50,7 +66,7 @@ namespace StarLab
         /// <returns>A <see cref="DialogResult"/> that identifies the button that was clicked.</returns>
         public DialogResult ShowMessage(string caption, string message, MessageBoxButtons buttons, MessageBoxIcon icon)
         {
-            return MessageBox.Show(this, message, caption, buttons, icon);
+            return DialogController.ShowMessage(this, caption, message, buttons, icon);
         }
 
         /// <summary>
@@ -61,7 +77,7 @@ namespace StarLab
         /// <param name="icon">A <see cref="MessageBoxIcon"/> that specifies the icon to include on the meeage box.</param>
         public void ShowMessage(string caption, string message, MessageBoxIcon icon)
         {
-            ShowMessage(message, caption, MessageBoxButtons.OK, icon);
+            DialogController.ShowMessage(this, caption, message, icon);
         }
 
         /// <summary>
@@ -72,24 +88,7 @@ namespace StarLab
         /// <returns></returns>
         public string ShowOpenFileDialog(string title, string filter)
         {
-            var filename = string.Empty;
-
-            var dialog = new OpenFileDialog
-            {
-                AddExtension = false,
-                CheckFileExists = true,
-                CheckPathExists = true,
-                Filter = filter,
-                Multiselect = false,
-                Title = title,
-                ValidateNames = true
-            };
-
-            var result = dialog.ShowDialog(this);
-
-            if (result == DialogResult.OK) filename = dialog.FileName;
-
-            return filename;
+            return DialogController.ShowOpenFileDialog(this, title, filter);
         }
 
         /// <summary>
@@ -101,29 +100,7 @@ namespace StarLab
         /// <returns></returns>
         public string ShowSaveFileDialog(string title, string filter, string extension)
         {
-            var filename = string.Empty;
-
-            var dialog = new SaveFileDialog
-            {
-                AddExtension = true,
-                CheckFileExists = true,
-                CheckPathExists = true,
-                DefaultExt = extension,
-                Filter = filter,
-                OverwritePrompt = true,
-                Title = title,
-                ValidateNames = true
-            };
-
-            var result = dialog.ShowDialog(this);
-
-            if (result == DialogResult.OK) filename = dialog.FileName;
-
-            return filename;
+            return DialogController.ShowSaveFileDialog(this, title, filter, extension);
         }
-
-        #endregion
-
-        protected abstract IViewController GetController();
     }
 }

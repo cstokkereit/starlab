@@ -1,4 +1,4 @@
-﻿using StarLab.Application;
+﻿using StarLab.Application.Events;
 
 namespace StarLab.Application
 {
@@ -6,19 +6,22 @@ namespace StarLab.Application
     {
         private readonly IUseCaseFactory factory;
 
-        public Controller(IUseCaseFactory factory)
+        private readonly IEventAggregator events;
+
+
+        public Controller(IUseCaseFactory factory, IEventAggregator events)
         {
+            ArgumentNullException.ThrowIfNull(factory, nameof(factory));
+            ArgumentNullException.ThrowIfNull(factory, nameof(events));
+
             this.factory = factory;
+            this.events = events;
         }
 
-        #region IController Members
+        public abstract string Name { get; }
 
-        public string Name => GetName();
-
-        #endregion
+        protected IEventAggregator Events => events;
 
         protected IUseCaseFactory UseCaseFactory { get => factory; }
-
-        protected abstract string GetName();
     }
 }

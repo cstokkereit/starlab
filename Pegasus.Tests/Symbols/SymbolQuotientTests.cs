@@ -1,9 +1,8 @@
 ﻿namespace Pegasus.Symbols
 {
-    [TestClass]
     public class SymbolQuotientTests
     {
-        [TestMethod]
+        [Test]
         public void TestConstructorWithIEnumerables()
         {
             var numerator = new ISymbol[] { new Symbol("kg"), new Symbol("m", false, false, string.Empty, "2") };
@@ -14,7 +13,7 @@
             Assert.IsNotNull(quotient);
         }
 
-        [TestMethod]
+        [Test]
         public void TestConstructorWithIEnumerablesAndSymbol()
         {
             var numerator = new ISymbol[] { new Symbol("kg"), new Symbol("m", false, false, string.Empty, "2") };
@@ -25,7 +24,7 @@
             Assert.IsNotNull(quotient);
         }
 
-        [TestMethod]
+        [Test]
         public void TestConstructorWithSymbolProducts()
         {
             var numerator = new SymbolProduct(new ISymbol[] { new Symbol("kg"), new Symbol("m", false, false, string.Empty, "2") });
@@ -36,7 +35,7 @@
             Assert.IsNotNull(quotient);
         }
 
-        [TestMethod]
+        [Test]
         public void TestConstructorWithSymbolProductAndSymbol()
         {
             var numerator = new SymbolProduct(new ISymbol[] { new Symbol("kg"), new Symbol("m") });
@@ -47,7 +46,7 @@
             Assert.IsNotNull(quotient);
         }
 
-        [TestMethod]
+        [Test]
         public void TestConstructorWithSymbolAndSymbolProduct()
         {
             var numerator = new Symbol("kg");
@@ -58,7 +57,7 @@
             Assert.IsNotNull(quotient);
         }
 
-        [TestMethod]
+        [Test]
         public void TestConstructorWithSymbols()
         {
             var numerator = new Symbol("m");
@@ -69,7 +68,7 @@
             Assert.IsNotNull(quotient);
         }
 
-        [TestMethod]
+        [Test]
         public void TestEqualsWhenArgumentIsDifferentType()
         {
             var quotient = new SymbolQuotient(new Symbol("kg"), new SymbolProduct(new ISymbol[] { new Symbol("m"), new Symbol("s", false, false, string.Empty, "2") }));
@@ -77,7 +76,7 @@
             Assert.IsFalse(quotient.Equals("(kg m)/s<sup>2</sup>"));
         }
 
-        [TestMethod]
+        [Test]
         public void TestEqualsWhenArgumentIsEqual()
         {
             var quotient1 = new SymbolQuotient(new Symbol("kg"), new SymbolProduct(new ISymbol[] { new Symbol("m"), new Symbol("s", false, false, string.Empty, "2") }));
@@ -86,7 +85,7 @@
             Assert.IsTrue(quotient1.Equals(quotient2));
         }
 
-        [TestMethod]
+        [Test]
         public void TestEqualsWhenArgumentIsNotEqual()
         {
             var quotient1 = new SymbolQuotient(new Symbol("kg"), new SymbolProduct(new ISymbol[] { new Symbol("m"), new Symbol("s", false, false, string.Empty, "2") }));
@@ -95,7 +94,7 @@
             Assert.IsFalse(quotient1.Equals(quotient2));
         }
 
-        [TestMethod]
+        [Test]
         public void TestEqualsWhenArgumentIsNull()
         {
             var quotient = new SymbolQuotient(new Symbol("kg"), new SymbolProduct(new ISymbol[] { new Symbol("m"), new Symbol("s", false, false, string.Empty, "2") }));
@@ -103,7 +102,7 @@
             Assert.IsFalse(quotient.Equals(null));
         }
 
-        [TestMethod]
+        [Test]
         public void TestEqualsWhenArgumentIsSameObject()
         {
             var quotient1 = new SymbolQuotient(new Symbol("kg"), new SymbolProduct(new ISymbol[] { new Symbol("m"), new Symbol("s", false, false, string.Empty, "2") }));
@@ -112,7 +111,7 @@
             Assert.IsTrue(quotient1.Equals(quotient2));
         }
 
-        [TestMethod]
+        [Test]
         public void TestHashCodesDoNotMatchForDifferentSymbolQuotients()
         {
             var quotient1 = new SymbolQuotient(new Symbol("kg"), new SymbolProduct(new ISymbol[] { new Symbol("m"), new Symbol("s", false, false, string.Empty, "2") }));
@@ -121,7 +120,7 @@
             Assert.AreNotEqual(quotient1.GetHashCode(), quotient2.GetHashCode());
         }
 
-        [TestMethod]
+        [Test]
         public void TestHashCodesMatchForSameSymbolQuotients()
         {
             var quotient1 = new SymbolQuotient(new Symbol("kg"), new SymbolProduct(new ISymbol[] { new Symbol("m"), new Symbol("s", false, false, string.Empty, "2") }));
@@ -130,7 +129,7 @@
             Assert.AreEqual(quotient1.GetHashCode(), quotient2.GetHashCode());
         }
 
-        [TestMethod]
+        [Test]
         public void TestToStringWithBracketsInTheDenominator()
         {
             var numerator = new Symbol("kg");
@@ -141,7 +140,7 @@
             Assert.AreEqual("kg/(m s<sup>2</sup>)", quotient.ToString());
         }
 
-        [TestMethod]
+        [Test]
         public void TestToStringWithBracketsInTheNumerator()
         {
             var numerator = new SymbolProduct(new ISymbol[] { new Symbol("kg"), new Symbol("m") });
@@ -152,7 +151,7 @@
             Assert.AreEqual("(kg m)/s", quotient.ToString());
         }
 
-        [TestMethod]
+        [Test]
         public void TestToStringWithMultipleTermsInBothNumeratorAndDenominator()
         {
             var numerator = new SymbolProduct(new ISymbol[] { new Symbol("kg"), new Symbol("m", false, false, string.Empty, "2") });
@@ -163,7 +162,7 @@
             Assert.AreEqual("(kg m<sup>2</sup>)/(s<sup>3</sup> A)", quotient.ToString());
         }
 
-        [TestMethod]
+        [Test]
         public void TestToStringWithSingleTermsInBothNumeratorAndDenominator()
         {
             var numerator = new Symbol("m");
@@ -174,7 +173,7 @@
             Assert.AreEqual("m/s", quotient.ToString());
         }
 
-        [TestMethod]
+        [Test]
         public void TestToStringFormattedAsRtfWithBracketsInTheDenominator()
         {
             var numerator = new Symbol("kg");
@@ -185,7 +184,7 @@
             Assert.AreEqual("kg/(m s{\\super 2})", quotient.ToString(new RtfFormatter()));
         }
 
-        [TestMethod]
+        [Test]
         public void TestToStringFormattedAsRtfWithBracketsInTheNumerator()
         {
             var numerator = new SymbolProduct(new ISymbol[] { new Symbol("kg"), new Symbol("m") });
@@ -196,7 +195,7 @@
             Assert.AreEqual("(kg m)/s", quotient.ToString(new RtfFormatter()));
         }
 
-        [TestMethod]
+        [Test]
         public void TestToStringFormattedAsRtfWithMultipleTermsInBothNumeratorAndDenominator()
         {
             var numerator = new SymbolProduct(new ISymbol[] { new Symbol("kg"), new Symbol("m", false, false, string.Empty, "2") });
@@ -207,7 +206,7 @@
             Assert.AreEqual("(kg m{\\super 2})/(s{\\super 3} A)", quotient.ToString(new RtfFormatter()));
         }
 
-        [TestMethod]
+        [Test]
         public void TestToStringFormattedAsRtfWithSingleTermsInBothNumeratorAndDenominator()
         {
             var numerator = new Symbol("m");

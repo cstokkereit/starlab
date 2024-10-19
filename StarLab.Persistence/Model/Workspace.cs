@@ -6,9 +6,6 @@ namespace StarLab.Serialisation.Model
     [XmlRoot]
     public class Workspace
     {
-        [XmlArray]
-        public List<Chart>? Charts;
-
         [XmlAttribute("filename")]
         public string? FileName;
 

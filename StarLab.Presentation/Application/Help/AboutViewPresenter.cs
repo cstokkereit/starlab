@@ -1,42 +1,28 @@
 ﻿using AutoMapper;
-using StarLab.Application;
 using StarLab.Application.Events;
-using StarLab.Shared.Properties;
+using StarLab.Commands;
 using System.Reflection;
 
 namespace StarLab.Application.Help
 {
-    internal class AboutViewPresenter : FormViewPresenter<IAboutView>, IAboutViewPresenter
+    internal class AboutViewPresenter : ControlViewPresenter<IAboutView>, IAboutViewPresenter
     {
-        public AboutViewPresenter(IAboutView view, IUseCaseFactory useCaseFactory, IConfiguration configuration, IMapper mapper, IEventAggregator events)
-            : base(view, useCaseFactory, configuration, mapper, events) { }
+        public AboutViewPresenter(IAboutView view, ICommandManager commands, IUseCaseFactory useCaseFactory, IConfiguration configuration, IMapper mapper, IEventAggregator events)
+            : base(view, commands, useCaseFactory, configuration, mapper, events) { }
 
-        #region IAboutViewPresenter Members
+        public override string Name => View.Name + Constants.CONTROLLER;
 
         public override void Initialise(IApplicationController applicationController)
         {
             base.Initialise(applicationController);
 
-            View.Text = Resources.AboutStarLab;
-
-            View.SetCompanyName(Resources.CompanyName);
-            View.SetCopyright(Resources.Copyright);
-            View.SetDescription(Resources.ProductDescription);
+            //View.SetCompanyName(Resources.CompanyName);
+            //View.SetCopyright(Resources.Copyright);
+            //View.SetDescription(Resources.ProductDescription);
             //View.SetLogo("");
-            View.SetProductName(Resources.StarLab);
-            View.SetVersion(string.Format(Resources.Version, GetVersion()));
+            //View.SetProductName(Resources.StarLab);
+            //View.SetVersion(string.Format(Resources.Version, GetVersion()));
         }
-
-        #endregion
-
-        #region IViewController Members
-
-        public override void Show(IView view)
-        {
-            throw new NotImplementedException();
-        }
-
-        #endregion
 
         private string GetVersion()
         {

@@ -1,32 +1,24 @@
-﻿using StarLab.Presentation;
+﻿using StarLab.Application.Help;
+using StarLab.Presentation;
 
 namespace StarLab.Application.Options
 {
-    public partial class OptionsView : View, IOptionsView
+    public partial class OptionsView : UserControl, IOptionsView
     {
         private readonly IOptionsViewPresenter presenter;
 
-        public OptionsView(IPresenterFactory presenterFactory)
-        {
+        public OptionsView(IPresenterFactory factory)
+        { 
             InitializeComponent();
 
-            presenter = (IOptionsViewPresenter)presenterFactory.CreatePresenter(this);
+            Name = Views.OPTIONS;
+
+            presenter = (IOptionsViewPresenter)factory.CreatePresenter(this);
         }
 
-        #region IOptionsView Members
-
-        public override void Initialise(IApplicationController controller)
+        public void Initialise(IApplicationController controller, IFormController parentController)
         {
-            base.Initialise(controller);
-
             presenter.Initialise(controller);
-        }
-
-        #endregion
-
-        protected override IViewController GetController()
-        {
-            return presenter;
         }
     }
 }

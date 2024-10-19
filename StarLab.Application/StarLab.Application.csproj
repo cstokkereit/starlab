@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net8.0-windows8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RootNamespace>StarLab</RootNamespace>
@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\StarLab.Application.Core\StarLab.Application.Core.csproj" />
+    <ProjectReference Include="..\StarLab.Shared.Resources\StarLab.Shared.Resources.csproj" />
   </ItemGroup>
 
 </Project>

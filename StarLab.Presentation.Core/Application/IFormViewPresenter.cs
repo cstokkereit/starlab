@@ -3,7 +3,7 @@ using StarLab.Presentation;
 
 namespace StarLab.Application
 {
-    public interface IFormViewPresenter : IPresenter, IViewController
+    public interface IFormViewPresenter : IPresenter, IDialogController, IViewController
     {
         /// <summary>
         /// 

@@ -7,8 +7,6 @@ namespace StarLab.Application
     /// </summary>
     public class Configuration : IConfiguration
     {
-        #region IConfiguration Members
-
         /// <summary>
         /// A flag indicating that the configuration has been changed and needs to be saved.
         /// </summary>
@@ -45,7 +43,5 @@ namespace StarLab.Application
                 Dirty = false;
             }
         }
-
-        #endregion
     }
 }

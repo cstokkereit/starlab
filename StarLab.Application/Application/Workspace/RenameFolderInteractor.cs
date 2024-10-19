@@ -2,62 +2,85 @@
 using StarLab.Application.DataTransfer;
 using StarLab.Application.Model;
 
+using StarLab.Shared.Properties;
+
 namespace StarLab.Application.Workspace
 {
-    internal class RenameFolderInteractor : UseCaseInteractor<IWorkspaceOutputPort>, IRenameDocumentUseCase
+    internal class RenameFolderInteractor : UseCaseInteractor<IWorkspaceOutputPort>, IRenameItemUseCase
     {
-        private readonly char[] invalidCharacters = { '/', '?', ':', '&',  '\\', '*', '\'', '\"', '<', '>', '|', '#', '%' };
-
         public RenameFolderInteractor(IWorkspaceOutputPort outputPort, IMapper mapper)
             : base(outputPort, mapper) { }
     
-        public void Execute(WorkspaceDTO dto, string id, string name)
+        public void Execute(WorkspaceDTO dto, string path, string name)
         {
-            throw new NotImplementedException();
+            if (IsValid(name))
+            {
+                var workspace = new Model.Workspace(dto);
+                var folder = workspace.GetFolder(path);
 
-            //var workspace = new Model.Workspace(dto);
+                var folders = folder.Parent != null ? folder.Parent.Folders : workspace.Folders;
 
-            //var document = workspace.GetDocument(id);
-
-            //var folder = workspace.GetFolder(document.Path);
-
-            //if (IsValid(folder, name))
-            //{
-            //    document.Name = name;
-            //}
-            //else
-            //{
-            //    throw new NotImplementedException(); // Show a message
-            //}
-
-            //OutputPort.UpdateDocument(Mapper.Map<IDocument, DocumentDTO>(document));
+                if (IsValid(folders, name))
+                {
+                    workspace.RenameFolder(folder, name);
+                    Mapper.Map(workspace.Documents, dto.Documents);
+                    Mapper.Map(workspace.Folders, dto.Folders);
+                    OutputPort.UpdateFolders(dto);
+                }
+                else
+                {
+                    throw CreateException(path.Substring(path.LastIndexOf('/') + 1), name);
+                }
+            }
+            else
+            {
+                throw CreateException();
+            }
         }
 
-        private bool IsValid(IFolder folder, string name)
+        private Exception CreateException(string oldName, string newName)
         {
-            throw new NotImplementedException();
+            return new Exception(string.Format(Resources.CannotRenameBecauseNameAlreadyExists, oldName, newName, Resources.Folder.ToLower()));
+        }
 
-            //var valid = true;
+        private Exception CreateException()
+        {
+            return new Exception(string.Format(Resources.NameContainsIllegalCharacters, Resources.Folder, string.Join(' ', Constants.IllegalCharacters)));
+        }
 
-            //foreach (var character in invalidCharacters)
-            //{
-            //    if (name.Contains(character))
-            //    {
-            //        valid = false;
-            //        break;
-            //    }
-            //}
+        private bool IsValid(IEnumerable<IFolder> folders, string name)
+        {
+            var valid = true;
 
-            //foreach (var document in folder.Documents)
-            //{
-            //    if (document.Name == name)
-            //    {
-            //        valid = false;
-            //        break;
-            //    }
-            //}
+            foreach (var folder in folders)
+            {
+                if (folder.Name == name)
+                {
+                    valid = false;
+                    break;
+                }
+            }
 
-            //return valid;
+            return valid;
+        }
+
+        private bool IsValid(string name)
+        {
+            var valid = !string.IsNullOrEmpty(name);
+
+            if (valid)
+            {
+                foreach (var character in Constants.IllegalCharacters)
+                {
+                    if (name.Contains(character))
+                    {
+                        valid = false;
+                        break;
+                    }
+                }
+            }
+
+            return valid;
         }
     }
 }

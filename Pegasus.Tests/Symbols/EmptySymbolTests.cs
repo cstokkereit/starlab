@@ -1,41 +1,40 @@
 ﻿namespace Pegasus.Symbols
 {
-    [TestClass]
     public class EmptySymbolTests
     {
         private static ISymbol empty = Symbol.Empty;
 
-        [TestMethod]
+        [Test]
         public void TestConstructor()
         {
             Assert.IsNotNull(empty);
         }
 
-        [TestMethod]
+        [Test]
         public void TestEqualsWhenArgumentIsDifferentType()
         {
             Assert.IsFalse(empty.Equals("ΔT<sub>1</sub><sup>2</sup>"));
         }
 
-        [TestMethod]
+        [Test]
         public void TestEqualsWhenArgumentIsEqual()
         {
             Assert.IsTrue(empty.Equals(Symbol.Empty));
         }
 
-        [TestMethod]
+        [Test]
         public void TestEqualsWhenArgumentIsNotEqual()
         {
             Assert.IsFalse(empty.Equals(new Symbol("Delta", "T", false, false, 1, 2)));
         }
 
-        [TestMethod]
+        [Test]
         public void TestEqualsWhenArgumentIsNull()
         {
             Assert.IsFalse(empty.Equals(null));
         }
 
-        [TestMethod]
+        [Test]
         public void TestEqualsWhenArgumentIsSameObject()
         {
             var empty2 = empty;
@@ -43,19 +42,19 @@
             Assert.IsTrue(empty.Equals(empty2));
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetHashCode()
         {
             Assert.AreEqual(0, empty.GetHashCode());
         }
 
-        [TestMethod]
+        [Test]
         public void TestToString()
         {
             Assert.AreEqual(string.Empty, empty.ToString());
         }
 
-        [TestMethod]
+        [Test]
         public void TestToStringFormattedAsRtf()
         {
             Assert.AreEqual(string.Empty, empty.ToString(new RtfFormatter()));

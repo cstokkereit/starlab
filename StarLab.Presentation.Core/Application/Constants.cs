@@ -18,11 +18,12 @@
         public const string CUT = "Cut";
 
         public const string DELETE = "delete";
-        public const string DOCUMENT = "Document";
         public const string DOCK_BOTTOM = "DockBottom";
         public const string DOCK_LEFT = "DockLeft";
         public const string DOCK_RIGHT = "DockRight";
         public const string DOCK_TOP = "DockTop";
+        public const string DOCUMENT = "Document";
+        public const string DOCUMENT_CONTROLLER = "Document({0}) Controller";
 
         public const string ELLIPSIS = "...";
 
@@ -51,6 +52,7 @@
 
         public const string SHOW_SETTINGS = "ShowSettings";
         public const string SPLIT_VIEW = "StarLab.UI.SplitView";
+        public const string STARLAB = "StarLab";
         public const string SYNCHRONISE = "Synchronise";
 
         public const string TOOLS = "Tools";

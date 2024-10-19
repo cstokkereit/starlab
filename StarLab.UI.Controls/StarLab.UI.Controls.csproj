@@ -10,10 +10,15 @@
 
   <ItemGroup>
     <ProjectReference Include="..\StarLab.Commands\StarLab.Commands.csproj" />
+    <ProjectReference Include="..\StarLab.Presentation.Core\StarLab.Presentation.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Properties\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Application\SplitContainer.cs" />
   </ItemGroup>
 
 </Project>

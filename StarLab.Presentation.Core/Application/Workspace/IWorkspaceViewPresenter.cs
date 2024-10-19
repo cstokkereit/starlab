@@ -1,6 +1,4 @@
-﻿using StarLab.Application;
-
-namespace StarLab.Application.Workspace
+﻿namespace StarLab.Application.Workspace
 {
     public interface IWorkspaceViewPresenter : IFormViewPresenter
     {

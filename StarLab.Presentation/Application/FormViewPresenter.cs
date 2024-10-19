@@ -1,25 +1,22 @@
 ﻿using AutoMapper;
 using StarLab.Application.Events;
+using StarLab.Commands;
 using StarLab.Presentation;
 using System.ComponentModel;
 
 namespace StarLab.Application
 {
-    public abstract class FormViewPresenter<T> : Presenter, IFormViewPresenter where T : IFormView
+    public class FormViewPresenter : Presenter, IFormViewPresenter
     {
-        private readonly T view;
+        private readonly IFormView view;
 
-        #region Constructors
-
-        public FormViewPresenter(T view, IUseCaseFactory useCaseFactory, IConfiguration configuration, IMapper mapper, IEventAggregator events)
-            : base(useCaseFactory, configuration, mapper, events)
+        public FormViewPresenter(IFormView view, ICommandManager commands, IUseCaseFactory useCaseFactory, IConfiguration configuration, IMapper mapper, IEventAggregator events)
+            : base(commands, useCaseFactory, configuration, mapper, events)
         {
             this.view = view;
         }
 
-        #endregion
-
-        #region IFormViewPresenter Members
+        public override string Name => view.Name + Constants.CONTROLLER;
 
         /// <summary>
         /// 
@@ -31,19 +28,29 @@ namespace StarLab.Application
             throw new NotImplementedException();
         }
 
-        #endregion
-
-        #region IViewController Members
-
-        public abstract void Show(IView view);
-
-        #endregion
-
-        protected T View { get => view; }
-
-        protected override string GetName()
+        public void Show(IView view)
         {
-            return View.Name + Constants.CONTROLLER;
+            this.view.Show(view);
+        }
+
+        public DialogResult ShowMessage(string caption, string message, MessageBoxButtons buttons, MessageBoxIcon icon)
+        {
+            return view.ShowMessage(caption, message, buttons, icon);
+        }
+
+        public void ShowMessage(string caption, string message, MessageBoxIcon icon)
+        {
+            view.ShowMessage(caption, message, icon);
+        }
+
+        public string ShowOpenFileDialog(string title, string filter)
+        {
+            return view.ShowOpenFileDialog(title, filter);
+        }
+
+        public string ShowSaveFileDialog(string title, string filter, string extension)
+        {
+            return view.ShowSaveFileDialog(title, filter, extension);
         }
     }
 }

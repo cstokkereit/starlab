@@ -21,8 +21,6 @@
 
         private readonly bool bold; // A flag that specifies the use of bold text in the string representation of this symbol.
 
-        #region Constructors
-
         /// <summary>
         /// Initialises a new instance of the <see cref="Symbol"/> class.
         /// </summary>
@@ -129,10 +127,6 @@
         public Symbol(string symbol)
             : this(symbol, false, false) { }
 
-        #endregion
-
-        #region ISymbol Members
-
         /// <summary>
         /// Determines whether this instance and a specified object, which must also be an <see cref="ISymbol"/> object, have the same value.
         /// </summary>
@@ -168,10 +162,6 @@
         {
             return formatter.Format(prefix, text, bold, italic, subscript, superscript);
         }
-
-        #endregion
-
-        #region Object Overrides
 
         /// <summary>
         /// Determines whether this instance and a specified object have the same value.
@@ -211,10 +201,6 @@
         {
             return ToString(new HtmlFormatter());
         }
-
-        #endregion
-
-        #region Static Members
 
         /// <summary>
         /// Returns an empty symbol.
@@ -259,8 +245,6 @@
             }
 
             return text;
-        } 
-
-        #endregion
+        }
     }
 }

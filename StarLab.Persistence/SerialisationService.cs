@@ -30,10 +30,7 @@ namespace StarLab.Serialisation
                 }
             }
 
-            if (workspace == null)
-            {
-                throw new Exception();
-            }
+            if (workspace == null) throw new Exception();
 
             return mapper.Map<Workspace, WorkspaceDTO>(workspace);
         }

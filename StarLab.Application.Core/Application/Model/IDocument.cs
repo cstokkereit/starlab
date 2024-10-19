@@ -6,6 +6,6 @@
 
         string Name { get; set; }
 
-        string Path { get; }
+        string Path { get; set; }
     }
 }

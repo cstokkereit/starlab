@@ -6,6 +6,8 @@ namespace StarLab.Application.Workspace
     {
         void UpdateDocument(DocumentDTO dto);
 
+        void UpdateFolders(WorkspaceDTO dto);
+
         void UpdateWorkspace(WorkspaceDTO dto);
     }
 }

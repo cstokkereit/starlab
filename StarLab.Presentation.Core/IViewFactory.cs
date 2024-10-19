@@ -6,10 +6,12 @@ namespace StarLab
 {
     public interface IViewFactory
     {
+        IControlView CreateControlView(string typeName);
+
         IDockableView CreateDocumentView(IDocument document);
 
-        IDockableView CreateToolView(string name);
+        IFormView CreateFormView(string id, string name);
 
-        IFormView CreateView(string name);
+        IDockableView CreateToolView(string id, string name);
     }
 }
