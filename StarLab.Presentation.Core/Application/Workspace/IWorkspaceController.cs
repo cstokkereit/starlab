@@ -1,7 +1,9 @@
 ﻿namespace StarLab.Application.Workspace
 {
-    public interface IWorkspaceController : IController
+    public interface IWorkspaceController : IViewController
     {
+        void AddFolder(string path);
+
         void CloseActiveDocument();
 
         void CloseWorkspace();
@@ -10,7 +12,7 @@
 
         void DeleteFolder(string path);
 
-        void AddFolder(string path);
+        void Exit();
 
         void NewWorkspace();
 

@@ -13,7 +13,7 @@
         {
             var command = new TestCommand(new MockReceiver<string>());
 
-            Assert.IsNotNull(command);
+            Assert.That(command, Is.Not.Null);
         }
 
         /// <summary>

@@ -1,5 +1,4 @@
 ﻿using StarLab.Commands;
-using StarLab.Presentation;
 using StarLab.Shared.Properties;
 
 namespace StarLab.Application.Workspace.WorkspaceExplorer

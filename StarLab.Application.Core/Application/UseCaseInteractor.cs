@@ -10,8 +10,8 @@ namespace StarLab.Application
 
         public UseCaseInteractor(T outputPort, IMapper mapper)
         {
-            this.outputPort = outputPort;
-            this.mapper = mapper;
+            this.outputPort = outputPort ?? throw new ArgumentNullException(nameof(outputPort));
+            this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
         protected IMapper Mapper => mapper;

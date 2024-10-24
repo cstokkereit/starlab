@@ -1,8 +1,6 @@
-﻿using StarLab.Presentation;
-
-namespace StarLab.Application.Workspace
+﻿namespace StarLab.Application.Workspace
 {
-    public interface IDockableViewPresenter : IPresenter, IDialogController, IViewController
+    public interface IDockableViewPresenter : IPresenter
     {
         string Location { get; set; }
     }

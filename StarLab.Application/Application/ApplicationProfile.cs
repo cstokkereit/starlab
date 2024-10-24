@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using StarLab.Application.DataTransfer;
-using StarLab.Application.Model;
+using StarLab.Application.Workspace;
+using StarLab.Application.Workspace.Documents;
 
 namespace StarLab.Application
 {
@@ -8,7 +8,7 @@ namespace StarLab.Application
     {
         public ApplicationProfile()
         {
-            CreateMap<Model.Workspace, WorkspaceDTO>();
+            CreateMap<Workspace.Workspace, WorkspaceDTO>();
             CreateMap<Content, ContentDTO>();
             CreateMap<Document, DocumentDTO>();
             CreateMap<Folder, FolderDTO>();

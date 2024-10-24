@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
-using StarLab.Application.Events;
+using StarLab.Application.Workspace.Documents;
 using StarLab.Commands;
-using StarLab.Presentation.Model;
 
 using ImageResources = StarLab.Properties.Resources;
 using StringResources = StarLab.Shared.Properties.Resources;
@@ -29,7 +28,7 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
         public WorkspaceExplorerViewPresenter(IWorkspaceExplorerView view, ICommandManager commands, IUseCaseFactory useCaseFactory, IConfiguration configuration, IMapper mapper, IEventAggregator events)
             : base(view, commands, useCaseFactory, configuration, mapper, events)
         {
-            workspace = new Presentation.Model.Workspace();
+            workspace = new Workspace();
         }
 
         public override string Name => throw new NotImplementedException();

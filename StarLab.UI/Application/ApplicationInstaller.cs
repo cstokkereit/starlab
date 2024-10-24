@@ -4,7 +4,6 @@ using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Services.Logging.Log4netIntegration;
 using Castle.Windsor;
-using StarLab.Application.Events;
 using StarLab.Commands;
 
 namespace StarLab.Application

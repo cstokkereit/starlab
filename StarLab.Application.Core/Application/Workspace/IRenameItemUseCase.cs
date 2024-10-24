@@ -1,6 +1,4 @@
-﻿using StarLab.Application.DataTransfer;
-
-namespace StarLab.Application.Workspace
+﻿namespace StarLab.Application.Workspace
 {
     public interface IRenameItemUseCase
     {

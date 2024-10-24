@@ -126,6 +126,10 @@
   <data name="Add" xml:space="preserve">
     <value>Add</value>
   </data>
+  <data name="ApplicationClosing" xml:space="preserve">
+    <value>Save your changes to the following items:
+{0}</value>
+  </data>
   <data name="CannotRenameBecauseNameAlreadyExists" xml:space="preserve">
     <value>Cannot rename '{0}' to '{1}' because a {2} with that name already exists.</value>
   </data>

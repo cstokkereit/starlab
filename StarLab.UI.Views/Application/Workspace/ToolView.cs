@@ -1,6 +1,4 @@
-﻿using StarLab.Presentation;
-
-using WeifenLuo.WinFormsUI.Docking;
+﻿using WeifenLuo.WinFormsUI.Docking;
 
 namespace StarLab.Application.Workspace
 {
@@ -29,7 +27,7 @@ namespace StarLab.Application.Workspace
             ResumeLayout();
         }
 
-        public IViewController Controller => presenter;
+        public IViewController Controller => (IViewController)presenter;
 
         public string ID => id;
 

@@ -1,4 +1,4 @@
-﻿using StarLab.Presentation.Model;
+﻿using StarLab.Application.Workspace.Documents;
 
 namespace StarLab.Application.Workspace
 {

@@ -1,7 +1,4 @@
 ﻿using AutoMapper;
-using StarLab.Application.DataTransfer;
-using StarLab.Application.Model;
-
 using StarLab.Shared.Properties;
 
 namespace StarLab.Application.Workspace
@@ -15,7 +12,7 @@ namespace StarLab.Application.Workspace
         {
             if (IsValid(name))
             {
-                var workspace = new Model.Workspace(dto);
+                var workspace = new Workspace(dto);
                 var folder = workspace.GetFolder(path);
 
                 var folders = folder.Parent != null ? folder.Parent.Folders : workspace.Folders;
@@ -48,7 +45,7 @@ namespace StarLab.Application.Workspace
             return new Exception(string.Format(Resources.NameContainsIllegalCharacters, Resources.Folder, string.Join(' ', Constants.IllegalCharacters)));
         }
 
-        private bool IsValid(IEnumerable<IFolder> folders, string name)
+        private bool IsValid(IEnumerable<Folder> folders, string name)
         {
             var valid = true;
 

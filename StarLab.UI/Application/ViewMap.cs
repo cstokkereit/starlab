@@ -1,6 +1,5 @@
 ﻿using StarLab.Application.Workspace;
-using StarLab.Presentation.Model;
-
+using StarLab.Application.Workspace.Documents;
 using StarLab.Shared.Properties;
 
 namespace StarLab.Application

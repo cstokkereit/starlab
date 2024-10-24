@@ -1,14 +1,9 @@
 ﻿using System.ComponentModel;
-using StarLab.Presentation;
 
 namespace StarLab.Application
 {
-    public interface IFormViewPresenter : IPresenter, IDialogController, IViewController
+    public interface IFormViewPresenter : IPresenter
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="e"></param>
-        void ViewClosing(CancelEventArgs e);
+        void ViewClosing(CancelEventArgs args);
     }
 }

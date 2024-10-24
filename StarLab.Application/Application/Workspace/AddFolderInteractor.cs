@@ -1,6 +1,4 @@
 ﻿using AutoMapper;
-using StarLab.Application.DataTransfer;
-using StarLab.Application.Model;
 using StarLab.Shared.Properties;
 
 namespace StarLab.Application.Workspace
@@ -12,7 +10,7 @@ namespace StarLab.Application.Workspace
 
         public void Execute(WorkspaceDTO dto, string key)
         {
-            var workspace = new Model.Workspace(dto);
+            var workspace = new Workspace(dto);
 
             var parent = workspace.GetFolder(key);
             var name = GetName(parent);
@@ -25,7 +23,7 @@ namespace StarLab.Application.Workspace
             OutputPort.UpdateFolders(dto);
         }
 
-        private string GetName(IFolder parent)
+        private string GetName(Folder parent)
         {
             var name = Resources.DefaultFolderName;
             var names = GetNames(parent.Folders);
@@ -39,7 +37,7 @@ namespace StarLab.Application.Workspace
             return name;
         }
 
-        private List<string> GetNames(IEnumerable<IFolder> folders)
+        private List<string> GetNames(IEnumerable<Folder> folders)
         {
             var names = new List<string>();
 

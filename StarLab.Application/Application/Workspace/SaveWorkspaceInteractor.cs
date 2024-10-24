@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using StarLab.Application.DataTransfer;
 
 namespace StarLab.Application.Workspace
 {
@@ -15,11 +14,15 @@ namespace StarLab.Application.Workspace
 
         public void Execute(WorkspaceDTO dto)
         {
-            throw new NotImplementedException();
-
-            //dto.FileName = "D:\\Users\\Colin\\Documents\\WIP\\StarLab\\Workspaces\\Workspace-2.slw";
-
-            //serialisationService.SerialiseWorkspace(dto, dto.FileName);
+            try
+            {
+                if (!string.IsNullOrEmpty(dto.FileName))
+                    serialisationService.SerialiseWorkspace(dto, dto.FileName);
+            }
+            catch (Exception e)
+            {
+                OutputPort.ShowErrorMessage(e.Message);
+            }
         }
     }
 }

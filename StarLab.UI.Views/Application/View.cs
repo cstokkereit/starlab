@@ -1,5 +1,4 @@
 ﻿using StarLab.Application;
-using StarLab.Presentation;
 
 namespace StarLab
 {
@@ -43,7 +42,7 @@ namespace StarLab
             presenter.Initialise(controller);
         }
 
-        public IViewController Controller => presenter;
+        public IViewController Controller => (IViewController)presenter;
 
         public string ID => id;
 

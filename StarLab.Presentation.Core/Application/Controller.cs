@@ -1,6 +1,4 @@
-﻿using StarLab.Application.Events;
-
-namespace StarLab.Application
+﻿namespace StarLab.Application
 {
     public abstract class Controller
     {

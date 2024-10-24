@@ -1,5 +1,4 @@
-﻿using StarLab.Presentation;
-using StarLab.Commands;
+﻿using StarLab.Commands;
 
 namespace StarLab.Application.Workspace.Documents.Charts
 {
@@ -19,11 +18,6 @@ namespace StarLab.Application.Workspace.Documents.Charts
         public void Initialise(IApplicationController controller, IDocumentController parentController)
         {
             presenter.Initialise(controller, parentController);
-        }
-
-        public void Initialise(IApplicationController controller)
-        {
-            presenter.Initialise(controller);
         }
 
         public void AttachCancelButtonCommand(ICommand command)

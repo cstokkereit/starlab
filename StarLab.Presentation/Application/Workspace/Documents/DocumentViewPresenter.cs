@@ -1,8 +1,5 @@
 ﻿using AutoMapper;
-using StarLab.Application.Events;
 using StarLab.Commands;
-using StarLab.Presentation;
-using StarLab.Presentation.Model;
 
 namespace StarLab.Application.Workspace.Documents
 {

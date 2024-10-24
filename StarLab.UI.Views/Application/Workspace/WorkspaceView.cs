@@ -1,5 +1,4 @@
 ﻿using StarLab.Commands;
-using StarLab.Presentation;
 using System.Text;
 using WeifenLuo.WinFormsUI.Docking;
 
@@ -28,15 +27,15 @@ namespace StarLab.Application.Workspace
 
             Text = name;
             Name = id;
-            
-            presenter = (IWorkspaceViewPresenter)factory.CreatePresenter(this);
+
+            presenter = factory.CreatePresenter(this);
 
             dockPanel.Theme = new VS2015LightTheme();
 
             dockPanel.Theme.Extender.FloatWindowFactory = new FloatWindowFactory();
         }
 
-        public IViewController Controller => presenter;
+        public IViewController Controller => (IViewController)presenter;
 
         public string ID => id;
 
@@ -164,7 +163,7 @@ namespace StarLab.Application.Workspace
 
         public void CloseActiveDocument()
         {
-            if (dockPanel.ActiveDocument != null) dockPanel.ActiveDocument.DockHandler.Close();
+            if (dockPanel.ActiveDocument != null) dockPanel.ActiveDocument.DockHandler.Hide();
         }
 
         public void CloseAll()
@@ -208,15 +207,6 @@ namespace StarLab.Application.Workspace
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="controller"></param>
-        public void Initialise(IApplicationController controller)
-        {
-            throw new NotImplementedException(); // This should not be called
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="layout"></param>
         public void SetLayout(string layout)
         {
@@ -229,18 +219,16 @@ namespace StarLab.Application.Workspace
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="view"></param>
-        public void Show(IDockableView view)
-        {
-            if (view is DockContent dockable) dockable.Show(dockPanel);
-        }
-
         public void Show(IView view)
         {
-            if (view is Form form) form.Show(this);
+            if (view is DockContent dockable)
+            {
+                dockable.Show(dockPanel);
+            }
+            else if (view is Form form)
+            {
+                form.Show(this);
+            }
         }
 
         /// <summary>
@@ -310,6 +298,11 @@ namespace StarLab.Application.Workspace
             {
                 presenter.ClearActiveDocument();
             }
+        }
+
+        private void Form_Closing(object sender, FormClosingEventArgs e)
+        {
+            presenter.ViewClosing(e);
         }
     }
 }

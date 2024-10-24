@@ -1,5 +1,4 @@
 ﻿using Castle.Core.Logging;
-using StarLab.Application.Events;
 using StarLab.Application.Workspace;
 using StarLab.Commands;
 using StarLab.Shared.Properties;
@@ -30,6 +29,33 @@ namespace StarLab.Application
         }
 
         public override string Name => Constants.APPLICATION + Constants.CONTROLLER;
+
+        public void Exit()
+        {
+            if (controllers[Constants.WORKSPACE_VIEW_CONTROLLER] is IWorkspaceController controller)
+            {
+                var result = controller.ShowMessage(Resources.StarLab, Resources.ApplicationClosing, MessageBoxButtons.YesNoCancel, MessageBoxIcon.None);
+
+                switch (result)
+                {
+                    case DialogResult.No:
+                        controller.Exit();
+                        break;
+
+                    case DialogResult.Yes:
+                        controller.Exit();
+                        break;
+                }
+
+                // TODO 
+                // Change to a custom dialog that will centre on the application
+                // Identify dirty items documentController.Dirty ?
+                // Perform any cleanup here prior to closing the workspace
+                // Save and/or close all open forms
+                // Teardown parent child relationships
+                // Implement the save functionality
+            }
+        }
 
         public ICommand GetCommand(ICommandManager commands, IController controller, string action, string target)
         {
@@ -124,9 +150,9 @@ namespace StarLab.Application
             {
                 workspaceView.Initialise(this, (IDockableViewFactory)views);
             }
-            else
+            else if (view is IDockableView dockableView)
             {
-                view.Initialise(this);
+                dockableView.Initialise(this);
             }
 
             controllers.Add(view.Controller.Name, view.Controller);

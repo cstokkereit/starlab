@@ -23,12 +23,6 @@
         string Text { get; set; }
 
         /// <summary>
-        /// Initialises the view.
-        /// </summary>
-        /// <param name="controller">The <see cref="IApplicationController"/>.</param>
-        void Initialise(IApplicationController controller);
-
-        /// <summary>
         /// Shows the specified view.
         /// </summary>
         /// <param name="view">The <see cref="IView"/> to be shown.</param>

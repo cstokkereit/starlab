@@ -1,6 +1,4 @@
-﻿using StarLab.Presentation;
-
-namespace StarLab.Application.Help
+﻿namespace StarLab.Application.Help
 {
     public partial class AboutView : UserControl, IAboutView
     {

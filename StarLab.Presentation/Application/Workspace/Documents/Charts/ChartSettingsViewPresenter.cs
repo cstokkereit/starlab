@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using StarLab.Application.Events;
 using StarLab.Commands;
 
 using ImageResources = StarLab.Properties.Resources;

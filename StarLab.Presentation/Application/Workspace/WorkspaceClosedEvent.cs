@@ -1,6 +1,4 @@
-﻿using StarLab.Presentation.Model;
-
-namespace StarLab.Application.Workspace
+﻿namespace StarLab.Application.Workspace
 {
     public class WorkspaceClosedEvent
     {

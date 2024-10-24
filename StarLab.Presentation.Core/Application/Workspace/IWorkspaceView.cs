@@ -28,11 +28,5 @@
         /// </summary>
         /// <param name="layout"></param>
         void SetLayout(string layout);
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="view"></param>
-        void Show(IDockableView view);
     }
 }

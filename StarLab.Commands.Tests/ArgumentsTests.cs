@@ -13,7 +13,7 @@
         {
             var arguments = new Arguments();
 
-            Assert.IsNotNull(arguments);
+            Assert.That(arguments, Is.Not.Null);
         }
 
         /// <summary>

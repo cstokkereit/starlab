@@ -88,6 +88,16 @@ namespace StarLab.Shared.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Save your changes to the following items:
+        ///{0}.
+        /// </summary>
+        public static string ApplicationClosing {
+            get {
+                return ResourceManager.GetString("ApplicationClosing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cannot rename &apos;{0}&apos; to &apos;{1}&apos; because a {2} with that name already exists..
         /// </summary>
         public static string CannotRenameBecauseNameAlreadyExists {

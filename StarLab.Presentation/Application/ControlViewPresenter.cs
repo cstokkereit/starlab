@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
-using StarLab.Application.Events;
 using StarLab.Commands;
-using StarLab.Presentation;
 
 using StarLab.Shared.Properties;
 

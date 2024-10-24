@@ -1,9 +1,6 @@
 ﻿using AutoMapper;
-using StarLab.Application.DataTransfer;
-using StarLab.Application.Events;
+using StarLab.Application.Workspace.Documents;
 using StarLab.Commands;
-using StarLab.Presentation;
-using StarLab.Presentation.Model;
 using System.ComponentModel;
 
 using ImageResources = StarLab.Properties.Resources;
@@ -19,10 +16,12 @@ namespace StarLab.Application.Workspace
 
         private IWorkspace workspace;
 
+        private bool confirmExit = true;
+
         public WorkspaceViewPresenter(IWorkspaceView view, ICommandManager commands, IUseCaseFactory useCaseFactory, IConfiguration configuration, IMapper mapper, IEventAggregator events)
             : base(commands, useCaseFactory, configuration, mapper, events)
         {
-            workspace = new Presentation.Model.Workspace();
+            workspace = new Workspace();
 
             this.view = view;
         }
@@ -57,13 +56,9 @@ namespace StarLab.Application.Workspace
             IDockableView view;
 
             if (workspace.HasDocument(id))
-            {
                 view = factory.CreateView(workspace.GetDocument(id));
-            }
             else
-            {
                 view = factory.GetView(id);
-            }
 
             return view;
         }
@@ -80,6 +75,13 @@ namespace StarLab.Application.Workspace
             var interactor = UseCaseFactory.CreateDeleteFolderUseCase(this);
             var dto = Mapper.Map<IWorkspace, WorkspaceDTO>(workspace);
             interactor.Execute(dto, path);
+        }
+
+        public void Exit()
+        {
+            confirmExit = false;
+            
+            view.Close();
         }
 
         public void Initialise(IApplicationController controller, IDockableViewFactory factory)
@@ -173,9 +175,14 @@ namespace StarLab.Application.Workspace
             }
         }
 
-        public void ShowMessage(string message)
+        public void ShowErrorMessage(string message)
         {
-            view.ShowMessage(StringResources.StarLab, message, MessageBoxIcon.Error);
+            ShowMessage(StringResources.StarLab, message, MessageBoxIcon.Error);
+        }
+
+        public void ShowWarningMessage(string message)
+        {
+            ShowMessage(StringResources.StarLab, message, MessageBoxIcon.Warning);
         }
 
         public DialogResult ShowMessage(string caption, string message, MessageBoxButtons buttons, MessageBoxIcon icon)
@@ -215,7 +222,7 @@ namespace StarLab.Application.Workspace
 
         public void UpdateFolders(WorkspaceDTO dto)
         {
-            workspace = new Presentation.Model.Workspace(dto);
+            workspace = new Workspace(dto);
 
             Events.Publish(new WorkspaceChangedEvent(workspace));
         }
@@ -226,7 +233,7 @@ namespace StarLab.Application.Workspace
 
             view.CloseAll();
 
-            workspace = new Presentation.Model.Workspace(dto);
+            workspace = new Workspace(dto);
 
             if (!string.IsNullOrEmpty(workspace.Layout))
             {
@@ -234,16 +241,25 @@ namespace StarLab.Application.Workspace
             }
 
             Events.Publish(new WorkspaceChangedEvent(workspace));
-        }
 
+            if (!string.IsNullOrEmpty(dto.FileName))
+            {
+                Configuration.Workspace = dto.FileName;
+                Configuration.Save();
+            }
+        }
+        
         /// <summary>
         /// 
         /// </summary>
         /// <param name="e"></param>
-        /// <exception cref="NotImplementedException"></exception>
         public void ViewClosing(CancelEventArgs e)
         {
-            throw new NotImplementedException();
+            if (confirmExit)
+            {
+                GetCommand(Actions.EXIT_APPLICATION).Execute();
+                e.Cancel = true;
+            }
         }
 
         /// <summary>
@@ -265,7 +281,7 @@ namespace StarLab.Application.Workspace
             view.AddMenuItem(Constants.FILE, Constants.FILE_PAGE_SETUP, StringResources.PageSetup + Constants.ELLIPSIS, ImageResources.PageSetup); //, AppController.GetCommand(this, Constants.FILE_PAGE_SETUP));
             view.AddMenuItem(Constants.FILE, Constants.FILE_PRINT, StringResources.Print + Constants.ELLIPSIS, ImageResources.Print); //, AppController.GetCommand(this, Constants.FILE_PRINT));
             view.AddMenuSeparator(Constants.FILE);
-            //view.AddMenuItem(Constants.FILE, Constants.FILE_EXIT, StringResources.Exit, GetCommand(Constants.FILE_EXIT));
+            view.AddMenuItem(Constants.FILE, Constants.FILE_EXIT, StringResources.Exit, GetCommand(AppController, Actions.EXIT_APPLICATION));
         }
 
         /// <summary>

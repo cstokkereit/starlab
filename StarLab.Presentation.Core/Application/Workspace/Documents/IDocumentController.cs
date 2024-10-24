@@ -1,6 +1,6 @@
 ﻿namespace StarLab.Application.Workspace.Documents
 {
-    public interface IDocumentController : IController, IDialogController, IToolbarManager
+    public interface IDocumentController : IViewController, IToolbarManager
     {
         void HideSplitContent(string name);
 

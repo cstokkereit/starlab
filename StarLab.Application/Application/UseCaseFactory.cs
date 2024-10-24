@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using StarLab.Application.Workspace;
+using StarLab.Application.Workspace.Documents;
 
 namespace StarLab.Application
 {

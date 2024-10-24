@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using StarLab.Application.DataTransfer;
 
 namespace StarLab.Application.Workspace
 {
@@ -10,7 +9,7 @@ namespace StarLab.Application.Workspace
 
         public void Execute(WorkspaceDTO dto, string key)
         {
-            var workspace = new Model.Workspace(dto);
+            var workspace = new Workspace(dto);
 
             workspace.DeleteFolder(key);
 

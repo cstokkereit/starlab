@@ -28,11 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            menuStrip = new Application.MenuStrip();
+            menuStrip = new MenuStrip();
             statusStrip = new StatusStrip();
             toolStripContainer = new ToolStripContainer();
             dockPanel = new WeifenLuo.WinFormsUI.Docking.DockPanel();
-            toolStrip = new Application.ToolStrip();
+            toolStrip = new ToolStrip();
             toolStripContainer.ContentPanel.SuspendLayout();
             toolStripContainer.TopToolStripPanel.SuspendLayout();
             toolStripContainer.SuspendLayout();
@@ -101,6 +101,7 @@
             MainMenuStrip = menuStrip;
             Name = "WorkspaceView";
             Text = "StarLab";
+            FormClosing += Form_Closing;
             toolStripContainer.ContentPanel.ResumeLayout(false);
             toolStripContainer.TopToolStripPanel.ResumeLayout(false);
             toolStripContainer.TopToolStripPanel.PerformLayout();

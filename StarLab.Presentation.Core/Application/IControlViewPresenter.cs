@@ -1,6 +1,4 @@
-﻿using StarLab.Presentation;
-
-namespace StarLab.Application
+﻿namespace StarLab.Application
 {
     public interface IControlViewPresenter : IPresenter
     {

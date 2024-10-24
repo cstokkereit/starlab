@@ -1,7 +1,4 @@
-﻿using StarLab.Application.Help;
-using StarLab.Presentation;
-
-namespace StarLab.Application.Options
+﻿namespace StarLab.Application.Options
 {
     public partial class OptionsView : UserControl, IOptionsView
     {

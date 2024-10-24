@@ -1,4 +1,4 @@
-﻿using StarLab.Application.DataTransfer;
+﻿using StarLab.Application.Workspace;
 
 namespace StarLab.Application
 {

@@ -14,11 +14,22 @@ namespace StarLab.Application.Workspace
 
         public void Execute(string filename)
         {
-            var dto = serialisationService.DeserialiseWorkspace(filename);
+            try
+            {
+                var dto = serialisationService.DeserialiseWorkspace(filename);
 
-            // Handle errors etc, return result? success failure
+                dto.FileName = filename;
 
-            OutputPort.UpdateWorkspace(dto);
+                OutputPort.UpdateWorkspace(dto);
+            }
+            catch (FileNotFoundException e1)
+            {
+                OutputPort.ShowErrorMessage(e1.Message);
+            }
+            catch (Exception e2)
+            {
+                OutputPort.ShowErrorMessage(e2.Message);
+            }
         }
     }
 }

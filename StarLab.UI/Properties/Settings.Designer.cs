@@ -25,7 +25,7 @@ namespace StarLab.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("D:\\Users\\Colin\\Documents\\WIP\\StarLab\\Workspaces\\Workspace-2.slw")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string Workspace {
             get {
                 return ((string)(this["Workspace"]));

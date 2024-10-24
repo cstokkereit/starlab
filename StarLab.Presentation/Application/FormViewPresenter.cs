@@ -1,12 +1,10 @@
 ﻿using AutoMapper;
-using StarLab.Application.Events;
 using StarLab.Commands;
-using StarLab.Presentation;
 using System.ComponentModel;
 
 namespace StarLab.Application
 {
-    public class FormViewPresenter : Presenter, IFormViewPresenter
+    public class FormViewPresenter : Presenter, IFormViewPresenter, IViewController
     {
         private readonly IFormView view;
 

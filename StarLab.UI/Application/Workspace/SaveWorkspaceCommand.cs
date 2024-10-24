@@ -9,7 +9,7 @@ namespace StarLab.Application.Workspace
 
         public override void Execute()
         {
-            receiver.NewWorkspace();
+            receiver.SaveWorkspace();
         }
     }
 }

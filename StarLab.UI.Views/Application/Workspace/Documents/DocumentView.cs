@@ -1,6 +1,4 @@
 ﻿using StarLab.Commands;
-using StarLab.Presentation;
-using StarLab.Presentation.Model;
 using WeifenLuo.WinFormsUI.Docking;
 
 namespace StarLab.Application.Workspace.Documents
@@ -31,7 +29,7 @@ namespace StarLab.Application.Workspace.Documents
             }
         }
 
-        public IViewController Controller => presenter;
+        public IViewController Controller => (IViewController)presenter;
 
         public string ID => id;
 

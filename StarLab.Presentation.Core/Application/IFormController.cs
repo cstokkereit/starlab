@@ -1,6 +1,6 @@
 ﻿namespace StarLab.Application
 {
-    public interface IFormController : IController, IDialogController
+    public interface IFormController : IViewController
     {
 
     }

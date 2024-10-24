@@ -5,7 +5,7 @@ namespace StarLab.Application
 {
     public interface IApplicationController : IController
     {
-        //ICommand CreateAggregateCommand(IEnumerable<ICommand> commands, string view);
+        void Exit();
 
         ICommand GetCommand(ICommandManager commands, IController controller, string action, string target);
 

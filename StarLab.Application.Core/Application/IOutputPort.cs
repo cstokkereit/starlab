@@ -6,6 +6,12 @@
         /// 
         /// </summary>
         /// <param name="message"></param>
-        void ShowMessage(string message);
+        void ShowErrorMessage(string message);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="message"></param>
+        void ShowWarningMessage(string message);
     }
 }

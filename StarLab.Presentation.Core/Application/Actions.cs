@@ -13,6 +13,8 @@
         public const string DELETE_DOCUMENT = "DeleteDocument";
         public const string DELETE_FOLDER = "DeleteFolder";
 
+        public const string EXIT_APPLICATION = "ExitApplication";
+
         public const string HIDE_SPLIT_CONTENT = "HideSplitContent";
 
         public const string NEW_WORKSPACE = "NewWorkspace";
