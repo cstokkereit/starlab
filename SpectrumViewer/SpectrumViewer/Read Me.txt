@@ -1,0 +1,22 @@
+ You will need to install Microsoft Visual Studio Community 2022 17.10.5 or later with C# Tools and Nuget Package Manager at least - may just come with it.
+ 
+ I have created a skelton project with the correct output type, target .net/OS versions etc.
+ 
+ You will need to use the Nuget Package Manager to install ScottPlot.WinForms 5.0.40 - Awsome graphing package - you may get some warnings about component compatibility but it still seems to work OK on my machine.
+ 
+ I think the best thing to do first off is load the first two columns of the data files and write them out as rows in new delimted files - this will reduce the size and make importing the data easier. ScottPlot will accept
+ separate arrays of x and y values so should be easy to load the converted files by spitting on the separator.
+ 
+ The ScottPlot documentation is here - I have notriced some of the documentation seems to be out of date but they have just released a new version so it may be sorted now. give me a shout if any problems as I have a working chart
+ using the latest code.
+ 
+ https://scottplot.net/cookbook/5.0/
+ 
+ https://scottplot.net/demo/5.0/
+ 
+ Once you have generated a graph of the spectrum save it out as a png.
+ 
+ Ultimately will want to select a range of files, do the conversion, import and png generation as a batch process.
+ 
+ Have fun.
+ 
