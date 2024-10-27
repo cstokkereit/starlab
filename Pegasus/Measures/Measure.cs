@@ -70,7 +70,7 @@ namespace Pegasus.Measures
         public override string ToString()
         {
             return value.ToString() + " " + units.ToString();
-        } 
+        }
 
         private double GetDoubleValue()
         {

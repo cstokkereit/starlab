@@ -77,11 +77,14 @@ namespace StarLab.Application.Workspace
             folders.Add(folder);
         }
 
-        public void DeleteContents()
+        public void DeleteDocument(Document document)
         {
-            documents.Clear();
-            folders.Clear();
-            Parent = null;
+            documents.Remove(document);
+        }
+
+        public void DeleteFolder(Folder folder)
+        {
+            folders.Remove(folder);
         }
     }
 }

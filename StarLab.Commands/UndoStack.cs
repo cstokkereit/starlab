@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace StarLab.Commands
+﻿namespace StarLab.Commands
 {
     /// <summary>
     /// A basic implementation of the <see cref="IUndoStack"/> class.

@@ -1,4 +1,5 @@
-﻿using ScottPlot;
+﻿using log4net;
+using ScottPlot;
 using ScottPlot.Plottables;
 using System.Text.RegularExpressions;
 
@@ -9,6 +10,8 @@ namespace StarLab.Application.Workspace.Documents.Charts
     // https://github.com/casaluca/bolometric-corrections
     public partial class ChartView : UserControl, IChartView
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(ChartView));
+
         private readonly IChartViewPresenter presenter;
 
         readonly ScottPlot.Plottables.Rectangle RectanglePlot;
@@ -26,7 +29,15 @@ namespace StarLab.Application.Workspace.Documents.Charts
 
             InitializeComponent();
 
-            presenter = (IChartViewPresenter)presenterFactory.CreatePresenter(this);
+            try
+            {
+                presenter = (IChartViewPresenter)presenterFactory.CreatePresenter(this);
+            }
+            catch (Exception ex)
+            {
+                log.Fatal(ex.Message, ex);
+                throw;
+            }
 
             Name = Views.CHART;
 
@@ -147,7 +158,7 @@ namespace StarLab.Application.Workspace.Documents.Charts
         Coordinates MouseNowCoordinates;
         CoordinateRect MouseSlectionRect => new(MouseDownCoordinates, MouseNowCoordinates);
         bool MouseIsDown = true;
-        
+
         bool selectPoints = false;
 
         Regex regex = new Regex(@"([OBAFGKM]\d[\.\d]*[\/]?[OBAFGKM]?[\d\.\d]?)(I{0,3}V?[-|\/]?I{0,3}V?)(.*)", RegexOptions.Compiled);
@@ -173,7 +184,7 @@ namespace StarLab.Application.Workspace.Documents.Charts
 
                         if (!string.IsNullOrEmpty(apparentMagnitude) && !string.IsNullOrEmpty(parallax) && !string.IsNullOrEmpty(spectralType))
                         {
-                            var d = 1/(double.Parse(parallax)/1000);
+                            var d = 1 / (double.Parse(parallax) / 1000);
                             var M = 5 + double.Parse(apparentMagnitude) - (5 * Math.Log10(d));
 
                             xValues.Add(Parse(spectralType));
@@ -303,8 +314,8 @@ namespace StarLab.Application.Workspace.Documents.Charts
             if (bottom.Max > 69) bottom.Max = 69;
 
             IYAxis left = rp.Plot.Axes.Left;
-            if (left.Min >20) left.Min = 20;
-            if (left.Max <-10) left.Max = -10;
+            if (left.Min > 20) left.Min = 20;
+            if (left.Max < -10) left.Max = -10;
 
         }
     }

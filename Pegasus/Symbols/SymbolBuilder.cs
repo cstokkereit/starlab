@@ -502,7 +502,7 @@
         /// <returns>The <see cref="ISymbol"/> representation of the specified symbol.</returns>
         public static ISymbol CreateSymbolWithSuperscript(string symbol, bool bold, bool italic, string superscript)
         {
-            return new Symbol(symbol,bold, italic , string.Empty, superscript);
+            return new Symbol(symbol, bold, italic, string.Empty, superscript);
         }
 
         /// <summary>

@@ -1,6 +1,4 @@
-﻿using StarLab.Application;
-
-namespace StarLab.Application
+﻿namespace StarLab.Application
 {
     public interface IViewMap
     {

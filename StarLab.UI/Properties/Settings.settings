@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="Workspace" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">D:\Users\Colin\Documents\WIP\StarLab\Workspaces\Workspace-2.slw</Value>
     </Setting>
   </Settings>
 </SettingsFile>

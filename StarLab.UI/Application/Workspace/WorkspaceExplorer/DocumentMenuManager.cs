@@ -2,14 +2,15 @@
 {
     internal class DocumentMenuManager : MenuStateManager, IMenuManager
     {
-        //private readonly string document;
-
-        public DocumentMenuManager(string document)
-            : base(document) { }
+        public DocumentMenuManager(string name)
+            : base(name) { }
 
         protected override bool IsTargetNode(TreeNode node)
         {
-            return (string)node.Tag == Constants.DOCUMENT & node.Name == Name;
+            if (node != null)
+                return (string)node.Tag == Constants.DOCUMENT & node.Name == Name;
+
+            return false;
         }
     }
 }

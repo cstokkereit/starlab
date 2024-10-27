@@ -121,7 +121,7 @@
         [Test]
         public void TestCreateSymbolQuotientFromIEnumerableAndISymbol()
         {
-            var quotient = SymbolBuilder.CreateQuotient(new[] { SymbolBuilder.CreateSymbol("kg"), SymbolBuilder.CreateSymbol("m") }, 
+            var quotient = SymbolBuilder.CreateQuotient(new[] { SymbolBuilder.CreateSymbol("kg"), SymbolBuilder.CreateSymbol("m") },
                                                                 SymbolBuilder.CreateSymbolWithSuperscript("s", false, false, 2));
 
             Assert.AreEqual("(kg m)/s<sup>2</sup>", quotient.ToString());
@@ -130,7 +130,7 @@
         [Test]
         public void TestCreateSymbolQuotientFromISymbolAndIEnumerable()
         {
-            var quotient = SymbolBuilder.CreateQuotient(SymbolBuilder.CreateSymbol("J"), 
+            var quotient = SymbolBuilder.CreateQuotient(SymbolBuilder.CreateSymbol("J"),
                                                         new[] { SymbolBuilder.CreateSymbol("s"), SymbolBuilder.CreateSymbolWithSuperscript("A", false, false, 2) });
 
             Assert.AreEqual("J/(s A<sup>2</sup>)", quotient.ToString());

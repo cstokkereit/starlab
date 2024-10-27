@@ -33,7 +33,18 @@ namespace StarLab.Application.Workspace
 
         public void DeleteDocument(string id)
         {
-            throw new NotImplementedException();
+            var document = GetDocument(id);
+
+            if (document != null && foldersByPath.ContainsKey(document.Path))
+            {
+                var folder = foldersByPath[document.Path];
+
+                if (folder != null)
+                {
+                    folder.DeleteDocument(document);
+                    documentsByID.Remove(id);
+                }
+            }
         }
 
         public void DeleteFolder(string path)
@@ -113,9 +124,9 @@ namespace StarLab.Application.Workspace
                 DeleteFolders(child);
             }
 
+            if (folder.Parent != null && foldersByPath.ContainsKey(folder.Parent.Path)) foldersByPath[folder.Parent.Path].DeleteFolder(folder);
+            
             foldersByPath.Remove(folder.Path);
-
-            folder.DeleteContents();
         }
 
         private void UpdatePaths(IEnumerable<Folder> folders)

@@ -1,9 +1,6 @@
 ﻿using AutoMapper;
 using StarLab.Commands;
 
-using ImageResources = StarLab.Properties.Resources;
-using StringResources = StarLab.Shared.Properties.Resources;
-
 namespace StarLab.Application.Workspace.Documents.Charts
 {
     internal class ColourMagnitudeChartViewPresenter : ControlViewPresenter<IChartView>, IChartViewPresenter

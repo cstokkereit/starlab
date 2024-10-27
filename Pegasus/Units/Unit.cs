@@ -24,7 +24,7 @@ namespace Pegasus.Units
             : this(name, symbol, new HtmlFormatter()) { }
 
         public Unit(string name, string symbol)
-            : this(name, new Symbol(symbol)) { } 
+            : this(name, new Symbol(symbol)) { }
 
         public override string ToString()
         {

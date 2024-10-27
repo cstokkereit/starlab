@@ -334,7 +334,7 @@
 
             stack.Undo();
             stack.Undo();
-            
+
             Assert.Throws<InvalidOperationException>(() => stack.Undo());
         }
 

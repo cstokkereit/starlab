@@ -3,11 +3,10 @@ using Castle.Windsor;
 using StarLab.Application.Workspace;
 using StarLab.Application.Workspace.Documents;
 using StarLab.Commands;
-using StarLab.Shared.Properties;
 
 namespace StarLab.Application
 {
-    public class PresenterFactory : IPresenterFactory
+    public class PresenterFactory : Factory, IPresenterFactory
     {
         private readonly Dictionary<string, string> presenters = new Dictionary<string, string>();
 
@@ -36,23 +35,7 @@ namespace StarLab.Application
         {
             var commands = container.Resolve<ICommandManager>();
 
-            IControlViewPresenter? presenter = null;
-
-            var typeName = presenters[view.Name];
-
-            var type = Type.GetType(typeName);
-
-            if (type != null)
-            {
-                presenter = Activator.CreateInstance(type, new object[] { view, commands, useCaseFactory, configuration, mapper, events }) as IControlViewPresenter;
-            }
-
-            if (presenter == null)
-            {
-                throw new Exception(string.Format(Resources.CouldNotBeCreated, typeName));
-            }
-
-            return presenter;
+            return (IControlViewPresenter)CreateInstance(presenters[view.Name], new object[] { view, commands, useCaseFactory, configuration, mapper, events });
         }
 
         public IDockableViewPresenter CreatePresenter(IDockableView view, string id, string name)
@@ -85,11 +68,11 @@ namespace StarLab.Application
 
         private void Initialise()
         {
-            presenters.Add(Views.ABOUT, "StarLab.Application.Help.AboutViewPresenter");
-            presenters.Add(Views.CHART_SETTINGS, "StarLab.Application.Workspace.Documents.Charts.ChartSettingsViewPresenter");
-            presenters.Add(Views.CHART, "StarLab.Application.Workspace.Documents.Charts.ColourMagnitudeChartViewPresenter");
-            presenters.Add(Views.OPTIONS, "StarLab.Application.Options.OptionsViewPresenter");
-            presenters.Add(Views.WORKSPACE_EXPLORER, "StarLab.Application.Workspace.WorkspaceExplorer.WorkspaceExplorerViewPresenter");
+            presenters.Add(Views.ABOUT, "StarLab.Application.Help.AboutViewPresenter, StarLab.Presentation");
+            presenters.Add(Views.CHART_SETTINGS, "StarLab.Application.Workspace.Documents.Charts.ChartSettingsViewPresenter, StarLab.Presentation");
+            presenters.Add(Views.CHART, "StarLab.Application.Workspace.Documents.Charts.ColourMagnitudeChartViewPresenter, StarLab.Presentation");
+            presenters.Add(Views.OPTIONS, "StarLab.Application.Options.OptionsViewPresenter, StarLab.Presentation");
+            presenters.Add(Views.WORKSPACE_EXPLORER, "StarLab.Application.Workspace.WorkspaceExplorer.WorkspaceExplorerViewPresenter, StarLab.Presentation");
         }
     }
 }

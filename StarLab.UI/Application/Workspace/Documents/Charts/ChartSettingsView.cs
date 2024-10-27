@@ -1,17 +1,28 @@
-﻿using StarLab.Commands;
+﻿using log4net;
+using StarLab.Commands;
 
 namespace StarLab.Application.Workspace.Documents.Charts
 {
     public partial class ChartSettingsView : UserControl, IChartSettingsView
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(ChartSettingsView));
+
         private readonly IChartSettingsViewPresenter presenter;
 
         public ChartSettingsView(IPresenterFactory presenterFactory)
         {
             InitializeComponent();
 
-            presenter = (IChartSettingsViewPresenter)presenterFactory.CreatePresenter(this);
-
+            try
+            {
+                presenter = (IChartSettingsViewPresenter)presenterFactory.CreatePresenter(this);
+            }
+            catch (Exception ex)
+            {
+                log.Fatal(ex.Message, ex);
+                throw;
+            }
+            
             Name = Views.CHART_SETTINGS;
         }
 

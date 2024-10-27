@@ -50,8 +50,8 @@
                 var dialog = new OpenFileDialog
                 {
                     AddExtension = false,
-                    CheckFileExists = true,
-                    CheckPathExists = true,
+                    CheckFileExists = false,
+                    CheckPathExists = false,
                     Filter = filter,
                     Multiselect = false,
                     Title = title,

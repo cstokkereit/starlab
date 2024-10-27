@@ -11,9 +11,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Castle.Core-log4net" Version="5.1.1" />
-    <PackageReference Include="Castle.LoggingFacility" Version="6.0.0" />
     <PackageReference Include="Castle.Windsor" Version="6.0.0" />
+    <PackageReference Include="DockPanelSuite" Version="3.1.1" />
+    <PackageReference Include="DockPanelSuite.ThemeVS2015" Version="3.1.1" />
+    <PackageReference Include="log4net" Version="3.0.2" />
+    <PackageReference Include="ScottPlot.WinForms" Version="5.0.40" />
   </ItemGroup>
 
   <ItemGroup>
@@ -21,10 +23,34 @@
     <ProjectReference Include="..\StarLab.Persistence\StarLab.Serialisation.csproj" />
     <ProjectReference Include="..\StarLab.Presentation.Core\StarLab.Presentation.Core.csproj" />
     <ProjectReference Include="..\StarLab.Presentation\StarLab.Presentation.csproj" />
-    <ProjectReference Include="..\StarLab.UI.Views\StarLab.UI.Views.csproj" />
+    <ProjectReference Include="..\StarLab.UI.Controls\StarLab.UI.Controls.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Application\Help\AboutView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Application\Options\OptionsView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Application\View.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Application\Workspace\Documents\Charts\ChartSettingsView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Application\Workspace\Documents\Charts\ChartView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Application\Workspace\Documents\DocumentView.cs" />
+    <Compile Update="Application\Workspace\SizeableFloatWindow.cs" />
+    <Compile Update="Application\Workspace\ToolView.cs" />
+    <Compile Update="Application\Workspace\WorkspaceExplorer\WorkspaceExplorerView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Application\Workspace\WorkspaceView.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Properties\Settings.Designer.cs">
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <AutoGen>True</AutoGen>
@@ -36,6 +62,7 @@
     <None Update="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 

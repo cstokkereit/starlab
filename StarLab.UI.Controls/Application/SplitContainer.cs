@@ -1,5 +1,4 @@
 ﻿using StarLab.Commands;
-using System.Windows.Forms;
 
 namespace StarLab.Application
 {
@@ -150,13 +149,13 @@ namespace StarLab.Application
             switch (splitContainer.Orientation)
             {
                 case Orientation.Horizontal:
-                    e.Graphics.DrawLine(Pens.DarkGray, 0, splitContainer.SplitterDistance + (splitContainer.SplitterWidth/2),
-                    splitContainer.Width, splitContainer.SplitterDistance + (splitContainer.SplitterWidth/2));
+                    e.Graphics.DrawLine(Pens.DarkGray, 0, splitContainer.SplitterDistance + (splitContainer.SplitterWidth / 2),
+                    splitContainer.Width, splitContainer.SplitterDistance + (splitContainer.SplitterWidth / 2));
                     break;
 
                 case Orientation.Vertical:
-                    e.Graphics.DrawLine(Pens.DarkGray, splitContainer.SplitterDistance + (splitContainer.SplitterWidth/2), 0,
-                    splitContainer.SplitterDistance + (splitContainer.SplitterWidth/2), splitContainer.Height);
+                    e.Graphics.DrawLine(Pens.DarkGray, splitContainer.SplitterDistance + (splitContainer.SplitterWidth / 2), 0,
+                    splitContainer.SplitterDistance + (splitContainer.SplitterWidth / 2), splitContainer.Height);
                     break;
             }
         }

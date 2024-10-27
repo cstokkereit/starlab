@@ -1,19 +1,31 @@
-﻿using StarLab.Commands;
+﻿using log4net;
+using StarLab.Application.Workspace.Documents.Charts;
+using StarLab.Commands;
 using WeifenLuo.WinFormsUI.Docking;
 
 namespace StarLab.Application.Workspace.Documents
 {
     public sealed partial class DocumentView : DockContent, IDocumentView
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(DocumentView));
+
         private readonly IDockableViewPresenter presenter;
-        
+
         private readonly string id;
 
         public DocumentView(IDocument document, IViewFactory viewFactory, IPresenterFactory presenterFactory)
         {
             InitializeComponent();
-
-            presenter = presenterFactory.CreatePresenter(this, document);
+            
+            try
+            {
+                presenter = presenterFactory.CreatePresenter(this, document);
+            }
+            catch (Exception ex)
+            {
+                log.Fatal(ex.Message, ex);
+                throw;
+            }
 
             Name = document.Name;
             Text = document.Name;

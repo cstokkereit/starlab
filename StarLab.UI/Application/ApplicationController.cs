@@ -1,4 +1,4 @@
-﻿using Castle.Core.Logging;
+﻿using log4net;
 using StarLab.Application.Workspace;
 using StarLab.Commands;
 using StarLab.Shared.Properties;
@@ -11,20 +11,21 @@ namespace StarLab.Application
 
     public class ApplicationController : Controller, IApplicationController, ISubscriber<WorkspaceClosedEvent>
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(ApplicationController));
+
         private readonly IDictionary<string, IViewController> controllers = new Dictionary<string, IViewController>();
+
+        private readonly CommandFactory commandFactory;
 
         private readonly IViewMap views;
 
-        private readonly ILogger logger;
-
-        public ApplicationController(IViewMap views, IUseCaseFactory factory, IEventAggregator events, ILogger logger)
+        public ApplicationController(IViewMap views, IUseCaseFactory factory, IEventAggregator events)
             : base(factory, events)
         {
-            ArgumentNullException.ThrowIfNull(nameof(factory));
-            ArgumentNullException.ThrowIfNull(nameof(logger));
             ArgumentNullException.ThrowIfNull(nameof(views));
 
-            this.logger = logger;
+            commandFactory = new CommandFactory();
+
             this.views = views;
         }
 
@@ -32,64 +33,20 @@ namespace StarLab.Application
 
         public void Exit()
         {
-            if (controllers[Constants.WORKSPACE_VIEW_CONTROLLER] is IWorkspaceController controller)
-            {
-                var result = controller.ShowMessage(Resources.StarLab, Resources.ApplicationClosing, MessageBoxButtons.YesNoCancel, MessageBoxIcon.None);
-
-                switch (result)
-                {
-                    case DialogResult.No:
-                        controller.Exit();
-                        break;
-
-                    case DialogResult.Yes:
-                        controller.Exit();
-                        break;
-                }
-
-                // TODO 
-                // Change to a custom dialog that will centre on the application
-                // Identify dirty items documentController.Dirty ?
-                // Perform any cleanup here prior to closing the workspace
-                // Save and/or close all open forms
-                // Teardown parent child relationships
-                // Implement the save functionality
-            }
+            if (controllers[Constants.WORKSPACE_VIEW_CONTROLLER] is IWorkspaceController controller) controller.Exit();
         }
 
-        public ICommand GetCommand(ICommandManager commands, IController controller, string action, string target)
+        public ICommand CreateCommand(ICommandManager commands, IController controller, string action, string target)
         {
-            ICommand? command = null;
-
-            var type = GetCommandType(controller, action);
-
-            if (type != null)
-            {
-                command = Activator.CreateInstance(type, new object[] { commands, controller, target }) as ICommand;
-            }
-
-            if (command == null) throw new NotImplementedException(); // TODO - Custom Exception
-
-            return command;
+            return commandFactory.CreateCommand(commands, controller, action, target);
         }
 
-        public ICommand GetCommand(ICommandManager commands, IController controller, string action)
+        public ICommand CreateCommand(ICommandManager commands, IController controller, string action)
         {
-            ICommand? command = null;
-
-            var type = GetCommandType(controller, action);
-
-            if (type != null)
-            {
-                command = Activator.CreateInstance(type, new object[] { commands, controller }) as ICommand;
-            }
-
-            if (command == null) throw new NotImplementedException(); // TODO - Custom Exception
-
-            return command;
+            return commandFactory.CreateCommand(commands, controller, action);
         }
 
-        public ICommand GetCommand(ICommandManager commands, IViewController controller, string view)
+        public ICommand CreateCommand(ICommandManager commands, IViewController controller, string view)
         {
             return new ShowViewCommand(commands, controller, views[view]);
         }
@@ -101,6 +58,11 @@ namespace StarLab.Application
 
         public void OnEvent(WorkspaceClosedEvent args)
         {
+            // TODO 
+            // Change to a custom dialog that will centre on the application
+            // Perform any cleanup here prior to closing the workspace
+            // Teardown parent child relationships
+
             foreach (var document in args.Workspace.Documents)
             {
                 controllers.Remove(string.Format(Constants.DOCUMENT_CONTROLLER, document.ID));
@@ -117,7 +79,7 @@ namespace StarLab.Application
 
         public void Run()
         {
-            logger.Info(Resources.InitialisationComplete);
+            log.Info(Resources.InitialisationComplete);
 
             views.ViewCreated += OnViewCreated;
 
@@ -137,11 +99,6 @@ namespace StarLab.Application
             }
         }
 
-        private Type? GetCommandType(IController controller, string action)
-        {
-            return Type.GetType(controller.GetType().Namespace + '.' + action + Constants.COMMAND);
-        }
-
         private void OnViewCreated(object? sender, IView? view)
         {
             ArgumentNullException.ThrowIfNull(view);
@@ -156,6 +113,21 @@ namespace StarLab.Application
             }
 
             controllers.Add(view.Controller.Name, view.Controller);
+        }
+
+        private class CommandFactory : Factory
+        {
+            private const string TYPE_NAME = "{0}.{1}Command, StarLab.UI";
+
+            public ICommand CreateCommand(ICommandManager commands, IController controller, string action, string target)
+            {
+                return (ICommand)CreateInstance(string.Format(TYPE_NAME, controller.GetType().Namespace, action), new object[] { commands, controller, target });
+            }
+
+            public ICommand CreateCommand(ICommandManager commands, IController controller, string action)
+            {
+                return (ICommand)CreateInstance(string.Format(TYPE_NAME, controller.GetType().Namespace, action), new object[] { commands, controller });
+            }
         }
     }
 }

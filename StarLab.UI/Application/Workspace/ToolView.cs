@@ -1,50 +1,78 @@
-﻿using StarLab.Application;
+﻿using log4net;
+using WeifenLuo.WinFormsUI.Docking;
 
-namespace StarLab
+namespace StarLab.Application.Workspace
 {
-    /// <summary>
-    /// The base class for all <see cref="Form"/> views.
-    /// </summary>
-    public partial class View : Form, IFormView
-    { 
-        private readonly IFormViewPresenter presenter;
+    public sealed partial class ToolView : DockContent, IDockableView
+    {
+        private static readonly ILog log = LogManager.GetLogger(typeof(ToolView));
+
+        private readonly IDockableViewPresenter presenter;
 
         private readonly string id;
 
-        /// <summary>
-        /// Initialises a new instance of the <see cref="View"> class.
-        /// </summary>
-        public View(string id, string name, IControlView content, IPresenterFactory factory)
+        public ToolView(string id, string name, IControlView content, IPresenterFactory factory)
         {
-            ArgumentNullException.ThrowIfNull(nameof(content));
-            ArgumentNullException.ThrowIfNull(nameof(factory));
-            
             InitializeComponent();
 
-            if (content is UserControl control) Controls.Add(control);
-
+            try
+            {
+                presenter = factory.CreatePresenter(this, id, name);
+            }
+            catch (Exception ex)
+            {
+                log.Fatal(ex.Message, ex);
+                throw;
+            }
+            
             this.id = id;
 
-            Name = name;
+            SuspendLayout();
 
-            presenter = factory.CreatePresenter(this);
+            if (content is Control control)
+            {
+                control.Dock = DockStyle.Fill;
+                Controls.Add(control);
+            }
 
-            StartPosition = FormStartPosition.CenterParent;
-        }
-
-        /// <summary>
-        /// Initialises the view.
-        /// </summary>
-        /// <param name="name">The view name.</param>
-        /// <param name="controller">The <see cref="IApplicationController"/>.</param>
-        public virtual void Initialise(IApplicationController controller)
-        {
-            presenter.Initialise(controller);
+            ResumeLayout();
         }
 
         public IViewController Controller => (IViewController)presenter;
 
         public string ID => id;
+
+        /// <summary>
+        /// Initialises the view.
+        /// </summary>
+        /// <param name="controller">The <see cref="IApplicationController"/>.</param>
+        public void Initialise(IApplicationController controller)
+        {
+            presenter.Initialise(controller);
+
+            if (presenter is IFormController parentController)
+            {
+                foreach (var control in Controls)
+                {
+                    if (control is IFormContent<IFormController> view) view.Initialise(controller, parentController);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dockPanel"></param>
+        public new void Show(DockPanel dockPanel)
+        {
+            if (DockState == DockState.Hidden || DockState == DockState.Unknown)
+            {
+                //Height = presenter.Height;
+                //Width = presenter.Width;
+            }
+
+            Show(dockPanel, (DockState)Enum.Parse(DockState.GetType(), presenter.Location));
+        }
 
         /// <summary>
         /// Shows the specified view.
@@ -100,6 +128,11 @@ namespace StarLab
         public string ShowSaveFileDialog(string title, string filter, string extension)
         {
             return DialogController.ShowSaveFileDialog(this, title, filter, extension);
+        }
+
+        protected override string GetPersistString()
+        {
+            return ID;
         }
     }
 }

@@ -1,5 +1,5 @@
-﻿using StarLab.Commands;
-using StarLab.Shared.Properties;
+﻿using log4net;
+using StarLab.Commands;
 
 namespace StarLab.Application.Workspace.WorkspaceExplorer
 {
@@ -8,6 +8,8 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
     /// </summary>
     public partial class WorkspaceExplorerView : UserControl, IWorkspaceExplorerView
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(WorkspaceExplorerView));
+
         private readonly Dictionary<string, TreeNode> nodes = new Dictionary<string, TreeNode>();
 
         private readonly IWorkspaceExplorerViewPresenter presenter;
@@ -20,7 +22,15 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
         {
             InitializeComponent();
 
-            presenter = (IWorkspaceExplorerViewPresenter)presenterFactory.CreatePresenter(this);
+            try
+            {
+                presenter = (IWorkspaceExplorerViewPresenter)presenterFactory.CreatePresenter(this);
+            }
+            catch (Exception ex)
+            {
+                log.Fatal(ex.Message, ex);
+                throw;
+            }
 
             Name = Views.WORKSPACE_EXPLORER;
 
@@ -223,7 +233,7 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
                 {
                     e.CancelEdit = true;
 
-                    if (!string.IsNullOrEmpty(e.Label)) 
+                    if (!string.IsNullOrEmpty(e.Label))
                         presenter.ShowErrorMessage(ex.Message);
 
                     e.Node.BeginEdit();

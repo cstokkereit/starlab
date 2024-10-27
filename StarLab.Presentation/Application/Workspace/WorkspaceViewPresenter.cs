@@ -18,10 +18,12 @@ namespace StarLab.Application.Workspace
 
         private bool confirmExit = true;
 
+        private bool dirty = false;
+
         public WorkspaceViewPresenter(IWorkspaceView view, ICommandManager commands, IUseCaseFactory useCaseFactory, IConfiguration configuration, IMapper mapper, IEventAggregator events)
             : base(commands, useCaseFactory, configuration, mapper, events)
         {
-            workspace = new Workspace();
+            workspace = new EmptyWorkspace();
 
             this.view = view;
         }
@@ -42,11 +44,35 @@ namespace StarLab.Application.Workspace
 
         public void CloseWorkspace()
         {
-            //DetachEventHandlers();
+            var close = true;
 
-            view.CloseAll();
+            if (dirty)
+            {
+                var result = ShowMessage(StringResources.StarLab, StringResources.WorkspaceClosing, MessageBoxButtons.YesNoCancel, MessageBoxIcon.None);
+                
+                if (result == DialogResult.Yes) SaveWorkspace();
+                
+                close = result != DialogResult.Cancel;
+            }
 
-            Events.Publish(new WorkspaceClosedEvent(workspace));
+            if (close)
+            {
+                //DetachEventHandlers(); ?
+
+                UpdateCommandState(Actions.CLOSE_WORKSPACE, false);
+
+                var layout = workspace.Layout;
+
+                view.CloseAll();
+
+                Events.Publish(new WorkspaceClosedEvent(workspace));
+
+                workspace = new EmptyWorkspace();
+
+                view.SetLayout(layout); // This will restore any open tool windows
+
+                Events.Publish(new WorkspaceChangedEvent(workspace));
+            }
         }
 
         public IDockableView CreateView(string id)
@@ -79,8 +105,10 @@ namespace StarLab.Application.Workspace
 
         public void Exit()
         {
+            // TODO - Save a backup?
+
             confirmExit = false;
-            
+            view.CloseAll();
             view.Close();
         }
 
@@ -102,11 +130,6 @@ namespace StarLab.Application.Workspace
             OpenDefaultWorkspace();
         }
 
-        public override void Initialise(IApplicationController controller)
-        {
-            throw new NotImplementedException(); // This should not be called
-        }
-
         public void AddFolder(string path)
         {
             var interactor = UseCaseFactory.CreateAddFolderUseCase(this);
@@ -121,7 +144,7 @@ namespace StarLab.Application.Workspace
 
         public void OnEvent(ActiveDocumentChangedEvent args)
         {
-            if (GetCommand(Actions.CLOSE_DOCUMENT) is IComponentCommand command) command.Enabled = args.Workspace.ActiveDocument != null;
+            UpdateCommandState(Actions.CLOSE_DOCUMENT, args.Workspace.ActiveDocument != null);
         }
 
         public void OpenDocument(string id)
@@ -166,13 +189,9 @@ namespace StarLab.Application.Workspace
         public void Show(IView view)
         {
             if (view is IDockableView dockable)
-            {
                 this.view.Show(dockable);
-            }
             else
-            {
                 this.view.Show(view);
-            }
         }
 
         public void ShowErrorMessage(string message)
@@ -215,6 +234,8 @@ namespace StarLab.Application.Workspace
                 {
                     document.Name = dto.Name;
 
+                    dirty = true;
+
                     Events.Publish(new WorkspaceChangedEvent(workspace));
                 }
             }
@@ -224,21 +245,18 @@ namespace StarLab.Application.Workspace
         {
             workspace = new Workspace(dto);
 
+            dirty = true;
+
             Events.Publish(new WorkspaceChangedEvent(workspace));
         }
 
         public void UpdateWorkspace(WorkspaceDTO dto)
         {
-            // TODO - Change this so that it only applies changes and does not always rebuild the workspace as this causes flicker
-
             view.CloseAll();
 
             workspace = new Workspace(dto);
 
-            if (!string.IsNullOrEmpty(workspace.Layout))
-            {
-                view.SetLayout(workspace.Layout);
-            }
+            if (!string.IsNullOrEmpty(workspace.Layout)) view.SetLayout(workspace.Layout);
 
             Events.Publish(new WorkspaceChangedEvent(workspace));
 
@@ -247,8 +265,10 @@ namespace StarLab.Application.Workspace
                 Configuration.Workspace = dto.FileName;
                 Configuration.Save();
             }
+
+            UpdateCommandState(Actions.CLOSE_DOCUMENT, workspace.ActiveDocument != null);
         }
-        
+
         /// <summary>
         /// 
         /// </summary>
@@ -268,7 +288,9 @@ namespace StarLab.Application.Workspace
         private void CreateFileMenu()
         {
             view.AddMenuItem(Constants.FILE, StringResources.File);
-            view.AddMenuItem(Constants.FILE, Constants.FILE_NEW, StringResources.New + Constants.ELLIPSIS);
+            view.AddMenuItem(Constants.FILE, Constants.FILE_NEW, StringResources.New);
+            view.AddMenuItem(Constants.FILE_NEW, Constants.FILE_NEW_PROJECT, StringResources.Project + Constants.ELLIPSIS);
+            view.AddMenuItem(Constants.FILE_NEW, Constants.FILE_NEW_WORKSPACE, StringResources.Workspace + Constants.ELLIPSIS);
             view.AddMenuSeparator(Constants.FILE);
             view.AddMenuItem(Constants.FILE, Constants.FILE_OPEN, StringResources.Open);
             view.AddMenuItem(Constants.FILE_OPEN, Constants.FILE_OPEN_WORKSPACE, StringResources.Workspace + Constants.ELLIPSIS, ImageResources.OpenWorkspace, GetCommand(Actions.OPEN_WORKSPACE));
@@ -358,6 +380,8 @@ namespace StarLab.Application.Workspace
             var interactor = UseCaseFactory.CreateOpenWorkspaceUseCase(this);
 
             interactor.Execute(filename);
+
+            UpdateCommandState(Actions.CLOSE_WORKSPACE, true);
         }
     }
 }

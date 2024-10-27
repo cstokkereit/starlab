@@ -7,7 +7,10 @@
 
         protected override bool IsTargetNode(TreeNode node)
         {
-            return (string)node.Tag == Constants.FOLDER & node.Name == Name;
+            if (node != null) 
+                return (string)node.Tag == Constants.FOLDER & node.Name == Name;
+
+            return false;
         }
     }
 }

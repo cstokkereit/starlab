@@ -1,9 +1,13 @@
 ﻿using AutoMapper;
+using log4net;
+using StarLab.Shared.Properties;
 
 namespace StarLab.Application.Workspace
 {
     internal class OpenWorkspaceInteractor : UseCaseInteractor<IWorkspaceOutputPort>, IOpenWorkspaceUseCase
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(OpenWorkspaceInteractor));
+
         private readonly ISerialisationService serialisationService;
 
         public OpenWorkspaceInteractor(ISerialisationService serialisationService, IWorkspaceOutputPort outputPort, IMapper mapper)
@@ -22,13 +26,15 @@ namespace StarLab.Application.Workspace
 
                 OutputPort.UpdateWorkspace(dto);
             }
-            catch (FileNotFoundException e1)
+            catch (FileNotFoundException)
             {
-                OutputPort.ShowErrorMessage(e1.Message);
+                OutputPort.ShowErrorMessage(string.Format(Resources.FileNotFound, filename));
             }
-            catch (Exception e2)
+            catch (Exception ex2)
             {
-                OutputPort.ShowErrorMessage(e2.Message);
+                var message = ex2.InnerException != null ? ex2.InnerException.Message : string.Empty;
+                OutputPort.ShowErrorMessage(string.Format(Resources.WorkspaceCouldNotBeOpened, message));
+                log.Error(ex2.Message, ex2);
             }
         }
     }

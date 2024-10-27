@@ -58,7 +58,7 @@ namespace Pegasus.Symbols
                     }
                 }
             }
-            
+
             return result;
         }
 

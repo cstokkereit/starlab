@@ -23,7 +23,7 @@
         public string ToString(IFormatter formatter)
         {
             return string.Empty;
-        } 
+        }
 
         /// <summary>
         /// Determines whether this instance and a specified object have the same value.

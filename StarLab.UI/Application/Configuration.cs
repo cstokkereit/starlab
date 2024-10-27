@@ -39,7 +39,7 @@ namespace StarLab.Application
         {
             if (Dirty)
             {
-                Settings.Default.Save();
+                //Settings.Default.Save();
                 Dirty = false;
             }
         }

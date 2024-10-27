@@ -58,7 +58,7 @@ namespace StarLab.Application
 
             if (!commands.ContainsCommand(name))
             {
-                commands.AddCommand(name, AppController.GetCommand(commands, controller, action, target));
+                commands.AddCommand(name, AppController.CreateCommand(commands, controller, action, target));
             }
 
             return commands.GetCommand(name);
@@ -70,7 +70,7 @@ namespace StarLab.Application
 
             if (!commands.ContainsCommand(name))
             {
-                commands.AddCommand(name, AppController.GetCommand(commands, this, action, target));
+                commands.AddCommand(name, AppController.CreateCommand(commands, this, action, target));
             }
 
             return commands.GetCommand(name);
@@ -80,7 +80,7 @@ namespace StarLab.Application
         {
             if (!commands.ContainsCommand(action))
             {
-                commands.AddCommand(action, AppController.GetCommand(commands, controller, action));
+                commands.AddCommand(action, AppController.CreateCommand(commands, controller, action));
             }
 
             return commands.GetCommand(action);
@@ -90,7 +90,7 @@ namespace StarLab.Application
         {
             if (!commands.ContainsCommand(action))
             {
-                commands.AddCommand(action, AppController.GetCommand(commands, this, action));
+                commands.AddCommand(action, AppController.CreateCommand(commands, this, action));
             }
 
             return commands.GetCommand(action);
@@ -117,10 +117,15 @@ namespace StarLab.Application
 
             if (!commands.ContainsCommand(name))
             {
-                commands.AddCommand(name, AppController.GetCommand(commands, (IViewController)this, view));
+                commands.AddCommand(name, AppController.CreateCommand(commands, (IViewController)this, view));
             }
 
             return commands.GetCommand(name);
+        }
+
+        protected void UpdateCommandState(string action, bool enabled)
+        {
+            if (GetCommand(action) is IComponentCommand command) command.Enabled = enabled;
         }
     }
 }

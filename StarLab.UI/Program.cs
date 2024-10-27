@@ -1,5 +1,6 @@
 using Castle.MicroKernel.Resolvers.SpecializedResolvers;
 using Castle.Windsor;
+using log4net.Config;
 using StarLab.Application;
 
 namespace StarLab
@@ -12,6 +13,8 @@ namespace StarLab
         [STAThread]
         static void Main()
         {
+            XmlConfigurator.Configure();
+
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();

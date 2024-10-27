@@ -1,6 +1,4 @@
-﻿using StarLab.Application;
-
-namespace StarLab.Application.Workspace.Documents
+﻿namespace StarLab.Application.Workspace.Documents
 {
     public interface IContent
     {

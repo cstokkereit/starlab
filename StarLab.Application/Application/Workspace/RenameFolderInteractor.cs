@@ -7,7 +7,7 @@ namespace StarLab.Application.Workspace
     {
         public RenameFolderInteractor(IWorkspaceOutputPort outputPort, IMapper mapper)
             : base(outputPort, mapper) { }
-    
+
         public void Execute(WorkspaceDTO dto, string path, string name)
         {
             if (IsValid(name))

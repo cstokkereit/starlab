@@ -49,7 +49,7 @@ namespace Pegasus.Symbols
             var text = symbol.ToString(this);
 
             if (!string.IsNullOrEmpty(text)) text = string.Format(format, text);
-            
+
             return text;
         }
     }

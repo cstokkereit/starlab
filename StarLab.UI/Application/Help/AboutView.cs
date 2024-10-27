@@ -1,7 +1,11 @@
-﻿namespace StarLab.Application.Help
+﻿using log4net;
+
+namespace StarLab.Application.Help
 {
     public partial class AboutView : UserControl, IAboutView
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(AboutView));
+
         private readonly IAboutViewPresenter presenter;
 
         public AboutView(IPresenterFactory factory)
@@ -10,7 +14,15 @@
 
             Name = Views.ABOUT;
 
-            presenter = (IAboutViewPresenter)factory.CreatePresenter(this);
+            try
+            {
+                presenter = (IAboutViewPresenter)factory.CreatePresenter(this);
+            }
+            catch (Exception ex)
+            {
+                log.Fatal(ex.Message, ex);
+                throw;
+            }
         }
 
         public void Initialise(IApplicationController controller, IFormController parentController)

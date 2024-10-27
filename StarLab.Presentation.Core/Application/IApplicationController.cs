@@ -7,11 +7,11 @@ namespace StarLab.Application
     {
         void Exit();
 
-        ICommand GetCommand(ICommandManager commands, IController controller, string action, string target);
+        ICommand CreateCommand(ICommandManager commands, IController controller, string action, string target);
 
-        ICommand GetCommand(ICommandManager commands, IController controller, string action);
+        ICommand CreateCommand(ICommandManager commands, IController controller, string action);
 
-        ICommand GetCommand(ICommandManager commands, IViewController controller, string view);
+        ICommand CreateCommand(ICommandManager commands, IViewController controller, string view);
 
         IWorkspaceController GetWorkspaceController();
 

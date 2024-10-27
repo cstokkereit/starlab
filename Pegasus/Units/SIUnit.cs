@@ -43,7 +43,7 @@ namespace Pegasus.Units
 
         private ISymbol GetSymbol(SIUnitPrefixes prefix)
         {
-            var symbol = string.Empty; 
+            var symbol = string.Empty;
 
             switch (prefix)
             {

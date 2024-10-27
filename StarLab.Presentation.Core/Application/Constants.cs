@@ -12,7 +12,6 @@
         public const string APPLICATION = "Application";
 
         public const string COLLAPSE_ALL = "CollapseAll";
-        public const string COMMAND = "Command";
         public const string CONTROLLER = "Controller";
         public const string COPY = "Copy";
         public const string CUT = "Cut";
@@ -32,13 +31,15 @@
         public const string FILE_CLOSE_WORKSPACE = "FileCloseWorkspace";
         public const string FILE_EXIT = "FileExit";
         public const string FILE_NEW = "FileNew";
+        public const string FILE_NEW_PROJECT = "FileNewProject";
+        public const string FILE_NEW_WORKSPACE = "FileNewWorkspace";
         public const string FILE_OPEN = "FileOpen";
         public const string FILE_OPEN_WORKSPACE = "FileOpenWorkspace";
         public const string FILE_PAGE_SETUP = "FilePageSetup";
         public const string FILE_PRINT = "FilePrint";
         public const string FILE_SAVE_ALL = "FileSaveAll";
         public const string FOLDER = "Folder";
-        
+
         public const string HELP = "Help";
         public const string HELP_ABOUT = "HelpAbout";
         public const string HELP_VIEW = "HelpView";
@@ -47,6 +48,7 @@
         public const string OPEN = "Open";
 
         public const string PASTE = "Paste";
+        public const string PROJECT = "Project";
 
         public const string RENAME = "Rename";
 

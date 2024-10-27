@@ -28,7 +28,7 @@
         public void TestConstructorWithSymbolProducts()
         {
             var numerator = new SymbolProduct(new ISymbol[] { new Symbol("kg"), new Symbol("m", false, false, string.Empty, "2") });
-            var denominator = new SymbolProduct(new ISymbol[] { new Symbol("s", false, false, string.Empty,"3"), new Symbol("A") });
+            var denominator = new SymbolProduct(new ISymbol[] { new Symbol("s", false, false, string.Empty, "3"), new Symbol("A") });
 
             var quotient = new SymbolQuotient(numerator, denominator);
 
@@ -116,7 +116,7 @@
         {
             var quotient1 = new SymbolQuotient(new Symbol("kg"), new SymbolProduct(new ISymbol[] { new Symbol("m"), new Symbol("s", false, false, string.Empty, "2") }));
             var quotient2 = new SymbolQuotient(new Symbol("kg"), new SymbolProduct(new ISymbol[] { new Symbol("m"), new Symbol("s") }));
-            
+
             Assert.AreNotEqual(quotient1.GetHashCode(), quotient2.GetHashCode());
         }
 

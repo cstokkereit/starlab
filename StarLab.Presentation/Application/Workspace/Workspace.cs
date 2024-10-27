@@ -33,8 +33,7 @@ namespace StarLab.Application.Workspace
 
             AddChildFolders(foldersByPath.Values);
 
-            // TODO
-            ActiveDocument = documents[0];
+            if (documents.Count > 0) ActiveDocument = documents[0];
         }
 
         public Workspace()

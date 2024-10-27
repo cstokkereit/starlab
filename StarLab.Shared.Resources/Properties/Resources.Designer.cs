@@ -88,16 +88,6 @@ namespace StarLab.Shared.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Save your changes to the following items:
-        ///{0}.
-        /// </summary>
-        public static string ApplicationClosing {
-            get {
-                return ResourceManager.GetString("ApplicationClosing", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Cannot rename &apos;{0}&apos; to &apos;{1}&apos; because a {2} with that name already exists..
         /// </summary>
         public static string CannotRenameBecauseNameAlreadyExists {
@@ -242,6 +232,16 @@ namespace StarLab.Shared.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The file {0} could not be found.
+        ///Check the filename and try again..
+        /// </summary>
+        public static string FileNotFound {
+            get {
+                return ResourceManager.GetString("FileNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Folder.
         /// </summary>
         public static string Folder {
@@ -381,6 +381,15 @@ namespace StarLab.Shared.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Project.
+        /// </summary>
+        public static string Project {
+            get {
+                return ResourceManager.GetString("Project", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rename.
         /// </summary>
         public static string Rename {
@@ -512,6 +521,24 @@ namespace StarLab.Shared.Properties {
         public static string Workspace {
             get {
                 return ResourceManager.GetString("Workspace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The workspace contains items with unsaved changes. Do you want to save your changes?.
+        /// </summary>
+        public static string WorkspaceClosing {
+            get {
+                return ResourceManager.GetString("WorkspaceClosing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The workspace file could not be opened. {0}.
+        /// </summary>
+        public static string WorkspaceCouldNotBeOpened {
+            get {
+                return ResourceManager.GetString("WorkspaceCouldNotBeOpened", resourceCulture);
             }
         }
         

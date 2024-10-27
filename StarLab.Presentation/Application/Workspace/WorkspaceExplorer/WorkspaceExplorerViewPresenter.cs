@@ -101,14 +101,9 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
             CreateToolbar();
         }
 
-        public override void Initialise(IApplicationController controller)
-        {
-            throw new NotImplementedException();
-        }
-
         public void OnEvent(ActiveDocumentChangedEvent args)
         {
-            if (GetCommand(Actions.SYNCHRONISE) is IComponentCommand command) command.Enabled = args.Workspace.ActiveDocument != null;
+            UpdateCommandState(Actions.SYNCHRONISE, args.Workspace.ActiveDocument != null);
         }
 
         public void OnEvent(WorkspaceChangedEvent args)
@@ -152,18 +147,28 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
 
             View.Clear();
 
-            CreateFolders();
-            CreateDocuments();
-            ExpandNodes();
-
-            foreach (var folder in workspace.Folders)
+            if (workspace is Workspace)
             {
-                if (folder.IsNew)
+                CreateFolders();
+                CreateDocuments();
+                ExpandNodes();
+
+                foreach (var folder in workspace.Folders)
                 {
-                    Rename(folder.Key);
-                    break;
+                    if (folder.IsNew)
+                    {
+                        Rename(folder.Key);
+                        break;
+                    }
                 }
+
+                UpdateCommandState(Actions.COLLAPSE_ALL, true);
             }
+            else
+            {
+                UpdateCommandState(Actions.COLLAPSE_ALL, false);
+            }
+            
         }
 
         public void ViewActivated()

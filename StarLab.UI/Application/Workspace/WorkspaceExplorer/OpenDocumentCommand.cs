@@ -7,7 +7,7 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
         private readonly string target;
 
         public OpenDocumentCommand(ICommandManager commands, IWorkspaceExplorerController controller, string target)
-            : base(commands, controller) 
+            : base(commands, controller)
         {
             this.target = target;
         }

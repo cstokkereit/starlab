@@ -1,4 +1,5 @@
-﻿using StarLab.Commands;
+﻿using log4net;
+using StarLab.Commands;
 using System.Text;
 using WeifenLuo.WinFormsUI.Docking;
 
@@ -9,6 +10,8 @@ namespace StarLab.Application.Workspace
     /// </summary>
     public sealed partial class WorkspaceView : Form, IWorkspaceView
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(WorkspaceView));
+
         private readonly IWorkspaceViewPresenter presenter;
 
         private readonly string id;
@@ -28,8 +31,16 @@ namespace StarLab.Application.Workspace
             Text = name;
             Name = id;
 
-            presenter = factory.CreatePresenter(this);
-
+            try
+            {
+                presenter = factory.CreatePresenter(this);
+            }
+            catch (Exception ex)
+            {
+                log.Fatal(ex.Message, ex);
+                throw;
+            }
+            
             dockPanel.Theme = new VS2015LightTheme();
 
             dockPanel.Theme.Extender.FloatWindowFactory = new FloatWindowFactory();
