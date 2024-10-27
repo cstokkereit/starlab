@@ -4,6 +4,9 @@
  
  You will need to use the Nuget Package Manager to install ScottPlot.WinForms 5.0.40 - Awsome graphing package - you may get some warnings about component compatibility but it still seems to work OK on my machine.
  
+The data file is in the folder above this one and called lte03000-3.00+1.0.7 - had to delete 90% of it to get it below the 10Mb limt as I
+did want to set up GitLFS
+
  I think the best thing to do first off is load the first two columns of the data files and write them out as rows in new delimted files - this will reduce the size and make importing the data easier. ScottPlot will accept
  separate arrays of x and y values so should be easy to load the converted files by spitting on the separator.
  
