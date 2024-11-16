@@ -14,7 +14,7 @@ namespace StarLab.Application
                 view = Activator.CreateInstance(type, args);
 
             if (view == null)
-                throw new Exception(string.Format(Resources.CouldNotBeCreated, typeName));
+                throw new Exception(string.Format(Resources.CouldNotBeCreatedMessage, typeName));
 
             return view;
         }

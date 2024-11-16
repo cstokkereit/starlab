@@ -30,6 +30,39 @@ namespace StarLab.Application.Workspace
 
         public override string Name => Views.WORKSPACE + Constants.CONTROLLER;
 
+        public void AddChart(string path)
+        {
+            var dialog = AppController.GetDialog(Views.ADD_DOCUMENT);
+
+            //if (dialog.Controller is IAddDocument
+
+
+
+            AppController.Show(dialog);
+
+
+
+
+
+
+
+
+            var x = dialog.ID;
+
+            //var interactor = UseCaseFactory.CreateAddDocumentUseCase(this);
+            //var dto = Mapper.Map<IWorkspace, WorkspaceDTO>(workspace);
+            //interactor.Execute(dto, path);
+        }
+
+        public void AddTable(string path)
+        {
+
+
+            //var interactor = UseCaseFactory.CreateAddDocumentUseCase(this);
+            //var dto = Mapper.Map<IWorkspace, WorkspaceDTO>(workspace);
+            //interactor.Execute(dto, path);
+        }
+
         public void ClearActiveDocument()
         {
             workspace.ClearActiveDocument();
@@ -48,7 +81,7 @@ namespace StarLab.Application.Workspace
 
             if (dirty)
             {
-                var result = ShowMessage(StringResources.StarLab, StringResources.WorkspaceClosing, MessageBoxButtons.YesNoCancel, MessageBoxIcon.None);
+                var result = ShowMessage(StringResources.StarLab, StringResources.WorkspaceClosingMessage, MessageBoxButtons.YesNoCancel, MessageBoxIcon.None);
                 
                 if (result == DialogResult.Yes) SaveWorkspace();
                 
@@ -77,7 +110,7 @@ namespace StarLab.Application.Workspace
 
         public IDockableView CreateView(string id)
         {
-            if (factory == null) throw new InvalidOperationException(StringResources.ObjectNotInitialised);
+            if (factory == null) throw new InvalidOperationException(StringResources.ObjectNotInitialisedMessage);
 
             IDockableView view;
 
@@ -169,6 +202,13 @@ namespace StarLab.Application.Workspace
             var interactor = UseCaseFactory.CreateRenameFolderUseCase(this);
             var dto = Mapper.Map<IWorkspace, WorkspaceDTO>(workspace);
             interactor.Execute(dto, key, name);
+        }
+
+        public void RenameWorkspace(string name)
+        {
+            var interactor = UseCaseFactory.CreateRenameWorkspaceUseCase(this);
+            var dto = Mapper.Map<IWorkspace, WorkspaceDTO>(workspace);
+            interactor.Execute(dto, name);
         }
 
         public void SaveWorkspace()
@@ -277,7 +317,7 @@ namespace StarLab.Application.Workspace
         {
             if (confirmExit)
             {
-                GetCommand(Actions.EXIT_APPLICATION).Execute();
+                GetCommand(Actions.EXIT).Execute();
                 e.Cancel = true;
             }
         }
@@ -303,7 +343,7 @@ namespace StarLab.Application.Workspace
             view.AddMenuItem(Constants.FILE, Constants.FILE_PAGE_SETUP, StringResources.PageSetup + Constants.ELLIPSIS, ImageResources.PageSetup); //, AppController.GetCommand(this, Constants.FILE_PAGE_SETUP));
             view.AddMenuItem(Constants.FILE, Constants.FILE_PRINT, StringResources.Print + Constants.ELLIPSIS, ImageResources.Print); //, AppController.GetCommand(this, Constants.FILE_PRINT));
             view.AddMenuSeparator(Constants.FILE);
-            view.AddMenuItem(Constants.FILE, Constants.FILE_EXIT, StringResources.Exit, GetCommand(AppController, Actions.EXIT_APPLICATION));
+            view.AddMenuItem(Constants.FILE, Constants.FILE_EXIT, StringResources.Exit, GetCommand(AppController, Actions.EXIT));
         }
 
         /// <summary>

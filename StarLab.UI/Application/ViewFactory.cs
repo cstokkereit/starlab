@@ -1,5 +1,6 @@
 ﻿using StarLab.Application.Workspace;
 using StarLab.Application.Workspace.Documents;
+using StarLab.Shared.Properties;
 
 namespace StarLab.Application
 {
@@ -21,42 +22,35 @@ namespace StarLab.Application
             return (IControlView)CreateInstance(typeName, new object[] { presenterFactory });
         }
 
+        public IDialogView CreateDialogView(string id, string text)
+        {
+            return new DialogView(id, text, CreateContent(id), presenterFactory);
+        }
+
         public IDockableView CreateDocumentView(IDocument document)
         {
             return (IDockableView)CreateInstance(document.View, new object[] { document, this, presenterFactory });
         }
 
-        public IFormView CreateFormView(string id, string name)
+        public IDockableView CreateToolView(string id, string text)
         {
-            IFormView? view = null;
-
-            if (id == Views.WORKSPACE)
-            {
-                view = new WorkspaceView(id, name, presenterFactory);
-            }
-            else
-            {
-                view = new View(id, name, CreateContent(id), presenterFactory);
-            }
-
-            return view;
+            return new ToolView(id, text, CreateContent(id), presenterFactory);
         }
 
-        public IDockableView CreateToolView(string id, string name)
+        public IWorkspaceView CreateWorkspaceView()
         {
-            return new ToolView(id, name, CreateContent(id), presenterFactory);
+            return new WorkspaceView(Views.WORKSPACE, Resources.StarLab, presenterFactory);
         }
 
         private IControlView CreateContent(string id)
         {
-
-
             return (IControlView)CreateInstance(views[id], new object[] { presenterFactory });
         }
 
         private void Initialise()
         {
             views.Add(Views.ABOUT, "StarLab.Application.Help.AboutView, StarLab.UI");
+            views.Add(Views.ADD_DOCUMENT, "StarLab.Application.Workspace.Documents.AddDocumentView, StarLab.UI");
             views.Add(Views.CHART, "StarLab.Application.Workspace.Documents.Charts.ChartView, StarLab.UI");
             views.Add(Views.CHART_SETTINGS, "StarLab.Application.Workspace.Documents.Charts.ChartSettingsView, StarLab.UI");
             views.Add(Views.OPTIONS, "StarLab.Application.Options.OptionsView, StarLab.UI");

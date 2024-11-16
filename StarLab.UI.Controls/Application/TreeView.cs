@@ -6,7 +6,7 @@ namespace StarLab.Application
     {
         private ContextMenuManager menuManager = new ContextMenuManager();
 
-        private string? editedText;
+        private bool showContextMenu = true;
 
         [Category("Behavior")]
         public event EventHandler<NodeRequestTextEventArgs>? RequestDisplayText;
@@ -36,6 +36,13 @@ namespace StarLab.Application
             }
         }
 
+        protected override void OnEnter(EventArgs e)
+        {
+            showContextMenu = true;
+
+            base.OnEnter(e);
+        }
+
         protected override void OnMouseDown(MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
@@ -43,6 +50,12 @@ namespace StarLab.Application
                 var node = GetNodeAt(e.X, e.Y);
 
                 if (node != null) SelectedNode = node;
+            }
+
+            if (showContextMenu)
+            {
+                menuManager.ShowContextMenu();
+                showContextMenu = false;
             }
 
             base.OnMouseDown(e);

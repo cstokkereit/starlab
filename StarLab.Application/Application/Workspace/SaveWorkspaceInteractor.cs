@@ -19,9 +19,9 @@ namespace StarLab.Application.Workspace
                 if (!string.IsNullOrEmpty(dto.FileName))
                     serialisationService.SerialiseWorkspace(dto, dto.FileName);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                OutputPort.ShowErrorMessage(ex.Message);
+                OutputPort.ShowErrorMessage(e.Message);
             }
         }
     }

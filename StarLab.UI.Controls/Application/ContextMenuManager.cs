@@ -2,11 +2,11 @@
 {
     public class ContextMenuManager
     {
-        private IDictionary<string, MenuStateManager> managers = new Dictionary<string, MenuStateManager>();
+        private IDictionary<string, NodeMenuManager> managers = new Dictionary<string, NodeMenuManager>();
 
         private ContextMenuStrip? menuStrip;
 
-        public void Add(MenuStateManager manager)
+        public void Add(NodeMenuManager manager)
         {
             if (!managers.ContainsKey(manager.Name))
             {
@@ -21,6 +21,11 @@
             {
                 managers.Remove(name);
             }
+        }
+
+        public void ShowContextMenu()
+        {
+            menuStrip.Show();
         }
 
         public void Update(TreeNode node)

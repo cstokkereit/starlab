@@ -2,5 +2,6 @@
 {
     public interface IOptionsViewPresenter : IControlViewPresenter
     {
+        void Initialise(IApplicationController controller, IDialogController parentController);
     }
 }

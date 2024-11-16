@@ -3,7 +3,7 @@ using StarLab.Shared.Properties;
 
 namespace StarLab.Application.Workspace.Documents
 {
-    internal class RenameDocumentInteractor : UseCaseInteractor<IWorkspaceOutputPort>, IRenameItemUseCase
+    internal class RenameDocumentInteractor : WorkspaceInteractor, IRenameItemUseCase
     {
         public RenameDocumentInteractor(IWorkspaceOutputPort outputPort, IMapper mapper)
             : base(outputPort, mapper) { }
@@ -25,26 +25,16 @@ namespace StarLab.Application.Workspace.Documents
                 }
                 else
                 {
-                    throw CreateException(document.Name, name);
+                    throw CreateTargetExistsException(document.Name, name, Resources.Document);
                 }
             }
             else
             {
-                throw CreateException();
+                throw CreateInvalidNameException(name, Resources.Document);
             }
         }
 
-        private Exception CreateException(string oldName, string newName)
-        {
-            return new Exception(string.Format(Resources.CannotRenameBecauseNameAlreadyExists, oldName, newName, Resources.Document.ToLower()));
-        }
-
-        private Exception CreateException()
-        {
-            return new Exception(string.Format(Resources.NameContainsIllegalCharacters, Resources.Document, string.Join(' ', Constants.IllegalCharacters)));
-        }
-
-        private bool IsValid(Folder folder, string name)
+        private bool IsValid(IFolder folder, string name)
         {
             var valid = true;
 
@@ -54,25 +44,6 @@ namespace StarLab.Application.Workspace.Documents
                 {
                     valid = false;
                     break;
-                }
-            }
-
-            return valid;
-        }
-
-        private bool IsValid(string name)
-        {
-            var valid = !string.IsNullOrEmpty(name);
-
-            if (valid)
-            {
-                foreach (var character in Constants.IllegalCharacters)
-                {
-                    if (name.Contains(character))
-                    {
-                        valid = false;
-                        break;
-                    }
                 }
             }
 

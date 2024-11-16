@@ -2,6 +2,6 @@
 {
     public interface IChartViewPresenter : IControlViewPresenter
     {
-
+        void Initialise(IApplicationController controller, IDocumentController parentController);
     }
 }

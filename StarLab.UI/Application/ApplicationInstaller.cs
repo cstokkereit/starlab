@@ -2,6 +2,7 @@
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
+using StarLab.Application.Workspace.Documents;
 using StarLab.Commands;
 
 namespace StarLab.Application

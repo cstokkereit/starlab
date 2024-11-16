@@ -52,11 +52,11 @@ namespace StarLab.Application
             return new DocumentViewPresenter(view, document, commands, useCaseFactory, configuration, mapper, events);
         }
 
-        public IFormViewPresenter CreatePresenter(IFormView view)
+        public IDialogViewPresenter CreatePresenter(IDialogView view)
         {
             var commands = container.Resolve<ICommandManager>();
 
-            return new FormViewPresenter(view, commands, useCaseFactory, configuration, mapper, events);
+            return new DialogViewPresenter(view, commands, useCaseFactory, configuration, mapper, events);
         }
 
         public IWorkspaceViewPresenter CreatePresenter(IWorkspaceView view)
@@ -69,6 +69,7 @@ namespace StarLab.Application
         private void Initialise()
         {
             presenters.Add(Views.ABOUT, "StarLab.Application.Help.AboutViewPresenter, StarLab.Presentation");
+            presenters.Add(Views.ADD_DOCUMENT, "StarLab.Application.Workspace.Documents.AddDocumentViewPresenter, StarLab.Presentation");
             presenters.Add(Views.CHART_SETTINGS, "StarLab.Application.Workspace.Documents.Charts.ChartSettingsViewPresenter, StarLab.Presentation");
             presenters.Add(Views.CHART, "StarLab.Application.Workspace.Documents.Charts.ColourMagnitudeChartViewPresenter, StarLab.Presentation");
             presenters.Add(Views.OPTIONS, "StarLab.Application.Options.OptionsViewPresenter, StarLab.Presentation");

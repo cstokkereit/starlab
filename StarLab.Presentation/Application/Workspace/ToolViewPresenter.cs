@@ -3,7 +3,7 @@ using StarLab.Commands;
 
 namespace StarLab.Application.Workspace
 {
-    public class ToolViewPresenter : Presenter, IDockableViewPresenter, IFormController
+    public class ToolViewPresenter : Presenter, IDockableViewPresenter, IViewController
     {
         private readonly IDockableView view;
 

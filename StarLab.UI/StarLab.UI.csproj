@@ -33,7 +33,7 @@
     <Compile Update="Application\Options\OptionsView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="Application\View.cs">
+    <Compile Update="Application\DialogView.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Application\Workspace\Documents\Charts\ChartSettingsView.cs">

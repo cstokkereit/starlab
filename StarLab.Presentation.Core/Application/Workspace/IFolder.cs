@@ -1,9 +1,7 @@
 ﻿namespace StarLab.Application.Workspace
 {
-    public interface IFolder
+    public interface IFolder : ICollapsible
     {
-        bool Expanded { get; }
-
         bool IsNew { get; }
 
         string Key { get; }
@@ -11,13 +9,5 @@
         string Name { get; }
 
         string ParentKey { get; }
-
-        void Collapse();
-
-        void CollapseAll();
-
-        void Expand();
-
-        void ExpandAll();
     }
 }

@@ -11,7 +11,9 @@ namespace StarLab.Application
 
         ICommand CreateCommand(ICommandManager commands, IController controller, string action);
 
-        ICommand CreateCommand(ICommandManager commands, IViewController controller, string view);
+        ICommand CreateCommand(ICommandManager commands, string view);
+
+        IDialogView GetDialog(string name);
 
         IWorkspaceController GetWorkspaceController();
 
@@ -21,6 +23,8 @@ namespace StarLab.Application
         /// Starts the application.
         /// </summary>
         void Run();
+
+        void Show(IDialogView view);
 
         void Show(string id);
     }

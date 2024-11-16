@@ -12,7 +12,7 @@ namespace StarLab.Application
 
         public ViewMap(IViewFactory factory)
         {
-            this.factory = factory;
+            this.factory = factory ?? throw new ArgumentNullException();
         }
 
         public event EventHandler<IView>? ViewCreated;
@@ -57,12 +57,13 @@ namespace StarLab.Application
         public void Initialise()
         {
             CreateFormView(Views.ABOUT, Resources.AboutStarLab);
+            CreateFormView(Views.ADD_DOCUMENT, Resources.AddDocument);
             CreateFormView(Views.OPTIONS, Resources.Options);
 
             CreateToolView(Views.WORKSPACE_EXPLORER, Resources.WorkspaceExplorer);
 
             // NOTE - This must be the last view to be created.
-            CreateFormView(Views.WORKSPACE, Resources.StarLab);
+            CreateWorkspaceView();
         }
 
         public void Remove(string id)
@@ -72,7 +73,7 @@ namespace StarLab.Application
 
         private void CreateFormView(string id, string name)
         {
-            var view = factory.CreateFormView(id, name);
+            var view = factory.CreateDialogView(id, name);
             ViewCreated?.Invoke(this, view);
             views.Add(view.ID, view);
         }
@@ -80,6 +81,13 @@ namespace StarLab.Application
         private void CreateToolView(string id, string name)
         {
             var view = factory.CreateToolView(id, name);
+            ViewCreated?.Invoke(this, view);
+            views.Add(view.ID, view);
+        }
+
+        private void CreateWorkspaceView()
+        {
+            var view = factory.CreateWorkspaceView();
             ViewCreated?.Invoke(this, view);
             views.Add(view.ID, view);
         }

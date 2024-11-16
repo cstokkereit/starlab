@@ -1,59 +1,69 @@
 ﻿using AutoMapper;
 using StarLab.Commands;
-
-using StarLab.Shared.Properties;
+using System.Diagnostics;
 
 namespace StarLab.Application
 {
-    public abstract class ControlViewPresenter<T> : Presenter where T : IControlView
+    public abstract class ControlViewPresenter<TView, TParent> : Presenter
+        where TParent : IViewController
+        where TView : IControlView
     {
-        private readonly T view;
+        private readonly TView view;
 
-        private IDialogController? dialogs;
+        private TParent? parentController;
 
-        public ControlViewPresenter(T view, ICommandManager commands, IUseCaseFactory useCaseFactory, IConfiguration configuration, IMapper mapper, IEventAggregator events)
+        public ControlViewPresenter(TView view, ICommandManager commands, IUseCaseFactory useCaseFactory, IConfiguration configuration, IMapper mapper, IEventAggregator events)
             : base(commands, useCaseFactory, configuration, mapper, events)
         {
             this.view = view ?? throw new ArgumentNullException(nameof(view));
         }
 
-        public override string Name => throw new NotImplementedException();
+        public override string Name => View.Name + Constants.CONTROLLER;
 
-        protected T View => view;
+        protected TParent Parent
+        {
+            get
+            {
+                Debug.Assert(parentController != null);
+                return parentController;
+            }
+        }
 
-        protected void Initialise(IApplicationController controller, IDialogController dialogs)
+        public virtual void Initialise(IApplicationController controller, TParent parentController)
         {
             base.Initialise(controller);
 
-            this.dialogs = dialogs;
+            this.parentController = parentController;
         }
+
+        protected TView View => view;
 
         protected DialogResult ShowMessage(string caption, string message, MessageBoxButtons buttons, MessageBoxIcon icon)
         {
-            if (dialogs == null) throw new Exception(Resources.ObjectNotInitialised);
+            Debug.Assert(parentController != null);
 
-            return dialogs.ShowMessage(caption, message, buttons, icon);
+            return parentController.ShowMessage(caption, message, buttons, icon);
         }
 
         protected void ShowMessage(string caption, string message, MessageBoxIcon icon)
         {
-            if (dialogs == null) throw new Exception(Resources.ObjectNotInitialised);
+            Debug.Assert(parentController != null);
 
-            dialogs.ShowMessage(caption, message, icon);
+            parentController.ShowMessage(caption, message, icon);
         }
 
         protected string ShowOpenFileDialog(string title, string filter)
         {
-            if (dialogs == null) throw new Exception(Resources.ObjectNotInitialised);
+            Debug.Assert(parentController != null);
 
-            return dialogs.ShowOpenFileDialog(title, filter);
+            return parentController.ShowOpenFileDialog(title, filter);
         }
 
         protected string ShowSaveFileDialog(string title, string filter, string extension)
         {
-            if (dialogs == null) throw new Exception(Resources.ObjectNotInitialised);
+            Debug.Assert(parentController != null);
 
-            return dialogs.ShowSaveFileDialog(title, filter, extension);
+            return parentController.ShowSaveFileDialog(title, filter, extension);
         }
     }
 }

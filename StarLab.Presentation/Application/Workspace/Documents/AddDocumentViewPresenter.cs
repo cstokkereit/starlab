@@ -1,0 +1,65 @@
+﻿using AutoMapper;
+using StarLab.Commands;
+using StarLab.Properties;
+
+namespace StarLab.Application.Workspace.Documents
+{
+    public class AddDocumentViewPresenter : ControlViewPresenter<IAddDocumentView, IDialogController>, IAddDocumentViewPresenter
+    {
+        public AddDocumentViewPresenter(IAddDocumentView view, ICommandManager commands, IUseCaseFactory useCaseFactory, IConfiguration configuration, IMapper mapper, IEventAggregator events)
+            : base(view, commands, useCaseFactory, configuration, mapper, events) { }
+
+        public void AddDocument()
+        {
+            var name = View.DocumentName;
+
+            var ws = AppController.GetWorkspaceController();
+
+            DocumentBuilder builder = new DocumentBuilder();
+
+            //builder.CreateDocument()
+
+            // TODO - Interactor
+            Parent.Close();
+        }
+
+        public override void Initialise(IApplicationController controller, IDialogController parentController)
+        {
+            base.Initialise(controller, parentController);
+
+            View.AttachAddButtonCommand(GetCommand(Actions.ADD_DOCUMENT));
+            View.AttachCancelButtonCommand(GetCommand(Actions.CANCEL));
+            
+            AddImages();
+            AddDocumentTypes();
+        }
+
+        public void Cancel()
+        {
+            Parent.Close();
+        }
+
+        private void AddDocumentTypes()
+        {
+            //view.ClearChartTypes();
+
+            //TODO - Should be configured or discovered -> plugin
+
+            View.AddDocument("HRDiagram", "Colour-Magnitude Diagram", "HRDiagram");
+            //view.AddChart("TwoColourDiagram", "Two-Colour Diagram", "HRDiagram");
+            //view.AddChart("ScatterPlot", "Scatter Plot", "HRDiagram");
+            //view.AddChart("BarChart", "Bar Chart", "HRDiagram");
+
+            //view.SelectDefaultItem();
+        }
+
+        private void AddImages()
+        {
+            //view.ClearImages();
+
+            //TODO - Image should be contained within the plug-in
+
+            View.AddImage("HRDiagram", Resources.HRDiagram);
+        }
+    }
+}

@@ -8,6 +8,7 @@
         public const string ADD = "Add";
         public const string ADD_CHART = "AddChart";
         public const string ADD_FOLDER = "AddFolder";
+        public const string ADD_PROJECT = "AddProject";
         public const string ADD_TABLE = "AddTable";
         public const string APPLICATION = "Application";
 
@@ -22,7 +23,6 @@
         public const string DOCK_RIGHT = "DockRight";
         public const string DOCK_TOP = "DockTop";
         public const string DOCUMENT = "Document";
-        public const string DOCUMENT_CONTROLLER = "Document({0}) Controller";
 
         public const string ELLIPSIS = "...";
 

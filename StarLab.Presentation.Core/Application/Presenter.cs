@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using StarLab.Commands;
 using StarLab.Shared.Properties;
+using System.Diagnostics;
 
 namespace StarLab.Application
 {
@@ -25,6 +26,21 @@ namespace StarLab.Application
             this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
+        protected IApplicationController AppController
+        {
+            get
+            {
+                Debug.Assert(controller != null);
+                return controller;
+            }
+        }
+
+        protected ICommandManager Commands => commands;
+
+        protected IConfiguration Configuration => configuration;
+
+        protected IMapper Mapper => mapper;
+
         /// <summary>
         /// Initialises the presenter.
         /// </summary>
@@ -38,21 +54,7 @@ namespace StarLab.Application
             Events.Subsribe(this);
         }
 
-        protected IApplicationController AppController
-        {
-            get
-            {
-                if (controller == null) throw new InvalidOperationException(Resources.ObjectNotInitialised);
-
-                return controller;
-            }
-        }
-
-        protected IConfiguration Configuration => configuration;
-
-        protected IMapper Mapper => mapper;
-
-        protected ICommand GetCommand(IController controller, string action, string target) // Consider changing controller to its typename and let AppController resolve it
+        protected ICommand GetCommand(IController controller, string action, string target)
         {
             var name = action + target;
 
@@ -76,7 +78,7 @@ namespace StarLab.Application
             return commands.GetCommand(name);
         }
 
-        protected ICommand GetCommand(IController controller, string action) // Consider changing controller to its typename and let AppController resolve it
+        protected ICommand GetCommand(IController controller, string action)
         {
             if (!commands.ContainsCommand(action))
             {
@@ -117,10 +119,15 @@ namespace StarLab.Application
 
             if (!commands.ContainsCommand(name))
             {
-                commands.AddCommand(name, AppController.CreateCommand(commands, (IViewController)this, view));
+                commands.AddCommand(name, AppController.CreateCommand(commands, view));
             }
 
             return commands.GetCommand(name);
+        }
+
+        protected void UpdateCommandState(string action, string target, bool enabled)
+        {
+            if (GetCommand(action + target) is IComponentCommand command) command.Enabled = enabled;
         }
 
         protected void UpdateCommandState(string action, bool enabled)

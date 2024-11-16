@@ -1,6 +1,6 @@
 ﻿namespace StarLab.Application.Workspace
 {
-    public interface IWorkspaceViewPresenter : IFormViewPresenter
+    public interface IWorkspaceViewPresenter : IDialogViewPresenter
     {
         void ClearActiveDocument();
 

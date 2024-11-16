@@ -22,7 +22,7 @@ namespace StarLab.Application.Workspace
         /// <param name="presenterFactory">An <see cref="IPresenterFactory"/> that is used to create the <see cref="IPresenter"/> that controls this view.</param>
         public WorkspaceView(string id, string name, IPresenterFactory factory)
         {
-            ArgumentNullException.ThrowIfNull(nameof(factory));
+            ArgumentNullException.ThrowIfNull(factory, nameof(factory));
 
             InitializeComponent();
 
@@ -35,9 +35,9 @@ namespace StarLab.Application.Workspace
             {
                 presenter = factory.CreatePresenter(this);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                log.Fatal(ex.Message, ex);
+                log.Fatal(e.Message, e);
                 throw;
             }
             
@@ -238,7 +238,7 @@ namespace StarLab.Application.Workspace
             }
             else if (view is Form form)
             {
-                form.Show(this);
+                form.ShowDialog(this);
             }
         }
 

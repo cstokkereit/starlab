@@ -33,9 +33,9 @@ namespace StarLab.Application.Workspace.Documents.Charts
             {
                 presenter = (IChartViewPresenter)presenterFactory.CreatePresenter(this);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                log.Fatal(ex.Message, ex);
+                log.Fatal(e.Message, e);
                 throw;
             }
 

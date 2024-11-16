@@ -2,7 +2,7 @@
 
 namespace StarLab.Application.Workspace.WorkspaceExplorer
 {
-    public interface IWorkspaceExplorerView : IControlView, IFormContent<IFormController>
+    public interface IWorkspaceExplorerView : IControlView, IFormContent<IViewController>
     {
         int AddImage(Image image);
 
@@ -10,7 +10,9 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
 
         void AddFolderNode(string key, string parentKey, string text, int imageIndex, int selectedImageIndex);
 
-        void AddRootNode(string key, string text, int imageIndex);
+        void AddProjectNode(string key, string parentKey, string text, int imageIndex);
+
+        void AddWorkspaceNode(string key, string text, int imageIndex);
 
         void AddToolbarButton(string name, string tooltip, Image image, ICommand command);
 
@@ -21,6 +23,8 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
         IMenuManager CreateDocumentMenuManager(string document);
 
         IMenuManager CreateFolderMenuManager(string folder);
+
+        IMenuManager CreateProjectMenuManager(string project);
 
         IMenuManager CreateWorkspaceMenuManager();
 
@@ -33,6 +37,8 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
         string GetSelectedNode();
 
         void SelectNode(string key);
+
+        void SetNodeText(string key, string text);
 
         void UpdateNodeState(string key, int imageIndex, int selectedImageIndex);
     }

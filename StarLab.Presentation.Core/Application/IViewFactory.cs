@@ -9,8 +9,10 @@ namespace StarLab.Application
 
         IDockableView CreateDocumentView(IDocument document);
 
-        IFormView CreateFormView(string id, string name);
+        IDialogView CreateDialogView(string id, string text);
 
-        IDockableView CreateToolView(string id, string name);
+        IDockableView CreateToolView(string id, string text);
+
+        IWorkspaceView CreateWorkspaceView();
     }
 }

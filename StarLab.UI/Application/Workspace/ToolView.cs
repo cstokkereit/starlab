@@ -19,9 +19,9 @@ namespace StarLab.Application.Workspace
             {
                 presenter = factory.CreatePresenter(this, id, name);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                log.Fatal(ex.Message, ex);
+                log.Fatal(e.Message, e);
                 throw;
             }
             
@@ -50,11 +50,11 @@ namespace StarLab.Application.Workspace
         {
             presenter.Initialise(controller);
 
-            if (presenter is IFormController parentController)
+            if (presenter is IViewController parentController)
             {
                 foreach (var control in Controls)
                 {
-                    if (control is IFormContent<IFormController> view) view.Initialise(controller, parentController);
+                    if (control is IFormContent<IViewController> view) view.Initialise(controller, parentController);
                 }
             }
         }

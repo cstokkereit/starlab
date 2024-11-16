@@ -13,8 +13,8 @@ namespace StarLab.Application.Workspace.Documents
 
             workspace.DeleteDocument(key);
 
-            Mapper.Map(workspace.Documents, dto.Documents);
-            Mapper.Map(workspace.Folders, dto.Folders);
+            //Mapper.Map(workspace.Documents, dto.Documents);
+            //Mapper.Map(workspace.Folders, dto.Folders);
 
             OutputPort.UpdateWorkspace(dto);
         }

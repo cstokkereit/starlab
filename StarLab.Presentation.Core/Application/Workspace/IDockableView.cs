@@ -1,6 +1,6 @@
 ﻿namespace StarLab.Application.Workspace
 {
-    public interface IDockableView : IView, IDialogController
+    public interface IDockableView : IView
     {
         /// <summary>
         /// Initialises the view.

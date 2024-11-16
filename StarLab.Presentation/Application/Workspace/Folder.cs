@@ -1,8 +1,8 @@
 ﻿namespace StarLab.Application.Workspace
 {
-    public class Folder : IFolder
+    internal class Folder : IFolder
     {
-        private List<Folder> folders = new List<Folder>();
+        private readonly List<IFolder> folders = new List<IFolder>();
 
         private readonly string parentKey;
 
@@ -12,30 +12,35 @@
 
         public Folder(FolderDTO dto)
         {
-            if (string.IsNullOrEmpty(dto.Path))
-            {
-                throw new ArgumentException(); // TODO
-            }
+            ArgumentNullException.ThrowIfNull(dto, nameof(dto));
+
+            if (string.IsNullOrEmpty(dto.Path)) throw new ArgumentException(); // TODO
 
             key = dto.Path;
 
-            if (key.Contains('/'))
-            {
-                var index = key.LastIndexOf('/');
-                parentKey = key.Substring(0, index);
-                name = key.Substring(index + 1);
-            }
-            else
-            {
-                parentKey = string.Empty;
-                name = key;
-            }
+            var index = key.LastIndexOf('/');
+            parentKey = key.Substring(0, index);
+            name = key.Substring(index + 1);
 
             Expanded = dto.Expanded;
             IsNew = dto.IsNew;
         }
 
+        public Folder(string name, bool expanded)
+        {
+            if (string.IsNullOrEmpty(name)) throw new ArgumentException(); // TODO
+
+            this.name = name;
+
+            parentKey = Constants.WORKSPACE;
+            key = parentKey + '/' + name;
+            
+            Expanded = expanded;
+        }
+
         public bool Expanded { get; private set; }
+
+        public IEnumerable<IFolder> Folders => folders;
 
         public bool IsNew { get; private set; }
 
@@ -44,8 +49,6 @@
         public string Name => name;
 
         public string ParentKey => parentKey;
-
-        public string Path => parentKey + '/' + name;
 
         public void Collapse()
         {
@@ -77,14 +80,11 @@
             Expand();
         }
 
-        public void AddChildFolders(IEnumerable<Folder> folders)
+        public void AddChildFolders(IEnumerable<IFolder> folders)
         {
             foreach (var folder in folders)
             {
-                if (folder.parentKey == key)
-                {
-                    this.folders.Add(folder);
-                }
+                if (folder.ParentKey == key) this.folders.Add(folder);
             }
         }
     }

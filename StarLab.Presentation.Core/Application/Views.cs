@@ -3,6 +3,7 @@
     public static class Views
     {
         public const string ABOUT = "AboutView";
+        public const string ADD_DOCUMENT = "AddDocumentView";
 
         public const string CHART_SETTINGS = "ChartSettingsView";
         public const string CHART = "ColourMagnitudeChartView";

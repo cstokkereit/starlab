@@ -1,6 +1,6 @@
 ﻿namespace StarLab.Application.Workspace.Documents
 {
-    public class Content : IContent
+    internal class Content : IContent
     {
         private readonly string name;
 

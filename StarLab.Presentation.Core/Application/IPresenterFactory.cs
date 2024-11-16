@@ -11,7 +11,7 @@ namespace StarLab.Application
 
         IDockableViewPresenter CreatePresenter(IDocumentView view, IDocument document);
 
-        IFormViewPresenter CreatePresenter(IFormView view);
+        IDialogViewPresenter CreatePresenter(IDialogView view);
 
         IWorkspaceViewPresenter CreatePresenter(IWorkspaceView view);
     }

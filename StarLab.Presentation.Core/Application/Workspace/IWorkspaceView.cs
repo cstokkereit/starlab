@@ -3,7 +3,7 @@
     /// <summary>
     /// The interface for the Main view.
     /// </summary>
-    public interface IWorkspaceView : IFormView, IMenuManager, IToolbarManager
+    public interface IWorkspaceView : IView, IMenuManager, IToolbarManager
     {
         /// <summary>
         /// 
@@ -14,6 +14,11 @@
         /// 
         /// </summary>
         void CloseAll();
+
+        /// <summary>
+        /// 
+        /// </summary>
+        void Close();
 
         /// <summary>
         /// 

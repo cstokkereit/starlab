@@ -4,16 +4,14 @@ using System.Reflection;
 
 namespace StarLab.Application.Help
 {
-    internal class AboutViewPresenter : ControlViewPresenter<IAboutView>, IAboutViewPresenter
+    internal class AboutViewPresenter : ControlViewPresenter<IAboutView, IDialogController>, IAboutViewPresenter
     {
         public AboutViewPresenter(IAboutView view, ICommandManager commands, IUseCaseFactory useCaseFactory, IConfiguration configuration, IMapper mapper, IEventAggregator events)
             : base(view, commands, useCaseFactory, configuration, mapper, events) { }
 
-        public override string Name => View.Name + Constants.CONTROLLER;
-
-        public override void Initialise(IApplicationController applicationController)
+        public override void Initialise(IApplicationController controller, IDialogController parentController)
         {
-            base.Initialise(applicationController);
+            base.Initialise(controller, parentController);
 
             //View.SetCompanyName(Resources.CompanyName);
             //View.SetCopyright(Resources.Copyright);

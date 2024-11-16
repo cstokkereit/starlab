@@ -1,5 +1,4 @@
 ﻿using log4net;
-using StarLab.Application.Workspace.Documents.Charts;
 using StarLab.Commands;
 using WeifenLuo.WinFormsUI.Docking;
 
@@ -21,9 +20,9 @@ namespace StarLab.Application.Workspace.Documents
             {
                 presenter = presenterFactory.CreatePresenter(this, document);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                log.Fatal(ex.Message, ex);
+                log.Fatal(e.Message, e);
                 throw;
             }
 
