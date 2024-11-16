@@ -1,4 +1,5 @@
 ﻿using StarLab.Application.Workspace;
+using StarLab.Application.Workspace.Documents;
 using StarLab.Commands;
 
 namespace StarLab.Application
@@ -11,7 +12,11 @@ namespace StarLab.Application
 
         ICommand CreateCommand(ICommandManager commands, IController controller, string action);
 
-        ICommand CreateCommand(ICommandManager commands, IViewController controller, string view);
+        ICommand CreateCommand(ICommandManager commands, string view);
+
+        IDockableView GetView(IDocument document);
+
+        IDockableView GetView(string id);
 
         IWorkspaceController GetWorkspaceController();
 

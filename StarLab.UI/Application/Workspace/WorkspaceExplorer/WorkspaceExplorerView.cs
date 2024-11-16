@@ -26,9 +26,9 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
             {
                 presenter = (IWorkspaceExplorerViewPresenter)presenterFactory.CreatePresenter(this);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                log.Fatal(ex.Message, ex);
+                log.Fatal(e.Message, e);
                 throw;
             }
 
@@ -36,6 +36,8 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
 
             treeView.ContextMenuStrip = new ContextMenuStrip();
         }
+
+        public IChildViewController Controller => (IChildViewController)presenter;
 
         public string DefaultLocation => Constants.DOCK_RIGHT;
 
@@ -54,15 +56,23 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
             nodes.Add(key, node);
         }
 
-        public void AddFolderNode(string key, string parentKey, string text, int unselectedImageIndex, int selectedImageIndex)
+        public void AddFolderNode(string key, string parentKey, string text, int imageIndex, int selectedImageIndex)
         {
             var parent = nodes[parentKey];
-            var node = parent.Nodes.Add(key, text, unselectedImageIndex, selectedImageIndex);
+            var node = parent.Nodes.Add(key, text, imageIndex, selectedImageIndex);
             node.Tag = Constants.FOLDER;
             nodes.Add(key, node);
         }
 
-        public void AddRootNode(string key, string text, int imageIndex)
+        public void AddProjectNode(string key, string parentKey, string text, int imageIndex)
+        {
+            var parent = nodes[parentKey];
+            var node = parent.Nodes.Add(key, text, imageIndex, imageIndex);
+            node.Tag = Constants.PROJECT;
+            nodes.Add(key, node);
+        }
+
+        public void AddWorkspaceNode(string key, string text, int imageIndex)
         {
             var node = treeView.Nodes.Add(key, text, imageIndex, imageIndex);
             node.Tag = Constants.WORKSPACE;
@@ -105,21 +115,28 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
 
         public IMenuManager CreateDocumentMenuManager(string document)
         {
-            var manager = new DocumentMenuManager(document);
+            var manager = new NodeMenuManager(document, Constants.DOCUMENT);
             treeView.ContextMenuManager.Add(manager);
             return manager;
         }
 
         public IMenuManager CreateFolderMenuManager(string folder)
         {
-            var manager = new FolderMenuManager(folder);
+            var manager = new NodeMenuManager(folder, Constants.FOLDER);
+            treeView.ContextMenuManager.Add(manager);
+            return manager;
+        }
+
+        public IMenuManager CreateProjectMenuManager(string project)
+        {
+            var manager = new NodeMenuManager(project, Constants.PROJECT);
             treeView.ContextMenuManager.Add(manager);
             return manager;
         }
 
         public IMenuManager CreateWorkspaceMenuManager()
         {
-            var manager = new WorkspaceMenuManager(Constants.WORKSPACE);
+            var manager = new NodeMenuManager(Constants.WORKSPACE);
             treeView.ContextMenuManager.Add(manager);
             return manager;
         }
@@ -143,17 +160,19 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
             return treeView.SelectedNode == null ? string.Empty : treeView.SelectedNode.Name;
         }
 
-        public void Initialise(IApplicationController controller, IFormController parentController)
+        public void Initialise(IApplicationController controller)
         {
-            presenter.Initialise(controller, parentController);
+
         }
 
         public void SelectNode(string key)
         {
-            if (nodes.ContainsKey(key))
-            {
-                treeView.SelectedNode = nodes[key];
-            }
+            if (nodes.ContainsKey(key)) treeView.SelectedNode = nodes[key];
+        }
+
+        public void SetNodeText(string key, string text)
+        {
+            if (nodes.ContainsKey(key)) nodes[key].Text = text;
         }
 
         public void UpdateNodeState(string key, int imageIndex, int selectedImageIndex)
@@ -180,6 +199,10 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
                         node.ImageIndex = presenter.GetImageIndex(Constants.FOLDER, node.IsExpanded, false);
                         break;
 
+                    case Constants.PROJECT:
+                        presenter.ProjectCollapsed(node.Name);
+                        break;
+
                     case Constants.WORKSPACE:
                         presenter.WorkspaceCollapsed();
                         break;
@@ -199,6 +222,10 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
                         presenter.FolderExpanded(node.Name);
                         node.SelectedImageIndex = presenter.GetImageIndex(Constants.FOLDER, node.IsExpanded, true);
                         node.ImageIndex = presenter.GetImageIndex(Constants.FOLDER, node.IsExpanded, false);
+                        break;
+
+                    case Constants.PROJECT:
+                        presenter.ProjectExpanded(node.Name);
                         break;
 
                     case Constants.WORKSPACE:
@@ -223,7 +250,12 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
                             break;
 
                         case Constants.FOLDER:
+                        case Constants.PROJECT:
                             presenter.RenameFolder(e.Node.Name, e.Label);
+                            break;
+
+                        case Constants.WORKSPACE:
+                            presenter.RenameWorkspace(e.Label);
                             break;
                     }
 
@@ -265,6 +297,11 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
 
                     case Constants.FOLDER:
                         presenter.FolderSelected(node.Name);
+                        
+                        break;
+
+                    case Constants.PROJECT:
+                        presenter.ProjectSelected(node.Name);
                         break;
 
                     case Constants.WORKSPACE:

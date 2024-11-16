@@ -1,5 +1,6 @@
 ﻿using log4net;
 using StarLab.Commands;
+using StarLab.Shared.Properties;
 using System.Text;
 using WeifenLuo.WinFormsUI.Docking;
 
@@ -20,24 +21,23 @@ namespace StarLab.Application.Workspace
         /// Initialises a new instance of the <see cref="WorkspaceView"/> class.
         /// </summary>
         /// <param name="presenterFactory">An <see cref="IPresenterFactory"/> that is used to create the <see cref="IPresenter"/> that controls this view.</param>
-        public WorkspaceView(string id, string name, IPresenterFactory factory)
+        public WorkspaceView(IPresenterFactory factory)
         {
-            ArgumentNullException.ThrowIfNull(nameof(factory));
+            ArgumentNullException.ThrowIfNull(factory, nameof(factory));
 
             InitializeComponent();
 
-            this.id = id;
-
-            Text = name;
-            Name = id;
+            Text = Resources.StarLab;
+            Name = Views.WORKSPACE;
+            id = Views.WORKSPACE;
 
             try
             {
                 presenter = factory.CreatePresenter(this);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                log.Fatal(ex.Message, ex);
+                log.Fatal(e.Message, e);
                 throw;
             }
             
@@ -210,11 +210,6 @@ namespace StarLab.Application.Workspace
             return layout;
         }
 
-        public void Initialise(IApplicationController controller, IDockableViewFactory factory)
-        {
-            presenter.Initialise(controller, factory);
-        }
-
         /// <summary>
         /// 
         /// </summary>
@@ -238,7 +233,7 @@ namespace StarLab.Application.Workspace
             }
             else if (view is Form form)
             {
-                form.Show(this);
+                form.ShowDialog(this);
             }
         }
 

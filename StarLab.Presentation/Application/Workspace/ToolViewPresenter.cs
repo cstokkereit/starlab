@@ -3,34 +3,30 @@ using StarLab.Commands;
 
 namespace StarLab.Application.Workspace
 {
-    public class ToolViewPresenter : Presenter, IDockableViewPresenter, IFormController
+    public class ToolViewPresenter : Presenter, IDockableViewPresenter, IViewController
     {
         private readonly IDockableView view;
 
-        private readonly string name;
-
-        private readonly string id;
-
-        public ToolViewPresenter(IDockableView view, string id, string name, ICommandManager commands, IUseCaseFactory useCaseFactory, IConfiguration configuration, IMapper mapper, IEventAggregator events)
+        public ToolViewPresenter(IDockableView view, ICommandManager commands, IUseCaseFactory useCaseFactory, IConfiguration configuration, IMapper mapper, IEventAggregator events)
             : base(commands, useCaseFactory, configuration, mapper, events)
         {
-            this.name = name;
             this.view = view;
-            this.id = id;
 
             Location = Constants.DOCK_RIGHT; // TODO
         }
 
         public string Location { get; set; }
 
-        public override string Name => id + Constants.CONTROLLER;
+        public override string Name => view.ID + Constants.CONTROLLER;
 
         public override void Initialise(IApplicationController controller)
         {
-            base.Initialise(controller);
+            if (!Initialised)
+            {
+                base.Initialise(controller);
 
-            view.Text = name;
-            view.Name = id;
+                view.Initialise(controller);
+            }
         }
 
         public void Show(IView view)

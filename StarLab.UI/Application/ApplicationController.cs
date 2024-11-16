@@ -1,7 +1,9 @@
 ﻿using log4net;
 using StarLab.Application.Workspace;
+using StarLab.Application.Workspace.Documents;
 using StarLab.Commands;
 using StarLab.Shared.Properties;
+using System.Reflection.Metadata;
 
 namespace StarLab.Application
 {
@@ -15,18 +17,18 @@ namespace StarLab.Application
 
         private readonly IDictionary<string, IViewController> controllers = new Dictionary<string, IViewController>();
 
-        private readonly CommandFactory commandFactory;
+        private readonly IDictionary<string, IView> views = new Dictionary<string, IView>();
 
-        private readonly IViewMap views;
+        private readonly CommandFactory commandFactory = new CommandFactory();
 
-        public ApplicationController(IViewMap views, IUseCaseFactory factory, IEventAggregator events)
+        private readonly IViewFactory viewFactory;
+
+        public ApplicationController(IUseCaseFactory factory, IViewFactory viewFactory, IEventAggregator events)
             : base(factory, events)
         {
-            ArgumentNullException.ThrowIfNull(nameof(views));
+            ArgumentNullException.ThrowIfNull(viewFactory, nameof(viewFactory));
 
-            commandFactory = new CommandFactory();
-
-            this.views = views;
+            this.viewFactory = viewFactory;
         }
 
         public override string Name => Constants.APPLICATION + Constants.CONTROLLER;
@@ -46,9 +48,37 @@ namespace StarLab.Application
             return commandFactory.CreateCommand(commands, controller, action);
         }
 
-        public ICommand CreateCommand(ICommandManager commands, IViewController controller, string view)
+        public ICommand CreateCommand(ICommandManager commands, string view)
         {
-            return new ShowViewCommand(commands, controller, views[view]);
+            return commandFactory.CreateCommand(commands, this, Actions.SHOW, view);
+        }
+
+        public IDockableView GetView(IDocument document)
+        {
+            IView view;
+
+            if (views.ContainsKey(document.ID))
+            {
+                view = (IDockableView)views[document.ID];
+            }
+            else
+            {
+                var bundle = viewFactory.CreateDocumentView(document);
+
+                var controller = bundle.Controller;
+                controllers.Add(controller.Name, controller);
+                controller.Initialise(this);
+
+                view = bundle.View;
+                views.Add(view.ID, view);
+            }
+
+            return (IDockableView)view;
+        }
+
+        public IDockableView GetView(string id)
+        {
+            return (IDockableView)views[id];
         }
 
         public IWorkspaceController GetWorkspaceController()
@@ -63,11 +93,11 @@ namespace StarLab.Application
             // Perform any cleanup here prior to closing the workspace
             // Teardown parent child relationships
 
-            foreach (var document in args.Workspace.Documents)
-            {
-                controllers.Remove(string.Format(Constants.DOCUMENT_CONTROLLER, document.ID));
-                views.Remove(document.ID);
-            }
+            //foreach (var document in args.Workspace.Documents)
+            //{
+            //    controllers.Remove($"Document ({document.ID}) Controller");
+            //    views.Remove(document.ID);
+            //}
         }
 
         public void RegisterCommandInvokers(ICommandManager commands)
@@ -81,52 +111,118 @@ namespace StarLab.Application
         {
             log.Info(Resources.InitialisationComplete);
 
-            views.ViewCreated += OnViewCreated;
-
             Events.Subsribe(this);
 
-            views.Initialise();
+            CreateViews();
+            InitialiseViews();
 
-            if (views[Views.WORKSPACE] is Form form)
-                System.Windows.Forms.Application.Run(form);
+            var view = views[Views.WORKSPACE];
+
+            if (views[Views.WORKSPACE] is Form form) System.Windows.Forms.Application.Run(form);
         }
 
         public void Show(string id)
         {
-            if (views.Contains(id) && controllers.ContainsKey(Constants.WORKSPACE_VIEW_CONTROLLER))
+            if (views.ContainsKey(id))
             {
+                var view = views[id];
+
+                var controller = GetController(view);
+                controller.Initialise(this);
+
                 controllers[Constants.WORKSPACE_VIEW_CONTROLLER].Show(views[id]);
             }
         }
 
-        private void OnViewCreated(object? sender, IView? view)
+        private void CreateDialogView(string id, string name)
         {
-            ArgumentNullException.ThrowIfNull(view);
+            var bundle = viewFactory.CreateDialogView(id, name);
 
-            if (view is IWorkspaceView workspaceView)
+            var controller = bundle.Controller;
+            controllers.Add(controller.Name, controller);
+            views.Add(bundle.View.ID, bundle.View);
+        }
+
+        private void CreateToolView(string id, string name)
+        {
+            var bundle = viewFactory.CreateToolView(id, name);
+
+            var controller = bundle.Controller;
+            controllers.Add(controller.Name, controller);
+            views.Add(bundle.View.ID, bundle.View);
+        }
+
+        private void CreateWorkspaceView()
+        {
+            var bundle = viewFactory.CreateWorkspaceView();
+
+            var controller = bundle.Controller;
+            controllers.Add(controller.Name, controller);
+            views.Add(bundle.View.ID, bundle.View);
+        }
+
+        private void CreateViews()
+        {
+            CreateDialogView(Views.ABOUT, Resources.AboutStarLab);
+            CreateDialogView(Views.ADD_DOCUMENT, Resources.AddDocument);
+            CreateDialogView(Views.OPTIONS, Resources.Options);
+
+            CreateToolView(Views.WORKSPACE_EXPLORER, Resources.WorkspaceExplorer);
+
+            // NOTE - This must be the last view to be created.
+            CreateWorkspaceView();
+        }
+
+        private IViewController GetController(IView view)
+        {
+            string id;
+
+            if (view is IWorkspaceView)
             {
-                workspaceView.Initialise(this, (IDockableViewFactory)views);
+                id = Views.WORKSPACE + Constants.CONTROLLER;
+            } 
+            else if (view is IDialogView)
+            {
+                id = view.ID + Constants.CONTROLLER;
             }
-            else if (view is IDockableView dockableView)
+            else if (view is IDockableView)
             {
-                dockableView.Initialise(this);
+                id = view.ID + Constants.CONTROLLER;
+            }
+            else if (view is IDocumentView)
+            {
+                throw new NotImplementedException();
+            }
+            else
+            {
+                throw new Exception(); // TODO
             }
 
-            controllers.Add(view.Controller.Name, view.Controller);
+            return controllers[id];
+        }
+
+        private void InitialiseViews()
+        {
+            GetController(views[Views.WORKSPACE_EXPLORER]).Initialise(this);
+
+            // NOTE - This must be the last view to be initialised
+            GetController(views[Views.WORKSPACE]).Initialise(this);
         }
 
         private class CommandFactory : Factory
         {
-            private const string TYPE_NAME = "{0}.{1}Command, StarLab.UI";
-
             public ICommand CreateCommand(ICommandManager commands, IController controller, string action, string target)
             {
-                return (ICommand)CreateInstance(string.Format(TYPE_NAME, controller.GetType().Namespace, action), new object[] { commands, controller, target });
+                return new ActionCommand(commands, controller, action, [target]);
+
+                //return (ICommand)CreateInstance($"{controller.GetType().Namespace}.{action}Command, StarLab.UI", new object[] { commands, controller, target });
             }
 
             public ICommand CreateCommand(ICommandManager commands, IController controller, string action)
             {
-                return (ICommand)CreateInstance(string.Format(TYPE_NAME, controller.GetType().Namespace, action), new object[] { commands, controller });
+                return new ActionCommand(commands, controller, action);
+
+                //return (ICommand)CreateInstance($"{controller.GetType().Namespace}.{action}Command, StarLab.UI", new object[] { commands, controller });
             }
         }
     }

@@ -1,5 +1,4 @@
-﻿using StarLab.Application.Workspace.Documents;
-using System.Xml;
+﻿using System.Xml;
 using System.Xml.Serialization;
 
 namespace StarLab.Application.Workspace
@@ -7,14 +6,14 @@ namespace StarLab.Application.Workspace
     [XmlRoot]
     public class Workspace
     {
-        [XmlArray]
-        public List<Document>? Documents;
-
-        [XmlArray]
-        public List<Folder>? Folders;
+        [XmlAttribute]
+        public string? ActiveDocument;
 
         [XmlIgnore]
         public string? Layout;
+
+        [XmlArray]
+        public List<Project>? Projects;
 
         [XmlElement("Layout")]
         public XmlCDataSection LayoutCData

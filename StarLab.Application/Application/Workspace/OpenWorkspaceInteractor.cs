@@ -28,13 +28,13 @@ namespace StarLab.Application.Workspace
             }
             catch (FileNotFoundException)
             {
-                OutputPort.ShowErrorMessage(string.Format(Resources.FileNotFound, filename));
+                OutputPort.ShowErrorMessage(string.Format(Resources.FileNotFoundMessage, filename));
             }
-            catch (Exception ex2)
+            catch (Exception e)
             {
-                var message = ex2.InnerException != null ? ex2.InnerException.Message : string.Empty;
-                OutputPort.ShowErrorMessage(string.Format(Resources.WorkspaceCouldNotBeOpened, message));
-                log.Error(ex2.Message, ex2);
+                var message = e.InnerException != null ? e.InnerException.Message : string.Empty;
+                OutputPort.ShowErrorMessage(string.Format(Resources.WorkspaceCouldNotBeOpenedMessage, message));
+                log.Error(e.Message, e);
             }
         }
     }

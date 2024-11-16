@@ -2,7 +2,7 @@
 
 namespace StarLab.Application.Workspace
 {
-    internal class DeleteFolderInteractor : UseCaseInteractor<IWorkspaceOutputPort>, IDeleteItemUseCase
+    internal class DeleteFolderInteractor : WorkspaceInteractor, IDeleteItemUseCase
     {
         public DeleteFolderInteractor(IWorkspaceOutputPort outputPort, IMapper mapper)
             : base(outputPort, mapper) { }
@@ -12,12 +12,7 @@ namespace StarLab.Application.Workspace
             var workspace = new Workspace(dto);
 
             workspace.DeleteFolder(key);
-
-            Mapper.Map(workspace.Documents, dto.Documents);
-            Mapper.Map(workspace.Folders, dto.Folders);
-
-            // TODO If folder tree contains documents further down - will need to UpdateWorkspace
-
+            UpdateWorkspace(workspace, dto.Projects);
             OutputPort.UpdateFolders(dto);
         }
     }

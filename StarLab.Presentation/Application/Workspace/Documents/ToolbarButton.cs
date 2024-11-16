@@ -2,7 +2,7 @@
 
 namespace StarLab.Application.Workspace.Documents
 {
-    public class ToolbarButton : IToolbarButton
+    internal class ToolbarButton : IToolbarButton
     {
         private readonly ICommand command;
 

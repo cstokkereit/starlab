@@ -1,11 +1,10 @@
 ﻿namespace StarLab.Application
 {
-    public abstract class Controller
+    public abstract class Controller : IController
     {
         private readonly IUseCaseFactory factory;
 
         private readonly IEventAggregator events;
-
 
         public Controller(IUseCaseFactory factory, IEventAggregator events)
         {
@@ -20,6 +19,6 @@
 
         protected IEventAggregator Events => events;
 
-        protected IUseCaseFactory UseCaseFactory { get => factory; }
+        protected IUseCaseFactory UseCaseFactory => factory;
     }
 }

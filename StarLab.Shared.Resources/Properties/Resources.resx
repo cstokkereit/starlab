@@ -126,8 +126,8 @@
   <data name="Add" xml:space="preserve">
     <value>Add</value>
   </data>
-  <data name="CannotRenameBecauseNameAlreadyExists" xml:space="preserve">
-    <value>Cannot rename '{0}' to '{1}' because a {2} with that name already exists.</value>
+  <data name="AddDocument" xml:space="preserve">
+    <value>Add New Document</value>
   </data>
   <data name="Chart" xml:space="preserve">
     <value>Chart</value>
@@ -153,14 +153,14 @@
   <data name="Copyright" xml:space="preserve">
     <value>© 2024 All rights reserved etc.</value>
   </data>
-  <data name="CouldNotBeCreated" xml:space="preserve">
+  <data name="CouldNotBeCreatedMessage" xml:space="preserve">
     <value>{0} could not be created.</value>
   </data>
   <data name="Cut" xml:space="preserve">
     <value>Cut</value>
   </data>
   <data name="DefaultFolderName" xml:space="preserve">
-    <value>NewFolder</value>
+    <value>New Folder</value>
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Delete</value>
@@ -174,7 +174,7 @@
   <data name="File" xml:space="preserve">
     <value>File</value>
   </data>
-  <data name="FileNotFound" xml:space="preserve">
+  <data name="FileNotFoundMessage" xml:space="preserve">
     <value>The file {0} could not be found.
 Check the filename and try again.</value>
   </data>
@@ -187,12 +187,18 @@ Check the filename and try again.</value>
   <data name="InitialisationComplete" xml:space="preserve">
     <value>Initialisation complete. Starting the application.</value>
   </data>
-  <data name="NameContainsIllegalCharacters" xml:space="preserve">
+  <data name="NameAlreadyExistsMessage" xml:space="preserve">
+    <value>Cannot rename '{0}' to '{1}' because a {2} with that name already exists.</value>
+  </data>
+  <data name="NameCannotIncludeMessage" xml:space="preserve">
     <value>{0} names cannot include any of the following:
 
                                {1}
 
 Please enter a valid name.</value>
+  </data>
+  <data name="NameNullOrEmptyMessage" xml:space="preserve">
+    <value>The {0} name cannot be an empty string.</value>
   </data>
   <data name="New" xml:space="preserve">
     <value>New</value>
@@ -200,7 +206,7 @@ Please enter a valid name.</value>
   <data name="NewFolder" xml:space="preserve">
     <value>New Folder</value>
   </data>
-  <data name="ObjectNotInitialised" xml:space="preserve">
+  <data name="ObjectNotInitialisedMessage" xml:space="preserve">
     <value>This object has not been properly initialised.</value>
   </data>
   <data name="Open" xml:space="preserve">
@@ -275,10 +281,10 @@ Please enter a valid name.</value>
   <data name="Workspace" xml:space="preserve">
     <value>Workspace</value>
   </data>
-  <data name="WorkspaceClosing" xml:space="preserve">
+  <data name="WorkspaceClosingMessage" xml:space="preserve">
     <value>The workspace contains items with unsaved changes. Do you want to save your changes?</value>
   </data>
-  <data name="WorkspaceCouldNotBeOpened" xml:space="preserve">
+  <data name="WorkspaceCouldNotBeOpenedMessage" xml:space="preserve">
     <value>The workspace file could not be opened. {0}</value>
   </data>
   <data name="WorkspaceExplorer" xml:space="preserve">

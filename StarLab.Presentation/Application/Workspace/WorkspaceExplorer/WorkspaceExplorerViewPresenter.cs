@@ -7,10 +7,8 @@ using StringResources = StarLab.Shared.Properties.Resources;
 
 namespace StarLab.Application.Workspace.WorkspaceExplorer
 {
-    internal class WorkspaceExplorerViewPresenter : ControlViewPresenter<IWorkspaceExplorerView>, IWorkspaceExplorerViewPresenter, IWorkspaceExplorerController, ISubscriber<ActiveDocumentChangedEvent>, ISubscriber<WorkspaceChangedEvent>
+    internal class WorkspaceExplorerViewPresenter : ChildViewPresenter<IWorkspaceExplorerView, IViewController>, IWorkspaceExplorerViewPresenter, IWorkspaceExplorerController, ISubscriber<ActiveDocumentChangedEvent>, ISubscriber<WorkspaceChangedEvent>
     {
-        private const string WORKSPACE_NAME = "{0} '{1}'";
-
         private IWorkspace workspace;
 
         private int indexFolderClosed;
@@ -28,16 +26,22 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
         public WorkspaceExplorerViewPresenter(IWorkspaceExplorerView view, ICommandManager commands, IUseCaseFactory useCaseFactory, IConfiguration configuration, IMapper mapper, IEventAggregator events)
             : base(view, commands, useCaseFactory, configuration, mapper, events)
         {
-            workspace = new Workspace();
+            workspace = new EmptyWorkspace();
         }
 
-        public override string Name => throw new NotImplementedException();
-
-        public void CollapseAll()
+        public void Collapse(string key)
         {
-            foreach (var folder in workspace.Folders)
+            if (key.Equals(Constants.WORKSPACE))
             {
-                folder.Collapse();
+                workspace.Collapse();
+            }
+            else if (workspace.HasProject(key))
+            {
+                workspace.GetProject(key).CollapseAll();
+            }
+            else if (workspace.HasFolder(key))
+            {
+                workspace.GetFolder(key).CollapseAll();
             }
 
             UpdateView();
@@ -92,13 +96,15 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
             return index;
         }
 
-        public void Initialise(IApplicationController controller, IFormController parentController)
+        public override void Initialise(IApplicationController controller)
         {
-            base.Initialise(controller, parentController);
+            if (!Initialised)
+            {
+                base.Initialise(controller);
 
-            AddImages();
-            CreateWorkspaceMenu();
-            CreateToolbar();
+                AddImages();
+                CreateToolbar();
+            }
         }
 
         public void OnEvent(ActiveDocumentChangedEvent args)
@@ -116,9 +122,32 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
             AppController.Show(id);
         }
 
+        public void ProjectCollapsed(string key)
+        {
+            workspace.GetProject(key).Collapse();
+        }
+
+        public void ProjectExpanded(string key)
+        {
+            workspace.GetProject(key).Expand();
+        }
+
+        public void ProjectSelected(string key)
+        {
+
+        }
+
         public void Rename(string key)
         {
-            View.EditNodeLabel(key);
+            if (key == Constants.WORKSPACE)
+            {
+                View.SetNodeText(key, workspace.Name);
+                View.EditNodeLabel(key);
+            }
+            else
+            {
+                View.EditNodeLabel(key);
+            }
         }
 
         public void RenameDocument(string id, string name)
@@ -129,6 +158,11 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
         public void RenameFolder(string key, string name)
         {
             AppController.GetWorkspaceController().RenameFolder(key, name);
+        }
+
+        public void RenameWorkspace(string name)
+        {
+            AppController.GetWorkspaceController().RenameWorkspace(name);
         }
 
         public void ShowErrorMessage(string message)
@@ -149,8 +183,10 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
 
             if (workspace is Workspace)
             {
-                CreateFolders();
-                CreateDocuments();
+                CreateWorkspaceNode();
+                CreateProjectNodes();
+                CreateFolderNodes();
+                CreateDocumentNodes();
                 ExpandNodes();
 
                 foreach (var folder in workspace.Folders)
@@ -162,11 +198,11 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
                     }
                 }
 
-                UpdateCommandState(Actions.COLLAPSE_ALL, true);
+                UpdateCommandState(Actions.COLLAPSE, Constants.WORKSPACE, true);
             }
             else
             {
-                UpdateCommandState(Actions.COLLAPSE_ALL, false);
+                UpdateCommandState(Actions.COLLAPSE, Constants.WORKSPACE, false);
             }
             
         }
@@ -175,7 +211,7 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
         {
             var key = View.GetSelectedNode();
 
-            if (!string.IsNullOrEmpty(key) && key != Constants.WORKSPACE && !workspace.HasDocument(key))
+            if (workspace.HasFolder(key))
             {
                 var folder = workspace.GetFolder(key);
 
@@ -190,7 +226,7 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
         {
             var key = View.GetSelectedNode();
 
-            if (!string.IsNullOrEmpty(key) && key != Constants.WORKSPACE && !workspace.HasDocument(key))
+            if (workspace.HasFolder(key))
             {
                 var folder = workspace.GetFolder(key);
 
@@ -238,10 +274,10 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
             manager.AddMenuItem(Constants.COPY, StringResources.Copy, ImageResources.Copy);
             manager.AddMenuItem(Constants.PASTE, StringResources.Paste, ImageResources.Paste);
             manager.AddMenuItem(Constants.DELETE, StringResources.Delete, GetCommand(workspaceController, Actions.DELETE_DOCUMENT, document.ID));
-            manager.AddMenuItem(Constants.RENAME, StringResources.Rename, GetCommand(Actions.RENAME_DOCUMENT, document.ID));
+            manager.AddMenuItem(Constants.RENAME, StringResources.Rename, ImageResources.Rename, GetCommand(Actions.RENAME_DOCUMENT, document.ID));
         }
 
-        private void CreateDocuments()
+        private void CreateDocumentNodes()
         {
             foreach (var document in workspace.Documents)
             {
@@ -257,23 +293,21 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
             var workspaceController = AppController.GetWorkspaceController();
 
             manager.AddMenuItem(Constants.ADD, StringResources.Add);
-            manager.AddMenuItem(Constants.ADD, Constants.ADD_CHART, StringResources.Chart + Constants.ELLIPSIS);
-            manager.AddMenuItem(Constants.ADD, Constants.ADD_TABLE, StringResources.Table + Constants.ELLIPSIS);
+            manager.AddMenuItem(Constants.ADD, Constants.ADD_CHART, StringResources.Chart + Constants.ELLIPSIS, GetCommand(workspaceController, Actions.ADD_CHART, folder.Key));
+            manager.AddMenuItem(Constants.ADD, Constants.ADD_TABLE, StringResources.Table + Constants.ELLIPSIS, GetCommand(workspaceController, Actions.ADD_TABLE, folder.Key));
             manager.AddMenuItem(Constants.ADD, Constants.ADD_FOLDER, StringResources.NewFolder, ImageResources.NewFolder, GetCommand(workspaceController, Actions.ADD_FOLDER, folder.Key));
             manager.AddMenuSeparator();
-            manager.AddMenuItem(Constants.COLLAPSE_ALL, StringResources.CollapseAllDescendants, ImageResources.Collapse);
+            manager.AddMenuItem(Constants.COLLAPSE_ALL, StringResources.CollapseAllDescendants, ImageResources.Collapse, GetCommand(Actions.COLLAPSE, folder.Key));
             manager.AddMenuSeparator();
             manager.AddMenuItem(Constants.CUT, StringResources.Cut, ImageResources.Cut);
             manager.AddMenuItem(Constants.COPY, StringResources.Copy, ImageResources.Copy);
             manager.AddMenuItem(Constants.PASTE, StringResources.Paste, ImageResources.Paste);
             manager.AddMenuItem(Constants.DELETE, StringResources.Delete, GetCommand(workspaceController, Actions.DELETE_FOLDER, folder.Key));
-            manager.AddMenuItem(Constants.RENAME, StringResources.Rename, GetCommand(Actions.RENAME_FOLDER, folder.Key));
+            manager.AddMenuItem(Constants.RENAME, StringResources.Rename, ImageResources.Rename, GetCommand(Actions.RENAME, folder.Key));
         }
 
-        private void CreateFolders()
+        private void CreateFolderNodes()
         {
-            View.AddRootNode(Constants.WORKSPACE, GetFolderName(), indexWorkspace);
-
             foreach (var folder in workspace.Folders)
             {
                 if (folder.Expanded)
@@ -285,19 +319,56 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
             }
         }
 
+        private void CreateProjectMenu(IProject project)
+        {
+            var manager = View.CreateProjectMenuManager(project.Key);
+
+            var workspaceController = AppController.GetWorkspaceController();
+
+            manager.AddMenuItem(Constants.COLLAPSE_ALL, StringResources.CollapseAllDescendants, ImageResources.Collapse, GetCommand(Actions.COLLAPSE, project.Key));
+            manager.AddMenuSeparator();
+            manager.AddMenuItem(Constants.ADD, StringResources.Add);
+            manager.AddMenuItem(Constants.ADD, Constants.ADD_CHART, StringResources.Chart + Constants.ELLIPSIS, GetCommand(workspaceController, Actions.ADD_CHART, project.Key));
+            manager.AddMenuItem(Constants.ADD, Constants.ADD_TABLE, StringResources.Table + Constants.ELLIPSIS, GetCommand(workspaceController, Actions.ADD_TABLE, project.Key));
+            manager.AddMenuItem(Constants.ADD, Constants.ADD_FOLDER, StringResources.Folder + Constants.ELLIPSIS);
+            manager.AddMenuSeparator();
+            manager.AddMenuItem(Constants.RENAME, StringResources.Rename, ImageResources.Rename, GetCommand(Actions.RENAME, project.Key));
+        }
+
+        private void CreateProjectNodes()
+        {
+            foreach (var project in workspace.Projects)
+            {
+                View.AddProjectNode(project.Key, project.ParentKey, project.Name, indexWorkspace);
+                CreateProjectMenu(project);
+            }
+        }
+
         /// <summary>
         /// TODO
         /// </summary>
         private void CreateToolbar()
         {
             View.AddToolbarButton(Constants.SYNCHRONISE, StringResources.SyncWithActiveDocument, ImageResources.Synchronise, GetCommand(Actions.SYNCHRONISE));
-            View.AddToolbarButton(Constants.COLLAPSE_ALL, StringResources.CollapseAll, ImageResources.CollapseAll, GetCommand(Actions.COLLAPSE_ALL));
+            View.AddToolbarButton(Constants.COLLAPSE_ALL, StringResources.CollapseAll, ImageResources.CollapseAll, GetCommand(Actions.COLLAPSE, Constants.WORKSPACE));
+        }
+
+        private void CreateWorkspaceNode()
+        {
+            View.AddWorkspaceNode(Constants.WORKSPACE, GetWorkspaceName(), indexWorkspace);
+            CreateWorkspaceMenu();
         }
 
         private void CreateWorkspaceMenu()
         {
             var manager = View.CreateWorkspaceMenuManager();
-            manager.AddMenuItem(Constants.RENAME, StringResources.Rename);
+
+            manager.AddMenuItem(Constants.COLLAPSE_ALL, StringResources.CollapseAllDescendants, ImageResources.Collapse, GetCommand(Actions.COLLAPSE, Constants.WORKSPACE));
+            manager.AddMenuSeparator();
+            manager.AddMenuItem(Constants.ADD, StringResources.Add);
+            manager.AddMenuItem(Constants.ADD, Constants.ADD_PROJECT, StringResources.Project + Constants.ELLIPSIS);
+            manager.AddMenuSeparator();
+            manager.AddMenuItem(Constants.RENAME, StringResources.Rename, ImageResources.Rename, GetCommand(Actions.RENAME, Constants.WORKSPACE));
         }
 
         private void DeselectFolders()
@@ -315,19 +386,29 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
         {
             View.ExpandNode(Constants.WORKSPACE);
 
+            foreach (var project in workspace.Projects)
+            {
+                if (project.Expanded) View.ExpandNode(project.Key);
+            }
+
             foreach (var folder in workspace.Folders)
             {
                 if (folder.Expanded) View.ExpandNode(folder.Key);
             }
         }
 
-        private string GetFolderName()
+        private string GetWorkspaceName()
         {
-            return string.IsNullOrEmpty(workspace.Name) ? StringResources.Workspace : string.Format(WORKSPACE_NAME, StringResources.Workspace, workspace.Name);
+            return string.IsNullOrEmpty(workspace.Name) ? StringResources.Workspace : $"{StringResources.Workspace} '{workspace.Name}'";
         }
 
         private void UpdateView()
         {
+            foreach (var project in workspace.Projects)
+            {
+                if (!project.Expanded) View.CollapseNode(project.Key);
+            }
+
             foreach (var folder in workspace.Folders)
             {
                 if (!folder.Expanded) View.CollapseNode(folder.Key);

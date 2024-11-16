@@ -12,8 +12,6 @@ namespace StarLab.Application.Workspace
     {
         private readonly IWorkspaceView view;
 
-        private IDockableViewFactory? factory;
-
         private IWorkspace workspace;
 
         private bool confirmExit = true;
@@ -29,6 +27,37 @@ namespace StarLab.Application.Workspace
         }
 
         public override string Name => Views.WORKSPACE + Constants.CONTROLLER;
+
+        public void AddChart(string path)
+        {
+            AppController.Show(Views.ADD_DOCUMENT);
+
+            //if (dialog.Controller is IAddDocument
+
+
+
+
+
+
+
+
+
+
+
+
+            //var interactor = UseCaseFactory.CreateAddDocumentUseCase(this);
+            //var dto = Mapper.Map<IWorkspace, WorkspaceDTO>(workspace);
+            //interactor.Execute(dto, path);
+        }
+
+        public void AddTable(string path)
+        {
+
+
+            //var interactor = UseCaseFactory.CreateAddDocumentUseCase(this);
+            //var dto = Mapper.Map<IWorkspace, WorkspaceDTO>(workspace);
+            //interactor.Execute(dto, path);
+        }
 
         public void ClearActiveDocument()
         {
@@ -48,7 +77,7 @@ namespace StarLab.Application.Workspace
 
             if (dirty)
             {
-                var result = ShowMessage(StringResources.StarLab, StringResources.WorkspaceClosing, MessageBoxButtons.YesNoCancel, MessageBoxIcon.None);
+                var result = ShowMessage(StringResources.StarLab, StringResources.WorkspaceClosingMessage, MessageBoxButtons.YesNoCancel, MessageBoxIcon.None);
                 
                 if (result == DialogResult.Yes) SaveWorkspace();
                 
@@ -77,14 +106,12 @@ namespace StarLab.Application.Workspace
 
         public IDockableView CreateView(string id)
         {
-            if (factory == null) throw new InvalidOperationException(StringResources.ObjectNotInitialised);
-
             IDockableView view;
 
             if (workspace.HasDocument(id))
-                view = factory.CreateView(workspace.GetDocument(id));
+                view = AppController.GetView(workspace.GetDocument(id));
             else
-                view = factory.GetView(id);
+                view = AppController.GetView(id);
 
             return view;
         }
@@ -112,22 +139,23 @@ namespace StarLab.Application.Workspace
             view.Close();
         }
 
-        public void Initialise(IApplicationController controller, IDockableViewFactory factory)
+        public override void Initialise(IApplicationController controller)
         {
-            base.Initialise(controller);
+            if(!Initialised)
+            {
+                base.Initialise(controller);
 
-            this.factory = factory;
+                CreateFileMenu();
+                CreateViewMenu();
+                CreateWorkspaceMenu();
+                CreateToolsMenu();
+                CreateWindowMenu();
+                CreateHelpMenu();
 
-            CreateFileMenu();
-            CreateViewMenu();
-            CreateWorkspaceMenu();
-            CreateToolsMenu();
-            CreateWindowMenu();
-            CreateHelpMenu();
+                CreateStandardToolbar();
 
-            CreateStandardToolbar();
-
-            OpenDefaultWorkspace();
+                OpenDefaultWorkspace();
+            }
         }
 
         public void AddFolder(string path)
@@ -169,6 +197,13 @@ namespace StarLab.Application.Workspace
             var interactor = UseCaseFactory.CreateRenameFolderUseCase(this);
             var dto = Mapper.Map<IWorkspace, WorkspaceDTO>(workspace);
             interactor.Execute(dto, key, name);
+        }
+
+        public void RenameWorkspace(string name)
+        {
+            var interactor = UseCaseFactory.CreateRenameWorkspaceUseCase(this);
+            var dto = Mapper.Map<IWorkspace, WorkspaceDTO>(workspace);
+            interactor.Execute(dto, name);
         }
 
         public void SaveWorkspace()
@@ -277,7 +312,7 @@ namespace StarLab.Application.Workspace
         {
             if (confirmExit)
             {
-                GetCommand(Actions.EXIT_APPLICATION).Execute();
+                GetCommand(Actions.EXIT).Execute();
                 e.Cancel = true;
             }
         }
@@ -303,7 +338,7 @@ namespace StarLab.Application.Workspace
             view.AddMenuItem(Constants.FILE, Constants.FILE_PAGE_SETUP, StringResources.PageSetup + Constants.ELLIPSIS, ImageResources.PageSetup); //, AppController.GetCommand(this, Constants.FILE_PAGE_SETUP));
             view.AddMenuItem(Constants.FILE, Constants.FILE_PRINT, StringResources.Print + Constants.ELLIPSIS, ImageResources.Print); //, AppController.GetCommand(this, Constants.FILE_PRINT));
             view.AddMenuSeparator(Constants.FILE);
-            view.AddMenuItem(Constants.FILE, Constants.FILE_EXIT, StringResources.Exit, GetCommand(AppController, Actions.EXIT_APPLICATION));
+            view.AddMenuItem(Constants.FILE, Constants.FILE_EXIT, StringResources.Exit, GetCommand(AppController, Actions.EXIT));
         }
 
         /// <summary>
@@ -373,9 +408,7 @@ namespace StarLab.Application.Workspace
         private void OpenWorkspace(string filename)
         {
             if (string.IsNullOrEmpty(filename))
-            {
                 filename = view.ShowOpenFileDialog(StringResources.OpenWorkspace, StringResources.WorkspaceFileFilter);
-            }
 
             var interactor = UseCaseFactory.CreateOpenWorkspaceUseCase(this);
 

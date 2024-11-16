@@ -1,6 +1,7 @@
 ﻿namespace StarLab.Application.Options
 {
-    public interface IOptionsViewPresenter : IControlViewPresenter
+    public interface IOptionsViewPresenter : IChildViewPresenter
     {
+
     }
 }

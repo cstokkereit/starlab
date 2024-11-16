@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using StarLab.Commands;
-using StarLab.Shared.Properties;
+using System.Diagnostics;
 
 namespace StarLab.Application
 {
@@ -31,9 +31,11 @@ namespace StarLab.Application
         /// <param name="controller">The application controller.</param>
         public virtual void Initialise(IApplicationController controller)
         {
+            Debug.Assert(!Initialised);
+
             this.controller = controller ?? throw new ArgumentNullException(nameof(controller));
 
-            controller.RegisterCommandInvokers(commands);
+            AppController.RegisterCommandInvokers(commands);
 
             Events.Subsribe(this);
         }
@@ -42,17 +44,18 @@ namespace StarLab.Application
         {
             get
             {
-                if (controller == null) throw new InvalidOperationException(Resources.ObjectNotInitialised);
-
+                Debug.Assert(controller != null);
                 return controller;
             }
         }
 
         protected IConfiguration Configuration => configuration;
 
+        protected bool Initialised => controller != null;
+
         protected IMapper Mapper => mapper;
 
-        protected ICommand GetCommand(IController controller, string action, string target) // Consider changing controller to its typename and let AppController resolve it
+        protected ICommand GetCommand(IController controller, string action, string target)
         {
             var name = action + target;
 
@@ -76,7 +79,7 @@ namespace StarLab.Application
             return commands.GetCommand(name);
         }
 
-        protected ICommand GetCommand(IController controller, string action) // Consider changing controller to its typename and let AppController resolve it
+        protected ICommand GetCommand(IController controller, string action)
         {
             if (!commands.ContainsCommand(action))
             {
@@ -117,10 +120,15 @@ namespace StarLab.Application
 
             if (!commands.ContainsCommand(name))
             {
-                commands.AddCommand(name, AppController.CreateCommand(commands, (IViewController)this, view));
+                commands.AddCommand(name, AppController.CreateCommand(commands, view));
             }
 
             return commands.GetCommand(name);
+        }
+
+        protected void UpdateCommandState(string action, string target, bool enabled)
+        {
+            if (GetCommand(action + target) is IComponentCommand command) command.Enabled = enabled;
         }
 
         protected void UpdateCommandState(string action, bool enabled)

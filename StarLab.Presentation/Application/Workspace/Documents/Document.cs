@@ -1,6 +1,6 @@
 ﻿namespace StarLab.Application.Workspace.Documents
 {
-    public class Document : IDocument
+    internal class Document : IDocument
     {
         private readonly List<IContent> contents = new List<IContent>();
 
@@ -12,12 +12,20 @@
 
         private string name;
 
+        public Document(string id, string name, string path, string view)
+        {
+            this.name = name;
+            this.path = path;
+            this.view = view;
+            this.id = id;
+        }
+
         public Document(DocumentDTO dto)
         {
-            name = dto.Name;
-            path = dto.Path;
-            view = dto.View;
-            id = dto.ID;
+            name = dto.Name ?? throw new ArgumentException(); // TODO
+            path = dto.Path ?? throw new ArgumentException();
+            view = dto.View ?? throw new ArgumentException();
+            id = dto.ID ?? throw new ArgumentException();
 
             if (dto.Contents != null) CreateContents(dto.Contents);
         }
@@ -26,7 +34,7 @@
 
         public IEnumerable<IContent> Contents => contents;
 
-        public string FullName => Path + '/' + Name;
+        public string FullName => $"{Path}/{Name}";
 
         public string ID => id;
 

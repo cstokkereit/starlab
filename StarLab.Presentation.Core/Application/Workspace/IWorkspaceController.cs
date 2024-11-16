@@ -2,7 +2,11 @@
 {
     public interface IWorkspaceController : IViewController
     {
+        void AddChart(string path);
+
         void AddFolder(string path);
+
+        void AddTable(string path);
 
         void CloseActiveDocument();
 
@@ -21,6 +25,8 @@
         void RenameDocument(string id, string name);
 
         void RenameFolder(string key, string name);
+
+        void RenameWorkspace(string name);
 
         void SaveWorkspace();
     }

@@ -1,4 +1,5 @@
 ﻿using log4net;
+using System.Diagnostics;
 using WeifenLuo.WinFormsUI.Docking;
 
 namespace StarLab.Application.Workspace
@@ -11,25 +12,22 @@ namespace StarLab.Application.Workspace
 
         private readonly string id;
 
-        public ToolView(string id, string name, IControlView content, IPresenterFactory factory)
+        public ToolView(string id, string text, IChildView childView, IPresenterFactory factory)
         {
             InitializeComponent();
 
-            try
-            {
-                presenter = factory.CreatePresenter(this, id, name);
-            }
-            catch (Exception ex)
-            {
-                log.Fatal(ex.Message, ex);
-                throw;
-            }
-            
             this.id = id;
+
+            Text = text;
+            Name = id;
+   
+            presenter = factory.CreatePresenter(this);
+            Debug.Assert(presenter is IViewController);
+            childView.Controller.Attach((IViewController)presenter);
 
             SuspendLayout();
 
-            if (content is Control control)
+            if (childView is Control control)
             {
                 control.Dock = DockStyle.Fill;
                 Controls.Add(control);
@@ -48,14 +46,9 @@ namespace StarLab.Application.Workspace
         /// <param name="controller">The <see cref="IApplicationController"/>.</param>
         public void Initialise(IApplicationController controller)
         {
-            presenter.Initialise(controller);
-
-            if (presenter is IFormController parentController)
+            foreach (var control in Controls)
             {
-                foreach (var control in Controls)
-                {
-                    if (control is IFormContent<IFormController> view) view.Initialise(controller, parentController);
-                }
+                if (control is IChildView view) view.Controller.Initialise(controller);
             }
         }
 

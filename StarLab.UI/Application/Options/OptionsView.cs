@@ -18,16 +18,13 @@ namespace StarLab.Application.Options
             {
                 presenter = (IOptionsViewPresenter)factory.CreatePresenter(this);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                log.Fatal(ex.Message, ex);
+                log.Fatal(e.Message, e);
                 throw;
             }
         }
 
-        public void Initialise(IApplicationController controller, IFormController parentController)
-        {
-            presenter.Initialise(controller);
-        }
+        public IChildViewController Controller => (IChildViewController)presenter;
     }
 }

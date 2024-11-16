@@ -5,16 +5,18 @@ namespace StarLab.Application.Options
 {
     // https://learn.microsoft.com/en-us/dotnet/desktop/winforms/advanced/how-to-create-application-settings?view=netframeworkdesktop-4.8
 
-    internal class OptionsViewPresenter : ControlViewPresenter<IOptionsView>, IOptionsViewPresenter
+    internal class OptionsViewPresenter : ChildViewPresenter<IOptionsView, IDialogController>, IOptionsViewPresenter, IChildViewController
     {
         public OptionsViewPresenter(IOptionsView view, ICommandManager commands, IUseCaseFactory useCaseFactory, IConfiguration configuration, IMapper mapper, IEventAggregator events)
             : base(view, commands, useCaseFactory, configuration, mapper, events) { }
 
-        public override string Name => throw new NotImplementedException();
-
-        public override void Initialise(IApplicationController applicationController)
+        public override void Initialise(IApplicationController controller)
         {
-            base.Initialise(applicationController);
+            if (!Initialised)
+            {
+                base.Initialise(controller);
+
+            }
         }
     }
 }

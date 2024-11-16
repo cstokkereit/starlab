@@ -1,8 +1,8 @@
 ﻿namespace StarLab.Application.Workspace.WorkspaceExplorer
 {
-    public interface IWorkspaceExplorerController : IController
+    public interface IWorkspaceExplorerController : IChildViewController
     {
-        void CollapseAll();
+        void Collapse(string key);
 
         void Rename(string key);
 

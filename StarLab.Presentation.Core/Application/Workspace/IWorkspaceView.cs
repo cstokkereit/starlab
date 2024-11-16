@@ -3,7 +3,7 @@
     /// <summary>
     /// The interface for the Main view.
     /// </summary>
-    public interface IWorkspaceView : IFormView, IMenuManager, IToolbarManager
+    public interface IWorkspaceView : IView, IMenuManager, IToolbarManager
     {
         /// <summary>
         /// 
@@ -18,10 +18,13 @@
         /// <summary>
         /// 
         /// </summary>
+        void Close();
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <returns></returns>
         string GetLayout();
-
-        void Initialise(IApplicationController controller, IDockableViewFactory factory);
 
         /// <summary>
         /// 

@@ -26,10 +26,7 @@ namespace StarLab.Application.Workspace.Documents.Charts
             Name = Views.CHART_SETTINGS;
         }
 
-        public void Initialise(IApplicationController controller, IDocumentController parentController)
-        {
-            presenter.Initialise(controller, parentController);
-        }
+        public IChildViewController Controller => (IChildViewController)presenter;
 
         public void AttachCancelButtonCommand(ICommand command)
         {

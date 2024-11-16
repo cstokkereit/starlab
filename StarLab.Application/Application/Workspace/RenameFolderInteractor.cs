@@ -3,7 +3,7 @@ using StarLab.Shared.Properties;
 
 namespace StarLab.Application.Workspace
 {
-    internal class RenameFolderInteractor : UseCaseInteractor<IWorkspaceOutputPort>, IRenameItemUseCase
+    internal class RenameFolderInteractor : WorkspaceInteractor, IRenameItemUseCase
     {
         public RenameFolderInteractor(IWorkspaceOutputPort outputPort, IMapper mapper)
             : base(outputPort, mapper) { }
@@ -14,38 +14,26 @@ namespace StarLab.Application.Workspace
             {
                 var workspace = new Workspace(dto);
                 var folder = workspace.GetFolder(path);
-
-                var folders = folder.Parent != null ? folder.Parent.Folders : workspace.Folders;
+                var folders = folder.Parent.Folders;
 
                 if (IsValid(folders, name))
                 {
                     workspace.RenameFolder(folder, name);
-                    Mapper.Map(workspace.Documents, dto.Documents);
-                    Mapper.Map(workspace.Folders, dto.Folders);
+                    UpdateWorkspace(workspace, dto.Projects);
                     OutputPort.UpdateFolders(dto);
                 }
                 else
                 {
-                    throw CreateException(path.Substring(path.LastIndexOf('/') + 1), name);
+                    throw CreateTargetExistsException(path.Substring(path.LastIndexOf('/') + 1), name, Resources.Folder);
                 }
             }
             else
             {
-                throw CreateException();
+                throw CreateInvalidNameException(name, Resources.Folder);
             }
         }
 
-        private Exception CreateException(string oldName, string newName)
-        {
-            return new Exception(string.Format(Resources.CannotRenameBecauseNameAlreadyExists, oldName, newName, Resources.Folder.ToLower()));
-        }
-
-        private Exception CreateException()
-        {
-            return new Exception(string.Format(Resources.NameContainsIllegalCharacters, Resources.Folder, string.Join(' ', Constants.IllegalCharacters)));
-        }
-
-        private bool IsValid(IEnumerable<Folder> folders, string name)
+        private bool IsValid(IEnumerable<IFolder> folders, string name)
         {
             var valid = true;
 
@@ -55,25 +43,6 @@ namespace StarLab.Application.Workspace
                 {
                     valid = false;
                     break;
-                }
-            }
-
-            return valid;
-        }
-
-        private bool IsValid(string name)
-        {
-            var valid = !string.IsNullOrEmpty(name);
-
-            if (valid)
-            {
-                foreach (var character in Constants.IllegalCharacters)
-                {
-                    if (name.Contains(character))
-                    {
-                        valid = false;
-                        break;
-                    }
                 }
             }
 

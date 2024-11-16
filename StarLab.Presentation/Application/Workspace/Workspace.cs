@@ -2,15 +2,13 @@
 
 namespace StarLab.Application.Workspace
 {
-    public class Workspace : IWorkspace
+    internal class Workspace : IWorkspace
     {
-        private readonly Dictionary<string, IDocument> documentsByID = new Dictionary<string, IDocument>();
+        private readonly Dictionary<string, IDocument> documents = new Dictionary<string, IDocument>();
 
-        private readonly Dictionary<string, Folder> foldersByPath = new Dictionary<string, Folder>();
+        private readonly Dictionary<string, IProject> projects = new Dictionary<string, IProject>();
 
-        private readonly List<IDocument> documents = new List<IDocument>();
-
-        private readonly List<IFolder> folders = new List<IFolder>();
+        private readonly Dictionary<string, IFolder> folders = new Dictionary<string, IFolder>();
 
         public Workspace(WorkspaceDTO dto)
         {
@@ -27,31 +25,24 @@ namespace StarLab.Application.Workspace
                 Name = string.Empty;
             }
 
-            if (dto.Folders != null) CreateFolders(dto.Folders);
+            if (dto.Projects != null) CreateProjects(dto.Projects);
 
-            if (dto.Documents != null) CreateDocuments(dto.Documents);
-
-            AddChildFolders(foldersByPath.Values);
-
-            if (documents.Count > 0) ActiveDocument = documents[0];
-        }
-
-        public Workspace()
-        {
-            // Do Nothing
+            if (!string.IsNullOrEmpty(dto.ActiveDocument) && documents.Count > 0) ActiveDocument = documents[dto.ActiveDocument];
         }
 
         public IDocument? ActiveDocument { get; private set; }
 
-        public IEnumerable<IDocument> Documents => documents;
+        public IEnumerable<IDocument> Documents => documents.Values;
 
         public string FileName { get; private set; }
 
-        public IEnumerable<IFolder> Folders => folders;
+        public IEnumerable<IFolder> Folders => folders.Values;
 
         public string Layout { get; private set; }
 
         public string Name { get; private set; }
+
+        public IEnumerable<IProject> Projects => projects.Values;
 
         public void ClearActiveDocument()
         {
@@ -60,38 +51,53 @@ namespace StarLab.Application.Workspace
 
         public void Collapse()
         {
-            foreach (var folder in folders)
+            foreach (var project in projects.Values)
             {
-                folder.Collapse();
+                project.Collapse();
             }
         }
 
         public void Expand()
         {
-            foreach (var folder in folders)
+            foreach (var project in projects.Values)
             {
-                folder.Expand();
+                project.Expand();
             }
         }
 
         public IDocument GetDocument(string id)
         {
-            return documentsByID[id];
+            return documents[id];
         }
 
-        public IFolder GetFolder(string path)
+        public IFolder GetFolder(string key)
         {
-            return foldersByPath[path];
+            return folders[key];
+        }
+
+        public IProject GetProject(string key)
+        {
+            return projects[key];
         }
 
         public bool HasDocument(string id)
         {
-            return documentsByID.ContainsKey(id);
+            return documents.ContainsKey(id);
+        }
+
+        public bool HasFolder(string key)
+        {
+            return folders.ContainsKey(key);
+        }
+
+        public bool HasProject(string key)
+        {
+            return projects.ContainsKey(key);
         }
 
         public void SetActiveDocument(string id)
         {
-            if (documentsByID.ContainsKey(id)) ActiveDocument = documentsByID[id];
+            if (documents.ContainsKey(id)) ActiveDocument = documents[id];
         }
 
         public void UpdateLayout(string layout)
@@ -102,40 +108,19 @@ namespace StarLab.Application.Workspace
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="folders"></param>
-        private void AddChildFolders(IEnumerable<Folder> folders)
-        {
-            foreach (var folder in folders)
-            {
-                folder.AddChildFolders(folders);
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="dtos"></param>
-        private void CreateDocuments(IEnumerable<DocumentDTO> dtos)
+        private void CreateProjects(IEnumerable<ProjectDTO> dtos)
         {
             foreach (var dto in dtos)
             {
-                var document = new Document(dto);
-                documentsByID.Add(document.ID, document);
-                documents.Add(document);
-            }
-        }
+                var project = new Project(dto);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="dtos"></param>
-        private void CreateFolders(IEnumerable<FolderDTO> dtos)
-        {
-            foreach (var dto in dtos)
-            {
-                var folder = new Folder(dto);
-                foldersByPath.Add(folder.Key, folder);
-                folders.Add(folder);
+                projects.Add(project.Key, project);
+
+                foreach (var folder in project.Folders)
+                {
+                    folders.Add(folder.Key, folder);
+                }
             }
         }
     }

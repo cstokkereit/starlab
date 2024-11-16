@@ -16,52 +16,62 @@ namespace StarLab.Application
             Initialise();
         }
 
-        public IControlView CreateControlView(string typeName)
+        public IChildView CreateControlView(string typeName)
         {
-            return (IControlView)CreateInstance(typeName, new object[] { presenterFactory });
+            return (IChildView)CreateInstance(typeName, new object[] { presenterFactory });
         }
 
-        public IDockableView CreateDocumentView(IDocument document)
+        public IViewBundle CreateDialogView(string id, string text)
         {
-            return (IDockableView)CreateInstance(document.View, new object[] { document, this, presenterFactory });
+            var view = new DialogView(id, text, CreateContent(id), presenterFactory);
+            return new ViewBundle(view, view.Controller);
         }
 
-        public IFormView CreateFormView(string id, string name)
+        public IViewBundle CreateDocumentView(IDocument document)
         {
-            IFormView? view = null;
-
-            if (id == Views.WORKSPACE)
-            {
-                view = new WorkspaceView(id, name, presenterFactory);
-            }
-            else
-            {
-                view = new View(id, name, CreateContent(id), presenterFactory);
-            }
-
-            return view;
+            var view = (DocumentView)CreateInstance(document.View, new object[] { document, this, presenterFactory });
+            return new ViewBundle(view, view.Controller);
         }
 
-        public IDockableView CreateToolView(string id, string name)
+        public IViewBundle CreateToolView(string id, string text)
         {
-            return new ToolView(id, name, CreateContent(id), presenterFactory);
+            var view = new ToolView(id, text, CreateContent(id), presenterFactory);
+            return new ViewBundle(view, view.Controller);
         }
 
-        private IControlView CreateContent(string id)
+        public IViewBundle CreateWorkspaceView()
         {
+            var view = new WorkspaceView(presenterFactory);
+            return new ViewBundle(view, view.Controller);
+        }
 
-
-            return (IControlView)CreateInstance(views[id], new object[] { presenterFactory });
+        private IChildView CreateContent(string id)
+        {
+            return (IChildView)CreateInstance(views[id], new object[] { presenterFactory });
         }
 
         private void Initialise()
         {
             views.Add(Views.ABOUT, "StarLab.Application.Help.AboutView, StarLab.UI");
+            views.Add(Views.ADD_DOCUMENT, "StarLab.Application.Workspace.Documents.AddDocumentView, StarLab.UI");
             views.Add(Views.CHART, "StarLab.Application.Workspace.Documents.Charts.ChartView, StarLab.UI");
             views.Add(Views.CHART_SETTINGS, "StarLab.Application.Workspace.Documents.Charts.ChartSettingsView, StarLab.UI");
             views.Add(Views.OPTIONS, "StarLab.Application.Options.OptionsView, StarLab.UI");
             views.Add(Views.WORKSPACE, "StarLab.Application.Workspace.WorkspaceView, StarLab.UI");
             views.Add(Views.WORKSPACE_EXPLORER, "StarLab.Application.Workspace.WorkspaceExplorer.WorkspaceExplorerView, StarLab.UI");
+        }
+
+        private struct ViewBundle : IViewBundle
+        {
+            public ViewBundle(IView view, IViewController controller)
+            {
+                Controller = controller;
+                View = view;
+            }
+
+            public IViewController Controller { get; private set; }
+
+            public IView View { get; private set; }
         }
     }
 }

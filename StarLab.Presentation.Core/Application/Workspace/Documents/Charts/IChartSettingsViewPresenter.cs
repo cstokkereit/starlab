@@ -1,7 +1,7 @@
 ﻿namespace StarLab.Application.Workspace.Documents.Charts
 {
-    public interface IChartSettingsViewPresenter : IControlViewPresenter
+    public interface IChartSettingsViewPresenter : IChildViewPresenter
     {
-        void Initialise(IApplicationController controller, IDocumentController parentController);
+
     }
 }

@@ -33,9 +33,9 @@ namespace StarLab.Application.Workspace.Documents.Charts
             {
                 presenter = (IChartViewPresenter)presenterFactory.CreatePresenter(this);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                log.Fatal(ex.Message, ex);
+                log.Fatal(e.Message, e);
                 throw;
             }
 
@@ -55,14 +55,10 @@ namespace StarLab.Application.Workspace.Documents.Charts
             formsPlot.MouseUp += FormsPlot1_MouseUp;
         }
 
+        public IChildViewController Controller => (IChildViewController)presenter;
+
         public void Initialise(IApplicationController controller, IDocumentController parentController)
         {
-            presenter.Initialise(controller);
-
-
-
-
-
             // This is all temporary
 
             // Split data into vertical series and colour according to spectral class

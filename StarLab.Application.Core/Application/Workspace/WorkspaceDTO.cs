@@ -1,20 +1,17 @@
-﻿using StarLab.Application.Workspace.Documents;
-
-namespace StarLab.Application.Workspace
+﻿namespace StarLab.Application.Workspace
 {
     public class WorkspaceDTO
     {
         public WorkspaceDTO()
         {
-            Documents = new List<DocumentDTO>();
-            Folders = new List<FolderDTO>();
+            Projects = new List<ProjectDTO>();
         }
 
-        public List<DocumentDTO> Documents;
+        public string? ActiveDocument;
 
         public string? FileName;
 
-        public List<FolderDTO> Folders;
+        public List<ProjectDTO> Projects;
 
         public string? Layout;
     }

@@ -12,6 +12,7 @@ namespace StarLab.Application
             CreateMap<Content, ContentDTO>();
             CreateMap<Document, DocumentDTO>();
             CreateMap<Folder, FolderDTO>();
+            CreateMap<Project, ProjectDTO>();
             //CreateMap<Chart, ChartDTO>();
             //CreateMap<Title, TitleDTO>();
             //CreateMap<Font, FontDTO>();

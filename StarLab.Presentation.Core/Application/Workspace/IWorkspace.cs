@@ -6,15 +6,17 @@ namespace StarLab.Application.Workspace
     {
         IDocument? ActiveDocument { get; }
 
-        IEnumerable<IDocument> Documents { get; }
-
         string FileName { get; }
-
-        IEnumerable<IFolder> Folders { get; }
 
         string Layout { get; }
 
         string Name { get; }
+
+        IEnumerable<IDocument> Documents { get; }
+
+        IEnumerable<IFolder> Folders { get; }
+
+        IEnumerable<IProject> Projects { get; }
 
         void ClearActiveDocument();
 
@@ -24,9 +26,15 @@ namespace StarLab.Application.Workspace
 
         IDocument GetDocument(string id);
 
-        IFolder GetFolder(string path);
+        IFolder GetFolder(string key);
+
+        IProject GetProject(string key);
 
         bool HasDocument(string id);
+
+        bool HasFolder(string key);
+
+        bool HasProject(string key);
 
         void SetActiveDocument(string id);
 

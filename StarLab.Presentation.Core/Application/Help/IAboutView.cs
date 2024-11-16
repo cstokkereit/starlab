@@ -1,6 +1,6 @@
 ﻿namespace StarLab.Application.Help
 {
-    public interface IAboutView : IControlView, IFormContent<IFormController>
+    public interface IAboutView : IChildView
     {
         void SetCompanyName(string companyName);
 

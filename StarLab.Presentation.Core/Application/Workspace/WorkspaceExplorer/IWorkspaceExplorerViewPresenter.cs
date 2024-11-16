@@ -1,6 +1,6 @@
 ﻿namespace StarLab.Application.Workspace.WorkspaceExplorer
 {
-    public interface IWorkspaceExplorerViewPresenter : IControlViewPresenter
+    public interface IWorkspaceExplorerViewPresenter : IChildViewPresenter
     {
         void DocumentSelected(string id);
 
@@ -12,13 +12,19 @@
 
         int GetImageIndex(string nodeType, bool expanded, bool selected);
 
-        void Initialise(IApplicationController controller, IFormController parentController);
-
         void OpenDocument(string id);
+
+        void ProjectCollapsed(string key);
+
+        void ProjectExpanded(string key);
+
+        void ProjectSelected(string key);
 
         void RenameDocument(string id, string name);
 
         void RenameFolder(string id, string name);
+
+        void RenameWorkspace(string name);
 
         void ShowErrorMessage(string message);
 

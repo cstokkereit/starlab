@@ -4,23 +4,26 @@ using System.Reflection;
 
 namespace StarLab.Application.Help
 {
-    internal class AboutViewPresenter : ControlViewPresenter<IAboutView>, IAboutViewPresenter
+    internal class AboutViewPresenter : ChildViewPresenter<IAboutView, IDialogController>, IAboutViewPresenter, IChildViewController
     {
+        private IDialogController parentController;
+
         public AboutViewPresenter(IAboutView view, ICommandManager commands, IUseCaseFactory useCaseFactory, IConfiguration configuration, IMapper mapper, IEventAggregator events)
             : base(view, commands, useCaseFactory, configuration, mapper, events) { }
 
-        public override string Name => View.Name + Constants.CONTROLLER;
-
-        public override void Initialise(IApplicationController applicationController)
+        public override void Initialise(IApplicationController controller)
         {
-            base.Initialise(applicationController);
+            if (!Initialised)
+            {
+                base.Initialise(controller);
 
-            //View.SetCompanyName(Resources.CompanyName);
-            //View.SetCopyright(Resources.Copyright);
-            //View.SetDescription(Resources.ProductDescription);
-            //View.SetLogo("");
-            //View.SetProductName(Resources.StarLab);
-            //View.SetVersion(string.Format(Resources.Version, GetVersion()));
+                //View.SetCompanyName(Resources.CompanyName);
+                //View.SetCopyright(Resources.Copyright);
+                //View.SetDescription(Resources.ProductDescription);
+                //View.SetLogo("");
+                //View.SetProductName(Resources.StarLab);
+                //View.SetVersion(string.Format(Resources.Version, GetVersion()));
+            }
         }
 
         private string GetVersion()

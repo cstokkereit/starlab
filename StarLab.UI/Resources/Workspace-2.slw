@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Workspace xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ActiveDocument="">
+  <Projects>
+    <Project expanded="true" name="Yale Bright Star Catalog">
+      <Documents />
+      <Folders>
+        <Folder expanded="true" path="Workspace/Yale Bright Star Catalog/Charts" />
+        <Folder expanded="true" path="Workspace/Yale Bright Star Catalog/Charts/HRDiagrams" />
+        <Folder expanded="true" path="Workspace/Yale Bright Star Catalog/Charts/Spectra" />
+        <Folder expanded="true" path="Workspace/Yale Bright Star Catalog/Tables" />
+        <Folder expanded="true" path="Workspace/Yale Bright Star Catalog/Tables/Brightest" />
+        <Folder expanded="true" path="Workspace/Yale Bright Star Catalog/Tables/Closest" />
+      </Folders>
+    </Project>
+    <Project expanded="true" name="Henry Draper Catalog">
+      <Documents />
+      <Folders>
+        <Folder expanded="false" path="Workspace/Henry Draper Catalog/Charts" />
+        <Folder expanded="false" path="Workspace/Henry Draper Catalog/Charts/HRDiagrams" />
+        <Folder expanded="false" path="Workspace/Henry Draper Catalog/Charts/Spectra" />
+        <Folder expanded="false" path="Workspace/Henry Draper Catalog/Tables" />
+        <Folder expanded="false" path="Workspace/Henry Draper Catalog/Tables/Brightest" />
+        <Folder expanded="false" path="Workspace/Henry Draper Catalog/Tables/Closest" />
+      </Folders>
+    </Project>
+  </Projects>
+  <Layout><![CDATA[<?xml version="1.0" encoding="utf-8"?>
+<!--DockPanel configuration file. Author: Weifen Luo, all rights reserved.-->
+<!--!!! AUTOMATICALLY GENERATED FILE. DO NOT MODIFY !!!-->
+<DockPanel FormatVersion="1.0" DockLeftPortion="0.25" DockRightPortion="0.25" DockTopPortion="0.25" DockBottomPortion="0.25" ActiveDocumentPane="-1" ActivePane="0">
+  <Contents Count="1">
+    <Content ID="0" PersistString="WorkspaceExplorerView" AutoHidePortion="0.25" IsHidden="False" IsFloat="False" />
+  </Contents>
+  <Panes Count="1">
+    <Pane ID="0" DockState="DockRight" ActiveContent="0">
+      <Contents Count="1">
+        <Content ID="0" RefID="0" />
+      </Contents>
+    </Pane>
+  </Panes>
+  <DockWindows>
+    <DockWindow ID="0" DockState="Document" ZOrderIndex="1">
+      <NestedPanes Count="0" />
+    </DockWindow>
+    <DockWindow ID="1" DockState="DockLeft" ZOrderIndex="3">
+      <NestedPanes Count="0" />
+    </DockWindow>
+    <DockWindow ID="2" DockState="DockRight" ZOrderIndex="2">
+      <NestedPanes Count="1">
+        <Pane ID="0" RefID="0" PrevPane="-1" Alignment="Bottom" Proportion="0.5" />
+      </NestedPanes>
+    </DockWindow>
+    <DockWindow ID="3" DockState="DockTop" ZOrderIndex="4">
+      <NestedPanes Count="0" />
+    </DockWindow>
+    <DockWindow ID="4" DockState="DockBottom" ZOrderIndex="5">
+      <NestedPanes Count="0" />
+    </DockWindow>
+  </DockWindows>
+  <FloatWindows Count="0" />
+</DockPanel>]]></Layout>
+</Workspace>

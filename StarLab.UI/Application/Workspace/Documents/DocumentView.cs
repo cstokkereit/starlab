@@ -1,5 +1,4 @@
 ﻿using log4net;
-using StarLab.Application.Workspace.Documents.Charts;
 using StarLab.Commands;
 using WeifenLuo.WinFormsUI.Docking;
 
@@ -21,9 +20,9 @@ namespace StarLab.Application.Workspace.Documents
             {
                 presenter = presenterFactory.CreatePresenter(this, document);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                log.Fatal(ex.Message, ex);
+                log.Fatal(e.Message, e);
                 throw;
             }
 
@@ -61,25 +60,23 @@ namespace StarLab.Application.Workspace.Documents
         /// <param name="controller">The <see cref="IApplicationController"/>.</param>
         public void Initialise(IApplicationController controller)
         {
-            presenter.Initialise(controller);
-
             if (presenter is IDocumentController parentController)
             {
-                foreach (var control in splitContainer.Panel1.Controls)
-                {
-                    if (control is IFormContent<IDocumentController> content)
-                    {
-                        content.Initialise(controller, parentController);
-                    }
-                }
+                //foreach (var control in splitContainer.Panel1.Controls)
+                //{
+                //    if (control is IFormContent<IDocumentController> content)
+                //    {
+                //        content.Initialise(controller, parentController);
+                //    }
+                //}
 
-                foreach (var control in splitContainer.Panel2.Controls)
-                {
-                    if (control is IFormContent<IDocumentController> content)
-                    {
-                        content.Initialise(controller, parentController);
-                    }
-                }
+                //foreach (var control in splitContainer.Panel2.Controls)
+                //{
+                //    if (control is IFormContent<IDocumentController> content)
+                //    {
+                //        content.Initialise(controller, parentController);
+                //    }
+                //}
             }
         }
 

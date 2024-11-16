@@ -2,6 +2,7 @@
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
+using StarLab.Application.Workspace.Documents;
 using StarLab.Commands;
 
 namespace StarLab.Application
@@ -20,7 +21,6 @@ namespace StarLab.Application
         private void InstallApplicationClasses(IWindsorContainer container)
         {
             container.Register(
-                Component.For<IViewMap>().ImplementedBy<ViewMap>().LifestyleTransient(),
                 Component.For<IEventAggregator>().ImplementedBy<EventAggregator>().LifestyleSingleton(),
                 Classes.FromAssemblyNamed("StarLab.Application").Where(t => t.Name.EndsWith("Factory")).WithServiceDefaultInterfaces(),
                 Classes.FromAssemblyNamed("StarLab.Application").BasedOn<Profile>().WithServiceBase()

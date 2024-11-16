@@ -1,71 +1,112 @@
 ﻿using StarLab.Application.Workspace.Documents;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 
 namespace StarLab.Application.Workspace
 {
-    internal class Workspace
+    internal class Workspace : IFolder
     {
-        private readonly Dictionary<string, Document> documentsByID = new Dictionary<string, Document>();
+        private readonly Dictionary<string, Document> documents = new Dictionary<string, Document>();
 
-        private readonly Dictionary<string, Folder> foldersByPath = new Dictionary<string, Folder>();
+        private readonly Dictionary<string, Project> projects = new Dictionary<string, Project>();
+
+        private readonly Dictionary<string, IFolder> folders = new Dictionary<string, IFolder>();
 
         public Workspace(WorkspaceDTO dto)
         {
-            if (dto.Folders != null)
-            {
-                CreateFolders(dto.Folders);
-            }
+            ArgumentNullException.ThrowIfNull(dto, nameof(dto));
 
-            if (dto.Documents != null)
-            {
-                CreateDocuments(dto.Documents);
-            }
+            CreateProjects(dto.Projects);
         }
 
         public Workspace() { }
-        public IEnumerable<Document> Documents => documentsByID.Values;
 
-        public IEnumerable<Folder> Folders => foldersByPath.Values;
+        public IEnumerable<Document> Documents => throw new InvalidOperationException();
 
-        public void AddFolder(Folder folder)
+        public IEnumerable<IFolder> Folders => throw new InvalidOperationException();
+
+        public string Name { get => Constants.WORKSPACE; set => throw new InvalidOperationException(); }
+
+        public string Path { get => Constants.WORKSPACE; }
+
+        public IFolder Parent => throw new InvalidOperationException();
+
+        public IEnumerable<Project> Projects => projects.Values;
+
+        public void AddDocument(Document document)
         {
-            if (!foldersByPath.ContainsKey(folder.Path)) foldersByPath.Add(folder.Path, folder);
+            var folder = GetFolder(document.Path);
+            folder.AddDocument(document);
+
+            documents.Add(document.ID, document);
+        }
+
+        public void AddFolder(IFolder folder)
+        {
+            if (folder is not Folder) throw new InvalidOperationException();
+
+            folders.Add(folder.Path, folder);
         }
 
         public void DeleteDocument(string id)
         {
-            var document = GetDocument(id);
+            //var document = GetDocument(id);
 
-            if (document != null && foldersByPath.ContainsKey(document.Path))
+            //if (document != null && folders.ContainsKey(document.Path))
+            //{
+            //    var folder = folders[document.Path];
+
+            //    if (folder != null)
+            //    {
+            //        folder.DeleteDocument(document);
+            //        documents.Remove(id);
+            //    }
+            //}
+        }
+
+        public void DeleteFolder(IFolder folder)
+        {
+            if (folder != null && folder.Parent != null)
             {
-                var folder = foldersByPath[document.Path];
+                DeleteFolders(folder);
 
-                if (folder != null)
-                {
-                    folder.DeleteDocument(document);
-                    documentsByID.Remove(id);
-                }
+                
+                folder.Parent.DeleteFolder(folder);
             }
         }
 
         public void DeleteFolder(string path)
         {
-            DeleteFolders(GetFolder(path));
+            DeleteFolder(GetFolder(path));
         }
+
 
         public Document GetDocument(string id)
         {
-            return documentsByID[id];
+            return documents[id];
         }
 
-        public Folder GetFolder(string path)
+        public IFolder GetFolder(string path)
         {
-            return foldersByPath[path];
+            if (path.Equals(Constants.WORKSPACE)) return this;
+            
+            if (projects.ContainsKey(path)) return projects[path];
+            
+            if (folders.ContainsKey(path)) return folders[path];
+            
+            throw new KeyNotFoundException(path);
         }
 
-        public void RenameFolder(Folder folder, string name)
+        public Project GetProject(string name)
         {
-            var folders = new List<Folder>(foldersByPath.Values);
-            if (folder is Folder f) f.Name = name;
+            return projects[$"{Constants.WORKSPACE}/{name}"];
+        }
+
+        public void RenameFolder(IFolder folder, string name)
+        {
+            var folders = new List<IFolder>(this.folders.Values);
+
+            folder.Name = name;
+
             UpdatePaths(folders);
         }
 
@@ -75,14 +116,26 @@ namespace StarLab.Application.Workspace
         /// <param name="dtos"></param>
         private void CreateDocuments(IEnumerable<DocumentDTO> dtos)
         {
+            //foreach (var dto in dtos)
+            //{
+            //    if (!string.IsNullOrEmpty(dto.Path) && folders.ContainsKey(dto.Path))
+            //    {
+            //        var document = new Document(dto);
+            //        folders[document.Path].AddDocument(document);
+            //        documents.Add(document.ID, document);
+            //    }
+            //}
+        }
+
+        private void CreateProjects(IEnumerable<ProjectDTO> dtos)
+        {
+            // Validate paths of new IFolder objects against their dto.Path?
+
             foreach (var dto in dtos)
             {
-                if (!string.IsNullOrEmpty(dto.Path) && foldersByPath.ContainsKey(dto.Path))
-                {
-                    var document = new Document(dto);
-                    foldersByPath[document.Path].AddDocument(document);
-                    documentsByID.Add(document.ID, document);
-                }
+                var project = new Project(dto, this);
+                projects.Add(project.Path, project);
+                CreateFolders(dto.Folders, project);
             }
         }
 
@@ -90,7 +143,7 @@ namespace StarLab.Application.Workspace
         /// 
         /// </summary>
         /// <param name="dtos"></param>
-        private void CreateFolders(IEnumerable<FolderDTO> dtos)
+        private void CreateFolders(IEnumerable<FolderDTO> dtos, IFolder parent)
         {
             Folder folder;
 
@@ -100,38 +153,41 @@ namespace StarLab.Application.Workspace
                 {
                     var parentPath = dto.Path.Substring(0, dto.Path.LastIndexOf('/'));
 
-                    if (foldersByPath.ContainsKey(parentPath))
-                        folder = new Folder(dto, foldersByPath[parentPath]);
+                    if (folders.ContainsKey(parentPath))
+                        folder = new Folder(dto, folders[parentPath]);
                     else
-                        folder = new Folder(dto);
+                        folder = new Folder(dto, parent);
 
-                    foldersByPath.Add(folder.Path, folder);
+                    folders.Add(folder.Path, folder);
                 }
             }
         }
 
-        private void DeleteFolders(Folder folder)
+        private void DeleteDocuments(IFolder folder)
         {
             foreach (var document in folder.Documents)
             {
-                documentsByID.Remove(document.ID);
+                documents.Remove(document.ID);
             }
-
-            foreach (var child in folder.Folders)
-            {
-                foldersByPath.Remove(child.Path);
-
-                DeleteFolders(child);
-            }
-
-            if (folder.Parent != null && foldersByPath.ContainsKey(folder.Parent.Path)) foldersByPath[folder.Parent.Path].DeleteFolder(folder);
-            
-            foldersByPath.Remove(folder.Path);
         }
 
-        private void UpdatePaths(IEnumerable<Folder> folders)
+        private void DeleteFolders(IFolder parent)
         {
-            foldersByPath.Clear();
+            var folders = new List<IFolder>(this.folders.Values);
+
+            foreach (var folder in folders)
+            {
+                if (folder.Path.StartsWith(parent.Path))
+                {
+                    this.folders.Remove(folder.Path);
+                    DeleteDocuments(folder);
+                }
+            }
+        }
+
+        private void UpdatePaths(IEnumerable<IFolder> folders)
+        {
+            this.folders.Clear();
 
             foreach (var folder in folders)
             {
@@ -140,7 +196,7 @@ namespace StarLab.Application.Workspace
                     document.Path = folder.Path;
                 }
 
-                foldersByPath.Add(folder.Path, folder);
+                this.folders.Add(folder.Path, folder);
             }
         }
     }

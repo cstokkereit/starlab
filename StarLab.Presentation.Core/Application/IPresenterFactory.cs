@@ -5,13 +5,13 @@ namespace StarLab.Application
 {
     public interface IPresenterFactory
     {
-        IControlViewPresenter CreatePresenter(IControlView view);
+        IChildViewPresenter CreatePresenter(IChildView view);
 
-        IDockableViewPresenter CreatePresenter(IDockableView view, string id, string name);
+        IDockableViewPresenter CreatePresenter(IDockableView view);
 
         IDockableViewPresenter CreatePresenter(IDocumentView view, IDocument document);
 
-        IFormViewPresenter CreatePresenter(IFormView view);
+        IDialogViewPresenter CreatePresenter(IDialogView view);
 
         IWorkspaceViewPresenter CreatePresenter(IWorkspaceView view);
     }

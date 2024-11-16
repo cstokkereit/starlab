@@ -2,77 +2,70 @@
 
 namespace StarLab.Application.Workspace
 {
-    internal class Folder
+    internal class Folder : IFolder
     {
-        private const string PATH = "{0}/{1}";
-
-        private const string WORKSPACE = "Workspace";
-
         private readonly List<Document> documents = new List<Document>();
 
-        private readonly List<Folder> folders = new List<Folder>();
+        private readonly List<IFolder> folders = new List<IFolder>();
 
         private readonly bool expanded;
 
-        private readonly bool isNew = false;
+        private readonly bool isNew;
 
-        public Folder(FolderDTO dto, Folder parent)
+        public Folder(FolderDTO dto, IFolder parent)
         {
             if (string.IsNullOrEmpty(dto.Path)) throw new ArgumentException(); // TODO
 
-            ArgumentNullException.ThrowIfNull(nameof(parent));
+            Parent = parent ?? throw new ArgumentNullException(nameof(parent));
 
             Name = dto.Path.Substring(dto.Path.LastIndexOf('/') + 1);
-
+            
             expanded = dto.Expanded;
 
-            Parent = parent;
-
-            parent.AddFolder(this);
+            Parent.AddFolder(this);
         }
 
-        public Folder(FolderDTO dto)
+        public Folder(string? name, bool expanded, IFolder parent)
         {
-            if (string.IsNullOrEmpty(dto.Path)) throw new ArgumentException(); // TODO
+            Parent = parent ?? throw new ArgumentNullException(nameof(parent));
+            Name = name ?? throw new ArgumentNullException(nameof(name));
 
-            Name = dto.Path.Substring(dto.Path.LastIndexOf('/') + 1);
-
-            expanded = dto.Expanded;
+            this.expanded = expanded;
         }
 
-        public Folder(string name, Folder parent)
+        public Folder(string name, IFolder parent)
         {
-            Parent = parent;
-            Name = name;
+            Parent = parent ?? throw new ArgumentNullException(nameof(parent));
+            Name = name ?? throw new ArgumentNullException(nameof(name));
 
             isNew = true;
 
-            parent.AddFolder(this);
+            Parent.AddFolder(this);
         }
 
         public IEnumerable<Document> Documents => documents;
 
         public bool Expanded => expanded;
 
-        public IEnumerable<Folder> Folders => folders;
+        public IEnumerable<IFolder> Folders => folders;
 
         public bool IsNew => isNew;
 
         public string Name { get; set; }
 
-        public Folder? Parent { get; private set; }
-
         public string Path
         {
-            get { return string.Format(PATH, Parent == null ? WORKSPACE : Parent.Path, Name); }
+            get { return $"{Parent.Path}/{Name}"; }
         }
+
+        public IFolder Parent { get; private set; }
 
         public void AddDocument(Document document)
         {
             documents.Add(document);
         }
 
-        public void AddFolder(Folder folder)
+        public void AddFolder(IFolder folder)
         {
             folders.Add(folder);
         }
@@ -82,7 +75,7 @@ namespace StarLab.Application.Workspace
             documents.Remove(document);
         }
 
-        public void DeleteFolder(Folder folder)
+        public void DeleteFolder(IFolder folder)
         {
             folders.Remove(folder);
         }
