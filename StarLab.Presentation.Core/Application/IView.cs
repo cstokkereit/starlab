@@ -43,10 +43,7 @@
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="title"></param>
-        /// <param name="filter"></param>
-        /// <param name="extension"></param>
-        /// <returns></returns>
-        string ShowSaveFileDialog(string title, string filter, string extension);
+        /// <param name="view">The <see cref="IView"/> to be shown.</param>
+        void Show(IView view);
     }
 }

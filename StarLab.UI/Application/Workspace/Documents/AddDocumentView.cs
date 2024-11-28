@@ -81,7 +81,7 @@ namespace StarLab.Application.Workspace.Documents
 
         public void Initialise(IApplicationController controller)
         {
-            
+
         }
     }
 }

@@ -28,6 +28,7 @@ namespace StarLab.Application.Workspace.Documents.Charts
             //chain.Add(GetCommand(this, Actions.APPLY_SETTINGS));
             //chain.Add(GetCommand(parentController, Actions.HIDE_SPLIT_CONTENT, View.Name));
 
+
             //View.AttachOKButtonCommand(chain);
         }
     }

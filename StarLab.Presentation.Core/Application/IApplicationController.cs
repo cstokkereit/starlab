@@ -27,6 +27,8 @@ namespace StarLab.Application
         /// </summary>
         void Run();
 
+        void Show(IDialogView view);
+
         void Show(string id);
     }
 }

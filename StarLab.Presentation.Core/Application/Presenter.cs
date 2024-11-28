@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using StarLab.Commands;
+using StarLab.Shared.Properties;
 using System.Diagnostics;
 
 namespace StarLab.Application

@@ -121,6 +121,14 @@ namespace StarLab.Application
             if (views[Views.WORKSPACE] is Form form) System.Windows.Forms.Application.Run(form);
         }
 
+        public void Show(IDialogView view)
+        {
+            if (controllers.ContainsKey(Constants.WORKSPACE_VIEW_CONTROLLER))
+            {
+                controllers[Constants.WORKSPACE_VIEW_CONTROLLER].Show(view);
+            }
+        }
+
         public void Show(string id)
         {
             if (views.ContainsKey(id))

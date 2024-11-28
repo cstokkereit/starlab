@@ -12,6 +12,8 @@
 
         int GetImageIndex(string nodeType, bool expanded, bool selected);
 
+        void Initialise(IApplicationController controller);
+
         void OpenDocument(string id);
 
         void ProjectCollapsed(string key);

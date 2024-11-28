@@ -34,17 +34,6 @@ namespace StarLab.Application.Workspace
 
             //if (dialog.Controller is IAddDocument
 
-
-
-
-
-
-
-
-
-
-
-
             //var interactor = UseCaseFactory.CreateAddDocumentUseCase(this);
             //var dto = Mapper.Map<IWorkspace, WorkspaceDTO>(workspace);
             //interactor.Execute(dto, path);
