@@ -19,6 +19,7 @@ namespace StarLab.Application.Workspace
             folder = new Folder(dto.Name, dto.Expanded);
 
             CreateFolders(dto.Folders);
+            CreateDocuments(dto.Documents);
 
             folder.AddChildFolders(folders);
         }
@@ -79,6 +80,14 @@ namespace StarLab.Application.Workspace
             foreach (var folder in folders)
             {
                 if (folder is Folder parent) parent.AddChildFolders(folders);
+            }
+        }
+
+        private void CreateDocuments(IEnumerable<DocumentDTO> dtos)
+        {
+            foreach (var dto in dtos)
+            {
+                documents.Add(new Document(dto));
             }
         }
     }

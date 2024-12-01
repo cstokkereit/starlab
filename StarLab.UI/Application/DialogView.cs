@@ -1,17 +1,18 @@
 ﻿using log4net;
 using StarLab.Application;
-using System.Diagnostics;
 
 namespace StarLab
 {
     /// <summary>
     /// The base class for all <see cref="Form"/> based views.
     /// </summary>
-    public partial class DialogView : Form, IDialogView
+    public partial class DialogView : Form, IDialog, IDialogView
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(DialogView));
 
         private readonly IDialogViewPresenter presenter;
+
+        private readonly IChildView childView;
 
         private readonly string id;
 
@@ -27,6 +28,7 @@ namespace StarLab
 
             StartPosition = FormStartPosition.CenterParent;
 
+            this.childView = childView;
             this.id = id;
 
             Text = text;
@@ -35,8 +37,7 @@ namespace StarLab
             try
             {
                 presenter = factory.CreatePresenter(this);
-                Debug.Assert(presenter is IViewController);
-                childView.Controller.Attach((IViewController)presenter);
+                this.childView.Controller.Attach((IViewController)presenter);
             }
             catch (Exception e)
             {
@@ -61,10 +62,12 @@ namespace StarLab
         /// <param name="controller">The <see cref="IApplicationController"/>.</param>
         public void Initialise(IApplicationController controller)
         {
-            foreach (var control in Controls)
-            {
-                if (control is IChildView view) view.Controller.Initialise(controller);
-            }
+            childView.Controller.Initialise(controller);
+        }
+
+        public void Show(IInteractionContext context)
+        {
+            childView.Controller.Run(context);
         }
 
         public IViewController Controller => (IViewController)presenter;

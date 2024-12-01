@@ -26,6 +26,13 @@ namespace StarLab.Application.Help
             }
         }
 
+        //public override void Run(IDialogConfiguration config)
+        //{
+        //    base.Run(config);
+
+        //    ParentController.Show();
+        //}
+
         private string GetVersion()
         {
             string version = string.Empty;

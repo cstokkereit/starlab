@@ -14,8 +14,7 @@ namespace StarLab.Application.Workspace
             var parent = workspace.GetFolder(key);
             var name = GetName(parent);
 
-            var folder = new Folder(name, parent);
-            workspace.AddFolder(folder);
+            workspace.AddFolder(name, parent);
 
             UpdateWorkspace(workspace, dto.Projects);
 

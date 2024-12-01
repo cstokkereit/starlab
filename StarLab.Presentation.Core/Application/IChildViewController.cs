@@ -5,5 +5,7 @@
         void Attach(IViewController parentController);
 
         void Initialise(IApplicationController controller);
+
+        void Run(IInteractionContext context);
     }
 }

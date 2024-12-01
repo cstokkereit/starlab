@@ -121,6 +121,11 @@ namespace StarLab.Application.Workspace
                 {
                     folders.Add(folder.Key, folder);
                 }
+
+                foreach (var document in project.Documents)
+                {
+                    documents.Add(document.ID, document);
+                }
             }
         }
     }

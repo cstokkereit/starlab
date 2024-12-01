@@ -35,8 +35,7 @@ namespace StarLab.Application.Workspace.Documents
             {
                 var view = viewFactory.CreateControlView(content.View);
 
-                if (view is Control control)
-                    splitContainer.AddControl(control, content.Panel);
+                if (view is Control control) splitContainer.AddControl(control, content.Panel);
             }
         }
 

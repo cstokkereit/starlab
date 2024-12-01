@@ -1,5 +1,4 @@
 ﻿using StarLab.Application.Workspace.Documents;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 
 namespace StarLab.Application.Workspace
 {
@@ -20,9 +19,9 @@ namespace StarLab.Application.Workspace
 
         public Workspace() { }
 
-        public IEnumerable<Document> Documents => throw new InvalidOperationException();
+        public IEnumerable<Document> Documents => documents.Values;
 
-        public IEnumerable<IFolder> Folders => throw new InvalidOperationException();
+        public IEnumerable<IFolder> Folders => folders.Values;
 
         public string Name { get => Constants.WORKSPACE; set => throw new InvalidOperationException(); }
 
@@ -40,11 +39,18 @@ namespace StarLab.Application.Workspace
             documents.Add(document.ID, document);
         }
 
-        public void AddFolder(IFolder folder)
+        public void AddFolder(string name, IFolder parent)
         {
-            if (folder is not Folder) throw new InvalidOperationException();
+            if (parent is Workspace) throw new InvalidOperationException();
+
+            var folder = new Folder(name, parent);
 
             folders.Add(folder.Path, folder);
+        }
+
+        public void AddFolder(IFolder folder)
+        {
+            throw new InvalidOperationException();
         }
 
         public void DeleteDocument(string id)
@@ -116,26 +122,14 @@ namespace StarLab.Application.Workspace
         /// <param name="dtos"></param>
         private void CreateDocuments(IEnumerable<DocumentDTO> dtos)
         {
-            //foreach (var dto in dtos)
-            //{
-            //    if (!string.IsNullOrEmpty(dto.Path) && folders.ContainsKey(dto.Path))
-            //    {
-            //        var document = new Document(dto);
-            //        folders[document.Path].AddDocument(document);
-            //        documents.Add(document.ID, document);
-            //    }
-            //}
-        }
-
-        private void CreateProjects(IEnumerable<ProjectDTO> dtos)
-        {
-            // Validate paths of new IFolder objects against their dto.Path?
-
             foreach (var dto in dtos)
             {
-                var project = new Project(dto, this);
-                projects.Add(project.Path, project);
-                CreateFolders(dto.Folders, project);
+                if (!string.IsNullOrEmpty(dto.Path) && folders.ContainsKey(dto.Path))
+                {
+                    var document = new Document(dto);
+                    folders[document.Path].AddDocument(document);
+                    documents.Add(document.ID, document);
+                }
             }
         }
 
@@ -154,12 +148,29 @@ namespace StarLab.Application.Workspace
                     var parentPath = dto.Path.Substring(0, dto.Path.LastIndexOf('/'));
 
                     if (folders.ContainsKey(parentPath))
+                    {
                         folder = new Folder(dto, folders[parentPath]);
+                    }   
                     else
+                    {
                         folder = new Folder(dto, parent);
-
+                    }
+                    
                     folders.Add(folder.Path, folder);
                 }
+            }
+        }
+
+        private void CreateProjects(IEnumerable<ProjectDTO> dtos)
+        {
+            // Validate paths of new IFolder objects against their dto.Path?
+
+            foreach (var dto in dtos)
+            {
+                var project = new Project(dto, this);
+                projects.Add(project.Path, project);
+                CreateFolders(dto.Folders, project);
+                CreateDocuments(dto.Documents);
             }
         }
 
@@ -183,6 +194,16 @@ namespace StarLab.Application.Workspace
                     DeleteDocuments(folder);
                 }
             }
+        }
+
+        private Project GetProject(IFolder folder)
+        {
+            foreach(var project in projects.Values)
+            {
+                if (folder.Path.StartsWith(project.Path)) return project;
+            }
+
+            throw new ArgumentException(nameof(folder)); // TODO
         }
 
         private void UpdatePaths(IEnumerable<IFolder> folders)

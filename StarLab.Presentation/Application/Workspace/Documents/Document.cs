@@ -54,6 +54,11 @@
 
         public string View => view;
 
+        public void AddContent(IContent content)
+        {
+            contents.Add(content);
+        }
+
         private void CreateContents(IEnumerable<ContentDTO> dtos)
         {
             foreach (var dto in dtos)

@@ -14,9 +14,9 @@ namespace StarLab.Application
 
         ICommand CreateCommand(ICommandManager commands, string view);
 
-        IDockableView GetView(IDocument document);
+        IView GetView(IDocument document);
 
-        IDockableView GetView(string id);
+        IView GetView(string id);
 
         IWorkspaceController GetWorkspaceController();
 
@@ -26,6 +26,8 @@ namespace StarLab.Application
         /// Starts the application.
         /// </summary>
         void Run();
+
+        void Show(IView view);
 
         void Show(string id);
     }

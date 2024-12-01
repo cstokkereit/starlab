@@ -3,7 +3,8 @@ using StarLab.Application.Workspace;
 using StarLab.Application.Workspace.Documents;
 using StarLab.Commands;
 using StarLab.Shared.Properties;
-using System.Reflection.Metadata;
+using System.IO;
+using System.Windows.Forms;
 
 namespace StarLab.Application
 {
@@ -53,32 +54,31 @@ namespace StarLab.Application
             return commandFactory.CreateCommand(commands, this, Actions.SHOW, view);
         }
 
-        public IDockableView GetView(IDocument document)
+        public IView GetView(IDocument document)
         {
             IView view;
 
             if (views.ContainsKey(document.ID))
             {
-                view = (IDockableView)views[document.ID];
+                view = views[document.ID];
             }
             else
             {
                 var bundle = viewFactory.CreateDocumentView(document);
 
-                var controller = bundle.Controller;
-                controllers.Add(controller.Name, controller);
-                controller.Initialise(this);
-
                 view = bundle.View;
-                views.Add(view.ID, view);
+
+                views.Add(bundle.View.ID, bundle.View);
+
+                InitialiseController(bundle);
             }
 
-            return (IDockableView)view;
+            return view;
         }
 
-        public IDockableView GetView(string id)
+        public IView GetView(string id)
         {
-            return (IDockableView)views[id];
+            return views[id];
         }
 
         public IWorkspaceController GetWorkspaceController()
@@ -114,51 +114,54 @@ namespace StarLab.Application
             Events.Subsribe(this);
 
             CreateViews();
-            InitialiseViews();
 
             var view = views[Views.WORKSPACE];
 
             if (views[Views.WORKSPACE] is Form form) System.Windows.Forms.Application.Run(form);
         }
 
+        public void Show(IView view)
+        {
+            var controller = GetController(view);
+            controller.Initialise(this);
+
+            controllers[Constants.WORKSPACE_VIEW_CONTROLLER].Show(view); // Need to pick this based on the view in question - somne sort of map?
+        }
+
         public void Show(string id)
         {
-            if (views.ContainsKey(id))
-            {
-                var view = views[id];
+            if (!views.ContainsKey(id)) throw new ArgumentOutOfRangeException(nameof(id)); // TODO
 
-                var controller = GetController(view);
-                controller.Initialise(this);
+            var view = views[id];
 
-                controllers[Constants.WORKSPACE_VIEW_CONTROLLER].Show(views[id]);
-            }
+            var controller = GetController(view);
+            controller.Initialise(this);
+
+            //if (view is IDialog dialog)
+            //    dialog.Show(new AddDocumentDialogConfiguration(workspace, path, DocumentType.Chart)); This is how AddDcoumentView gets shown from WorkspaceExplorerViewPresenter
+
+            controllers[Constants.WORKSPACE_VIEW_CONTROLLER].Show(view); // Need to pick this based on the view in question - some sort of map?
         }
 
         private void CreateDialogView(string id, string name)
         {
             var bundle = viewFactory.CreateDialogView(id, name);
-
-            var controller = bundle.Controller;
-            controllers.Add(controller.Name, controller);
             views.Add(bundle.View.ID, bundle.View);
+            InitialiseController(bundle);
         }
 
         private void CreateToolView(string id, string name)
         {
             var bundle = viewFactory.CreateToolView(id, name);
-
-            var controller = bundle.Controller;
-            controllers.Add(controller.Name, controller);
             views.Add(bundle.View.ID, bundle.View);
+            InitialiseController(bundle);
         }
 
         private void CreateWorkspaceView()
         {
             var bundle = viewFactory.CreateWorkspaceView();
-
-            var controller = bundle.Controller;
-            controllers.Add(controller.Name, controller);
             views.Add(bundle.View.ID, bundle.View);
+            InitialiseController(bundle);
         }
 
         private void CreateViews()
@@ -185,13 +188,13 @@ namespace StarLab.Application
             {
                 id = view.ID + Constants.CONTROLLER;
             }
+            else if (view is IDocumentView)
+            {
+                id = $"Document({view.ID}) {Constants.CONTROLLER}";
+            }
             else if (view is IDockableView)
             {
                 id = view.ID + Constants.CONTROLLER;
-            }
-            else if (view is IDocumentView)
-            {
-                throw new NotImplementedException();
             }
             else
             {
@@ -201,12 +204,13 @@ namespace StarLab.Application
             return controllers[id];
         }
 
-        private void InitialiseViews()
+        private void InitialiseController(IViewBundle bundle)
         {
-            GetController(views[Views.WORKSPACE_EXPLORER]).Initialise(this);
-
-            // NOTE - This must be the last view to be initialised
-            GetController(views[Views.WORKSPACE]).Initialise(this);
+            if (bundle.Controller is IViewController controller)
+            {
+                controllers.Add(controller.Name, controller);
+                controller.Initialise(this);
+            }
         }
 
         private class CommandFactory : Factory

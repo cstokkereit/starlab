@@ -4,6 +4,6 @@ namespace StarLab.Application.Workspace
 {
     public interface IAddDocumentUseCase
     {
-        void Execute(WorkspaceDTO dto, string path);
+        void Execute(WorkspaceDTO dtoWorkspace, DocumentDTO dtoDocument);
     }
 }

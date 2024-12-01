@@ -28,15 +28,14 @@ namespace StarLab.Application.Workspace
 
         public override string Name => Views.WORKSPACE + Constants.CONTROLLER;
 
-        public void AddChart(string path)
+        public void AddChart(IDocument document)
         {
-            AppController.Show(Views.ADD_DOCUMENT);
 
-            //if (dialog.Controller is IAddDocument
 
-            //var interactor = UseCaseFactory.CreateAddDocumentUseCase(this);
-            //var dto = Mapper.Map<IWorkspace, WorkspaceDTO>(workspace);
-            //interactor.Execute(dto, path);
+
+            
+
+            
         }
 
         public void AddTable(string path)
@@ -95,14 +94,14 @@ namespace StarLab.Application.Workspace
 
         public IDockableView CreateView(string id)
         {
-            IDockableView view;
+            IView view;
 
             if (workspace.HasDocument(id))
                 view = AppController.GetView(workspace.GetDocument(id));
             else
                 view = AppController.GetView(id);
 
-            return view;
+            return (IDockableView)view;
         }
 
         public void DeleteDocument(string id)
@@ -216,6 +215,11 @@ namespace StarLab.Application.Workspace
                 this.view.Show(dockable);
             else
                 this.view.Show(view);
+        }
+
+        public void Show(string id)
+        {
+            AppController.Show(id);
         }
 
         public void ShowErrorMessage(string message)

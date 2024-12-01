@@ -1,8 +1,10 @@
-﻿namespace StarLab.Application.Workspace
+﻿using StarLab.Application.Workspace.Documents;
+
+namespace StarLab.Application.Workspace
 {
     public interface IWorkspaceController : IViewController
     {
-        void AddChart(string path);
+        void AddChart(IDocument document);
 
         void AddFolder(string path);
 

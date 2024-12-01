@@ -35,7 +35,16 @@ namespace StarLab.Application
         {
             var commands = container.Resolve<ICommandManager>();
 
-            return (IChildViewPresenter)CreateInstance(presenters[view.Name], new object[] { view, commands, useCaseFactory, configuration, mapper, events });
+            if (view.Name == "ChartView") // TODO - This needs to be done properly. ChartView is generic - generate specific chart types by picking the appropriate presenter
+            {
+                return (IChildViewPresenter)CreateInstance(presenters[Views.CHART], new object[] { view, commands, useCaseFactory, configuration, mapper, events });
+            }
+            else
+            {
+                return (IChildViewPresenter)CreateInstance(presenters[view.Name], new object[] { view, commands, useCaseFactory, configuration, mapper, events });
+            }
+
+            
         }
 
         public IDockableViewPresenter CreatePresenter(IDockableView view)

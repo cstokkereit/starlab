@@ -4,16 +4,14 @@ using System.Diagnostics;
 
 namespace StarLab.Application
 {
-    public abstract class ChildViewPresenter<TView, TParent> : Presenter, IChildViewPresenter 
+    public abstract class ChildViewPresenter<TView, TParent> : Presenter, IChildViewPresenter
         where TParent : IViewController
         where TView : IChildView
     {
-        private readonly TView view;
-
         public ChildViewPresenter(TView view, ICommandManager commands, IUseCaseFactory useCaseFactory, IConfiguration configuration, IMapper mapper, IEventAggregator events)
             : base(commands, useCaseFactory, configuration, mapper, events)
         {
-            this.view = view ?? throw new ArgumentNullException(nameof(view));
+            View = view ?? throw new ArgumentNullException(nameof(view));
         }
 
         public override string Name => View.Name + Constants.CONTROLLER;
@@ -23,9 +21,16 @@ namespace StarLab.Application
             ParentController = (TParent)parentController;
         }
 
+        public virtual void Run(IInteractionContext context)
+        {
+            InteractionContext = context; // May not be necessary
+        }
+
+        protected IInteractionContext? InteractionContext { get; private set; }
+
         protected TParent? ParentController { get; private set; }
 
-        protected TView View => view;
+        protected TView View { get; }
 
         protected DialogResult ShowMessage(string caption, string message, MessageBoxButtons buttons, MessageBoxIcon icon)
         {

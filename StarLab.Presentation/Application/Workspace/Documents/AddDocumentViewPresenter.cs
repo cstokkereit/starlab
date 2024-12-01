@@ -1,26 +1,50 @@
 ﻿using AutoMapper;
 using StarLab.Commands;
 using StarLab.Properties;
+using System.Diagnostics;
 
 namespace StarLab.Application.Workspace.Documents
 {
     public class AddDocumentViewPresenter : ChildViewPresenter<IAddDocumentView, IDialogController>, IAddDocumentViewPresenter, IChildViewController
     {
+        private string path = string.Empty;
+
+        private IWorkspace? workspace;
+
         public AddDocumentViewPresenter(IAddDocumentView view, ICommandManager commands, IUseCaseFactory useCaseFactory, IConfiguration configuration, IMapper mapper, IEventAggregator events)
             : base(view, commands, useCaseFactory, configuration, mapper, events) { }
 
         public void AddDocument()
         {
-            var name = View.DocumentName;
+            if (InteractionContext is AddDocumentInteractionContext context && AppController.GetWorkspaceController() is IWorkspaceOutputPort port)
+            {
+                try
+                {
+                    DocumentBuilder builder = new DocumentBuilder();
 
-            var ws = AppController.GetWorkspaceController();
+                    var document = builder.CreateDocument(View.DocumentName, context.Path)
+                                          .AddContent("StarLab.Application.Workspace.Documents.Charts.ChartSettingsView, StarLab.UI", View.Name, SplitViewPanels.Panel1)
+                                          .AddContent("StarLab.Application.Workspace.Documents.Charts.ChartView, StarLab.UI", View.Name, SplitViewPanels.Panel2)
+                                          .GetDocument();
 
-            DocumentBuilder builder = new DocumentBuilder();
+                    var interactor = UseCaseFactory.CreateAddDocumentUseCase(port);
 
-            //builder.CreateDocument()
+                    interactor.Execute(Mapper.Map<IWorkspace, WorkspaceDTO>(context.Workspace), Mapper.Map<IDocument, DocumentDTO>(document));
 
-            // TODO - Interactor
+                    var view = AppController.GetView(document);
+                    AppController.Show(view);
 
+                    ParentController?.Close();
+                }
+                catch (Exception ex)
+                {
+
+                }
+            }
+        }
+
+        public void Cancel()
+        {
             ParentController?.Close();
         }
 
@@ -38,9 +62,13 @@ namespace StarLab.Application.Workspace.Documents
             }
         }
 
-        public void Cancel()
+        public override void Run(IInteractionContext context)
         {
-            ParentController?.Close();
+            Debug.Assert(ParentController != null);
+
+            base.Run(context);
+
+            ParentController.Show();
         }
 
         private void AddDocumentTypes()

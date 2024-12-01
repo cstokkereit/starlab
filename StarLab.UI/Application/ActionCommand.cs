@@ -21,8 +21,21 @@ namespace StarLab.Application
         public override void Execute()
         {
             var type = receiver.GetType();
-            var method = type.GetMethod(action);
+            var types = GetArgumentTypes();
+            var method = type.GetMethod(action, types);
             method?.Invoke(receiver, args);
+        }
+
+        private Type[] GetArgumentTypes()
+        {
+            var types = new List<Type>();
+
+            foreach (var arg in args)
+            {
+                types.Add(arg.GetType());
+            }
+
+            return types.ToArray();
         }
     }
 }

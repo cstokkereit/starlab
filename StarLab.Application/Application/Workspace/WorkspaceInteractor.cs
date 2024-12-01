@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using StarLab.Application.Workspace.Documents;
 using StarLab.Shared.Properties;
 
 namespace StarLab.Application.Workspace
@@ -23,19 +24,6 @@ namespace StarLab.Application.Workspace
         protected Exception CreateTargetExistsException(string oldName, string newName, string target)
         {
             return new Exception(string.Format(Resources.NameAlreadyExistsMessage, oldName, newName, target.ToLower()));
-        }
-
-        protected IEnumerable<IFolder> GetChildFolders(IFolder folder)
-        {
-            var folders = new List<IFolder>();
-
-            foreach (var child in folder.Folders)
-            {
-                folders.Add(child);
-                folders.AddRange(GetChildFolders(child));
-            }
-
-            return folders;
         }
 
         protected bool IsValid(string name)
@@ -64,9 +52,37 @@ namespace StarLab.Application.Workspace
                 if (!string.IsNullOrEmpty(dto.Name))
                 {
                     var project = workspace.GetProject(dto.Name);
-                    Mapper.Map(GetChildFolders(project), dto.Folders);
+                    var folders = GetChildFolders(project);
+
+                    Mapper.Map(GetDocuments(folders), dto.Documents);
+                    Mapper.Map(folders, dto.Folders);
                 }
             }
+        }
+
+        private static IEnumerable<IFolder> GetChildFolders(IFolder folder)
+        {
+            var folders = new List<IFolder>();
+
+            foreach (var child in folder.Folders)
+            {
+                folders.Add(child);
+                folders.AddRange(GetChildFolders(child));
+            }
+
+            return folders;
+        }
+
+        private static IEnumerable<Document> GetDocuments(IEnumerable<IFolder> folders)
+        {
+            var documents = new List<Document>();
+
+            foreach (var folder in folders)
+            {
+                documents.AddRange(folder.Documents);
+            }
+
+            return documents;
         }
     }
 }

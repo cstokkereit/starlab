@@ -38,6 +38,11 @@ namespace StarLab.Application
             this.view.Show(view);
         }
 
+        public void Show()
+        {
+            AppController.Show(view);
+        }
+
         public DialogResult ShowMessage(string caption, string message, MessageBoxButtons buttons, MessageBoxIcon icon)
         {
             return view.ShowMessage(caption, message, buttons, icon);

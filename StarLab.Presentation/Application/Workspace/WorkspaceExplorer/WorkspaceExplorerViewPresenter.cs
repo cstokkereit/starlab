@@ -29,6 +29,14 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
             workspace = new EmptyWorkspace();
         }
 
+        public void AddChart(string path)
+        {
+            if (AppController.GetView(Views.ADD_DOCUMENT) is IDialog dialog)
+            {
+                dialog.Show(new AddDocumentInteractionContext(workspace, path, DocumentType.Chart));
+            }   
+        }
+
         public void Collapse(string key)
         {
             if (key.Equals(Constants.WORKSPACE))
@@ -88,9 +96,13 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
             if (nodeType == Constants.FOLDER)
             {
                 if (selected)
+                {
                     index = expanded ? indexSelectedOpened : indexSelectedClosed;
+                }
                 else
+                {
                     index = expanded ? indexFolderOpened : indexFolderClosed;
+                }  
             }
 
             return index;
@@ -216,9 +228,13 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
                 var folder = workspace.GetFolder(key);
 
                 if (folder.Expanded)
+                {
                     View.UpdateNodeState(folder.Key, indexFolderOpened, indexSelectedOpened);
+                }   
                 else
+                {
                     View.UpdateNodeState(folder.Key, indexFolderClosed, indexSelectedClosed);
+                }   
             }
         }
 
@@ -231,9 +247,13 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
                 var folder = workspace.GetFolder(key);
 
                 if (folder.Expanded)
+                {
                     View.UpdateNodeState(folder.Key, indexFolderOpened, indexFolderOpened);
+                }
                 else
+                {
                     View.UpdateNodeState(folder.Key, indexFolderClosed, indexFolderClosed);
+                }   
             }
         }
 
@@ -293,8 +313,8 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
             var workspaceController = AppController.GetWorkspaceController();
 
             manager.AddMenuItem(Constants.ADD, StringResources.Add);
-            manager.AddMenuItem(Constants.ADD, Constants.ADD_CHART, StringResources.Chart + Constants.ELLIPSIS, GetCommand(workspaceController, Actions.ADD_CHART, folder.Key));
-            manager.AddMenuItem(Constants.ADD, Constants.ADD_TABLE, StringResources.Table + Constants.ELLIPSIS, GetCommand(workspaceController, Actions.ADD_TABLE, folder.Key));
+            manager.AddMenuItem(Constants.ADD, Constants.ADD_CHART, StringResources.Chart + Constants.ELLIPSIS, GetCommand(this, Actions.ADD_CHART, folder.Key));
+            manager.AddMenuItem(Constants.ADD, Constants.ADD_TABLE, StringResources.Table + Constants.ELLIPSIS, GetCommand(this, Actions.ADD_TABLE, folder.Key));
             manager.AddMenuItem(Constants.ADD, Constants.ADD_FOLDER, StringResources.NewFolder, ImageResources.NewFolder, GetCommand(workspaceController, Actions.ADD_FOLDER, folder.Key));
             manager.AddMenuSeparator();
             manager.AddMenuItem(Constants.COLLAPSE_ALL, StringResources.CollapseAllDescendants, ImageResources.Collapse, GetCommand(Actions.COLLAPSE, folder.Key));
@@ -311,9 +331,13 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
             foreach (var folder in workspace.Folders)
             {
                 if (folder.Expanded)
+                {
                     View.AddFolderNode(folder.Key, folder.ParentKey, folder.Name, indexFolderOpened, indexSelectedOpened);
+                }
                 else
+                {
                     View.AddFolderNode(folder.Key, folder.ParentKey, folder.Name, indexFolderClosed, indexSelectedClosed);
+                }   
 
                 CreateFolderMenu(folder);
             }
