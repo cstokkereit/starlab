@@ -1,4 +1,5 @@
 ﻿using log4net;
+using StarLab.Application.Configuration;
 
 namespace StarLab.Application.Options
 {
@@ -8,23 +9,21 @@ namespace StarLab.Application.Options
 
         private readonly IOptionsViewPresenter presenter;
 
-        public OptionsView(IPresenterFactory factory)
+        private readonly SplitViewPanels panel;
+
+        public OptionsView(IContentConfiguration config, IViewConfiguration parent, IViewFactory factory)
         {
             InitializeComponent();
 
             Name = Views.OPTIONS;
 
-            try
-            {
-                presenter = (IOptionsViewPresenter)factory.CreatePresenter(this);
-            }
-            catch (Exception e)
-            {
-                log.Fatal(e.Message, e);
-                throw;
-            }
+            panel = (SplitViewPanels)config.Panel;
+
+            presenter = (IOptionsViewPresenter)factory.CreatePresenter(parent, this);
         }
 
         public IChildViewController Controller => (IChildViewController)presenter;
+
+        public SplitViewPanels Panel => panel;
     }
 }

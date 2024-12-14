@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using StarLab.Application.Configuration;
 using StarLab.Commands;
 
 namespace StarLab.Application.Workspace.Documents
@@ -9,7 +10,7 @@ namespace StarLab.Application.Workspace.Documents
 
         private readonly IDocument document;
 
-        public DocumentViewPresenter(IDocumentView view, IDocument document, ICommandManager commands, IUseCaseFactory useCaseFactory, IConfiguration configuration, IMapper mapper, IEventAggregator events)
+        public DocumentViewPresenter(IDocumentView view, IDocument document, ICommandManager commands, IUseCaseFactory useCaseFactory, IConfigurationService configuration, IMapper mapper, IEventAggregator events)
             : base(commands, useCaseFactory, configuration, mapper, events)
         {
             this.document = document;

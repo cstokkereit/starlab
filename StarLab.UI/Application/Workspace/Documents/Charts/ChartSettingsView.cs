@@ -1,4 +1,5 @@
 ﻿using log4net;
+using StarLab.Application.Configuration;
 using StarLab.Commands;
 
 namespace StarLab.Application.Workspace.Documents.Charts
@@ -9,24 +10,22 @@ namespace StarLab.Application.Workspace.Documents.Charts
 
         private readonly IChartSettingsViewPresenter presenter;
 
-        public ChartSettingsView(IPresenterFactory presenterFactory)
+        private readonly SplitViewPanels panel;
+
+        public ChartSettingsView(IContentConfiguration config, IViewConfiguration parent, IViewFactory factory)
         {
             InitializeComponent();
 
-            try
-            {
-                presenter = (IChartSettingsViewPresenter)presenterFactory.CreatePresenter(this);
-            }
-            catch (Exception ex)
-            {
-                log.Fatal(ex.Message, ex);
-                throw;
-            }
-            
             Name = Views.CHART_SETTINGS;
+
+            panel = (SplitViewPanels)config.Panel;
+
+            presenter = (IChartSettingsViewPresenter)factory.CreatePresenter(parent, this);
         }
 
         public IChildViewController Controller => (IChildViewController)presenter;
+
+        public SplitViewPanels Panel => panel;
 
         public void AttachCancelButtonCommand(ICommand command)
         {

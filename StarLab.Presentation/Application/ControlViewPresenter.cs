@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using StarLab.Application.Configuration;
 using StarLab.Commands;
 using System.Diagnostics;
 
@@ -12,7 +13,7 @@ namespace StarLab.Application
 
         private TParent? parentController;
 
-        public ControlViewPresenter(TView view, ICommandManager commands, IUseCaseFactory useCaseFactory, IConfiguration configuration, IMapper mapper, IEventAggregator events)
+        public ControlViewPresenter(TView view, ICommandManager commands, IUseCaseFactory useCaseFactory, IConfigurationService configuration, IMapper mapper, IEventAggregator events)
             : base(commands, useCaseFactory, configuration, mapper, events)
         {
             this.view = view ?? throw new ArgumentNullException(nameof(view));

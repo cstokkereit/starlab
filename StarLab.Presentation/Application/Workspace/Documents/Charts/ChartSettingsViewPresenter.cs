@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using StarLab.Application.Configuration;
 using StarLab.Commands;
 
 using ImageResources = StarLab.Properties.Resources;
@@ -10,7 +11,7 @@ namespace StarLab.Application.Workspace.Documents.Charts
     {
         private IDocumentController? parentController;
 
-        public ChartSettingsViewPresenter(IChartSettingsView view, ICommandManager commands, IUseCaseFactory useCaseFactory, IConfiguration configuration, IMapper mapper, IEventAggregator events)
+        public ChartSettingsViewPresenter(IChartSettingsView view, ICommandManager commands, IUseCaseFactory useCaseFactory, IConfigurationService configuration, IMapper mapper, IEventAggregator events)
             : base(view, commands, useCaseFactory, configuration, mapper, events) { }
 
         public override string Name => throw new NotImplementedException();

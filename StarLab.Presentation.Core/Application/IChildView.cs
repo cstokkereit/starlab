@@ -14,6 +14,8 @@
         /// </summary>
         string Name { get; set; }
 
+        SplitViewPanels Panel { get; }
+
         /// <summary>
         /// 
         /// </summary>

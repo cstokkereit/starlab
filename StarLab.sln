@@ -5,13 +5,13 @@ VisualStudioVersion = 17.2.32526.322
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarLab.UI", "StarLab.UI\StarLab.UI.csproj", "{BBBF7747-9EEF-4E8A-AAFA-575F44545CB8}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "User Interface Layer", "User Interface Layer", "{3417EDB1-5EF3-4352-843D-F899A4FF1788}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "User Interface", "User Interface", "{3417EDB1-5EF3-4352-843D-F899A4FF1788}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation Layer", "Presentation Layer", "{5F474B1E-EC21-4D57-ADD5-41709DDC2627}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{5F474B1E-EC21-4D57-ADD5-41709DDC2627}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Cross Cutting Concerns", "Cross Cutting Concerns", "{2690B547-E925-4105-85A3-652A8B5856C6}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application Layer", "Application Layer", "{41E8476A-36C2-4347-BFCB-B4EA80538A16}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{41E8476A-36C2-4347-BFCB-B4EA80538A16}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarLab.UI.Controls", "StarLab.UI.Controls\StarLab.UI.Controls.csproj", "{615072B9-BD82-44E0-9AB7-9C91659CD94D}"
 EndProject
@@ -23,9 +23,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarLab.Presentation.Core",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarLab.Presentation", "StarLab.Presentation\StarLab.Presentation.csproj", "{583472DA-222E-46FA-9DD7-1C31F115D22C}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain Layer", "Domain Layer", "{FCC0C76B-ADB5-4FF9-8170-D171FC9532F0}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{FCC0C76B-ADB5-4FF9-8170-D171FC9532F0}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure Layer", "Infrastructure Layer", "{D8D69DEA-16CB-482B-A942-453FDDD6720B}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{D8D69DEA-16CB-482B-A942-453FDDD6720B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarLab.Application.Core", "StarLab.Application.Core\StarLab.Application.Core.csproj", "{32956A5D-C947-4182-8B93-49F7B6E59617}"
 EndProject
@@ -40,6 +40,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pegasus.Tests", "Pegasus.Tests\Pegasus.Tests.csproj", "{C7396108-9CC7-41BA-B8DC-FF26C377E417}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarLab.Commands.Tests", "StarLab.Commands.Tests\StarLab.Commands.Tests.csproj", "{94F91BFD-4D35-454B-86FC-E382723C2B93}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StarLab.Configuration", "StarLab.Configuration\StarLab.Configuration.csproj", "{9B3537FA-C1E9-4F93-8DAC-D522F95FCF51}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Persistence", "Persistence", "{839E7B8B-C86A-47E0-82F6-9E4F4CCD53EA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -99,6 +103,10 @@ Global
 		{94F91BFD-4D35-454B-86FC-E382723C2B93}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{94F91BFD-4D35-454B-86FC-E382723C2B93}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{94F91BFD-4D35-454B-86FC-E382723C2B93}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B3537FA-C1E9-4F93-8DAC-D522F95FCF51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B3537FA-C1E9-4F93-8DAC-D522F95FCF51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B3537FA-C1E9-4F93-8DAC-D522F95FCF51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B3537FA-C1E9-4F93-8DAC-D522F95FCF51}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -117,6 +125,7 @@ Global
 		{7284AB22-FD61-41C0-B9E2-5DAD788D29EA} = {41E8476A-36C2-4347-BFCB-B4EA80538A16}
 		{C7396108-9CC7-41BA-B8DC-FF26C377E417} = {FCC0C76B-ADB5-4FF9-8170-D171FC9532F0}
 		{94F91BFD-4D35-454B-86FC-E382723C2B93} = {5F474B1E-EC21-4D57-ADD5-41709DDC2627}
+		{9B3537FA-C1E9-4F93-8DAC-D522F95FCF51} = {D8D69DEA-16CB-482B-A942-453FDDD6720B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C901BDDE-CD19-4752-8A90-F4800FC22F0F}

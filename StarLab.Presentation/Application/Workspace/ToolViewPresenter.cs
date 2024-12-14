@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using StarLab.Application.Configuration;
 using StarLab.Commands;
 
 namespace StarLab.Application.Workspace
@@ -7,7 +8,7 @@ namespace StarLab.Application.Workspace
     {
         private readonly IDockableView view;
 
-        public ToolViewPresenter(IDockableView view, ICommandManager commands, IUseCaseFactory useCaseFactory, IConfiguration configuration, IMapper mapper, IEventAggregator events)
+        public ToolViewPresenter(IDockableView view, ICommandManager commands, IUseCaseFactory useCaseFactory, IConfigurationService configuration, IMapper mapper, IEventAggregator events)
             : base(commands, useCaseFactory, configuration, mapper, events)
         {
             this.view = view;

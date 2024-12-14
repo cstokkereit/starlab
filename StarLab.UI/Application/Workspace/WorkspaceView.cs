@@ -1,4 +1,5 @@
 ﻿using log4net;
+using StarLab.Application.Configuration;
 using StarLab.Commands;
 using StarLab.Shared.Properties;
 using System.Text;
@@ -21,7 +22,7 @@ namespace StarLab.Application.Workspace
         /// Initialises a new instance of the <see cref="WorkspaceView"/> class.
         /// </summary>
         /// <param name="presenterFactory">An <see cref="IPresenterFactory"/> that is used to create the <see cref="IPresenter"/> that controls this view.</param>
-        public WorkspaceView(IPresenterFactory factory)
+        public WorkspaceView(IViewFactory factory)
         {
             ArgumentNullException.ThrowIfNull(factory, nameof(factory));
 
@@ -31,16 +32,8 @@ namespace StarLab.Application.Workspace
             Name = Views.WORKSPACE;
             id = Views.WORKSPACE;
 
-            try
-            {
-                presenter = factory.CreatePresenter(this);
-            }
-            catch (Exception e)
-            {
-                log.Fatal(e.Message, e);
-                throw;
-            }
-            
+            presenter = (IWorkspaceViewPresenter)factory.CreatePresenter(Views.WORKSPACE, this);
+
             dockPanel.Theme = new VS2015LightTheme();
 
             dockPanel.Theme.Extender.FloatWindowFactory = new FloatWindowFactory();

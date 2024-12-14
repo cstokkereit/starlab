@@ -1,5 +1,9 @@
 ﻿using log4net;
 using StarLab.Application;
+using StarLab.Application.Configuration;
+using StarLab.Application.Workspace;
+using StarLab.Application.Workspace.Documents;
+using System.Windows.Forms;
 
 namespace StarLab
 {
@@ -19,31 +23,25 @@ namespace StarLab
         /// <summary>
         /// Initialises a new instance of the <see cref="DialogView"> class.
         /// </summary>
-        public DialogView(string id, string text, IChildView childView, IPresenterFactory factory)
+        public DialogView(string name, string text, IViewFactory factory, IViewConfiguration config)
         {
-            ArgumentNullException.ThrowIfNull(childView, nameof(childView));
             ArgumentNullException.ThrowIfNull(factory, nameof(factory));
+            ArgumentNullException.ThrowIfNull(config, nameof(config));
+
+            if (config.Contents.Count > 1) throw new ArgumentException(); // TODO
 
             InitializeComponent();
 
             StartPosition = FormStartPosition.CenterParent;
 
-            this.childView = childView;
-            this.id = id;
-
+            Name = name;
             Text = text;
-            Name = id;
+            id = name;
 
-            try
-            {
-                presenter = factory.CreatePresenter(this);
-                this.childView.Controller.Attach((IViewController)presenter);
-            }
-            catch (Exception e)
-            {
-                log.Fatal(e.Message, e);
-                throw;
-            }
+            presenter = (IDialogViewPresenter)factory.CreatePresenter(config.Name, this);
+
+            childView = factory.CreateView(config.Contents[0], config);
+            childView.Controller.Attach((IViewController)presenter);
 
             SuspendLayout();
 

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Castle.Windsor;
+using StarLab.Application.Configuration;
 using StarLab.Application.Workspace;
 using StarLab.Application.Workspace.Documents;
 using StarLab.Commands;
@@ -8,81 +9,81 @@ namespace StarLab.Application
 {
     public class PresenterFactory : Factory, IPresenterFactory
     {
-        private readonly Dictionary<string, string> presenters = new Dictionary<string, string>();
+        private readonly IConfigurationService configService;
 
         private readonly IWindsorContainer container;
 
-        private readonly IUseCaseFactory useCaseFactory;
-
-        private readonly IConfiguration configuration;
-
         private readonly IEventAggregator events;
+
+        private readonly IUseCaseFactory factory;
 
         private readonly IMapper mapper;
 
-        public PresenterFactory(IWindsorContainer container, IUseCaseFactory useCaseFactory, IConfiguration configuration, IMapper mapper, IEventAggregator events)
+        public PresenterFactory(IWindsorContainer container, IUseCaseFactory factory, IConfigurationService configService, IMapper mapper, IEventAggregator events)
         {
-            this.useCaseFactory = useCaseFactory ?? throw new ArgumentNullException(nameof(useCaseFactory));
-            this.configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            this.configService = configService ?? throw new ArgumentNullException(nameof(configService));
             this.container = container ?? throw new ArgumentNullException(nameof(container));
+            this.factory = factory ?? throw new ArgumentNullException(nameof(factory));
             this.events = events ?? throw new ArgumentNullException(nameof(events));
             this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-
-            Initialise();
         }
 
-        public IChildViewPresenter CreatePresenter(IChildView view)
+        public IPresenter CreatePresenter(string name, IView view)
         {
-            var commands = container.Resolve<ICommandManager>();
+            return CreatePresenter(view, configService.GetViewConfiguration(name));
+        }
 
-            if (view.Name == "ChartView") // TODO - This needs to be done properly. ChartView is generic - generate specific chart types by picking the appropriate presenter
+        public IPresenter CreatePresenter(IDocument document, IView view)
+        {
+            return new DocumentViewPresenter((IDocumentView)view, document, container.Resolve<ICommandManager>(), factory, configService, mapper, events);
+        }
+
+        public IPresenter CreatePresenter(IViewConfiguration parent, IChildView child)
+        {
+            IPresenter presenter;
+
+            if (parent.Contents.Count > 1)
             {
-                return (IChildViewPresenter)CreateInstance(presenters[Views.CHART], new object[] { view, commands, useCaseFactory, configuration, mapper, events });
+                presenter = CreatePresenter(child, parent.GetContentConfiguration(child.Name));
             }
             else
             {
-                return (IChildViewPresenter)CreateInstance(presenters[view.Name], new object[] { view, commands, useCaseFactory, configuration, mapper, events });
+                presenter = CreatePresenter(child, parent.Contents[0]);
             }
 
-            
+            return presenter;
         }
 
-        public IDockableViewPresenter CreatePresenter(IDockableView view)
+        private IPresenter CreatePresenter(IChildView view, IContentConfiguration configuration)
+        {
+            return (IPresenter)CreateInstance(configuration.Presenter, new object[] { view, container.Resolve<ICommandManager>(), factory, configService, mapper, events });
+        }
+
+        private IPresenter CreatePresenter(IView view, IViewConfiguration configuration)
         {
             var commands = container.Resolve<ICommandManager>();
 
-            return new ToolViewPresenter(view, commands, useCaseFactory, configuration, mapper, events);
-        }
+            IPresenter presenter;
 
-        public IDockableViewPresenter CreatePresenter(IDocumentView view, IDocument document)
-        {
-            var commands = container.Resolve<ICommandManager>();
+            switch (configuration.Type)
+            {
+                case ViewTypes.Application:
+                    presenter = new WorkspaceViewPresenter((IWorkspaceView)view, commands, factory, configService, mapper, events);
+                    break;
 
-            return new DocumentViewPresenter(view, document, commands, useCaseFactory, configuration, mapper, events);
-        }
+                case ViewTypes.Dialog:
+                    presenter = new DialogViewPresenter((IDialogView)view, commands, factory, configService, mapper, events);
+                    break;
 
-        public IDialogViewPresenter CreatePresenter(IDialogView view)
-        {
-            var commands = container.Resolve<ICommandManager>();
+                case ViewTypes.Tool:
+                    presenter = new ToolViewPresenter((IDockableView)view, commands, factory, configService, mapper, events);
+                    break;
 
-            return new DialogViewPresenter(view, commands, useCaseFactory, configuration, mapper, events);
-        }
+                default:
+                    throw new Exception(); // TODO
+            }
 
-        public IWorkspaceViewPresenter CreatePresenter(IWorkspaceView view)
-        {
-            var commands = container.Resolve<ICommandManager>();
-
-            return new WorkspaceViewPresenter(view, commands, useCaseFactory, configuration, mapper, events);
-        }
-
-        private void Initialise()
-        {
-            presenters.Add(Views.ABOUT, "StarLab.Application.Help.AboutViewPresenter, StarLab.Presentation");
-            presenters.Add(Views.ADD_DOCUMENT, "StarLab.Application.Workspace.Documents.AddDocumentViewPresenter, StarLab.Presentation");
-            presenters.Add(Views.CHART_SETTINGS, "StarLab.Application.Workspace.Documents.Charts.ChartSettingsViewPresenter, StarLab.Presentation");
-            presenters.Add(Views.CHART, "StarLab.Application.Workspace.Documents.Charts.ColourMagnitudeChartViewPresenter, StarLab.Presentation");
-            presenters.Add(Views.OPTIONS, "StarLab.Application.Options.OptionsViewPresenter, StarLab.Presentation");
-            presenters.Add(Views.WORKSPACE_EXPLORER, "StarLab.Application.Workspace.WorkspaceExplorer.WorkspaceExplorerViewPresenter, StarLab.Presentation");
+            return presenter;
         }
     }
 }

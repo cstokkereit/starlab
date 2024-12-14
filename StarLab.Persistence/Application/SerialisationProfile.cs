@@ -11,7 +11,6 @@ namespace StarLab.Application
         {
             CreateMap<Axis, AxisDTO>().ReverseMap();
             CreateMap<Chart, ChartDTO>().ReverseMap();
-            CreateMap<Content, ContentDTO>().ReverseMap();
             CreateMap<Document, DocumentDTO>().ReverseMap();
             CreateMap<Folder, FolderDTO>().ReverseMap();
             CreateMap<Font, FontDTO>().ReverseMap();

@@ -1,17 +1,14 @@
-﻿using StarLab.Application.Workspace.Documents;
+﻿using StarLab.Application.Configuration;
+using StarLab.Application.Workspace.Documents;
 
 namespace StarLab.Application
 {
-    public interface IViewFactory
+    public interface IViewFactory : IPresenterFactory
     {
-        IChildView CreateControlView(string typeName);
+        IView CreateView(string name, string text);
 
-        IViewBundle CreateDocumentView(IDocument document);
+        IView CreateView(IDocument document);
 
-        IViewBundle CreateDialogView(string id, string text);
-
-        IViewBundle CreateToolView(string id, string text);
-
-        IViewBundle CreateWorkspaceView();
+        IChildView CreateView(IContentConfiguration config, IViewConfiguration parent);
     }
 }

@@ -1,77 +1,83 @@
-﻿using StarLab.Application.Workspace;
+﻿using StarLab.Application.Configuration;
+using StarLab.Application.Workspace;
 using StarLab.Application.Workspace.Documents;
 
 namespace StarLab.Application
 {
+    /// <summary>
+    /// A class that is used to create instances of <see cref="IView"/> and <see cref="IChildView"/>.
+    /// </summary>
     public class ViewFactory : Factory, IViewFactory
     {
-        private readonly Dictionary<string, string> views = new Dictionary<string, string>();
+        private readonly IConfigurationService configService;
 
-        private readonly IPresenterFactory presenterFactory;
+        private readonly IPresenterFactory factory;
 
-        public ViewFactory(IPresenterFactory presenterFactory)
+        /// <summary>
+        /// Initialises a new instance of the <see cref="ViewFactory"/> class.
+        /// </summary>
+        /// <param name="factory"></param>
+        /// <param name="configService"></param>
+        /// <exception cref="ArgumentNullException"></exception>
+        public ViewFactory(IPresenterFactory factory, IConfigurationService configService)
         {
-            this.presenterFactory = presenterFactory ?? throw new ArgumentNullException(nameof(presenterFactory));
-
-            Initialise();
+            this.configService = configService ?? throw new ArgumentNullException(nameof(configService));
+            this.factory = factory ?? throw new ArgumentNullException(nameof(factory));
         }
 
-        public IChildView CreateControlView(string typeName)
+        public IPresenter CreatePresenter(string name, IView view)
         {
-            return (IChildView)CreateInstance(typeName, new object[] { presenterFactory });
+            return factory.CreatePresenter(name, view);
         }
 
-        public IViewBundle CreateDialogView(string id, string text)
+        public IPresenter CreatePresenter(IDocument document, IView view)
         {
-            var view = new DialogView(id, text, CreateContent(id), presenterFactory);
-            return new ViewBundle(view, view.Controller);
+            return factory.CreatePresenter(document, view);
         }
 
-        public IViewBundle CreateDocumentView(IDocument document)
+        public IPresenter CreatePresenter(IViewConfiguration parent, IChildView child)
         {
-            var view = (DocumentView)CreateInstance(document.View, new object[] { document, this, presenterFactory });
-            return new ViewBundle(view, view.Controller);
+            return factory.CreatePresenter(parent, child);
         }
 
-        public IViewBundle CreateToolView(string id, string text)
+        public IView CreateView(string name, string text)
         {
-            var view = new ToolView(id, text, CreateContent(id), presenterFactory);
-            return new ViewBundle(view, view.Controller);
+            return CreateView(configService.GetViewConfiguration(name), text);
         }
 
-        public IViewBundle CreateWorkspaceView()
+        public IView CreateView(IDocument document)
         {
-            var view = new WorkspaceView(presenterFactory);
-            return new ViewBundle(view, view.Controller);
+            return new DocumentView(document, this, configService.GetViewConfiguration(document.View));
         }
 
-        private IChildView CreateContent(string id)
+        public IChildView CreateView(IContentConfiguration config, IViewConfiguration parent)
         {
-            return (IChildView)CreateInstance(views[id], new object[] { presenterFactory });
+            return (IChildView)CreateInstance(config.View, new object[] { config, parent, this });
         }
 
-        private void Initialise()
+        private IView CreateView(IViewConfiguration config, string text)
         {
-            views.Add(Views.ABOUT, "StarLab.Application.Help.AboutView, StarLab.UI");
-            views.Add(Views.ADD_DOCUMENT, "StarLab.Application.Workspace.Documents.AddDocumentView, StarLab.UI");
-            views.Add(Views.CHART, "StarLab.Application.Workspace.Documents.Charts.ChartView, StarLab.UI");
-            views.Add(Views.CHART_SETTINGS, "StarLab.Application.Workspace.Documents.Charts.ChartSettingsView, StarLab.UI");
-            views.Add(Views.OPTIONS, "StarLab.Application.Options.OptionsView, StarLab.UI");
-            views.Add(Views.WORKSPACE, "StarLab.Application.Workspace.WorkspaceView, StarLab.UI");
-            views.Add(Views.WORKSPACE_EXPLORER, "StarLab.Application.Workspace.WorkspaceExplorer.WorkspaceExplorerView, StarLab.UI");
-        }
+            IView view;
 
-        private struct ViewBundle : IViewBundle
-        {
-            public ViewBundle(IView view, IViewController controller)
+            switch (config.Type)
             {
-                Controller = controller;
-                View = view;
+                case ViewTypes.Application:
+                    view = new WorkspaceView(this);
+                    break;
+
+                case ViewTypes.Dialog:
+                    view = new DialogView(config.Name, text, this, config);
+                    break;
+
+                case ViewTypes.Tool:
+                    view = new ToolView(config.Name, text, this, config);
+                    break;
+
+                default:
+                    throw new Exception(); // TODO
             }
 
-            public IViewController Controller { get; private set; }
-
-            public IView View { get; private set; }
+            return view;
         }
     }
 }

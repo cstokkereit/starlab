@@ -1,18 +1,14 @@
-﻿using StarLab.Application.Workspace;
+﻿using StarLab.Application.Configuration;
 using StarLab.Application.Workspace.Documents;
 
 namespace StarLab.Application
 {
     public interface IPresenterFactory
     {
-        IChildViewPresenter CreatePresenter(IChildView view);
+        IPresenter CreatePresenter(string name, IView view);
 
-        IDockableViewPresenter CreatePresenter(IDockableView view);
+        IPresenter CreatePresenter(IDocument document, IView view);
 
-        IDockableViewPresenter CreatePresenter(IDocumentView view, IDocument document);
-
-        IDialogViewPresenter CreatePresenter(IDialogView view);
-
-        IWorkspaceViewPresenter CreatePresenter(IWorkspaceView view);
+        IPresenter CreatePresenter(IViewConfiguration parent, IChildView child);
     }
 }

@@ -1,10 +1,9 @@
 ﻿using log4net;
+using StarLab.Application.Configuration;
 using StarLab.Application.Workspace;
 using StarLab.Application.Workspace.Documents;
 using StarLab.Commands;
 using StarLab.Shared.Properties;
-using System.IO;
-using System.Windows.Forms;
 
 namespace StarLab.Application
 {
@@ -22,14 +21,15 @@ namespace StarLab.Application
 
         private readonly CommandFactory commandFactory = new CommandFactory();
 
+        private readonly IConfigurationService configuration;
+
         private readonly IViewFactory viewFactory;
 
-        public ApplicationController(IUseCaseFactory factory, IViewFactory viewFactory, IEventAggregator events)
+        public ApplicationController(IConfigurationService configuration, IViewFactory viewFactory, IUseCaseFactory factory, IEventAggregator events)
             : base(factory, events)
         {
-            ArgumentNullException.ThrowIfNull(viewFactory, nameof(viewFactory));
-
-            this.viewFactory = viewFactory;
+            this.configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            this.viewFactory = viewFactory ?? throw new ArgumentNullException(nameof(viewFactory));
         }
 
         public override string Name => Constants.APPLICATION + Constants.CONTROLLER;
@@ -64,13 +64,12 @@ namespace StarLab.Application
             }
             else
             {
-                var bundle = viewFactory.CreateDocumentView(document);
+                view = viewFactory.CreateView(document);
 
-                view = bundle.View;
-
-                views.Add(bundle.View.ID, bundle.View);
-
-                InitialiseController(bundle);
+                var controller = ((DocumentView)view).Controller;
+                controllers.Add(controller.Name, controller);
+                controller.Initialise(this);
+                views.Add(view.ID, view);
             }
 
             return view;
@@ -113,6 +112,7 @@ namespace StarLab.Application
 
             Events.Subsribe(this);
 
+            InitialiseServices();
             CreateViews();
 
             var view = views[Views.WORKSPACE];
@@ -143,37 +143,47 @@ namespace StarLab.Application
             controllers[Constants.WORKSPACE_VIEW_CONTROLLER].Show(view); // Need to pick this based on the view in question - some sort of map?
         }
 
-        private void CreateDialogView(string id, string name)
+        private void CreateView(string name, string text)
         {
-            var bundle = viewFactory.CreateDialogView(id, name);
-            views.Add(bundle.View.ID, bundle.View);
-            InitialiseController(bundle);
-        }
+            var view = viewFactory.CreateView(name, text);
 
-        private void CreateToolView(string id, string name)
-        {
-            var bundle = viewFactory.CreateToolView(id, name);
-            views.Add(bundle.View.ID, bundle.View);
-            InitialiseController(bundle);
-        }
+            IViewController controller;
 
-        private void CreateWorkspaceView()
-        {
-            var bundle = viewFactory.CreateWorkspaceView();
-            views.Add(bundle.View.ID, bundle.View);
-            InitialiseController(bundle);
+            switch (configuration.GetViewConfiguration(name).Type)
+            {
+                case ViewTypes.Application:
+                    controller = ((WorkspaceView)view).Controller;
+                    break;
+
+                case ViewTypes.Dialog:
+                    controller = ((DialogView)view).Controller;
+                    break;
+
+                case ViewTypes.Document:
+                    throw new NotImplementedException();
+
+                case ViewTypes.Tool:
+                    controller = ((ToolView)view).Controller;
+                    break;
+
+                default:
+                    throw new NotImplementedException(); // TODO
+            }
+
+            controllers.Add(controller.Name, controller);
+            controller.Initialise(this);
+            views.Add(view.ID, view);
         }
 
         private void CreateViews()
         {
-            CreateDialogView(Views.ABOUT, Resources.AboutStarLab);
-            CreateDialogView(Views.ADD_DOCUMENT, Resources.AddDocument);
-            CreateDialogView(Views.OPTIONS, Resources.Options);
-
-            CreateToolView(Views.WORKSPACE_EXPLORER, Resources.WorkspaceExplorer);
+            CreateView(Views.ABOUT, Resources.AboutStarLab);
+            CreateView(Views.ADD_DOCUMENT, Resources.AddDocument);
+            CreateView(Views.OPTIONS, Resources.Options);
+            CreateView(Views.WORKSPACE_EXPLORER, Resources.WorkspaceExplorer);
 
             // NOTE - This must be the last view to be created.
-            CreateWorkspaceView();
+            CreateView(Views.WORKSPACE, Resources.StarLab);
         }
 
         private IViewController GetController(IView view)
@@ -204,13 +214,9 @@ namespace StarLab.Application
             return controllers[id];
         }
 
-        private void InitialiseController(IViewBundle bundle)
+        private void InitialiseServices()
         {
-            if (bundle.Controller is IViewController controller)
-            {
-                controllers.Add(controller.Name, controller);
-                controller.Initialise(this);
-            }
+            configuration.Initialise();
         }
 
         private class CommandFactory : Factory

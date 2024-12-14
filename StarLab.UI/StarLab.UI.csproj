@@ -14,12 +14,13 @@
     <PackageReference Include="Castle.Windsor" Version="6.0.0" />
     <PackageReference Include="DockPanelSuite" Version="3.1.1" />
     <PackageReference Include="DockPanelSuite.ThemeVS2015" Version="3.1.1" />
-    <PackageReference Include="log4net" Version="3.0.2" />
-    <PackageReference Include="ScottPlot.WinForms" Version="5.0.40" />
+    <PackageReference Include="log4net" Version="3.0.3" />
+    <PackageReference Include="ScottPlot.WinForms" Version="5.0.47" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\StarLab.Application.Core\StarLab.Application.Core.csproj" />
+    <ProjectReference Include="..\StarLab.Configuration\StarLab.Configuration.csproj" />
     <ProjectReference Include="..\StarLab.Persistence\StarLab.Serialisation.csproj" />
     <ProjectReference Include="..\StarLab.Presentation.Core\StarLab.Presentation.Core.csproj" />
     <ProjectReference Include="..\StarLab.Presentation\StarLab.Presentation.csproj" />
@@ -39,9 +40,7 @@
     <Compile Update="Application\Workspace\Documents\Charts\ChartSettingsView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="Application\Workspace\Documents\Charts\ChartView.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Update="Application\Workspace\Documents\Charts\ChartView.cs" />
     <Compile Update="Application\Workspace\Documents\DocumentView.cs" />
     <Compile Update="Application\Workspace\SizeableFloatWindow.cs" />
     <Compile Update="Application\Workspace\ToolView.cs" />
@@ -51,19 +50,16 @@
     <Compile Update="Application\Workspace\WorkspaceView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Properties\Settings.Designer.cs">
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-    </Compile>
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    <None Update="app.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
 
 </Project>

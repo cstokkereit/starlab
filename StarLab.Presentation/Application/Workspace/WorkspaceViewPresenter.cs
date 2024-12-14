@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using StarLab.Application.Configuration;
 using StarLab.Application.Workspace.Documents;
 using StarLab.Commands;
 using System.ComponentModel;
@@ -18,11 +19,11 @@ namespace StarLab.Application.Workspace
 
         private bool dirty = false;
 
-        public WorkspaceViewPresenter(IWorkspaceView view, ICommandManager commands, IUseCaseFactory useCaseFactory, IConfiguration configuration, IMapper mapper, IEventAggregator events)
+        public WorkspaceViewPresenter(IWorkspaceView view, ICommandManager commands, IUseCaseFactory useCaseFactory, IConfigurationService configuration, IMapper mapper, IEventAggregator events)
             : base(commands, useCaseFactory, configuration, mapper, events)
         {
             workspace = new EmptyWorkspace();
-
+            
             this.view = view;
         }
 
@@ -288,10 +289,9 @@ namespace StarLab.Application.Workspace
 
             Events.Publish(new WorkspaceChangedEvent(workspace));
 
-            if (!string.IsNullOrEmpty(dto.FileName))
+            if (!string.IsNullOrEmpty(dto.FileName) && !Configuration.Workspace.Equals(dto.FileName))
             {
                 Configuration.Workspace = dto.FileName;
-                Configuration.Save();
             }
 
             UpdateCommandState(Actions.CLOSE_DOCUMENT, workspace.ActiveDocument != null);
@@ -391,7 +391,7 @@ namespace StarLab.Application.Workspace
 
         private void OpenDefaultWorkspace()
         {
-            // Handle any errors
+            // TODO Handle any errors
             if (!string.IsNullOrEmpty(Configuration.Workspace))
             {
                 OpenWorkspace(Configuration.Workspace); // TODO - Need to set the default workspace to the current workspace when the app closes

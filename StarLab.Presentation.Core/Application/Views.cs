@@ -6,7 +6,7 @@
         public const string ADD_DOCUMENT = "AddDocumentView";
 
         public const string CHART_SETTINGS = "ChartSettingsView";
-        public const string CHART = "ColourMagnitudeChartView";
+        public const string CHART = "ChartView";
 
         public const string DOCUMENT = "DocumentView";
 

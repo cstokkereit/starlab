@@ -2,7 +2,7 @@
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
-using StarLab.Application.Workspace.Documents;
+using StarLab.Application.Configuration;
 using StarLab.Commands;
 
 namespace StarLab.Application
@@ -21,7 +21,7 @@ namespace StarLab.Application
         private void InstallApplicationClasses(IWindsorContainer container)
         {
             container.Register(
-                Component.For<IEventAggregator>().ImplementedBy<EventAggregator>().LifestyleSingleton(),
+                Component.For<IEventAggregator>().ImplementedBy<EventAggregator>(),
                 Classes.FromAssemblyNamed("StarLab.Application").Where(t => t.Name.EndsWith("Factory")).WithServiceDefaultInterfaces(),
                 Classes.FromAssemblyNamed("StarLab.Application").BasedOn<Profile>().WithServiceBase()
             );
@@ -30,7 +30,8 @@ namespace StarLab.Application
         private void InstallInfrastructureClasses(IWindsorContainer container)
         {
             container.Register(
-                Classes.FromAssemblyNamed("StarLab.Serialisation").Where(t => t.Name.EndsWith("Service")).WithServiceDefaultInterfaces(),
+                Component.For<IConfigurationService>().ImplementedBy<ConfigurationService>(),
+                Component.For<ISerialisationService>().ImplementedBy<SerialisationService>(),
                 Classes.FromAssemblyNamed("StarLab.Serialisation").BasedOn<Profile>().WithServiceBase()
             );
         }
@@ -67,8 +68,7 @@ namespace StarLab.Application
         {
             container.Register(
                 Classes.FromAssemblyNamed("StarLab.UI").Where(t => t.Name.EndsWith("Factory")).WithServiceDefaultInterfaces(),
-                Component.For<IApplicationController>().ImplementedBy<ApplicationController>().LifestyleTransient(),
-                Component.For<IConfiguration>().ImplementedBy<Configuration>().LifestyleTransient()
+                Component.For<IApplicationController>().ImplementedBy<ApplicationController>()
             );
         }
     }

@@ -2,8 +2,6 @@
 {
     internal class Document : IDocument
     {
-        private readonly List<IContent> contents = new List<IContent>();
-
         private readonly string path;
 
         private readonly string view;
@@ -20,19 +18,18 @@
             this.id = id;
         }
 
+        public Document(string name, string path, string view)
+            : this(Guid.NewGuid().ToString(), name, path, view) { }
+
         public Document(DocumentDTO dto)
         {
             name = dto.Name ?? throw new ArgumentException(); // TODO
             path = dto.Path ?? throw new ArgumentException();
             view = dto.View ?? throw new ArgumentException();
             id = dto.ID ?? throw new ArgumentException();
-
-            if (dto.Contents != null) CreateContents(dto.Contents);
         }
 
         public event EventHandler<string>? NameChanged;
-
-        public IEnumerable<IContent> Contents => contents;
 
         public string FullName => $"{Path}/{Name}";
 
@@ -53,19 +50,5 @@
         public string Path => path;
 
         public string View => view;
-
-        public void AddContent(IContent content)
-        {
-            contents.Add(content);
-        }
-
-        private void CreateContents(IEnumerable<ContentDTO> dtos)
-        {
-            foreach (var dto in dtos)
-            {
-                var content = new Content(dto);
-                contents.Add(content);
-            }
-        }
     }
 }

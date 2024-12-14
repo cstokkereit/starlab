@@ -1,4 +1,5 @@
 ﻿using log4net;
+using StarLab.Application.Configuration;
 using StarLab.Commands;
 
 namespace StarLab.Application.Workspace.WorkspaceExplorer
@@ -14,32 +15,30 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
 
         private readonly IWorkspaceExplorerViewPresenter presenter;
 
+        private readonly SplitViewPanels panel;
+
         /// <summary>
         /// Initialises a new instance of the <see cref="WorkspaceExplorerView"/> class.
         /// </summary>
         /// <param name="presenterFactory">An <see cref="IPresenterFactory"/> that is used to create the <see cref="IPresenter"/> that controls this view.</param>
-        public WorkspaceExplorerView(IPresenterFactory presenterFactory)
+        public WorkspaceExplorerView(IContentConfiguration configuration, IViewConfiguration parent, IViewFactory factory)
         {
             InitializeComponent();
 
-            try
-            {
-                presenter = (IWorkspaceExplorerViewPresenter)presenterFactory.CreatePresenter(this);
-            }
-            catch (Exception e)
-            {
-                log.Fatal(e.Message, e);
-                throw;
-            }
-
             Name = Views.WORKSPACE_EXPLORER;
+
+            panel = (SplitViewPanels)configuration.Panel;
+
+            presenter = (IWorkspaceExplorerViewPresenter)factory.CreatePresenter(parent, this);
 
             treeView.ContextMenuStrip = new ContextMenuStrip();
         }
 
         public IChildViewController Controller => (IChildViewController)presenter;
 
-        public string DefaultLocation => Constants.DOCK_RIGHT;
+        public string DefaultLocation => Constants.DOCK_RIGHT; // TODO - This belongs in the parent configuration
+
+        public SplitViewPanels Panel => panel;
 
         public int AddImage(Image image)
         {

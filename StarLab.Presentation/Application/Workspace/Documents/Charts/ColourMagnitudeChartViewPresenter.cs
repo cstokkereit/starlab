@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
+using StarLab.Application.Configuration;
 using StarLab.Commands;
 
 namespace StarLab.Application.Workspace.Documents.Charts
 {
     internal class ColourMagnitudeChartViewPresenter : ChildViewPresenter<IChartView, IDocumentController>, IChartViewPresenter
     {
-        public ColourMagnitudeChartViewPresenter(IChartView view, ICommandManager commands, IUseCaseFactory useCaseFactory, IConfiguration configuration, IMapper mapper, IEventAggregator events)
+        public ColourMagnitudeChartViewPresenter(IChartView view, ICommandManager commands, IUseCaseFactory useCaseFactory, IConfigurationService configuration, IMapper mapper, IEventAggregator events)
             : base(view, commands, useCaseFactory, configuration, mapper, events)
         {
 

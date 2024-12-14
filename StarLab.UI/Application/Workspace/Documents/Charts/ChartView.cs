@@ -1,6 +1,7 @@
 ﻿using log4net;
 using ScottPlot;
 using ScottPlot.Plottables;
+using StarLab.Application.Configuration;
 using System.Text.RegularExpressions;
 
 namespace StarLab.Application.Workspace.Documents.Charts
@@ -14,11 +15,14 @@ namespace StarLab.Application.Workspace.Documents.Charts
 
         private readonly IChartViewPresenter presenter;
 
+        private readonly SplitViewPanels panel;
+
+
         readonly ScottPlot.Plottables.Rectangle RectanglePlot;
 
         private Scatter scatter;
 
-        public ChartView(IPresenterFactory presenterFactory)
+        public ChartView(IContentConfiguration config, IViewConfiguration parent, IViewFactory presenterFactory)
         {
             // Scale points with zoom
             // Dragable axis lines
@@ -29,17 +33,13 @@ namespace StarLab.Application.Workspace.Documents.Charts
 
             InitializeComponent();
 
-            try
-            {
-                presenter = (IChartViewPresenter)presenterFactory.CreatePresenter(this);
-            }
-            catch (Exception e)
-            {
-                log.Fatal(e.Message, e);
-                throw;
-            }
-
             Name = Views.CHART;
+
+            panel = (SplitViewPanels)config.Panel;
+
+            presenter = (IChartViewPresenter)presenterFactory.CreatePresenter(parent, this);
+
+
 
 
 
@@ -56,6 +56,8 @@ namespace StarLab.Application.Workspace.Documents.Charts
         }
 
         public IChildViewController Controller => (IChildViewController)presenter;
+
+        public SplitViewPanels Panel => panel;
 
         public void Initialise(IApplicationController controller, IDocumentController parentController)
         {
@@ -148,6 +150,8 @@ namespace StarLab.Application.Workspace.Documents.Charts
             formsPlot.Plot.Axes.Rules.Add(new LockAxisRule());
 
         }
+
+        
 
         readonly Coordinates[] DataPoints;
         Coordinates MouseDownCoordinates;

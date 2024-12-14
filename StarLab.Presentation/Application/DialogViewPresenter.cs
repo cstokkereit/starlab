@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using StarLab.Application.Configuration;
 using StarLab.Commands;
 using System.ComponentModel;
 
@@ -8,7 +9,7 @@ namespace StarLab.Application
     {
         private readonly IDialogView view;
 
-        public DialogViewPresenter(IDialogView view, ICommandManager commands, IUseCaseFactory useCaseFactory, IConfiguration configuration, IMapper mapper, IEventAggregator events)
+        public DialogViewPresenter(IDialogView view, ICommandManager commands, IUseCaseFactory useCaseFactory, IConfigurationService configuration, IMapper mapper, IEventAggregator events)
             : base(commands, useCaseFactory, configuration, mapper, events)
         {
             this.view = view;

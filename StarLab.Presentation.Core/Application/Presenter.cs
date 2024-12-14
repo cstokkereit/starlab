@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using StarLab.Application.Configuration;
 using StarLab.Commands;
 using StarLab.Shared.Properties;
 using System.Diagnostics;
@@ -10,7 +11,7 @@ namespace StarLab.Application
     /// </summary>
     public abstract class Presenter : Controller, IPresenter
     {
-        private readonly IConfiguration configuration;
+        private readonly IConfigurationService configuration;
 
         private readonly ICommandManager commands;
 
@@ -18,7 +19,7 @@ namespace StarLab.Application
 
         private IApplicationController? controller;
 
-        public Presenter(ICommandManager commands, IUseCaseFactory useCaseFactory, IConfiguration configuration, IMapper mapper, IEventAggregator events)
+        public Presenter(ICommandManager commands, IUseCaseFactory useCaseFactory, IConfigurationService configuration, IMapper mapper, IEventAggregator events)
             : base(useCaseFactory, events)
         {
             this.configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
@@ -50,7 +51,7 @@ namespace StarLab.Application
             }
         }
 
-        protected IConfiguration Configuration => configuration;
+        protected IConfigurationService Configuration => configuration;
 
         protected bool Initialised => controller != null;
 

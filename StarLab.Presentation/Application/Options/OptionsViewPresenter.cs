@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using StarLab.Application.Configuration;
 using StarLab.Commands;
 
 namespace StarLab.Application.Options
@@ -7,7 +8,7 @@ namespace StarLab.Application.Options
 
     internal class OptionsViewPresenter : ChildViewPresenter<IOptionsView, IDialogController>, IOptionsViewPresenter, IChildViewController
     {
-        public OptionsViewPresenter(IOptionsView view, ICommandManager commands, IUseCaseFactory useCaseFactory, IConfiguration configuration, IMapper mapper, IEventAggregator events)
+        public OptionsViewPresenter(IOptionsView view, ICommandManager commands, IUseCaseFactory useCaseFactory, IConfigurationService configuration, IMapper mapper, IEventAggregator events)
             : base(view, commands, useCaseFactory, configuration, mapper, events) { }
 
         public override void Initialise(IApplicationController controller)

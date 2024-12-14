@@ -9,7 +9,6 @@ namespace StarLab.Application
         public ApplicationProfile()
         {
             CreateMap<Workspace.Workspace, WorkspaceDTO>();
-            CreateMap<Content, ContentDTO>();
             CreateMap<Document, DocumentDTO>();
             CreateMap<Folder, FolderDTO>();
             CreateMap<Project, ProjectDTO>();

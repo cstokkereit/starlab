@@ -1,5 +1,5 @@
 ﻿using log4net;
-using System.Diagnostics;
+using StarLab.Application.Configuration;
 using WeifenLuo.WinFormsUI.Docking;
 
 namespace StarLab.Application.Workspace
@@ -12,22 +12,29 @@ namespace StarLab.Application.Workspace
 
         private readonly string id;
 
-        public ToolView(string id, string text, IChildView childView, IPresenterFactory factory)
+        public ToolView(string name, string text, IViewFactory factory, IViewConfiguration config)
         {
+            ArgumentNullException.ThrowIfNull(factory, nameof(factory));
+            ArgumentNullException.ThrowIfNull(config, nameof(config));
+
+            if (config.Contents.Count > 1) throw new ArgumentException(); // TODO
+
             InitializeComponent();
 
-            this.id = id;
-
+            Name = name;
             Text = text;
-            Name = id;
+            id = name;
    
-            presenter = factory.CreatePresenter(this);
-            Debug.Assert(presenter is IViewController);
-            childView.Controller.Attach((IViewController)presenter);
-
             SuspendLayout();
 
-            if (childView is Control control)
+            presenter = (IDockableViewPresenter)factory.CreatePresenter(config.Name, this);
+
+            var view = factory.CreateView(config.Contents[0], config);
+            view.Controller.Attach((IViewController)presenter);
+
+            view.Controller.Attach((IViewController)presenter);
+
+            if (view is Control control)
             {
                 control.Dock = DockStyle.Fill;
                 Controls.Add(control);

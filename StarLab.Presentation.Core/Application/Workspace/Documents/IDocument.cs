@@ -4,8 +4,6 @@
     {
         public event EventHandler<string>? NameChanged;
 
-        IEnumerable<IContent> Contents { get; }
-
         string FullName { get; }
 
         string ID { get; }

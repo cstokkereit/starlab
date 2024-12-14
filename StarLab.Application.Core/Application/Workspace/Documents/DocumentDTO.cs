@@ -2,8 +2,6 @@
 {
     public class DocumentDTO
     {
-        public List<ContentDTO> Contents = new List<ContentDTO>();
-
         public string? ID;
 
         public string? Name;

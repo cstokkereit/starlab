@@ -1,4 +1,5 @@
 ﻿using log4net;
+using StarLab.Application.Configuration;
 using StarLab.Commands;
 using WeifenLuo.WinFormsUI.Docking;
 
@@ -12,30 +13,24 @@ namespace StarLab.Application.Workspace.Documents
 
         private readonly string id;
 
-        public DocumentView(IDocument document, IViewFactory viewFactory, IPresenterFactory presenterFactory)
+        public DocumentView(IDocument document, IViewFactory factory, IViewConfiguration config)
         {
+            ArgumentNullException.ThrowIfNull(document, nameof(document));
+            ArgumentNullException.ThrowIfNull(factory, nameof(factory));
+            ArgumentNullException.ThrowIfNull(config, nameof(config));
+
             InitializeComponent();
-            
-            try
-            {
-                presenter = presenterFactory.CreatePresenter(this, document);
-            }
-            catch (Exception e)
-            {
-                log.Fatal(e.Message, e);
-                throw;
-            }
 
             Name = document.Name;
             Text = document.Name;
-
             id = document.ID;
 
-            foreach (var content in document.Contents)
-            {
-                var view = viewFactory.CreateControlView(content.View);
+            presenter = (IDockableViewPresenter)factory.CreatePresenter(document, this);
 
-                if (view is Control control) splitContainer.AddControl(control, content.Panel);
+            foreach (var content in config.Contents)
+            {
+                var view = factory.CreateView(content, config);
+                splitContainer.AddControl((Control)view, view.Panel);
             }
         }
 
@@ -159,6 +154,7 @@ namespace StarLab.Application.Workspace.Documents
         {
             return ID;
         }
+
 
 
         //        /// <summary>

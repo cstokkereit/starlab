@@ -1,4 +1,5 @@
 ﻿using log4net;
+using StarLab.Application.Configuration;
 using StarLab.Commands;
 
 namespace StarLab.Application.Workspace.Documents
@@ -9,26 +10,24 @@ namespace StarLab.Application.Workspace.Documents
 
         private readonly IAddDocumentViewPresenter presenter;
 
-        public AddDocumentView(IPresenterFactory factory)
+        private readonly SplitViewPanels panel;
+
+        public AddDocumentView(IContentConfiguration config, IViewConfiguration parent, IViewFactory factory)
         {
             InitializeComponent();
 
             Name = Views.ADD_DOCUMENT;
 
-            try
-            {
-                presenter = (IAddDocumentViewPresenter)factory.CreatePresenter(this);
-            }
-            catch (Exception e)
-            {
-                log.Fatal(e.Message, e);
-                throw;
-            }
+            panel = (SplitViewPanels)config.Panel;
+
+            presenter = (IAddDocumentViewPresenter)factory.CreatePresenter(parent, this);
         }
 
         public IChildViewController Controller => (IChildViewController)presenter;
 
-        public string DocumentType => "Chart";
+        public SplitViewPanels Panel => panel;
+
+        public string DocumentType => "ColourMagnitudeChartView"; // TODO
 
         public string DocumentName
         {

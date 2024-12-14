@@ -8,7 +8,6 @@ namespace StarLab.Application
     {
         public PresentationProfile()
         {
-            CreateMap<IContent, ContentDTO>();
             CreateMap<IDocument, DocumentDTO>();
             CreateMap<IFolder, FolderDTO>().ForMember(dest => dest.Path, opt => opt.MapFrom(src => src.Key));
             CreateMap<IProject, ProjectDTO>();

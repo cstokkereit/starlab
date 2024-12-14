@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using StarLab.Application.Configuration;
 using StarLab.Commands;
 using System.Reflection;
 
@@ -8,7 +9,7 @@ namespace StarLab.Application.Help
     {
         private IDialogController parentController;
 
-        public AboutViewPresenter(IAboutView view, ICommandManager commands, IUseCaseFactory useCaseFactory, IConfiguration configuration, IMapper mapper, IEventAggregator events)
+        public AboutViewPresenter(IAboutView view, ICommandManager commands, IUseCaseFactory useCaseFactory, IConfigurationService configuration, IMapper mapper, IEventAggregator events)
             : base(view, commands, useCaseFactory, configuration, mapper, events) { }
 
         public override void Initialise(IApplicationController controller)

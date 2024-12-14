@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using StarLab.Application.Configuration;
 using StarLab.Commands;
 using StarLab.Properties;
 using System.Diagnostics;
@@ -11,7 +12,7 @@ namespace StarLab.Application.Workspace.Documents
 
         private IWorkspace? workspace;
 
-        public AddDocumentViewPresenter(IAddDocumentView view, ICommandManager commands, IUseCaseFactory useCaseFactory, IConfiguration configuration, IMapper mapper, IEventAggregator events)
+        public AddDocumentViewPresenter(IAddDocumentView view, ICommandManager commands, IUseCaseFactory useCaseFactory, IConfigurationService configuration, IMapper mapper, IEventAggregator events)
             : base(view, commands, useCaseFactory, configuration, mapper, events) { }
 
         public void AddDocument()
@@ -20,12 +21,7 @@ namespace StarLab.Application.Workspace.Documents
             {
                 try
                 {
-                    DocumentBuilder builder = new DocumentBuilder();
-
-                    var document = builder.CreateDocument(View.DocumentName, context.Path)
-                                          .AddContent("StarLab.Application.Workspace.Documents.Charts.ChartSettingsView, StarLab.UI", View.Name, SplitViewPanels.Panel1)
-                                          .AddContent("StarLab.Application.Workspace.Documents.Charts.ChartView, StarLab.UI", View.Name, SplitViewPanels.Panel2)
-                                          .GetDocument();
+                    var document = new Document(View.DocumentName, context.Path, View.DocumentType);
 
                     var interactor = UseCaseFactory.CreateAddDocumentUseCase(port);
 
