@@ -1,9 +1,0 @@
-﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="StarLab.Properties" GeneratedClassName="Settings">
-  <Profiles />
-  <Settings>
-    <Setting Name="Workspace" Type="System.String" Scope="User">
-      <Value Profile="(Default)">D:\Users\Colin\Documents\GitHub\starlab\StarLab.UI\Resources\Workspace-2.slw</Value>
-    </Setting>
-  </Settings>
-</SettingsFile>
