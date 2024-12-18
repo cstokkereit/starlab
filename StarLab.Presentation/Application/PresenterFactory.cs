@@ -33,14 +33,14 @@ namespace StarLab.Application
             return CreatePresenter(view, configService.GetViewConfiguration(name));
         }
 
-        public IPresenter CreatePresenter(IDocument document, IView view)
+        public IDockableViewPresenter CreatePresenter(IDocument document, IDocumentView view)
         {
-            return new DocumentViewPresenter((IDocumentView)view, document, container.Resolve<ICommandManager>(), factory, configService, mapper, events);
+            return new DocumentViewPresenter(view, document, container.Resolve<ICommandManager>(), factory, configService, mapper, events);
         }
 
-        public IPresenter CreatePresenter(IViewConfiguration parent, IChildView child)
+        public IChildViewPresenter CreatePresenter(IViewConfiguration parent, IChildView child)
         {
-            IPresenter presenter;
+            IChildViewPresenter presenter;
 
             if (parent.Contents.Count > 1)
             {
@@ -54,9 +54,9 @@ namespace StarLab.Application
             return presenter;
         }
 
-        private IPresenter CreatePresenter(IChildView view, IContentConfiguration configuration)
+        private IChildViewPresenter CreatePresenter(IChildView view, IContentConfiguration configuration)
         {
-            return (IPresenter)CreateInstance(configuration.Presenter, new object[] { view, container.Resolve<ICommandManager>(), factory, configService, mapper, events });
+            return (IChildViewPresenter)CreateInstance(configuration.Presenter, new object[] { view, container.Resolve<ICommandManager>(), factory, configService, mapper, events });
         }
 
         private IPresenter CreatePresenter(IView view, IViewConfiguration configuration)

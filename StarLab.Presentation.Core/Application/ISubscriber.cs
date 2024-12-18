@@ -1,11 +1,15 @@
 ﻿namespace StarLab.Application
 {
     /// <summary>
-    /// An interface to be implemented by subscribers of the specified event type.
+    /// An interface to be implemented by subscribers of the specified event type. TODO
     /// </summary>
-    /// <typeparam name="T">The event type.</typeparam>
-    public interface ISubscriber<T>
+    /// <typeparam name="TEventType">The event type.</typeparam>
+    public interface ISubscriber<TEventType>
     {
-        void OnEvent(T e);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="e"></param>
+        void OnEvent(TEventType e);
     }
 }

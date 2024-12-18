@@ -43,6 +43,11 @@ namespace StarLab.Application.Workspace.Documents.Charts
             }
         }
 
+        public void Initialise(IApplicationController controller)
+        {
+            // Do Nothing
+        }
+
         public void SetMinimumSize(Size size)
         {
             MinimumSize = size;

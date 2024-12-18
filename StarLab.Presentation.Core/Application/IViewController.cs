@@ -1,5 +1,8 @@
 ﻿namespace StarLab.Application
 {
+    /// <summary>
+    /// TODO
+    /// </summary>
     public interface IViewController : IController
     {
         void Initialise(IApplicationController controller);

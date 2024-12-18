@@ -9,28 +9,28 @@ namespace StarLab.Application.Workspace.Documents.Charts
 {
     internal class ChartSettingsViewPresenter : ChildViewPresenter<IChartSettingsView, IDocumentController>, IChartSettingsViewPresenter, IChartSettingsController
     {
-        private IDocumentController? parentController;
-
         public ChartSettingsViewPresenter(IChartSettingsView view, ICommandManager commands, IUseCaseFactory useCaseFactory, IConfigurationService configuration, IMapper mapper, IEventAggregator events)
             : base(view, commands, useCaseFactory, configuration, mapper, events) { }
 
         public override string Name => throw new NotImplementedException();
 
-        public override void Attach(IViewController parentController)
+        public override void Initialise(IApplicationController controller)
         {
-            base.Attach(parentController);
+            if (!Initialised)
+            {
+                base.Initialise(controller);
 
-            parentController = (IDocumentController)parentController;
+                ParentController.AddToolbarButton(Constants.SHOW_SETTINGS, StringResources.Settings, ImageResources.Settings, GetCommand(ParentController, Actions.SHOW_SPLIT_CONTENT, View.Name));
+                View.AttachCancelButtonCommand(GetCommand(ParentController, Actions.HIDE_SPLIT_CONTENT, View.Name));
 
-            //parentController.AddToolbarButton(Constants.SHOW_SETTINGS, StringResources.Settings, ImageResources.Settings, GetCommand(parentController, Actions.SHOW_SPLIT_CONTENT, View.Name));
-            //View.AttachCancelButtonCommand(GetCommand(parentController, Actions.HIDE_SPLIT_CONTENT, View.Name));
+                var chain = GetCommandChain();
+                chain.Add(GetCommand(this, Actions.APPLY_SETTINGS));
+                chain.Add(GetCommand(ParentController, Actions.HIDE_SPLIT_CONTENT, View.Name));
 
-            //var chain = GetCommandChain();
-            //chain.Add(GetCommand(this, Actions.APPLY_SETTINGS));
-            //chain.Add(GetCommand(parentController, Actions.HIDE_SPLIT_CONTENT, View.Name));
+                View.AttachOKButtonCommand(chain);
 
-
-            //View.AttachOKButtonCommand(chain);
+                View.Initialise(controller);
+            }
         }
     }
 }

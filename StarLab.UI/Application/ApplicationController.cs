@@ -11,15 +11,16 @@ namespace StarLab.Application
 
     // https://www.youtube.com/watch?v=280HyyLF-wU
 
+    /// <summary>
+    /// A controller that creates, initialises and manages the views that comprise the user interface of the application.
+    /// </summary>
     public class ApplicationController : Controller, IApplicationController, ISubscriber<WorkspaceClosedEvent>
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(ApplicationController));
-
         private readonly IDictionary<string, IViewController> controllers = new Dictionary<string, IViewController>();
 
-        private readonly IDictionary<string, IView> views = new Dictionary<string, IView>();
+        private static readonly ILog log = LogManager.GetLogger(typeof(ApplicationController));
 
-        private readonly CommandFactory commandFactory = new CommandFactory();
+        private readonly IDictionary<string, IView> views = new Dictionary<string, IView>();
 
         private readonly IConfigurationService configuration;
 
@@ -41,17 +42,17 @@ namespace StarLab.Application
 
         public ICommand CreateCommand(ICommandManager commands, IController controller, string action, string target)
         {
-            return commandFactory.CreateCommand(commands, controller, action, target);
+            return new ActionCommand(commands, controller, action, [target]);
         }
 
         public ICommand CreateCommand(ICommandManager commands, IController controller, string action)
         {
-            return commandFactory.CreateCommand(commands, controller, action);
+            return new ActionCommand(commands, controller, action);
         }
 
         public ICommand CreateCommand(ICommandManager commands, string view)
         {
-            return commandFactory.CreateCommand(commands, this, Actions.SHOW, view);
+            return CreateCommand(commands, this, Actions.SHOW, view);
         }
 
         public IView GetView(IDocument document)
@@ -69,6 +70,7 @@ namespace StarLab.Application
                 var controller = ((DocumentView)view).Controller;
                 controllers.Add(controller.Name, controller);
                 controller.Initialise(this);
+
                 views.Add(view.ID, view);
             }
 
@@ -80,6 +82,10 @@ namespace StarLab.Application
             return views[id];
         }
 
+        /// <summary>
+        /// TODO - Is there a better way than doing this?
+        /// </summary>
+        /// <returns></returns>
         public IWorkspaceController GetWorkspaceController()
         {
             return (IWorkspaceController)controllers[Constants.WORKSPACE_VIEW_CONTROLLER];
@@ -217,23 +223,6 @@ namespace StarLab.Application
         private void InitialiseServices()
         {
             configuration.Initialise();
-        }
-
-        private class CommandFactory : Factory
-        {
-            public ICommand CreateCommand(ICommandManager commands, IController controller, string action, string target)
-            {
-                return new ActionCommand(commands, controller, action, [target]);
-
-                //return (ICommand)CreateInstance($"{controller.GetType().Namespace}.{action}Command, StarLab.UI", new object[] { commands, controller, target });
-            }
-
-            public ICommand CreateCommand(ICommandManager commands, IController controller, string action)
-            {
-                return new ActionCommand(commands, controller, action);
-
-                //return (ICommand)CreateInstance($"{controller.GetType().Namespace}.{action}Command, StarLab.UI", new object[] { commands, controller });
-            }
         }
     }
 }

@@ -2,7 +2,6 @@
 using StarLab.Application.Configuration;
 using StarLab.Commands;
 using StarLab.Properties;
-using System.Diagnostics;
 
 namespace StarLab.Application.Workspace.Documents
 {
@@ -27,21 +26,18 @@ namespace StarLab.Application.Workspace.Documents
 
                     interactor.Execute(Mapper.Map<IWorkspace, WorkspaceDTO>(context.Workspace), Mapper.Map<IDocument, DocumentDTO>(document));
 
-                    var view = AppController.GetView(document);
-                    AppController.Show(view);
-
-                    ParentController?.Close();
+                    ParentController.Close();
                 }
                 catch (Exception ex)
                 {
-
+                    // TODO
                 }
             }
         }
 
         public void Cancel()
         {
-            ParentController?.Close();
+            ParentController.Close();
         }
 
         public override void Initialise(IApplicationController controller)
@@ -60,9 +56,9 @@ namespace StarLab.Application.Workspace.Documents
 
         public override void Run(IInteractionContext context)
         {
-            Debug.Assert(ParentController != null);
-
             base.Run(context);
+
+            View.DocumentName = string.Empty;
 
             ParentController.Show();
         }

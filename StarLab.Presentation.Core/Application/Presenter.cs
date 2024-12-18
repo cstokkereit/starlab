@@ -1,24 +1,32 @@
 ﻿using AutoMapper;
 using StarLab.Application.Configuration;
 using StarLab.Commands;
-using StarLab.Shared.Properties;
 using System.Diagnostics;
 
 namespace StarLab.Application
 {
     /// <summary>
-    /// The base class for all presenters.
+    /// TODO
     /// </summary>
     public abstract class Presenter : Controller, IPresenter
     {
-        private readonly IConfigurationService configuration;
+        private readonly IConfigurationService configuration; //
 
-        private readonly ICommandManager commands;
+        private readonly ICommandManager commands; // 
 
-        private readonly IMapper mapper;
+        private readonly IMapper mapper; //
 
-        private IApplicationController? controller;
+        private IApplicationController? controller; //
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="commands"></param>
+        /// <param name="useCaseFactory"></param>
+        /// <param name="configuration"></param>
+        /// <param name="mapper"></param>
+        /// <param name="events"></param>
+        /// <exception cref="ArgumentNullException"></exception>
         public Presenter(ICommandManager commands, IUseCaseFactory useCaseFactory, IConfigurationService configuration, IMapper mapper, IEventAggregator events)
             : base(useCaseFactory, events)
         {
@@ -28,9 +36,9 @@ namespace StarLab.Application
         }
 
         /// <summary>
-        /// Initialises the presenter.
+        /// 
         /// </summary>
-        /// <param name="controller">The application controller.</param>
+        /// <param name="controller"></param>
         public virtual void Initialise(IApplicationController controller)
         {
             Debug.Assert(!Initialised);
@@ -42,6 +50,9 @@ namespace StarLab.Application
             Events.Subsribe(this);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected IApplicationController AppController
         {
             get
@@ -51,12 +62,28 @@ namespace StarLab.Application
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected IConfigurationService Configuration => configuration;
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected bool Initialised => controller != null;
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected IMapper Mapper => mapper;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="controller"></param>
+        /// <param name="action"></param>
+        /// <param name="target"></param>
+        /// <returns></returns>
         protected ICommand GetCommand(IController controller, string action, string target)
         {
             var name = action + target;
@@ -69,6 +96,12 @@ namespace StarLab.Application
             return commands.GetCommand(name);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="target"></param>
+        /// <returns></returns>
         protected ICommand GetCommand(string action, string target)
         {
             var name = action + target;
@@ -81,6 +114,12 @@ namespace StarLab.Application
             return commands.GetCommand(name);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="controller"></param>
+        /// <param name="action"></param>
+        /// <returns></returns>
         protected ICommand GetCommand(IController controller, string action)
         {
             if (!commands.ContainsCommand(action))
@@ -91,6 +130,11 @@ namespace StarLab.Application
             return commands.GetCommand(action);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="action"></param>
+        /// <returns></returns>
         protected ICommand GetCommand(string action)
         {
             if (!commands.ContainsCommand(action))
@@ -101,6 +145,11 @@ namespace StarLab.Application
             return commands.GetCommand(action);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         protected ICommandChain GetCommandChain(string name)
         {
             if (!commands.ContainsCommand(name))
@@ -111,11 +160,20 @@ namespace StarLab.Application
             return (ICommandChain)commands.GetCommand(name);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         protected ICommandChain GetCommandChain()
         {
             return new CommandChain(commands);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="view"></param>
+        /// <returns></returns>
         protected ICommand GetShowViewCommand(string view)
         {
             var name = Actions.SHOW + view;
@@ -128,11 +186,22 @@ namespace StarLab.Application
             return commands.GetCommand(name);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="target"></param>
+        /// <param name="enabled"></param>
         protected void UpdateCommandState(string action, string target, bool enabled)
         {
             if (GetCommand(action + target) is IComponentCommand command) command.Enabled = enabled;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="enabled"></param>
         protected void UpdateCommandState(string action, bool enabled)
         {
             if (GetCommand(action) is IComponentCommand command) command.Enabled = enabled;

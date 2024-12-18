@@ -30,12 +30,12 @@ namespace StarLab.Application
             return factory.CreatePresenter(name, view);
         }
 
-        public IPresenter CreatePresenter(IDocument document, IView view)
+        public IDockableViewPresenter CreatePresenter(IDocument document, IDocumentView view)
         {
             return factory.CreatePresenter(document, view);
         }
 
-        public IPresenter CreatePresenter(IViewConfiguration parent, IChildView child)
+        public IChildViewPresenter CreatePresenter(IViewConfiguration parent, IChildView child)
         {
             return factory.CreatePresenter(parent, child);
         }

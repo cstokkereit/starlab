@@ -59,7 +59,7 @@ namespace StarLab.Application.Workspace.Documents.Charts
 
         public SplitViewPanels Panel => panel;
 
-        public void Initialise(IApplicationController controller, IDocumentController parentController)
+        public void Initialise(IApplicationController controller)
         {
             // This is all temporary
 

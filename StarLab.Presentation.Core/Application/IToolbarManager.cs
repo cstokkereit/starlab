@@ -2,6 +2,9 @@
 
 namespace StarLab.Application
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public interface IToolbarManager
     {
         /// <summary>

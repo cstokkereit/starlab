@@ -1,5 +1,8 @@
 ﻿namespace StarLab.Application
 {
+    /// <summary>
+    /// A static class containing the <see cref="string"/> constants used to identify a view.
+    /// </summary>
     public static class Views
     {
         public const string ABOUT = "AboutView";

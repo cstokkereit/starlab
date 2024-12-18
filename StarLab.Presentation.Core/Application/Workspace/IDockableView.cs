@@ -1,11 +1,14 @@
 ﻿namespace StarLab.Application.Workspace
 {
+    /// <summary>
+    /// TODO
+    /// </summary>
     public interface IDockableView : IView
     {
         /// <summary>
-        /// Initialises the view.
+        /// 
         /// </summary>
-        /// <param name="controller">The <see cref="IApplicationController"/>.</param>
+        /// <param name="controller"></param>
         void Initialise(IApplicationController controller);
     }
 }

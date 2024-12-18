@@ -1,5 +1,8 @@
 ﻿namespace StarLab.Application
 {
+    /// <summary>
+    /// A static class containing the <see cref="string"/> constants used to specify the method that will be called when executing an <see cref="ActionCommand"/>.
+    /// </summary>
     public static class Actions
     {
         public const string ADD_CHART = "AddChart";

@@ -41,7 +41,7 @@ namespace StarLab
             presenter = (IDialogViewPresenter)factory.CreatePresenter(config.Name, this);
 
             childView = factory.CreateView(config.Contents[0], config);
-            childView.Controller.Attach((IViewController)presenter);
+            childView.Controller.RegisterController((IViewController)presenter);
 
             SuspendLayout();
 

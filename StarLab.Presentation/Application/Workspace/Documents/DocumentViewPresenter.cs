@@ -23,7 +23,6 @@ namespace StarLab.Application.Workspace.Documents
 
         public override string Name => $"Document({document.ID}) Controller";
 
-
         public void AddToolbarButton(string name, string tooltip, Image image, ICommand command)
         {
             view.AddToolbarButton(name, tooltip, image, command);
@@ -41,6 +40,8 @@ namespace StarLab.Application.Workspace.Documents
                 base.Initialise(controller);
 
                 AttachEventHandlers();
+
+                view.Initialise(controller);
             }
         }
 

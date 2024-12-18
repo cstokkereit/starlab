@@ -25,7 +25,7 @@ namespace StarLab.Application.Workspace.Documents
             Text = document.Name;
             id = document.ID;
 
-            presenter = (IDockableViewPresenter)factory.CreatePresenter(document, this);
+            presenter = factory.CreatePresenter(document, this);
 
             foreach (var content in config.Contents)
             {
@@ -54,23 +54,25 @@ namespace StarLab.Application.Workspace.Documents
         /// <param name="controller">The <see cref="IApplicationController"/>.</param>
         public void Initialise(IApplicationController controller)
         {
-            if (presenter is IDocumentController parentController)
+            if (presenter is IViewController parentController)
             {
-                //foreach (var control in splitContainer.Panel1.Controls)
-                //{
-                //    if (control is IFormContent<IDocumentController> content)
-                //    {
-                //        content.Initialise(controller, parentController);
-                //    }
-                //}
+                foreach (var control in splitContainer.Panel1.Controls)
+                {
+                    if (control is IChildView content)
+                    {
+                        content.Controller.RegisterController(parentController);
+                        content.Controller.Initialise(controller);
+                    }
+                }
 
-                //foreach (var control in splitContainer.Panel2.Controls)
-                //{
-                //    if (control is IFormContent<IDocumentController> content)
-                //    {
-                //        content.Initialise(controller, parentController);
-                //    }
-                //}
+                foreach (var control in splitContainer.Panel2.Controls)
+                {
+                    if (control is IChildView content)
+                    {
+                        content.Controller.RegisterController(parentController);
+                        content.Controller.Initialise(controller);
+                    }
+                }
             }
         }
 

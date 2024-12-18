@@ -30,9 +30,13 @@ namespace StarLab.Application.Help
 
         public SplitViewPanels Panel => panel;
 
-        public void AttachPresenter(IPresenter presenter)
+        /// <summary>
+        /// Initialises the view.
+        /// </summary>
+        /// <param name="controller">The <see cref="IApplicationController"/>.</param>
+        public void Initialise(IApplicationController controller)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException(); 
         }
 
         public void SetCompanyName(string companyName)

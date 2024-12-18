@@ -10,8 +10,13 @@
 
         private string name;
 
-        public Document(string id, string name, string path, string view)
+        public Document(string id, string name, string path, string? view)
         {
+            if (string.IsNullOrEmpty(name)) throw new ArgumentNullException(nameof(name));
+            if (string.IsNullOrEmpty(path)) throw new ArgumentNullException(nameof(path));
+            if (string.IsNullOrEmpty(view)) throw new ArgumentNullException(nameof(view));
+            if (string.IsNullOrEmpty(id)) throw new ArgumentNullException(nameof(id));
+
             this.name = name;
             this.path = path;
             this.view = view;
@@ -23,10 +28,17 @@
 
         public Document(DocumentDTO dto)
         {
-            name = dto.Name ?? throw new ArgumentException(); // TODO
-            path = dto.Path ?? throw new ArgumentException();
-            view = dto.View ?? throw new ArgumentException();
-            id = dto.ID ?? throw new ArgumentException();
+            ArgumentNullException.ThrowIfNull(dto, nameof(dto));
+
+            if (string.IsNullOrEmpty(dto.Name)) throw new ArgumentNullException(nameof(dto.Name));
+            if (string.IsNullOrEmpty(dto.Path)) throw new ArgumentNullException(nameof(dto.Path));
+            if (string.IsNullOrEmpty(dto.View)) throw new ArgumentNullException(nameof(dto.View));
+            if (string.IsNullOrEmpty(dto.ID)) throw new ArgumentNullException(nameof(dto.ID));
+
+            name = dto.Name;
+            path = dto.Path;
+            view = dto.View;
+            id = dto.ID;
         }
 
         public event EventHandler<string>? NameChanged;

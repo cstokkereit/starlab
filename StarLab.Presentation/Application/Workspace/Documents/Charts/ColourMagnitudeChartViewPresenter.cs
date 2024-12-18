@@ -4,7 +4,7 @@ using StarLab.Commands;
 
 namespace StarLab.Application.Workspace.Documents.Charts
 {
-    internal class ColourMagnitudeChartViewPresenter : ChildViewPresenter<IChartView, IDocumentController>, IChartViewPresenter
+    internal class ColourMagnitudeChartViewPresenter : ChildViewPresenter<IChartView, IDocumentController>, IChartViewPresenter, IChartController
     {
         public ColourMagnitudeChartViewPresenter(IChartView view, ICommandManager commands, IUseCaseFactory useCaseFactory, IConfigurationService configuration, IMapper mapper, IEventAggregator events)
             : base(view, commands, useCaseFactory, configuration, mapper, events)
@@ -19,6 +19,8 @@ namespace StarLab.Application.Workspace.Documents.Charts
             if (!Initialised)
             {
                 base.Initialise(controller);
+
+                View.Initialise(controller);
 
                 //View.MinimumSize = new Size(200, 200);
             }

@@ -30,9 +30,9 @@ namespace StarLab.Application.Workspace
             presenter = (IDockableViewPresenter)factory.CreatePresenter(config.Name, this);
 
             var view = factory.CreateView(config.Contents[0], config);
-            view.Controller.Attach((IViewController)presenter);
+            view.Controller.RegisterController((IViewController)presenter);
 
-            view.Controller.Attach((IViewController)presenter);
+            view.Controller.RegisterController((IViewController)presenter);
 
             if (view is Control control)
             {

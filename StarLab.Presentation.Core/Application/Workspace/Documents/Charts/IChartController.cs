@@ -3,8 +3,8 @@
     /// <summary>
     /// TODO
     /// </summary>
-    public interface IChartViewPresenter : IChildViewPresenter
+    public interface IChartController : IChildViewController
     {
-        
+
     }
 }

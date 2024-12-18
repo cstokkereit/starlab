@@ -1,7 +1,7 @@
 ﻿namespace StarLab.Application
 {
     /// <summary>
-    /// Base interface implemented by all presenters.
+    /// Defines the methods that are common to all presenters.
     /// </summary>
     public interface IPresenter : IController
     {

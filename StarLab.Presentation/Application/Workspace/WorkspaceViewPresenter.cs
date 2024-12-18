@@ -29,25 +29,6 @@ namespace StarLab.Application.Workspace
 
         public override string Name => Views.WORKSPACE + Constants.CONTROLLER;
 
-        public void AddChart(IDocument document)
-        {
-
-
-
-            
-
-            
-        }
-
-        public void AddTable(string path)
-        {
-
-
-            //var interactor = UseCaseFactory.CreateAddDocumentUseCase(this);
-            //var dto = Mapper.Map<IWorkspace, WorkspaceDTO>(workspace);
-            //interactor.Execute(dto, path);
-        }
-
         public void ClearActiveDocument()
         {
             workspace.ClearActiveDocument();
@@ -121,8 +102,6 @@ namespace StarLab.Application.Workspace
 
         public void Exit()
         {
-            // TODO - Save a backup?
-
             confirmExit = false;
             view.CloseAll();
             view.Close();
@@ -166,7 +145,7 @@ namespace StarLab.Application.Workspace
 
         public void OpenDocument(string id)
         {
-
+            Show(AppController.GetView(workspace.GetDocument(id)));
         }
 
         public void OpenWorkspace()
@@ -213,9 +192,15 @@ namespace StarLab.Application.Workspace
         public void Show(IView view)
         {
             if (view is IDockableView dockable)
+            {
                 this.view.Show(dockable);
+                workspace.UpdateLayout(this.view.GetLayout());
+                Events.Publish(new WorkspaceChangedEvent(workspace));
+            } 
             else
+            {
                 this.view.Show(view);
+            }   
         }
 
         public void Show(string id)
@@ -401,8 +386,10 @@ namespace StarLab.Application.Workspace
         private void OpenWorkspace(string filename)
         {
             if (string.IsNullOrEmpty(filename))
+            {
                 filename = view.ShowOpenFileDialog(StringResources.OpenWorkspace, StringResources.WorkspaceFileFilter);
-
+            }
+            
             var interactor = UseCaseFactory.CreateOpenWorkspaceUseCase(this);
 
             interactor.Execute(filename);

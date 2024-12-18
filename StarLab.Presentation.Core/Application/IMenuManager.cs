@@ -2,6 +2,9 @@
 
 namespace StarLab.Application
 {
+    /// <summary>
+    /// Defines the methods that can be used to create a menu.
+    /// </summary>
     public interface IMenuManager
     {
         /// <summary>
@@ -24,7 +27,7 @@ namespace StarLab.Application
         /// </summary>
         /// <param name="name">The name of the menu item.</param>
         /// <param name="text">The menu item text.</param>
-        /// <param name="image">The menu item image.</param>
+        /// <param name="image">The menu item <see cref="Image"/>.</param>
         void AddMenuItem(string name, string text, Image image);
 
         /// <summary>
@@ -32,7 +35,7 @@ namespace StarLab.Application
         /// </summary>
         /// <param name="name">The name of the menu item.</param>
         /// <param name="text">The menu item text.</param>
-        /// <param name="command">The command to invoke when the menu item is clicked.</param>
+        /// <param name="command">The <see cref="ICommand"/> that will be invoked when the menu item is clicked.</param>
         void AddMenuItem(string name, string text, ICommand command);
 
         /// <summary>
@@ -41,7 +44,7 @@ namespace StarLab.Application
         /// <param name="parent">The name of the parent menu item.</param>
         /// <param name="name">The name of the menu item.</param>
         /// <param name="text">The menu item text.</param>
-        /// <param name="image">The menu item image.</param>
+        /// <param name="image">The menu item <see cref="Image"/>.</param>
         void AddMenuItem(string parent, string name, string text, Image image);
 
         /// <summary>
@@ -50,7 +53,7 @@ namespace StarLab.Application
         /// <param name="parent">The name of the parent menu item.</param>
         /// <param name="name">The name of the menu item.</param>
         /// <param name="text">The menu item text.</param>
-        /// <param name="command">The command to invoke when the menu item is clicked.</param>
+        /// <param name="command">The <see cref="ICommand"/> that will be invoked when the menu item is clicked.</param>
         void AddMenuItem(string parent, string name, string text, ICommand command);
 
         /// <summary>
@@ -58,8 +61,8 @@ namespace StarLab.Application
         /// </summary>
         /// <param name="name">The name of the menu item.</param>
         /// <param name="text">The menu item text.</param>
-        /// <param name="image">The menu item image.</param>
-        /// <param name="command">The command to invoke when the menu item is clicked.</param>
+        /// <param name="image">The menu item <see cref="Image"/>.</param>
+        /// <param name="command">The <see cref="ICommand"/> that will be invoked when the menu item is clicked.</param>
         void AddMenuItem(string name, string text, Image image, ICommand command);
 
         /// <summary>
@@ -68,8 +71,8 @@ namespace StarLab.Application
         /// <param name="parent">The name of the parent menu item.</param>
         /// <param name="name">The name of the menu item.</param>
         /// <param name="text">The menu item text.</param>
-        /// <param name="image">The menu item image.</param>
-        /// <param name="command">The command to invoke when the menu item is clicked.</param>
+        /// <param name="image">The menu item <see cref="Image"/>.</param>
+        /// <param name="command">The <see cref="ICommand"/> that will be invoked when the menu item is clicked.</param>
         void AddMenuItem(string parent, string name, string text, Image image, ICommand command);
 
         /// <summary>

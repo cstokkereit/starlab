@@ -25,5 +25,14 @@ namespace StarLab.Application.Options
         public IChildViewController Controller => (IChildViewController)presenter;
 
         public SplitViewPanels Panel => panel;
+
+        /// <summary>
+        /// Initialises the view.
+        /// </summary>
+        /// <param name="controller">The <see cref="IApplicationController"/>.</param>
+        public void Initialise(IApplicationController controller)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Workspace xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ActiveDocument="">
+<Workspace xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ActiveDocument="c46d67b8-78b6-4d34-9527-3f479131f5f3">
   <Projects>
     <Project expanded="true" name="Yale Bright Star Catalog">
-      <Documents />
+      <Documents>
+        <Document id="577cb05b-c02f-499c-bc36-deb47aff9029" name="HR-Diagram-1" path="Workspace/Yale Bright Star Catalog/Charts/HRDiagrams" view="ColourMagnitudeChartView" />
+        <Document id="f7f6ec62-39d9-411e-ab6a-af547dca8dc5" name="HR-Diagram1" path="Workspace/Yale Bright Star Catalog/Charts/HRDiagrams" view="ColourMagnitudeChartView" />
+        <Document id="c46d67b8-78b6-4d34-9527-3f479131f5f3" name="HR-Diagram2" path="Workspace/Yale Bright Star Catalog/Charts/HRDiagrams" view="ColourMagnitudeChartView" />
+      </Documents>
       <Folders>
         <Folder expanded="true" path="Workspace/Yale Bright Star Catalog/Charts" />
         <Folder expanded="true" path="Workspace/Yale Bright Star Catalog/Charts/HRDiagrams" />
@@ -24,24 +28,35 @@
       </Folders>
     </Project>
   </Projects>
-  <Layout>
-    <![CDATA[<?xml version="1.0" encoding="utf-8"?>
+  <Layout><![CDATA[<?xml version="1.0" encoding="utf-8"?>
 <!--DockPanel configuration file. Author: Weifen Luo, all rights reserved.-->
 <!--!!! AUTOMATICALLY GENERATED FILE. DO NOT MODIFY !!!-->
-<DockPanel FormatVersion="1.0" DockLeftPortion="0.25" DockRightPortion="0.25" DockTopPortion="0.25" DockBottomPortion="0.25" ActiveDocumentPane="-1" ActivePane="0">
-  <Contents Count="1">
+<DockPanel FormatVersion="1.0" DockLeftPortion="0.25" DockRightPortion="0.25" DockTopPortion="0.25" DockBottomPortion="0.25" ActiveDocumentPane="1" ActivePane="1">
+  <Contents Count="4">
     <Content ID="0" PersistString="WorkspaceExplorerView" AutoHidePortion="0.25" IsHidden="False" IsFloat="False" />
+    <Content ID="1" PersistString="577cb05b-c02f-499c-bc36-deb47aff9029" AutoHidePortion="0.25" IsHidden="False" IsFloat="False" />
+    <Content ID="2" PersistString="f7f6ec62-39d9-411e-ab6a-af547dca8dc5" AutoHidePortion="0.25" IsHidden="False" IsFloat="False" />
+    <Content ID="3" PersistString="c46d67b8-78b6-4d34-9527-3f479131f5f3" AutoHidePortion="0.25" IsHidden="False" IsFloat="False" />
   </Contents>
-  <Panes Count="1">
+  <Panes Count="2">
     <Pane ID="0" DockState="DockRight" ActiveContent="0">
       <Contents Count="1">
         <Content ID="0" RefID="0" />
       </Contents>
     </Pane>
+    <Pane ID="1" DockState="Document" ActiveContent="3">
+      <Contents Count="3">
+        <Content ID="0" RefID="1" />
+        <Content ID="1" RefID="2" />
+        <Content ID="2" RefID="3" />
+      </Contents>
+    </Pane>
   </Panes>
   <DockWindows>
     <DockWindow ID="0" DockState="Document" ZOrderIndex="1">
-      <NestedPanes Count="0" />
+      <NestedPanes Count="1">
+        <Pane ID="0" RefID="1" PrevPane="-1" Alignment="Right" Proportion="0.5" />
+      </NestedPanes>
     </DockWindow>
     <DockWindow ID="1" DockState="DockLeft" ZOrderIndex="3">
       <NestedPanes Count="0" />
@@ -59,6 +74,5 @@
     </DockWindow>
   </DockWindows>
   <FloatWindows Count="0" />
-</DockPanel>]]>
-  </Layout>
+</DockPanel>]]></Layout>
 </Workspace>

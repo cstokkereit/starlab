@@ -1,7 +1,7 @@
 ﻿namespace StarLab.Application
 {
     /// <summary>
-    /// The string constants and identifiers used within the application.
+    /// A static class containing the <see cref="string"/> constants used within the application.
     /// </summary>
     public static class Constants
     {

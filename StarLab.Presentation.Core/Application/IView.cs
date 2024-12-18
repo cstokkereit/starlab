@@ -1,11 +1,23 @@
 ﻿namespace StarLab.Application
 {
+    /// <summary>
+    /// Defines the properties and methods that are common to all views. TODO
+    /// </summary>
     public interface IView
     {
+        /// <summary>
+        /// 
+        /// </summary>
         string ID { get; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         string Name { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         string Text { get; set; }
 
         /// <summary>
