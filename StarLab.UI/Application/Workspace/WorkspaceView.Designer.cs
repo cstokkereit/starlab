@@ -79,8 +79,8 @@
             dockPanel.Name = "dockPanel";
             dockPanel.Size = new Size(902, 435);
             dockPanel.TabIndex = 0;
-            dockPanel.ContentRemoved += dockPanel_DockContentRemoved;
-            dockPanel.ActiveDocumentChanged += dockPanel_ActiveDocumentChanged;
+            dockPanel.ContentRemoved += DockPanel_DockContentRemoved;
+            dockPanel.ActiveDocumentChanged += DockPanel_ActiveDocumentChanged;
             // 
             // toolStrip
             // 

@@ -1,7 +1,7 @@
 ﻿namespace StarLab.Application
 {
     /// <summary>
-    /// Represents a dialog box used to retrieve user input. 
+    /// Represents a dialog box used to retrieve user input.
     /// </summary>
     public interface IDialog
     {

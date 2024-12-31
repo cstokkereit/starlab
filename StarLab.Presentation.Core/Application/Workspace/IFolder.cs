@@ -1,27 +1,27 @@
 ﻿namespace StarLab.Application.Workspace
 {
     /// <summary>
-    /// 
+    /// Represents a project folder.
     /// </summary>
     public interface IFolder : ICollapsible
     {
         /// <summary>
-        /// 
+        /// TODO - This could be removed and replaced with a test.
         /// </summary>
         bool IsNew { get; }
 
         /// <summary>
-        /// 
+        /// Gets the folder key. 
         /// </summary>
         string Key { get; }
 
         /// <summary>
-        /// 
+        /// Gets the name of the folder.
         /// </summary>
         string Name { get; }
 
         /// <summary>
-        /// 
+        /// Getsthe parent folder key.
         /// </summary>
         string ParentKey { get; }
     }

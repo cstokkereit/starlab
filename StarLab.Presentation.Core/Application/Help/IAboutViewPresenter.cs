@@ -1,7 +1,7 @@
 ﻿namespace StarLab.Application.Help
 {
     /// <summary>
-    /// TODO
+    /// Defines the methods used by the <see cref="IAboutView"/> to communicate with its presenter.
     /// </summary>
     public interface IAboutViewPresenter : IChildViewPresenter
     {

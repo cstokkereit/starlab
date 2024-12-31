@@ -1,10 +1,12 @@
 ﻿namespace StarLab.Application.Workspace.Documents
 {
     /// <summary>
-    /// TODO
+    /// Specifies a document type.
     /// </summary>
     public enum DocumentType
     {
-        Any, Chart, Table
+        Any,
+        Chart,
+        Table
     }
 }

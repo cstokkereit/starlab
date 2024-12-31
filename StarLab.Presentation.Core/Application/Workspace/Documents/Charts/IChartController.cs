@@ -1,7 +1,7 @@
 ﻿namespace StarLab.Application.Workspace.Documents.Charts
 {
     /// <summary>
-    /// TODO
+    /// Represents a controller that can be used to control a chart.
     /// </summary>
     public interface IChartController : IChildViewController
     {

@@ -4,20 +4,33 @@ using WeifenLuo.WinFormsUI.Docking;
 
 namespace StarLab.Application.Workspace
 {
+    /// <summary>
+    /// A <see cref="DockContent"/> that implements the behaviour that is common to all dockable tool windows.
+    /// </summary>
     public sealed partial class ToolView : DockContent, IDockableView
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(ToolView));
+        private static readonly ILog log = LogManager.GetLogger(typeof(ToolView)); // The logger that will be used for writing log messages.
 
-        private readonly IDockableViewPresenter presenter;
+        private readonly IDockableViewPresenter presenter; // The presenter that controls the view.
 
-        private readonly string id;
+        private readonly string id; // The view ID.
 
-        public ToolView(string name, string text, IViewFactory factory, IViewConfiguration config)
+        /// <summary>
+        /// Initialises a new instance of the <see cref="ToolView"> class.
+        /// </summary>
+        /// <param name="name">The name of the tool window.</param>
+        /// <param name="text">The tool window text.</param>
+        /// <param name="factory">An <see cref="IPresentationFactory"/> that will be used to create the presenter and child view.</param>
+        /// <param name="configuration">An <see cref="IViewConfiguration"/> that holds the configuration information required to construct this view.</param>
+        /// <exception cref="ArgumentException"></exception>
+        public ToolView(string name, string text, IPresentationFactory factory, IViewConfiguration configuration)
         {
+            ArgumentNullException.ThrowIfNull(configuration, nameof(configuration));
             ArgumentNullException.ThrowIfNull(factory, nameof(factory));
-            ArgumentNullException.ThrowIfNull(config, nameof(config));
+            ArgumentException.ThrowIfNullOrEmpty(name, nameof(name));
+            ArgumentException.ThrowIfNullOrEmpty(text, nameof(text));
 
-            if (config.Contents.Count > 1) throw new ArgumentException(); // TODO
+            if (configuration.Contents.Count > 1) throw new ArgumentException(); // TODO
 
             InitializeComponent();
 
@@ -27,9 +40,9 @@ namespace StarLab.Application.Workspace
    
             SuspendLayout();
 
-            presenter = (IDockableViewPresenter)factory.CreatePresenter(config.Name, this);
+            presenter = (IDockableViewPresenter)factory.CreatePresenter(configuration.Name, this);
 
-            var view = factory.CreateView(config.Contents[0], config);
+            var view = factory.CreateView(configuration.Contents[0], configuration);
             view.Controller.RegisterController((IViewController)presenter);
 
             view.Controller.RegisterController((IViewController)presenter);
@@ -43,8 +56,14 @@ namespace StarLab.Application.Workspace
             ResumeLayout();
         }
 
+        /// <summary>
+        /// Gets the <see cref="IViewController"> that controls this view.
+        /// </summary>
         public IViewController Controller => (IViewController)presenter;
 
+        /// <summary>
+        /// Gets the view ID.
+        /// </summary>
         public string ID => id;
 
         /// <summary>
@@ -60,9 +79,9 @@ namespace StarLab.Application.Workspace
         }
 
         /// <summary>
-        /// 
+        /// Shows the tool window in the specified <see cref="DockPanel"/>.
         /// </summary>
-        /// <param name="dockPanel"></param>
+        /// <param name="dockPanel">The <see cref="DockPanel"/> that will contain the tool window.</param>
         public new void Show(DockPanel dockPanel)
         {
             if (DockState == DockState.Hidden || DockState == DockState.Unknown)
@@ -84,52 +103,68 @@ namespace StarLab.Application.Workspace
         }
 
         /// <summary>
-        /// Displays a message box with the specified text, caption, buttons and icon.
+        /// Displays a <see cref="MessageBox"/> with the specified options.
         /// </summary>
         /// <param name="caption">The message box caption.</param>
         /// <param name="message">The message text.</param>
-        /// <param name="buttons">A <see cref="MessageBoxButtons"/> that specifies which buttons to include on the meeage box.</param>
-        /// <param name="icon">A <see cref="MessageBoxIcon"/> that specifies the icon to include on the meeage box.</param>
-        /// <returns>A <see cref="DialogResult"/> that identifies the button that was clicked.</returns>
-        public DialogResult ShowMessage(string caption, string message, MessageBoxButtons buttons, MessageBoxIcon icon)
+        /// <param name="type">An <see cref="InteractionType"/> that specifies the type of message being displayed.</param>
+        /// <param name="responses">An <see cref="InteractionResponses"/> that specifies the available responses.</param>
+        /// <returns>An <see cref="InteractionResult"/> that identifies the button that was clicked.</returns>
+        public InteractionResult ShowMessage(string caption, string message, InteractionType type, InteractionResponses responses)
         {
-            return DialogController.ShowMessage(this, caption, message, buttons, icon);
+            return DialogController.ShowMessage(this, caption, message, type, responses);
         }
 
         /// <summary>
-        /// Displays a message box with the specified text, caption and icon.
+        /// Displays a <see cref="MessageBox"/> with the specified options.
         /// </summary>
         /// <param name="caption">The message box caption.</param>
         /// <param name="message">The message text.</param>
-        /// <param name="icon">A <see cref="MessageBoxIcon"/> that specifies the icon to include on the meeage box.</param>
-        public void ShowMessage(string caption, string message, MessageBoxIcon icon)
+        /// <param name="responses">An <see cref="InteractionResponses"/> that specifies the available responses.</param>
+        /// <returns>An <see cref="InteractionResult"/> that identifies the chosen response.</returns>
+        public InteractionResult ShowMessage(string caption, string message, InteractionResponses responses)
         {
-            DialogController.ShowMessage(this, caption, message, icon);
+            return DialogController.ShowMessage(this, caption, message, responses);
         }
 
         /// <summary>
-        /// 
+        /// Displays a <see cref="MessageBox"/> with the specified options.
         /// </summary>
-        /// <param name="title"></param>
-        /// <param name="filter"></param>
-        /// <returns></returns>
+        /// <param name="caption">The message box caption.</param>
+        /// <param name="message">The message text.</param>
+        /// <returns>An <see cref="InteractionResult"/> that identifies the chosen response.</returns>
+        public InteractionResult ShowMessage(string caption, string message)
+        {
+            return DialogController.ShowMessage(this, caption, message);
+        }
+
+        /// <summary>
+        /// Displays an <see cref="OpenFileDialog"/> with the specified options.
+        /// </summary>
+        /// <param name="title">The dialog title.</param>
+        /// <param name="filter">The file name filter.</param>
+        /// <returns>The filename selected in the dialog.</returns>
         public string ShowOpenFileDialog(string title, string filter)
         {
             return DialogController.ShowOpenFileDialog(this, title, filter);
         }
 
         /// <summary>
-        /// 
+        /// Displays a <see cref="SaveFileDialog"/> with the specified options.
         /// </summary>
-        /// <param name="title"></param>
-        /// <param name="filter"></param>
-        /// <param name="extension"></param>
-        /// <returns></returns>
+        /// <param name="title">The dialog title.</param>
+        /// <param name="filter">The file name filter.</param>
+        /// <param name="extension">The default file extension.</param>
+        /// <returns>The filename selected in the dialog.</returns>
         public string ShowSaveFileDialog(string title, string filter, string extension)
         {
             return DialogController.ShowSaveFileDialog(this, title, filter, extension);
         }
 
+        /// <summary>
+        /// Gets the persistence data that will be saved with the layout.
+        /// </summary>
+        /// <returns>The view ID.</returns>
         protected override string GetPersistString()
         {
             return ID;

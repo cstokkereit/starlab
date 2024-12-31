@@ -1,7 +1,7 @@
 ﻿namespace StarLab.Application.Workspace.Documents.Charts
 {
     /// <summary>
-    /// TODO
+    /// Defines the methods used by the <see cref="IChartSettingsView"/> to communicate with its presenter.
     /// </summary>
     public interface IChartSettingsViewPresenter : IChildViewPresenter
     {

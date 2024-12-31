@@ -1,26 +1,26 @@
 ﻿namespace StarLab.Application.Workspace
 {
     /// <summary>
-    /// TODO
+    /// Defines the methods used by the <see cref="IWorkspaceView"/> to communicate with its presenter.
     /// </summary>
     public interface IWorkspaceViewPresenter : IDialogViewPresenter
     {
         /// <summary>
-        /// 
+        /// Clears the active document.
         /// </summary>
         void ClearActiveDocument();
 
         /// <summary>
-        /// 
+        /// Returns the <see cref="IDockableView"/> with the specified ID if it exists. If not, a new <see cref="IDockableView"/> with the specified ID will be created.
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <param name="id">The ID of the required <see cref="IDockableView"/>.</param>
+        /// <returns>The <see cref="IDockableView"/> with the specified ID.</returns>
         IDockableView CreateView(string id);
 
         /// <summary>
-        /// 
+        /// Makes the document with the specified ID the active document.
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">The ID of the document.</param>
         void SetActiveDocument(string id);
     }
 }

@@ -2,6 +2,7 @@
 using StarLab.Application.Configuration;
 using StarLab.Commands;
 using System.Diagnostics;
+using System.Drawing.Printing;
 
 namespace StarLab.Application
 {
@@ -39,18 +40,46 @@ namespace StarLab.Application
 
         protected TView View => view;
 
-        protected DialogResult ShowMessage(string caption, string message, MessageBoxButtons buttons, MessageBoxIcon icon)
+        /// <summary>
+        /// Displays a <see cref="MessageBox"/> with the specified options.
+        /// </summary>
+        /// <param name="caption">The message box caption.</param>
+        /// <param name="message">The message text.</param>
+        /// <param name="type">An <see cref="InteractionType"/> that specifies the type of message being displayed.</param>
+        /// <param name="responses">An <see cref="InteractionResponses"/> that specifies the available responses.</param>
+        /// <returns>An <see cref="InteractionResult"/> that identifies the button that was clicked.</returns>
+        protected InteractionResult ShowMessage(string caption, string message, InteractionType type, InteractionResponses responses)
         {
             Debug.Assert(parentController != null);
 
-            return parentController.ShowMessage(caption, message, buttons, icon);
+            return parentController.ShowMessage(caption, message, type, responses);
         }
 
-        protected void ShowMessage(string caption, string message, MessageBoxIcon icon)
+        /// <summary>
+        /// Displays a <see cref="MessageBox"/> with the specified options.
+        /// </summary>
+        /// <param name="caption">The message box caption.</param>
+        /// <param name="message">The message text.</param>
+        /// <param name="responses">An <see cref="InteractionResponses"/> that specifies the available responses.</param>
+        /// <returns>An <see cref="InteractionResult"/> that identifies the chosen response.</returns>
+        protected InteractionResult ShowMessage(string caption, string message, InteractionResponses responses)
         {
             Debug.Assert(parentController != null);
 
-            parentController.ShowMessage(caption, message, icon);
+            return parentController.ShowMessage(caption, message, responses);
+        }
+
+        /// <summary>
+        /// Displays a <see cref="MessageBox"/> with the specified options.
+        /// </summary>
+        /// <param name="caption">The message box caption.</param>
+        /// <param name="message">The message text.</param>
+        /// <returns>An <see cref="InteractionResult"/> that identifies the chosen response.</returns>
+        protected InteractionResult ShowMessage(string caption, string message)
+        {
+            Debug.Assert(parentController != null);
+
+            return parentController.ShowMessage(caption, message);
         }
 
         protected string ShowOpenFileDialog(string title, string filter)

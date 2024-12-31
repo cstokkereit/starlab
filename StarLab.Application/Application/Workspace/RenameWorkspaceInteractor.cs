@@ -33,7 +33,7 @@ namespace StarLab.Application.Workspace
                     }
                     catch (Exception e)
                     {
-                        OutputPort.ShowErrorMessage(e.Message);
+                        OutputPort.ShowMessage(Resources.StarLab, e.Message, InteractionType.Error, InteractionResponses.OK);
                         dto.FileName = filename;
                     }
                     finally

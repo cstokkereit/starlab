@@ -5,18 +5,19 @@ using StarLab.Application;
 
 namespace StarLab
 {
+    /// <summary>
+    /// A static class that contains the entry point for the application.
+    /// </summary>
     internal static class Program
     {
         /// <summary>
-        ///  The main entry point for the application.
+        ///  The entry point for the application.
         /// </summary>
         [STAThread]
         static void Main()
         {
             XmlConfigurator.Configure();
 
-            // To customize application configuration such as set high DPI settings or default font,
-            // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
 
             var container = new WindsorContainer();

@@ -9,21 +9,34 @@ namespace StarLab.Application.Workspace.Documents.Charts
     //https://scottplot.net/cookbook/5.0/
     // https://astronomy.stackexchange.com/questions/39610/is-there-a-formula-for-absolute-magnitude-that-does-not-contain-an-apparent-magn
     // https://github.com/casaluca/bolometric-corrections
+
+    /// <summary>
+    /// A <see cref="UserControl"/> that implements the <see cref="IChartView"/> interface used to control the behaviour that is specific to a chart document.
+    /// </summary>
     public partial class ChartView : UserControl, IChartView
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(ChartView));
+        private static readonly ILog log = LogManager.GetLogger(typeof(ChartView)); // The logger that will be used for writing log messages.
 
-        private readonly IChartViewPresenter presenter;
+        private readonly IChartViewPresenter presenter; // The presenter that controls the view.
 
-        private readonly SplitViewPanels panel;
+        private readonly SplitViewPanels panel; // The panel that will contain the view.
 
+        readonly ScottPlot.Plottables.Rectangle RectanglePlot; //
 
-        readonly ScottPlot.Plottables.Rectangle RectanglePlot;
+        private Scatter scatter; //
 
-        private Scatter scatter;
-
-        public ChartView(IContentConfiguration config, IViewConfiguration parent, IViewFactory presenterFactory)
+        /// <summary>
+        /// Initialises a new instance of the <see cref="ChartView"> class.
+        /// </summary>
+        /// <param name="configuration">An <see cref="IContentConfiguration"/> that holds the configuration information required to construct this view.</param>
+        /// <param name="parent">An <see cref="IViewConfiguration"/> that holds the configuration information that was used to construct the parent view.</param>
+        /// <param name="factory">An <see cref="IPresentationFactory"/> that will be used to create the presenter and child view.</param>
+        public ChartView(IContentConfiguration configuration, IViewConfiguration parent, IPresentationFactory factory)
         {
+            ArgumentNullException.ThrowIfNull(configuration, nameof(configuration));
+            ArgumentNullException.ThrowIfNull(factory, nameof(factory));
+            ArgumentNullException.ThrowIfNull(parent, nameof(parent));
+
             // Scale points with zoom
             // Dragable axis lines
             // scale points according to number of stars
@@ -35,15 +48,15 @@ namespace StarLab.Application.Workspace.Documents.Charts
 
             Name = Views.CHART;
 
-            panel = (SplitViewPanels)config.Panel;
+            panel = (SplitViewPanels)configuration.Panel;
 
-            presenter = (IChartViewPresenter)presenterFactory.CreatePresenter(parent, this);
-
-
+            presenter = (IChartViewPresenter)factory.CreatePresenter(parent, this);
 
 
 
-            // This is all temporary - calculations etc need to happen in a worker thread
+
+
+            // TODO - This is all temporary - calculations etc need to happen in a worker thread
 
             // add a rectangle we can use as a selection indicator
             RectanglePlot = formsPlot.Plot.Add.Rectangle(0, 0, 0, 0);
@@ -55,10 +68,20 @@ namespace StarLab.Application.Workspace.Documents.Charts
             formsPlot.MouseUp += FormsPlot1_MouseUp;
         }
 
+        /// <summary>
+        /// Gets the <see cref="IChildViewController"> that controls this view.
+        /// </summary>
         public IChildViewController Controller => (IChildViewController)presenter;
 
+        /// <summary>
+        /// Gets the preferred panel, if any, in which to display the view.
+        /// </summary>
         public SplitViewPanels Panel => panel;
 
+        /// <summary>
+        /// Initialises the view.
+        /// </summary>
+        /// <param name="controller">The <see cref="IApplicationController"/>.</param>
         public void Initialise(IApplicationController controller)
         {
             // This is all temporary

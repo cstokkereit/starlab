@@ -38,7 +38,7 @@
             Name = "View";
             StartPosition = FormStartPosition.CenterParent;
             Text = "View";
-            FormClosing += OnFormClosing;
+            FormClosing += Form_Closing;
             ResumeLayout(false);
         }
 

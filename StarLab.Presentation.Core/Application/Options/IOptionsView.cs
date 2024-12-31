@@ -1,7 +1,7 @@
 ﻿namespace StarLab.Application.Options
 {
     /// <summary>
-    /// TODO
+    /// Defines the properties and methods used by the <see cref="IOptionsViewPresenter"/> to control the behaviour of the Options dialog.
     /// </summary>
     public interface IOptionsView : IChildView
     {

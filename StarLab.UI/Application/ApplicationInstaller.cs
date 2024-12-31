@@ -7,8 +7,16 @@ using StarLab.Commands;
 
 namespace StarLab.Application
 {
+    /// <summary>
+    /// A class for registering the injectable application dependencies with the WindsorContainer.
+    /// </summary>
     internal class ApplicationInstaller : IWindsorInstaller
     {
+        /// <summary>
+        /// Registers all of the application dependencies with the <see cref="IWindsorContainer"/>.
+        /// </summary>
+        /// <param name="container">An <see cref="IWindsorContainer"/> that will be used to register the dependencies.</param>
+        /// <param name="store">An <see cref="IConfigurationStore"/> that provides configuration information.</param>
         public void Install(IWindsorContainer container, IConfigurationStore store)
         {
             InstallMapperClasses(container);
@@ -18,6 +26,10 @@ namespace StarLab.Application
             InstallUserInterfaceClasses(container);
         }
 
+        /// <summary>
+        /// Registers the dependencies from assemblies within the application layer with the <see cref="IWindsorContainer"/>.
+        /// </summary>
+        /// <param name="container">The <see cref="IWindsorContainer"/> that will be used to register the dependencies.</param>
         private void InstallApplicationClasses(IWindsorContainer container)
         {
             container.Register(
@@ -27,6 +39,10 @@ namespace StarLab.Application
             );
         }
 
+        /// <summary>
+        /// Registers the dependencies from assemblies within the infrastructure layer with the <see cref="IWindsorContainer"/>.
+        /// </summary>
+        /// <param name="container">The <see cref="IWindsorContainer"/> that will be used to register the dependencies.</param>
         private void InstallInfrastructureClasses(IWindsorContainer container)
         {
             container.Register(
@@ -36,6 +52,10 @@ namespace StarLab.Application
             );
         }
 
+        /// <summary>
+        /// Registers any AutoMapper profiles that it finds within the solution with the <see cref="IWindsorContainer"/>.
+        /// </summary>
+        /// <param name="container">The <see cref="IWindsorContainer"/> that will be used to register the dependencies.</param>
         private void InstallMapperClasses(IWindsorContainer container)
         {
             // Register IConfigurationProvider with all registered profiles
@@ -49,11 +69,13 @@ namespace StarLab.Application
             }).LifestyleSingleton());
 
             // Register IMapper with registered IConfigurationProvider
-            container.Register(
-                Component.For<IMapper>().UsingFactoryMethod(kernel => new Mapper(kernel.Resolve<IConfigurationProvider>(), kernel.Resolve))
-            );
+            container.Register(Component.For<IMapper>().UsingFactoryMethod(kernel => new Mapper(kernel.Resolve<IConfigurationProvider>(), kernel.Resolve)));
         }
 
+        /// <summary>
+        /// Registers the dependencies from assemblies within the presentation layer with the <see cref="IWindsorContainer"/>.
+        /// </summary>
+        /// <param name="container">The <see cref="IWindsorContainer"/> that will be used to register the dependencies.</param>
         private void InstallPresentationClasses(IWindsorContainer container)
         {
             container.Register(
@@ -64,6 +86,10 @@ namespace StarLab.Application
             );
         }
 
+        /// <summary>
+        /// Registers the dependencies from assemblies within the user interface layer with the <see cref="IWindsorContainer"/>.
+        /// </summary>
+        /// <param name="container">The <see cref="IWindsorContainer"/> that will be used to register the dependencies.</param>
         private void InstallUserInterfaceClasses(IWindsorContainer container)
         {
             container.Register(

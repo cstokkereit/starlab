@@ -178,9 +178,9 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
             AppController.GetWorkspaceController().RenameWorkspace(name);
         }
 
-        public void ShowErrorMessage(string message)
+        public void ShowMessage(string message)
         {
-            ShowMessage(StringResources.StarLab, message, MessageBoxIcon.Error);
+            ShowMessage(StringResources.StarLab, message, InteractionType.Error, InteractionResponses.OK);
         }
 
         public void Synchronise()

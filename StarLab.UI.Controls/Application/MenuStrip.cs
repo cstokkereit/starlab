@@ -2,6 +2,9 @@
 
 namespace StarLab.Application
 {
+    /// <summary>
+    /// TODO
+    /// </summary>
     public class MenuStrip : System.Windows.Forms.MenuStrip
     {
         private Dictionary<string, ToolStripMenuItem> menuItems = new Dictionary<string, ToolStripMenuItem>(); // A dictionary containing the menu items indexed by name.

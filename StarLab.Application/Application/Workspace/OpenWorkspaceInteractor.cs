@@ -6,7 +6,7 @@ namespace StarLab.Application.Workspace
 {
     internal class OpenWorkspaceInteractor : UseCaseInteractor<IWorkspaceOutputPort>, IOpenWorkspaceUseCase
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(OpenWorkspaceInteractor));
+        private static readonly ILog log = LogManager.GetLogger(typeof(OpenWorkspaceInteractor)); // The logger that will be used for writing log messages.
 
         private readonly ISerialisationService serialisationService;
 
@@ -28,12 +28,12 @@ namespace StarLab.Application.Workspace
             }
             catch (FileNotFoundException)
             {
-                OutputPort.ShowErrorMessage(string.Format(Resources.FileNotFoundMessage, filename));
+                OutputPort.ShowMessage(Resources.StarLab, string.Format(Resources.FileNotFoundMessage, filename), InteractionType.Error, InteractionResponses.OK);
             }
             catch (Exception e)
             {
                 var message = e.InnerException != null ? e.InnerException.Message : string.Empty;
-                OutputPort.ShowErrorMessage(string.Format(Resources.WorkspaceCouldNotBeOpenedMessage, message));
+                OutputPort.ShowMessage(Resources.StarLab, string.Format(Resources.WorkspaceCouldNotBeOpenedMessage, message), InteractionType.Error, InteractionResponses.OK);
                 log.Error(e.Message, e);
             }
         }

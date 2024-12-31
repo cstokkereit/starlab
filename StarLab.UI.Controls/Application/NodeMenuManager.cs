@@ -2,6 +2,9 @@
 
 namespace StarLab.Application
 {
+    /// <summary>
+    /// TODO
+    /// </summary>
     public class NodeMenuManager : IMenuManager
     {
         private readonly List<AddMenuItemCommand> commands = new List<AddMenuItemCommand>();

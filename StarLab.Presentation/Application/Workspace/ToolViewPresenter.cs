@@ -35,14 +35,19 @@ namespace StarLab.Application.Workspace
             this.view.Show(view);
         }
 
-        public DialogResult ShowMessage(string caption, string message, MessageBoxButtons buttons, MessageBoxIcon icon)
+        public InteractionResult ShowMessage(string caption, string message, InteractionType type, InteractionResponses responses)
         {
-            return view.ShowMessage(caption, message, buttons, icon);
+            return view.ShowMessage(caption, message, type, responses);
         }
 
-        public void ShowMessage(string caption, string message, MessageBoxIcon icon)
+        public InteractionResult ShowMessage(string caption, string message, InteractionResponses responses)
         {
-            view.ShowMessage(caption, message, icon);
+            return view.ShowMessage(caption, message, responses);
+        }
+
+        public InteractionResult ShowMessage(string caption, string message)
+        {
+            return view.ShowMessage(caption, message);
         }
 
         public string ShowOpenFileDialog(string title, string filter)

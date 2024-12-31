@@ -1,5 +1,8 @@
 ﻿namespace StarLab.Application
 {
+    /// <summary>
+    /// TODO
+    /// </summary>
     public class ContextMenuManager
     {
         private IDictionary<string, NodeMenuManager> managers = new Dictionary<string, NodeMenuManager>();

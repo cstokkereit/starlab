@@ -5,7 +5,7 @@ using StarLab.Commands;
 namespace StarLab.Application
 {
     /// <summary>
-    /// Represents a controller that creates, initialises and manages the views that comprise the user interface of the application.
+    /// Represents a controller that can be used to create, initialise and manage the views that comprise the user interface of the application.
     /// </summary>
     public interface IApplicationController : IController
     {

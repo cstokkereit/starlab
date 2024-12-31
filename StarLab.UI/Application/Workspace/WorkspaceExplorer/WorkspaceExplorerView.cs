@@ -5,23 +5,25 @@ using StarLab.Commands;
 namespace StarLab.Application.Workspace.WorkspaceExplorer
 {
     /// <summary>
-    /// 
+    /// A <see cref="UserControl"/> that implements the behaviour that is specific to the Workspace Explorer tool.
     /// </summary>
     public partial class WorkspaceExplorerView : UserControl, IWorkspaceExplorerView
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(WorkspaceExplorerView));
+        private static readonly ILog log = LogManager.GetLogger(typeof(WorkspaceExplorerView)); // The logger that will be used for writing log messages.
 
-        private readonly Dictionary<string, TreeNode> nodes = new Dictionary<string, TreeNode>();
+        private readonly Dictionary<string, TreeNode> nodes = new Dictionary<string, TreeNode>(); // A dictionary containing the tree nodes indexed by node key.
 
-        private readonly IWorkspaceExplorerViewPresenter presenter;
+        private readonly IWorkspaceExplorerViewPresenter presenter; // The presenter that controls the view.
 
-        private readonly SplitViewPanels panel;
+        private readonly SplitViewPanels panel; // The panel that will contain the view.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="WorkspaceExplorerView"/> class.
         /// </summary>
-        /// <param name="presenterFactory">An <see cref="IPresenterFactory"/> that is used to create the <see cref="IPresenter"/> that controls this view.</param>
-        public WorkspaceExplorerView(IContentConfiguration configuration, IViewConfiguration parent, IViewFactory factory)
+        /// <param name="configuration">An <see cref="IContentConfiguration"/> that holds the configuration information required to construct this view.</param>
+        /// <param name="parent">An <see cref="IViewConfiguration"/> that holds the configuration information that was used to construct the parent view.</param>
+        /// <param name="factory">An <see cref="IPresentationFactory"/> that will be used to create the presenter and child view.</param>
+        public WorkspaceExplorerView(IContentConfiguration configuration, IViewConfiguration parent, IPresentationFactory factory)
         {
             InitializeComponent();
 
@@ -34,12 +36,26 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
             treeView.ContextMenuStrip = new ContextMenuStrip();
         }
 
+        /// <summary>
+        /// Gets the <see cref="IChildViewController"> that controls this view.
+        /// </summary>
         public IChildViewController Controller => (IChildViewController)presenter;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public string DefaultLocation => Constants.DOCK_RIGHT; // TODO - This belongs in the parent configuration
 
+        /// <summary>
+        /// Gets the preferred panel, if any, in which to display the view.
+        /// </summary>
         public SplitViewPanels Panel => panel;
 
+        /// <summary>
+        /// Adds an <see cref="Image"/> to the list of available images.
+        /// </summary>
+        /// <param name="image">The <see cref="Image"/> to be added.</param>
+        /// <returns>The index that can be used to select the <see cref="Image"/> from the list of available images.</returns>
         public int AddImage(Image image)
         {
             int index = imageList.Images.Count;
@@ -47,6 +63,13 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
             return index;
         }
 
+        /// <summary>
+        /// Adds a document node to the tree view that displays the structure of the workspace.
+        /// </summary>
+        /// <param name="key">The node key.</param>
+        /// <param name="parentKey">The parent node key.</param>
+        /// <param name="text">The node text.</param>
+        /// <param name="imageIndex">The index of the node image.</param>
         public void AddDocumentNode(string key, string parentKey, string text, int imageIndex)
         {
             var parent = nodes[parentKey];
@@ -55,6 +78,14 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
             nodes.Add(key, node);
         }
 
+        /// <summary>
+        /// Adds a folder node to the tree view that displays the structure of the workspace.
+        /// </summary>
+        /// <param name="key">The node key.</param>
+        /// <param name="parentKey">The parent node key.</param>
+        /// <param name="text">The node text.</param>
+        /// <param name="imageIndex">The index of the image to use when the node is not selected.</param>
+        /// <param name="selectedImageIndex">The index of the image to use when the node is selected.</param>
         public void AddFolderNode(string key, string parentKey, string text, int imageIndex, int selectedImageIndex)
         {
             var parent = nodes[parentKey];
@@ -63,6 +94,13 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
             nodes.Add(key, node);
         }
 
+        /// <summary>
+        /// Adds a project node to the tree view that displays the structure of the workspace.
+        /// </summary>
+        /// <param name="key">The node key.</param>
+        /// <param name="parentKey">The parent node key.</param>
+        /// <param name="text">The node text.</param>
+        /// <param name="imageIndex">The index of the node image.</param>
         public void AddProjectNode(string key, string parentKey, string text, int imageIndex)
         {
             var parent = nodes[parentKey];
@@ -71,6 +109,12 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
             nodes.Add(key, node);
         }
 
+        /// <summary>
+        /// Adds the workspace node to the tree view that displays the structure of the workspace.
+        /// </summary>
+        /// <param name="key">The node key.</param>
+        /// <param name="text">The node text.</param>
+        /// <param name="imageIndex">The index of the node image.</param>
         public void AddWorkspaceNode(string key, string text, int imageIndex)
         {
             var node = treeView.Nodes.Add(key, text, imageIndex, imageIndex);
@@ -91,7 +135,7 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
         }
 
         /// <summary>
-        /// 
+        /// Clears the tree view.
         /// </summary>
         public void Clear()
         {
@@ -107,11 +151,20 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
             nodes.Clear();
         }
 
+        /// <summary>
+        /// Collapses the node with the specified key.
+        /// </summary>
+        /// <param name="key">The key that identifies the node.</param>
         public void CollapseNode(string key)
         {
             if (nodes.ContainsKey(key)) nodes[key].Collapse();
         }
 
+        /// <summary>
+        /// Creates an <see cref="IMenuManager"> that controls the context menu for the specified document.
+        /// </summary>
+        /// <param name="document">The document ID.</param>
+        /// <returns>An <see cref="IMenuManager"/> that can be used to configure the context menu.</returns>
         public IMenuManager CreateDocumentMenuManager(string document)
         {
             var manager = new NodeMenuManager(document, Constants.DOCUMENT);
@@ -119,6 +172,11 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
             return manager;
         }
 
+        /// <summary>
+        /// Creates an <see cref="IMenuManager"> that controls the context menu for the specified folder.
+        /// </summary>
+        /// <param name="folder">The folder key.</param>
+        /// <returns>An <see cref="IMenuManager"/> that can be used to configure the context menu.</returns>
         public IMenuManager CreateFolderMenuManager(string folder)
         {
             var manager = new NodeMenuManager(folder, Constants.FOLDER);
@@ -126,6 +184,11 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
             return manager;
         }
 
+        /// <summary>
+        /// Creates an <see cref="IMenuManager"> that controls the context menu for the specified project.
+        /// </summary>
+        /// <param name="project">The project key.</param>
+        /// <returns>An <see cref="IMenuManager"/> that can be used to configure the context menu.</returns>
         public IMenuManager CreateProjectMenuManager(string project)
         {
             var manager = new NodeMenuManager(project, Constants.PROJECT);
@@ -133,6 +196,10 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
             return manager;
         }
 
+        /// <summary>
+        /// Creates an <see cref="IMenuManager"> that controls the context menu for the workspace.
+        /// </summary>
+        /// <returns>An <see cref="IMenuManager"/> that can be used to configure the context menu.</returns>
         public IMenuManager CreateWorkspaceMenuManager()
         {
             var manager = new NodeMenuManager(Constants.WORKSPACE);
@@ -140,6 +207,10 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
             return manager;
         }
 
+        /// <summary>
+        /// Initiates editing of the specified tree node label.
+        /// </summary>
+        /// <param name="key">The node key.</param>
         public void EditNodeLabel(string key)
         {
             if (nodes.ContainsKey(key))
@@ -149,31 +220,58 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
             }
         }
 
+        /// <summary>
+        /// Expands the node with the specified key.
+        /// </summary>
+        /// <param name="key">The key that identifies the node.</param>
         public void ExpandNode(string key)
         {
             if (nodes.ContainsKey(key)) nodes[key].Expand();
         }
 
+        /// <summary>
+        /// Gets the key of the currently selected node.
+        /// </summary>
+        /// <returns>The key that identifies the selected node.</returns>
         public string GetSelectedNode()
         {
             return treeView.SelectedNode == null ? string.Empty : treeView.SelectedNode.Name;
         }
 
+        /// <summary>
+        /// Initialises the view.
+        /// </summary>
+        /// <param name="controller">The <see cref="IApplicationController"/>.</param>
         public void Initialise(IApplicationController controller)
         {
-
+            // Do Nothing
         }
 
+        /// <summary>
+        /// Selects the node with the specified key.
+        /// </summary>
+        /// <param name="key">The node key.</param>
         public void SelectNode(string key)
         {
             if (nodes.ContainsKey(key)) treeView.SelectedNode = nodes[key];
         }
 
+        /// <summary>
+        /// Sets the text displayed in the label of the specified node.
+        /// </summary>
+        /// <param name="key">The node key.</param>
+        /// <param name="text">The label text.</param>
         public void SetNodeText(string key, string text)
         {
             if (nodes.ContainsKey(key)) nodes[key].Text = text;
         }
 
+        /// <summary>
+        /// Updates the images to be used for the selected and unselected states of the specified node.
+        /// </summary>
+        /// <param name="key">The node key.</param>
+        /// <param name="imageIndex">The index of the image to use when the node is not selected.</param>
+        /// <param name="selectedImageIndex">The index of the image to use when the node is selected.</param>
         public void UpdateNodeState(string key, int imageIndex, int selectedImageIndex)
         {
             if (nodes.ContainsKey(key))
@@ -184,6 +282,11 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
             }
         }
 
+        /// <summary>
+        /// Event handler for the <see cref="TreeView"/>.AfterCollapse event.
+        /// </summary>
+        /// <param name="sender">The <see cref="object"> that was the originator of the event.</param>
+        /// <param name="e">A <see cref="TreeViewEventArgs"/> that provides context for the event.</param>
         private void TreeView_AfterCollapse(object sender, TreeViewEventArgs e)
         {
             if (e != null && e.Node != null)
@@ -209,6 +312,11 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
             }
         }
 
+        /// <summary>
+        /// Event handler for the <see cref="TreeView"/>.AfterExpand event.
+        /// </summary>
+        /// <param name="sender">The <see cref="object"> that was the originator of the event.</param>
+        /// <param name="e">A <see cref="TreeViewEventArgs"/> that provides context for the event.</param>
         private void TreeView_AfterExpand(object sender, TreeViewEventArgs e)
         {
             if (e != null && e.Node != null)
@@ -234,6 +342,11 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
             }
         }
 
+        /// <summary>
+        /// Event handler for the <see cref="TreeView"/>.AfterLabelEdit event.
+        /// </summary>
+        /// <param name="sender">The <see cref="object"> that was the originator of the event.</param>
+        /// <param name="e">A <see cref="NodeLabelEditEventArgs"/> that provides context for the event.</param>
         private void TreeView_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)
         {
             if (e != null && e.Label != null && e.Node != null)
@@ -264,24 +377,38 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
                 {
                     e.CancelEdit = true;
 
-                    if (!string.IsNullOrEmpty(e.Label))
-                        presenter.ShowErrorMessage(ex.Message);
+                    if (!string.IsNullOrEmpty(e.Label)) presenter.ShowMessage(ex.Message);
 
                     e.Node.BeginEdit();
                 }
             }
         }
 
+        /// <summary>
+        /// Event handler for the <see cref="TreeView"/>.Enter event.
+        /// </summary>
+        /// <param name="sender">The <see cref="object"> that was the originator of the event.</param>
+        /// <param name="e">A <see cref="EventArgs"/> that provides context for the event.</param>
         private void TreeView_Enter(object sender, EventArgs e)
         {
             presenter.ViewActivated();
         }
 
+        /// <summary>
+        /// Event handler for the <see cref="TreeView"/>.Leave event.
+        /// </summary>
+        /// <param name="sender">The <see cref="object"> that was the originator of the event.</param>
+        /// <param name="e">A <see cref="EventArgs"/> that provides context for the event.</param>
         private void TreeView_Leave(object sender, EventArgs e)
         {
             presenter.ViewDeactivated();
         }
 
+        /// <summary>
+        /// Event handler for the <see cref="TreeView"/>.MouseDown event.
+        /// </summary>
+        /// <param name="sender">The <see cref="object"> that was the originator of the event.</param>
+        /// <param name="e">A <see cref="MouseEventArgs"/> that provides context for the event.</param>
         private void TreeView_MouseDown(object sender, MouseEventArgs e)
         {
             if (e != null)
@@ -310,6 +437,11 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
             }
         }
 
+        /// <summary>
+        /// Event handler for the <see cref="TreeView"/>.NodeDoubleClick event.
+        /// </summary>
+        /// <param name="sender">The <see cref="object"> that was the originator of the event.</param>
+        /// <param name="e">A <see cref="TreeNodeMouseClickEventArgs"/> that provides context for the event.</param>
         private void TreeView_NodeDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
         {
             if (e != null && e.Node != null)
@@ -318,6 +450,11 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
             }
         }
 
+        /// <summary>
+        /// Gets the node type for the <see cref="TreeNode"> provided.
+        /// </summary>
+        /// <param name="node">The <see cref="TreeNode"/> for which the node type is required.</param>
+        /// <returns>The node type of the <see cref="TreeNode"/> provided.</returns>
         private string GetNodeType(TreeNode node)
         {
             return node == null ? string.Empty : (string)node.Tag;

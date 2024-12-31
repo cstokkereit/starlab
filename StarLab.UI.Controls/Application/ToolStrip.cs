@@ -2,6 +2,9 @@
 
 namespace StarLab.Application
 {
+    /// <summary>
+    /// TODO
+    /// </summary>
     public class ToolStrip : System.Windows.Forms.ToolStrip
     {
         /// <summary>

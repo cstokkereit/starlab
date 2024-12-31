@@ -2,6 +2,9 @@
 
 namespace StarLab.Application
 {
+    /// <summary>
+    /// TODO
+    /// </summary>
     internal static class NativeMethods
     {
         // Extending the LabelEdit functionality of a TreeView to include validation

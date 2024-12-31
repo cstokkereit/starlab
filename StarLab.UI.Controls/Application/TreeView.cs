@@ -2,6 +2,9 @@
 
 namespace StarLab.Application
 {
+    /// <summary>
+    /// TODO
+    /// </summary>
     public class TreeView : System.Windows.Forms.TreeView
     {
         private ContextMenuManager menuManager = new ContextMenuManager();

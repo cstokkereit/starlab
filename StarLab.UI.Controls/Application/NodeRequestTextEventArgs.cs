@@ -2,6 +2,9 @@
 
 namespace StarLab.Application
 {
+    /// <summary>
+    /// TODO
+    /// </summary>
     public class NodeRequestTextEventArgs : CancelEventArgs
     {
         public NodeRequestTextEventArgs(TreeNode node, string label)

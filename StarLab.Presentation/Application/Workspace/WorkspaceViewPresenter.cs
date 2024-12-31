@@ -47,11 +47,11 @@ namespace StarLab.Application.Workspace
 
             if (dirty)
             {
-                var result = ShowMessage(StringResources.StarLab, StringResources.WorkspaceClosingMessage, MessageBoxButtons.YesNoCancel, MessageBoxIcon.None);
+                var result = ShowMessage(StringResources.StarLab, StringResources.WorkspaceClosingMessage, InteractionResponses.YesNoCancel);
                 
-                if (result == DialogResult.Yes) SaveWorkspace();
+                if (result == InteractionResult.Yes) SaveWorkspace();
                 
-                close = result != DialogResult.Cancel;
+                close = result != InteractionResult.Cancel;
             }
 
             if (close)
@@ -93,11 +93,11 @@ namespace StarLab.Application.Workspace
             interactor.Execute(dto, id);
         }
 
-        public void DeleteFolder(string path)
+        public void DeleteFolder(string key)
         {
             var interactor = UseCaseFactory.CreateDeleteFolderUseCase(this);
             var dto = Mapper.Map<IWorkspace, WorkspaceDTO>(workspace);
-            interactor.Execute(dto, path);
+            interactor.Execute(dto, key);
         }
 
         public void Exit()
@@ -126,11 +126,11 @@ namespace StarLab.Application.Workspace
             }
         }
 
-        public void AddFolder(string path)
+        public void AddFolder(string key)
         {
             var interactor = UseCaseFactory.CreateAddFolderUseCase(this);
             var dto = Mapper.Map<IWorkspace, WorkspaceDTO>(workspace);
-            interactor.Execute(dto, path);
+            interactor.Execute(dto, key);
         }
 
         public void NewWorkspace()
@@ -208,24 +208,19 @@ namespace StarLab.Application.Workspace
             AppController.Show(id);
         }
 
-        public void ShowErrorMessage(string message)
+        public InteractionResult ShowMessage(string caption, string message, InteractionType type, InteractionResponses responses)
         {
-            ShowMessage(StringResources.StarLab, message, MessageBoxIcon.Error);
+            return view.ShowMessage(caption, message, type, responses);
         }
 
-        public void ShowWarningMessage(string message)
+        public InteractionResult ShowMessage(string caption, string message, InteractionResponses responses)
         {
-            ShowMessage(StringResources.StarLab, message, MessageBoxIcon.Warning);
+            return view.ShowMessage(caption, message, responses);
         }
 
-        public DialogResult ShowMessage(string caption, string message, MessageBoxButtons buttons, MessageBoxIcon icon)
+        public InteractionResult ShowMessage(string caption, string message)
         {
-            return view.ShowMessage(caption, message, buttons, icon);
-        }
-
-        public void ShowMessage(string caption, string message, MessageBoxIcon icon)
-        {
-            view.ShowMessage(caption, message, icon);
+            return view.ShowMessage(caption, message);
         }
 
         public string ShowOpenFileDialog(string title, string filter)

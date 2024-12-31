@@ -2,6 +2,9 @@
 
 namespace StarLab.Application
 {
+    /// <summary>
+    /// TODO
+    /// </summary>
     public partial class SplitContainer : UserControl
     {
         private readonly Dictionary<string, Control> views = new Dictionary<string, Control>();

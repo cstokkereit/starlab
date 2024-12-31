@@ -19,7 +19,7 @@ namespace StarLab.Application
         private IApplicationController? controller; //
 
         /// <summary>
-        /// 
+        /// Initialises a new instance of the <see cref="Presenter"/> class.
         /// </summary>
         /// <param name="commands"></param>
         /// <param name="useCaseFactory"></param>
@@ -36,7 +36,7 @@ namespace StarLab.Application
         }
 
         /// <summary>
-        /// 
+        /// Initialises a new instance of the <see cref="Presenter"/> class.
         /// </summary>
         /// <param name="controller"></param>
         public virtual void Initialise(IApplicationController controller)

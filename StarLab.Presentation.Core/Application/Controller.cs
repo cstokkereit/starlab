@@ -12,7 +12,7 @@
         /// <summary>
         /// Initialises a new instance of the <see cref="Controller"/> class.
         /// </summary>
-        /// <param name="factory">An <see cref="IUseCaseFactory"> that can be used to create instances of the interactors that implement the use cases.</param>
+        /// <param name="factory">An <see cref="IUseCaseFactory"> that can be used to create instances of the use case interactors.</param>
         /// <param name="events">An <see cref="IEventAggregator"> that can be used for subscribing to and publishing events.</param>
         public Controller(IUseCaseFactory factory, IEventAggregator events)
         {
@@ -34,7 +34,7 @@
         protected IEventAggregator Events => events;
 
         /// <summary>
-        /// Gets the <see cref="IUseCaseFactory"> that can be used to create instances of the interactors that implement the use cases.
+        /// Gets the <see cref="IUseCaseFactory"> that can be used to create instances of the use case interactors.
         /// </summary>
         protected IUseCaseFactory UseCaseFactory => factory;
     }

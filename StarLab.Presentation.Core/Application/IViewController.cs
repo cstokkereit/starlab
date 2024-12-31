@@ -1,51 +1,64 @@
 ﻿namespace StarLab.Application
 {
     /// <summary>
-    /// TODO
+    /// Represents a controller that can be used to display commonly used dialogs.
     /// </summary>
     public interface IViewController : IController
     {
+        /// <summary>
+        /// Initialises the <see cref="IViewController"/>.
+        /// </summary>
+        /// <param name="controller">The <see cref="IApplicationController"/> that manages the views that comprise the user interface of the application.</param>
         void Initialise(IApplicationController controller);
 
         /// <summary>
-        /// 
+        /// Shows the <see cref="IView"/> provided.
         /// </summary>
-        /// <param name="view"></param>
+        /// <param name="view">The <see cref="IView"/> to be shown.</param>
         void Show(IView view);
 
         /// <summary>
-        /// Displays a message box with the specified text, caption, buttons and icon.
+        /// Displays a <see cref="MessageBox"/> with the specified options.
         /// </summary>
         /// <param name="caption">The message box caption.</param>
         /// <param name="message">The message text.</param>
-        /// <param name="buttons">A <see cref="MessageBoxButtons"/> that specifies which buttons to include on the meeage box.</param>
-        /// <param name="icon">A <see cref="MessageBoxIcon"/> that specifies the icon to include on the meeage box.</param>
-        /// <returns>A <see cref="DialogResult"/> that identifies the button that was clicked.</returns>
-        DialogResult ShowMessage(string caption, string message, MessageBoxButtons buttons, MessageBoxIcon icon);
+        /// <param name="type">An <see cref="InteractionType"/> that specifies the type of message being displayed.</param>
+        /// <param name="responses">An <see cref="InteractionResponses"/> that specifies the available responses.</param>
+        /// <returns>An <see cref="InteractionResult"/> that identifies the button that was clicked.</returns>
+        public InteractionResult ShowMessage(string caption, string message, InteractionType type, InteractionResponses responses);
 
         /// <summary>
-        /// Displays a message box with the specified text, caption and icon.
+        /// Displays a <see cref="MessageBox"/> with the specified options.
         /// </summary>
         /// <param name="caption">The message box caption.</param>
         /// <param name="message">The message text.</param>
-        /// <param name="icon">A <see cref="MessageBoxIcon"/> that specifies the icon to include on the meeage box.</param>
-        void ShowMessage(string caption, string message, MessageBoxIcon icon);
+        /// <param name="responses">An <see cref="InteractionResponses"/> that specifies the available responses.</param>
+        /// <returns>An <see cref="InteractionResult"/> that identifies the chosen response.</returns>
+        InteractionResult ShowMessage(string caption, string message, InteractionResponses responses);
 
         /// <summary>
-        /// 
+        /// Displays a <see cref="MessageBox"/> with the specified options.
         /// </summary>
-        /// <param name="title"></param>
-        /// <param name="filter"></param>
-        /// <returns></returns>
+        /// <param name="caption">The message box caption.</param>
+        /// <param name="message">The message text.</param>
+        /// <returns>An <see cref="InteractionResult"/> that identifies the chosen response.</returns>
+        InteractionResult ShowMessage(string caption, string message);
+
+        /// <summary>
+        /// Displays an <see cref="OpenFileDialog"/> with the specified options.
+        /// </summary>
+        /// <param name="title">The dialog title.</param>
+        /// <param name="filter">The file name filter.</param>
+        /// <returns>The filename selected in the dialog.</returns>
         string ShowOpenFileDialog(string title, string filter);
 
         /// <summary>
-        /// 
+        /// Displays a <see cref="SaveFileDialog"/> with the specified options.
         /// </summary>
-        /// <param name="title"></param>
-        /// <param name="filter"></param>
-        /// <param name="extension"></param>
-        /// <returns></returns>
+        /// <param name="title">The dialog title.</param>
+        /// <param name="filter">The file name filter.</param>
+        /// <param name="extension">The default file extension.</param>
+        /// <returns>The filename selected in the dialog.</returns>
         string ShowSaveFileDialog(string title, string filter, string extension);
     }
 }

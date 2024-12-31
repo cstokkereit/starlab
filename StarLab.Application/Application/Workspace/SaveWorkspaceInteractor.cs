@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using StarLab.Shared.Properties;
 
 namespace StarLab.Application.Workspace
 {
@@ -16,12 +17,11 @@ namespace StarLab.Application.Workspace
         {
             try
             {
-                if (!string.IsNullOrEmpty(dto.FileName))
-                    serialisationService.SerialiseWorkspace(dto, dto.FileName);
+                if (!string.IsNullOrEmpty(dto.FileName)) serialisationService.SerialiseWorkspace(dto, dto.FileName);
             }
             catch (Exception e)
             {
-                OutputPort.ShowErrorMessage(e.Message);
+                OutputPort.ShowMessage(Resources.StarLab, e.Message, InteractionType.Error, InteractionResponses.OK);
             }
         }
     }
