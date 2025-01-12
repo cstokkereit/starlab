@@ -4,45 +4,47 @@ using System.ComponentModel;
 namespace StarLab.Application
 {
     /// <summary>
-    /// Invokes the command that is associated with a ToolStripMenuItem.
+    /// Invokes the <see cref="ICommand"> that is associated with a <see cref="ToolStripMenuItem"/>.
     /// </summary>
     public class ToolStripMenuItemCommandInvoker : CommandInvoker<ToolStripMenuItem>
     {
         /// <summary>
-        /// Associates a command with the ToolStripMenuItem that invokes it.
+        /// Associates an <see cref="ICommand"> with the <see cref="ToolStripMenuItem"/> that invokes it.
         /// </summary>
-        /// <param name="item">The ToolStripMenuItem that will invoke the command.</param>
-        /// <param name="command">The command that will be invoked.</param>
+        /// <param name="item">The <see cref="ToolStripMenuItem"/> that will invoke the <see cref="ICommand">.</param>
+        /// <param name="command">The <see cref="ICommand"> that will be invoked.</param>
         public override void AddInstance(Component component, ICommand command)
         {
-            if (component is ToolStripMenuItem control) control.Click += OnClick;
+            if (component is ToolStripMenuItem control) control.Click += ToolStripItem_Click;
+
             base.AddInstance(component, command);
         }
 
         /// <summary>
-        /// Dissociates a command from the ToolStripMenuItem that invokes it.
+        /// Dissociates an <see cref="ICommand"> from the <see cref="ToolStripMenuItem"/> that invokes it.
         /// </summary>
-        /// <param name="component">The ToolStripMenuItem that will no longer invoke the command.</param>
+        /// <param name="component">The <see cref="ToolStripMenuItem"/> that will no longer invoke the <see cref="ICommand">.</param>
         public override void RemoveInstance(Component component)
         {
-            if (component is ToolStripMenuItem control) control.Click -= OnClick;
+            if (component is ToolStripMenuItem control) control.Click -= ToolStripItem_Click;
+
             base.RemoveInstance(component);
         }
 
         /// <summary>
-        /// Updates the Checked state of the ToolStripMenuItem provided.
+        /// Updates the Checked state of the <see cref="ToolStripMenuItem"/> provided.
         /// </summary>
-        /// <param name="component">The ToolStripMenuItem being updated.</param>
-        /// <param name="value">The new Checked state.</param>
+        /// <param name="component">The <see cref="ToolStripMenuItem"/> being updated.</param>
+        /// <param name="value">The new Enabled state.</param>
         public override void UpdateCheckedState(Component component, bool value)
         {
             if (component is ToolStripMenuItem control) control.Checked = value;
         }
 
         /// <summary>
-        /// Updates the Enabled state of the ToolStripMenuItem provided.
+        /// Updates the Enabled state of the <see cref="ToolStripMenuItem"/> provided.
         /// </summary>
-        /// <param name="component">The ToolStripMenuItem being updated.</param>
+        /// <param name="component">The <see cref="ToolStripMenuItem"/> being updated.</param>
         /// <param name="value">The new Enabled state.</param>
         public override void UpdateEnabledState(Component component, bool value)
         {
@@ -50,14 +52,17 @@ namespace StarLab.Application
         }
 
         /// <summary>
-        /// Handler for the ToolStripMenuItem Click event.
+        /// Event handler for the <see cref="ToolStripItem.Click"/> event.
         /// </summary>
-        /// <param name="sender">The control that raised the event.</param>
-        /// <param name="e">The event arguments.</param>
-        private void OnClick(object sender, EventArgs e)
+        /// <param name="sender">The <see cref="object"> that was the originator of the event.</param>
+        /// <param name="e">An <see cref="EventArgs"/> that provides context for the event.</param>
+        private void ToolStripItem_Click(object? sender, EventArgs? e)
         {
-            var command = GetCommandForInstance((ToolStripMenuItem)sender);
-            if (command != null) command.Execute();
+            if (sender != null)
+            {
+                var command = GetCommandForInstance((ToolStripMenuItem)sender);
+                command?.Execute();
+            }
         }
     }
 }

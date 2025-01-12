@@ -7,20 +7,23 @@ using StarLab.Commands;
 
 namespace StarLab.Application
 {
-    public abstract class PresentationFactoryBase : Factory, IPresentationFactory
+    /// <summary>
+    /// A factory for creating <see cref="IPresenter"/>s.
+    /// </summary>
+    public class PresenterFactory : Factory, IPresenterFactory
     {
-        private readonly IConfigurationService configuration;
+        private readonly IConfigurationService configuration; // A service that provides the configuration information.
 
-        private readonly IWindsorContainer container;
+        private readonly IWindsorContainer container; // Used to resolve dependencies at run time.
 
-        private readonly IEventAggregator events;
+        private readonly IEventAggregator events; // This can be used for subscribing to and publishing events.
 
-        private readonly IUseCaseFactory factory;
+        private readonly IUseCaseFactory factory; // This can be used to create use case interactors.
 
-        private readonly IMapper mapper;
+        private readonly IMapper mapper; // Copies data from model objects to data transfer objects and vice versa.
 
         /// <summary>
-        /// 
+        /// Initialises a new instance of the <see cref="PresenterFactory"> class.
         /// </summary>
         /// <param name="container">An <see cref="IWindsorContainer"/> that will be used to resolve dependencies.</param>
         /// <param name="factory">An <see cref="IUseCaseFactory"/> that will be used to create use case interactors.</param>
@@ -28,7 +31,7 @@ namespace StarLab.Application
         /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
         /// <param name="events">The <see cref="IEventAggregator"/> that manages application events.</param>
         /// <exception cref="ArgumentNullException"></exception>
-        public PresentationFactoryBase(IWindsorContainer container, IUseCaseFactory factory, IConfigurationService configuration, IMapper mapper, IEventAggregator events)
+        public PresenterFactory(IWindsorContainer container, IUseCaseFactory factory, IConfigurationService configuration, IMapper mapper, IEventAggregator events)
         {
             this.configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
             this.container = container ?? throw new ArgumentNullException(nameof(container));
@@ -51,7 +54,7 @@ namespace StarLab.Application
         /// <summary>
         /// Creates an <see cref="IDockableViewPresenter"/> to control the <see cref="IDocumentView"/> provided.
         /// </summary>
-        /// <param name="document">An <see cref="IDocument"/> that </param>
+        /// <param name="document">An <see cref="IDocument"/> that the view represents.</param>
         /// <param name="view">The <see cref="IDocumentView"/> that the presenter will control.</param>
         /// <returns>An <see cref="IDockableViewPresenter"/> that can be used to control the <see cref="IDocumentView"/> provided.</returns>
         public IDockableViewPresenter CreatePresenter(IDocument document, IDocumentView view)
@@ -69,51 +72,36 @@ namespace StarLab.Application
         {
             IChildViewPresenter presenter;
 
-            if (parent.Contents.Count > 1)
+            if (parent.ChildViews.Count > 1)
             {
-                presenter = CreatePresenter(child, parent.GetContentConfiguration(child.Name));
+                presenter = CreatePresenter(child, parent.GetChildViewConfiguration(child.Name));
             }
             else
             {
-                presenter = CreatePresenter(child, parent.Contents[0]);
+                presenter = CreatePresenter(child, parent.ChildViews[0]);
             }
 
             return presenter;
         }
 
         /// <summary>
-        /// Creates the specified <see cref="IView"/>.
+        /// Creates an <see cref="IChildViewPresenter"/> to control the <see cref="IChildView"/> provided.
         /// </summary>
-        /// <param name="name">The name of the view.</param>
-        /// <param name="text">The view text.</param>
-        /// <returns>The specified <see cref="IView"/>.</returns>
-        public abstract IView CreateView(string name, string text);
-
-        /// <summary>
-        /// Creates the specified <see cref="IView"/>.
-        /// </summary>
-        /// <param name="document">The <see cref="IDocument"> that specifies the view to be created.</param>
-        /// <returns>The specified <see cref="IView"/>.</returns>
-        public abstract IView CreateView(IDocument document);
-
-        /// <summary>
-        /// Creates the specified <see cref="IChildView"/>.
-        /// </summary>
-        /// <param name="config">The <see cref="IContentConfiguration"/> that specifies the view to be created.</param>
-        /// <param name="parent">The <see cref="IViewConfiguration"/> of the parent view.</param>
-        /// <returns>The specified <see cref="IChildView"/>.</returns>
-        public abstract IChildView CreateView(IContentConfiguration config, IViewConfiguration parent);
-
-        /// <summary>
-        /// Gets the <see cref="IConfigurationService"/>
-        /// </summary>
-        protected IConfigurationService Configuration => configuration;
-
-        private IChildViewPresenter CreatePresenter(IChildView view, IContentConfiguration configuration)
+        /// <param name="view">The <see cref="IChildView"/> that the presenter will control.</param>
+        /// <param name="configuration">The <see cref="IChildViewConfiguration"/> for the child view.</param>
+        /// <returns>An <see cref="IChildViewPresenter"/> that can be used to control the <see cref="IChildView"/> provided.</returns>
+        private IChildViewPresenter CreatePresenter(IChildView view, IChildViewConfiguration configuration)
         {
             return (IChildViewPresenter)CreateInstance(configuration.Presenter, new object[] { view, container.Resolve<ICommandManager>(), factory, this.configuration, mapper, events });
         }
 
+        /// <summary>
+        /// Creates an <see cref="IPresenter"/> to control the <see cref="IView"/> provided.
+        /// </summary>
+        /// <param name="view">The <see cref="IView"/> that the presenter will control.</param>
+        /// <param name="configuration">The <see cref="IViewConfiguration"/> for the view.</param>
+        /// <returns>An <see cref="IPresenter"/> that can be used to control the <see cref="IView"/> provided.</returns>
+        /// <exception cref="Exception"></exception>
         private IPresenter CreatePresenter(IView view, IViewConfiguration configuration)
         {
             var commands = container.Resolve<ICommandManager>();

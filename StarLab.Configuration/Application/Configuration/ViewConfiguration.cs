@@ -2,9 +2,9 @@
 {
     internal struct ViewConfiguration : IViewConfiguration
     {
-        private readonly Dictionary<string, IContentConfiguration> contentsByName = new Dictionary<string, IContentConfiguration>();
+        private readonly Dictionary<string, IChildViewConfiguration> contentsByName = new Dictionary<string, IChildViewConfiguration>();
 
-        private readonly List<IContentConfiguration> contents = new List<IContentConfiguration>();
+        private readonly List<IChildViewConfiguration> contents = new List<IChildViewConfiguration>();
 
         private readonly ViewTypes type;
 
@@ -39,13 +39,13 @@
             LoadContents(view);
         }
 
-        public IList<IContentConfiguration> Contents => contents;
+        public IList<IChildViewConfiguration> ChildViews => contents;
 
         public string Name => name;
 
         public ViewTypes Type => type;
 
-        public IContentConfiguration GetContentConfiguration(string name) => contentsByName[name];
+        public IChildViewConfiguration GetChildViewConfiguration(string name) => contentsByName[name];
 
         private void LoadContents(View view)
         {

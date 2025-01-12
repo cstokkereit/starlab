@@ -3,12 +3,15 @@
 namespace StarLab.Application
 {
     /// <summary>
-    /// TODO
+    /// A <see cref="UserControl"/> that combines a <see cref="System.Windows.Forms.SplitContainer"/> with a <see cref="ToolStrip"/>.
     /// </summary>
-    public partial class SplitContainer : UserControl
+    public partial class SplitContainer : UserControl, IToolbarManager
     {
-        private readonly Dictionary<string, Control> views = new Dictionary<string, Control>();
+        private readonly Dictionary<string, Control> views = new Dictionary<string, Control>(); // A dictionary containing the contained controls indexed by name.
 
+        /// <summary>
+        /// Initialises a new instance of the <see cref="SplitContainer"/> class.
+        /// </summary>
         public SplitContainer()
         {
             InitializeComponent();
@@ -16,8 +19,14 @@ namespace StarLab.Application
             splitContainer.Panel1Collapsed = true;
         }
 
+        /// <summary>
+        /// Gets the left or top panel of the <see cref="SplitContainer"/> depending on the <see cref="Orientation"/>.
+        /// </summary>
         public SplitterPanel Panel1 => splitContainer.Panel1;
 
+        /// <summary>
+        /// Gets the right or bottom panel of the <see cref="SplitContainer"/> depending on the <see cref="Orientation"/>.
+        /// </summary>
         public SplitterPanel Panel2 => splitContainer.Panel2;
 
         /// <summary>
@@ -25,8 +34,8 @@ namespace StarLab.Application
         /// </summary>
         /// <param name="name">The name of the button.</param>
         /// <param name="tooltip">The tooltip text.</param>
-        /// <param name="image">The image to use for the button.</param>
-        /// <param name="command">The command to invoke when the button is clicked.</param>
+        /// <param name="image">The <see cref="Image"> to use for the button.</param>
+        /// <param name="command">The <see cref="ICommand"> to invoke when the button is clicked.</param>
         public void AddToolbarButton(string name, string tooltip, Image? image, ICommand command)
         {
             var button = new ToolStripButton(image);
@@ -42,10 +51,10 @@ namespace StarLab.Application
         }
 
         /// <summary>
-        /// 
+        /// Adds a <see cref="Control"/> to the specified <see cref="SplitterPanel">.
         /// </summary>
-        /// <param name="control"></param>
-        /// <param name="panel"></param>
+        /// <param name="control">The <see cref="Control"/> to be added.</param>
+        /// <param name="panel">The panel that the control should be added to.</param>
         public void AddControl(Control control, SplitViewPanels panel)
         {
             switch (panel)
@@ -68,9 +77,9 @@ namespace StarLab.Application
         }
 
         /// <summary>
-        /// 
+        /// Hides the specified <see cref="Control"/>.
         /// </summary>
-        /// <param name="name"></param>
+        /// <param name="name">The name of the <see cref="Control"/> to hide.</param>
         public void HideSplitContent(string name)
         {
             if (views.ContainsKey(name))
@@ -88,9 +97,9 @@ namespace StarLab.Application
         }
 
         /// <summary>
-        /// 
+        /// Shows the specified <see cref="Control"/>.
         /// </summary>
-        /// <param name="name"></param>
+        /// <param name="name">The name of the <see cref="Control"/> to show.</param>
         public void ShowSplitContent(string name)
         {
             if (views.ContainsKey(name))
@@ -109,6 +118,11 @@ namespace StarLab.Application
             }
         }
 
+        /// <summary>
+        /// Gets the minimum <see cref="Size"/> that satisfies the minimum size requirements for all of the controls in the collection provided.
+        /// </summary>
+        /// <param name="controls">A <see cref="System.Windows.Forms.ControlCollection"/> that contains the controls.</param>
+        /// <returns>A <see cref="Size"/> struct that specifies the minimum height and width.</returns>
         private Size GetMinimumSize(ControlCollection controls)
         {
             var size = new Size(0, 0);
@@ -122,6 +136,10 @@ namespace StarLab.Application
             return size;
         }
 
+        /// <summary>
+        /// TODO - Refactor, functions should not have side effects
+        /// </summary>
+        /// <returns></returns>
         private Size GetMinimumSize()
         {
             var size1 = GetMinimumSize(splitContainer.Panel1.Controls);
@@ -147,6 +165,11 @@ namespace StarLab.Application
             return size;
         }
 
+        /// <summary>
+        /// Event handler for the <see cref="Control.Paint"/> event.
+        /// </summary>
+        /// <param name="sender">The <see cref="object"> that was the originator of the event.</param>
+        /// <param name="e">A <see cref="PaintEventArgs"/> that provides context for the event.</param>
         private void SplitContainer_Paint(object sender, PaintEventArgs e)
         {
             switch (splitContainer.Orientation)

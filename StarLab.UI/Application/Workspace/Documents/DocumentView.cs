@@ -20,9 +20,9 @@ namespace StarLab.Application.Workspace.Documents
         /// Initialises a new instance of the <see cref="DocumentView"> class.
         /// </summary>
         /// <param name="document">The <see cref="IDocument"/> that this view represents.</param>
-        /// <param name="factory">An <see cref="IPresentationFactory"/> that will be used to create the presenter and child view.</param>
+        /// <param name="factory">An <see cref="IViewFactory"/> that will be used to create the presenter and child view.</param>
         /// <param name="configuration">An <see cref="IViewConfiguration"/> that holds the configuration information required to construct this view.</param>
-        public DocumentView(IDocument document, IPresentationFactory factory, IViewConfiguration configuration)
+        public DocumentView(IDocument document, IViewFactory factory, IViewConfiguration configuration)
         {
             ArgumentNullException.ThrowIfNull(document, nameof(document));
             ArgumentNullException.ThrowIfNull(factory, nameof(factory));
@@ -36,7 +36,7 @@ namespace StarLab.Application.Workspace.Documents
 
             presenter = factory.CreatePresenter(document, this);
 
-            foreach (var content in configuration.Contents)
+            foreach (var content in configuration.ChildViews)
             {
                 var view = factory.CreateView(content, configuration);
                 splitContainer.AddControl((Control)view, view.Panel);

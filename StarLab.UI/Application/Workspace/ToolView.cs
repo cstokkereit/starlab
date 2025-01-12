@@ -20,17 +20,17 @@ namespace StarLab.Application.Workspace
         /// </summary>
         /// <param name="name">The name of the tool window.</param>
         /// <param name="text">The tool window text.</param>
-        /// <param name="factory">An <see cref="IPresentationFactory"/> that will be used to create the presenter and child view.</param>
+        /// <param name="factory">An <see cref="IViewFactory"/> that will be used to create the presenter and child view.</param>
         /// <param name="configuration">An <see cref="IViewConfiguration"/> that holds the configuration information required to construct this view.</param>
         /// <exception cref="ArgumentException"></exception>
-        public ToolView(string name, string text, IPresentationFactory factory, IViewConfiguration configuration)
+        public ToolView(string name, string text, IViewFactory factory, IViewConfiguration configuration)
         {
             ArgumentNullException.ThrowIfNull(configuration, nameof(configuration));
             ArgumentNullException.ThrowIfNull(factory, nameof(factory));
             ArgumentException.ThrowIfNullOrEmpty(name, nameof(name));
             ArgumentException.ThrowIfNullOrEmpty(text, nameof(text));
 
-            if (configuration.Contents.Count > 1) throw new ArgumentException(); // TODO
+            if (configuration.ChildViews.Count > 1) throw new ArgumentException(); // TODO
 
             InitializeComponent();
 
@@ -42,7 +42,7 @@ namespace StarLab.Application.Workspace
 
             presenter = (IDockableViewPresenter)factory.CreatePresenter(configuration.Name, this);
 
-            var view = factory.CreateView(configuration.Contents[0], configuration);
+            var view = factory.CreateView(configuration.ChildViews[0], configuration);
             view.Controller.RegisterController((IViewController)presenter);
 
             view.Controller.RegisterController((IViewController)presenter);

@@ -17,7 +17,7 @@ namespace StarLab.Commands
         private bool isEnabled = true; // The enabled state of the control instanced.
 
         /// <summary>
-        /// Initialises a new instance of the <see cref="ComponentCommand&lt;TReceiver&gt;"/> class.
+        /// Initialises a new instance of the <see cref="ComponentCommand{TReceiver}"/> class.
         /// </summary>
         /// <param name="manager">The <see cref="ICommandManager"/> that manages this command and its invokers.</param>
         /// <param name="receiver">The receiver that this command will act on.</param>
@@ -70,9 +70,9 @@ namespace StarLab.Commands
         }
 
         /// <summary>
-        /// Adds a component to the list of components that can execute this command.
+        /// Adds the <see cref="Component"> provided to the list of components that can execute this command.
         /// </summary>
-        /// <param name="instance">The component to be added e.g. a ToolStripMenuItem.</param>
+        /// <param name="instance">The <see cref="Component"> being added.</param>
         public void AddInstance(Component instance)
         {
             instances.Add(instance);

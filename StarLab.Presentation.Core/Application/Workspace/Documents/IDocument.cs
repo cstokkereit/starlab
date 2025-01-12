@@ -31,7 +31,7 @@
         string Path { get; }
 
         /// <summary>
-        /// Gets the name of the config section that identifies the implementation classes used to display the document.
+        /// Gets the name of the view config section.
         /// </summary>
         string View { get; }
     }

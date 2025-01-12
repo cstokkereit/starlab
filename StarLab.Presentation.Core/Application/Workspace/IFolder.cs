@@ -21,7 +21,7 @@
         string Name { get; }
 
         /// <summary>
-        /// Getsthe parent folder key.
+        /// Gets the parent folder key.
         /// </summary>
         string ParentKey { get; }
     }

@@ -18,8 +18,8 @@ namespace StarLab.Application
         /// Creates the <see cref="ICommand"> specified by the controller, action and target provided.
         /// </summary>
         /// <param name="commands">An instance of <see cref="ICommandManager"/> that is required for the creation of the command.</param>
-        /// <param name="controller">The <see cref="IController"/> that contains the method that will be invoked by the <see cref="ICommand"/> when it's <see cref="Execute"/> method is called.</param>
-        /// <param name="action">The action to be performed by the <see cref="ICommand"/> when it's <see cref="Execute"/> method is called.</param>
+        /// <param name="controller">The <see cref="IController"/> that contains the method that will be invoked by the <see cref="ICommand"/> when the <see cref="ICommand.Execute"/> method is called.</param>
+        /// <param name="action">The action to be performed when the <see cref="ICommand.Execute"/> method is called.</param>
         /// <param name="target">The target for the action.</param>
         /// <returns>An instance of <see cref="ICommand"> that can be used to invoke the specified action.</returns>
         ICommand CreateCommand(ICommandManager commands, IController controller, string action, string target);
@@ -28,8 +28,8 @@ namespace StarLab.Application
         /// Creates the <see cref="ICommand"> specified by the controller and action provided.
         /// </summary>
         /// <param name="commands">An instance of <see cref="ICommandManager"/> that is required for the creation of the command.</param>
-        /// <param name="controller">The <see cref="IController"/> that contains the method that will be invoked by the <see cref="ICommand"/> when it's <see cref="Execute"/> method is called.</param>
-        /// <param name="action">The action to be performed by the <see cref="ICommand"/> when it's <see cref="Execute"/> method is called.</param>
+        /// <param name="controller">The <see cref="IController"/> that contains the method that will be invoked by the <see cref="ICommand"/> when the <see cref="ICommand.Execute"/> method is called.</param>
+        /// <param name="action">The action to be performed when the <see cref="ICommand.Execute"/> method is called.</param>
         /// <returns>An instance of <see cref="ICommand"> that can be used to invoke the specified action.</returns>
         ICommand CreateCommand(ICommandManager commands, IController controller, string action);
 

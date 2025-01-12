@@ -20,10 +20,10 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
         /// <summary>
         /// Initialises a new instance of the <see cref="WorkspaceExplorerView"/> class.
         /// </summary>
-        /// <param name="configuration">An <see cref="IContentConfiguration"/> that holds the configuration information required to construct this view.</param>
+        /// <param name="configuration">An <see cref="IChildViewConfiguration"/> that holds the configuration information required to construct this view.</param>
         /// <param name="parent">An <see cref="IViewConfiguration"/> that holds the configuration information that was used to construct the parent view.</param>
-        /// <param name="factory">An <see cref="IPresentationFactory"/> that will be used to create the presenter and child view.</param>
-        public WorkspaceExplorerView(IContentConfiguration configuration, IViewConfiguration parent, IPresentationFactory factory)
+        /// <param name="factory">An <see cref="IViewFactory"/> that will be used to create the presenter and child view.</param>
+        public WorkspaceExplorerView(IChildViewConfiguration configuration, IViewConfiguration parent, IViewFactory factory)
         {
             InitializeComponent();
 
@@ -283,7 +283,7 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
         }
 
         /// <summary>
-        /// Event handler for the <see cref="TreeView"/>.AfterCollapse event.
+        /// Event handler for the <see cref="System.Windows.Forms.TreeView.AfterCollapse"/> event.
         /// </summary>
         /// <param name="sender">The <see cref="object"> that was the originator of the event.</param>
         /// <param name="e">A <see cref="TreeViewEventArgs"/> that provides context for the event.</param>
@@ -313,7 +313,7 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
         }
 
         /// <summary>
-        /// Event handler for the <see cref="TreeView"/>.AfterExpand event.
+        /// Event handler for the <see cref="System.Windows.Forms.TreeView.AfterExpand"/> event.
         /// </summary>
         /// <param name="sender">The <see cref="object"> that was the originator of the event.</param>
         /// <param name="e">A <see cref="TreeViewEventArgs"/> that provides context for the event.</param>
@@ -343,7 +343,7 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
         }
 
         /// <summary>
-        /// Event handler for the <see cref="TreeView"/>.AfterLabelEdit event.
+        /// Event handler for the <see cref="System.Windows.Forms.TreeView.AfterLabelEdit"/> event.
         /// </summary>
         /// <param name="sender">The <see cref="object"> that was the originator of the event.</param>
         /// <param name="e">A <see cref="NodeLabelEditEventArgs"/> that provides context for the event.</param>
@@ -385,27 +385,27 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
         }
 
         /// <summary>
-        /// Event handler for the <see cref="TreeView"/>.Enter event.
+        /// Event handler for the <see cref="System.Windows.Forms.TreeView.Enter"/> event.
         /// </summary>
         /// <param name="sender">The <see cref="object"> that was the originator of the event.</param>
-        /// <param name="e">A <see cref="EventArgs"/> that provides context for the event.</param>
+        /// <param name="e">An <see cref="EventArgs"/> that provides context for the event.</param>
         private void TreeView_Enter(object sender, EventArgs e)
         {
             presenter.ViewActivated();
         }
 
         /// <summary>
-        /// Event handler for the <see cref="TreeView"/>.Leave event.
+        /// Event handler for the <see cref="System.Windows.Forms.TreeView.Leave"/> event.
         /// </summary>
         /// <param name="sender">The <see cref="object"> that was the originator of the event.</param>
-        /// <param name="e">A <see cref="EventArgs"/> that provides context for the event.</param>
+        /// <param name="e">An <see cref="EventArgs"/> that provides context for the event.</param>
         private void TreeView_Leave(object sender, EventArgs e)
         {
             presenter.ViewDeactivated();
         }
 
         /// <summary>
-        /// Event handler for the <see cref="TreeView"/>.MouseDown event.
+        /// Event handler for the <see cref="System.Windows.Forms.TreeView.MouseDown"/> event.
         /// </summary>
         /// <param name="sender">The <see cref="object"> that was the originator of the event.</param>
         /// <param name="e">A <see cref="MouseEventArgs"/> that provides context for the event.</param>
@@ -438,7 +438,7 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
         }
 
         /// <summary>
-        /// Event handler for the <see cref="TreeView"/>.NodeDoubleClick event.
+        /// Event handler for the <see cref="System.Windows.Forms.TreeView.NodeMouseDoubleClick"/> event.
         /// </summary>
         /// <param name="sender">The <see cref="object"> that was the originator of the event.</param>
         /// <param name="e">A <see cref="TreeNodeMouseClickEventArgs"/> that provides context for the event.</param>

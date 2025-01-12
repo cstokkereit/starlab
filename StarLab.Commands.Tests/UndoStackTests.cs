@@ -22,7 +22,7 @@
         [Test]
         public void TestAdd()
         {
-            var receiver = new MockReceiver<int>(5);
+            var receiver = new MockReceiver();
             var add = new TestCommand(receiver);
             var stack = new UndoStack();
 
@@ -30,12 +30,12 @@
             stack.Add(add);
 
             Assert.That(stack.UndoCount, Is.EqualTo(1));
-            Assert.That(receiver.Arguments, Is.EqualTo(10));
+            Assert.That(receiver.Value, Is.EqualTo(5));
 
             stack.Undo();
 
-            Assert.That(receiver.Arguments, Is.EqualTo(5));
             Assert.That(stack.UndoCount, Is.EqualTo(0));
+            Assert.That(receiver.Value, Is.EqualTo(0));
         }
 
         /// <summary>
@@ -44,7 +44,7 @@
         [Test]
         public void TestAddAfterUndo()
         {
-            var receiver = new MockReceiver<int>(5);
+            var receiver = new MockReceiver();
             var stack = new UndoStack();
 
             var add5 = new TestCommand(receiver);
@@ -62,25 +62,25 @@
             stack.Undo();
             stack.Undo();
 
-            Assert.That(receiver.Arguments, Is.EqualTo(10));
             Assert.That(stack.UndoCount, Is.EqualTo(1));
+            Assert.That(receiver.Value, Is.EqualTo(5));
 
             var add4 = new TestCommand(receiver);
             add4.Execute(4);
             stack.Add(add4);
 
-            Assert.That(receiver.Arguments, Is.EqualTo(14));
             Assert.That(stack.UndoCount, Is.EqualTo(2));
-
+            Assert.That(receiver.Value, Is.EqualTo(9));
+            
             stack.Undo();
 
-            Assert.That(receiver.Arguments, Is.EqualTo(10));
             Assert.That(stack.UndoCount, Is.EqualTo(1));
+            Assert.That(receiver.Value, Is.EqualTo(5));
 
             stack.Undo();
 
-            Assert.That(receiver.Arguments, Is.EqualTo(5));
             Assert.That(stack.UndoCount, Is.EqualTo(0));
+            Assert.That(receiver.Value, Is.EqualTo(0));
         }
 
         /// <summary>
@@ -89,7 +89,7 @@
         [Test]
         public void TestAddResetsTheRedoStack()
         {
-            var receiver = new MockReceiver<int>(5);
+            var receiver = new MockReceiver();
             var stack = new UndoStack();
 
             var add5 = new TestCommand(receiver);
@@ -124,7 +124,7 @@
         [Test]
         public void TestGetRedoCount()
         {
-            var receiver = new MockReceiver<int>(5);
+            var receiver = new MockReceiver();
             var stack = new UndoStack();
 
             var add5 = new TestCommand(receiver);
@@ -172,7 +172,7 @@
         [Test]
         public void TestGetUndoCount()
         {
-            var receiver = new MockReceiver<int>(5);
+            var receiver = new MockReceiver();
             var stack = new UndoStack();
 
             var add5 = new TestCommand(receiver);
@@ -220,7 +220,7 @@
         [Test]
         public void TestRedo()
         {
-            var receiver = new MockReceiver<int>(5);
+            var receiver = new MockReceiver();
             var stack = new UndoStack();
 
             var add5 = new TestCommand(receiver);
@@ -239,19 +239,19 @@
             stack.Undo();
             stack.Undo();
 
-            Assert.That(receiver.Arguments, Is.EqualTo(5));
+            Assert.That(receiver.Value, Is.EqualTo(0));
 
             stack.Redo();
 
-            Assert.That(receiver.Arguments, Is.EqualTo(10));
+            Assert.That(receiver.Value, Is.EqualTo(5));
 
             stack.Redo();
 
-            Assert.That(receiver.Arguments, Is.EqualTo(12));
+            Assert.That(receiver.Value, Is.EqualTo(7));
 
             stack.Redo();
 
-            Assert.That(receiver.Arguments, Is.EqualTo(15));
+            Assert.That(receiver.Value, Is.EqualTo(10));
         }
 
         /// <summary>
@@ -260,7 +260,7 @@
         [Test]
         public void TestRedoStackThrowsExceptionWhenEmpty()
         {
-            var receiver = new MockReceiver<int>(5);
+            var receiver = new MockReceiver();
             var stack = new UndoStack();
 
             var add5 = new TestCommand(receiver);
@@ -285,7 +285,7 @@
         [Test]
         public void TestUndo()
         {
-            var receiver = new MockReceiver<int>(5);
+            var receiver = new MockReceiver();
             var stack = new UndoStack();
 
             var add5 = new TestCommand(receiver);
@@ -300,19 +300,19 @@
             add3.Execute(3);
             stack.Add(add3);
 
-            Assert.That(receiver.Arguments, Is.EqualTo(15));
+            Assert.That(receiver.Value, Is.EqualTo(10));
 
             stack.Undo();
 
-            Assert.That(receiver.Arguments, Is.EqualTo(12));
+            Assert.That(receiver.Value, Is.EqualTo(7));
 
             stack.Undo();
 
-            Assert.That(receiver.Arguments, Is.EqualTo(10));
+            Assert.That(receiver.Value, Is.EqualTo(5));
 
             stack.Undo();
 
-            Assert.That(receiver.Arguments, Is.EqualTo(5));
+            Assert.That(receiver.Value, Is.EqualTo(0));
         }
 
         /// <summary>
@@ -321,7 +321,7 @@
         [Test]
         public void TestUndoStackThrowsExceptionWhenEmpty()
         {
-            var receiver = new MockReceiver<int>(5);
+            var receiver = new MockReceiver();
             var stack = new UndoStack();
 
             var add5 = new TestCommand(receiver);
@@ -339,24 +339,35 @@
         }
 
         /// <summary>
+        /// A test class that can be used to check the undo and redo functionality.
+        /// </summary>
+        private class MockReceiver
+        {
+            public int Value { get; private set; }
+
+            public void Add(int value) { Value += value; }
+        }
+
+
+        /// <summary>
         /// A test class that implements the <see cref="IRevertableCommand"/> interface.
         /// </summary>
-        private class TestCommand : ParameterisedCommand<int, MockReceiver<int>>, IRevertableCommand
+        private class TestCommand : ParameterisedCommand<int, MockReceiver>, IRevertableCommand
         {
             private int arguments;
 
-            public TestCommand(MockReceiver<int> receiver)
+            public TestCommand(MockReceiver receiver)
                 : base(receiver) { }
 
             public override void Execute(int arguments)
             {
-                receiver.Test(receiver.Arguments + arguments);
                 this.arguments = arguments;
+                receiver.Add(arguments);
             }
 
             public override void Execute()
             {
-                receiver.Test(receiver.Arguments + arguments);
+                receiver.Add(arguments);
             }
 
             public void Redo()
@@ -366,7 +377,7 @@
 
             public void Undo()
             {
-                receiver.Test(receiver.Arguments - arguments);
+                receiver.Add(-arguments);
             }
         }
     }

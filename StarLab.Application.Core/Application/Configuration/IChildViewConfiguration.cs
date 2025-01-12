@@ -1,6 +1,6 @@
 ﻿namespace StarLab.Application.Configuration
 {
-    public interface IContentConfiguration
+    public interface IChildViewConfiguration
     {
         int Panel { get; }
 

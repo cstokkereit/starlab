@@ -3,13 +3,10 @@
 namespace StarLab.Application
 {
     /// <summary>
-    /// TODO
+    /// Provides access to functions defined in the Windows API libraries.
     /// </summary>
     internal static class NativeMethods
     {
-        // Extending the LabelEdit functionality of a TreeView to include validation
-        // http://cyotek.com/blog/extending-the-labeledit-functionality-of-a-treeview-to-include-validation
-
         public const int TVM_GETEDITCONTROL = 0x110F;
 
         public const int WM_SETTEXT = 0xC;
@@ -18,6 +15,6 @@ namespace StarLab.Application
         public static extern nint SendMessage(nint hWnd, int msg, nint wParam, nint lParam);
 
         [DllImport("USER32", EntryPoint = "SendMessage", CharSet = CharSet.Auto, SetLastError = true)]
-        public static extern nint SendMessage(nint hWnd, int msg, nint wParam, string? lParam); // Made this nullable - in case it causes problems
+        public static extern nint SendMessage(nint hWnd, int msg, nint wParam, string? lParam);
     }
 }

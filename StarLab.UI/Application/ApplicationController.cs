@@ -14,7 +14,7 @@ namespace StarLab.Application
     /// <summary>
     /// A controller that creates, initialises and manages the views that comprise the user interface of the application.
     /// </summary>
-    public class ApplicationController : Controller, IApplicationController, ISubscriber<WorkspaceClosedEvent>
+    public class ApplicationController : Controller, IApplicationController, ISubscriber<WorkspaceClosedEventArgs>
     {
         private readonly IDictionary<string, IViewController> controllers = new Dictionary<string, IViewController>(); // A dictionary containing the view controllers indexed by name.
 
@@ -24,17 +24,17 @@ namespace StarLab.Application
 
         private readonly IConfigurationService configuration; // A service that provides the configuration information.
 
-        private readonly IPresentationFactory factory; // A factory for creating views.
+        private readonly IViewFactory factory; // A factory for creating views.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="ApplicationController"/> class.
         /// </summary>
         /// <param name="configuration">The <see cref="IConfigurationService"> that provides the configuration information.</param>
-        /// <param name="factory">An <see cref="IPresentationFactory"/> that will be used to create the views.</param>
+        /// <param name="factory">An <see cref="IViewFactory"/> that will be used to create the views.</param>
         /// <param name="interactorFactory">An <see cref="IUseCaseFactory"> that will be used to create the use case interactors.</param>
         /// <param name="events">An <see cref="IEventAggregator"> that can be used for subscribing to and publishing events.</param>
         /// <exception cref="ArgumentNullException"></exception>
-        public ApplicationController(IConfigurationService configuration, IPresentationFactory factory, IUseCaseFactory interactorFactory, IEventAggregator events)
+        public ApplicationController(IConfigurationService configuration, IViewFactory factory, IUseCaseFactory interactorFactory, IEventAggregator events)
             : base(interactorFactory, events)
         {
             this.configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
@@ -58,8 +58,8 @@ namespace StarLab.Application
         /// Creates the <see cref="ICommand"> specified by the controller, action and target provided.
         /// </summary>
         /// <param name="commands">An instance of <see cref="ICommandManager"/> that is required for the creation of the command.</param>
-        /// <param name="controller">The <see cref="IController"/> that contains the method that will be invoked by the <see cref="ICommand"/> when it's <see cref="Execute"/> method is called.</param>
-        /// <param name="action">The action to be performed by the <see cref="ICommand"/> when it's <see cref="Execute"/> method is called.</param>
+        /// <param name="controller">The <see cref="IController"/> that contains the method that will be invoked by the <see cref="ICommand"/> when the <see cref="ICommand.Execute"/> method is called.</param>
+        /// <param name="action">The action to be performed when the <see cref="ICommand.Execute"/> method is called.</param>
         /// <param name="target">The target for the action.</param>
         /// <returns>An instance of <see cref="ICommand"> that can be used to invoke the specified action.</returns>
         public ICommand CreateCommand(ICommandManager commands, IController controller, string action, string target)
@@ -71,8 +71,8 @@ namespace StarLab.Application
         /// Creates the <see cref="ICommand"> specified by the controller and action provided.
         /// </summary>
         /// <param name="commands">An instance of <see cref="ICommandManager"/> that is required for the creation of the command.</param>
-        /// <param name="controller">The <see cref="IController"/> that contains the method that will be invoked by the <see cref="ICommand"/> when it's <see cref="Execute"/> method is called.</param>
-        /// <param name="action">The action to be performed by the <see cref="ICommand"/> when it's <see cref="Execute"/> method is called.</param>
+        /// <param name="controller">The <see cref="IController"/> that contains the method that will be invoked by the <see cref="ICommand"/> when the <see cref="ICommand.Execute"/> method is called.</param>
+        /// <param name="action">The action to be performed when the <see cref="ICommand.Execute"/> method is called.</param>
         /// <returns>An instance of <see cref="ICommand"> that can be used to invoke the specified action.</returns>
         public ICommand CreateCommand(ICommandManager commands, IController controller, string action)
         {
@@ -140,7 +140,7 @@ namespace StarLab.Application
         /// TODO
         /// </summary>
         /// <param name="args"></param>
-        public void OnEvent(WorkspaceClosedEvent args)
+        public void OnEvent(WorkspaceClosedEventArgs args)
         {
             // TODO
             // Change to a custom dialog that will centre on the application

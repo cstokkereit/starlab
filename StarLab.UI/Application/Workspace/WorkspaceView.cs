@@ -20,8 +20,8 @@ namespace StarLab.Application.Workspace
         /// Initialises a new instance of the <see cref="WorkspaceView"/> class.
         /// </summary>
         /// <param name="text">The window text.</param>
-        /// <param name="factory">An <see cref="IPresentationFactory"/> that will be used to create the presenter.</param>
-        public WorkspaceView(string text, IPresentationFactory factory)
+        /// <param name="factory">An <see cref="IViewFactory"/> that will be used to create the presenter.</param>
+        public WorkspaceView(string text, IViewFactory factory)
         {
             ArgumentNullException.ThrowIfNull(factory, nameof(factory));
             ArgumentException.ThrowIfNullOrEmpty(text, nameof(text));
@@ -147,7 +147,7 @@ namespace StarLab.Application.Workspace
         /// <param name="parent">The name of the parent menu item.</param>
         public void AddMenuSeparator(string parent)
         {
-            menuStrip.AddSeparator(parent);
+            menuStrip.AddMenuSeparator(parent);
         }
 
         /// <summary>
@@ -155,7 +155,7 @@ namespace StarLab.Application.Workspace
         /// </summary>
         public void AddMenuSeparator()
         {
-            menuStrip.AddSeparator();
+            menuStrip.AddMenuSeparator();
         }
 
         /// <summary>
@@ -305,17 +305,17 @@ namespace StarLab.Application.Workspace
         }
 
         /// <summary>
-        /// Event handler for the <see cref="DockPanel"/>.ActiveDocumentChanged event.
+        /// Event handler for the <see cref="DockPanel.ActiveDocumentChanged"/> event.
         /// </summary>
         /// <param name="sender">The <see cref="object"> that was the originator of the event.</param>
-        /// <param name="e">A <see cref="EventArgs"/> that provides context for the event.</param>
+        /// <param name="e">An <see cref="EventArgs"/> that provides context for the event.</param>
         private void DockPanel_ActiveDocumentChanged(object sender, EventArgs e)
         {
             UpdateActiveDocument();
         }
 
         /// <summary>
-        /// Event handler for the <see cref="DockPanel"/>.DockContentRemoved event.
+        /// Event handler for the <see cref="DockPanel.DockContentRemoved"/> event.
         /// </summary>
         /// <param name="sender">The <see cref="object"> that was the originator of the event.</param>
         /// <param name="e">A <see cref="DockContentEventArgs"/> that provides context for the event.</param>
@@ -325,7 +325,7 @@ namespace StarLab.Application.Workspace
         }
 
         /// <summary>
-        /// Event handler for the <see cref="Form"/>.Closing event.
+        /// Event handler for the <see cref="Form.FormClosing"/> event.
         /// </summary>
         /// <param name="sender">The <see cref="object"> that was the originator of the event.</param>
         /// <param name="e">A <see cref="FormClosingEventArgs"/> that provides context for the event.</param>

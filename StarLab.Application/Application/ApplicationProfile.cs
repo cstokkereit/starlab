@@ -4,8 +4,14 @@ using StarLab.Application.Workspace.Documents;
 
 namespace StarLab.Application
 {
+    /// <summary>
+    /// Defines mappings used by AutoMapper to copy application model objects to their respective data transfer objects.
+    /// </summary>
     public class ApplicationProfile : Profile
     {
+        /// <summary>
+        /// Initialises a new instance of the <see cref="ApplicationProfile"> class.
+        /// </summary>
         public ApplicationProfile()
         {
             CreateMap<Workspace.Workspace, WorkspaceDTO>();

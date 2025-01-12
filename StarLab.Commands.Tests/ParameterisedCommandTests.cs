@@ -1,7 +1,7 @@
 ﻿namespace StarLab.Commands
 {
     /// <summary>
-    /// A class for performing unit tests on the <see cref="ParameterisedCommand&lt;TArguments, TReceiver&gt;"/> class.
+    /// A class for performing unit tests on the <see cref="ParameterisedCommand{TArguments, TReceiver}"/> class.
     /// </summary>
     public class ParameterisedCommandTests
     {
@@ -11,7 +11,7 @@
         [Test]
         public void TestConstructor()
         {
-            var command = new TestCommand(new MockReceiver<MockArguments>());
+            var command = new TestCommand(Substitute.For<IReceiver<Arguments>>());
 
             Assert.That(command, Is.Not.Null);
         }
@@ -31,26 +31,26 @@
         [Test]
         public void TestExecute()
         {
-            var receiver = new MockReceiver<MockArguments>();
+            var receiver = Substitute.For<IReceiver<Arguments>>();
 
             var command = new TestCommand(receiver);
 
-            command.Execute(new MockArguments("U1", "pwd"));
+            var arguments = new Arguments();
 
-            Assert.That(receiver.Arguments.UserName, Is.EqualTo("U1"));
-            Assert.That(receiver.Arguments.Password, Is.EqualTo("pwd"));
-            Assert.That(receiver.TestCalled);
+            command.Execute(arguments);
+
+            receiver.Received().Test(arguments);
         }
 
         /// <summary>
-        /// A derived class used to test the abstract <see cref="ParameterisedCommand&lt;TArguments, TReceiver&gt;"/> class.
+        /// A derived class used to test the abstract <see cref="ParameterisedCommand{TArguments, TReceiver}"/> class.
         /// </summary>
-        private class TestCommand : ParameterisedCommand<MockArguments, MockReceiver<MockArguments>>
+        private class TestCommand : ParameterisedCommand<Arguments, IReceiver<Arguments>>
         {
-            public TestCommand(MockReceiver<MockArguments> receiver)
+            public TestCommand(IReceiver<Arguments> receiver)
                 : base(receiver) { }
 
-            public override void Execute(MockArguments arguments)
+            public override void Execute(Arguments arguments)
             {
                 receiver.Test(arguments);
             }

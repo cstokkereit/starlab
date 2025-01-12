@@ -3,7 +3,7 @@
 namespace StarLab.Commands
 {
     /// <summary>
-    /// A class for performing unit tests on the <see cref="CommandInvoker&lt;TComponent&gt;"/> class.
+    /// A class for performing unit tests on the <see cref="CommandInvoker{TComponent}"/> class.
     /// </summary>
     public class CommandInvokerTests
     {
@@ -26,7 +26,7 @@ namespace StarLab.Commands
         {
             var invoker = new ButtonInvoker();
 
-            var command = new MockCommand(new MockReceiver<string>());
+            var command = Substitute.For<ICommand>();
 
             var button = new Button();
 
@@ -34,7 +34,7 @@ namespace StarLab.Commands
 
             button.PerformClick();
 
-            Assert.That(command.ExecuteCalled);
+            command.Received().Execute();
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace StarLab.Commands
         {
             var invoker = new ButtonInvoker();
 
-            var command = new MockCommand(new MockReceiver<string>());
+            var command = Substitute.For<ICommand>();
 
             var button = new Button();
 
@@ -66,7 +66,7 @@ namespace StarLab.Commands
 
             button.PerformClick();
 
-            Assert.That(command.ExecuteCalled, Is.False);
+            command.DidNotReceive().Execute();
         }
 
         /// <summary>
@@ -128,10 +128,13 @@ namespace StarLab.Commands
                 button.Enabled = value;
             }
 
-            private void OnClick(object sender, System.EventArgs e)
+            private void OnClick(object? sender, EventArgs? e)
             {
-                var command = GetCommandForInstance(sender as Button);
-                command.Execute();
+                if (sender is Button button)
+                {
+                    var command = GetCommandForInstance(button);
+                    command.Execute();
+                }
             }
         }
 

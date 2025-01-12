@@ -10,28 +10,28 @@ namespace StarLab.Commands
         /// <summary>
         /// Adds an <see cref="ICommand"/> to the collection of managed commands.
         /// </summary>
-        /// <param name="name">The name used to identify the command.</param>
+        /// <param name="name">The name of the <see cref="ICommand"/>.</param>
         /// <param name="command">The <see cref="ICommand"/> being added.</param>
         void AddCommand(string name, ICommand command);
 
         /// <summary>
-        /// Determines whether a command with the specified name has already been added.
+        /// Determines whether the specified <see cref="ICommand"/> has already been added.
         /// </summary>
-        /// <param name="name">The name of the command.</param>
-        /// <returns>true if the specifed command has already been added; false otherwise.</returns>
+        /// <param name="name">The name of the <see cref="ICommand"/>.</param>
+        /// <returns>true if the specifed <see cref="ICommand"/> has already been added; false otherwise.</returns>
         bool ContainsCommand(string name);
 
         /// <summary>
-        /// Gets the <see cref="ICommand"/> with the specified name.
+        /// Gets the specified <see cref="ICommand"/>.
         /// </summary>
-        /// <param name="name">The name of the command.</param>
+        /// <param name="name">The name of the <see cref="ICommand"/>.</param>
         /// <returns>The specified <see cref="ICommand"/>.</returns>
         ICommand GetCommand(string name);
 
         /// <summary>
-        /// Gets the <see cref="ICommandInvoker"/> associated with the specified component instance.
+        /// Gets the <see cref="ICommandInvoker"/> associated with the specified <see cref="Component"/>.
         /// </summary>
-        /// <param name="instance">The component instance.</param>
+        /// <param name="instance">The <see cref="Component"/> instance.</param>
         /// <returns>The specified <see cref="ICommandInvoker"/>.</returns>
         ICommandInvoker GetCommandInvoker(Component instance);
 
@@ -42,9 +42,9 @@ namespace StarLab.Commands
         void RegisterCommandInvoker(ICommandInvoker invoker);
 
         /// <summary>
-        /// Removes an <see cref="ICommand"/> from the collection of managed commands.
+        /// Removes the specified <see cref="ICommand"/> from the collection of managed commands.
         /// </summary>
-        /// <param name="name">The name of the command.</param>
+        /// <param name="name">The name of the <see cref="ICommand"/> being removed.</param>
         void RemoveCommand(string name);
     }
 }

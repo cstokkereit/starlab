@@ -1,7 +1,7 @@
 ﻿namespace StarLab.Commands
 {
     /// <summary>
-    /// A basic implementation of the <see cref="IUndoStack"/> class.
+    /// A basic implementation of the <see cref="IUndoStack"/> interface.
     /// </summary>
     public class UndoStack : IUndoStack
     {
@@ -20,9 +20,9 @@
         public int UndoCount { get { return undo.Count; } }
 
         /// <summary>
-        /// Adds a command that has just been executed to the undo stack.
+        /// Adds an <see cref="ICommand"/> that has just been executed to the undo stack.
         /// </summary>
-        /// <param name="command">The command to be added.</param>
+        /// <param name="command">The <see cref="ICommand"/> to be added.</param>
         public virtual void Add(IRevertableCommand command)
         {
             undo.Push(command);
@@ -30,7 +30,7 @@
         }
 
         /// <summary>
-        /// Executes the command at the top of the redo stack and moves it to the undo stack.
+        /// Executes the <see cref="ICommand"/> at the top of the redo stack and moves it to the undo stack.
         /// </summary>
         public virtual void Redo()
         {
@@ -40,7 +40,7 @@
         }
 
         /// <summary>
-        /// Undoes the command at the top of the undo stack and moves it to the redo stack.
+        /// Undoes the <see cref="ICommand"/> at the top of the undo stack and moves it to the redo stack.
         /// </summary>
         public virtual void Undo()
         {

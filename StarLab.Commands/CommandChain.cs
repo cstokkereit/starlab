@@ -3,7 +3,7 @@
 namespace StarLab.Commands
 {
     /// <summary>
-    /// Represents a chain of commands that will be executed sequentially.
+    /// Represents a chain of commands that will be executed in the order in which they were added to the chain.
     /// </summary>
     public class CommandChain : ICommand, ICommandChain, IComponentCommand
     {
@@ -23,9 +23,7 @@ namespace StarLab.Commands
         /// <param name="manager">The <see cref="ICommandManager"/> that manages this command and its invokers.</param>
         public CommandChain(ICommandManager manager)
         {
-            ArgumentNullException.ThrowIfNull(manager, nameof(manager));
-
-            this.manager = manager;
+            this.manager = manager ?? throw new ArgumentNullException(nameof(manager));
         }
 
         /// <summary>
@@ -82,9 +80,9 @@ namespace StarLab.Commands
         }
 
         /// <summary>
-        /// Adds the <see cref="ICommand"/> provided to the chain of commands.
+        /// Adds the <see cref="ICommand"/> provided to the chain.
         /// </summary>
-        /// <param name="command">The command to be added.</param>
+        /// <param name="command">The <see cref="ICommand"/> being added.</param>
         public void Add(ICommand command)
         {
             ArgumentNullException.ThrowIfNull(command, nameof(command));
@@ -93,9 +91,9 @@ namespace StarLab.Commands
         }
 
         /// <summary>
-        /// Adds a component to the list of components that can execute this command.
+        /// Adds the <see cref="Component"> provided to the list of components that can execute this command.
         /// </summary>
-        /// <param name="instance">The component to be added e.g. a ToolStripMenuItem.</param>
+        /// <param name="instance">The <see cref="Component"> being added.</param>
         public void AddInstance(Component instance)
         {
             ArgumentNullException.ThrowIfNull(instance, nameof(instance));

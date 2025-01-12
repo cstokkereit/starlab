@@ -8,34 +8,34 @@ namespace StarLab.Commands
     public interface ICommandInvoker
     {
         /// <summary>
-        /// Gets the type of the component that invokes the commands e.g. System.Windows.Forms.Button
+        /// Gets the type of the <see cref="Component"/> that invokes the commands e.g. System.Windows.Forms.Button
         /// </summary>
         string Type { get; }
 
         /// <summary>
-        /// Associates a command with the component that invokes it.
+        /// Associates an <see cref="ICommand"/> with the <see cref="Component"/> that invokes it.
         /// </summary>
-        /// <param name="item">The component that will invoke the command.</param>
-        /// <param name="command">The command that will be invoked.</param>
+        /// <param name="item">The <see cref="Component"/> that will invoke the command.</param>
+        /// <param name="command">The <see cref="ICommand"/> that will be invoked.</param>
         void AddInstance(Component component, ICommand command);
 
         /// <summary>
-        /// Dissociates a command from the component that invokes it.
+        /// Dissociates an <see cref="ICommand"/> from the <see cref="Component"/> that invokes it.
         /// </summary>
-        /// <param name="component">The component that will no longer invoke the command.</param>
+        /// <param name="component">The <see cref="Component"/> that will no longer invoke the command.</param>
         void RemoveInstance(Component component);
 
         /// <summary>
-        /// Updates the Checked state of the component provided.
+        /// Updates the Checked state of the <see cref="Component"/> provided.
         /// </summary>
-        /// <param name="component">The component being updated.</param>
+        /// <param name="component">The <see cref="Component"/> being updated.</param>
         /// <param name="value">The new Checked state.</param>
         void UpdateCheckedState(Component component, bool value);
 
         /// <summary>
-        /// Updates the Enabled state of the component provided.
+        /// Updates the Enabled state of the <see cref="Component"/> provided.
         /// </summary>
-        /// <param name="component">The component being updated.</param>
+        /// <param name="component">The <see cref="Component"/> being updated.</param>
         /// <param name="value">The new Enabled state.</param>
         void UpdateEnabledState(Component component, bool value);
     }

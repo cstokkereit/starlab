@@ -22,17 +22,18 @@ namespace StarLab
         /// </summary>
         /// <param name="name">The name of the dialog.</param>
         /// <param name="text">The dialog text.</param>
-        /// <param name="factory">An <see cref="IPresentationFactory"/> that will be used to create the presenter and child view.</param>
+        /// <param name="factory">An <see cref="IViewFactory"/> that will be used to create the presenter and child view.</param>
         /// <param name="configuration">An <see cref="IViewConfiguration"/> that holds the configuration information required to construct this view.</param>
+        /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="ArgumentException"></exception>
-        public DialogView(string name, string text, IPresentationFactory factory, IViewConfiguration configuration)
+        public DialogView(string name, string text, IViewFactory factory, IViewConfiguration configuration)
         {
             ArgumentNullException.ThrowIfNull(configuration, nameof(configuration));
             ArgumentNullException.ThrowIfNull(factory, nameof(factory));
             ArgumentException.ThrowIfNullOrEmpty(name, nameof(name));
             ArgumentException.ThrowIfNullOrEmpty(text, nameof(text));
 
-            if (configuration.Contents.Count > 1) throw new ArgumentException(); // TODO
+            if (configuration.ChildViews.Count > 1) throw new ArgumentException(); // TODO
 
             InitializeComponent();
 
@@ -44,7 +45,7 @@ namespace StarLab
 
             presenter = (IDialogViewPresenter)factory.CreatePresenter(configuration.Name, this);
 
-            childView = factory.CreateView(configuration.Contents[0], configuration);
+            childView = factory.CreateView(configuration.ChildViews[0], configuration);
             childView.Controller.RegisterController((IViewController)presenter);
 
             SuspendLayout();
@@ -160,7 +161,7 @@ namespace StarLab
         }
 
         /// <summary>
-        /// Event handler for the <see cref="Form"/>.Closing event.
+        /// Event handler for the <see cref="Form.FormClosing"/> event.
         /// </summary>
         /// <param name="sender">The <see cref="object"> that was the originator of the event.</param>
         /// <param name="e">A <see cref="FormClosingEventArgs"/> that provides context for the event.</param>

@@ -1,37 +1,66 @@
 ﻿using AutoMapper;
 using StarLab.Application.Configuration;
 using StarLab.Commands;
-using System.Diagnostics;
-using System.Drawing;
 
 namespace StarLab.Application
 {
+    /// <summary>
+    /// The base class for all <see cref="UserControl"> based view presenters. The view controlled by this presenter is a child of a <see cref="Form"/> based parent view.
+    /// 
+    /// </summary>
     public abstract class ChildViewPresenter<TView, TParent> : Presenter, IChildViewPresenter
         where TParent : IViewController
         where TView : IChildView
     {
-        private TParent? parentController;
+        private TParent? parentController; // The parent view controller.
 
-        public ChildViewPresenter(TView view, ICommandManager commands, IUseCaseFactory useCaseFactory, IConfigurationService configuration, IMapper mapper, IEventAggregator events)
-            : base(commands, useCaseFactory, configuration, mapper, events)
+        /// <summary>
+        /// Initialises a new instance of the <see cref="ChildViewPresenter{TView, TParent}"/> class.
+        /// </summary>
+        /// <param name="view">The <see cref="TView"/> controlled by the presenter.</param>
+        /// <param name="commands">An instance of <see cref="ICommandManager"/> that is required for the creation of commands.</param>
+        /// <param name="factory">An <see cref="IUseCaseFactory"/> that will be used to create use case interactors.</param>
+        /// <param name="configuration">The <see cref="IConfigurationService"/> that will be used to get configuration information.</param>
+        /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
+        /// <param name="events">The <see cref="IEventAggregator"/> that manages application events.</param>
+        /// <exception cref="ArgumentNullException"></exception>
+        public ChildViewPresenter(TView view, ICommandManager commands, IUseCaseFactory factory, IConfigurationService configuration, IMapper mapper, IEventAggregator events)
+            : base(commands, factory, configuration, mapper, events)
         {
             View = view ?? throw new ArgumentNullException(nameof(view));
         }
 
+        /// <summary>
+        /// Gets the name of the controller.
+        /// </summary>
         public override string Name => View.Name + Constants.CONTROLLER;
 
+        /// <summary>
+        /// Registers the parent <see cref="IViewController"/> with the <see cref="ChildViewPresenter{TView, TParent}"/>.
+        /// </summary>
+        /// <param name="parentController">An <see cref="IViewController"/> that can be used to control the behaviour of the parent view.</param>
         public virtual void RegisterController(IViewController parentController)
         {
             this.parentController = (TParent)parentController;
         }
 
+        /// <summary>
+        /// Runs the presenter with the <see cref="IInteractionContext"/> provided.
+        /// </summary>
+        /// <param name="context">An <see cref="IInteractionContext"/> that provides context for the use case.</param>
         public virtual void Run(IInteractionContext context)
         {
             InteractionContext = context; // May not be necessary
         }
 
+        /// <summary>
+        /// Gets or sets the <see cref="IInteractionContext"/>.
+        /// </summary>
         protected IInteractionContext? InteractionContext { get; private set; }
 
+        /// <summary>
+        /// Gets or sets the <see cref="TParent"/> controller.
+        /// </summary>
         protected TParent ParentController 
         {
             get
@@ -44,6 +73,9 @@ namespace StarLab.Application
             private set { parentController = value; }
         }
 
+        /// <summary>
+        /// Gets the <see cref="TView"/> that is controlled by the presenter.
+        /// </summary>
         protected TView View { get; }
 
         /// <summary>
@@ -82,11 +114,24 @@ namespace StarLab.Application
             return ParentController.ShowMessage(caption, message);
         }
 
+        /// <summary>
+        /// TODO - Remove
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="filter"></param>
+        /// <returns></returns>
         protected string ShowOpenFileDialog(string title, string filter)
         {
             return ParentController.ShowOpenFileDialog(title, filter);
         }
 
+        /// <summary>
+        /// TODO - Remove
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="filter"></param>
+        /// <param name="extension"></param>
+        /// <returns></returns>
         protected string ShowSaveFileDialog(string title, string filter, string extension)
         {
             return ParentController.ShowSaveFileDialog(title, filter, extension);

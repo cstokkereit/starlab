@@ -3,17 +3,17 @@
 namespace StarLab.Application
 {
     /// <summary>
-    /// TODO
+    /// Extends the <see cref="System.Windows.Forms.ToolStrip"/> control.
     /// </summary>
     public class ToolStrip : System.Windows.Forms.ToolStrip
     {
         /// <summary>
-        /// Adds a button to the tool bar.
+        /// Adds a <see cref="ToolStripButton"> to the <see cref="System.Windows.Forms.ToolStrip"/>.
         /// </summary>
-        /// <param name="name">The name of the button.</param>
+        /// <param name="name">The name of the <see cref="ToolStripButton">.</param>
         /// <param name="tooltip">The tooltip text.</param>
-        /// <param name="image">The image to use for the button.</param>
-        /// <param name="command">The command to invoke when the button is clicked.</param>
+        /// <param name="image">The <see cref="Image"> to use for the button.</param>
+        /// <param name="command">The <see cref="ICommand"> that will be invoked when the button is clicked.</param>
         public void AddButton(string name, string tooltip, Image? image, ICommand command)
         {
             var button = new ToolStripButton(image);

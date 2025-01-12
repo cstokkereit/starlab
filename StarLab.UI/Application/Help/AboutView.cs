@@ -17,10 +17,10 @@ namespace StarLab.Application.Help
         /// <summary>
         /// Initialises a new instance of the <see cref="AboutView"> class.
         /// </summary>
-        /// <param name="configuration">An <see cref="IContentConfiguration"/> that holds the configuration information required to construct this view.</param>
+        /// <param name="configuration">An <see cref="IChildViewConfiguration"/> that holds the configuration information required to construct this view.</param>
         /// <param name="parent">An <see cref="IViewConfiguration"/> that holds the configuration information that was used to construct the parent view.</param>
-        /// <param name="factory">An <see cref="IPresentationFactory"/> that will be used to create the presenter and child view.</param>
-        public AboutView(IContentConfiguration config, IViewConfiguration parent, IPresentationFactory factory)
+        /// <param name="factory">An <see cref="IViewFactory"/> that will be used to create the presenter and child view.</param>
+        public AboutView(IChildViewConfiguration config, IViewConfiguration parent, IViewFactory factory)
         {
             InitializeComponent();
 

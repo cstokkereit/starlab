@@ -21,7 +21,7 @@ namespace StarLab.Application.Workspace.Documents
         /// <param name="config"></param>
         /// <param name="parent"></param>
         /// <param name="factory"></param>
-        public AddDocumentView(IContentConfiguration config, IViewConfiguration parent, IPresentationFactory factory)
+        public AddDocumentView(IChildViewConfiguration config, IViewConfiguration parent, IViewFactory factory)
         {
             InitializeComponent();
 

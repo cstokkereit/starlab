@@ -2,12 +2,12 @@
 {
     public interface IViewConfiguration
     {
-        IList<IContentConfiguration> Contents { get; }
+        IList<IChildViewConfiguration> ChildViews { get; }
 
         string Name { get; }
 
         ViewTypes Type { get; }
 
-        IContentConfiguration GetContentConfiguration(string name);
+        IChildViewConfiguration GetChildViewConfiguration(string name);
     }
 }

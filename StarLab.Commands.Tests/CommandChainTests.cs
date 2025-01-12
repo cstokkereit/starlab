@@ -1,13 +1,17 @@
-﻿namespace StarLab.Commands
+﻿using System.ComponentModel;
+
+namespace StarLab.Commands
 {
     /// <summary>
     /// A class for performing unit tests on the <see cref="CommandChain"/> class.
     /// </summary>
     public class CommandChainTests
     {
+        private readonly ICommandManager manager = new CommandManager(); // The command manager used to register the command invoker used in the tests.
 
-        // TODO - Add tests for ComponentCommand version of AggregateCommand
-
+        /// <summary>
+        /// Test that the default constructor works.
+        /// </summary>
         public void TestDefaultConstructor()
         {
             var command = new CommandChain();
@@ -16,12 +20,50 @@
         }
 
         /// <summary>
-        /// Test that the Execute() method works correctly when the <see cref="CommandChain"/> was initialised with a collection.
+        /// Test that the ICommandManager constructor works correctly.
+        /// </summary>
+        [Test]
+        public void TestManagerConstructor()
+        {
+            var command = new CommandChain(manager);
+
+            Assert.That(command, Is.Not.Null);
+        }
+
+        /// <summary>
+        /// Test that the AddInstance(Component) method works correctly.
+        /// </summary>
+        [Test]
+        public void TestAddInstance()
+        {
+            manager.RegisterCommandInvoker(new TestInvoker());
+
+            var receiver = Substitute.For<IReceiver<string>>();
+            var command = new CommandChain(manager);
+            var menu = new ToolStripMenuItem();
+
+            command.AddInstance(menu);
+
+            command.Add(new TestCommand(receiver, "This"));
+            command.Add(new TestCommand(receiver, "is"));
+            command.Add(new TestCommand(receiver, "a"));
+            command.Add(new TestCommand(receiver, "test."));
+
+            menu.PerformClick();
+
+            receiver.Received(1).Test("This");
+            receiver.Received(1).Test("is");
+            receiver.Received(1).Test("a");
+            receiver.Received(1).Test("test.");
+        }
+
+        /// <summary>
+        /// Test that the Execute() method works correctly when the <see cref="CommandChain"/> contains multiple commands.
         /// </summary>
         [Test]
         public void TestExecuteCommandChain()
         {
-            var receiver = new TestReceiver();
+            var receiver = Substitute.For<IReceiver<string>>();
 
             var command = new CommandChain();
 
@@ -32,39 +74,69 @@
 
             command.Execute();
 
-            Assert.That(receiver.Text, Is.EqualTo("This is a test."));
+            receiver.Received(1).Test("This");
+            receiver.Received(1).Test("is");
+            receiver.Received(1).Test("a");
+            receiver.Received(1).Test("test.");
         }
 
         /// <summary>
-        /// A class used to test the <see cref="CommandChain"/> class.
+        /// A derived class used to test the <see cref="CommandChain"/> class.
         /// </summary>
-        private class TestReceiver
+        private class TestInvoker : CommandInvoker<ToolStripMenuItem>
         {
-            public string Text { get; private set; }
-
-            public void AppendText(string text)
+            public override void AddInstance(Component component, ICommand command)
             {
-                Text = Text + " " + text;
-                Text = Text.Trim();
+                base.AddInstance(component, command);
+                var menu = Cast(component);
+                menu.Click += OnClick;
+            }
+
+            public override void RemoveInstance(Component component)
+            {
+                base.RemoveInstance(component);
+                var menu = Cast(component);
+                menu.Click -= OnClick;
+            }
+
+            public override void UpdateCheckedState(Component component, bool value)
+            {
+                var menu = Cast(component);
+                menu.Checked = value;
+            }
+
+            public override void UpdateEnabledState(Component component, bool value)
+            {
+                var menu = Cast(component);
+                menu.Enabled = value;
+            }
+
+            private void OnClick(object? sender, EventArgs? e)
+            {
+                if (sender is ToolStripMenuItem item)
+                {
+                    var command = GetCommandForInstance(item);
+                    command.Execute();
+                }
             }
         }
 
         /// <summary>
         /// A derived class used to test the <see cref="CommandChain"/> class.
         /// </summary>
-        private class TestCommand : Command<TestReceiver>
+        private class TestCommand : Command<IReceiver<string>>
         {
-            private readonly string text;
+            private string text;
 
-            public TestCommand(TestReceiver receiver, string text)
-                : base(receiver)
+            public TestCommand(IReceiver<string> receiver, string text)
+                : base(receiver) 
             {
                 this.text = text;
             }
 
             public override void Execute()
             {
-                receiver.AppendText(text);
+                receiver.Test(text);
             }
         }
     }

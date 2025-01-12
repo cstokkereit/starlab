@@ -18,9 +18,9 @@ namespace StarLab.Commands
         bool Enabled { get; set; }
 
         /// <summary>
-        /// Adds a component to the list of components that can execute this command.
+        /// Adds the <see cref="Component"> provided to the list of components that can execute this command.
         /// </summary>
-        /// <param name="instance">The component to be added e.g. a ToolStripMenuItem.</param>
+        /// <param name="instance">The <see cref="Component"> being added.</param>
         void AddInstance(Component instance);
     }
 }

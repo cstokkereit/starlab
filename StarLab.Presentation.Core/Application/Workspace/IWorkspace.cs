@@ -13,9 +13,19 @@ namespace StarLab.Application.Workspace
         IDocument? ActiveDocument { get; }
 
         /// <summary>
+        /// Gets the documents within the workspace.
+        /// </summary>
+        IEnumerable<IDocument> Documents { get; }
+
+        /// <summary>
         /// Gets the workspace file name.
         /// </summary>
         string FileName { get; }
+
+        /// <summary>
+        /// Gets the folders within the workspace.
+        /// </summary>
+        IEnumerable<IFolder> Folders { get; }
 
         /// <summary>
         /// Gets the workspace layout.
@@ -26,16 +36,6 @@ namespace StarLab.Application.Workspace
         /// Gets the workspace name.
         /// </summary>
         string Name { get; }
-
-        /// <summary>
-        /// Gets the documents within the workspace.
-        /// </summary>
-        IEnumerable<IDocument> Documents { get; }
-
-        /// <summary>
-        /// Gets the folders within the workspace.
-        /// </summary>
-        IEnumerable<IFolder> Folders { get; }
 
         /// <summary>
         /// Gets the projects within the workspace.

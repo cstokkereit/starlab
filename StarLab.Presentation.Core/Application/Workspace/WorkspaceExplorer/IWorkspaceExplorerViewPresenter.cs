@@ -8,25 +8,25 @@
         /// <summary>
         /// Notifies the presenter that the specified document node has been selected.
         /// </summary>
-        /// <param name="id">The ID of the node.</param>
-        void DocumentSelected(string id);
+        /// <param name="key">The node key.</param>
+        void DocumentSelected(string key);
 
         /// <summary>
         /// Notifies the presenter that the specified folder node has been collapsed.
         /// </summary>
-        /// <param name="key">The key that identifies the node.</param>
+        /// <param name="key">The node key.</param>
         void FolderCollapsed(string key);
 
         /// <summary>
         /// Notifies the presenter that the specified folder node has been expanded.
         /// </summary>
-        /// <param name="key">The key that identifies the node.</param>
+        /// <param name="key">The node key.</param>
         void FolderExpanded(string key);
 
         /// <summary>
         /// Notifies the presenter that the specified folder node has been selected.
         /// </summary>
-        /// <param name="key">The key that identifies the node.</param>
+        /// <param name="key">The node key.</param>
         void FolderSelected(string key);
 
         /// <summary>
@@ -47,38 +47,38 @@
         /// <summary>
         /// Opens the specified document.
         /// </summary>
-        /// <param name="id">The ID of the document to open.</param>
-        void OpenDocument(string id);
+        /// <param name="key">The node key.</param>
+        void OpenDocument(string key);
 
         /// <summary>
         /// Notifies the presenter that the specified project node has been collapsed.
         /// </summary>
-        /// <param name="key">The key that identifies the node.</param>
+        /// <param name="key">The node key.</param>
         void ProjectCollapsed(string key);
 
         /// <summary>
         /// Notifies the presenter that the specified project node has been expanded.
         /// </summary>
-        /// <param name="key">The key that identifies the node.</param>
+        /// <param name="key">The node key.</param>
         void ProjectExpanded(string key);
 
         /// <summary>
         /// Notifies the presenter that the specified project node has been selected.
         /// </summary>
-        /// <param name="key">The key that identifies the node.</param>
+        /// <param name="key">The node key.</param>
         void ProjectSelected(string key);
 
         /// <summary>
         /// Renames the specified document.
         /// </summary>
-        /// <param name="id">The ID of the document to be renamed.</param>
+        /// <param name="key">The node key.</param>
         /// <param name="name">The new name.</param>
-        void RenameDocument(string id, string name);
+        void RenameDocument(string key, string name);
 
         /// <summary>
         /// Renames the specified folder.
         /// </summary>
-        /// <param name="key">The key that identifies the folder to be renamed.</param>
+        /// <param name="key">The node key.</param>
         /// <param name="name">The new name.</param>
         void RenameFolder(string key, string name);
 
@@ -93,6 +93,11 @@
         /// </summary>
         /// <param name="message">The message text.</param>
         void ShowMessage(string message);
+
+        /// <summary>
+        /// Selects the node that represents the active document.
+        /// </summary>
+        void Synchronise();
 
         /// <summary>
         /// Notifies the presenter that the view has been activated.

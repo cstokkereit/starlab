@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-
-namespace StarLab.Commands
+﻿namespace StarLab.Commands
 {
     /// <summary>
     /// A class for performing unit tests on the <see cref="CommandManager"/> class.
@@ -24,8 +22,8 @@ namespace StarLab.Commands
         [Test]
         public void TestAddExistingCommand()
         {
-            var command1 = new MockCommand(new MockReceiver<string>());
-            var command2 = new MockCommand(new MockReceiver<string>());
+            var command1 = Substitute.For<ICommand>();
+            var command2 = Substitute.For<ICommand>();
 
             var manager = new CommandManager();
 
@@ -40,9 +38,9 @@ namespace StarLab.Commands
         [Test]
         public void TestGetCommand()
         {
-            var command1 = new MockCommand(new MockReceiver<string>());
-            var command2 = new MockCommand(new MockReceiver<string>());
-            var command3 = new MockCommand(new MockReceiver<string>());
+            var command1 = Substitute.For<ICommand>();
+            var command2 = Substitute.For<ICommand>();
+            var command3 = Substitute.For<ICommand>();
 
             var manager = new CommandManager();
 
@@ -73,15 +71,19 @@ namespace StarLab.Commands
         public void TestGetCommandInvoker()
         {
             var manager = new CommandManager();
-            var test = new TestInvoker();
 
-            manager.RegisterCommandInvoker(test);
+            var invoker1 = Substitute.For<ICommandInvoker>();
+            invoker1.Type.Returns(typeof(Button).ToString());
+            manager.RegisterCommandInvoker(invoker1);
 
-            var invoker = manager.GetCommandInvoker(new Button());
+            var invoker2 = Substitute.For<ICommandInvoker>();
+            invoker2.Type.Returns(typeof(ToolStripMenuItem).ToString());
+            manager.RegisterCommandInvoker(invoker2);
 
-            Assert.That(invoker, Is.Not.Null);
-            Assert.That(invoker.Type, Is.EqualTo("System.Windows.Forms.Button"));
-            Assert.That(invoker, Is.SameAs(test));
+            var invoker3 = manager.GetCommandInvoker(new ToolStripMenuItem());
+
+            Assert.That(invoker3, Is.Not.Null);
+            Assert.That(invoker3, Is.SameAs(invoker2));
         }
 
         /// <summary>
@@ -102,45 +104,38 @@ namespace StarLab.Commands
         public void TestRegisterCommandInvoker()
         {
             var manager = new CommandManager();
-            var button = new Button();
 
-            manager.RegisterCommandInvoker(new TestInvoker());
+            var invoker1 = Substitute.For<ICommandInvoker>();
+            invoker1.Type.Returns(typeof(Button).ToString());
 
-            var invoker = manager.GetCommandInvoker(button);
+            manager.RegisterCommandInvoker(invoker1);
 
-            Assert.That(invoker, Is.Not.Null);
-            Assert.That(invoker.Type, Is.EqualTo("System.Windows.Forms.Button"));
+            var invoker2 = manager.GetCommandInvoker(new Button());
+
+            Assert.That(invoker2, Is.Not.Null);
+            Assert.That(invoker2, Is.SameAs(invoker1));
         }
 
         /// <summary>
-        /// Test that the GetCommand(string) method works correctly when the specified command has been added.
+        /// Test that the RemoveCommand(string) method works correctly.
         /// </summary>
         [Test]
         public void TestRemoveCommand()
         {
             var manager = new CommandManager();
 
-            manager.AddCommand("C1", new TestCommand(new TestReceiver(), "C1"));
-            manager.AddCommand("C2", new TestCommand(new TestReceiver(), "C2"));
-            manager.AddCommand("C3", new TestCommand(new TestReceiver(), "C3"));
+            var command1 = Substitute.For<ICommand>();
+            var command2 = Substitute.For<ICommand>();
+            var command3 = Substitute.For<ICommand>();
 
-            var c1 = manager.GetCommand("C1") as TestCommand;
-            var c2 = manager.GetCommand("C2") as TestCommand;
-            var c3 = manager.GetCommand("C3") as TestCommand;
-
-            Assert.IsNotNull(c1);
-            Assert.That(c1.Text, Is.EqualTo("C1"));
-
-            Assert.IsNotNull(c2);
-            Assert.That(c2.Text, Is.EqualTo("C2"));
-
-            Assert.IsNotNull(c3);
-            Assert.That(c3.Text, Is.EqualTo("C3"));
+            manager.AddCommand("C1", command1);
+            manager.AddCommand("C2", command2);
+            manager.AddCommand("C3", command3);
 
             manager.RemoveCommand("C2");
 
-            Assert.That(((TestCommand)manager.GetCommand("C1")).Text, Is.EqualTo("C1"));
-            Assert.That(((TestCommand)manager.GetCommand("C3")).Text, Is.EqualTo("C3"));
+            Assert.That(manager.GetCommand("C1"), Is.SameAs(command1));
+            Assert.That(manager.GetCommand("C3"), Is.SameAs(command3));
 
             var pass = false;
 
@@ -165,68 +160,6 @@ namespace StarLab.Commands
             var manager = new CommandManager();
 
             Assert.Throws<ArgumentException>(() => manager.RemoveCommand("C1"));
-        }
-
-        /// <summary>
-        /// A test class that implements the <see cref="ICommandInvoker"/> interface.
-        /// </summary>
-        private class TestInvoker : ICommandInvoker
-        {
-            private Component component = new Button();
-
-            public string Type => component.GetType().ToString();
-
-            public void AddInstance(Component component, ICommand command)
-            {
-                throw new NotImplementedException();
-            }
-
-            public void RemoveInstance(Component component)
-            {
-                throw new NotImplementedException();
-            }
-
-            public void UpdateCheckedState(Component component, bool value)
-            {
-                throw new NotImplementedException();
-            }
-
-            public void UpdateEnabledState(Component component, bool value)
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        /// <summary>
-        /// A test class used to capture the result of executing a command.
-        /// </summary>
-        private class TestReceiver
-        {
-            public string Text { get; private set; }
-
-            public void AppendText(string text)
-            {
-                Text = Text + text;
-            }
-        }
-
-        /// <summary>
-        /// A test class that implements the <see cref="Command&lt;TestReceiver&lt;"/> interface.
-        /// </summary>
-        private class TestCommand : Command<TestReceiver>
-        {
-            public TestCommand(TestReceiver receiver, string text)
-                : base(receiver)
-            {
-                Text = text;
-            }
-
-            public string Text { get; private set; }
-
-            public override void Execute()
-            {
-                receiver.AppendText(Text);
-            }
         }
     }
 }

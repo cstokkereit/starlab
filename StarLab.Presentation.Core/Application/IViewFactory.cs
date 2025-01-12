@@ -7,7 +7,7 @@ namespace StarLab.Application
     /// <summary>
     /// Represents a factory for creating presenters and views.
     /// </summary>
-    public interface IPresentationFactory
+    public interface IViewFactory
     {
         /// <summary>
         /// Creates an <see cref="IPresenter"/> to control the <see cref="IView"/> provided.
@@ -20,7 +20,7 @@ namespace StarLab.Application
         /// <summary>
         /// Creates an <see cref="IDockableViewPresenter"/> to control the <see cref="IDocumentView"/> provided.
         /// </summary>
-        /// <param name="document">An <see cref="IDocument"/> that </param>
+        /// <param name="document">An <see cref="IDocument"/> that the view represents.</param>
         /// <param name="view">The <see cref="IDocumentView"/> that the presenter will control.</param>
         /// <returns>An <see cref="IDockableViewPresenter"/> that can be used to control the <see cref="IDocumentView"/> provided.</returns>
         IDockableViewPresenter CreatePresenter(IDocument document, IDocumentView view);
@@ -51,9 +51,9 @@ namespace StarLab.Application
         /// <summary>
         /// Creates the specified <see cref="IChildView"/>.
         /// </summary>
-        /// <param name="config">The <see cref="IContentConfiguration"/> that specifies the view to be created.</param>
+        /// <param name="config">The <see cref="IChildViewConfiguration"/> that specifies the view to be created.</param>
         /// <param name="parent">The <see cref="IViewConfiguration"/> of the parent view.</param>
         /// <returns>The specified <see cref="IChildView"/>.</returns>
-        IChildView CreateView(IContentConfiguration config, IViewConfiguration parent);
+        IChildView CreateView(IChildViewConfiguration config, IViewConfiguration parent);
     }
 }

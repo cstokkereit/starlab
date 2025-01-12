@@ -1,7 +1,7 @@
 ﻿namespace StarLab.Commands
 {
     /// <summary>
-    /// A class for performing unit tests on a <see cref="ParameterisedCommand&lt;TArguments, TReceiver&gt;"/> that implements the <see cref="IRevertableCommand"/> interface.
+    /// A class for performing unit tests on a <see cref="ParameterisedCommand{TArguments, TReceiver}"/> that implements the <see cref="IRevertableCommand"/> interface.
     /// </summary>
     public class RevertableCommandTests
     {
@@ -11,7 +11,7 @@
         [Test]
         public void TestConstructor()
         {
-            var command = new TestCommand(new MockReceiver<int>());
+            var command = new TestCommand(Substitute.For<IReceiver<int>>());
 
             Assert.That(command, Is.Not.Null);
         }
@@ -31,14 +31,13 @@
         [Test]
         public void TestExecute()
         {
-            var receiver = new MockReceiver<int>();
+            var receiver = Substitute.For<IReceiver<int>>();
 
             var command = new TestCommand(receiver);
 
             command.Execute(10);
 
-            Assert.IsTrue(receiver.TestCalled);
-            Assert.That(receiver.Arguments, Is.EqualTo(10));
+            receiver.Received().Test(10);
         }
 
         /// <summary>
@@ -47,18 +46,16 @@
         [Test]
         public void TestRedo()
         {
-            var receiver = new MockReceiver<int>(15);
+            var receiver = Substitute.For<IReceiver<int>>();
 
             var command = new TestCommand(receiver);
 
             command.Execute(10);
             command.Undo();
-
-            Assert.That(receiver.Arguments, Is.EqualTo(15));
-
             command.Redo();
 
-            Assert.That(receiver.Arguments, Is.EqualTo(25));
+            receiver.Received(1).Test(-10);
+            receiver.Received(2).Test(10);
         }
 
         /// <summary>
@@ -67,33 +64,31 @@
         [Test]
         public void TestUndo()
         {
-            var receiver = new MockReceiver<int>(15);
+            var receiver = Substitute.For<IReceiver<int>>();
 
             var command = new TestCommand(receiver);
 
             command.Execute(10);
-
-            Assert.That(receiver.Arguments, Is.EqualTo(25));
-
             command.Undo();
 
-            Assert.That(receiver.Arguments, Is.EqualTo(15));
+            receiver.Received(1).Test(-10);
+            receiver.Received(1).Test(10);
         }
 
         /// <summary>
-        /// A test class that implements the abstract <see cref="ParameterisedCommand&lt;TArguments, TReceiver&gt;"/> class and <see cref="IRevertableCommand"/> interface.
+        /// A test class that implements the abstract <see cref="ParameterisedCommand{TArguments, TReceiver}"/> class and <see cref="IRevertableCommand"/> interface.
         /// The Execute and Redo methods both add the arguments to the receiver while the Undo method subtracts them from the receiver. 
         /// </summary>
-        private class TestCommand : ParameterisedCommand<int, MockReceiver<int>>, IRevertableCommand
+        private class TestCommand : ParameterisedCommand<int, IReceiver<int>>, IRevertableCommand
         {
             private int arguments;
 
-            public TestCommand(MockReceiver<int> receiver)
+            public TestCommand(IReceiver<int> receiver)
                 : base(receiver) { }
 
             public override void Execute(int arguments)
             {
-                receiver.Test(receiver.Arguments + arguments);
+                receiver.Test(arguments);
                 this.arguments = arguments;
             }
 
@@ -104,12 +99,12 @@
 
             public void Redo()
             {
-                receiver.Test(receiver.Arguments + arguments);
+                receiver.Test(arguments);
             }
 
             public void Undo()
             {
-                receiver.Test(receiver.Arguments - arguments);
+                receiver.Test(-arguments);
             }
         }
     }

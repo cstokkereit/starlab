@@ -6,29 +6,29 @@ using System.Diagnostics;
 namespace StarLab.Application
 {
     /// <summary>
-    /// TODO
+    /// The base class for all presenters.
     /// </summary>
     public abstract class Presenter : Controller, IPresenter
     {
-        private readonly IConfigurationService configuration; //
+        private readonly IConfigurationService configuration; // A service that provides the configuration information.
 
-        private readonly ICommandManager commands; // 
+        private readonly ICommandManager commands; // Required for the creation and management of commands.
 
-        private readonly IMapper mapper; //
+        private readonly IMapper mapper; // Copies data from model objects to data transfer objects and vice versa.
 
-        private IApplicationController? controller; //
+        private IApplicationController? controller; // A controller that creates, initialises and manages the views that comprise the user interface of the application.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="Presenter"/> class.
         /// </summary>
-        /// <param name="commands"></param>
-        /// <param name="useCaseFactory"></param>
-        /// <param name="configuration"></param>
-        /// <param name="mapper"></param>
-        /// <param name="events"></param>
+        /// <param name="commands">An instance of <see cref="ICommandManager"/> that is required for the creation of commands.</param>
+        /// <param name="factory">An <see cref="IUseCaseFactory"/> that will be used to create use case interactors.</param>
+        /// <param name="configuration">The <see cref="IConfigurationService"/> that will be used to get configuration information.</param>
+        /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
+        /// <param name="events">The <see cref="IEventAggregator"/> that manages application events.</param>
         /// <exception cref="ArgumentNullException"></exception>
-        public Presenter(ICommandManager commands, IUseCaseFactory useCaseFactory, IConfigurationService configuration, IMapper mapper, IEventAggregator events)
-            : base(useCaseFactory, events)
+        public Presenter(ICommandManager commands, IUseCaseFactory factory, IConfigurationService configuration, IMapper mapper, IEventAggregator events)
+            : base(factory, events)
         {
             this.configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
             this.commands = commands ?? throw new ArgumentNullException(nameof(commands));
@@ -36,9 +36,9 @@ namespace StarLab.Application
         }
 
         /// <summary>
-        /// Initialises a new instance of the <see cref="Presenter"/> class.
+        /// Initialises the view.
         /// </summary>
-        /// <param name="controller"></param>
+        /// <param name="controller">The <see cref="IApplicationController"/>.</param>
         public virtual void Initialise(IApplicationController controller)
         {
             Debug.Assert(!Initialised);
@@ -51,7 +51,7 @@ namespace StarLab.Application
         }
 
         /// <summary>
-        /// 
+        /// Gets the <see cref="IApplicationController"/> that manages the <see cref="IView"/>s.
         /// </summary>
         protected IApplicationController AppController
         {
@@ -63,27 +63,27 @@ namespace StarLab.Application
         }
 
         /// <summary>
-        /// 
+        /// Gets the <see cref="IConfigurationService"/> that provides the configuration information.
         /// </summary>
         protected IConfigurationService Configuration => configuration;
 
         /// <summary>
-        /// 
+        /// Returns true if the presenter has been initialised; false otherwise.
         /// </summary>
         protected bool Initialised => controller != null;
 
         /// <summary>
-        /// 
+        /// Gets the <see cref="IMapper"/> used to copy data from model objects to data transfer objects and vice versa.
         /// </summary>
         protected IMapper Mapper => mapper;
 
         /// <summary>
-        /// 
+        /// Gets the specified <see cref="ICommand"/>. 
         /// </summary>
-        /// <param name="controller"></param>
-        /// <param name="action"></param>
-        /// <param name="target"></param>
-        /// <returns></returns>
+        /// <param name="controller">The <see cref="IController"/> that acts as the receiver for the command.</param>
+        /// <param name="action">The action to be performed when the <see cref="ICommand.Execute"/> method is called.</param>
+        /// <param name="target">The target for the action.</param>
+        /// <returns>An instance of <see cref="ICommand"> that can be used to invoke the specified action.</returns>
         protected ICommand GetCommand(IController controller, string action, string target)
         {
             var name = action + target;
@@ -97,11 +97,27 @@ namespace StarLab.Application
         }
 
         /// <summary>
-        /// 
+        /// Gets the specified <see cref="ICommand"/>.
         /// </summary>
-        /// <param name="action"></param>
-        /// <param name="target"></param>
-        /// <returns></returns>
+        /// <param name="controller">The <see cref="IController"/> that acts as the receiver for the command.</param>
+        /// <param name="action">The action to be performed when the <see cref="ICommand.Execute"/> method is called.</param>
+        /// <returns>An instance of <see cref="ICommand"> that can be used to invoke the specified action.</returns>
+        protected ICommand GetCommand(IController controller, string action)
+        {
+            if (!commands.ContainsCommand(action))
+            {
+                commands.AddCommand(action, AppController.CreateCommand(commands, controller, action));
+            }
+
+            return commands.GetCommand(action);
+        }
+
+        /// <summary>
+        /// Gets the specified <see cref="ICommand"/>.
+        /// </summary>
+        /// <param name="action">The action to be performed when the <see cref="ICommand.Execute"/> method is called.</param>
+        /// <param name="target">The target for the action.</param>
+        /// <returns>An instance of <see cref="ICommand"> that can be used to invoke the specified action.</returns>
         protected ICommand GetCommand(string action, string target)
         {
             var name = action + target;
@@ -115,26 +131,10 @@ namespace StarLab.Application
         }
 
         /// <summary>
-        /// 
+        /// Gets the specified <see cref="ICommand"/>.
         /// </summary>
-        /// <param name="controller"></param>
-        /// <param name="action"></param>
-        /// <returns></returns>
-        protected ICommand GetCommand(IController controller, string action)
-        {
-            if (!commands.ContainsCommand(action))
-            {
-                commands.AddCommand(action, AppController.CreateCommand(commands, controller, action));
-            }
-
-            return commands.GetCommand(action);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="action"></param>
-        /// <returns></returns>
+        /// <param name="action">The action to be performed when the <see cref="ICommand.Execute"/> method is called.</param>
+        /// <returns>An instance of <see cref="ICommand"> that can be used to invoke the specified action.</returns>
         protected ICommand GetCommand(string action)
         {
             if (!commands.ContainsCommand(action))
@@ -146,10 +146,10 @@ namespace StarLab.Application
         }
 
         /// <summary>
-        /// 
+        /// Gets the specified <see cref="ICommandChain"/> that can be used to execute multiple <see cref="ICommand"/>s in sequence.
         /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
+        /// <param name="name">The name of the required <see cref="ICommandChain"/>.</param>
+        /// <returns>The specified instance of <see cref="ICommandChain"/>.</returns>
         protected ICommandChain GetCommandChain(string name)
         {
             if (!commands.ContainsCommand(name))
@@ -161,19 +161,19 @@ namespace StarLab.Application
         }
 
         /// <summary>
-        /// 
+        /// Gets an <see cref="ICommandChain"/> that can be used to execute multiple <see cref="ICommand"/>s in sequence.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>An instance of <see cref="ICommandChain"/>.</returns>
         protected ICommandChain GetCommandChain()
         {
             return new CommandChain(commands);
         }
 
         /// <summary>
-        /// 
+        /// Gets the specified <see cref="ICommand"/>.
         /// </summary>
-        /// <param name="view"></param>
-        /// <returns></returns>
+        /// <param name="view">The name of the <see cref="IView"/> that will be shown when the <see cref="ICommand.Execute"/> method is called.</param>
+        /// <returns>An instance of <see cref="ICommand"> that can be used to show the specified <see cref="IView"/>.</returns>
         protected ICommand GetShowViewCommand(string view)
         {
             var name = Actions.SHOW + view;
@@ -187,21 +187,21 @@ namespace StarLab.Application
         }
 
         /// <summary>
-        /// 
+        /// Sets the enabled state of the specified <see cref="ICommand"/>.
         /// </summary>
-        /// <param name="action"></param>
-        /// <param name="target"></param>
-        /// <param name="enabled"></param>
+        /// <param name="action">The action to be performed when the <see cref="ICommand.Execute"/> method is called.</param>
+        /// <param name="target">The target for the action.</param>
+        /// <param name="enabled">The new enabled state.</param>
         protected void UpdateCommandState(string action, string target, bool enabled)
         {
             if (GetCommand(action + target) is IComponentCommand command) command.Enabled = enabled;
         }
 
         /// <summary>
-        /// 
+        /// Sets the enabled state of the specified <see cref="ICommand"/>.
         /// </summary>
-        /// <param name="action"></param>
-        /// <param name="enabled"></param>
+        /// <param name="action">The action to be performed when the <see cref="ICommand.Execute"/> method is called.</param>
+        /// <param name="enabled">The new enabled state.</param>
         protected void UpdateCommandState(string action, bool enabled)
         {
             if (GetCommand(action) is IComponentCommand command) command.Enabled = enabled;

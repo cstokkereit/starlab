@@ -5,7 +5,7 @@ namespace StarLab.Application
     /// <summary>
     /// TODO
     /// </summary>
-    public class MenuStrip : System.Windows.Forms.MenuStrip
+    public class MenuStrip : System.Windows.Forms.MenuStrip, IMenuManager
     {
         private Dictionary<string, ToolStripMenuItem> menuItems = new Dictionary<string, ToolStripMenuItem>(); // A dictionary containing the menu items indexed by name.
 
@@ -22,9 +22,20 @@ namespace StarLab.Application
         /// <summary>
         /// Adds a menu item to the menu.
         /// </summary>
+        /// <param name="parent">The name of the parent menu item.</param>
         /// <param name="name">The name of the menu item.</param>
         /// <param name="text">The menu item text.</param>
-        /// <param name="image">The menu item image.</param>
+        public void AddMenuItem(string parent, string name, string text)
+        {
+            AddItem(parent, name, text);
+        }
+
+        /// <summary>
+        /// Adds a menu item to the menu.
+        /// </summary>
+        /// <param name="name">The name of the menu item.</param>
+        /// <param name="text">The menu item text.</param>
+        /// <param name="image">The menu item <see cref="Image"/>.</param>
         public void AddMenuItem(string name, string text, Image image)
         {
             var item = AddItem(name, text);
@@ -38,37 +49,9 @@ namespace StarLab.Application
         /// <summary>
         /// Adds a menu item to the menu.
         /// </summary>
-        /// <param name="parent">The name of the parent menu item.</param>
         /// <param name="name">The name of the menu item.</param>
         /// <param name="text">The menu item text.</param>
-        public void AddMenuItem(string parent, string name, string text)
-        {
-            AddItem(parent, name, text);
-        }
-
-        /// <summary>
-        /// Adds a menu item to the menu.
-        /// </summary>
-        /// <param name="parent">The name of the parent menu item.</param>
-        /// <param name="name">The name of the menu item.</param>
-        /// <param name="text">The menu item text.</param>
-        /// <param name="image">The menu item image.</param>
-        public void AddMenuItem(string parent, string name, string text, Image image)
-        {
-            var item = AddItem(parent, name, text);
-
-            if (item != null)
-            {
-                item.Image = image;
-            }
-        }
-
-        /// <summary>
-        /// Adds a menu item to the menu.
-        /// </summary>
-        /// <param name="name">The name of the menu item.</param>
-        /// <param name="text">The menu item text.</param>
-        /// <param name="command">The command to invoke when the menu item is clicked.</param>
+        /// <param name="command">The <see cref="ICommand"/> that will be invoked when the menu item is clicked.</param>
         public void AddMenuItem(string name, string text, ICommand command)
         {
             var item = AddItem(name, text);
@@ -82,10 +65,44 @@ namespace StarLab.Application
         /// <summary>
         /// Adds a menu item to the menu.
         /// </summary>
+        /// <param name="parent">The name of the parent menu item.</param>
         /// <param name="name">The name of the menu item.</param>
         /// <param name="text">The menu item text.</param>
-        /// <param name="image">The menu item image.</param>
-        /// <param name="command">The command to invoke when the menu item is clicked.</param>
+        /// <param name="image">The menu item <see cref="Image"/>.</param>
+        public void AddMenuItem(string parent, string name, string text, Image image)
+        {
+            var item = AddItem(parent, name, text);
+
+            if (item != null)
+            {
+                item.Image = image;
+            }
+        }
+
+        /// <summary>
+        /// Adds a menu item to the menu.
+        /// </summary>
+        /// <param name="parent">The name of the parent menu item.</param>
+        /// <param name="name">The name of the menu item.</param>
+        /// <param name="text">The menu item text.</param>
+        /// <param name="command">The <see cref="ICommand"/> that will be invoked when the menu item is clicked.</param>
+        public void AddMenuItem(string parent, string name, string text, ICommand command)
+        {
+            var item = AddItem(parent, name, text);
+
+            if (item != null && command is IComponentCommand componentCommand)
+            {
+                componentCommand.AddInstance(item);
+            }
+        }
+
+        /// <summary>
+        /// Adds a menu item to the menu.
+        /// </summary>
+        /// <param name="name">The name of the menu item.</param>
+        /// <param name="text">The menu item text.</param>
+        /// <param name="image">The menu item <see cref="Image"/>.</param>
+        /// <param name="command">The <see cref="ICommand"/> that will be invoked when the menu item is clicked.</param>
         public void AddMenuItem(string name, string text, Image image, ICommand command)
         {
             var item = AddItem(name, text);
@@ -103,25 +120,8 @@ namespace StarLab.Application
         /// <param name="parent">The name of the parent menu item.</param>
         /// <param name="name">The name of the menu item.</param>
         /// <param name="text">The menu item text.</param>
-        /// <param name="command">The command to invoke when the menu item is clicked.</param>
-        public void AddMenuItem(string parent, string name, string text, ICommand command)
-        {
-            var item = AddItem(parent, name, text);
-
-            if (item != null && command is IComponentCommand componentCommand)
-            {
-                componentCommand.AddInstance(item);
-            }
-        }
-
-        /// <summary>
-        /// Adds a menu item to the menu.
-        /// </summary>
-        /// <param name="parent">The name of the parent menu item.</param>
-        /// <param name="name">The name of the menu item.</param>
-        /// <param name="text">The menu item text.</param>
-        /// <param name="image">The menu item image.</param>
-        /// <param name="command">The command to invoke when the menu item is clicked.</param>
+        /// <param name="image">The menu item <see cref="Image"/>.</param>
+        /// <param name="command">The <see cref="ICommand"/> that will be invoked when the menu item is clicked.</param>
         public void AddMenuItem(string parent, string name, string text, Image image, ICommand command)
         {
             var item = AddItem(parent, name, text);
@@ -137,7 +137,7 @@ namespace StarLab.Application
         /// Adds a separator to the menu.
         /// </summary>
         /// <param name="parent">The name of the parent menu item.</param>
-        public void AddSeparator(string parent)
+        public void AddMenuSeparator(string parent)
         {
             if (menuItems.ContainsKey(parent))
             {
@@ -149,7 +149,7 @@ namespace StarLab.Application
         /// <summary>
         /// Adds a separator to the menu.
         /// </summary>
-        public void AddSeparator()
+        public void AddMenuSeparator()
         {
             // Do Nothing
         }

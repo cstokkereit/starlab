@@ -1,7 +1,7 @@
 ﻿namespace StarLab.Commands
 {
     /// <summary>
-    /// A class for performing unit tests on the <see cref="Command&lt;TReceiver&gt;"/> class.
+    /// A class for performing unit tests on the <see cref="Command{TReceiver}"/> class.
     /// </summary>
     public class CommandTests
     {
@@ -11,7 +11,7 @@
         [Test]
         public void TestConstructor()
         {
-            var command = new TestCommand(new MockReceiver<string>());
+            var command = new TestCommand(Substitute.For<IReceiver>());
 
             Assert.That(command, Is.Not.Null);
         }
@@ -31,21 +31,21 @@
         [Test]
         public void TestExecute()
         {
-            var receiver = new MockReceiver<string>();
+            var receiver = Substitute.For<IReceiver>();
 
             var command = new TestCommand(receiver);
 
             command.Execute();
 
-            Assert.That(receiver.TestCalled);
+            receiver.Received().Test();
         }
 
         /// <summary>
-        /// A derived class used to test the abstract <see cref="Command&lt;TReceiver&gt;"/> class.
+        /// A derived class used to test the abstract <see cref="Command{TReceiver}"/> class.
         /// </summary>
-        private class TestCommand : Command<MockReceiver<string>>
+        private class TestCommand : Command<IReceiver>
         {
-            public TestCommand(MockReceiver<string> receiver)
+            public TestCommand(IReceiver receiver)
                 : base(receiver) { }
 
             public override void Execute()

@@ -3,7 +3,7 @@
 namespace StarLab.Commands
 {
     /// <summary>
-    /// A class for performing unit tests on the <see cref="ComponentCommand&lt;TReceiver&gt;"/> class.
+    /// A class for performing unit tests on the <see cref="ComponentCommand{TReceiver}"/> class.
     /// </summary>
     public class ComponentCommandTests
     {
@@ -15,7 +15,7 @@ namespace StarLab.Commands
         [Test]
         public void TestConstructor()
         {
-            var command = new TestCommand(manager, new MockReceiver<string>());
+            var command = new TestCommand(manager, Substitute.For<IReceiver>());
 
             Assert.That(command, Is.Not.Null);
         }
@@ -30,7 +30,7 @@ namespace StarLab.Commands
 
             manager.RegisterCommandInvoker(new TestInvoker());
 
-            var receiver = new MockReceiver<string>();
+            var receiver = Substitute.For<IReceiver>();
 
             var command = new TestCommand(manager, receiver);
 
@@ -38,7 +38,7 @@ namespace StarLab.Commands
 
             menu.PerformClick();
 
-            Assert.That(receiver.TestCalled);
+            receiver.Received().Test();
         }
 
         /// <summary>
@@ -51,9 +51,7 @@ namespace StarLab.Commands
 
             manager.RegisterCommandInvoker(new TestInvoker());
 
-            var receiver = new MockReceiver<string>();
-
-            var command = new TestCommand(manager, receiver);
+            var command = new TestCommand(manager, Substitute.For<IReceiver>());
 
             command.AddInstance(menu);
 
@@ -71,9 +69,7 @@ namespace StarLab.Commands
 
             manager.RegisterCommandInvoker(new TestInvoker());
 
-            var receiver = new MockReceiver<string>();
-
-            var command = new TestCommand(manager, receiver);
+            var command = new TestCommand(manager, Substitute.For<IReceiver>());
 
             command.AddInstance(menu);
 
@@ -93,9 +89,7 @@ namespace StarLab.Commands
 
             manager.RegisterCommandInvoker(new TestInvoker());
 
-            var receiver = new MockReceiver<string>();
-
-            var command = new TestCommand(manager, receiver);
+            var command = new TestCommand(manager, Substitute.For<IReceiver>());
 
             command.AddInstance(menu);
 
@@ -113,9 +107,7 @@ namespace StarLab.Commands
 
             manager.RegisterCommandInvoker(new TestInvoker());
 
-            var receiver = new MockReceiver<string>();
-
-            var command = new TestCommand(manager, receiver);
+            var command = new TestCommand(manager, Substitute.For<IReceiver>());
 
             command.AddInstance(menu);
 
@@ -126,7 +118,7 @@ namespace StarLab.Commands
         }
 
         /// <summary>
-        /// A derived class used to test the abstract <see cref="ComponentCommand&lt;TReceiver&gt;"/> class.
+        /// A derived class used to test the abstract <see cref="ComponentCommand{TReceiver}"/> class.
         /// </summary>
         private class TestInvoker : CommandInvoker<ToolStripMenuItem>
         {
@@ -156,19 +148,22 @@ namespace StarLab.Commands
                 menu.Enabled = value;
             }
 
-            private void OnClick(object sender, EventArgs e)
+            private void OnClick(object? sender, EventArgs? e)
             {
-                var command = GetCommandForInstance(sender as ToolStripMenuItem);
-                command.Execute();
+                if (sender is ToolStripMenuItem item)
+                {
+                    var command = GetCommandForInstance(item);
+                    command.Execute();
+                }
             }
         }
 
         /// <summary>
-        /// A test class that implements the abstract <see cref="ComponentCommand&lt;TReceiver&gt;"/> class.
+        /// A test class that implements the abstract <see cref="ComponentCommand{TReceiver}"/> class.
         /// </summary>
-        private class TestCommand : ComponentCommand<MockReceiver<string>>
+        private class TestCommand : ComponentCommand<IReceiver>
         {
-            public TestCommand(ICommandManager manager, MockReceiver<string> receiver)
+            public TestCommand(ICommandManager manager, IReceiver receiver)
                 : base(manager, receiver) { }
 
             public override void Execute()

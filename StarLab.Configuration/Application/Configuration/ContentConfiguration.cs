@@ -1,6 +1,6 @@
 ﻿namespace StarLab.Application.Configuration
 {
-    internal readonly struct ContentConfiguration : IContentConfiguration
+    internal readonly struct ContentConfiguration : IChildViewConfiguration
     {
         private readonly int panel;
 
