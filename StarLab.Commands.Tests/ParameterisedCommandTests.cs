@@ -6,7 +6,7 @@
     public class ParameterisedCommandTests
     {
         /// <summary>
-        /// Test that the constructor works correctly.
+        /// Test that the <see cref="ParameterisedCommand{Arguments, IReceiver{Arguments}}(IReceiver{Arguments})"/> constructor works correctly.
         /// </summary>
         [Test]
         public void TestConstructor()
@@ -17,7 +17,7 @@
         }
 
         /// <summary>
-        /// Test that the constructor throws an exception when the receiver argument is null.
+        /// Test that the <see cref="ParameterisedCommand{Arguments, IReceiver{Arguments}}(IReceiver{Arguments})"/> constructor throws an exception when the receiver argument is null.
         /// </summary>
         [Test]
         public void TestConstructorWithNullArgument()
@@ -26,7 +26,7 @@
         }
 
         /// <summary>
-        /// Test that the Execute(TArguments) method works correctly.
+        /// Test that the <see cref="ParameterisedCommand{Arguments, IReceiver{Arguments}}.Execute(Arguments)"/> method works correctly.
         /// </summary>
         [Test]
         public void TestExecute()

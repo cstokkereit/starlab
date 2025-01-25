@@ -6,7 +6,7 @@
     public class CommandManagerTests
     {
         /// <summary>
-        /// Test that the constructor works correctly.
+        /// Test that the <see cref="CommandManager()"/> constructor works correctly.
         /// </summary>
         [Test]
         public void TestConstructor()
@@ -17,7 +17,7 @@
         }
 
         /// <summary>
-        ///  Test that the AddCommand(string, ICommand) method throws an exception when the command has already been added.
+        ///  Test that the <see cref="CommandManager.AddCommand(string, ICommand)"/> method throws an exception when the command has already been added.
         /// </summary>
         [Test]
         public void TestAddExistingCommand()
@@ -33,7 +33,7 @@
         }
 
         /// <summary>
-        /// Test that the GetCommand(string) method works correctly when the specified command has been added.
+        /// Test that the <see cref="CommandManager.GetCommand(string)"/> method works correctly when the specified command has been added.
         /// </summary>
         [Test]
         public void TestGetCommand()
@@ -54,7 +54,7 @@
         }
 
         /// <summary>
-        /// Test that the GetCommand(string) method throws an exception when the specified command has not been added.
+        /// Test that the <see cref="CommandManager.GetCommand(string)"/> method throws an exception when the specified command has not been added.
         /// </summary>
         [Test]
         public void TestGetMissingCommand()
@@ -65,7 +65,7 @@
         }
 
         /// <summary>
-        /// Test that the GetCommandInvoker(Component) method works correctly when the specified invoker has been registered.
+        /// Test that the <see cref="CommandManager.GetCommandInvoker(System.ComponentModel.Component)"/> method works correctly when the specified invoker has been registered.
         /// </summary>
         [Test]
         public void TestGetCommandInvoker()
@@ -87,7 +87,7 @@
         }
 
         /// <summary>
-        /// Test that the GetCommandInvoker(Component) method throws an exception when the specified command invoker has not been registered.
+        /// Test that the <see cref="CommandManager.GetCommandInvoker(System.ComponentModel.Component)"/> method throws an exception when the specified command invoker has not been registered.
         /// </summary>
         [Test]
         public void TestGetMissingCommandInvoker()
@@ -98,7 +98,7 @@
         }
 
         /// <summary>
-        /// Test that the RegisterCommandInvoker(ICommandInvoker) method works correctly.
+        /// Test that the <see cref="CommandManager.RegisterCommandInvoker(ICommandInvoker)"/> method works correctly.
         /// </summary>
         [Test]
         public void TestRegisterCommandInvoker()
@@ -117,7 +117,7 @@
         }
 
         /// <summary>
-        /// Test that the RemoveCommand(string) method works correctly.
+        /// Test that the <see cref="CommandManager.RemoveCommand(string)"/> method works correctly.
         /// </summary>
         [Test]
         public void TestRemoveCommand()
@@ -137,22 +137,11 @@
             Assert.That(manager.GetCommand("C1"), Is.SameAs(command1));
             Assert.That(manager.GetCommand("C3"), Is.SameAs(command3));
 
-            var pass = false;
-
-            try
-            {
-                manager.GetCommand("C2");
-            }
-            catch (ArgumentException e)
-            {
-                pass = e.Message == "A command named C2 could not be found.";
-            }
-
-            Assert.IsTrue(pass);
+            Assert.Throws<ArgumentException>(() => manager.GetCommand("C2"), "A command named C2 could not be found.");
         }
 
         /// <summary>
-        /// Test that the GetCommand(string) method throws an exception when the specified command has not been added.
+        /// Test that the <see cref="CommandManager.RemoveCommand(string)"/> method throws an exception when the specified command has not been added.
         /// </summary>
         [Test]
         public void TestRemoveMissingCommand()

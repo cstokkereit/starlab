@@ -30,7 +30,7 @@ namespace StarLab.Commands
         /// Determines whether the specified <see cref="ICommand"/> has already been added.
         /// </summary>
         /// <param name="name">The name of the <see cref="ICommand"/>.</param>
-        /// <returns>true if the specifed <see cref="ICommand"/> has already been added; false otherwise.</returns>
+        /// <returns><see cref="true"/> if the specifed <see cref="ICommand"/> has already been added; <see cref="false"/> otherwise.</returns>
         public bool ContainsCommand(string name)
         {
             return commands.ContainsKey(name); // TODO Add unit tests
@@ -43,7 +43,7 @@ namespace StarLab.Commands
         /// <returns>The specified <see cref="ICommand"/>.</returns>
         public ICommand GetCommand(string name)
         {
-            if (!commands.ContainsKey(name)) throw new ArgumentException(string.Format(Resources.MessageCommandNotFound, nameof(name)));
+            if (!commands.ContainsKey(name)) throw new ArgumentException(string.Format(Resources.MessageCommandNotFound, name));
 
             return commands[name];
         }

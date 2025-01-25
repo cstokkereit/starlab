@@ -3,6 +3,9 @@ using System.Xml.Serialization;
 
 namespace StarLab.Application.Workspace
 {
+    /// <summary>
+    /// A POCO representation of a project used for XML serialisation/deserialisation.
+    /// </summary>
     public class Project
     {
         [XmlArray]

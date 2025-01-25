@@ -39,7 +39,7 @@
         /// Initialises a new instance of the <see cref="Folder"/> class.
         /// </summary>
         /// <param name="name">The name of the folder.</param>
-        /// <param name="expanded">true if the folder is expanded; false otherwise.</param>
+        /// <param name="expanded"><see cref="true"/> if the folder is expanded; <see cref="false"/> otherwise.</param>
         /// <exception cref="ArgumentException"></exception>
         public Folder(string name, bool expanded)
         {
@@ -54,7 +54,7 @@
         }
 
         /// <summary>
-        /// Returns true if the folder is expanded; false otherwise.
+        /// Returns <see cref="true"/> if the folder is expanded; <see cref="false"/> otherwise.
         /// </summary>
         public bool Expanded { get; private set; }
 

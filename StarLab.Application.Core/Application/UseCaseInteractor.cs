@@ -2,20 +2,36 @@
 
 namespace StarLab.Application
 {
-    public abstract class UseCaseInteractor<T>
+    /// <summary>
+    /// The base class for all use case interactors.
+    /// </summary>
+    /// <typeparam name="TOutputPort">The <see cref="IOutputPort"/> that updates the UI in response to the outputs of the use case.</typeparam>
+    public abstract class UseCaseInteractor<TOutputPort> where TOutputPort : IOutputPort
     {
-        private readonly IMapper mapper;
+        private readonly IMapper mapper; // Copies data from model objects to data transfer objects and vice versa.
 
-        private readonly T outputPort;
+        private readonly TOutputPort outputPort; // Updates the UI in response to the outputs of the use case.
 
-        public UseCaseInteractor(T outputPort, IMapper mapper)
+        /// <summary>
+        /// Initialises a new instance of the <see cref="UseCaseInteractor{TOutputPort}"/> class.
+        /// </summary>
+        /// <param name="outputPort">The <see cref="IOutputPort"/> that updates the UI in response to the outputs of the use case.</param>
+        /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
+        /// <exception cref="ArgumentNullException"></exception>
+        public UseCaseInteractor(TOutputPort outputPort, IMapper mapper)
         {
             this.outputPort = outputPort ?? throw new ArgumentNullException(nameof(outputPort));
             this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
+        /// <summary>
+        /// Gets the <see cref="IMapper"/> used to copy data from model objects to data transfer objects and vice versa.
+        /// </summary>
         protected IMapper Mapper => mapper;
 
-        protected T OutputPort => outputPort;
+        /// <summary>
+        /// Gets the <see cref="IOutputPort"/> that updates the UI in response to the outputs of the use case.
+        /// </summary>
+        protected TOutputPort OutputPort => outputPort;
     }
 }

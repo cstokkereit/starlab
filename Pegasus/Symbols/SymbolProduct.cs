@@ -15,7 +15,7 @@ namespace Pegasus.Symbols
         /// Initialises a new instance of the <see cref="SymbolProduct"/> class.
         /// </summary>
         /// <param name="symbols">A collection containing the symbols that comprise this symbol product.</param>
-        /// <param name="separator">The symbol to be used as a separator in the string representation of this symbol product.</param>
+        /// <param name="separator">The <see cref="ISymbol"/> to be used as a separator in the string representation of this symbol product.</param>
         public SymbolProduct(IEnumerable<ISymbol> symbols, ISymbol separator)
         {
             this.symbols = new List<ISymbol>(symbols);
@@ -41,7 +41,7 @@ namespace Pegasus.Symbols
         /// Determines whether this instance and a specified object, which must also be an <see cref="ISymbol"/> object, have the same value.
         /// </summary>
         /// <param name="other">The <see cref="ISymbol"/> to compare to this instance.</param>
-        /// <returns>true if other has the same value as this instance; false otherwise.</returns>
+        /// <returns><see cref="true"/> if other has the same value as this instance; <see cref="false"/> otherwise.</returns>
         public bool Equals(ISymbol? other)
         {
             var result = !ReferenceEquals(other, null);
@@ -86,7 +86,7 @@ namespace Pegasus.Symbols
         /// Determines whether this instance and a specified object have the same value.
         /// </summary>
         /// <param name="obj">The object to compare to this instance.</param>
-        /// <returns>true if obj is a <see cref="SymbolProduct"/> and its value is the same as this instance; false otherwise.</returns>
+        /// <returns><see cref="true"/> if obj is a <see cref="SymbolProduct"/> and its value is the same as this instance; <see cref="false"/> otherwise.</returns>
         public override bool Equals(object? obj)
         {
             return obj is SymbolProduct && Equals((SymbolProduct)obj);

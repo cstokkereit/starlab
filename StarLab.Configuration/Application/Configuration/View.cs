@@ -1,13 +1,16 @@
 ﻿namespace StarLab.Application.Configuration
 {
+    /// <summary>
+    /// A POCO representation of a view configuration used for XML serialisation/deserialisation.
+    /// </summary>
     internal class View
     {
-        public Contents Contents { get; set; }
+        public ChildViews? ChildViews { get; set; }
 
-        public Content Content { get; set; }
+        public ChildView? ChildView { get; set; }
 
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
-        public string Type { get; set; }
+        public string? Type { get; set; }
     }
 }

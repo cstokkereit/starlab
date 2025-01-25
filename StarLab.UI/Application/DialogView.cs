@@ -55,7 +55,7 @@ namespace StarLab
                 control.Dock = DockStyle.Fill;
                 Controls.Add(control);
             }
-
+            
             ResumeLayout();
         }
 

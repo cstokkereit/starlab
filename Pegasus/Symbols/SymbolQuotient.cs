@@ -14,9 +14,9 @@ namespace Pegasus.Symbols
         /// <summary>
         /// Initialises a new instance of the <see cref="SymbolQuotient"/> class.
         /// </summary>
-        /// <param name="numerator">The symbol to be used as the numerator of this symbol quotient.</param>
-        /// <param name="denominator">The symbol to be used as the denominator of this symbol quotient.</param>
-        /// <exception cref="ArgumentNullException">TODO</exception>
+        /// <param name="numerator">The <see cref="ISymbol"/> to be used as the numerator of this symbol quotient.</param>
+        /// <param name="denominator">The <see cref="ISymbol"/> to be used as the denominator of this symbol quotient.</param>
+        /// <exception cref="ArgumentNullException"></exception>
         public SymbolQuotient(ISymbol numerator, ISymbol denominator)
         {
             this.denominator = denominator ?? throw new ArgumentNullException("denominator");
@@ -28,7 +28,7 @@ namespace Pegasus.Symbols
         /// </summary>
         /// <param name="numerator">A collection containing the symbols that comprise the numerator of this symbol quotient.</param>
         /// <param name="denominator">A collection containing the symbols that comprise the denominator of this symbol quotient.</param>
-        /// <param name="separator">The symbol to be used as a separator in the string representations of the numerator and denominator of this symbol quotient.</param>
+        /// <param name="separator">The <see cref="ISymbol"/> to be used as a separator in the string representations of the numerator and denominator of this symbol quotient.</param>
         public SymbolQuotient(IEnumerable<ISymbol> numerator, IEnumerable<ISymbol> denominator, ISymbol separator)
             : this(new SymbolProduct(numerator, separator), new SymbolProduct(denominator, separator)) { }
 
@@ -44,7 +44,7 @@ namespace Pegasus.Symbols
         /// Determines whether this instance and a specified object, which must also be an <see cref="ISymbol"/> object, have the same value.
         /// </summary>
         /// <param name="other">The <see cref="ISymbol"/> to compare to this instance.</param>
-        /// <returns>true if other has the same value as this instance; false otherwise.</returns>
+        /// <returns><see cref="true"/> if other has the same value as this instance; <see cref="false"/> otherwise.</returns>
         public bool Equals(ISymbol? other)
         {
             var result = !ReferenceEquals(other, null);
@@ -78,7 +78,7 @@ namespace Pegasus.Symbols
         /// Determines whether this instance and a specified object have the same value.
         /// </summary>
         /// <param name="obj">The object to compare to this instance.</param>
-        /// <returns>true if obj is a <see cref="SymbolQuotient"/> and its value is the same as this instance; false otherwise.</returns>
+        /// <returns><see cref="true"/> if obj is a <see cref="SymbolQuotient"/> and its value is the same as this instance; <see cref="false"/> otherwise.</returns>
         public override bool Equals(object? obj)
         {
             return obj is SymbolQuotient && Equals((SymbolQuotient)obj);
@@ -111,7 +111,7 @@ namespace Pegasus.Symbols
         /// <summary>
         /// Generates a string representation of the specified symbol using the formatter provided.
         /// </summary>
-        /// <param name="symbol">The symbol to be formatted.</param>
+        /// <param name="symbol">The <see cref="ISymbol"/> to be formatted.</param>
         /// <param name="formatter">An <see cref="IFormatter"/> object used to generate the string representation of a symbol.</param>
         /// <returns>A string representation of the specified <see cref="ISymbol"/> object.</returns>
         private string FormatSymbol(ISymbol symbol, IFormatter formatter)

@@ -3,11 +3,25 @@ using StarLab.Shared.Properties;
 
 namespace StarLab.Application.Workspace.Documents
 {
+    /// <summary>
+    /// A use case that renames a document in the workspace hierarchy.
+    /// </summary>
     internal class RenameDocumentInteractor : WorkspaceInteractor, IRenameItemUseCase
     {
+        /// <summary>
+        /// Initialises a new instance of the <see cref="AddDocumentInteractor"/> class.
+        /// </summary>
+        /// <param name="outputPort">An <see cref="IWorkspaceOutputPort"/> that updates the UI in response to the ouputs of the use case.</param>
+        /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
         public RenameDocumentInteractor(IWorkspaceOutputPort outputPort, IMapper mapper)
             : base(outputPort, mapper) { }
 
+        /// <summary>
+        /// Executes the use case.
+        /// </summary>
+        /// <param name="dtoWorkspace">A <see cref="WorkspaceDTO"/> that specifies the current state of the workspace.</param>
+        /// <param name="key">The key that identifies the document being renamed.</param>
+        /// <param name="name">The new document name.</param>
         public void Execute(WorkspaceDTO dto, string id, string name)
         {
             if (IsValid(name))
@@ -34,6 +48,12 @@ namespace StarLab.Application.Workspace.Documents
             }
         }
 
+        /// <summary>
+        /// Checks for the existance of a <see cref="Document"/> within the <see cref="IFolder"/> provided that has a name that matches the new document name.
+        /// </summary>
+        /// <param name="folder">The <see cref="IFolder"/> containing the documents.</param>
+        /// <param name="name">The new document name.</param>
+        /// <returns><see cref="true"/> if there are no documents with matching names; <see cref="false"/> otherwise.</returns>
         private bool IsValid(IFolder folder, string name)
         {
             var valid = true;

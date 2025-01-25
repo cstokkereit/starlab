@@ -5,7 +5,7 @@
     /// </summary>
     public class NamedCharacters : Dictionary<string, string>
     {
-        private static readonly string[] greek = new[] { "Alpha", "Beta", "Gamma", "Delta", "Epsilon", "Zeta", "Eta", "Theta", "Iota", "Kappa", "Lambda", "Mu", "Nu", "Xi", "Omicron", "Pi", "Rho", "Sigma", "Tau", "Upsilon", "Phi", "Chi", "Psi", "Omega" };
+        private static readonly string[] greek = new[] { "Alpha", "Beta", "Gamma", "Delta", "Epsilon", "Zeta", "Eta", "Theta", "Iota", "Kappa", "Lambda", "Mu", "Nu", "Xi", "Omicron", "Pi", "Rho", "Sigma", "Tau", "Upsilon", "Phi", "Chi", "Psi", "Omega" }; // An array containing the names of the Greek letters.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="NamedCharacters"/> class.

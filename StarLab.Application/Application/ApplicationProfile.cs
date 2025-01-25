@@ -10,7 +10,7 @@ namespace StarLab.Application
     public class ApplicationProfile : Profile
     {
         /// <summary>
-        /// Initialises a new instance of the <see cref="ApplicationProfile"> class.
+        /// Initialises a new instance of the <see cref="ApplicationProfile"/> class.
         /// </summary>
         public ApplicationProfile()
         {

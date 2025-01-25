@@ -6,7 +6,7 @@
     public class UndoStackTests
     {
         /// <summary>
-        /// Test that the constructor works correctly.
+        /// Test that the <see cref="UndoStack()"/> constructor works correctly.
         /// </summary>
         [Test]
         public void TestConstructor()
@@ -17,7 +17,7 @@
         }
 
         /// <summary>
-        /// Test that the Add(IRevertableCommand) method works correctly.
+        /// Test that the <see cref="UndoStack.Add(IRevertableCommand)"/> method works correctly.
         /// </summary>
         [Test]
         public void TestAdd()
@@ -39,7 +39,7 @@
         }
 
         /// <summary>
-        /// Test that the Add(IRevertableCommand) method works correctly when the stack has been partially reverted.
+        /// Test that the <see cref="UndoStack.Add(IRevertableCommand)"/> method works correctly when the stack has been partially reverted.
         /// </summary>
         [Test]
         public void TestAddAfterUndo()
@@ -84,7 +84,7 @@
         }
 
         /// <summary>
-        /// Test that the Add(IRevertableCommand) method clears the redo stack.
+        /// Test that the <see cref="UndoStack.Add(IRevertableCommand)"/> method clears the redo stack.
         /// </summary>
         [Test]
         public void TestAddResetsTheRedoStack()
@@ -119,7 +119,7 @@
         }
 
         /// <summary>
-        /// Test that the RedoCount property works correctly.
+        /// Test that the <see cref="UndoStack.RedoCount"/> property works correctly.
         /// </summary>
         [Test]
         public void TestGetRedoCount()
@@ -167,7 +167,7 @@
         }
 
         /// <summary>
-        /// Test that the UndoCount property works correctly.
+        /// Test that the <see cref="UndoStack.UndoCount"/> property works correctly.
         /// </summary>
         [Test]
         public void TestGetUndoCount()
@@ -215,7 +215,7 @@
         }
 
         /// <summary>
-        /// Test that the Redo() method works correctly.
+        /// Test that the <see cref="UndoStack.Redo()"/> method works correctly.
         /// </summary>
         [Test]
         public void TestRedo()
@@ -255,7 +255,7 @@
         }
 
         /// <summary>
-        /// Test that the Redo() method throws an exception when the redo stack is empty.
+        /// Test that the <see cref="UndoStack.Redo()"/> method throws an exception when the redo stack is empty.
         /// </summary>
         [Test]
         public void TestRedoStackThrowsExceptionWhenEmpty()
@@ -280,7 +280,7 @@
         }
 
         /// <summary>
-        /// Test that the Undo() method works correctly.
+        /// Test that the <see cref="UndoStack.Undo()"/> method works correctly.
         /// </summary>
         [Test]
         public void TestUndo()
@@ -316,7 +316,7 @@
         }
 
         /// <summary>
-        /// Test that the Undo() method throws an exception when the undo stack is empty.
+        /// Test that the <see cref="UndoStack.Undo()"/> method throws an exception when the undo stack is empty.
         /// </summary>
         [Test]
         public void TestUndoStackThrowsExceptionWhenEmpty()

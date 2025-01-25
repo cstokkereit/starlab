@@ -2,6 +2,9 @@
 
 namespace StarLab.Application.Workspace.Documents.Charts
 {
+    /// <summary>
+    /// A POCO representation of a chart used for XML serialisation/deserialisation.
+    /// </summary>
     [XmlType]
     public class Chart
     {
@@ -15,7 +18,7 @@ namespace StarLab.Application.Workspace.Documents.Charts
         public string? Path;
 
         [XmlAttribute("type")]
-        public string Type;
+        public string? Type;
 
         [XmlAttribute("backColor")]
         public int BackColor;
@@ -24,21 +27,21 @@ namespace StarLab.Application.Workspace.Documents.Charts
         public int ForeColor;
 
         [XmlElement]
-        public Grid MajorGrid;
+        public Grid? MajorGrid;
 
         [XmlElement]
-        public Grid MinorGrid;
+        public Grid? MinorGrid;
 
         [XmlElement]
-        public Axis XAxis;
+        public Axis? XAxis;
 
         [XmlElement]
-        public Axis XAxis2;
+        public Axis? XAxis2;
 
         [XmlElement]
-        public Axis YAxis;
+        public Axis? YAxis;
 
         [XmlElement]
-        public Axis YAxis2;
+        public Axis? YAxis2;
     }
 }

@@ -6,7 +6,7 @@
     public class CommandTests
     {
         /// <summary>
-        /// Test that the constructor works correctly.
+        /// Test that the <see cref="Command{IReceiver}(IReceiver)"/> constructor works correctly.
         /// </summary>
         [Test]
         public void TestConstructor()
@@ -17,7 +17,7 @@
         }
 
         /// <summary>
-        /// Test that the constructor throws an exception when the receiver argument is null.
+        /// Test that the <see cref="Command{IReceiver}(IReceiver)"/> throws an exception when the receiver argument is null.
         /// </summary>
         [Test]
         public void TestConstructorWithNullArgument()
@@ -26,7 +26,7 @@
         }
 
         /// <summary>
-        /// Test that the Execute() method works correctly.
+        /// Test that the <see cref="Command{TReceiver}.Execute()"/> method works correctly.
         /// </summary>
         [Test]
         public void TestExecute()

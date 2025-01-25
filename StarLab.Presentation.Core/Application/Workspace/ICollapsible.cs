@@ -6,7 +6,7 @@
     public interface ICollapsible
     {
         /// <summary>
-        /// Returns true if this element is currently expanded; false otherwise.
+        /// Returns <see cref="true"/> if this element is currently expanded; <see cref="false"/> otherwise.
         /// </summary>
         bool Expanded { get; }
 

@@ -6,7 +6,7 @@
     public class ArgumentsTests
     {
         /// <summary>
-        /// Test that the Arguments() constructor works correctly.
+        /// Test that the <see cref="Arguments()"/> constructor works correctly.
         /// </summary>
         [Test]
         public void TestConstructor()
@@ -17,7 +17,7 @@
         }
 
         /// <summary>
-        /// Test that the Count property returns the correct value.
+        /// Test that the <see cref="Arguments.Count"/> property returns the correct value.
         /// </summary>
         [Test]
         public void TestGetCount()
@@ -32,7 +32,7 @@
         }
 
         /// <summary>
-        /// Test that the Names property returns a list containing the correct names.
+        /// Test that the <see cref="Arguments.Names"/> property returns a list containing the correct names.
         /// </summary>
         [Test]
         public void TestGetNames()
@@ -51,7 +51,7 @@
         }
 
         /// <summary>
-        /// Test that the Names property returns an empty list when no arguments have been added.
+        /// Test that the <see cref="Arguments.Names"/> property returns an empty list when no arguments have been added.
         /// </summary>
         [Test]
         public void TestGetNamesWhenEmpty()
@@ -65,7 +65,7 @@
         }
 
         /// <summary>
-        /// Test that the this[string] property returns the correct value.
+        /// Test that the <see cref="Arguments.this[string]"/> property returns the correct value.
         /// </summary>
         [Test]
         public void TestGetThis()
@@ -80,7 +80,7 @@
         }
 
         /// <summary>
-        /// Test that the this[string] property throws an exception when an invalid key is used.
+        /// Test that the <see cref="Arguments.this[string]"/> property throws an exception when an invalid key is used.
         /// </summary>
         [Test]
         public void TestGetThisWithInvalidName()
@@ -95,7 +95,7 @@
         }
 
         /// <summary>
-        /// Test that the Add(string, object) method works correctly.
+        /// Test that the <see cref="Arguments.Add(string, object)"/> method works correctly.
         /// </summary>
         [Test]
         public void TestAdd()
@@ -124,7 +124,7 @@
         }
 
         /// <summary>
-        /// Test that the Add(string, object) method throws an exception when adding an argument with the same name as an existing argument.
+        /// Test that the <see cref="Arguments.Add(string, object)"/> method throws an exception when adding an argument with the same name as an existing argument.
         /// </summary>
         [Test]
         public void TestAddWithExistingName()

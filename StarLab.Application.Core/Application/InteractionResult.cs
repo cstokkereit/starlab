@@ -1,7 +1,7 @@
 ﻿namespace StarLab.Application
 {
     /// <summary>
-    /// Specifies constants to indicate the result of a user interaction.
+    /// Specifies constants that represent the result of a user interaction.
     /// </summary>
     public enum InteractionResult
     {

@@ -2,6 +2,9 @@
 
 namespace StarLab.Application.Workspace
 {
+    /// <summary>
+    /// A POCO representation of a folder used for XML serialisation/deserialisation.
+    /// </summary>
     [XmlType]
     public class Folder
     {

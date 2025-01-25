@@ -8,7 +8,7 @@ namespace StarLab.Commands
     public class CommandInvokerTests
     {
         /// <summary>
-        /// Check that the constructor works correctly. 
+        /// Check that the <see cref="CommandInvoker{Button}()"/> constructor works correctly. 
         /// </summary>
         [Test]
         public void TestContructor()
@@ -19,7 +19,7 @@ namespace StarLab.Commands
         }
 
         /// <summary>
-        /// Test that the AddInstance(Component, ICommand) method works correctly.
+        /// Test that the <see cref="CommandInvoker{Button}.AddInstance(Component, ICommand)"/>  method works correctly.
         /// </summary>
         [Test]
         public void TestAddInstance()
@@ -38,7 +38,7 @@ namespace StarLab.Commands
         }
 
         /// <summary>
-        /// Test that the Type property returns the correct type name.
+        /// Test that the <see cref="CommandInvoker{Button}.Type"/> property returns the correct type name.
         /// </summary>
         [Test]
         public void TestGetType()
@@ -49,7 +49,7 @@ namespace StarLab.Commands
         }
 
         /// <summary>
-        /// Test that the RemoveInstance(Component) method works correctly.
+        /// Test that the <see cref="CommandInvoker{Button}.RemoveInstance(Component)"/> method works correctly.
         /// </summary>
         [Test]
         public void TestRemoveInstance()
@@ -70,7 +70,7 @@ namespace StarLab.Commands
         }
 
         /// <summary>
-        /// Test that the UpdateEnabledState(Component, bool) method works correctly.
+        /// Test that the <see cref="CommandInvoker{Button}.UpdateEnabledState(Component, bool)"/> method works correctly.
         /// </summary>
         [Test]
         public void TestUpdateEnabledState()
@@ -87,7 +87,7 @@ namespace StarLab.Commands
         }
 
         /// <summary>
-        /// Test that the UpdateEnabledState(Component, bool) method works correctly.
+        /// Test that the <see cref="CommandInvoker{Button}.UpdateCheckedState(Component, bool)"/> method works correctly.
         /// </summary>
         [Test]
         public void TestUpdateCheckedState()
@@ -104,7 +104,7 @@ namespace StarLab.Commands
         }
 
         /// <summary>
-        /// A derived class used to test the abstract <see cref="CommandInvoker&lt;TComponent&gt;"/> class.
+        /// A derived class used to test the abstract <see cref="CommandInvoker{TComponent}"/> class.
         /// </summary>
         private class ButtonInvoker : CommandInvoker<Button>
         {
@@ -139,7 +139,7 @@ namespace StarLab.Commands
         }
 
         /// <summary>
-        /// A derived class used to test the abstract <see cref="CommandInvoker&lt;TComponent&gt;"/> class.
+        /// A derived class used to test the abstract <see cref="CommandInvoker{TComponent}"/> class.
         /// </summary>
         private class MenuItemInvoker : CommandInvoker<ToolStripMenuItem>
         {

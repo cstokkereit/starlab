@@ -12,7 +12,7 @@ namespace StarLab.Application
     /// </summary>
     public class PresenterFactory : Factory, IPresenterFactory
     {
-        private readonly IConfigurationService configuration; // A service that provides the configuration information.
+        private readonly Configuration.IConfigurationProvider configuration; // A service that provides the configuration information.
 
         private readonly IWindsorContainer container; // Used to resolve dependencies at run time.
 
@@ -27,11 +27,11 @@ namespace StarLab.Application
         /// </summary>
         /// <param name="container">An <see cref="IWindsorContainer"/> that will be used to resolve dependencies.</param>
         /// <param name="factory">An <see cref="IUseCaseFactory"/> that will be used to create use case interactors.</param>
-        /// <param name="configuration">The <see cref="IConfigurationService"/> that will be used to get configuration information.</param>
+        /// <param name="configuration">The <see cref="Configuration.IConfigurationProvider"/> that will be used to get configuration information.</param>
         /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
         /// <param name="events">The <see cref="IEventAggregator"/> that manages application events.</param>
         /// <exception cref="ArgumentNullException"></exception>
-        public PresenterFactory(IWindsorContainer container, IUseCaseFactory factory, IConfigurationService configuration, IMapper mapper, IEventAggregator events)
+        public PresenterFactory(IWindsorContainer container, IUseCaseFactory factory, Configuration.IConfigurationProvider configuration, IMapper mapper, IEventAggregator events)
         {
             this.configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
             this.container = container ?? throw new ArgumentNullException(nameof(container));

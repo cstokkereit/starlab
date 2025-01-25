@@ -10,7 +10,7 @@ namespace StarLab.Commands
         private readonly ICommandManager manager = new CommandManager(); // The command manager used to register the command invoker used in the tests.
 
         /// <summary>
-        /// Test that the constructor works correctly.
+        /// Test that the <see cref="ComponentCommand{IReceiver}(ICommandManager, IReceiver)"/> constructor works correctly.
         /// </summary>
         [Test]
         public void TestConstructor()
@@ -21,7 +21,7 @@ namespace StarLab.Commands
         }
 
         /// <summary>
-        /// Test that the AddInstance(Component) method works correctly.
+        /// Test that the <see cref="ComponentCommand{IReceiver}.AddInstance(Component)"/> method works correctly.
         /// </summary>
         [Test]
         public void TestAddInstance()
@@ -42,7 +42,7 @@ namespace StarLab.Commands
         }
 
         /// <summary>
-        /// Test that the Checked property returns the correct state.
+        /// Test that the <see cref="ComponentCommand{IReceiver}.Checked"/> property returns the correct state.
         /// </summary>
         [Test]
         public void TestGetChecked()
@@ -60,7 +60,7 @@ namespace StarLab.Commands
         }
 
         /// <summary>
-        /// Test that the Checked property can be set.
+        /// Test that the <see cref="ComponentCommand{IReceiver}.Checked"/> property can be set.
         /// </summary>
         [Test]
         public void TestSetChecked()
@@ -80,7 +80,7 @@ namespace StarLab.Commands
         }
 
         /// <summary>
-        /// Test that the Enabled property returns the correct state.
+        /// Test that the <see cref="ComponentCommand{IReceiver}.Enabled"/> property returns the correct state.
         /// </summary>
         [Test]
         public void TestGetEnabled()
@@ -98,7 +98,7 @@ namespace StarLab.Commands
         }
 
         /// <summary>
-        /// Test that the Enabled property can be set.
+        /// Test that the <see cref="ComponentCommand{IReceiver}.Enabled"/> property can be set.
         /// </summary>
         [Test]
         public void TestSetEnabled()

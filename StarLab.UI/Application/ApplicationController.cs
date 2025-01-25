@@ -22,19 +22,19 @@ namespace StarLab.Application
 
         private readonly IDictionary<string, IView> views = new Dictionary<string, IView>(); // A dictionary containing the views indexed by ID. 
 
-        private readonly IConfigurationService configuration; // A service that provides the configuration information.
+        private readonly IConfigurationProvider configuration; // A service that provides the configuration information.
 
         private readonly IViewFactory factory; // A factory for creating views.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="ApplicationController"/> class.
         /// </summary>
-        /// <param name="configuration">The <see cref="IConfigurationService"> that provides the configuration information.</param>
+        /// <param name="configuration">The <see cref="IConfigurationProvider"> that provides the configuration information.</param>
         /// <param name="factory">An <see cref="IViewFactory"/> that will be used to create the views.</param>
         /// <param name="interactorFactory">An <see cref="IUseCaseFactory"> that will be used to create the use case interactors.</param>
         /// <param name="events">An <see cref="IEventAggregator"> that can be used for subscribing to and publishing events.</param>
         /// <exception cref="ArgumentNullException"></exception>
-        public ApplicationController(IConfigurationService configuration, IViewFactory factory, IUseCaseFactory interactorFactory, IEventAggregator events)
+        public ApplicationController(IConfigurationProvider configuration, IViewFactory factory, IUseCaseFactory interactorFactory, IEventAggregator events)
             : base(interactorFactory, events)
         {
             this.configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));

@@ -10,8 +10,9 @@ namespace StarLab.Commands
         private readonly ICommandManager manager = new CommandManager(); // The command manager used to register the command invoker used in the tests.
 
         /// <summary>
-        /// Test that the default constructor works.
+        /// Test that the <see cref="CommandChain()"> constructor works.
         /// </summary>
+        [Test]
         public void TestDefaultConstructor()
         {
             var command = new CommandChain();
@@ -20,7 +21,7 @@ namespace StarLab.Commands
         }
 
         /// <summary>
-        /// Test that the ICommandManager constructor works correctly.
+        /// Test that the <see cref="CommandChain(ICommandManager)"/> constructor works correctly.
         /// </summary>
         [Test]
         public void TestManagerConstructor()
@@ -31,7 +32,7 @@ namespace StarLab.Commands
         }
 
         /// <summary>
-        /// Test that the AddInstance(Component) method works correctly.
+        /// Test that the <see cref="CommandChain.AddInstance(Component)"/> method works correctly.
         /// </summary>
         [Test]
         public void TestAddInstance()
@@ -58,7 +59,7 @@ namespace StarLab.Commands
         }
 
         /// <summary>
-        /// Test that the Execute() method works correctly when the <see cref="CommandChain"/> contains multiple commands.
+        /// Test that the <see cref="CommandChain.Execute()"/> method works correctly when the <see cref="CommandChain"/> contains multiple commands.
         /// </summary>
         [Test]
         public void TestExecuteCommandChain()

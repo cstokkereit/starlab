@@ -6,7 +6,7 @@
     public class RevertableCommandTests
     {
         /// <summary>
-        /// Test that the constructor works correctly.
+        /// Test that the <see cref="ParameterisedCommand{int, IReceiver{int}}(IReceiver{int})"/> constructor works correctly.
         /// </summary>
         [Test]
         public void TestConstructor()
@@ -17,7 +17,7 @@
         }
 
         /// <summary>
-        /// Test that the constructor throws an exception when the receiver argument is null.
+        /// Test that the <see cref="ParameterisedCommand{TArguments, TReceiver}(TReceiver)"/> constructor throws an exception when the receiver argument is null.
         /// </summary>
         [Test]
         public void TestConstructorWithNullArgument()
@@ -26,7 +26,7 @@
         }
 
         /// <summary>
-        /// Test that the Execute(int) method works correctly.
+        /// Test that the <see cref="ParameterisedCommand{int, IReceiver{int}}.Execute(int)"/> method works correctly.
         /// </summary>
         [Test]
         public void TestExecute()
@@ -41,7 +41,7 @@
         }
 
         /// <summary>
-        /// Test that the Redo() method works correctly.
+        /// Test that the <see cref="IRevertableCommand.Redo()"/> method works correctly.
         /// </summary>
         [Test]
         public void TestRedo()
@@ -59,7 +59,7 @@
         }
 
         /// <summary>
-        /// Test that the Undo() method works correctly.
+        /// Test that the <see cref="IRevertableCommand.Undo()"/> method works correctly.
         /// </summary>
         [Test]
         public void TestUndo()

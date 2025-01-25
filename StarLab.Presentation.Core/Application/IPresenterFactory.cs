@@ -1,9 +1,8 @@
-﻿using StarLab.Application;
-using StarLab.Application.Configuration;
+﻿using StarLab.Application.Configuration;
 using StarLab.Application.Workspace;
 using StarLab.Application.Workspace.Documents;
 
-namespace StarLab
+namespace StarLab.Application
 {
     public interface IPresenterFactory
     {

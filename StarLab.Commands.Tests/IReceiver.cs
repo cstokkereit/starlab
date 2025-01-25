@@ -1,7 +1,7 @@
 ﻿namespace StarLab.Commands
 {
     /// <summary>
-    /// 
+    /// An interface used to mock the receiver used by classes implementing the <see cref="Command{TReceiver}"/> interface.
     /// </summary>
     public interface IReceiver
     {
@@ -9,7 +9,7 @@
     }
 
     /// <summary>
-    /// 
+    /// An interface used to mock the receiver used by classes implementing the <see cref="Command{TReceiver}"/> interface.
     /// </summary>
     public interface IReceiver<Arguments>
     {

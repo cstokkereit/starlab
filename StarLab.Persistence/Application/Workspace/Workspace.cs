@@ -3,6 +3,9 @@ using System.Xml.Serialization;
 
 namespace StarLab.Application.Workspace
 {
+    /// <summary>
+    /// A POCO representation of a workspace used for XML serialisation/deserialisation.
+    /// </summary>
     [XmlRoot]
     public class Workspace
     {
