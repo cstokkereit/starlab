@@ -1,7 +1,7 @@
 ﻿namespace Pegasus.Symbols
 {
     /// <summary>
-    /// A mathematical or scientific symbol.
+    /// Represents a mathematical or scientific symbol.
     /// </summary>
     public class Symbol : ISymbol
     {
@@ -29,8 +29,8 @@
         /// <param name="bold">A flag that specifies the use of bold text in the string representation of this symbol.</param>
         /// <param name="italic">A flag that specifies the use of italic text in the string representation of this symbol.</param>
         /// <param name="subscript">The symbol to use as the subscript for this symbol.</param>
-        /// <param name="superscript">The symbol to use as the superscript for this symbol.</param>
-        /// <exception cref="ArgumentException">TODO</exception>
+        /// <param name="superscript">The <see cref="ISymbol"/> to use as the superscript for this symbol.</param>
+        /// <exception cref="ArgumentException"></exception>
         public Symbol(ISymbol? prefix, string symbol, bool bold, bool italic, ISymbol? subscript, ISymbol? superscript)
         {
             if (string.IsNullOrEmpty(symbol)) throw new ArgumentException("symbol");
@@ -154,23 +154,13 @@
         }
 
         /// <summary>
-        /// Converts the value of the current <see cref="Symbol"/> object to its equivalent string representation using the specified formatter.
-        /// </summary>
-        /// <param name="formatter">An <see cref="IFormatter"/> object that generates the string representation.</param>
-        /// <returns>A string representation of the current <see cref="Symbol"/> object as specified by the formatter.</returns>
-        public string ToString(IFormatter formatter)
-        {
-            return formatter.Format(prefix, text, bold, italic, subscript, superscript);
-        }
-
-        /// <summary>
         /// Determines whether this instance and a specified object have the same value.
         /// </summary>
-        /// <param name="obj">The object to compare to this instance.</param>
-        /// <returns>true if obj is a <see cref="Symbol"/> and its value is the same as this instance; false otherwise.</returns>
-        public override bool Equals(object? obj)
+        /// <param name="other">The object to compare to this instance.</param>
+        /// <returns>true if other is an <see cref="ISymbol"/> and its value is the same as this instance; false otherwise.</returns>
+        public override bool Equals(object? other)
         {
-            return obj is ISymbol && Equals((ISymbol)obj);
+            return other is ISymbol && Equals((ISymbol)other);
         }
 
         /// <summary>
@@ -191,6 +181,16 @@
 
                 return hashcode;
             }
+        }
+
+        /// <summary>
+        /// Converts the value of the current <see cref="Symbol"/> object to its equivalent string representation using the specified formatter.
+        /// </summary>
+        /// <param name="formatter">An <see cref="IFormatter"/> object that generates the string representation.</param>
+        /// <returns>A string representation of the current <see cref="Symbol"/> object as specified by the formatter.</returns>
+        public string ToString(IFormatter formatter)
+        {
+            return formatter.Format(prefix, text, bold, italic, subscript, superscript);
         }
 
         /// <summary>

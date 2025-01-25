@@ -6,8 +6,9 @@ namespace StarLab.Application
 {
     /// <summary>
     /// The base class for all <see cref="UserControl"> based view presenters. The view controlled by this presenter is a child of a <see cref="Form"/> based parent view.
-    /// 
     /// </summary>
+    /// <typeparam name="TView">The <see cref="IChildView"/> controlled by the presenter.</typeparam>
+    /// <typeparam name="TParent">The <see cref="IViewController"/> that controls the parent view.</typeparam>
     public abstract class ChildViewPresenter<TView, TParent> : Presenter, IChildViewPresenter
         where TParent : IViewController
         where TView : IChildView
@@ -20,11 +21,11 @@ namespace StarLab.Application
         /// <param name="view">The <see cref="TView"/> controlled by the presenter.</param>
         /// <param name="commands">An instance of <see cref="ICommandManager"/> that is required for the creation of commands.</param>
         /// <param name="factory">An <see cref="IUseCaseFactory"/> that will be used to create use case interactors.</param>
-        /// <param name="configuration">The <see cref="IConfigurationService"/> that will be used to get configuration information.</param>
+        /// <param name="configuration">The <see cref="Configuration.IConfigurationProvider"/> that will be used to get configuration information.</param>
         /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
         /// <param name="events">The <see cref="IEventAggregator"/> that manages application events.</param>
         /// <exception cref="ArgumentNullException"></exception>
-        public ChildViewPresenter(TView view, ICommandManager commands, IUseCaseFactory factory, IConfigurationService configuration, IMapper mapper, IEventAggregator events)
+        public ChildViewPresenter(TView view, ICommandManager commands, IUseCaseFactory factory, Configuration.IConfigurationProvider configuration, IMapper mapper, IEventAggregator events)
             : base(commands, factory, configuration, mapper, events)
         {
             View = view ?? throw new ArgumentNullException(nameof(view));

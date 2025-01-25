@@ -15,7 +15,7 @@ namespace Pegasus.Symbols
         /// Initialises a new instance of the <see cref="SymbolProduct"/> class.
         /// </summary>
         /// <param name="symbols">A collection containing the symbols that comprise this symbol product.</param>
-        /// <param name="separator">The symbol to be used as a separator in the string representation of this symbol product.</param>
+        /// <param name="separator">The <see cref="ISymbol"/> to be used as a separator in the string representation of this symbol product.</param>
         public SymbolProduct(IEnumerable<ISymbol> symbols, ISymbol separator)
         {
             this.symbols = new List<ISymbol>(symbols);

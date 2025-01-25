@@ -2,6 +2,9 @@
 
 namespace StarLab.Application
 {
+    /// <summary>
+    /// A POCO representation of a title used for XML serialisation/deserialisation.
+    /// </summary>
     [XmlType]
     public class Title
     {
@@ -12,9 +15,9 @@ namespace StarLab.Application
         public int Color;
 
         [XmlElement]
-        public Font Font;
+        public Font? Font;
 
         [XmlElement]
-        public string Text;
+        public string? Text;
     }
 }

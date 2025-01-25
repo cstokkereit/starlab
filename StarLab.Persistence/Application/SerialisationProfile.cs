@@ -5,8 +5,14 @@ using StarLab.Application.Workspace.Documents.Charts;
 
 namespace StarLab.Application
 {
+    /// <summary>
+    /// Defines mappings used by AutoMapper to copy POCOs used for XML serialisation/deserialisation to their respective data transfer objects and vice versa.
+    /// </summary>
     public class SerialisationProfile : Profile
     {
+        /// <summary>
+        /// Initialises a new instance of the <see cref="SerialisationProfile"> class.
+        /// </summary>
         public SerialisationProfile()
         {
             CreateMap<Axis, AxisDTO>().ReverseMap();

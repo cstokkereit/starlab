@@ -1,18 +1,26 @@
 ﻿namespace StarLab.Application.Configuration
 {
+    /// <summary>
+    /// Holds the configuration for a view.
+    /// </summary>
     internal struct ViewConfiguration : IViewConfiguration
     {
-        private readonly Dictionary<string, IChildViewConfiguration> contentsByName = new Dictionary<string, IChildViewConfiguration>();
+        private readonly Dictionary<string, IChildViewConfiguration> childViewsByName = new Dictionary<string, IChildViewConfiguration>(); // A dictionary containing the child view configurations indexed by name.
 
-        private readonly List<IChildViewConfiguration> contents = new List<IChildViewConfiguration>();
+        private readonly List<IChildViewConfiguration> childViews = new List<IChildViewConfiguration>(); // A list containing the child view configurations.
 
-        private readonly ViewTypes type;
+        private readonly ViewTypes type; // The view type.
 
-        private readonly string name;
+        private readonly string name; // The view name.
 
+        /// <summary>
+        /// Initialises a new instance of the <see cref="ViewConfiguration"/> class.
+        /// </summary>
+        /// <param name="view">The <see cref="View"/> containing the configuration.</param>
+        /// <exception cref="ArgumentException"></exception>
         public ViewConfiguration(View view)
         {
-            name =  view.Name;
+            name = view.Name ?? throw new ArgumentException(nameof(view));
 
             switch (view.Type)
             {
@@ -36,30 +44,48 @@
                     throw new ArgumentException(); // TODO
             }
 
-            LoadContents(view);
+            LoadChildViews(view);
         }
 
-        public IList<IChildViewConfiguration> ChildViews => contents;
+        /// <summary>
+        /// Gets an <see cref="IList{IChildViewConfiguration}"/> containing the configuration for the child views.
+        /// </summary>
+        public IList<IChildViewConfiguration> ChildViews => childViews;
 
+        /// <summary>
+        /// Gets the view name.
+        /// </summary>
         public string Name => name;
 
+        /// <summary>
+        /// Gets the view type.
+        /// </summary>
         public ViewTypes Type => type;
 
-        public IChildViewConfiguration GetChildViewConfiguration(string name) => contentsByName[name];
+        /// <summary>
+        /// Gets the <see cref="IChildViewConfiguration"/> containing the configuration for the specified child view.
+        /// </summary>
+        /// <param name="name">The name of the child view.</param>
+        /// <returns>The <see cref="IChildViewConfiguration"/> for the specified child view.</returns>
+        public IChildViewConfiguration GetChildViewConfiguration(string name) => childViewsByName[name];
 
-        private void LoadContents(View view)
+        /// <summary>
+        /// Loads the child view configurations from the <see cref="View"/> provided.
+        /// </summary>
+        /// <param name="view">The <see cref="View"/> containing the child view configurations being loaded.</param>
+        private void LoadChildViews(View view)
         {
-            if (view.Content != null)
+            if (view.ChildView != null)
             {
-                contents.Add(new ContentConfiguration(view.Content));
+                childViews.Add(new ChildViewConfiguration(view.ChildView));
             }
-            else if (view.Contents != null)
+            else if (view.ChildViews != null)
             {
-                foreach (var content in view.Contents)
+                foreach (var childView in view.ChildViews)
                 {
-                    var configuration = new ContentConfiguration(content);
-                    contentsByName.Add(configuration.Name, configuration);
-                    contents.Add(configuration);
+                    var configuration = new ChildViewConfiguration(childView);
+                    childViewsByName.Add(configuration.Name, configuration);
+                    childViews.Add(configuration);
                 }
             }
         }

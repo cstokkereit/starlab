@@ -1,7 +1,7 @@
 ﻿namespace StarLab.Application
 {
     /// <summary>
-    /// TODO
+    /// Allows a use case interactor to provide feedback or request user input.
     /// </summary>
     public interface IOutputPort
     {

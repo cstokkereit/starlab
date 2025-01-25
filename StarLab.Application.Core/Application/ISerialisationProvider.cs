@@ -3,9 +3,9 @@
 namespace StarLab.Application
 {
     /// <summary>
-    /// 
+    /// Serialises and deserialises data transfer objects (DTOs).
     /// </summary>
-    public interface ISerialisationService
+    public interface ISerialisationProvider
     {
         /// <summary>
         /// Deserialises the specified source file.

@@ -6,11 +6,11 @@ namespace StarLab.Application
 {
     public class UseCaseFactory : IUseCaseFactory
     {
-        private readonly ISerialisationService serialisationService;
+        private readonly ISerialisationProvider serialisationService;
 
         private readonly IMapper mapper;
 
-        public UseCaseFactory(IMapper mapper, ISerialisationService serialisationService)
+        public UseCaseFactory(IMapper mapper, ISerialisationProvider serialisationService)
         {
             this.serialisationService = serialisationService;
             this.mapper = mapper;

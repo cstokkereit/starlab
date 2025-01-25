@@ -5,9 +5,9 @@ namespace StarLab.Application.Workspace
 {
     internal class SaveWorkspaceInteractor : UseCaseInteractor<IWorkspaceOutputPort>, ISaveWorkspaceUseCase
     {
-        private readonly ISerialisationService serialisationService;
+        private readonly ISerialisationProvider serialisationService;
 
-        public SaveWorkspaceInteractor(ISerialisationService serialisationService, IWorkspaceOutputPort outputPort, IMapper mapper)
+        public SaveWorkspaceInteractor(ISerialisationProvider serialisationService, IWorkspaceOutputPort outputPort, IMapper mapper)
             : base(outputPort, mapper)
         {
             this.serialisationService = serialisationService;

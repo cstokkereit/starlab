@@ -1,7 +1,7 @@
 ﻿namespace Pegasus.Symbols
 {
     /// <summary>
-    /// A factory class for creating mathematical and scientific symbols.
+    /// A class for creating mathematical and scientific symbols.
     /// </summary>
     public static class SymbolBuilder
     {
@@ -28,7 +28,7 @@
         /// Creates a symbol product from the specified symbols.
         /// </summary>
         /// <param name="symbols">A collection containing the symbols that comprise the symbol product.</param>
-        /// <param name="separator">The symbol to be used as a separator in the string representation of the symbol product.</param>
+        /// <param name="separator">The <see cref="ISymbol"/> to be used as a separator in the string representation of the symbol product.</param>
         /// <returns>The <see cref="ISymbol"/> representation of the specified symbol product.</returns>
         public static ISymbol CreateProduct(IEnumerable<ISymbol> symbols, ISymbol separator)
         {
@@ -39,7 +39,7 @@
         /// Creates a symbol product from the specified symbols.
         /// </summary>
         /// <param name="symbols">A collection containing the symbols that comprise the symbol product.</param>
-        /// <param name="separator">The symbol to be used as a separator in the string representation of the symbol product.</param>
+        /// <param name="separator">The <see cref="ISymbol"/> to be used as a separator in the string representation of the symbol product.</param>
         /// <returns>The <see cref="ISymbol"/> representation of the specified symbol product.</returns>
         public static ISymbol CreateProduct(IEnumerable<string> symbols, ISymbol separator)
         {
@@ -134,7 +134,7 @@
         /// Creates a symbol quotient from the specified symbols.
         /// </summary>
         /// <param name="numerator">A collection containing the symbols that comprise the numerator of the symbol quotient.</param>
-        /// <param name="denominator">The symbol to be used as the denominator of the symbol quotient.</param>
+        /// <param name="denominator">The <see cref="ISymbol"/> to be used as the denominator of the symbol quotient.</param>
         /// <returns>The <see cref="ISymbol"/> representation of the specified symbol quotient.</returns>
         public static ISymbol CreateQuotient(IEnumerable<ISymbol> numerator, ISymbol denominator)
         {
@@ -144,7 +144,7 @@
         /// <summary>
         /// Creates a symbol quotient from the specified symbols.
         /// </summary>
-        /// <param name="numerator">The symbol to be used as the numerator of the symbol quotient.</param>
+        /// <param name="numerator">The <see cref="ISymbol"/> to be used as the numerator of the symbol quotient.</param>
         /// <param name="denominator">A collection containing the symbols that comprise the denominator of the symbol quotient.</param>
         /// <returns>The <see cref="ISymbol"/> representation of the specified symbol quotient.</returns>
         public static ISymbol CreateQuotient(ISymbol numerator, IEnumerable<ISymbol> denominator)
@@ -155,8 +155,8 @@
         /// <summary>
         /// Creates a symbol quotient from the specified symbols.
         /// </summary>
-        /// <param name="numerator">The symbol to be used as the numerator of the symbol quotient.</param>
-        /// <param name="denominator">The symbol to be used as the denominator of the symbol quotient.</param>
+        /// <param name="numerator">The <see cref="ISymbol"/> to be used as the numerator of the symbol quotient.</param>
+        /// <param name="denominator">The <see cref="ISymbol"/> to be used as the denominator of the symbol quotient.</param>
         /// <returns>The <see cref="ISymbol"/> representation of the specified symbol quotient.</returns>
         public static ISymbol CreateQuotient(ISymbol numerator, ISymbol denominator)
         {
@@ -188,7 +188,7 @@
         /// <summary>
         /// Creates the specified symbol.
         /// </summary>
-        /// <param name="prefix">The symbol to use as the prefix for this symbol.</param>
+        /// <param name="prefix">The <see cref="ISymbol"/> to use as the prefix for this symbol.</param>
         /// <param name="symbol">A string that specifies the symbol, this could be either the name of the symbol or the symbol itself e.g. 'theta' or 'θ'.</param>
         /// <param name="bold">A flag that specifies the use of bold text in the string representation of the symbol.</param>
         /// <param name="italic">A flag that specifies the use of italic text in the string representation of the symbol.</param>
@@ -214,11 +214,11 @@
         /// <summary>
         /// Creates the specified symbol.
         /// </summary>
-        /// <param name="prefix">The symbol to use as the prefix for this symbol.</param>
+        /// <param name="prefix">The <see cref="ISymbol"/> to use as the prefix for this symbol.</param>
         /// <param name="symbol">A string that specifies the symbol, this could be either the name of the symbol or the symbol itself e.g. 'theta' or 'θ'.</param>
         /// <param name="bold">A flag that specifies the use of bold text in the string representation of the symbol.</param>
         /// <param name="italic">A flag that specifies the use of italic text in the string representation of the symbol.</param>
-        /// <param name="subscript">The symbol to use as the subscript for the symbol.</param>
+        /// <param name="subscript">The <see cref="ISymbol"/> to use as the subscript for the symbol.</param>
         /// <returns>The <see cref="ISymbol"/> representation of the specified symbol.</returns>
         public static ISymbol CreateSymbolWithPrefixAndSubscript(ISymbol prefix, string symbol, bool bold, bool italic, ISymbol subscript)
         {
@@ -256,12 +256,12 @@
         /// <summary>
         /// Creates the specified symbol.
         /// </summary>
-        /// <param name="prefix">The symbol to use as the prefix for this symbol.</param>
+        /// <param name="prefix">The <see cref="ISymbol"/> to use as the prefix for this symbol.</param>
         /// <param name="symbol">A string that specifies the symbol, this could be either the name of the symbol or the symbol itself e.g. 'theta' or 'θ'.</param>
         /// <param name="bold">A flag that specifies the use of bold text in the string representation of the symbol.</param>
         /// <param name="italic">A flag that specifies the use of italic text in the string representation of the symbol.</param>
-        /// <param name="subscript">The symbol to use as the subscript for the symbol.</param>
-        /// <param name="superscript">The symbol to use as the superscript for the symbol.</param>
+        /// <param name="subscript">The <see cref="ISymbol"/> to use as the subscript for the symbol.</param>
+        /// <param name="superscript">The <see cref="ISymbol"/> to use as the superscript for the symbol.</param>
         /// <returns>The <see cref="ISymbol"/> representation of the specified symbol.</returns>
         public static ISymbol CreateSymbolWithPrefixSubscriptAndSuperscript(ISymbol prefix, string symbol, bool bold, bool italic, ISymbol subscript, ISymbol superscript)
         {
@@ -331,11 +331,11 @@
         /// <summary>
         /// Creates the specified symbol.
         /// </summary>
-        /// <param name="prefix">The text to use as the prefix for this symbol.</param>
+        /// <param name="prefix">The <see cref="ISymbol"/> to use as the prefix for this symbol.</param>
         /// <param name="symbol">A string that specifies the symbol, this could be either the name of the symbol or the symbol itself e.g. 'theta' or 'θ'.</param>
         /// <param name="bold">A flag that specifies the use of bold text in the string representation of the symbol.</param>
         /// <param name="italic">A flag that specifies the use of italic text in the string representation of the symbol.</param>
-        /// <param name="superscript">The text to use as the superscript for the symbol.</param>
+        /// <param name="superscript">The <see cref="ISymbol"/> to use as the superscript for the symbol.</param>
         /// <returns>The <see cref="ISymbol"/> representation of the specified symbol.</returns>
         public static ISymbol CreateSymbolWithPrefixAndSuperscript(ISymbol prefix, string symbol, bool bold, bool italic, ISymbol superscript)
         {
@@ -376,7 +376,7 @@
         /// <param name="symbol">A string that specifies the symbol, this could be either the name of the symbol or the symbol itself e.g. 'theta' or 'θ'.</param>
         /// <param name="bold">A flag that specifies the use of bold text in the string representation of the symbol.</param>
         /// <param name="italic">A flag that specifies the use of italic text in the string representation of the symbol.</param>
-        /// <param name="subscript">The symbol to use as the subscript for the symbol.</param>
+        /// <param name="subscript">The <see cref="ISymbol"/> to use as the subscript for the symbol.</param>
         /// <returns>The <see cref="ISymbol"/> representation of the specified symbol.</returns>
         public static ISymbol CreateSymbolWithSubscript(string symbol, bool bold, bool italic, ISymbol subscript)
         {
@@ -415,8 +415,8 @@
         /// <param name="symbol">A string that specifies the symbol, this could be either the name of the symbol or the symbol itself e.g. 'theta' or 'θ'.</param>
         /// <param name="bold">A flag that specifies the use of bold text in the string representation of the symbol.</param>
         /// <param name="italic">A flag that specifies the use of italic text in the string representation of the symbol.</param>
-        /// <param name="subscript">The symbol to use as the subscript for the symbol.</param>
-        /// <param name="superscript">The symbol to use as the superscript for the symbol.</param>
+        /// <param name="subscript">The <see cref="ISymbol"/> to use as the subscript for the symbol.</param>
+        /// <param name="superscript">The <see cref="ISymbol"/> to use as the superscript for the symbol.</param>
         /// <returns>The <see cref="ISymbol"/> representation of the specified symbol.</returns>
         public static ISymbol CreateSymbolWithSubscriptAndSuperscript(string symbol, bool bold, bool italic, ISymbol subscript, ISymbol superscript)
         {
@@ -485,7 +485,7 @@
         /// <param name="symbol">A string that specifies the symbol, this could be either the name of the symbol or the symbol itself e.g. 'theta' or 'θ'.</param>
         /// <param name="bold">A flag that specifies the use of bold text in the string representation of the symbol.</param>
         /// <param name="italic">A flag that specifies the use of italic text in the string representation of the symbol.</param>
-        /// <param name="superscript">The symbol to use as the superscript for the symbol.</param>
+        /// <param name="superscript">The <see cref="ISymbol"/> to use as the superscript for the symbol.</param>
         /// <returns>The <see cref="ISymbol"/> representation of the specified symbol.</returns>
         public static ISymbol CreateSymbolWithSuperscript(string symbol, bool bold, bool italic, ISymbol superscript)
         {

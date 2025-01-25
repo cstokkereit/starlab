@@ -8,9 +8,9 @@ namespace StarLab.Application.Workspace
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(OpenWorkspaceInteractor)); // The logger that will be used for writing log messages.
 
-        private readonly ISerialisationService serialisationService;
+        private readonly ISerialisationProvider serialisationService;
 
-        public OpenWorkspaceInteractor(ISerialisationService serialisationService, IWorkspaceOutputPort outputPort, IMapper mapper)
+        public OpenWorkspaceInteractor(ISerialisationProvider serialisationService, IWorkspaceOutputPort outputPort, IMapper mapper)
             : base(outputPort, mapper)
         {
             this.serialisationService = serialisationService;

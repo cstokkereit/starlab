@@ -6,9 +6,9 @@ namespace StarLab.Application.Workspace
 {
     internal class RenameWorkspaceInteractor : WorkspaceInteractor, IRenameWorkspaceUseCase
     {
-        private readonly ISerialisationService serialisationService;
+        private readonly ISerialisationProvider serialisationService;
 
-        public RenameWorkspaceInteractor(ISerialisationService serialisationService, IWorkspaceOutputPort outputPort, IMapper mapper)
+        public RenameWorkspaceInteractor(ISerialisationProvider serialisationService, IWorkspaceOutputPort outputPort, IMapper mapper)
             : base(outputPort, mapper)
         {
             this.serialisationService = serialisationService;

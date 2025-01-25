@@ -14,9 +14,9 @@ namespace Pegasus.Symbols
         /// <summary>
         /// Initialises a new instance of the <see cref="SymbolQuotient"/> class.
         /// </summary>
-        /// <param name="numerator">The symbol to be used as the numerator of this symbol quotient.</param>
-        /// <param name="denominator">The symbol to be used as the denominator of this symbol quotient.</param>
-        /// <exception cref="ArgumentNullException">TODO</exception>
+        /// <param name="numerator">The <see cref="ISymbol"/> to be used as the numerator of this symbol quotient.</param>
+        /// <param name="denominator">The <see cref="ISymbol"/> to be used as the denominator of this symbol quotient.</param>
+        /// <exception cref="ArgumentNullException"></exception>
         public SymbolQuotient(ISymbol numerator, ISymbol denominator)
         {
             this.denominator = denominator ?? throw new ArgumentNullException("denominator");
@@ -28,7 +28,7 @@ namespace Pegasus.Symbols
         /// </summary>
         /// <param name="numerator">A collection containing the symbols that comprise the numerator of this symbol quotient.</param>
         /// <param name="denominator">A collection containing the symbols that comprise the denominator of this symbol quotient.</param>
-        /// <param name="separator">The symbol to be used as a separator in the string representations of the numerator and denominator of this symbol quotient.</param>
+        /// <param name="separator">The <see cref="ISymbol"/> to be used as a separator in the string representations of the numerator and denominator of this symbol quotient.</param>
         public SymbolQuotient(IEnumerable<ISymbol> numerator, IEnumerable<ISymbol> denominator, ISymbol separator)
             : this(new SymbolProduct(numerator, separator), new SymbolProduct(denominator, separator)) { }
 
@@ -111,7 +111,7 @@ namespace Pegasus.Symbols
         /// <summary>
         /// Generates a string representation of the specified symbol using the formatter provided.
         /// </summary>
-        /// <param name="symbol">The symbol to be formatted.</param>
+        /// <param name="symbol">The <see cref="ISymbol"/> to be formatted.</param>
         /// <param name="formatter">An <see cref="IFormatter"/> object used to generate the string representation of a symbol.</param>
         /// <returns>A string representation of the specified <see cref="ISymbol"/> object.</returns>
         private string FormatSymbol(ISymbol symbol, IFormatter formatter)

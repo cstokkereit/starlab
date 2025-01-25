@@ -2,6 +2,9 @@
 
 namespace StarLab.Application.Workspace.Documents.Charts
 {
+    /// <summary>
+    /// A POCO representation of a chart axis used for XML serialisation/deserialisation.
+    /// </summary>
     [XmlType]
     public class Axis
     {
@@ -9,7 +12,7 @@ namespace StarLab.Application.Workspace.Documents.Charts
         public int Color;
 
         [XmlElement]
-        public Font Font;
+        public Font? Font;
 
         [XmlAttribute("interval")]
         public double Interval;
@@ -24,7 +27,7 @@ namespace StarLab.Application.Workspace.Documents.Charts
         public double Minimum;
 
         [XmlElement]
-        public Title Title;
+        public Title? Title;
 
         [XmlAttribute("visible")]
         public bool Visible;

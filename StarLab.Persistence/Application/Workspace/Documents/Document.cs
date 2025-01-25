@@ -2,12 +2,12 @@
 
 namespace StarLab.Application.Workspace.Documents
 {
+    /// <summary>
+    /// A POCO representation of a document used for XML serialisation/deserialisation.
+    /// </summary>
     [XmlType]
     public class Document
     {
-        [XmlArray]
-        public List<Content>? Contents;
-
         [XmlAttribute("id")]
         public string? ID;
 

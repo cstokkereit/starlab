@@ -46,8 +46,8 @@ namespace StarLab.Application
         private void InstallInfrastructureClasses(IWindsorContainer container)
         {
             container.Register(
-                Component.For<IConfigurationService>().ImplementedBy<ConfigurationService>(),
-                Component.For<ISerialisationService>().ImplementedBy<SerialisationService>(),
+                Component.For<Configuration.IConfigurationProvider>().ImplementedBy<ConfigurationProvider>(),
+                Component.For<ISerialisationProvider>().ImplementedBy<SerialisationProvider>(),
                 Classes.FromAssemblyNamed("StarLab.Serialisation").BasedOn<Profile>().WithServiceBase()
             );
         }
@@ -59,7 +59,7 @@ namespace StarLab.Application
         private void InstallMapperClasses(IWindsorContainer container)
         {
             // Register IConfigurationProvider with all registered profiles
-            container.Register(Component.For<IConfigurationProvider>().UsingFactoryMethod(kernel =>
+            container.Register(Component.For<AutoMapper.IConfigurationProvider>().UsingFactoryMethod(kernel =>
             {
                 return new MapperConfiguration(configuration =>
                 {
@@ -69,7 +69,7 @@ namespace StarLab.Application
             }).LifestyleSingleton());
 
             // Register IMapper with registered IConfigurationProvider
-            container.Register(Component.For<IMapper>().UsingFactoryMethod(kernel => new Mapper(kernel.Resolve<IConfigurationProvider>(), kernel.Resolve)));
+            container.Register(Component.For<IMapper>().UsingFactoryMethod(kernel => new Mapper(kernel.Resolve<AutoMapper.IConfigurationProvider>(), kernel.Resolve)));
         }
 
         /// <summary>
