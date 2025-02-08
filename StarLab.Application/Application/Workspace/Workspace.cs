@@ -98,23 +98,30 @@ namespace StarLab.Application.Workspace
         }
 
         /// <summary>
+        /// Deletes the <see cref="Document"/> provided from the folder.
+        /// </summary>
+        /// <param name="document">The <see cref="Document"/> to be deleted.</param>
+        public void DeleteDocument(Document document)
+        {
+            if (document != null && folders.ContainsKey(document.Path))
+            {
+                var folder = folders[document.Path];
+
+                if (folder != null)
+                {
+                    folder.DeleteDocument(document);
+                    documents.Remove(document.ID);
+                }
+            }
+        }
+
+        /// <summary>
         /// Removes the specified document from the workspace hierarchy.
         /// </summary>
         /// <param name="id">The ID of the document to be deleted.</param>
         public void DeleteDocument(string id)
         {
-            //var document = GetDocument(id);
-
-            //if (document != null && folders.ContainsKey(document.Path))
-            //{
-            //    var folder = folders[document.Path];
-
-            //    if (folder != null)
-            //    {
-            //        folder.DeleteDocument(document);
-            //        documents.Remove(id);
-            //    }
-            //}
+            DeleteDocument(GetDocument(id));
         }
 
         /// <summary>
@@ -127,7 +134,6 @@ namespace StarLab.Application.Workspace
             {
                 DeleteFolders(folder);
 
-                
                 folder.Parent.DeleteFolder(folder);
             }
         }

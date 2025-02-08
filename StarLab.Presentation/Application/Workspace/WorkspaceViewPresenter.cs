@@ -2,7 +2,7 @@
 using StarLab.Application.Workspace.Documents;
 using StarLab.Commands;
 using System.ComponentModel;
-
+using System.Diagnostics;
 using ImageResources = StarLab.Properties.Resources;
 using StringResources = StarLab.Shared.Properties.Resources;
 
@@ -113,16 +113,20 @@ namespace StarLab.Application.Workspace
         /// </summary>
         /// <param name="id">The ID of the required <see cref="IDockableView"/>.</param>
         /// <returns>The <see cref="IDockableView"/> with the specified ID.</returns>
-        public IDockableView CreateView(string id)
+        public IDockableView? CreateView(string id)
         {
-            IView view;
+            IView? view;
 
             if (workspace.HasDocument(id))
+            {
                 view = AppController.GetView(workspace.GetDocument(id));
+            }  
             else
-                view = AppController.GetView(id);
-
-            return (IDockableView)view;
+            {
+               view = AppController.GetView(id);
+            }
+            
+            return (IDockableView?)view;
         }
 
         /// <summary>
@@ -137,6 +141,18 @@ namespace StarLab.Application.Workspace
         }
 
         /// <summary>
+        /// Deletes the specified documents.
+        /// </summary>
+        /// <param name="dtos">An <see cref="IEnumerable{DocumentDTO}"/> that specifies the documents to be deleted.</param>
+        public void DeleteDocuments(IEnumerable<DocumentDTO> dtos)
+        {
+            foreach (var dto in dtos)
+            {
+                if (dto.ID != null) AppController.DeleteView(dto.ID);
+            }
+        }
+
+        /// <summary>
         /// Deletes the specified folder.
         /// </summary>
         /// <param name="key">The key that identifies the folder to be deleted.</param>
@@ -148,7 +164,7 @@ namespace StarLab.Application.Workspace
         }
 
         /// <summary>
-        /// Exists the application.
+        /// Exits the application.
         /// </summary>
         public void Exit()
         {
@@ -392,9 +408,9 @@ namespace StarLab.Application.Workspace
         }
 
         /// <summary>
-        /// TODO
+        /// Replaces the current workspace state with that specified by the <see cref="WorkspaceDTO"/> provided.
         /// </summary>
-        /// <param name="dto"></param>
+        /// <param name="dto">A <see cref="WorkspaceDTO"/> that represents the new workspace state.</param>
         public void UpdateWorkspace(WorkspaceDTO dto)
         {
             view.CloseAll();

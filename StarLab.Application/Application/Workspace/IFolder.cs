@@ -45,6 +45,12 @@ namespace StarLab.Application.Workspace
         void AddFolder(IFolder folder);
 
         /// <summary>
+        /// Deletes the <see cref="Document"/> provided from the folder.
+        /// </summary>
+        /// <param name="document">The <see cref="Document"/> to be deleted.</param>
+        void DeleteDocument(Document document);
+
+        /// <summary>
         /// Removes the <see cref="IFolder"/> provided from the folder.
         /// </summary>
         /// <param name="folder">The <see cref="IFolder"/> being removed.</param>

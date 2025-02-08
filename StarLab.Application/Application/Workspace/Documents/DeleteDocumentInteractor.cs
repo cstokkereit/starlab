@@ -5,7 +5,7 @@ namespace StarLab.Application.Workspace.Documents
     /// <summary>
     /// A use case that removes a document from the workspace hierarchy.
     /// </summary>
-    internal class DeleteDocumentInteractor : UseCaseInteractor<IWorkspaceOutputPort>, IDeleteItemUseCase
+    internal class DeleteDocumentInteractor : WorkspaceInteractor, IDeleteItemUseCase
     {
         /// <summary>
         /// Initialises a new instance of the <see cref="DeleteDocumentInteractor"/> class.
@@ -26,9 +26,8 @@ namespace StarLab.Application.Workspace.Documents
 
             workspace.DeleteDocument(key);
 
-            //Mapper.Map(workspace.Documents, dto.Documents);
-            //Mapper.Map(workspace.Folders, dto.Folders);
-
+            OutputPort.DeleteDocuments(GetDocumentDTOs(dto, [key]));
+            UpdateProjects(workspace, dto.Projects);
             OutputPort.UpdateWorkspace(dto);
         }
     }

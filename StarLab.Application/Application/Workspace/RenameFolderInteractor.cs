@@ -33,7 +33,7 @@ namespace StarLab.Application.Workspace
                 if (IsValid(folders, name))
                 {
                     workspace.RenameFolder(folder, name);
-                    UpdateWorkspace(workspace, dto.Projects);
+                    UpdateProjects(workspace, dto.Projects);
                     OutputPort.UpdateFolders(dto);
                 }
                 else

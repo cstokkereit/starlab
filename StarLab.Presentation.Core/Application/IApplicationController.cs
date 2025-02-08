@@ -42,6 +42,12 @@ namespace StarLab.Application
         ICommand CreateCommand(ICommandManager commands, string view);
 
         /// <summary>
+        /// Deletes the <see cref="IView"/> with the specified ID.
+        /// </summary>
+        /// <param name="id">The ID of the <see cref="IView"/> to delete.</param>
+        void DeleteView(string id);
+
+        /// <summary>
         /// Gets the <see cref="IView"/> specified by the <see cref="IDocument"/> provided. If the view does not already exist it will be created.
         /// </summary>
         /// <param name="document">An instance of <see cref="IDocument"/> that specifies which instance of <see cref="IView"/> is required.</param>
@@ -49,11 +55,11 @@ namespace StarLab.Application
         IView GetView(IDocument document);
 
         /// <summary>
-        /// Gets the <see cref="IView"/> with the specified ID. A view with the specified ID must already exist or an exception will be thrown.
+        /// Gets the <see cref="IView"/> with the specified ID. If the view does not exist <see cref="null"/> will be returned.
         /// </summary>
-        /// <param name="id">The ID of the required instance of <see cref="IView"/>.</param>
-        /// <returns>The required instance of <see cref="IView">.</returns>
-        IView GetView(string id);
+        /// <param name="id">The ID of the required <see cref="IView"/>.</param>
+        /// <returns>The required <see cref="IView"> or <see cref="null"/>.</returns>
+        IView? GetView(string id);
 
         /// <summary>
         /// TODO - This may be replaced by an indexed element e.g. Controllers[id]

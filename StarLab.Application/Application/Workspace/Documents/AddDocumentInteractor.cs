@@ -26,7 +26,7 @@ namespace StarLab.Application.Workspace.Documents
             var document = new Document(dtoDocument);
             workspace.AddDocument(document);
 
-            UpdateWorkspace(workspace, dtoWorkspace.Projects);
+            UpdateProjects(workspace, dtoWorkspace.Projects);
 
             OutputPort.UpdateWorkspace(dtoWorkspace);
             OutputPort.OpenDocument(document.ID);

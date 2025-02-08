@@ -8,7 +8,7 @@
         /// <summary>
         /// Executes the use case.
         /// </summary>
-        /// <param name="dtoWorkspace">A <see cref="WorkspaceDTO"/> that specifies the current state of the workspace.</param>
+        /// <param name="dto">A <see cref="WorkspaceDTO"/> that specifies the current state of the workspace.</param>
         /// <param name="key">The key that identifies the item being removed.</param>
         void Execute(WorkspaceDTO dto, string key);
     }

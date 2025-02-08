@@ -91,6 +91,15 @@ namespace StarLab.Application
         }
 
         /// <summary>
+        /// Deletes the <see cref="IView"/> with the specified ID.
+        /// </summary>
+        /// <param name="id">The ID of the <see cref="IView"/> to delete.</param>
+        public void DeleteView(string id)
+        {
+            if (views.ContainsKey(id)) views.Remove(id);
+        }
+
+        /// <summary>
         /// Gets the <see cref="IView"/> specified by the <see cref="IDocument"/> provided. If the view does not already exist it will be created.
         /// </summary>
         /// <param name="document">An instance of <see cref="IDocument"/> that specifies which instance of <see cref="IView"/> is required.</param>
@@ -118,13 +127,18 @@ namespace StarLab.Application
         }
 
         /// <summary>
-        /// Gets the <see cref="IView"/> with the specified ID. A view with the specified ID must already exist or an exception will be thrown.
+        /// Gets the <see cref="IView"/> with the specified ID. If the view does not exist <see cref="null"/> will be returned.
         /// </summary>
-        /// <param name="id">The ID of the required instance of <see cref="IView"/>.</param>
-        /// <returns>The required instance of <see cref="IView">.</returns>
-        public IView GetView(string id)
+        /// <param name="id">The ID of the required <see cref="IView"/>.</param>
+        /// <returns>The required <see cref="IView"> or <see cref="null"/>.</returns>
+        public IView? GetView(string id)
         {
-            return views[id];
+            if (views.TryGetValue(id, out IView? view))
+            {
+                return view;
+            }
+
+            return null;
         }
 
         /// <summary>

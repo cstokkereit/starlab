@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using StarLab.Application.Workspace.Documents;
 
 namespace StarLab.Application.Workspace
 {
@@ -18,15 +19,50 @@ namespace StarLab.Application.Workspace
         /// <summary>
         /// Executes the use case.
         /// </summary>
-        /// <param name="dtoWorkspace">A <see cref="WorkspaceDTO"/> that specifies the current state of the workspace.</param>
-        /// <param name="key">The key that identifies the folder being removed.</param>
+        /// <param name="dto">A <see cref="WorkspaceDTO"/> that specifies the current state of the workspace.</param>
+        /// <param name="key">The key that identifies the folder being deleted.</param>
         public void Execute(WorkspaceDTO dto, string key)
         {
             var workspace = new Workspace(dto);
-
+            var folder = workspace.GetFolder(key);
             workspace.DeleteFolder(key);
-            UpdateWorkspace(workspace, dto.Projects);
-            OutputPort.UpdateFolders(dto);
+
+            OutputPort.DeleteDocuments(GetDocumentDTOs(dto, folder));
+            UpdateProjects(workspace, dto.Projects);
+            OutputPort.UpdateWorkspace(dto);
+        }
+
+        /// <summary>
+        /// Gets an <see cref="IEnumerable{DocumentDTO}"/> containing all of the <see cref="DocumentDTO"/>s owned by the parent <see cref="IFolder"/> provided and any child folders.
+        /// </summary>
+        /// <param name="dto">A <see cref="WorkspaceDTO"/> that specifies the current state of the workspace.</param>
+        /// <param name="folder">The <see cref="IFolder"/> that contains the documents.</param>
+        /// <returns>An <see cref="IEnumerable{DocumentDTO}"/> containing the required <see cref="DocumentDTO"/>s.</returns>
+        private static IEnumerable<DocumentDTO> GetDocumentDTOs(WorkspaceDTO dto, IFolder folder)
+        {
+            var ids = new List<string>();
+
+            GetDocumentIDs(folder, ids);
+
+            return GetDocumentDTOs(dto, ids);
+        }
+
+        /// <summary>
+        /// Recursively populates the <see cref="List{string}"/> provided with the IDs of all documents owned by the parent <see cref="IFolder"/> provided and any child folders.
+        /// </summary>
+        /// <param name="folder">The <see cref="IFolder"/> that contains the documents.</param>
+        /// <param name="documents">An <see cref="List{string}"/> that will be populated with the IDs of the documents.</param>
+        private static void GetDocumentIDs(IFolder folder, List<string> documents)
+        {
+            foreach (var document in folder.Documents)
+            {
+                documents.Add(document.ID);
+            }
+
+            foreach (var child in folder.Folders)
+            {
+                GetDocumentIDs(child, documents);
+            }
         }
     }
 }

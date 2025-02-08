@@ -71,10 +71,7 @@ namespace Pegasus.Measures
         /// Determines whether this instance and a specified object, which must also be a <see cref="Measure"/> object, have the same value.
         /// </summary>
         /// <param name="other">The <see cref="Measure"/> to compare to this instance.</param>
-<<<<<<< HEAD
         /// <returns><see cref="true"/> if other has the same value as this instance; <see cref="false"/> otherwise.</returns>
-=======
->>>>>>> 8fe7ec8dc993dae512270f500395f9cd3baaeeb7
         public bool Equals(Measure other)
         {
             return other.value == value && other.units == units;

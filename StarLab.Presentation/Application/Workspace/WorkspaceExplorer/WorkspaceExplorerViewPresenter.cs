@@ -587,7 +587,7 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
                 {
                     if (folder.IsNew)
                     {
-                        Rename(folder.Key);
+                        Rename(folder.Key); // TODO Call this from the interactor
                         break;
                     }
                 }

@@ -15,7 +15,7 @@
         /// </summary>
         /// <param name="id">The ID of the required <see cref="IDockableView"/>.</param>
         /// <returns>The <see cref="IDockableView"/> with the specified ID.</returns>
-        IDockableView CreateView(string id);
+        IDockableView? CreateView(string id);
 
         /// <summary>
         /// Makes the document with the specified ID the active document.

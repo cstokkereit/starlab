@@ -65,6 +65,15 @@ namespace StarLab.Application.Workspace
         }
 
         /// <summary>
+        /// Deletes the <see cref="Document"/> provided from the folder.
+        /// </summary>
+        /// <param name="document">The <see cref="Document"/> to be deleted.</param>
+        public void DeleteDocument(Document document)
+        {
+            folder.DeleteDocument(document);
+        }  
+
+        /// <summary>
         /// Deletes the <see cref="IFolder"/> provided from the project folder.
         /// </summary>
         /// <param name="folder">The <see cref="IFolder"/> to be deleted.</param>

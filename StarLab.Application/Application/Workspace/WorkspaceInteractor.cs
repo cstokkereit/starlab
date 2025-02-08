@@ -23,7 +23,7 @@ namespace StarLab.Application.Workspace
         /// <param name="name">A name that is not valid for the item being named.</param>
         /// <param name="target">The item being named.</param>
         /// <returns>An <see cref="Exception"/> with a message identifying the issue with the name provided.</returns>
-        protected Exception CreateInvalidNameException(string name, string target)
+        protected static Exception CreateInvalidNameException(string name, string target)
         {
             var message = string.Empty;
 
@@ -46,9 +46,27 @@ namespace StarLab.Application.Workspace
         /// <param name="newName">A name that is not valid because an item of the same type with the same name already exists.</param>
         /// <param name="target">The item being renamed.</param>
         /// <returns>An <see cref="Exception"/> with a message identifying the issue with the name provided.</returns>
-        protected Exception CreateTargetExistsException(string oldName, string newName, string target)
+        protected static Exception CreateTargetExistsException(string oldName, string newName, string target)
         {
             return new Exception(string.Format(Resources.NameAlreadyExistsMessage, oldName, newName, target.ToLower()));
+        }
+
+        /// <summary>
+        /// Gets an <see cref="IEnumerable{DocumentDTO}"/> containing the specified <see cref="DocumentDTO"/>s from the <see cref="WorkspaceDTO"/> provided.
+        /// </summary>
+        /// <param name="dto">A <see cref="WorkspaceDTO"/> that contains the required <see cref="DocumentDTO"/>s.</param>
+        /// <param name="ids">An <see cref="IEnumerable{string}"/> containing the IDs of the required <see cref="DocumentDTO"/>s.</param>
+        /// <returns>An <see cref="IEnumerable{DocumentDTO}"/> containing the required <see cref="DocumentDTO"/>s.</returns>
+        protected static IEnumerable<DocumentDTO> GetDocumentDTOs(WorkspaceDTO dto, IEnumerable<string> ids)
+        {
+            List<DocumentDTO> dtos = new List<DocumentDTO>();
+
+            foreach (var project in dto.Projects)
+            {
+                dtos.AddRange(project.Documents.Where(d => ids.Contains(d.ID)));
+            }
+
+            return dtos;
         }
 
         /// <summary>
@@ -56,7 +74,7 @@ namespace StarLab.Application.Workspace
         /// </summary>
         /// <param name="name">A name that may contain illegal characters.</param>
         /// <returns><see cref="true"/> if the name does not contain illegal characters; <see cref="false"/> otherwise.</returns>
-        protected bool IsValid(string name)
+        protected static bool IsValid(string name)
         {
             var valid = !string.IsNullOrEmpty(name);
 
@@ -80,7 +98,7 @@ namespace StarLab.Application.Workspace
         /// </summary>
         /// <param name="workspace">A <see cref="Workspace"/> .</param>
         /// <param name="dtos">An <see cref="IEnumerable{ProjectDTO}"/> .</param>
-        protected void UpdateWorkspace(Workspace workspace, IEnumerable<ProjectDTO> dtos)
+        protected void UpdateProjects(Workspace workspace, IEnumerable<ProjectDTO> dtos)
         {
             foreach (var dto in dtos)
             {
@@ -93,8 +111,6 @@ namespace StarLab.Application.Workspace
                     Mapper.Map(folders, dto.Folders);
                 }
             }
-
-            // TODO - Apply the changes to the output port?
         }
 
         /// <summary>
