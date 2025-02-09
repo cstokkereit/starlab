@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using StarLab.Application.Configuration;
 using StarLab.Commands;
 
 namespace StarLab.Application.Workspace.Documents
@@ -52,6 +51,15 @@ namespace StarLab.Application.Workspace.Documents
         public void AddToolbarButton(string name, string tooltip, Image image, ICommand command)
         {
             view.AddToolbarButton(name, tooltip, image, command);
+        }
+
+        /// <summary>
+        /// Closes the document window.
+        /// </summary>
+        public void Close()
+        {
+            view.HideOnClose = false;
+            view.Close();
         }
 
         /// <summary>

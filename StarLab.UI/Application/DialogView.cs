@@ -60,24 +60,6 @@ namespace StarLab
         }
 
         /// <summary>
-        /// Initialises the view.
-        /// </summary>
-        /// <param name="controller">The <see cref="IApplicationController"/>.</param>
-        public void Initialise(IApplicationController controller)
-        {
-            childView.Controller.Initialise(controller);
-        }
-
-        /// <summary>
-        /// Shows the dialog with the specified <see cref="IInteractionContext"/>.
-        /// </summary>
-        /// <param name="context">An <see cref="IInteractionContext"/> that provides the context required to configure the dialog for a specific user interaction.</param>
-        public void Show(IInteractionContext context)
-        {
-            childView.Controller.Run(context);
-        }
-
-        /// <summary>
         /// Gets the <see cref="IViewController"> that controls this view.
         /// </summary>
         public IViewController Controller => (IViewController)presenter;
@@ -93,12 +75,30 @@ namespace StarLab
         public string ID => id;
 
         /// <summary>
+        /// Initialises the view.
+        /// </summary>
+        /// <param name="controller">The <see cref="IApplicationController"/>.</param>
+        public void Initialise(IApplicationController controller)
+        {
+            childView.Controller.Initialise(controller);
+        }
+
+        /// <summary>
         /// Shows the specified view.
         /// </summary>
         /// <param name="view">The <see cref="IView"/> to be shown.</param>
         public void Show(IView view)
         {
             if (view is Form form) form.ShowDialog(this);
+        }
+
+        /// <summary>
+        /// Shows the dialog with the specified <see cref="IInteractionContext"/>.
+        /// </summary>
+        /// <param name="context">An <see cref="IInteractionContext"/> that provides the context required to configure the dialog for a specific user interaction.</param>
+        public void Show(IInteractionContext context)
+        {
+            childView.Controller.Run(context);
         }
 
         /// <summary>

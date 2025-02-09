@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using StarLab.Application.Configuration;
 using StarLab.Commands;
 using System.ComponentModel;
 

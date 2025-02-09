@@ -6,16 +6,6 @@
     public interface IDialogView : IView
     {
         /// <summary>
-        /// Gets or sets a flag that determines whether the dialog box will be hidden or unloaded when it is closed.
-        /// </summary>
-        bool HideOnClose { get; set; }
-
-        /// <summary>
-        /// Closes the view.
-        /// </summary>
-        void Close();
-
-        /// <summary>
         /// Initialises the view.
         /// </summary>
         /// <param name="controller">The <see cref="IApplicationController"/>.</param>

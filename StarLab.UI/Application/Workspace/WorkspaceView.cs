@@ -45,6 +45,11 @@ namespace StarLab.Application.Workspace
         public IViewController Controller => (IViewController)presenter;
 
         /// <summary>
+        /// Gets or sets a flag that determines whether the dialog box will be hidden or unloaded when it is closed.
+        /// </summary>
+        public bool HideOnClose { get; set; }
+
+        /// <summary>
         /// Gets the view ID.
         /// </summary>
         public string ID => id;

@@ -6,6 +6,11 @@
     public interface IView
     {
         /// <summary>
+        /// Gets or sets a flag that determines whether the view will be hidden or unloaded when it is closed.
+        /// </summary>
+        bool HideOnClose { get; set; }
+
+        /// <summary>
         /// Gets the view ID.
         /// </summary>
         string ID { get; }
@@ -19,6 +24,11 @@
         /// Gets or sets the view text.
         /// </summary>
         string Text { get; set; }
+
+        /// <summary>
+        /// Closes the view.
+        /// </summary>
+        void Close();
 
         /// <summary>
         /// Shows the specified view.

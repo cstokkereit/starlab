@@ -413,11 +413,16 @@ namespace StarLab.Application.Workspace
         /// <param name="dto">A <see cref="WorkspaceDTO"/> that represents the new workspace state.</param>
         public void UpdateWorkspace(WorkspaceDTO dto)
         {
-            view.CloseAll();
+            var updateLayout = workspace.Layout != dto.Layout;
 
             workspace = new Workspace(dto);
 
-            if (!string.IsNullOrEmpty(workspace.Layout)) view.SetLayout(workspace.Layout);
+            if (updateLayout)
+            {
+                view.CloseAll();
+
+                if (!string.IsNullOrEmpty(workspace.Layout)) view.SetLayout(workspace.Layout);
+            }
 
             Events.Publish(new WorkspaceChangedEventArgs(workspace));
 

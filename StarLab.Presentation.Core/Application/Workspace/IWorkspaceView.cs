@@ -16,11 +16,6 @@
         void CloseAll();
 
         /// <summary>
-        /// Closes the application window.
-        /// </summary>
-        void Close();
-
-        /// <summary>
         /// Generates an XML representation of the workspace including the size, state and location of each of the dockable windows it contains.
         /// </summary>
         /// <returns>An XML representation of the workspace.</returns>

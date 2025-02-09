@@ -47,14 +47,6 @@ namespace StarLab.Application
         public override string Name => Constants.APPLICATION + Constants.CONTROLLER;
 
         /// <summary>
-        /// Exits the application.
-        /// </summary>
-        public void Exit()
-        {
-            if (controllers[Constants.WORKSPACE_VIEW_CONTROLLER] is IWorkspaceController controller) controller.Exit();
-        }
-
-        /// <summary>
         /// Creates the <see cref="ICommand"> specified by the controller, action and target provided.
         /// </summary>
         /// <param name="commands">An instance of <see cref="ICommandManager"/> that is required for the creation of the command.</param>
@@ -96,7 +88,25 @@ namespace StarLab.Application
         /// <param name="id">The ID of the <see cref="IView"/> to delete.</param>
         public void DeleteView(string id)
         {
-            if (views.ContainsKey(id)) views.Remove(id);
+            if (views.ContainsKey(id))
+            {
+                var view = views[id];
+
+                if (controllers[$"Document({view.ID}) Controller"] is IDocumentController controller) // If other types move to IViewController
+                {
+                    controller.Close();
+                }
+
+                views.Remove(id);
+            }
+        }
+
+        /// <summary>
+        /// Exits the application.
+        /// </summary>
+        public void Exit()
+        {
+            if (controllers[Constants.WORKSPACE_VIEW_CONTROLLER] is IWorkspaceController controller) controller.Exit();
         }
 
         /// <summary>

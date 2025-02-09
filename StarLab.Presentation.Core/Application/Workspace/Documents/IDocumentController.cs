@@ -6,6 +6,11 @@
     public interface IDocumentController : IViewController, IToolbarManager
     {
         /// <summary>
+        /// Closes the document window.
+        /// </summary>
+        void Close();
+
+        /// <summary>
         /// Hides the specified split content.
         /// </summary>
         /// <param name="name">The name of the content to be hidden.</param>
