@@ -28,13 +28,16 @@ namespace StarLab.Application.Workspace
             {
                 var workspace = new Workspace(dto);
                 var folder = workspace.GetFolder(key);
-                var folders = folder.Parent.Folders;
 
+                IEnumerable<IFolder> folders = folder.Parent.Folders;
+
+                if (folder is Project) folders = workspace.Projects;
+                
                 if (IsValid(folders, name))
                 {
                     workspace.RenameFolder(folder, name);
                     UpdateProjects(workspace, dto.Projects);
-                    OutputPort.UpdateFolders(dto);
+                    OutputPort.UpdateWorkspace(dto);
                 }
                 else
                 {
@@ -52,7 +55,7 @@ namespace StarLab.Application.Workspace
         /// </summary>
         /// <param name="folders">An <see cref="IEnumerable{IFolder}"/> containing the folders.</param>
         /// <param name="name">The new folder name.</param>
-        /// <returns><see cref="true"/> if there are no folders with matching names; <see cref="false"/> otherwise.</returns>
+        /// <returns>true if there are no folders with matching names; false otherwise.</returns>
         private bool IsValid(IEnumerable<IFolder> folders, string name)
         {
             var valid = true;

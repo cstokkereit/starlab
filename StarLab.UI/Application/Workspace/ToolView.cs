@@ -109,7 +109,7 @@ namespace StarLab.Application.Workspace
         /// <param name="message">The message text.</param>
         /// <param name="type">An <see cref="InteractionType"/> that specifies the type of message being displayed.</param>
         /// <param name="responses">An <see cref="InteractionResponses"/> that specifies the available responses.</param>
-        /// <returns>An <see cref="InteractionResult"/> that identifies the button that was clicked.</returns>
+        /// <returns>An <see cref="InteractionResult"/> that identifies the chosen response.</returns>
         public InteractionResult ShowMessage(string caption, string message, InteractionType type, InteractionResponses responses)
         {
             return DialogController.ShowMessage(this, caption, message, type, responses);

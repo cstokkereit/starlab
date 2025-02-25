@@ -31,7 +31,7 @@ namespace StarLab.Application.Workspace
 
             UpdateProjects(workspace, dto.Projects);
 
-            OutputPort.UpdateFolders(dto);
+            OutputPort.UpdateWorkspace(dto);
         }
 
         /// <summary>

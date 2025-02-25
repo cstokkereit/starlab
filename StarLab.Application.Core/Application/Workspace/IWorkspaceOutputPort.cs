@@ -29,12 +29,6 @@ namespace StarLab.Application.Workspace
         /// Updates the state of the workspace represented by the <see cref="WorkspaceDTO"/> provided.
         /// </summary>
         /// <param name="dto">The <see cref="WorkspaceDTO"/> that contains the updated workspace state.</param>
-        void UpdateFolders(WorkspaceDTO dto);
-
-        /// <summary>
-        /// Updates the state of the workspace represented by the <see cref="WorkspaceDTO"/> provided.
-        /// </summary>
-        /// <param name="dto">The <see cref="WorkspaceDTO"/> that contains the updated workspace state.</param>
         void UpdateWorkspace(WorkspaceDTO dto);
     }
 }

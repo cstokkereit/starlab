@@ -22,14 +22,16 @@ namespace StarLab.Application.Workspace.Documents
         /// <param name="dtoDocument">A <see cref="DocumentDTO"/> that defines the document being added.</param>
         public void Execute(WorkspaceDTO dtoWorkspace, DocumentDTO dtoDocument)
         {
-            var workspace = new Workspace(dtoWorkspace);
-            var document = new Document(dtoDocument);
-            workspace.AddDocument(document);
+            throw new NotImplementedException();
 
-            UpdateProjects(workspace, dtoWorkspace.Projects);
+            //var workspace = new Workspace(dtoWorkspace);
+            //var document = new Document(dtoDocument);
+            //workspace.AddDocument(document);
 
-            OutputPort.UpdateWorkspace(dtoWorkspace);
-            OutputPort.OpenDocument(document.ID);
+            //UpdateProjects(workspace, dtoWorkspace.Projects);
+
+            //OutputPort.UpdateWorkspace(dtoWorkspace);
+            //OutputPort.OpenDocument(document.ID);
         }
     }
 }

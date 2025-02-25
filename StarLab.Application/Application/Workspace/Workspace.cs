@@ -9,7 +9,7 @@ namespace StarLab.Application.Workspace
     {
         private readonly Dictionary<string, Document> documents = new Dictionary<string, Document>(); // A dictionary containing all of the documents within the workspace hierarchy.
 
-        private readonly Dictionary<string, Project> projects = new Dictionary<string, Project>(); // A dictionary containing all of the projects within the workspace hierarchy.
+        private readonly Dictionary<string, IFolder> projects = new Dictionary<string, IFolder>(); // A dictionary containing all of the projects within the workspace hierarchy.
 
         private readonly Dictionary<string, IFolder> folders = new Dictionary<string, IFolder>(); // A dictionary containing all of the folders within the workspace hierarchy.
 
@@ -40,6 +40,11 @@ namespace StarLab.Application.Workspace
         public IEnumerable<IFolder> Folders => folders.Values;
 
         /// <summary>
+        /// Returns true if the workspace does not contain any projects; false otherwise.
+        /// </summary>
+        public bool IsEmpty => projects.Count == 0;
+
+        /// <summary>
         /// Gets the workspace name.
         /// </summary>
         public string Name { get => Constants.WORKSPACE; set => throw new InvalidOperationException(); }
@@ -56,9 +61,9 @@ namespace StarLab.Application.Workspace
         public IFolder Parent => throw new InvalidOperationException();
 
         /// <summary>
-        /// Gets an <see cref="IEnumerable{Project}"/> containing the projects in the workspace hierarchy. 
+        /// Gets an <see cref="IEnumerable{IFolder}"/> containing the projects in the workspace hierarchy. 
         /// </summary>
-        public IEnumerable<Project> Projects => projects.Values;
+        public IEnumerable<IFolder> Projects => projects.Values;
 
         /// <summary>
         /// Adds the <see cref="Document"/> provided to the workspace hierarchy.
@@ -98,7 +103,7 @@ namespace StarLab.Application.Workspace
         }
 
         /// <summary>
-        /// Deletes the <see cref="Document"/> provided from the folder.
+        /// Deletes the <see cref="Document"/> provided from the workspace hierarchy.
         /// </summary>
         /// <param name="document">The <see cref="Document"/> to be deleted.</param>
         public void DeleteDocument(Document document)
@@ -134,7 +139,7 @@ namespace StarLab.Application.Workspace
             {
                 DeleteFolders(folder);
 
-                folder.Parent.DeleteFolder(folder);
+                if (folder.Parent != this) folder.Parent.DeleteFolder(folder);
             }
         }
 
@@ -145,6 +150,29 @@ namespace StarLab.Application.Workspace
         public void DeleteFolder(string path)
         {
             DeleteFolder(GetFolder(path));
+        }
+
+        /// <summary>
+        /// Removes the project provided from the workspace hierarchy.
+        /// </summary>
+        /// <param name="project">The <see cref="Project"/> being removed.</param>
+        public void DeleteProject(Project project)
+        {
+            if (project != null)
+            {
+                DeleteFolder(project);
+
+                projects.Remove(project.Path);
+            }
+        }
+
+        /// <summary>
+        /// Removes the specified project from the workspace hierarchy.
+        /// </summary>
+        /// <param name="path">The path to the project.</param>
+        public void DeleteProject(string path)
+        {
+            DeleteProject(GetProject(path));
         }
 
         /// <summary>
@@ -181,7 +209,7 @@ namespace StarLab.Application.Workspace
         /// <returns>The required <see cref="Project"/>.</returns>
         public Project GetProject(string name)
         {
-            return projects[$"{Constants.WORKSPACE}/{name}"];
+            return (Project)projects[$"{Constants.WORKSPACE}/{name}"];
         }
 
         /// <summary>
@@ -191,57 +219,11 @@ namespace StarLab.Application.Workspace
         /// <param name="name">The new name.</param>
         public void RenameFolder(IFolder folder, string name)
         {
-            var folders = new List<IFolder>(this.folders.Values);
+            var project = GetProject(folder);
 
-            folder.Name = name;
+            project.RenameFolder(folder, name);
 
-            UpdatePaths(folders);
-        }
-
-        /// <summary>
-        /// Creates the documents defined in the <see cref="IEnumerable{DocumentDTO}"/> provided.
-        /// </summary>
-        /// <param name="dtos">An <see cref="IEnumerable{DocumentDTO}"/> that contains the definitions of the documents to be created.</param>
-        private void CreateDocuments(IEnumerable<DocumentDTO> dtos)
-        {
-            foreach (var dto in dtos)
-            {
-                if (!string.IsNullOrEmpty(dto.Path) && folders.ContainsKey(dto.Path))
-                {
-                    var document = new Document(dto);
-                    folders[document.Path].AddDocument(document);
-                    documents.Add(document.ID, document);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Creates the folders defined in the <see cref="IEnumerable{FolderDTO}"/> provided at the specified location in the workspace hiewrarchy.
-        /// </summary>
-        /// <param name="dtos">An <see cref="IEnumerable{FolderDTO}"/> that contains the definitions of the folders to be created.</param>
-        /// <param name="parent">The parent <see cref="IFolder"/>.</param>
-        private void CreateFolders(IEnumerable<FolderDTO> dtos, IFolder parent)
-        {
-            Folder folder;
-
-            foreach (var dto in dtos)
-            {
-                if (!string.IsNullOrEmpty(dto.Path))
-                {
-                    var parentPath = dto.Path.Substring(0, dto.Path.LastIndexOf('/'));
-
-                    if (folders.ContainsKey(parentPath))
-                    {
-                        folder = new Folder(dto, folders[parentPath]);
-                    }   
-                    else
-                    {
-                        folder = new Folder(dto, parent);
-                    }
-                    
-                    folders.Add(folder.Path, folder);
-                }
-            }
+            UpdateProjects();
         }
 
         /// <summary>
@@ -255,9 +237,18 @@ namespace StarLab.Application.Workspace
             foreach (var dto in dtos)
             {
                 var project = new Project(dto, this);
+
                 projects.Add(project.Path, project);
-                CreateFolders(dto.Folders, project);
-                CreateDocuments(dto.Documents);
+
+                foreach (var folder in project.AllFolders)
+                {
+                    folders.Add(folder.Path, folder);
+                }
+
+                foreach (var document in project.AllDocuments)
+                {
+                    documents.Add(document.ID, document);
+                }
             }
         }
 
@@ -301,9 +292,9 @@ namespace StarLab.Application.Workspace
         {
             // TODO
 
-            foreach(var project in projects.Values)
+            foreach(var project in Projects)
             {
-                if (folder.Path.StartsWith(project.Path)) return project;
+                if (folder.Path.StartsWith(project.Path)) return (Project)project;
             }
 
             throw new ArgumentException(nameof(folder)); // TODO
@@ -312,19 +303,26 @@ namespace StarLab.Application.Workspace
         /// <summary>
         /// TODO
         /// </summary>
-        /// <param name="folders"></param>
-        private void UpdatePaths(IEnumerable<IFolder> folders)
+        /// <param name="project"></param>
+        private void UpdateProject(Project project)
         {
-            this.folders.Clear();
-
-            foreach (var folder in folders)
+            foreach (var folder in project.AllFolders)
             {
-                foreach (var document in folder.Documents)
-                {
-                    document.Path = folder.Path;
-                }
+                folders.Add(folder.Path, folder);
+            }
+        }
 
-                this.folders.Add(folder.Path, folder);
+        /// <summary>
+        /// TODO
+        /// </summary>
+        private void UpdateProjects()
+        {
+            //documents.Clear();
+            folders.Clear();
+
+            foreach (var project in projects.Values)
+            {
+                UpdateProject((Project)project);
             }
         }
     }

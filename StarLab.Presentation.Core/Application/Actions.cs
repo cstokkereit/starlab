@@ -19,6 +19,7 @@
 
         public const string DELETE_DOCUMENT = "DeleteDocument";
         public const string DELETE_FOLDER = "DeleteFolder";
+        public const string DELETE_PROJECT = "DeleteProject";
 
         public const string EXIT = "Exit";
 

@@ -34,6 +34,12 @@
         void DeleteFolder(string key);
 
         /// <summary>
+        /// Deletes the specified project.
+        /// </summary>
+        /// <param name="key">The key that identifies the project to be deleted.</param>
+        void DeleteProject(string key);
+
+        /// <summary>
         /// Exists the application.
         /// </summary>
         void Exit();

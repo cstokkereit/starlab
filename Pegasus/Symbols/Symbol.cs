@@ -131,7 +131,7 @@
         /// Determines whether this instance and a specified object, which must also be an <see cref="ISymbol"/> object, have the same value.
         /// </summary>
         /// <param name="other">The <see cref="ISymbol"/> to compare to this instance.</param>
-        /// <returns><see cref="true"/> if other has the same value as this instance; <see cref="false"/> otherwise.</returns>
+        /// <returns>true if other has the same value as this instance; false otherwise.</returns>
         public bool Equals(ISymbol? other)
         {
             var result = !ReferenceEquals(other, null);
@@ -157,7 +157,7 @@
         /// Determines whether this instance and a specified object have the same value.
         /// </summary>
         /// <param name="other">The object to compare to this instance.</param>
-        /// <returns><see cref="true"/> if other is an <see cref="ISymbol"/> and its value is the same as this instance; <see cref="false"/> otherwise.</returns>
+        /// <returns>true if other is an <see cref="ISymbol"/> and its value is the same as this instance; false otherwise.</returns>
         public override bool Equals(object? other)
         {
             return other is ISymbol && Equals((ISymbol)other);

@@ -5,6 +5,8 @@
     /// </summary>
     internal class Document
     {
+        private readonly IFolder parent; // The folder that contains the document.
+
         private readonly string view; // The type name of the document view.
 
         private readonly string id; // The document ID.
@@ -13,11 +15,13 @@
         /// Initialises a new instance of the <see cref="Document"/> class.
         /// </summary>
         /// <param name="dto">A data transfer object that specifies the initial state of the <see cref="Document"/>.</param>
+        /// <param name="parent">The <see cref="IFolder"/> that contains the document.</param>
         /// <exception cref="ArgumentException"></exception>
-        public Document(DocumentDTO dto)
+        public Document(DocumentDTO dto, IFolder parent)
         {
+            this.parent = parent ?? throw new ArgumentException();
+
             Name = dto.Name ?? throw new ArgumentException();
-            Path = dto.Path ?? throw new ArgumentException();
 
             view = dto.View ?? throw new ArgumentException();
             id = dto.ID ?? throw new ArgumentException();
@@ -36,7 +40,7 @@
         /// <summary>
         /// Gets or sets the document path.
         /// </summary>
-        public string Path { get; set; }
+        public string Path { get { return parent.Path; } }
 
         /// <summary>
         /// Gets the type name of the document view.

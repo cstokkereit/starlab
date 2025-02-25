@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using StarLab.Application.Workspace.Documents;
+using StarLab.Shared.Properties;
 
 namespace StarLab.Application.Workspace
 {
@@ -21,15 +22,21 @@ namespace StarLab.Application.Workspace
         /// </summary>
         /// <param name="dto">A <see cref="WorkspaceDTO"/> that specifies the current state of the workspace.</param>
         /// <param name="key">The key that identifies the folder being deleted.</param>
-        public void Execute(WorkspaceDTO dto, string key)
+        public virtual void Execute(WorkspaceDTO dto, string key)
         {
+            dto.ActiveDocument = string.Empty;
+
             var workspace = new Workspace(dto);
             var folder = workspace.GetFolder(key);
-            workspace.DeleteFolder(key);
 
-            OutputPort.DeleteDocuments(GetDocumentDTOs(dto, folder));
-            UpdateProjects(workspace, dto.Projects);
-            OutputPort.UpdateWorkspace(dto);
+            if (folder.IsEmpty || ConfirmAction(string.Format(Resources.FolderDeletionWarning, folder.Name)))
+            {
+                workspace.DeleteFolder(key);
+
+                OutputPort.DeleteDocuments(GetDocumentDTOs(dto, folder));
+                UpdateProjects(workspace, dto.Projects);
+                OutputPort.UpdateWorkspace(dto);
+            }
         }
 
         /// <summary>
@@ -38,7 +45,7 @@ namespace StarLab.Application.Workspace
         /// <param name="dto">A <see cref="WorkspaceDTO"/> that specifies the current state of the workspace.</param>
         /// <param name="folder">The <see cref="IFolder"/> that contains the documents.</param>
         /// <returns>An <see cref="IEnumerable{DocumentDTO}"/> containing the required <see cref="DocumentDTO"/>s.</returns>
-        private static IEnumerable<DocumentDTO> GetDocumentDTOs(WorkspaceDTO dto, IFolder folder)
+        protected static IEnumerable<DocumentDTO> GetDocumentDTOs(WorkspaceDTO dto, IFolder folder)
         {
             var ids = new List<string>();
 

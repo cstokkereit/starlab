@@ -67,7 +67,7 @@ namespace StarLab.Application
         protected Configuration.IConfigurationProvider Configuration => configuration;
 
         /// <summary>
-        /// Returns <see cref="true"/> if the presenter has been initialised; <see cref="false"/> otherwise.
+        /// Returns true if the presenter has been initialised; false otherwise.
         /// </summary>
         protected bool Initialised => controller != null;
 

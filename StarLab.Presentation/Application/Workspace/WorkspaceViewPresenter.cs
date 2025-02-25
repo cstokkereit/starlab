@@ -2,7 +2,6 @@
 using StarLab.Application.Workspace.Documents;
 using StarLab.Commands;
 using System.ComponentModel;
-using System.Diagnostics;
 using ImageResources = StarLab.Properties.Resources;
 using StringResources = StarLab.Shared.Properties.Resources;
 
@@ -159,6 +158,17 @@ namespace StarLab.Application.Workspace
         public void DeleteFolder(string key)
         {
             var interactor = UseCaseFactory.CreateDeleteFolderUseCase(this);
+            var dto = Mapper.Map<IWorkspace, WorkspaceDTO>(workspace);
+            interactor.Execute(dto, key);
+        }
+
+        /// <summary>
+        /// Deletes the specified project.
+        /// </summary>
+        /// <param name="key">The key that identifies the project to be deleted.</param>
+        public void DeleteProject(string key)
+        {
+            var interactor = UseCaseFactory.CreateDeleteProjectUseCase(this);
             var dto = Mapper.Map<IWorkspace, WorkspaceDTO>(workspace);
             interactor.Execute(dto, key);
         }
@@ -321,7 +331,7 @@ namespace StarLab.Application.Workspace
         /// <param name="message">The message text.</param>
         /// <param name="type">An <see cref="InteractionType"/> that specifies the type of message being displayed.</param>
         /// <param name="responses">An <see cref="InteractionResponses"/> that specifies the available responses.</param>
-        /// <returns>An <see cref="InteractionResult"/> that identifies the button that was clicked.</returns>
+        /// <returns>An <see cref="InteractionResult"/> that identifies the chosen response.</returns>
         public InteractionResult ShowMessage(string caption, string message, InteractionType type, InteractionResponses responses)
         {
             return view.ShowMessage(caption, message, type, responses);
@@ -395,24 +405,13 @@ namespace StarLab.Application.Workspace
         }
 
         /// <summary>
-        /// TODO
-        /// </summary>
-        /// <param name="dto"></param>
-        public void UpdateFolders(WorkspaceDTO dto)
-        {
-            workspace = new Workspace(dto);
-
-            dirty = true;
-
-            Events.Publish(new WorkspaceChangedEventArgs(workspace));
-        }
-
-        /// <summary>
         /// Replaces the current workspace state with that specified by the <see cref="WorkspaceDTO"/> provided.
         /// </summary>
         /// <param name="dto">A <see cref="WorkspaceDTO"/> that represents the new workspace state.</param>
         public void UpdateWorkspace(WorkspaceDTO dto)
         {
+            if (workspace.ActiveDocument != null && string.IsNullOrEmpty(dto.ActiveDocument)) dto.ActiveDocument = workspace.ActiveDocument.ID;
+
             var updateLayout = workspace.Layout != dto.Layout;
 
             workspace = new Workspace(dto);
@@ -423,6 +422,8 @@ namespace StarLab.Application.Workspace
 
                 if (!string.IsNullOrEmpty(workspace.Layout)) view.SetLayout(workspace.Layout);
             }
+
+            dirty = true;
 
             Events.Publish(new WorkspaceChangedEventArgs(workspace));
 
