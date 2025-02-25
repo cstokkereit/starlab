@@ -18,6 +18,11 @@ namespace StarLab.Application.Workspace
         IEnumerable<IFolder> Folders { get; }
 
         /// <summary>
+        /// Returns true if the folder does not contain any documents or folders; false otherwise.
+        /// </summary>
+        bool IsEmpty { get; }
+
+        /// <summary>
         /// Gets or sets the name of the folder.
         /// </summary>
         string Name { get; set; }

@@ -35,9 +35,9 @@ namespace StarLab.Application.Workspace
                 Name = string.Empty;
             }
 
-            if (dto.Projects != null) CreateProjects(dto.Projects);
+            CreateProjects(dto.Projects);
 
-            if (!string.IsNullOrEmpty(dto.ActiveDocument) && documents.Count > 0) ActiveDocument = documents[dto.ActiveDocument];
+            if (!string.IsNullOrEmpty(dto.ActiveDocument) && documents.ContainsKey(dto.ActiveDocument)) ActiveDocument = documents[dto.ActiveDocument];
         }
 
         /// <summary>
@@ -139,7 +139,7 @@ namespace StarLab.Application.Workspace
         /// Determines if the workspace contains the specified document.
         /// </summary>
         /// <param name="id">The ID of the required document.</param>
-        /// <returns><see cref="true"/> if the workspace contains a document with the specified ID; <see cref="false"/> otherwise.</returns>
+        /// <returns>true if the workspace contains a document with the specified ID; false otherwise.</returns>
         public bool HasDocument(string id)
         {
             return documents.ContainsKey(id);
@@ -149,7 +149,7 @@ namespace StarLab.Application.Workspace
         /// Determines if the workspace contains the specified folder.
         /// </summary>
         /// <param name="key">The key of the required folder.</param>
-        /// <returns><see cref="true"/> if the workspace contains a folder with the specified key; <see cref="false"/> otherwise.</returns>
+        /// <returns>true if the workspace contains a folder with the specified key; false otherwise.</returns>
         public bool HasFolder(string key)
         {
             return folders.ContainsKey(key);
@@ -159,7 +159,7 @@ namespace StarLab.Application.Workspace
         /// Determines if the workspace contains the specified project.
         /// </summary>
         /// <param name="key">The key of the required project.</param>
-        /// <returns><see cref="true"/> if the workspace contains a project with the specified key; <see cref="false"/> otherwise.</returns>
+        /// <returns>true if the workspace contains a project with the specified key; false otherwise.</returns>
         public bool HasProject(string key)
         {
             return projects.ContainsKey(key);

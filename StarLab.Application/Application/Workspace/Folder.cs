@@ -1,4 +1,5 @@
 ﻿using StarLab.Application.Workspace.Documents;
+using System.Windows.Forms;
 
 namespace StarLab.Application.Workspace
 {
@@ -27,7 +28,6 @@ namespace StarLab.Application.Workspace
             if (string.IsNullOrEmpty(dto.Path)) throw new ArgumentException(); // TODO
 
             Parent = parent ?? throw new ArgumentNullException(nameof(parent));
-
             Name = dto.Path.Substring(dto.Path.LastIndexOf('/') + 1);
             
             expanded = dto.Expanded;
@@ -61,9 +61,9 @@ namespace StarLab.Application.Workspace
             Parent = parent ?? throw new ArgumentNullException(nameof(parent));
             Name = name ?? throw new ArgumentNullException(nameof(name));
 
-            isNew = true;
-
             Parent.AddFolder(this);
+
+            isNew = true;
         }
 
         /// <summary>
@@ -80,6 +80,11 @@ namespace StarLab.Application.Workspace
         /// Gets an <see cref="IEnumerable{IFolder}"/> containing the folders in the folder.
         /// </summary>
         public IEnumerable<IFolder> Folders => folders;
+
+        /// <summary>
+        /// Returns true if the folder does not contain any documents or folders; false otherwise.
+        /// </summary>
+        public bool IsEmpty => documents.Count == 0 && folders.Count == 0;
 
         /// <summary>
         /// Returns true if the folder is new; false otherwise.

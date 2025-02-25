@@ -18,6 +18,16 @@ namespace StarLab.Application.Workspace
             : base(outputPort, mapper) { }
 
         /// <summary>
+        /// Displays a confirmation dialog box with the specified message.
+        /// </summary>
+        /// <param name="message">The message text.</param>
+        /// <returns>true if the action was confirmed; false otherwise.</returns>
+        protected bool ConfirmAction(string message)
+        {
+            return OutputPort.ShowMessage(Resources.StarLab, message, InteractionType.Warning, InteractionResponses.OKCancel) == InteractionResult.OK;
+        }
+
+        /// <summary>
         /// Creates an exception in response to an invalid name being provided.
         /// </summary>
         /// <param name="name">A name that is not valid for the item being named.</param>
@@ -73,7 +83,7 @@ namespace StarLab.Application.Workspace
         /// Checks the name provided to make sure that it does not contain any illegal characters.
         /// </summary>
         /// <param name="name">A name that may contain illegal characters.</param>
-        /// <returns><see cref="true"/> if the name does not contain illegal characters; <see cref="false"/> otherwise.</returns>
+        /// <returns>true if the name does not contain illegal characters; false otherwise.</returns>
         protected static bool IsValid(string name)
         {
             var valid = !string.IsNullOrEmpty(name);

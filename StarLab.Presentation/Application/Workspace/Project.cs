@@ -39,7 +39,7 @@ namespace StarLab.Application.Workspace
         public IEnumerable<IDocument> Documents => documents;
 
         /// <summary>
-        /// Returns <see cref="true"/> if the project is expanded; <see cref="false"/> otherwise.
+        /// Returns true if the project is expanded; false otherwise.
         /// </summary>
         public bool Expanded { get; private set; }
 

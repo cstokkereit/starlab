@@ -18,7 +18,7 @@ namespace StarLab.Commands
         /// Determines whether the specified <see cref="ICommand"/> has already been added.
         /// </summary>
         /// <param name="name">The name of the <see cref="ICommand"/>.</param>
-        /// <returns><see cref="true"/> if the specifed <see cref="ICommand"/> has already been added; <see cref="false"/> otherwise.</returns>
+        /// <returns>true if the specifed <see cref="ICommand"/> has already been added; false otherwise.</returns>
         bool ContainsCommand(string name);
 
         /// <summary>

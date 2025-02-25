@@ -453,13 +453,17 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
 
             var workspaceController = AppController.GetWorkspaceController();
 
-            manager.AddMenuItem(Constants.COLLAPSE_ALL, StringResources.CollapseAllDescendants, ImageResources.Collapse, GetCommand(Actions.COLLAPSE, project.Key));
-            manager.AddMenuSeparator();
             manager.AddMenuItem(Constants.ADD, StringResources.Add);
             manager.AddMenuItem(Constants.ADD, Constants.ADD_CHART, StringResources.Chart + Constants.ELLIPSIS, GetCommand(workspaceController, Actions.ADD_CHART, project.Key));
             manager.AddMenuItem(Constants.ADD, Constants.ADD_TABLE, StringResources.Table + Constants.ELLIPSIS, GetCommand(workspaceController, Actions.ADD_TABLE, project.Key));
             manager.AddMenuItem(Constants.ADD, Constants.ADD_FOLDER, StringResources.Folder + Constants.ELLIPSIS);
             manager.AddMenuSeparator();
+            manager.AddMenuItem(Constants.COLLAPSE_ALL, StringResources.CollapseAllDescendants, ImageResources.Collapse, GetCommand(Actions.COLLAPSE, project.Key));
+            manager.AddMenuSeparator();
+            manager.AddMenuItem(Constants.CUT, StringResources.Cut, ImageResources.Cut);
+            manager.AddMenuItem(Constants.COPY, StringResources.Copy, ImageResources.Copy);
+            manager.AddMenuItem(Constants.PASTE, StringResources.Paste, ImageResources.Paste);
+            manager.AddMenuItem(Constants.DELETE, StringResources.Delete, GetCommand(workspaceController, Actions.DELETE_PROJECT, project.Name));
             manager.AddMenuItem(Constants.RENAME, StringResources.Rename, ImageResources.Rename, GetCommand(Actions.RENAME, project.Key));
         }
 

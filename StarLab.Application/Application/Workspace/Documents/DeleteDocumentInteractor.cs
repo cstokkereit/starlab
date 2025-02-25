@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using StarLab.Shared.Properties;
 
 namespace StarLab.Application.Workspace.Documents
 {
@@ -22,13 +23,18 @@ namespace StarLab.Application.Workspace.Documents
         /// <param name="key">The key that identifies the document being removed.</param>
         public void Execute(WorkspaceDTO dto, string key)
         {
+            dto.ActiveDocument = string.Empty;
+
             var workspace = new Workspace(dto);
 
-            workspace.DeleteDocument(key);
+            if (ConfirmAction(string.Format(Resources.DeletionWarning, workspace.GetDocument(key).Name)))
+            {
+                workspace.DeleteDocument(key);
 
-            OutputPort.DeleteDocuments(GetDocumentDTOs(dto, [key]));
-            UpdateProjects(workspace, dto.Projects);
-            OutputPort.UpdateWorkspace(dto);
+                OutputPort.DeleteDocuments(GetDocumentDTOs(dto, [key]));
+                UpdateProjects(workspace, dto.Projects);
+                OutputPort.UpdateWorkspace(dto);
+            }
         }
     }
 }

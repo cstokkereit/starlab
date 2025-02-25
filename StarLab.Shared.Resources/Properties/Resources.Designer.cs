@@ -205,6 +205,15 @@ namespace StarLab.Shared.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; will be deleted permanently..
+        /// </summary>
+        public static string DeletionWarning {
+            get {
+                return ResourceManager.GetString("DeletionWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Document.
         /// </summary>
         public static string Document {
@@ -247,6 +256,15 @@ namespace StarLab.Shared.Properties {
         public static string Folder {
             get {
                 return ResourceManager.GetString("Folder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The folder &apos;{0}&apos; and all of its contents will be deleted permanently..
+        /// </summary>
+        public static string FolderDeletionWarning {
+            get {
+                return ResourceManager.GetString("FolderDeletionWarning", resourceCulture);
             }
         }
         
@@ -404,6 +422,15 @@ namespace StarLab.Shared.Properties {
         public static string Project {
             get {
                 return ResourceManager.GetString("Project", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The project &apos;{0}&apos; will be deleted permanently..
+        /// </summary>
+        public static string ProjectDeletionWarning {
+            get {
+                return ResourceManager.GetString("ProjectDeletionWarning", resourceCulture);
             }
         }
         

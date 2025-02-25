@@ -52,7 +52,7 @@ namespace StarLab.Application.Workspace
         /// </summary>
         /// <param name="folders">An <see cref="IEnumerable{IFolder}"/> containing the folders.</param>
         /// <param name="name">The new folder name.</param>
-        /// <returns><see cref="true"/> if there are no folders with matching names; <see cref="false"/> otherwise.</returns>
+        /// <returns>true if there are no folders with matching names; false otherwise.</returns>
         private bool IsValid(IEnumerable<IFolder> folders, string name)
         {
             var valid = true;
