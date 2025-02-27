@@ -1,5 +1,4 @@
 ﻿using StarLab.Application.Workspace.Documents;
-using System.Windows.Forms;
 
 namespace StarLab.Application.Workspace
 {

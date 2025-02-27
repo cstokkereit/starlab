@@ -65,11 +65,6 @@
         }
 
         /// <summary>
-        /// An event that will be raised whenever the document name is changed.
-        /// </summary>
-        public event EventHandler<string>? NameChanged;
-
-        /// <summary>
         /// Gets the document name including the path.
         /// </summary>
         public string FullName => $"{Path}/{Name}";
@@ -80,19 +75,9 @@
         public string ID => id;
 
         /// <summary>
-        /// Gets or sets the document name.
+        /// Gets the document name.
         /// </summary>
-        public string Name
-        {
-            get { return name; }
-
-            set
-            {
-                name = value;
-
-                NameChanged?.Invoke(this, name);
-            }
-        }
+        public string Name => name;
 
         /// <summary>
         /// Gets the path to the folder that contains the document.

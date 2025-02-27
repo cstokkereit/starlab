@@ -3,10 +3,17 @@ using StarLab.Application.Workspace.Documents;
 
 namespace StarLab
 {
+    /// <summary>
+    /// A helper class that uses the Builder Pattern to construct the <see cref="WorkspaceDTO"/>s used for unit testing.
+    /// </summary>
     internal class DTOBuilder
     {
-        private WorkspaceDTO workspace;
+        private WorkspaceDTO workspace; // The DTO being constructed.
 
+        /// <summary>
+        /// Initialises a new instance of the <see cref="DTOBuilder"/> class.
+        /// </summary>
+        /// <param name="filename">The workspace filename.</param>
         public DTOBuilder(string filename)
         {
             workspace = new WorkspaceDTO
@@ -15,6 +22,13 @@ namespace StarLab
             };
         }
 
+        /// <summary>
+        /// Adds a <see cref="DocumentDTO"/> to the <see cref="WorkspaceDTO"/>.
+        /// </summary>
+        /// <param name="id">The docmument ID.</param>
+        /// <param name="name">The docmument name.</param>
+        /// <param name="path">The docmument path.</param>
+        /// <returns>This instance so that other methods can be called to continue constructing the <see cref="WorkspaceDTO"/>.</returns>
         public DTOBuilder AddDocument(string id, string name, string path)
         {
             var document = new DocumentDTO
@@ -32,6 +46,11 @@ namespace StarLab
             return this;
         }
 
+        /// <summary>
+        /// Adds a <see cref="FolderDTO"/> to the <see cref="WorkspaceDTO"/>.
+        /// </summary>
+        /// <param name="path">The folder path.</param>
+        /// <returns>This instance so that other methods can be called to continue constructing the <see cref="WorkspaceDTO"/>.</returns>
         public DTOBuilder AddFolder(string path)
         {
             var folder = new FolderDTO
@@ -46,6 +65,11 @@ namespace StarLab
             return this;
         }
 
+        /// <summary>
+        /// Adds a <see cref="ProjectDTO"/> to the <see cref="WorkspaceDTO"/>.
+        /// </summary>
+        /// <param name="name">The project name.</param>
+        /// <returns>This instance so that other methods can be called to continue constructing the <see cref="WorkspaceDTO"/>.</returns>
         public DTOBuilder AddProject(string name)
         {
             var project = new ProjectDTO
@@ -58,11 +82,20 @@ namespace StarLab
             return this;
         }
 
+        /// <summary>
+        /// Creates the <see cref="WorkspaceDTO"/>.
+        /// </summary>
+        /// <returns>The required <see cref="WorkspaceDTO"/>.</returns>
         public WorkspaceDTO CreateWworkspace()
         {
             return workspace;
         }
 
+        /// <summary>
+        /// Creates a <see cref="ProjectDTO"/>.
+        /// </summary>
+        /// <param name="path">The project path.</param>
+        /// <returns>The required <see cref="ProjectDTO"/>.</returns>
         private ProjectDTO? GetProject(string path)
         {
             foreach (var project in workspace.Projects)

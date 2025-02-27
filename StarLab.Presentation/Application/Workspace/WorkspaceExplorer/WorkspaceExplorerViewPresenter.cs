@@ -384,7 +384,7 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
             manager.AddMenuItem(Constants.COPY, StringResources.Copy, ImageResources.Copy);
             manager.AddMenuItem(Constants.PASTE, StringResources.Paste, ImageResources.Paste);
             manager.AddMenuItem(Constants.DELETE, StringResources.Delete, GetCommand(workspaceController, Actions.DELETE_DOCUMENT, document.ID));
-            manager.AddMenuItem(Constants.RENAME, StringResources.Rename, ImageResources.Rename, GetCommand(Actions.RENAME_DOCUMENT, document.ID));
+            manager.AddMenuItem(Constants.RENAME, StringResources.Rename, ImageResources.Rename, GetCommand(Actions.RENAME, document.ID));
         }
 
         /// <summary>
@@ -591,7 +591,7 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
                 {
                     if (folder.IsNew)
                     {
-                        Rename(folder.Key); // TODO Call this from the interactor
+                        Rename(folder.Key); // TODO Call this from the interactor?
                         break;
                     }
                 }

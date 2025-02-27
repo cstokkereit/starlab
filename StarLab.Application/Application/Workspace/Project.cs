@@ -1,6 +1,4 @@
 ﻿using StarLab.Application.Workspace.Documents;
-using System.IO;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 
 namespace StarLab.Application.Workspace
 {
@@ -83,7 +81,7 @@ namespace StarLab.Application.Workspace
         /// <summary>
         /// Gets the project name.
         /// </summary>
-        public string Name { get => folder.Name; set => folder.Name = value; }
+        public string Name { get => folder.Name; set => RenameFolder(folder, value); }
 
         /// <summary>
         /// Gets the <see cref="IFolder"/> that contains the project.
@@ -137,72 +135,47 @@ namespace StarLab.Application.Workspace
         }
 
         /// <summary>
-        /// TODO
+        /// Renames the <see cref="IFolder"/> provided.
         /// </summary>
-        /// <param name="folder"></param>
-        /// <param name="name"></param>
+        /// <param name="folder">The <see cref="IFolder"/> to be renamed.</param>
+        /// <param name="name">The new folder name.</param>
         public void RenameFolder(IFolder folder, string name)
         {
             if (folder is Project) throw new ArgumentException(); // TODO
+
+            var project = folder.Path == this.folder.Path;
 
             var children = GetChildFolders(folder);
 
             RemoveFolders(children);
 
-            folders.Remove(folder.Name);
+            if (!project)
+            {
+                folders.Remove(folder.Name);
 
-            folder.Name = name;
+                folder.Name = name;
 
-            folders.Add(folder.Name, (Folder)folder);
-
+                folders.Add(folder.Name, (Folder)folder);
+            }
+            else
+            {
+                folder.Name = name;
+            }
+            
             AddFolders(children);
         }
 
         /// <summary>
-        /// TODO
+        /// Adds the folders provided to the dictionary containing all folders within the project hierarchy.
         /// </summary>
-        /// <param name="folders"></param>
+        /// <param name="folders">An <see cref="IEnumerable{IFolder}"/> containing the folders to be added.</param>
         private void AddFolders(IEnumerable<IFolder> folders)
         {
             foreach (var folder in folders)
             {
-                this.folders.Add(folder.Name, (Folder)folder);
+                this.folders.Add(folder.Path, (Folder)folder);
             }
         }
-
-        /// <summary>
-        /// TODO
-        /// </summary>
-        /// <param name="folders"></param>
-        private void RemoveFolders(IEnumerable<IFolder> folders)
-        {
-            foreach (var folder in folders)
-            {
-                this.folders.Remove(folder.Name);
-            }
-        }
-
-
-        /// <summary>
-        /// TODO
-        /// </summary>
-        /// <param name="parent"></param>
-        /// <returns></returns>
-        private IEnumerable<IFolder> GetChildFolders(IFolder parent)
-        {
-            var children = new List<IFolder>();
-
-            foreach (var folder in AllFolders)
-            {
-                if (folder.Parent == parent) children.Add(folder);
-            }
-
-            return children;
-        }
-
-
-
-
 
         /// <summary>
         /// Creates the documents that belong to this project from the <see cref="DocumentDTO"/>s provided.
@@ -250,6 +223,18 @@ namespace StarLab.Application.Workspace
         }
 
         /// <summary>
+        /// Gets all folders that are children of the <see cref="IFolder"/> provided.
+        /// </summary>
+        /// <param name="parent">The <see cref="IFolder"/> that contains the required child folders.</param>
+        /// <returns>An <see cref="IEnumerable{IFolder}"/> containing the child folders.</returns>
+        private IEnumerable<IFolder> GetChildFolders(IFolder parent)
+        {
+            var children = new List<IFolder>();
+            GetFolders(parent, children);
+            return children;
+        }
+
+        /// <summary>
         /// A recursive method that collects all of the documents within the project hierarchy.
         /// </summary>
         /// <param name="folder">The <see cref="IFolder"/> containing the documents to be collected.</param>
@@ -279,6 +264,18 @@ namespace StarLab.Application.Workspace
             foreach (var child in folder.Folders)
             {
                 GetFolders(child, folders);
+            }
+        }
+
+        /// <summary>
+        /// Removes the folders provided from the dictionary containing all folders within the project hierarchy.
+        /// </summary>
+        /// <param name="folders">An <see cref="IEnumerable{IFolder}"/> containing the folders to be removed.</param>
+        private void RemoveFolders(IEnumerable<IFolder> folders)
+        {
+            foreach (var folder in folders)
+            {
+                this.folders.Remove(folder.Path);
             }
         }
     }

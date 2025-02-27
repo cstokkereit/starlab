@@ -38,9 +38,9 @@
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets the document path.
+        /// Gets the document path.
         /// </summary>
-        public string Path { get { return parent.Path; } }
+        public string Path => parent.Path;
 
         /// <summary>
         /// Gets the type name of the document view.

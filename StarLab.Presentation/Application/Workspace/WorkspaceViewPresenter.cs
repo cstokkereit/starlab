@@ -2,6 +2,7 @@
 using StarLab.Application.Workspace.Documents;
 using StarLab.Commands;
 using System.ComponentModel;
+using System.Xml.Linq;
 using ImageResources = StarLab.Properties.Resources;
 using StringResources = StarLab.Shared.Properties.Resources;
 
@@ -384,27 +385,6 @@ namespace StarLab.Application.Workspace
         }
 
         /// <summary>
-        /// TODO
-        /// </summary>
-        /// <param name="dto"></param>
-        public void UpdateDocument(DocumentDTO dto)
-        {
-            if (!string.IsNullOrEmpty(dto.ID))
-            {
-                var document = workspace.GetDocument(dto.ID);
-
-                if (!string.IsNullOrEmpty(dto.Name) && document.Name != dto.Name)
-                {
-                    document.Name = dto.Name;
-
-                    dirty = true;
-
-                    Events.Publish(new WorkspaceChangedEventArgs(workspace));
-                }
-            }
-        }
-
-        /// <summary>
         /// Replaces the current workspace state with that specified by the <see cref="WorkspaceDTO"/> provided.
         /// </summary>
         /// <param name="dto">A <see cref="WorkspaceDTO"/> that represents the new workspace state.</param>
@@ -433,6 +413,26 @@ namespace StarLab.Application.Workspace
             }
 
             UpdateCommandState(Actions.CLOSE_DOCUMENT, workspace.ActiveDocument != null);
+        }
+
+        /// <summary>
+        /// Updates the state of the workspace represented by the <see cref="WorkspaceDTO"/> provided.
+        /// </summary>
+        /// <param name="dto">The <see cref="WorkspaceDTO"/> that contains the updated workspace state.</param>
+        /// <param name="documentId">The ID of the document that was modified.</param>
+        public void UpdateWorkspace(WorkspaceDTO dto, string documentId)
+        {
+            workspace = new Workspace(dto);
+
+            var document = workspace.GetDocument(documentId);
+
+            var controller = AppController.GetController(workspace.GetDocument(documentId));
+
+            controller.UpdateDocument(document);
+
+            dirty = true;
+
+            Events.Publish(new WorkspaceChangedEventArgs(workspace));
         }
 
         /// <summary>

@@ -56,7 +56,7 @@ namespace StarLab.Application
         }
 
         /// <summary>
-        /// Test that the <see cref="RenameFolderInteractor.Execute"/> method throws an exception if the new name is an empty string.
+        /// Test that the <see cref="RenameFolderInteractor.Execute"/> method throws an exception if the new folder name is an empty string.
         /// </summary>
         [Test]
         public void TestRenameFolderToEmptyStringThrowsAnException()
@@ -70,10 +70,9 @@ namespace StarLab.Application
             var dto = new DTOBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
-                .AddFolder("Workspace/Project1/Folder2")
                 .CreateWworkspace();
 
-            var e = Assert.Throws<Exception>(() => interactor.Execute(dto, "Workspace/Project1/Folder1", ""));
+            var e = Assert.Throws<Exception>(() => interactor.Execute(dto, "Workspace/Project1/Folder1", string.Empty));
 
             Assert.That(e.Message, Is.EqualTo("The folder name cannot be an empty string."));
         }
@@ -102,7 +101,7 @@ namespace StarLab.Application
         }
 
         /// <summary>
-        /// Test that the <see cref="RenameFolderInteractor.Execute"/> method throws an exception if the new name contains one or more illegal characters.
+        /// Test that the <see cref="RenameFolderInteractor.Execute"/> method throws an exception if the new folder name contains one or more illegal characters.
         /// </summary>
         [Test]
         public void TestRenameFolderToInvalidNameThrowsAnException()
@@ -300,6 +299,147 @@ namespace StarLab.Application
                 ws.Projects[0].Documents[5].Name == "Document6" &&
                 ws.Projects[0].Documents[6].Path == "Workspace/Project1/Folder1/Folder2/Folder122" &&
                 ws.Projects[0].Documents[6].Name == "Document7"));
+        }
+
+
+        /// <summary>
+        /// Test that the <see cref="RenameFolderInteractor.Execute"/> method correctly renames a project.
+        /// </summary>
+        [Test]
+        public void TestRenameProject()
+        {
+            var factory = container.Resolve<IUseCaseFactory>();
+
+            var port = Substitute.For<IWorkspaceOutputPort>();
+
+            var interactor = factory.CreateRenameFolderUseCase(port);
+
+            var dto = new DTOBuilder("Workspace")
+                .AddProject("Project1")
+                .AddProject("Project2")
+                .AddFolder("Workspace/Project1/Folder1")
+                .AddFolder("Workspace/Project1/Folder2")
+                .AddFolder("Workspace/Project1/Folder1/Folder11")
+                .AddFolder("Workspace/Project1/Folder2/Folder21")
+                .AddFolder("Workspace/Project1/Folder1/Folder11/Folder111")
+                .AddFolder("Workspace/Project1/Folder1/Folder11/Folder112")
+                .AddFolder("Workspace/Project2/Folder1")
+                .AddFolder("Workspace/Project2/Folder2")
+                .AddFolder("Workspace/Project2/Folder1/Folder11")
+                .AddFolder("Workspace/Project2/Folder2/Folder21")
+                .AddFolder("Workspace/Project2/Folder1/Folder11/Folder111")
+                .AddFolder("Workspace/Project2/Folder1/Folder11/Folder112")
+                .AddDocument("1", "Document1", "Workspace/Project1/Folder1/Folder11/Folder111")
+                .AddDocument("2", "Document2", "Workspace/Project1/Folder1/Folder11/Folder111")
+                .AddDocument("3", "Document3", "Workspace/Project1/Folder1/Folder11/Folder112")
+                .AddDocument("4", "Document4", "Workspace/Project1/Folder1/Folder11/Folder112")
+                .AddDocument("5", "Document5", "Workspace/Project2/Folder1/Folder11/Folder111")
+                .AddDocument("6", "Document6", "Workspace/Project2/Folder1/Folder11/Folder111")
+                .AddDocument("7", "Document7", "Workspace/Project2/Folder1/Folder11/Folder112")
+                .AddDocument("8", "Document8", "Workspace/Project2/Folder1/Folder11/Folder112")
+                .CreateWworkspace();
+
+            interactor.Execute(dto, "Workspace/Project2", "Project3");
+
+            port.Received().UpdateWorkspace(Arg.Is<WorkspaceDTO>(ws =>
+                ws.Projects.Count == 2 &&
+                ws.Projects[0].Folders.Count == 6 &&
+                ws.Projects[0].Folders[0].Path == "Workspace/Project1/Folder1" &&
+                ws.Projects[0].Folders[1].Path == "Workspace/Project1/Folder1/Folder11" &&
+                ws.Projects[0].Folders[2].Path == "Workspace/Project1/Folder1/Folder11/Folder111" &&
+                ws.Projects[0].Folders[3].Path == "Workspace/Project1/Folder1/Folder11/Folder112" &&
+                ws.Projects[0].Folders[4].Path == "Workspace/Project1/Folder2" &&
+                ws.Projects[0].Folders[5].Path == "Workspace/Project1/Folder2/Folder21" &&
+                ws.Projects[0].Documents.Count == 4 &&
+                ws.Projects[0].Documents[0].Path == "Workspace/Project1/Folder1/Folder11/Folder111" &&
+                ws.Projects[0].Documents[0].Name == "Document1" &&
+                ws.Projects[0].Documents[1].Path == "Workspace/Project1/Folder1/Folder11/Folder111" &&
+                ws.Projects[0].Documents[1].Name == "Document2" &&
+                ws.Projects[0].Documents[2].Path == "Workspace/Project1/Folder1/Folder11/Folder112" &&
+                ws.Projects[0].Documents[2].Name == "Document3" &&
+                ws.Projects[0].Documents[3].Path == "Workspace/Project1/Folder1/Folder11/Folder112" &&
+                ws.Projects[0].Documents[3].Name == "Document4" &&
+                ws.Projects[1].Folders.Count == 6 &&
+                ws.Projects[1].Folders[0].Path == "Workspace/Project3/Folder1" &&
+                ws.Projects[1].Folders[1].Path == "Workspace/Project3/Folder1/Folder11" &&
+                ws.Projects[1].Folders[2].Path == "Workspace/Project3/Folder1/Folder11/Folder111" &&
+                ws.Projects[1].Folders[3].Path == "Workspace/Project3/Folder1/Folder11/Folder112" &&
+                ws.Projects[1].Folders[4].Path == "Workspace/Project3/Folder2" &&
+                ws.Projects[1].Folders[5].Path == "Workspace/Project3/Folder2/Folder21" &&
+                ws.Projects[1].Documents.Count == 4 &&
+                ws.Projects[1].Documents[0].Path == "Workspace/Project3/Folder1/Folder11/Folder111" &&
+                ws.Projects[1].Documents[0].Name == "Document5" &&
+                ws.Projects[1].Documents[1].Path == "Workspace/Project3/Folder1/Folder11/Folder111" &&
+                ws.Projects[1].Documents[1].Name == "Document6" &&
+                ws.Projects[1].Documents[2].Path == "Workspace/Project3/Folder1/Folder11/Folder112" &&
+                ws.Projects[1].Documents[2].Name == "Document7" &&
+                ws.Projects[1].Documents[3].Path == "Workspace/Project3/Folder1/Folder11/Folder112" &&
+                ws.Projects[1].Documents[3].Name == "Document8"));
+        }
+
+
+        /// <summary>
+        /// Test that the <see cref="RenameFolderInteractor.Execute"/> method throws an exception if the new project name is an empty string.
+        /// </summary>
+        [Test]
+        public void TestRenameProjectToEmptyStringThrowsAnException()
+        {
+            var factory = container.Resolve<IUseCaseFactory>();
+
+            var port = Substitute.For<IWorkspaceOutputPort>();
+
+            var interactor = factory.CreateRenameFolderUseCase(port);
+
+            var dto = new DTOBuilder("Workspace")
+                .AddProject("Project1")
+                .CreateWworkspace();
+
+            var e = Assert.Throws<Exception>(() => interactor.Execute(dto, "Workspace/Project1", string.Empty));
+
+            Assert.That(e.Message, Is.EqualTo("The project name cannot be an empty string."));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="RenameFolderInteractor.Execute"/> method throws an exception if a project with the new name already exists.
+        /// </summary>
+        [Test]
+        public void TestRenameProjectToExistingNameThrowsAnException()
+        {
+            var factory = container.Resolve<IUseCaseFactory>();
+
+            var port = Substitute.For<IWorkspaceOutputPort>();
+
+            var interactor = factory.CreateRenameFolderUseCase(port);
+
+            var dto = new DTOBuilder("Workspace")
+                .AddProject("Project1")
+                .AddProject("Project2")
+                .CreateWworkspace();
+
+            var e = Assert.Throws<Exception>(() => interactor.Execute(dto, "Workspace/Project1", "Project2"));
+
+            Assert.That(e.Message, Is.EqualTo("Cannot rename 'Project1' to 'Project2' because a project with that name already exists."));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="RenameFolderInteractor.Execute"/> method throws an exception if the new project name contains one or more illegal characters.
+        /// </summary>
+        [Test]
+        public void TestRenameProjectToInvalidNameThrowsAnException()
+        {
+            var factory = container.Resolve<IUseCaseFactory>();
+
+            var port = Substitute.For<IWorkspaceOutputPort>();
+
+            var interactor = factory.CreateRenameFolderUseCase(port);
+
+            var dto = new DTOBuilder("Workspace")
+                .AddProject("Project1")
+                .CreateWworkspace();
+
+            var e = Assert.Throws<Exception>(() => interactor.Execute(dto, "Workspace/Project1", "Project1/"));
+
+            Assert.That(e.Message, Is.EqualTo("Project names cannot include any of the following:\r\n\r\n                               \\ / : * ? ' \" < > |\r\n\r\nPlease enter a valid name."));
         }
     }
 }

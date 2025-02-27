@@ -20,15 +20,16 @@ namespace StarLab.Application.Workspace
         void OpenDocument(string id);
 
         /// <summary>
-        /// Updates the state of the document represented by the <see cref="DocumentDTO"/> provided.
+        /// Updates the state of the workspace represented by the <see cref="WorkspaceDTO"/> provided.
         /// </summary>
-        /// <param name="dto">The <see cref="DocumentDTO"/> that contains the updated document state.</param>
-        void UpdateDocument(DocumentDTO dto);
+        /// <param name="dto">The <see cref="WorkspaceDTO"/> that contains the updated workspace state.</param>
+        void UpdateWorkspace(WorkspaceDTO dto);
 
         /// <summary>
         /// Updates the state of the workspace represented by the <see cref="WorkspaceDTO"/> provided.
         /// </summary>
         /// <param name="dto">The <see cref="WorkspaceDTO"/> that contains the updated workspace state.</param>
-        void UpdateWorkspace(WorkspaceDTO dto);
+        /// <param name="documentId">The ID of the document that was modified.</param>
+        void UpdateWorkspace(WorkspaceDTO dto, string documentId);
     }
 }

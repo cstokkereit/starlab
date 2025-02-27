@@ -24,29 +24,30 @@ namespace StarLab.Application.Workspace
         /// <param name="name">The new folder name.</param>
         public void Execute(WorkspaceDTO dto, string key, string name)
         {
+            var workspace = new Workspace(dto);
+
+            var folder = workspace.GetFolder(key);
+
+            var type = folder is Project ? Resources.Project : Resources.Folder;
+
             if (IsValid(name))
             {
-                var workspace = new Workspace(dto);
-                var folder = workspace.GetFolder(key);
+                var folders = folder is Project ? workspace.Projects : folder.Parent.Folders;
 
-                IEnumerable<IFolder> folders = folder.Parent.Folders;
-
-                if (folder is Project) folders = workspace.Projects;
-                
                 if (IsValid(folders, name))
                 {
                     workspace.RenameFolder(folder, name);
-                    UpdateProjects(workspace, dto.Projects);
-                    OutputPort.UpdateWorkspace(dto);
+
+                    OutputPort.UpdateWorkspace(Mapper.Map(workspace, dto));
                 }
                 else
                 {
-                    throw CreateTargetExistsException(key.Substring(key.LastIndexOf('/') + 1), name, Resources.Folder);
+                    throw CreateTargetExistsException(key.Substring(key.LastIndexOf('/') + 1), name, type);
                 }
             }
             else
             {
-                throw CreateInvalidNameException(name, Resources.Folder);
+                throw CreateInvalidNameException(name, type);
             }
         }
 

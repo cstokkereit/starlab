@@ -10,7 +10,7 @@ namespace StarLab.Application.Workspace.Documents
     {
         private readonly IDocumentView view; // The view controlled by the presenter.
 
-        private readonly IDocument document; // The document that the view represents.
+        private IDocument document; // The document that the view represents.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="DocumentViewPresenter"> class.
@@ -80,8 +80,6 @@ namespace StarLab.Application.Workspace.Documents
             if (!Initialised)
             {
                 base.Initialise(controller);
-
-                AttachEventHandlers();
 
                 view.Initialise(controller);
             }
@@ -165,22 +163,15 @@ namespace StarLab.Application.Workspace.Documents
         }
 
         /// <summary>
-        /// Attaches the document event handlers.
+        /// Updates the <see cref="IDocument"/> that the document window represents.
         /// </summary>
-        private void AttachEventHandlers()
+        /// <param name="document">The new <see cref="IDocument"/>.</param>
+        public void UpdateDocument(IDocument document)
         {
-            document.NameChanged += Document_NameChanged;
-        }
+            this.document = document;
 
-        /// <summary>
-        /// Event handler for the <see cref="Document.NameChanged"/> event.
-        /// </summary>
-        /// <param name="sender">The <see cref="object"> that was the originator of the event.</param>
-        /// <param name="name">The new document name.</param>
-        private void Document_NameChanged(object? sender, string name)
-        {
-            view.Name = name;
-            view.Text = name;
+            view.Name = document.Name;
+            view.Text = document.Name;
         }
     }
 }

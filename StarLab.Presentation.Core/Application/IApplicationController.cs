@@ -48,6 +48,13 @@ namespace StarLab.Application
         void DeleteView(string id);
 
         /// <summary>
+        /// Gets the <see cref="IDocumentController"/> that controls the view representing the <see cref="IDocument"/> provided.
+        /// </summary>
+        /// <param name="document">The <see cref="IDocument"/> represented by the view controlled by the <see cref="IDocumentController"/>.</param>
+        /// <returns>The required <see cref="IDocumentController"/></returns>
+        IDocumentController GetController(IDocument document);
+
+        /// <summary>
         /// Gets the <see cref="IView"/> specified by the <see cref="IDocument"/> provided. If the view does not already exist it will be created.
         /// </summary>
         /// <param name="document">An instance of <see cref="IDocument"/> that specifies which instance of <see cref="IView"/> is required.</param>

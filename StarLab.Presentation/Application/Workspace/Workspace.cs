@@ -48,7 +48,7 @@ namespace StarLab.Application.Workspace
         /// <summary>
         /// Gets the documents within the workspace.
         /// </summary>
-        public IEnumerable<IDocument> Documents => documents.Values;
+        public IEnumerable<IDocument> Documents => documents.Values.OrderBy(document => document.Name);
 
         /// <summary>
         /// Gets the workspace file name.
@@ -58,7 +58,7 @@ namespace StarLab.Application.Workspace
         /// <summary>
         /// Gets the folders within the workspace.
         /// </summary>
-        public IEnumerable<IFolder> Folders => folders.Values;
+        public IEnumerable<IFolder> Folders => folders.Values.OrderBy(folder => folder.Key);
 
         /// <summary>
         /// Gets the workspace layout.
@@ -73,7 +73,7 @@ namespace StarLab.Application.Workspace
         /// <summary>
         /// Gets the projects within the workspace.
         /// </summary>
-        public IEnumerable<IProject> Projects => projects.Values;
+        public IEnumerable<IProject> Projects => projects.Values.OrderBy(project => project.Name);
 
         /// <summary>
         /// Clears the active document.

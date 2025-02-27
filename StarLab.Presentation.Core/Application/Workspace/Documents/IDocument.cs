@@ -6,11 +6,6 @@
     public interface IDocument
     {
         /// <summary>
-        /// An event that will be raised whenever the document name is changed.
-        /// </summary>
-        public event EventHandler<string>? NameChanged;
-
-        /// <summary>
         /// Gets the document name including the path.
         /// </summary>
         string FullName { get; }
@@ -21,9 +16,9 @@
         string ID { get; }
 
         /// <summary>
-        /// Gets or sets the document name.
+        /// Gets the document name.
         /// </summary>
-        string Name { get; set; }
+        string Name { get; }
 
         /// <summary>
         /// Gets the path to the folder that contains the document.

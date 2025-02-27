@@ -13,6 +13,8 @@ namespace StarLab.Application.Workspace
 
         private readonly Dictionary<string, IFolder> folders = new Dictionary<string, IFolder>(); // A dictionary containing all of the folders within the workspace hierarchy.
 
+        private readonly string? layout;
+
         /// <summary>
         /// Initialises a new instance of the <see cref="Workspace"/> class.
         /// </summary>
@@ -20,8 +22,10 @@ namespace StarLab.Application.Workspace
         public Workspace(WorkspaceDTO dto)
         {
             ArgumentNullException.ThrowIfNull(dto, nameof(dto));
-
+            
             CreateProjects(dto.Projects);
+
+            layout = dto.Layout;
         }
 
         /// <summary>
@@ -43,6 +47,11 @@ namespace StarLab.Application.Workspace
         /// Returns true if the workspace does not contain any projects; false otherwise.
         /// </summary>
         public bool IsEmpty => projects.Count == 0;
+
+        /// <summary>
+        /// Gets the workspace layout.
+        /// </summary>
+        public string? Layout => layout;
 
         /// <summary>
         /// Gets the workspace name.
@@ -213,16 +222,32 @@ namespace StarLab.Application.Workspace
         }
 
         /// <summary>
-        /// Renames the specified folder.
+        /// Renames the <see cref="Document"/> provided.
+        /// </summary>
+        /// <param name="document">The <see cref="Document"/> being renamed.</param>
+        /// <param name="name">The new name.</param>
+        public void RenameDocument(Document document, string name)
+        {
+            document.Name = name;
+        }
+
+        /// <summary>
+        /// Renames the <see cref="IFolder"/> provided.
         /// </summary>
         /// <param name="folder">The <see cref="IFolder"/> being renamed.</param>
         /// <param name="name">The new name.</param>
         public void RenameFolder(IFolder folder, string name)
         {
-            var project = GetProject(folder);
-
-            project.RenameFolder(folder, name);
-
+            if (folder is Project)
+            {
+                folder.Name = name;
+            }
+            else
+            {
+                var project = GetProject(folder);
+                project.RenameFolder(folder, name);
+            }
+            
             UpdateProjects();
         }
 
@@ -232,8 +257,6 @@ namespace StarLab.Application.Workspace
         /// <param name="dtos">An <see cref="IEnumerable{ProjectDTO}"/> that contains the definitions of the projects to be created.</param>
         private void CreateProjects(IEnumerable<ProjectDTO> dtos)
         {
-            // Validate paths of new IFolder objects against their dto.Path?
-
             foreach (var dto in dtos)
             {
                 var project = new Project(dto, this);
@@ -253,7 +276,7 @@ namespace StarLab.Application.Workspace
         }
 
         /// <summary>
-        /// Removes all documents from the <see cref="IFolder"> provided.
+        /// Removes all documents from the <see cref="IFolder"/> provided.
         /// </summary>
         /// <param name="folder">The <see cref="IFolder"/> that contains the documents.</param>
         private void DeleteDocuments(IFolder folder)
@@ -265,7 +288,7 @@ namespace StarLab.Application.Workspace
         }
 
         /// <summary>
-        /// Removes all child folders from the <see cref="IFolder"> provided.
+        /// Removes all child folders from the <see cref="IFolder"/> provided.
         /// </summary>
         /// <param name="parent">The <see cref="IFolder"/> that contains the child folders.</param>
         private void DeleteFolders(IFolder parent)
@@ -283,15 +306,13 @@ namespace StarLab.Application.Workspace
         }
 
         /// <summary>
-        /// Gets the specified <see cref="Project"/>.
+        /// Gets the <see cref="Project"/> that contains the specified <see cref="IFolder"/>.
         /// </summary>
-        /// <param name="folder"></param>
-        /// <returns>The required <see cref="Project"/>.</returns>
+        /// <param name="folder">An <see cref="IFolder"/> from the required <see cref="Project"/>.</param>
+        /// <returns>The <see cref="Project"/> that contains the specified <see cref="IFolder"/>.</returns>
         /// <exception cref="ArgumentException"></exception>
         private Project GetProject(IFolder folder)
         {
-            // TODO
-
             foreach(var project in Projects)
             {
                 if (folder.Path.StartsWith(project.Path)) return (Project)project;
@@ -301,9 +322,9 @@ namespace StarLab.Application.Workspace
         }
 
         /// <summary>
-        /// TODO
+        /// Adds the folders from the <see cref="Project"/> provided to the dictionary containing all of the folders within the workspace hierarchy.
         /// </summary>
-        /// <param name="project"></param>
+        /// <param name="project">The <see cref="Project"/> containing the folders to be added.</param>
         private void UpdateProject(Project project)
         {
             foreach (var folder in project.AllFolders)
@@ -313,11 +334,10 @@ namespace StarLab.Application.Workspace
         }
 
         /// <summary>
-        /// TODO
+        /// Adds the folders from all projects within the workspace hierarchy to the dictionary containing all of the folders within the workspace hierarchy.
         /// </summary>
         private void UpdateProjects()
         {
-            //documents.Clear();
             folders.Clear();
 
             foreach (var project in projects.Values)

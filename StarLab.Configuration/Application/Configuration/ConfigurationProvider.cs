@@ -36,6 +36,9 @@ namespace StarLab.Application.Configuration
         /// </summary>
         public void Initialise()
         {
+            // TODO - This is not working very well - lots of errors on start up
+
+
             var builder = new ConfigurationBuilder();
 
             builder.AddXmlFile(Constants.CONFIGURATION);

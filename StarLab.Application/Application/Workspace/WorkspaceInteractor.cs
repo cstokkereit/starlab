@@ -39,7 +39,7 @@ namespace StarLab.Application.Workspace
 
             if (!string.IsNullOrEmpty(name))
             {
-                message = string.Format(Resources.NameCannotIncludeMessage, Capitalise(target), string.Join(' ', Constants.IllegalCharacters));
+                message = string.Format(Resources.NameCannotIncludeMessage, target, string.Join(' ', Constants.IllegalCharacters));
             }  
             else
             {
@@ -110,27 +110,19 @@ namespace StarLab.Application.Workspace
         /// <param name="dtos">An <see cref="IEnumerable{ProjectDTO}"/> .</param>
         protected void UpdateProjects(Workspace workspace, IEnumerable<ProjectDTO> dtos)
         {
-            foreach (var dto in dtos)
-            {
-                if (!string.IsNullOrEmpty(dto.Name))
-                {
-                    var project = workspace.GetProject(dto.Name);
-                    var folders = GetChildFolders(project);
+            throw new NotImplementedException();
 
-                    Mapper.Map(GetDocuments(folders), dto.Documents);
-                    Mapper.Map(folders, dto.Folders);
-                }
-            }
-        }
+            //foreach (var dto in dtos)
+            //{
+            //    if (!string.IsNullOrEmpty(dto.Name))
+            //    {
+            //        var project = workspace.GetProject(dto.Name);
+            //        var folders = GetChildFolders(project);
 
-        /// <summary>
-        /// Capitalises the first letter of the <see cref="string"/> provided.
-        /// </summary>
-        /// <param name="text">The text to be capitalised.</param>
-        /// <returns>The text provided with the first letter capitalised.</returns>
-        private static string Capitalise(string text)
-        {
-            return text.Substring(0, 1).ToUpper() + text.Substring(1).ToLower();
+            //        Mapper.Map(GetDocuments(folders), dto.Documents);
+            //        Mapper.Map(folders, dto.Folders);
+            //    }
+            //}
         }
 
         /// <summary>

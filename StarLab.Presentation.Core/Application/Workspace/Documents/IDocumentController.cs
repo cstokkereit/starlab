@@ -21,5 +21,11 @@
         /// </summary>
         /// <param name="name">The name of the content to be shown.</param>
         void ShowSplitContent(string name);
+
+        /// <summary>
+        /// Updates the <see cref="IDocument"/> that the document window represents.
+        /// </summary>
+        /// <param name="document">The new <see cref="IDocument"/>.</param>
+        void UpdateDocument(IDocument document);
     }
 }
