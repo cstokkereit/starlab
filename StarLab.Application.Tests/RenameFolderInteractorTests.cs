@@ -4,6 +4,9 @@ using StarLab.Application.Workspace;
 
 namespace StarLab.Application
 {
+    /// <summary>
+    /// A class for performing unit tests on the <see cref="RenameFolderInteractor"/> class.
+    /// </summary>
     public class RenameFolderInteractorTests
     {
         private WindsorContainer container; // The container used to resolve dependencies.

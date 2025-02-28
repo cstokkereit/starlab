@@ -39,11 +39,11 @@ namespace StarLab.Application.Workspace
 
             if (!string.IsNullOrEmpty(name))
             {
-                message = string.Format(Resources.NameCannotIncludeMessage, target, string.Join(' ', Constants.IllegalCharacters));
+                message = string.Format(Resources.NameCannotInclude, target, string.Join(' ', Constants.IllegalCharacters));
             }  
             else
             {
-                message = string.Format(Resources.NameNullOrEmptyMessage, target.ToLower());
+                message = string.Format(Resources.NameNullOrEmpty, target.ToLower());
             }
 
             return new Exception(message);
@@ -58,7 +58,12 @@ namespace StarLab.Application.Workspace
         /// <returns>An <see cref="Exception"/> with a message identifying the issue with the name provided.</returns>
         protected static Exception CreateTargetExistsException(string oldName, string newName, string target)
         {
-            return new Exception(string.Format(Resources.NameAlreadyExistsMessage, oldName, newName, target.ToLower()));
+            if (target == Resources.Workspace)
+            {
+                return new Exception(string.Format(Resources.WorkspaceAlreadyExists, Path.GetFileNameWithoutExtension(oldName), Path.GetFileNameWithoutExtension(newName)));
+            }
+
+            return new Exception(string.Format(Resources.NameAlreadyExists, oldName, newName, target.ToLower()));
         }
 
         /// <summary>

@@ -5,6 +5,9 @@ using StarLab.Application.Workspace.Documents;
 
 namespace StarLab.Application
 {
+    /// <summary>
+    /// A class for performing unit tests on the <see cref="RenameDocumentInteractor"/> class.
+    /// </summary>
     public class RenameDocumentInteractorTests
     {
         private WindsorContainer container; // The container used to resolve dependencies.

@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using StarLab.Shared.Properties;
-using System.Diagnostics;
 
 namespace StarLab.Application.Workspace
 {
@@ -30,14 +29,12 @@ namespace StarLab.Application.Workspace
         /// <param name="name">The new workspace name.</param>
         public void Execute(WorkspaceDTO dto, string name)
         {
-            if (IsValid(name))
+            var filename = dto.FileName;
+
+            if (IsValid(name) && !string.IsNullOrEmpty(filename))
             {
-                Debug.Assert(!string.IsNullOrEmpty(dto.FileName));
-
-                var filename = dto.FileName;
-
-                dto.FileName = Path.Join(Path.GetDirectoryName(dto.FileName), $"{name}.{Constants.WORKSPACE_EXTENSION}");
-
+                dto.FileName = Path.ChangeExtension(Path.Join(Path.GetDirectoryName(filename), name), Constants.WORKSPACE_EXTENSION);
+               
                 if (!File.Exists(dto.FileName))
                 {
                     try
