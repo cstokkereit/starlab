@@ -32,7 +32,7 @@ namespace StarLab.Application.Workspace.Documents
                 workspace.DeleteDocument(key);
 
                 OutputPort.DeleteDocuments(GetDocumentDTOs(dto, [key]));
-                UpdateProjects(workspace, dto.Projects);
+                //UpdateProjects(workspace, dto.Projects);
                 OutputPort.UpdateWorkspace(dto);
             }
         }

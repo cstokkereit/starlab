@@ -41,12 +41,11 @@ namespace StarLab.Application.Workspace
             }
             catch (FileNotFoundException)
             {
-                OutputPort.ShowMessage(Resources.StarLab, string.Format(Resources.FileNotFoundMessage, filename), InteractionType.Error, InteractionResponses.OK);
+                OutputPort.ShowMessage(Resources.StarLab, string.Format(Resources.FileNotFound, filename), InteractionType.Error, InteractionResponses.OK);
             }
             catch (Exception e)
             {
-                var message = e.InnerException != null ? e.InnerException.Message : string.Empty;
-                OutputPort.ShowMessage(Resources.StarLab, string.Format(Resources.WorkspaceCouldNotBeOpenedMessage, message), InteractionType.Error, InteractionResponses.OK);
+                OutputPort.ShowMessage(Resources.StarLab, string.Format(Resources.WorkspaceCouldNotBeOpened, filename), InteractionType.Error, InteractionResponses.OK);
                 log.Error(e.Message, e);
             }
         }

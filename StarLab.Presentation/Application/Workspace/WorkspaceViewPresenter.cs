@@ -81,7 +81,7 @@ namespace StarLab.Application.Workspace
 
             if (dirty)
             {
-                var result = ShowMessage(StringResources.StarLab, StringResources.WorkspaceClosingMessage, InteractionResponses.YesNoCancel);
+                var result = ShowMessage(StringResources.StarLab, StringResources.WorkspaceClosing, InteractionResponses.YesNoCancel);
                 
                 if (result == InteractionResult.Yes) SaveWorkspace();
                 

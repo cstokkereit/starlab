@@ -1,46 +1,21 @@
-﻿using Castle.MicroKernel.Resolvers.SpecializedResolvers;
-using Castle.Windsor;
-using StarLab.Application.Workspace;
+﻿using StarLab.Application.Workspace;
 
 namespace StarLab.Application
 {
-    public class RenameFolderInteractorTests
+    /// <summary>
+    /// A class for performing unit tests on the <see cref="RenameFolderInteractor"/> class.
+    /// </summary>
+    public class RenameFolderInteractorTests : InteractorTests
     {
-        private WindsorContainer container; // The container used to resolve dependencies.
-
-        /// <summary>
-        /// This will be run before each test.
-        /// </summary>
-        [SetUp]
-        public void SetUp()
-        {
-            container = new WindsorContainer();
-
-            container.Kernel.Resolver.AddSubResolver(new CollectionResolver(container.Kernel));
-
-            container.Install(new DependencyInstaller());
-        }
-
-        /// <summary>
-        /// This will be run after each test.
-        /// </summary>
-        [TearDown]
-        public void TearDown()
-        {
-            container.Dispose();
-        }
-
         /// <summary>
         /// Test that the <see cref="RenameFolderInteractor.Execute"/> method correctly renames a folder.
         /// </summary>
         [Test]
         public void TestRenameFolder()
         {
-            var factory = container.Resolve<IUseCaseFactory>();
-
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = factory.CreateRenameFolderUseCase(port);
+            var interactor = Factory.CreateRenameFolderUseCase(port);
 
             var dto = new DTOBuilder("Workspace")
                 .AddProject("Project1")
@@ -61,11 +36,9 @@ namespace StarLab.Application
         [Test]
         public void TestRenameFolderToEmptyStringThrowsAnException()
         {
-            var factory = container.Resolve<IUseCaseFactory>();
-
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = factory.CreateRenameFolderUseCase(port);
+            var interactor = Factory.CreateRenameFolderUseCase(port);
 
             var dto = new DTOBuilder("Workspace")
                 .AddProject("Project1")
@@ -83,11 +56,9 @@ namespace StarLab.Application
         [Test]
         public void TestRenameFolderToExistingNameThrowsAnException()
         {
-            var factory = container.Resolve<IUseCaseFactory>();
-
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = factory.CreateRenameFolderUseCase(port);
+            var interactor = Factory.CreateRenameFolderUseCase(port);
 
             var dto = new DTOBuilder("Workspace")
                 .AddProject("Project1")
@@ -106,11 +77,9 @@ namespace StarLab.Application
         [Test]
         public void TestRenameFolderToInvalidNameThrowsAnException()
         {
-            var factory = container.Resolve<IUseCaseFactory>();
-
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = factory.CreateRenameFolderUseCase(port);
+            var interactor = Factory.CreateRenameFolderUseCase(port);
 
             var dto = new DTOBuilder("Workspace")
                 .AddProject("Project1")
@@ -128,11 +97,9 @@ namespace StarLab.Application
         [Test]
         public void TestRenameFolderWithChildFolders()
         {
-            var factory = container.Resolve<IUseCaseFactory>();
-
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = factory.CreateRenameFolderUseCase(port);
+            var interactor = Factory.CreateRenameFolderUseCase(port);
 
             var dto = new DTOBuilder("Workspace")
                 .AddProject("Project1")
@@ -157,11 +124,9 @@ namespace StarLab.Application
         [Test]
         public void TestRenameFolderWithDocuments()
         {
-            var factory = container.Resolve<IUseCaseFactory>();
-
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = factory.CreateRenameFolderUseCase(port);
+            var interactor = Factory.CreateRenameFolderUseCase(port);
 
             var dto = new DTOBuilder("Workspace")
                 .AddProject("Project1")
@@ -189,11 +154,9 @@ namespace StarLab.Application
         [Test]
         public void TestRenameFolderWithChildFoldersAndDocuments()
         {
-            var factory = container.Resolve<IUseCaseFactory>();
-
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = factory.CreateRenameFolderUseCase(port);
+            var interactor = Factory.CreateRenameFolderUseCase(port);
 
             var dto = new DTOBuilder("Workspace")
                 .AddProject("Project1")
@@ -248,11 +211,9 @@ namespace StarLab.Application
         [Test]
         public void TestRenameChildFolderWithChildFoldersAndDocuments()
         {
-            var factory = container.Resolve<IUseCaseFactory>();
-
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = factory.CreateRenameFolderUseCase(port);
+            var interactor = Factory.CreateRenameFolderUseCase(port);
 
             var dto = new DTOBuilder("Workspace")
                 .AddProject("Project1")
@@ -308,11 +269,9 @@ namespace StarLab.Application
         [Test]
         public void TestRenameProject()
         {
-            var factory = container.Resolve<IUseCaseFactory>();
-
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = factory.CreateRenameFolderUseCase(port);
+            var interactor = Factory.CreateRenameFolderUseCase(port);
 
             var dto = new DTOBuilder("Workspace")
                 .AddProject("Project1")
@@ -384,11 +343,9 @@ namespace StarLab.Application
         [Test]
         public void TestRenameProjectToEmptyStringThrowsAnException()
         {
-            var factory = container.Resolve<IUseCaseFactory>();
-
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = factory.CreateRenameFolderUseCase(port);
+            var interactor = Factory.CreateRenameFolderUseCase(port);
 
             var dto = new DTOBuilder("Workspace")
                 .AddProject("Project1")
@@ -405,11 +362,9 @@ namespace StarLab.Application
         [Test]
         public void TestRenameProjectToExistingNameThrowsAnException()
         {
-            var factory = container.Resolve<IUseCaseFactory>();
-
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = factory.CreateRenameFolderUseCase(port);
+            var interactor = Factory.CreateRenameFolderUseCase(port);
 
             var dto = new DTOBuilder("Workspace")
                 .AddProject("Project1")
@@ -427,11 +382,9 @@ namespace StarLab.Application
         [Test]
         public void TestRenameProjectToInvalidNameThrowsAnException()
         {
-            var factory = container.Resolve<IUseCaseFactory>();
-
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = factory.CreateRenameFolderUseCase(port);
+            var interactor = Factory.CreateRenameFolderUseCase(port);
 
             var dto = new DTOBuilder("Workspace")
                 .AddProject("Project1")

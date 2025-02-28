@@ -1,47 +1,22 @@
-﻿using Castle.MicroKernel.Resolvers.SpecializedResolvers;
-using Castle.Windsor;
-using StarLab.Application.Workspace;
+﻿using StarLab.Application.Workspace;
 using StarLab.Application.Workspace.Documents;
 
 namespace StarLab.Application
 {
-    public class RenameDocumentInteractorTests
+    /// <summary>
+    /// A class for performing unit tests on the <see cref="RenameDocumentInteractor"/> class.
+    /// </summary>
+    public class RenameDocumentInteractorTests : InteractorTests
     {
-        private WindsorContainer container; // The container used to resolve dependencies.
-
-        /// <summary>
-        /// This will be run before each test.
-        /// </summary>
-        [SetUp]
-        public void SetUp()
-        {
-            container = new WindsorContainer();
-
-            container.Kernel.Resolver.AddSubResolver(new CollectionResolver(container.Kernel));
-
-            container.Install(new DependencyInstaller());
-        }
-
-        /// <summary>
-        /// This will be run after each test.
-        /// </summary>
-        [TearDown]
-        public void TearDown()
-        {
-            container.Dispose();
-        }
-
         /// <summary>
         /// Test that the <see cref="RenameDocumentInteractor.Execute"/> method correctly renames a document.
         /// </summary>
         [Test]
         public void TestRenameDocument()
         {
-            var factory = container.Resolve<IUseCaseFactory>();
-
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = factory.CreateRenameDocumentUseCase(port);
+            var interactor = Factory.CreateRenameDocumentUseCase(port);
 
             var dto = new DTOBuilder("Workspace")
                 .AddProject("Project1")
@@ -67,11 +42,9 @@ namespace StarLab.Application
         [Test]
         public void TestRenameDocumentToEmptyStringThrowsAnException()
         {
-            var factory = container.Resolve<IUseCaseFactory>();
-
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = factory.CreateRenameDocumentUseCase(port);
+            var interactor = Factory.CreateRenameDocumentUseCase(port);
 
             var dto = new DTOBuilder("Workspace")
                 .AddProject("Project1")
@@ -90,11 +63,9 @@ namespace StarLab.Application
         [Test]
         public void TestRenameDocumentToExistingNameThrowsAnException()
         {
-            var factory = container.Resolve<IUseCaseFactory>();
-
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = factory.CreateRenameDocumentUseCase(port);
+            var interactor = Factory.CreateRenameDocumentUseCase(port);
 
             var dto = new DTOBuilder("Workspace")
                 .AddProject("Project1")
@@ -114,11 +85,9 @@ namespace StarLab.Application
         [Test]
         public void TestRenameDocumentToInvalidNameThrowsAnException()
         {
-            var factory = container.Resolve<IUseCaseFactory>();
-
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = factory.CreateRenameDocumentUseCase(port);
+            var interactor = Factory.CreateRenameDocumentUseCase(port);
 
             var dto = new DTOBuilder("Workspace")
                 .AddProject("Project1")

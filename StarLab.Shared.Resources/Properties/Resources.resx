@@ -153,7 +153,7 @@
   <data name="Copyright" xml:space="preserve">
     <value>© 2024 All rights reserved etc.</value>
   </data>
-  <data name="CouldNotBeCreatedMessage" xml:space="preserve">
+  <data name="CouldNotBeCreated" xml:space="preserve">
     <value>{0} could not be created.</value>
   </data>
   <data name="Cut" xml:space="preserve">
@@ -177,7 +177,7 @@
   <data name="File" xml:space="preserve">
     <value>File</value>
   </data>
-  <data name="FileNotFoundMessage" xml:space="preserve">
+  <data name="FileNotFound" xml:space="preserve">
     <value>The file {0} could not be found.
 Check the filename and try again.</value>
   </data>
@@ -193,17 +193,17 @@ Check the filename and try again.</value>
   <data name="InitialisationComplete" xml:space="preserve">
     <value>Initialisation complete. Starting the application.</value>
   </data>
-  <data name="NameAlreadyExistsMessage" xml:space="preserve">
+  <data name="NameAlreadyExists" xml:space="preserve">
     <value>Cannot rename '{0}' to '{1}' because a {2} with that name already exists.</value>
   </data>
-  <data name="NameCannotIncludeMessage" xml:space="preserve">
+  <data name="NameCannotInclude" xml:space="preserve">
     <value>{0} names cannot include any of the following:
 
                                {1}
 
 Please enter a valid name.</value>
   </data>
-  <data name="NameNullOrEmptyMessage" xml:space="preserve">
+  <data name="NameNullOrEmpty" xml:space="preserve">
     <value>The {0} name cannot be an empty string.</value>
   </data>
   <data name="New" xml:space="preserve">
@@ -212,7 +212,7 @@ Please enter a valid name.</value>
   <data name="NewFolder" xml:space="preserve">
     <value>New Folder</value>
   </data>
-  <data name="ObjectNotInitialisedMessage" xml:space="preserve">
+  <data name="ObjectNotInitialised" xml:space="preserve">
     <value>This object has not been properly initialised.</value>
   </data>
   <data name="Open" xml:space="preserve">
@@ -290,11 +290,14 @@ Please enter a valid name.</value>
   <data name="Workspace" xml:space="preserve">
     <value>Workspace</value>
   </data>
-  <data name="WorkspaceClosingMessage" xml:space="preserve">
+  <data name="WorkspaceAlreadyExists" xml:space="preserve">
+    <value>Cannot rename '{0}' to '{1}' because a workspace with that name already exists at this location.</value>
+  </data>
+  <data name="WorkspaceClosing" xml:space="preserve">
     <value>The workspace contains items with unsaved changes. Do you want to save your changes?</value>
   </data>
-  <data name="WorkspaceCouldNotBeOpenedMessage" xml:space="preserve">
-    <value>The workspace file could not be opened. {0}</value>
+  <data name="WorkspaceCouldNotBeOpened" xml:space="preserve">
+    <value>The file {0} could not be opened.</value>
   </data>
   <data name="WorkspaceExplorer" xml:space="preserve">
     <value>Workspace Explorer</value>

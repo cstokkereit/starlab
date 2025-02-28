@@ -34,7 +34,7 @@ namespace StarLab.Application.Workspace
                 workspace.DeleteFolder(key);
 
                 OutputPort.DeleteDocuments(GetDocumentDTOs(dto, folder));
-                UpdateProjects(workspace, dto.Projects);
+                //UpdateProjects(workspace, dto.Projects);
                 OutputPort.UpdateWorkspace(dto);
             }
         }
