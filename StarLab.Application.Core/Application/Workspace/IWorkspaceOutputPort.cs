@@ -8,16 +8,16 @@ namespace StarLab.Application.Workspace
     public interface IWorkspaceOutputPort : IOutputPort
     {
         /// <summary>
-        /// Deletes the specified documents.
-        /// </summary>
-        /// <param name="dtos">An <see cref="IEnumerable{DocumentDTO}"/> that specifies the documents to be deleted.</param>
-        void DeleteDocuments(IEnumerable<DocumentDTO> dtos);
-
-        /// <summary>
         /// Opens the specified document.
         /// </summary>
-        /// <param name="id">The ID of the document to be opened.</param>
+        /// <param name="id">The document ID.</param>
         void OpenDocument(string id);
+
+        /// <summary>
+        /// Removes the specified document.
+        /// </summary>
+        /// <param name="id">The document ID.</param>
+        void RemoveDocument(string id);
 
         /// <summary>
         /// Updates the state of the workspace represented by the <see cref="WorkspaceDTO"/> provided.

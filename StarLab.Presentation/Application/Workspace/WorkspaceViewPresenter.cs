@@ -141,18 +141,6 @@ namespace StarLab.Application.Workspace
         }
 
         /// <summary>
-        /// Deletes the specified documents.
-        /// </summary>
-        /// <param name="dtos">An <see cref="IEnumerable{DocumentDTO}"/> that specifies the documents to be deleted.</param>
-        public void DeleteDocuments(IEnumerable<DocumentDTO> dtos)
-        {
-            foreach (var dto in dtos)
-            {
-                if (dto.ID != null) AppController.DeleteView(dto.ID);
-            }
-        }
-
-        /// <summary>
         /// Deletes the specified folder.
         /// </summary>
         /// <param name="key">The key that identifies the folder to be deleted.</param>
@@ -239,6 +227,15 @@ namespace StarLab.Application.Workspace
         public void OpenWorkspace()
         {
             OpenWorkspace(string.Empty);
+        }
+
+        /// <summary>
+        /// Removes the specified document.
+        /// </summary>
+        /// <param name="id">The document ID.</param>
+        public void RemoveDocument(string id)
+        {
+            AppController.DeleteView(id);
         }
 
         /// <summary>

@@ -35,9 +35,7 @@ namespace StarLab.Application.Workspace.Documents
                 {
                     workspace.RenameDocument(document, name);
 
-                    dto = Mapper.Map<Workspace, WorkspaceDTO>(workspace);
-
-                    OutputPort.UpdateWorkspace(Mapper.Map<Workspace, WorkspaceDTO>(workspace), id);
+                    OutputPort.UpdateWorkspace(Mapper.Map(workspace, dto), id);
                 }
                 else
                 {

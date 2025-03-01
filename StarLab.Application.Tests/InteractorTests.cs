@@ -5,6 +5,9 @@ using System.Reflection;
 
 namespace StarLab
 {
+    /// <summary>
+    /// Base class for testing classes derived from <see cref="UseCaseInteractor{TOutputPort}"/>.
+    /// </summary>
     public class InteractorTests
     {
         private readonly string resources; // The path to the test resources folder.

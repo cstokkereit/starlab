@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using StarLab.Application.Workspace.Documents;
 using StarLab.Shared.Properties;
+using System.Windows.Forms;
 
 namespace StarLab.Application.Workspace
 {
@@ -31,35 +31,25 @@ namespace StarLab.Application.Workspace
 
             if (folder.IsEmpty || ConfirmAction(string.Format(Resources.FolderDeletionWarning, folder.Name)))
             {
+                var ids = GetDocumentIds(folder);
+
                 workspace.DeleteFolder(key);
 
-                OutputPort.DeleteDocuments(GetDocumentDTOs(dto, folder));
-                //UpdateProjects(workspace, dto.Projects);
-                OutputPort.UpdateWorkspace(dto);
+                foreach (var id in ids)
+                {
+                    OutputPort.RemoveDocument(id);
+                }
+
+                OutputPort.UpdateWorkspace(Mapper.Map(workspace, dto));
             }
         }
 
         /// <summary>
-        /// Gets an <see cref="IEnumerable{DocumentDTO}"/> containing all of the <see cref="DocumentDTO"/>s owned by the parent <see cref="IFolder"/> provided and any child folders.
-        /// </summary>
-        /// <param name="dto">A <see cref="WorkspaceDTO"/> that specifies the current state of the workspace.</param>
-        /// <param name="folder">The <see cref="IFolder"/> that contains the documents.</param>
-        /// <returns>An <see cref="IEnumerable{DocumentDTO}"/> containing the required <see cref="DocumentDTO"/>s.</returns>
-        protected static IEnumerable<DocumentDTO> GetDocumentDTOs(WorkspaceDTO dto, IFolder folder)
-        {
-            var ids = new List<string>();
-
-            GetDocumentIDs(folder, ids);
-
-            return GetDocumentDTOs(dto, ids);
-        }
-
-        /// <summary>
-        /// Recursively populates the <see cref="List{string}"/> provided with the IDs of all documents owned by the parent <see cref="IFolder"/> provided and any child folders.
+        /// Recursively populates the <see cref="List{string}"/> provided with the IDs of all documents owned by the parent <see cref="IFolder"/> provided and its child folders.
         /// </summary>
         /// <param name="folder">The <see cref="IFolder"/> that contains the documents.</param>
         /// <param name="documents">An <see cref="List{string}"/> that will be populated with the IDs of the documents.</param>
-        private static void GetDocumentIDs(IFolder folder, List<string> documents)
+        private static void GetDocumentIds(IFolder folder, List<string> documents)
         {
             foreach (var document in folder.Documents)
             {
@@ -68,8 +58,20 @@ namespace StarLab.Application.Workspace
 
             foreach (var child in folder.Folders)
             {
-                GetDocumentIDs(child, documents);
+                GetDocumentIds(child, documents);
             }
+        }
+
+        /// <summary>
+        /// Gets the IDs of all documents owned by the parent <see cref="IFolder"/> provided and its child folders.
+        /// </summary>
+        /// <param name="folder">The <see cref="IFolder"/> that contains the documents.</param>
+        /// <returns>An <see cref="IEnumerable{string}"/> containing the required document IDs.</returns>
+        private static IEnumerable<string> GetDocumentIds(IFolder folder)
+        {
+            var ids = new List<string>();
+            GetDocumentIds(folder, ids);
+            return ids;
         }
     }
 }

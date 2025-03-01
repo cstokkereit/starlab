@@ -33,7 +33,7 @@ namespace StarLab.Application.Workspace
             {
                 workspace.DeleteProject(key);
 
-                OutputPort.DeleteDocuments(GetDocumentDTOs(dto, project));
+                //OutputPort.DeleteDocuments(GetDocumentDTOs(dto, project));
                 Mapper.Map(workspace, dto);
                 OutputPort.UpdateWorkspace(dto);
             }
