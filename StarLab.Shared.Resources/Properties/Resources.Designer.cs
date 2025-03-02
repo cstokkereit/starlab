@@ -260,7 +260,7 @@ namespace StarLab.Shared.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The folder &apos;{0}&apos; and all of its contents will be deleted permanently..
+        ///   Looks up a localized string similar to The {0} &apos;{1}&apos; and all of its contents will be deleted permanently..
         /// </summary>
         public static string FolderDeletionWarning {
             get {

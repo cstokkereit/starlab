@@ -187,7 +187,9 @@ namespace StarLab.Application.Workspace
             {
                 if (!string.IsNullOrEmpty(dto.Path))
                 {
-                    var folder = folders[dto.Path];
+                    IFolder folder = this;
+
+                    if (dto.Path != Path) folder = folders[dto.Path];
 
                     folder.AddDocument(new Document(dto, folder));
                 }

@@ -157,7 +157,7 @@ namespace StarLab.Application.Workspace
         /// <param name="key">The key that identifies the project to be deleted.</param>
         public void DeleteProject(string key)
         {
-            var interactor = UseCaseFactory.CreateDeleteProjectUseCase(this);
+            var interactor = UseCaseFactory.CreateDeleteFolderUseCase(this);
             var dto = Mapper.Map<IWorkspace, WorkspaceDTO>(workspace);
             interactor.Execute(dto, key);
         }

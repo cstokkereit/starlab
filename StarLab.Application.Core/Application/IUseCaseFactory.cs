@@ -44,13 +44,6 @@ namespace StarLab.Application
         IDeleteItemUseCase CreateDeleteFolderUseCase(IWorkspaceOutputPort outputPort);
 
         /// <summary>
-        /// Creates a use case interactor that deletes a project from the workspace.
-        /// </summary>
-        /// <param name="outputPort">An <see cref="IWorkspaceOutputPort"/> that updates the UI in response to the ouputs of the use case.</param>
-        /// <returns>An instance of <see cref="IDeleteItemUseCase"/> that implements the use case.</returns>
-        IDeleteItemUseCase CreateDeleteProjectUseCase(IWorkspaceOutputPort outputPort);
-
-        /// <summary>
         /// Creates a use case interactor that loads a workspace from a file.
         /// </summary>
         /// <param name="outputPort">An <see cref="IWorkspaceOutputPort"/> that updates the UI in response to the ouputs of the use case.</param>

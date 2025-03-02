@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using log4net;
 using StarLab.Shared.Properties;
 using System.Windows.Forms;
 
@@ -9,6 +10,8 @@ namespace StarLab.Application.Workspace
     /// </summary>
     internal class DeleteFolderInteractor : WorkspaceInteractor, IDeleteItemUseCase
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(DeleteFolderInteractor)); // The logger that will be used for writing log messages.
+
         /// <summary>
         /// Initialises a new instance of the <see cref="DeleteFolderInteractor"/> class.
         /// </summary>
@@ -27,21 +30,39 @@ namespace StarLab.Application.Workspace
             dto.ActiveDocument = string.Empty;
 
             var workspace = new Workspace(dto);
-            var folder = workspace.GetFolder(key);
 
-            if (folder.IsEmpty || ConfirmAction(string.Format(Resources.FolderDeletionWarning, folder.Name)))
+            try
             {
-                var ids = GetDocumentIds(folder);
+                var folder = workspace.GetFolder(key);
 
-                workspace.DeleteFolder(key);
-
-                foreach (var id in ids)
+                if (folder.IsEmpty || ConfirmAction(GetConfirmationMessage(folder)))
                 {
-                    OutputPort.RemoveDocument(id);
-                }
+                    var ids = GetDocumentIds(folder);
 
-                OutputPort.UpdateWorkspace(Mapper.Map(workspace, dto));
+                    workspace.DeleteFolder(key);
+
+                    foreach (var id in ids)
+                    {
+                        OutputPort.RemoveDocument(id);
+                    }
+
+                    OutputPort.UpdateWorkspace(Mapper.Map(workspace, dto));
+                }
             }
+            catch (Exception e)
+            {
+                log.Error(e.Message, e);
+            }
+        }
+
+        /// <summary>
+        /// Returns a message requesting confirmation of the deletion of the specified project or folder.
+        /// </summary>
+        /// <param name="target">The <see cref="IFolder"/> being deleted.</param>
+        /// <returns>The required confirmation message.</returns>
+        private static string GetConfirmationMessage(IFolder target)
+        {
+            return string.Format(Resources.FolderDeletionWarning, (target is Project ? Resources.Project : Resources.Folder).ToLower(), target.Name);
         }
 
         /// <summary>

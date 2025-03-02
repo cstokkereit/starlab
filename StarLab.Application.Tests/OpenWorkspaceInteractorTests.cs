@@ -67,7 +67,7 @@ namespace StarLab.Application
         /// Test that the <see cref="OpenWorkspaceInteractor.Execute"/> method displays an error message if the workspace file does not exist.
         /// </summary>
         [Test]
-        public void TestOpenNonExistantWorkspaceFileDisplaysAnErrorMessage()
+        public void TestOpenNonExistentWorkspaceFileDisplaysAnErrorMessage()
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 

@@ -463,7 +463,7 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
             manager.AddMenuItem(Constants.CUT, StringResources.Cut, ImageResources.Cut);
             manager.AddMenuItem(Constants.COPY, StringResources.Copy, ImageResources.Copy);
             manager.AddMenuItem(Constants.PASTE, StringResources.Paste, ImageResources.Paste);
-            manager.AddMenuItem(Constants.DELETE, StringResources.Delete, GetCommand(workspaceController, Actions.DELETE_PROJECT, project.Name));
+            manager.AddMenuItem(Constants.DELETE, StringResources.Delete, GetCommand(workspaceController, Actions.DELETE_FOLDER, project.Key));
             manager.AddMenuItem(Constants.RENAME, StringResources.Rename, ImageResources.Rename, GetCommand(Actions.RENAME, project.Key));
         }
 

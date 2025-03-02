@@ -185,7 +185,7 @@ Check the filename and try again.</value>
     <value>Folder</value>
   </data>
   <data name="FolderDeletionWarning" xml:space="preserve">
-    <value>The folder '{0}' and all of its contents will be deleted permanently.</value>
+    <value>The {0} '{1}' and all of its contents will be deleted permanently.</value>
   </data>
   <data name="Help" xml:space="preserve">
     <value>Help</value>

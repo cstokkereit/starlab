@@ -158,30 +158,18 @@ namespace StarLab.Application.Workspace
         /// <param name="path">The path to the folder.</param>
         public void DeleteFolder(string path)
         {
-            DeleteFolder(GetFolder(path));
-        }
+            var folder = GetFolder(path);
 
-        /// <summary>
-        /// Removes the project provided from the workspace hierarchy.
-        /// </summary>
-        /// <param name="project">The <see cref="Project"/> being removed.</param>
-        public void DeleteProject(Project project)
-        {
-            if (project != null)
+            if (folder is Project)
             {
-                DeleteFolder(project);
+                projects.Remove(folder.Path);
 
-                projects.Remove(project.Path);
+                DeleteFolders(folder);
             }
-        }
-
-        /// <summary>
-        /// Removes the specified project from the workspace hierarchy.
-        /// </summary>
-        /// <param name="path">The path to the project.</param>
-        public void DeleteProject(string path)
-        {
-            DeleteProject(GetProject(path));
+            else
+            {
+                DeleteFolder(folder);
+            }
         }
 
         /// <summary>
