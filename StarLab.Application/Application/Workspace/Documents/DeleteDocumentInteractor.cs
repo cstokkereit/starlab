@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using log4net;
 using StarLab.Shared.Properties;
 
 namespace StarLab.Application.Workspace.Documents
@@ -8,6 +9,8 @@ namespace StarLab.Application.Workspace.Documents
     /// </summary>
     internal class DeleteDocumentInteractor : WorkspaceInteractor, IDeleteItemUseCase
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(DeleteDocumentInteractor)); // The logger that will be used for writing log messages.
+
         /// <summary>
         /// Initialises a new instance of the <see cref="DeleteDocumentInteractor"/> class.
         /// </summary>
@@ -25,15 +28,26 @@ namespace StarLab.Application.Workspace.Documents
         {
             dto.ActiveDocument = string.Empty;
 
-            var workspace = new Workspace(dto);
-
-            if (ConfirmAction(string.Format(Resources.DeletionWarning, workspace.GetDocument(key).Name)))
+            try
             {
-                workspace.DeleteDocument(key);
+                var workspace = new Workspace(dto);
 
-                //OutputPort.DeleteDocuments(GetDocumentDTOs(dto, [key]));
-                //UpdateProjects(workspace, dto.Projects);
-                OutputPort.UpdateWorkspace(dto);
+                var document = workspace.GetDocument(key);
+
+                if (ConfirmAction(string.Format(Resources.DeletionWarning, document.Name)))
+                {
+                    workspace.DeleteDocument(key);
+
+                    OutputPort.RemoveDocument(key);
+
+                    Mapper.Map(workspace, dto);
+
+                    OutputPort.UpdateWorkspace(Mapper.Map(workspace, dto));
+                }
+            }
+            catch (Exception e)
+            {
+                log.Error(e.Message, e);
             }
         }
     }
