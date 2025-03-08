@@ -48,6 +48,13 @@ namespace StarLab.Application
         void DeleteView(string id);
 
         /// <summary>
+        /// Gets the <see cref="IChildViewController"/> that controls the content of the specified view.
+        /// </summary>
+        /// <param name="name">The name of the view.</param>
+        /// <returns>The required <see cref="IChildViewController"/>.</returns>
+        //IChildViewController GetContentController(string name);
+
+        /// <summary>
         /// Gets the <see cref="IDocumentController"/> that controls the view representing the <see cref="IDocument"/> provided.
         /// </summary>
         /// <param name="document">The <see cref="IDocument"/> represented by the view controlled by the <see cref="IDocumentController"/>.</param>

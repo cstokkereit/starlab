@@ -29,9 +29,7 @@ namespace StarLab.Application.Workspace
 
             workspace.AddFolder(name, parent);
 
-            //UpdateProjects(workspace, dto.Projects);
-
-            OutputPort.UpdateWorkspace(dto);
+            OutputPort.UpdateWorkspace(Mapper.Map(workspace, dto));
         }
 
         /// <summary>

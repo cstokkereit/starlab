@@ -110,6 +110,27 @@ namespace StarLab.Application
         }
 
         /// <summary>
+        /// Gets the <see cref="IChildViewController"/> that controls the content of the specified view.
+        /// </summary>
+        /// <param name="name">The name of the view.</param>
+        /// <returns>The required <see cref="IChildViewController"/>.</returns>
+        //public IChildViewController GetContentController(string name)
+        //{
+        //    IChildViewController? controller = null;
+
+        //    var view = GetView(name);
+
+        //    if (view != null)
+        //    {
+        //        //if (view is ToolView toolView) controller = toolView.ContentController;
+        //    }
+
+        //    if (controller == null) throw new Exception(); // TODO
+
+        //    return controller;
+        //}
+
+        /// <summary>
         /// Gets the <see cref="IDocumentController"/> that controls the view representing the <see cref="IDocument"/> provided.
         /// </summary>
         /// <param name="document">The <see cref="IDocument"/> represented by the view controlled by the <see cref="IDocumentController"/>.</param>
@@ -319,7 +340,7 @@ namespace StarLab.Application
             }
             else if (view is IDocumentView)
             {
-                id = $"Document({view.ID}) {Constants.CONTROLLER}";
+                id = $"{Constants.DOCUMENT}({view.ID}) {Constants.CONTROLLER}";
             }
             else if (view is IDockableView)
             {

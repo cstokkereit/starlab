@@ -32,7 +32,7 @@
             name = key.Substring(index + 1);
 
             Expanded = dto.Expanded;
-            IsNew = dto.IsNew;
+            Dirty = dto.Dirty;
         }
 
         /// <summary>
@@ -66,7 +66,7 @@
         /// <summary>
         /// TODO
         /// </summary>
-        public bool IsNew { get; private set; }
+        public bool Dirty { get; private set; }
 
         /// <summary>
         /// Gets the folder key. 

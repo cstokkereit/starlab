@@ -8,7 +8,7 @@
         /// <summary>
         /// TODO - This could be removed and replaced with a test.
         /// </summary>
-        bool IsNew { get; }
+        bool Dirty { get; }
 
         /// <summary>
         /// Gets the folder key. 

@@ -2,6 +2,9 @@
 
 namespace StarLab.Application
 {
+    /// <summary>
+    /// A class for performing unit tests on the <see cref="OpenWorkspaceInteractor"/> class.
+    /// </summary>
     public class OpenWorkspaceInteractorTests : InteractorTests
     {
         /// <summary>

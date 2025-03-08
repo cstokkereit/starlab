@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using log4net;
 using StarLab.Shared.Properties;
-using System.Windows.Forms;
 
 namespace StarLab.Application.Workspace
 {
@@ -29,10 +28,10 @@ namespace StarLab.Application.Workspace
         {
             dto.ActiveDocument = string.Empty;
 
-            var workspace = new Workspace(dto);
-
             try
             {
+                var workspace = new Workspace(dto);
+
                 var folder = workspace.GetFolder(key);
 
                 if (folder.IsEmpty || ConfirmAction(GetConfirmationMessage(folder)))

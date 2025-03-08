@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using StarLab.Application.Configuration;
 using StarLab.Application.Workspace.Documents;
 using StarLab.Commands;
 
@@ -76,7 +75,7 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
                 workspace.GetFolder(key).CollapseAll();
             }
 
-            UpdateView();
+            UpdateNodes();
         }
 
         /// <summary>
@@ -225,7 +224,7 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
         }
 
         /// <summary>
-        /// TODO
+        /// Renames the specified node in the workspace hierarchy.
         /// </summary>
         /// <param name="key">The key of the node to be renamed.</param>
         public void Rename(string key)
@@ -456,7 +455,7 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
             manager.AddMenuItem(Constants.ADD, StringResources.Add);
             manager.AddMenuItem(Constants.ADD, Constants.ADD_CHART, StringResources.Chart + Constants.ELLIPSIS, GetCommand(workspaceController, Actions.ADD_CHART, project.Key));
             manager.AddMenuItem(Constants.ADD, Constants.ADD_TABLE, StringResources.Table + Constants.ELLIPSIS, GetCommand(workspaceController, Actions.ADD_TABLE, project.Key));
-            manager.AddMenuItem(Constants.ADD, Constants.ADD_FOLDER, StringResources.Folder + Constants.ELLIPSIS);
+            manager.AddMenuItem(Constants.ADD, Constants.ADD_FOLDER, StringResources.NewFolder, ImageResources.NewFolder, GetCommand(workspaceController, Actions.ADD_FOLDER, project.Key));
             manager.AddMenuSeparator();
             manager.AddMenuItem(Constants.COLLAPSE_ALL, StringResources.CollapseAllDescendants, ImageResources.Collapse, GetCommand(Actions.COLLAPSE, project.Key));
             manager.AddMenuSeparator();
@@ -527,21 +526,22 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
         }
 
         /// <summary>
-        /// Expands the workspace node and all nodes that represent expanded projects or folders.
+        /// Expands the specified node in the workspace hierarchy.
         /// </summary>
-        private void ExpandNodes()
+        /// <param name="key">The node key.</param>
+        private void Expand(string key)
         {
-            View.ExpandNode(Constants.WORKSPACE);
-
-            foreach (var project in workspace.Projects)
+            if (key == Constants.WORKSPACE)
             {
-                if (project.Expanded) View.ExpandNode(project.Key);
+                View.ExpandNode(Constants.WORKSPACE);
+            }
+            else
+            {
+                ICollapsible parent = workspace.HasProject(key) ? workspace.GetProject(key) : workspace.GetFolder(key);
+                parent.Expand();
             }
 
-            foreach (var folder in workspace.Folders)
-            {
-                if (folder.Expanded) View.ExpandNode(folder.Key);
-            }
+            View.ExpandNode(key);
         }
 
         /// <summary>
@@ -554,18 +554,50 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
         }
 
         /// <summary>
-        /// Updates the view. TODO - Not well named more to do?
+        /// Updates the dirty folder if one exists.
         /// </summary>
-        private void UpdateView()
+        private void UpdateDirtyFolder()
         {
+            foreach (var folder in workspace.Folders)
+            {
+                if (folder.Dirty)
+                {
+                    Expand(folder.ParentKey);
+                    Rename(folder.Key);
+                    break;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Updates the states of the view nodes to match the states of the workspace nodes.
+        /// </summary>
+        private void UpdateNodes()
+        {
+            View.ExpandNode(Constants.WORKSPACE);
+
             foreach (var project in workspace.Projects)
             {
-                if (!project.Expanded) View.CollapseNode(project.Key);
+                if (project.Expanded)
+                {
+                    View.ExpandNode(project.Key);
+                }
+                else
+                {
+                    View.CollapseNode(project.Key);
+                }
             }
 
             foreach (var folder in workspace.Folders)
             {
-                if (!folder.Expanded) View.CollapseNode(folder.Key);
+                if (folder.Expanded)
+                {
+                    View.ExpandNode(folder.Key);
+                }
+                else
+                {
+                    View.CollapseNode(folder.Key);
+                }
             }
         }
 
@@ -579,29 +611,21 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
 
             View.Clear();
 
+            var enabled = false;
+
             if (workspace is Workspace)
             {
                 CreateWorkspaceNode();
                 CreateProjectNodes();
                 CreateFolderNodes();
                 CreateDocumentNodes();
-                ExpandNodes();
-
-                foreach (var folder in workspace.Folders)
-                {
-                    if (folder.IsNew)
-                    {
-                        Rename(folder.Key); // TODO Call this from the interactor?
-                        break;
-                    }
-                }
-
-                UpdateCommandState(Actions.COLLAPSE, Constants.WORKSPACE, true);
+                UpdateNodes();
+                UpdateDirtyFolder();
+                
+                enabled = true;
             }
-            else
-            {
-                UpdateCommandState(Actions.COLLAPSE, Constants.WORKSPACE, false);
-            }
+
+            UpdateCommandState(Actions.COLLAPSE, Constants.WORKSPACE, enabled);
         }
     }
 }

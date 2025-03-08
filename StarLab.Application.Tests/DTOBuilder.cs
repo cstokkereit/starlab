@@ -10,6 +10,8 @@ namespace StarLab
     {
         private WorkspaceDTO workspace; // The DTO being constructed.
 
+        private string workspaceName;
+
         /// <summary>
         /// Initialises a new instance of the <see cref="DTOBuilder"/> class.
         /// </summary>
@@ -20,6 +22,18 @@ namespace StarLab
             {
                 FileName = filename
             };
+
+            workspaceName = workspace.FileName;
+
+            if (!string.IsNullOrEmpty(workspace.FileName) && workspace.FileName.Contains("\\"))
+            {
+                workspaceName = workspace.FileName.Substring(workspace.FileName.LastIndexOf("\\") + 1);
+            }
+
+            if (workspaceName.Contains('.'))
+            {
+                workspaceName = workspaceName.Substring(0, workspaceName.IndexOf('.'));
+            }
         }
 
         /// <summary>
@@ -100,7 +114,7 @@ namespace StarLab
         {
             foreach (var project in workspace.Projects)
             {
-                if (path.StartsWith($"Workspace/{project.Name}")) return project;
+                if (path.StartsWith($"{workspaceName}/{project.Name}")) return project;
             }
 
             return null;

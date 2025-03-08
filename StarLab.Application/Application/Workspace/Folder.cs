@@ -13,8 +13,6 @@ namespace StarLab.Application.Workspace
 
         private readonly bool expanded; // A flag indicating that the folder has been expanded.
 
-        private readonly bool isNew; // A flag indicating that folder is new.
-
         /// <summary>
         /// Initialises a new instance of the <see cref="Folder"/> class.
         /// </summary>
@@ -62,8 +60,13 @@ namespace StarLab.Application.Workspace
 
             Parent.AddFolder(this);
 
-            isNew = true;
+            Dirty = true;
         }
+
+        /// <summary>
+        /// Returns true if the folder is new; false otherwise.
+        /// </summary>
+        public bool Dirty { get; private set; }
 
         /// <summary>
         /// Gets an <see cref="IEnumerable{Document}"/> containing the documents in the folder.
@@ -84,11 +87,6 @@ namespace StarLab.Application.Workspace
         /// Returns true if the folder does not contain any documents or folders; false otherwise.
         /// </summary>
         public bool IsEmpty => documents.Count == 0 && folders.Count == 0;
-
-        /// <summary>
-        /// Returns true if the folder is new; false otherwise.
-        /// </summary>
-        public bool IsNew => isNew;
 
         /// <summary>
         /// Gets or sets the folder name.

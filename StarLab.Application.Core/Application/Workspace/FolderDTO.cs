@@ -5,9 +5,9 @@
     /// </summary>
     public class FolderDTO
     {
-        public bool Expanded;
+        public bool Dirty;
 
-        public bool IsNew;
+        public bool Expanded;
 
         public string? Path;
     }

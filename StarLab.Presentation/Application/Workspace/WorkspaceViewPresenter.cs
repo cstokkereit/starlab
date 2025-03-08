@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
-using StarLab.Application.Workspace.Documents;
+using StarLab.Application.Workspace.WorkspaceExplorer;
 using StarLab.Commands;
 using System.ComponentModel;
-using System.Xml.Linq;
 using ImageResources = StarLab.Properties.Resources;
 using StringResources = StarLab.Shared.Properties.Resources;
 
@@ -90,8 +89,6 @@ namespace StarLab.Application.Workspace
 
             if (close)
             {
-                //DetachEventHandlers(); ?
-
                 UpdateCommandState(Actions.CLOSE_WORKSPACE, false);
 
                 var layout = workspace.Layout;

@@ -13,6 +13,8 @@ namespace StarLab.Application.Workspace
 
         private readonly IDockableViewPresenter presenter; // The presenter that controls the view.
 
+        private readonly IChildView content; // TODO
+
         private readonly string id; // The view ID.
 
         /// <summary>
@@ -42,22 +44,30 @@ namespace StarLab.Application.Workspace
 
             presenter = (IDockableViewPresenter)factory.CreatePresenter(configuration.Name, this);
 
-            var view = factory.CreateView(configuration.ChildViews[0], configuration);
-            view.Controller.RegisterController((IViewController)presenter);
+            content = factory.CreateView(configuration.ChildViews[0], configuration);
 
-            view.Controller.RegisterController((IViewController)presenter);
+            content.Controller.RegisterController((IViewController)presenter);
 
-            if (view is Control control)
+            if (content is Control control)
             {
                 control.Dock = DockStyle.Fill;
                 Controls.Add(control);
+            }
+            else
+            {
+                throw new Exception(); // TODO - This should never happen
             }
 
             ResumeLayout();
         }
 
         /// <summary>
-        /// Gets the <see cref="IViewController"> that controls this view.
+        /// Gets the <see cref="IChildViewController"/> that controls the view content.
+        /// </summary>
+        //public IChildViewController ContentController => content.Controller; TODO - Remove if never needed
+
+        /// <summary>
+        /// Gets the <see cref="IViewController"/> that controls this view.
         /// </summary>
         public IViewController Controller => (IViewController)presenter;
 
@@ -72,10 +82,7 @@ namespace StarLab.Application.Workspace
         /// <param name="controller">The <see cref="IApplicationController"/>.</param>
         public void Initialise(IApplicationController controller)
         {
-            foreach (var control in Controls)
-            {
-                if (control is IChildView view) view.Controller.Initialise(controller);
-            }
+            content.Controller.Initialise(controller);
         }
 
         /// <summary>
