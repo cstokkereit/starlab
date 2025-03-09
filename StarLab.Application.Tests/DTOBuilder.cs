@@ -10,7 +10,7 @@ namespace StarLab
     {
         private WorkspaceDTO workspace; // The DTO being constructed.
 
-        private string workspaceName;
+        private string workspaceName; // The workspace name.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="DTOBuilder"/> class.
@@ -50,7 +50,7 @@ namespace StarLab
                 ID = id,
                 Name = name,
                 Path = path,
-                View = "view"
+                View = string.Empty
             };
 
             var project = GetProject(path);

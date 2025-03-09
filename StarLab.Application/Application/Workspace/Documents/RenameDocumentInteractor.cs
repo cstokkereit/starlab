@@ -35,16 +35,16 @@ namespace StarLab.Application.Workspace.Documents
                 {
                     workspace.RenameDocument(document, name);
 
-                    OutputPort.UpdateWorkspace(Mapper.Map(workspace, dto), id);
+                    OutputPort.UpdateWorkspace(Mapper.Map<WorkspaceDTO>(workspace), id);
                 }
                 else
                 {
-                    throw CreateTargetExistsException(document.Name, name, Resources.Document);
+                    throw new Exception(CreateTargetExistsMessage(document.Name, name, Resources.Document));
                 }
             }
             else
             {
-                throw CreateInvalidNameException(name, Resources.Document);
+                throw new Exception(CreateInvalidNameMessage(name, Resources.Document));
             }
         }
 

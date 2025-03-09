@@ -38,16 +38,16 @@ namespace StarLab.Application.Workspace
                 {
                     workspace.RenameFolder(folder, name);
 
-                    OutputPort.UpdateWorkspace(Mapper.Map(workspace, dto));
+                    OutputPort.UpdateWorkspace(Mapper.Map<WorkspaceDTO>(workspace));
                 }
                 else
                 {
-                    throw CreateTargetExistsException(key.Substring(key.LastIndexOf('/') + 1), name, type);
+                    throw new Exception(CreateTargetExistsMessage(key.Substring(key.LastIndexOf('/') + 1), name, type));
                 }
             }
             else
             {
-                throw CreateInvalidNameException(name, type);
+                throw new Exception(CreateInvalidNameMessage(name, type));
             }
         }
 

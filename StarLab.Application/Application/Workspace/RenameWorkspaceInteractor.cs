@@ -54,12 +54,12 @@ namespace StarLab.Application.Workspace
                 }
                 else
                 {
-                    throw CreateTargetExistsException(Path.GetFileName(filename), Path.GetFileName(dto.FileName), Resources.Workspace);
+                    throw new Exception (CreateTargetExistsMessage(Path.GetFileName(filename), Path.GetFileName(dto.FileName), Resources.Workspace));
                 }
             }
             else
             {
-                throw CreateInvalidNameException(name, Resources.Workspace);
+                throw new Exception(CreateInvalidNameMessage(name, Resources.Workspace));
             }
         }
     }

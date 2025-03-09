@@ -171,6 +171,10 @@
   <data name="Document" xml:space="preserve">
     <value>Document</value>
   </data>
+  <data name="DocumentExistsWarning" xml:space="preserve">
+    <value>A document with the name '{0}' already exists at this location.
+Please provide a unique name for the document.</value>
+  </data>
   <data name="Exit" xml:space="preserve">
     <value>Exit</value>
   </data>

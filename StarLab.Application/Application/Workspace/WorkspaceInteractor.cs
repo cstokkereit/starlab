@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using StarLab.Application.Workspace.Documents;
 using StarLab.Shared.Properties;
+using System.Diagnostics;
 
 namespace StarLab.Application.Workspace
 {
@@ -28,42 +29,36 @@ namespace StarLab.Application.Workspace
         }
 
         /// <summary>
-        /// Creates an exception in response to an invalid name being provided.
+        /// Creates an error message in response to an invalid name being provided.
         /// </summary>
         /// <param name="name">A name that is not valid for the item being named.</param>
         /// <param name="target">The item being named.</param>
-        /// <returns>An <see cref="Exception"/> with a message identifying the issue with the name provided.</returns>
-        protected static Exception CreateInvalidNameException(string name, string target)
+        /// <returns>An error message identifying the issue with the name provided.</returns>
+        protected static string CreateInvalidNameMessage(string? name, string target)
         {
-            var message = string.Empty;
-
             if (!string.IsNullOrEmpty(name))
             {
-                message = string.Format(Resources.NameCannotInclude, target, string.Join(' ', Constants.IllegalCharacters));
-            }  
-            else
-            {
-                message = string.Format(Resources.NameNullOrEmpty, target.ToLower());
+                return string.Format(Resources.NameCannotInclude, target, string.Join(' ', Constants.IllegalCharacters));
             }
 
-            return new Exception(message);
+            return string.Format(Resources.NameNullOrEmpty, target.ToLower());
         }
 
         /// <summary>
-        /// Creates an exception in response to a duplicate name being provided.
+        /// Creates an error message in response to a duplicate name being provided.
         /// </summary>
         /// <param name="oldName">The current name of the item being renamed.</param>
         /// <param name="newName">A name that is not valid because an item of the same type with the same name already exists.</param>
         /// <param name="target">The item being renamed.</param>
-        /// <returns>An <see cref="Exception"/> with a message identifying the issue with the name provided.</returns>
-        protected static Exception CreateTargetExistsException(string oldName, string newName, string target)
+        /// <returns>An error message identifying the issue with the name provided.</returns>
+        protected static string CreateTargetExistsMessage(string oldName, string newName, string target)
         {
             if (target == Resources.Workspace)
             {
-                return new Exception(string.Format(Resources.WorkspaceAlreadyExists, Path.GetFileNameWithoutExtension(oldName), Path.GetFileNameWithoutExtension(newName)));
+                return string.Format(Resources.WorkspaceAlreadyExists, Path.GetFileNameWithoutExtension(oldName), Path.GetFileNameWithoutExtension(newName));
             }
 
-            return new Exception(string.Format(Resources.NameAlreadyExists, oldName, newName, target.ToLower()));
+            return string.Format(Resources.NameAlreadyExists, oldName, newName, target.ToLower());
         }
 
         /// <summary>
@@ -89,23 +84,16 @@ namespace StarLab.Application.Workspace
         /// </summary>
         /// <param name="name">A name that may contain illegal characters.</param>
         /// <returns>true if the name does not contain illegal characters; false otherwise.</returns>
-        protected static bool IsValid(string name)
+        protected static bool IsValid(string? name)
         {
-            var valid = !string.IsNullOrEmpty(name);
+            if (string.IsNullOrEmpty(name)) return false;
 
-            if (valid)
+            foreach (var character in Constants.IllegalCharacters)
             {
-                foreach (var character in Constants.IllegalCharacters)
-                {
-                    if (name.Contains(character))
-                    {
-                        valid = false;
-                        break;
-                    }
-                }
+                if (name.Contains(character)) return false;
             }
 
-            return valid;
+            return true;
         }
 
         /// <summary>

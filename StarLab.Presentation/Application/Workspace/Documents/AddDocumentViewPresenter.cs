@@ -35,11 +35,16 @@ namespace StarLab.Application.Workspace.Documents
             {
                 try
                 {
-                    var document = new Document(View.DocumentName, context.Path, View.DocumentType);
+                    var document = new DocumentDTO
+                    {
+                        Name = View.DocumentName,
+                        Path = context.Path,
+                        View = View.DocumentType
+                    };
 
                     var interactor = UseCaseFactory.CreateAddDocumentUseCase(port);
 
-                    interactor.Execute(Mapper.Map<IWorkspace, WorkspaceDTO>(context.Workspace), Mapper.Map<IDocument, DocumentDTO>(document));
+                    interactor.Execute(Mapper.Map<WorkspaceDTO>(context.Workspace), document);
 
                     ParentController.Close();
                 }

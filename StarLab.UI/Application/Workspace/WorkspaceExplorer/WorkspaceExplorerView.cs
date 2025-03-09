@@ -377,7 +377,7 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
                 {
                     e.CancelEdit = true;
 
-                    if (!string.IsNullOrEmpty(e.Label)) presenter.ShowMessage(ex.Message);
+                    presenter.ShowMessage(ex.Message);
 
                     e.Node.BeginEdit();
                 }

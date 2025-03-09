@@ -188,8 +188,10 @@ namespace StarLab.Application.Workspace
         /// <param name="path">The path to the required folder.</param>
         /// <returns>The required <see cref="IFolder"/>.</returns>
         /// <exception cref="KeyNotFoundException"></exception>
-        public IFolder GetFolder(string path)
+        public IFolder GetFolder(string? path)
         {
+            ArgumentException.ThrowIfNullOrEmpty(path, nameof(path));
+
             if (path.Equals(Constants.WORKSPACE)) return this;
             
             if (projects.ContainsKey(path)) return projects[path];
@@ -207,6 +209,23 @@ namespace StarLab.Application.Workspace
         public Project GetProject(string name)
         {
             return (Project)projects[$"{Constants.WORKSPACE}/{name}"];
+        }
+
+
+        /// <summary>
+        /// Determines if the workspace contains a document with the specified name and path.
+        /// </summary>
+        /// <param name="name">The document name.</param>
+        /// <param name="path">The document path.</param>
+        /// <returns>true if the workspace contains a document with the specified name and path; false otherwise.</returns>
+        public bool HasDocument(string? name, string? path)
+        {
+            foreach (var document in documents.Values)
+            {
+                if (document.Name == name && document.Path == path) return true;
+            }
+
+            return false;
         }
 
         /// <summary>

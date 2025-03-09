@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using StarLab.Shared.Properties;
 
 namespace StarLab.Application.Workspace.Documents
 {
@@ -22,16 +23,29 @@ namespace StarLab.Application.Workspace.Documents
         /// <param name="dtoDocument">A <see cref="DocumentDTO"/> that defines the document being added.</param>
         public void Execute(WorkspaceDTO dtoWorkspace, DocumentDTO dtoDocument)
         {
-            throw new NotImplementedException();
+            var workspace = new Workspace(dtoWorkspace);
+            
+            if (IsValid(dtoDocument.Name))
+            {
+                if (!workspace.HasDocument(dtoDocument.Name, dtoDocument.Path))
+                {
+                    var folder = workspace.GetFolder(dtoDocument.Path);
+                    var document = new Document(dtoDocument, folder);
+                    workspace.AddDocument(document);
 
-            //var workspace = new Workspace(dtoWorkspace);
-            //var document = new Document(dtoDocument);
-            //workspace.AddDocument(document);
+                    OutputPort.UpdateWorkspace(Mapper.Map<WorkspaceDTO>(workspace));
 
-            //UpdateProjects(workspace, dtoWorkspace.Projects);
-
-            //OutputPort.UpdateWorkspace(dtoWorkspace);
-            //OutputPort.OpenDocument(document.ID);
+                    OutputPort.OpenDocument(document.ID);
+                }
+                else
+                {
+                    OutputPort.ShowMessage(Resources.StarLab, string.Format(Resources.DocumentExistsWarning, dtoDocument.Name), InteractionType.Error, InteractionResponses.OK);
+                }
+            }
+            else
+            {
+                OutputPort.ShowMessage(Resources.StarLab, CreateInvalidNameMessage(dtoDocument.Name, Resources.Document), InteractionType.Error, InteractionResponses.OK);
+            }
         }
     }
 }

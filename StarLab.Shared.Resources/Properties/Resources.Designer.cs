@@ -223,6 +223,16 @@ namespace StarLab.Shared.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A document with the name &apos;{0}&apos; already exists at this location.
+        ///Please provide a unique name for the document..
+        /// </summary>
+        public static string DocumentExistsWarning {
+            get {
+                return ResourceManager.GetString("DocumentExistsWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exit.
         /// </summary>
         public static string Exit {

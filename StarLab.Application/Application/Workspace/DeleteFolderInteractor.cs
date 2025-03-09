@@ -45,7 +45,7 @@ namespace StarLab.Application.Workspace
                         OutputPort.RemoveDocument(id);
                     }
 
-                    OutputPort.UpdateWorkspace(Mapper.Map(workspace, dto));
+                    OutputPort.UpdateWorkspace(Mapper.Map<WorkspaceDTO>(workspace));
                 }
             }
             catch (Exception e)
