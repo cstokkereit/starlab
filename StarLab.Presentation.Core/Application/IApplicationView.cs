@@ -1,9 +1,9 @@
-﻿namespace StarLab.Application.Workspace
+﻿namespace StarLab.Application
 {
     /// <summary>
-    /// Defines the properties and methods used by the <see cref="IWorkspaceViewPresenter"/> to control the behaviour of the workspace view.
+    /// Defines the properties and methods used by the <see cref="IApplicationViewPresenter"/> to control the behaviour of the workspace view.
     /// </summary>
-    public interface IWorkspaceView : IView, IMenuManager, IToolbarManager
+    public interface IApplicationView : IView, IMenuManager, IToolbarManager
     {
         /// <summary>
         /// Closes the currently selected document.

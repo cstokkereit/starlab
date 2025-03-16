@@ -10,10 +10,8 @@
         public const string ADD_FOLDER = "AddFolder";
         public const string ADD_PROJECT = "AddProject";
         public const string ADD_TABLE = "AddTable";
-        public const string APPLICATION = "Application";
 
         public const string COLLAPSE_ALL = "CollapseAll";
-        public const string CONTROLLER = "Controller";
         public const string COPY = "Copy";
         public const string CUT = "Cut";
 
@@ -65,7 +63,5 @@
 
         public const string WINDOW = "Window";
         public const string WORKSPACE = "Workspace";
-        public const string WORKSPACE_EXPLORER = "WorkspaceExplorer";
-        public const string WORKSPACE_VIEW_CONTROLLER = "WorkspaceViewController";
     }
 }

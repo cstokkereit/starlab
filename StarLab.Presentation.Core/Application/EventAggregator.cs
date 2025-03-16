@@ -14,7 +14,8 @@
         /// </summary>
         /// <typeparam name="TEventType">The event type.</typeparam>
         /// <param name="payload">The event to publish.</param>
-        public void Publish<TEventType>(TEventType payload)
+        /// <param name="synchronous">If true the event will be published synchronously.</param>
+        public void Publish<TEventType>(TEventType payload, bool synchronous = false)
         {
             var type = typeof(ISubscriber<>).MakeGenericType(typeof(TEventType));
 
@@ -30,7 +31,7 @@
                     {
                         if (subsriber.IsAlive)
                         {
-                            if (subsriber.Target is ISubscriber<TEventType> subscriber) InvokeSubscribedEvent(payload, subscriber);
+                            if (subsriber.Target is ISubscriber<TEventType> subscriber) InvokeSubscribedEvent(payload, subscriber, synchronous);
                         }
                         else
                         {
@@ -97,11 +98,19 @@
         /// <typeparam name="TEventType">The event type.</typeparam>
         /// <param name="payload">The event being invoked.</param>
         /// <param name="subscriber">The <see cref="ISubscriber{TEventType}"/> receiving the event.</param>
-        private void InvokeSubscribedEvent<TEventType>(TEventType payload, ISubscriber<TEventType> subscriber)
+        /// <param name="synchronous">If true the event will be published synchronously.</param>
+        private void InvokeSubscribedEvent<TEventType>(TEventType payload, ISubscriber<TEventType> subscriber, bool synchronous)
         {
             var context = SynchronizationContext.Current ?? new SynchronizationContext();
 
-            context.Post(s => subscriber.OnEvent(payload), null);
+            if (synchronous)
+            {
+                context.Send(s => subscriber.OnEvent(payload), null);
+            }
+            else
+            {
+                context.Post(s => subscriber.OnEvent(payload), null);
+            }
         }
     }
 }

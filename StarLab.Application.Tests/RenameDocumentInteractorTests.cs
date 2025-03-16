@@ -27,7 +27,7 @@ namespace StarLab.Application
 
             interactor.Execute(dto, "1", "Document3");
 
-            port.Received().UpdateWorkspace(Arg.Is<WorkspaceDTO>(ws =>
+            port.Received().UpdateDocument(Arg.Is<WorkspaceDTO>(ws =>
                 ws.Projects.Count == 1 &&
                 ws.Projects[0].Documents.Count == 2 &&
                 ws.Projects[0].Documents[0].Path == "Workspace/Project1/Folder1" &&

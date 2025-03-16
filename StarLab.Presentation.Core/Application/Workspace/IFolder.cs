@@ -6,11 +6,6 @@
     public interface IFolder : ICollapsible
     {
         /// <summary>
-        /// TODO - This could be removed and replaced with a test.
-        /// </summary>
-        bool Dirty { get; }
-
-        /// <summary>
         /// Gets the folder key. 
         /// </summary>
         string Key { get; }

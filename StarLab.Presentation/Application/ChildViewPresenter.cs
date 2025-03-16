@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using StarLab.Application.Configuration;
 using StarLab.Commands;
 
 namespace StarLab.Application
@@ -34,7 +33,7 @@ namespace StarLab.Application
         /// <summary>
         /// Gets the name of the controller.
         /// </summary>
-        public override string Name => View.Name + Constants.CONTROLLER;
+        public override string Name => ControllerNames.GetContentControllerName(View.Name);
 
         /// <summary>
         /// Registers the parent <see cref="IViewController"/> with the <see cref="ChildViewPresenter{TView, TParent}"/>.
@@ -62,7 +61,7 @@ namespace StarLab.Application
         /// <summary>
         /// Gets or sets the <see cref="TParent"/> controller.
         /// </summary>
-        protected TParent ParentController 
+        protected TParent ParentController
         {
             get
             {
@@ -87,7 +86,7 @@ namespace StarLab.Application
         /// <param name="type">An <see cref="InteractionType"/> that specifies the type of message being displayed.</param>
         /// <param name="responses">An <see cref="InteractionResponses"/> that specifies the available responses.</param>
         /// <returns>An <see cref="InteractionResult"/> that identifies the chosen response.</returns>
-        protected InteractionResult ShowMessage(string caption, string message, InteractionType type, InteractionResponses responses)
+        public InteractionResult ShowMessage(string caption, string message, InteractionType type, InteractionResponses responses)
         {
             return ParentController.ShowMessage(caption, message, type, responses);
         }
@@ -99,7 +98,7 @@ namespace StarLab.Application
         /// <param name="message">The message text.</param>
         /// <param name="responses">An <see cref="InteractionResponses"/> that specifies the available responses.</param>
         /// <returns>An <see cref="InteractionResult"/> that identifies the chosen response.</returns>
-        protected InteractionResult ShowMessage(string caption, string message, InteractionResponses responses)
+        public InteractionResult ShowMessage(string caption, string message, InteractionResponses responses)
         {
             return ParentController.ShowMessage(caption, message, responses);
         }
@@ -110,7 +109,7 @@ namespace StarLab.Application
         /// <param name="caption">The message box caption.</param>
         /// <param name="message">The message text.</param>
         /// <returns>An <see cref="InteractionResult"/> that identifies the chosen response.</returns>
-        protected InteractionResult ShowMessage(string caption, string message)
+        public InteractionResult ShowMessage(string caption, string message)
         {
             return ParentController.ShowMessage(caption, message);
         }
@@ -121,7 +120,7 @@ namespace StarLab.Application
         /// <param name="title"></param>
         /// <param name="filter"></param>
         /// <returns></returns>
-        protected string ShowOpenFileDialog(string title, string filter)
+        public string ShowOpenFileDialog(string title, string filter)
         {
             return ParentController.ShowOpenFileDialog(title, filter);
         }
@@ -133,7 +132,7 @@ namespace StarLab.Application
         /// <param name="filter"></param>
         /// <param name="extension"></param>
         /// <returns></returns>
-        protected string ShowSaveFileDialog(string title, string filter, string extension)
+        public string ShowSaveFileDialog(string title, string filter, string extension)
         {
             return ParentController.ShowSaveFileDialog(title, filter, extension);
         }

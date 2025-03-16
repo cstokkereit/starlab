@@ -32,7 +32,6 @@
             name = key.Substring(index + 1);
 
             Expanded = dto.Expanded;
-            Dirty = dto.Dirty;
         }
 
         /// <summary>
@@ -62,11 +61,6 @@
         /// Gets the child folders.
         /// </summary>
         public IEnumerable<IFolder> Folders => folders;
-
-        /// <summary>
-        /// TODO
-        /// </summary>
-        public bool Dirty { get; private set; }
 
         /// <summary>
         /// Gets the folder key. 

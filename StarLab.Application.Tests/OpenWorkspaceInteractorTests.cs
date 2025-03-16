@@ -31,7 +31,7 @@ namespace StarLab.Application
         [Test]
         public void TestOpenWorkspace()
         {
-            var port = Substitute.For<IWorkspaceOutputPort>();
+            var port = Substitute.For<IApplicationOutputPort>();
 
             var interactor = Factory.CreateOpenWorkspaceUseCase(port);
 
@@ -41,7 +41,7 @@ namespace StarLab.Application
 
             interactor.Execute(filename);
 
-            port.Received().UpdateWorkspace(Arg.Is<WorkspaceDTO>(ws => ws.FileName == Path.Combine(Folder, "Workspace1.slw")));
+            port.Received().SetWorkspace(Arg.Is<WorkspaceDTO>(ws => ws.FileName == Path.Combine(Folder, "Workspace1.slw")));
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace StarLab.Application
         [Test]
         public void TestOpenInvalidWorkspaceFileDisplaysAnErrorMessage()
         {
-            var port = Substitute.For<IWorkspaceOutputPort>();
+            var port = Substitute.For<IApplicationOutputPort>();
 
             var interactor = Factory.CreateOpenWorkspaceUseCase(port);
 
@@ -72,7 +72,7 @@ namespace StarLab.Application
         [Test]
         public void TestOpenNonExistentWorkspaceFileDisplaysAnErrorMessage()
         {
-            var port = Substitute.For<IWorkspaceOutputPort>();
+            var port = Substitute.For<IApplicationOutputPort>();
 
             var interactor = Factory.CreateOpenWorkspaceUseCase(port);
 

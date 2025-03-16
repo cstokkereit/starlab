@@ -1,4 +1,6 @@
-﻿namespace StarLab.Application.Workspace
+﻿using StarLab.Application.Workspace;
+
+namespace StarLab.Application
 {
     /// <summary>
     /// Represents a use case that creates a file containing the definition of the current workspace.

@@ -10,7 +10,8 @@
         /// </summary>
         /// <typeparam name="TEventType">The event type.</typeparam>
         /// <param name="payload">The event to publish.</param>
-        void Publish<TEventType>(TEventType payload);
+        /// <param name="synchronous">If true the event will be published synchronously.</param>
+        void Publish<TEventType>(TEventType payload, bool synchronous = false);
 
         /// <summary>
         /// Subscribe to the event determined by the value of the type parameter specified in the implementation.

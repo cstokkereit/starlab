@@ -1,9 +1,11 @@
-﻿namespace StarLab.Application.Workspace
+﻿using StarLab.Application.Workspace;
+
+namespace StarLab.Application
 {
     /// <summary>
-    /// Defines the methods used by the <see cref="IWorkspaceView"/> to communicate with its presenter.
+    /// Defines the methods used by the <see cref="IApplicationView"/> to communicate with its presenter.
     /// </summary>
-    public interface IWorkspaceViewPresenter : IDialogViewPresenter
+    public interface IApplicationViewPresenter : IDialogViewPresenter
     {
         /// <summary>
         /// Clears the active document.

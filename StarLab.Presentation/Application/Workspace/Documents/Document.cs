@@ -16,36 +16,6 @@
         /// <summary>
         /// Initialises a new instance of the <see cref="Document"/> class.
         /// </summary>
-        /// <param name="id">The document ID.</param>
-        /// <param name="name">The name of the document.</param>
-        /// <param name="path">The path to the folder containing the document.</param>
-        /// <param name="view">The name of the view config section.</param>
-        /// <exception cref="ArgumentNullException"></exception>
-        public Document(string id, string name, string path, string? view)
-        {
-            if (string.IsNullOrEmpty(name)) throw new ArgumentNullException(nameof(name));
-            if (string.IsNullOrEmpty(path)) throw new ArgumentNullException(nameof(path));
-            if (string.IsNullOrEmpty(view)) throw new ArgumentNullException(nameof(view));
-            if (string.IsNullOrEmpty(id)) throw new ArgumentNullException(nameof(id));
-
-            this.name = name;
-            this.path = path;
-            this.view = view;
-            this.id = id;
-        }
-
-        /// <summary>
-        /// Initialises a new instance of the <see cref="Document"/> class.
-        /// </summary>
-        /// <param name="name">The name of the document.</param>
-        /// <param name="path">The path to the folder containing the document.</param>
-        /// <param name="view">The name of the view config section.</param>
-        public Document(string name, string path, string view)                                                                                
-            : this(Guid.NewGuid().ToString(), name, path, view) { }
-
-        /// <summary>
-        /// Initialises a new instance of the <see cref="Document"/> class.
-        /// </summary>
         /// <param name="dto">A <see cref="DocumentDTO"/> representation of the document.</param>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="ArgumentException"></exception>

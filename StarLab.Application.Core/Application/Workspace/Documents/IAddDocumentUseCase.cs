@@ -1,6 +1,4 @@
-﻿using StarLab.Application.Workspace.Documents;
-
-namespace StarLab.Application.Workspace
+﻿namespace StarLab.Application.Workspace.Documents
 {
     /// <summary>
     /// Represents a use case that adds a document to the workspace.

@@ -47,7 +47,7 @@
     <Compile Update="Application\Workspace\WorkspaceExplorer\WorkspaceExplorerView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="Application\Workspace\WorkspaceView.cs">
+    <Compile Update="Application\Workspace\ApplicationView.cs">
       <SubType>Form</SubType>
     </Compile>
   </ItemGroup>

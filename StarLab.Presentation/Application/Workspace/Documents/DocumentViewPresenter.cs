@@ -39,7 +39,7 @@ namespace StarLab.Application.Workspace.Documents
         /// <summary>
         /// Gets the name of the controller.
         /// </summary>
-        public override string Name => $"{Constants.DOCUMENT}({document.ID}) {Constants.CONTROLLER}";
+        public override string Name => ControllerNames.GetDocumentControllerName(document.ID);
 
         /// <summary>
         /// Adds a button to the tool bar.

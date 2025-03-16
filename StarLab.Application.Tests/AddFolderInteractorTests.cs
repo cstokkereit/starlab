@@ -28,9 +28,9 @@ namespace StarLab.Application
                 ws.Projects.Count == 1 &&
                 ws.Projects[0].Folders.Count == 2 &&
                 ws.Projects[0].Folders[0].Path == "Workspace/Project1/Folder1" &&
-                ws.Projects[0].Folders[0].Dirty == false &&
-                ws.Projects[0].Folders[1].Path == "Workspace/Project1/Folder1/New Folder" &&
-                ws.Projects[0].Folders[1].Dirty == true));
+                ws.Projects[0].Folders[1].Path == "Workspace/Project1/Folder1/New Folder"));
+
+            port.Received().RenameFolder("Workspace/Project1/Folder1/New Folder");
         }
 
         /// <summary>
@@ -55,11 +55,10 @@ namespace StarLab.Application
                 ws.Projects.Count == 1 &&
                 ws.Projects[0].Folders.Count == 3 &&
                 ws.Projects[0].Folders[0].Path == "Workspace/Project1/Folder1" &&
-                ws.Projects[0].Folders[0].Dirty == false &&
                 ws.Projects[0].Folders[1].Path == "Workspace/Project1/Folder1/New Folder" &&
-                ws.Projects[0].Folders[1].Dirty == false &&
-                ws.Projects[0].Folders[2].Path == "Workspace/Project1/Folder1/New Folder1" &&
-                ws.Projects[0].Folders[2].Dirty == true));
+                ws.Projects[0].Folders[2].Path == "Workspace/Project1/Folder1/New Folder1"));
+
+            port.Received().RenameFolder("Workspace/Project1/Folder1/New Folder1");
         }
 
         /// <summary>
@@ -81,8 +80,9 @@ namespace StarLab.Application
             port.Received().UpdateWorkspace(Arg.Is<WorkspaceDTO>(ws =>
                 ws.Projects.Count == 1 &&
                 ws.Projects[0].Folders.Count == 1 &&
-                ws.Projects[0].Folders[0].Path == "Workspace/Project1/New Folder" &&
-                ws.Projects[0].Folders[0].Dirty == true));
+                ws.Projects[0].Folders[0].Path == "Workspace/Project1/New Folder"));
+
+            port.Received().RenameFolder("Workspace/Project1/New Folder");
         }
 
         /// <summary>
@@ -106,10 +106,9 @@ namespace StarLab.Application
                 ws.Projects.Count == 1 &&
                 ws.Projects[0].Folders.Count == 2 &&
                 ws.Projects[0].Folders[0].Path == "Workspace/Project1/New Folder" &&
-                ws.Projects[0].Folders[0].Dirty == false &&
-                ws.Projects[0].Folders[1].Path == "Workspace/Project1/New Folder1" &&
-                ws.Projects[0].Folders[1].Dirty == true));
+                ws.Projects[0].Folders[1].Path == "Workspace/Project1/New Folder1"));
 
+            port.Received().RenameFolder("Workspace/Project1/New Folder1");
         }
     }
 }

@@ -19,12 +19,13 @@
         /// <exception cref="ArgumentException"></exception>
         public Document(DocumentDTO dto, IFolder parent)
         {
+            id = string.IsNullOrEmpty(dto.ID) ? Guid.NewGuid().ToString() : dto.ID;
+
             this.parent = parent ?? throw new ArgumentException();
 
             Name = dto.Name ?? throw new ArgumentException();
 
             view = dto.View ?? throw new ArgumentException();
-            id = dto.ID ?? throw new ArgumentException();
         }
 
         /// <summary>

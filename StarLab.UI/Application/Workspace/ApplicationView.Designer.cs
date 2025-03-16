@@ -1,6 +1,6 @@
 ﻿namespace StarLab.Application.Workspace
 {
-    partial class WorkspaceView
+    partial class ApplicationView
     {
         /// <summary>
         /// Required designer variable.

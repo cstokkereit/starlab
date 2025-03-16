@@ -59,14 +59,7 @@ namespace StarLab.Application.Workspace
             Name = name ?? throw new ArgumentNullException(nameof(name));
 
             Parent.AddFolder(this);
-
-            Dirty = true;
         }
-
-        /// <summary>
-        /// Returns true if the folder is new; false otherwise.
-        /// </summary>
-        public bool Dirty { get; private set; }
 
         /// <summary>
         /// Gets an <see cref="IEnumerable{Document}"/> containing the documents in the folder.

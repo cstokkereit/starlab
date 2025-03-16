@@ -6,14 +6,14 @@ namespace StarLab.Application.Workspace.Documents
     /// <summary>
     /// A use case that adds a document to a folder in the workspace hierarchy.
     /// </summary>
-    internal class AddDocumentInteractor : WorkspaceInteractor, IAddDocumentUseCase
+    internal class AddDocumentInteractor : UseCaseInteractor<IApplicationOutputPort>, IAddDocumentUseCase
     {
         /// <summary>
         /// Initialises a new instance of the <see cref="AddDocumentInteractor"/> class.
         /// </summary>
-        /// <param name="outputPort">An <see cref="IWorkspaceOutputPort"/> that updates the UI in response to the ouputs of the use case.</param>
+        /// <param name="outputPort">An <see cref="IApplicationOutputPort"/> that updates the UI in response to the execution of the use case.</param>
         /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
-        public AddDocumentInteractor(IWorkspaceOutputPort outputPort, IMapper mapper)
+        public AddDocumentInteractor(IApplicationOutputPort outputPort, IMapper mapper)
             : base(outputPort, mapper) { }
 
         /// <summary>
@@ -25,9 +25,9 @@ namespace StarLab.Application.Workspace.Documents
         {
             var workspace = new Workspace(dtoWorkspace);
             
-            if (IsValid(dtoDocument.Name))
+            if (WorkspaceInteractionHelper.IsValid(dtoDocument.Name))
             {
-                if (!workspace.HasDocument(dtoDocument.Name, dtoDocument.Path))
+                try
                 {
                     var folder = workspace.GetFolder(dtoDocument.Path);
                     var document = new Document(dtoDocument, folder);
@@ -37,14 +37,14 @@ namespace StarLab.Application.Workspace.Documents
 
                     OutputPort.OpenDocument(document.ID);
                 }
-                else
+                catch(InvalidOperationException)
                 {
                     OutputPort.ShowMessage(Resources.StarLab, string.Format(Resources.DocumentExistsWarning, dtoDocument.Name), InteractionType.Error, InteractionResponses.OK);
                 }
             }
             else
             {
-                OutputPort.ShowMessage(Resources.StarLab, CreateInvalidNameMessage(dtoDocument.Name, Resources.Document), InteractionType.Error, InteractionResponses.OK);
+                OutputPort.ShowMessage(Resources.StarLab, WorkspaceInteractionHelper.CreateInvalidNameMessage(dtoDocument.Name, Resources.Document), InteractionType.Error, InteractionResponses.OK);
             }
         }
     }

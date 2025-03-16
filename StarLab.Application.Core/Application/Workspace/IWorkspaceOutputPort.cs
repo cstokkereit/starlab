@@ -1,9 +1,7 @@
-﻿using StarLab.Application.Workspace.Documents;
-
-namespace StarLab.Application.Workspace
+﻿namespace StarLab.Application.Workspace
 {
     /// <summary>
-    /// Defines the responses that are available to a workspace use case interactor.
+    /// Used by a <see cref="UseCaseInteractor{TOutputPort}"/> to update the workspace.
     /// </summary>
     public interface IWorkspaceOutputPort : IOutputPort
     {
@@ -20,16 +18,22 @@ namespace StarLab.Application.Workspace
         void RemoveDocument(string id);
 
         /// <summary>
-        /// Updates the state of the workspace represented by the <see cref="WorkspaceDTO"/> provided.
+        /// Renames the specified folder.
         /// </summary>
-        /// <param name="dto">The <see cref="WorkspaceDTO"/> that contains the updated workspace state.</param>
-        void UpdateWorkspace(WorkspaceDTO dto);
+        /// <param name="path">The folder path.</param>
+        void RenameFolder(string path);
 
         /// <summary>
         /// Updates the state of the workspace represented by the <see cref="WorkspaceDTO"/> provided.
         /// </summary>
         /// <param name="dto">The <see cref="WorkspaceDTO"/> that contains the updated workspace state.</param>
-        /// <param name="documentId">The ID of the document that was modified.</param>
-        void UpdateWorkspace(WorkspaceDTO dto, string documentId);
+        /// <param name="id">The ID of the document that was modified.</param>
+        void UpdateDocument(WorkspaceDTO dto, string id);
+
+        /// <summary>
+        /// Updates the state of the workspace represented by the <see cref="WorkspaceDTO"/> provided.
+        /// </summary>
+        /// <param name="dto">The <see cref="WorkspaceDTO"/> that contains the updated workspace state.</param>
+        void UpdateWorkspace(WorkspaceDTO dto);
     }
 }

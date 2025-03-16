@@ -5,8 +5,6 @@
     /// </summary>
     public class FolderDTO
     {
-        public bool Dirty;
-
         public bool Expanded;
 
         public string? Path;

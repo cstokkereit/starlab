@@ -6,12 +6,12 @@ namespace StarLab.Application.Workspace
     /// <summary>
     /// A use case that renames a folder in the workspace hierarchy.
     /// </summary>
-    internal class RenameFolderInteractor : WorkspaceInteractor, IRenameItemUseCase
+    internal class RenameFolderInteractor : UseCaseInteractor<IWorkspaceOutputPort>, IRenameItemUseCase
     {
         /// <summary>
         /// Initialises a new instance of the <see cref="RenameFolderInteractor"/> class.
         /// </summary>
-        /// <param name="outputPort">An <see cref="IWorkspaceOutputPort"/> that updates the UI in response to the ouputs of the use case.</param>
+        /// <param name="outputPort">An <see cref="IWorkspaceOutputPort"/> that updates the UI in response to the execution of the use case.</param>
         /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
         public RenameFolderInteractor(IWorkspaceOutputPort outputPort, IMapper mapper)
             : base(outputPort, mapper) { }
@@ -30,7 +30,7 @@ namespace StarLab.Application.Workspace
 
             var type = folder is Project ? Resources.Project : Resources.Folder;
 
-            if (IsValid(name))
+            if (WorkspaceInteractionHelper.IsValid(name))
             {
                 var folders = folder is Project ? workspace.Projects : folder.Parent.Folders;
 
@@ -42,12 +42,12 @@ namespace StarLab.Application.Workspace
                 }
                 else
                 {
-                    throw new Exception(CreateTargetExistsMessage(key.Substring(key.LastIndexOf('/') + 1), name, type));
+                    throw new Exception(WorkspaceInteractionHelper.CreateTargetExistsMessage(key.Substring(key.LastIndexOf('/') + 1), name, type));
                 }
             }
             else
             {
-                throw new Exception(CreateInvalidNameMessage(name, type));
+                throw new Exception(WorkspaceInteractionHelper.CreateInvalidNameMessage(name, type));
             }
         }
 

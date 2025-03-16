@@ -1,4 +1,5 @@
 ﻿using StarLab.Application.Workspace;
+using StarLab.Application.Workspace.Documents;
 
 namespace StarLab.Application
 {
@@ -18,9 +19,9 @@ namespace StarLab.Application
         /// <summary>
         /// Creates a use case interactor that adds a document to the workspace.
         /// </summary>
-        /// <param name="outputPort">An <see cref="IWorkspaceOutputPort"/> that updates the UI in response to the ouputs of the use case.</param>
+        /// <param name="outputPort">An <see cref="IApplicationOutputPort"/> that updates the UI in response to the ouputs of the use case.</param>
         /// <returns>An instance of <see cref="IAddDocumentUseCase"/> that implements the use case.</returns>
-        IAddDocumentUseCase CreateAddDocumentUseCase(IWorkspaceOutputPort outputPort);
+        IAddDocumentUseCase CreateAddDocumentUseCase(IApplicationOutputPort outputPort);
 
         /// <summary>
         /// Creates a use case interactor that adds a folder to the workspace.
@@ -28,6 +29,13 @@ namespace StarLab.Application
         /// <param name="outputPort">An <see cref="IWorkspaceOutputPort"/> that updates the UI in response to the ouputs of the use case.</param>
         /// <returns>An instance of <see cref="IAddFolderUseCase"/> that implements the use case.</returns>
         IAddFolderUseCase CreateAddFolderUseCase(IWorkspaceOutputPort outputPort);
+
+        /// <summary>
+        /// Creates a use case interactor that adds a project to the workspace.
+        /// </summary>
+        /// <param name="outputPort">An <see cref="IWorkspaceOutputPort"/> that updates the UI in response to the ouputs of the use case.</param>
+        /// <returns>An instance of <see cref="IAddProjectUseCase"/> that implements the use case.</returns>
+        IAddProjectUseCase CreateAddProjectUseCase(IWorkspaceOutputPort outputPort);
 
         /// <summary>
         /// Creates a use case interactor that deletes a document from the workspace.
@@ -48,7 +56,7 @@ namespace StarLab.Application
         /// </summary>
         /// <param name="outputPort">An <see cref="IWorkspaceOutputPort"/> that updates the UI in response to the ouputs of the use case.</param>
         /// <returns>An instance of <see cref="IOpenWorkspaceUseCase"/> that implements the use case.</returns>
-        IOpenWorkspaceUseCase CreateOpenWorkspaceUseCase(IWorkspaceOutputPort outputPort);
+        IOpenWorkspaceUseCase CreateOpenWorkspaceUseCase(IApplicationOutputPort outputPort);
 
         /// <summary>
         /// Creates a use case interactor that renames a document in the workspace hierarchy.
@@ -76,6 +84,6 @@ namespace StarLab.Application
         /// </summary>
         /// <param name="outputPort">An <see cref="IWorkspaceOutputPort"/> that updates the UI in response to the ouputs of the use case.</param>
         /// <returns>An instance of <see cref="ISaveWorkspaceUseCase"/> that implements the use case.</returns>
-        ISaveWorkspaceUseCase CreateSaveWorkspaceUseCase(IWorkspaceOutputPort outputPort);
+        ISaveWorkspaceUseCase CreateSaveWorkspaceUseCase(IApplicationOutputPort outputPort);
     }
 }

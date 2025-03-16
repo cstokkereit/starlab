@@ -10,7 +10,7 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
     /// <summary>
     /// Controls the behaviour of an <see cref="IWorkspaceExplorerView"/>.
     /// </summary>
-    internal class WorkspaceExplorerViewPresenter : ChildViewPresenter<IWorkspaceExplorerView, IViewController>, IWorkspaceExplorerViewPresenter, IWorkspaceExplorerController, ISubscriber<ActiveDocumentChangedEventArgs>, ISubscriber<WorkspaceChangedEventArgs>
+    internal class WorkspaceExplorerViewPresenter : ChildViewPresenter<IWorkspaceExplorerView, IViewController>, IWorkspaceExplorerViewPresenter, IWorkspaceExplorerController, IWorkspaceOutputPort, ISubscriber<ActiveDocumentChangedEventArgs>, ISubscriber<WorkspaceChangedEventArgs>
     {
         /// <summary>
         /// Provides constants that can be used to access the node image indices.
@@ -53,7 +53,29 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
             if (AppController.GetView(Views.ADD_DOCUMENT) is IDialog dialog)
             {
                 dialog.Show(new AddDocumentInteractionContext(workspace, path, DocumentType.Chart));
-            }   
+            }
+        }
+
+        /// <summary>
+        /// Adds a folder with the specified parent folder.
+        /// </summary>
+        /// <param name="key">The key that identifies the parent folder.</param>
+        public void AddFolder(string key)
+        {
+            var interactor = UseCaseFactory.CreateAddFolderUseCase(this);
+            var dto = Mapper.Map<WorkspaceDTO>(workspace);
+            interactor.Execute(dto, key);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void AddProject()
+        {
+
+            // TODO - Create the AddProject Dialog view
+
+
         }
 
         /// <summary>
@@ -76,6 +98,39 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
             }
 
             UpdateNodes();
+        }
+
+        /// <summary>
+        /// Deletes the document with the specified ID.
+        /// </summary>
+        /// <param name="id">The ID of the document to be deleted.</param>
+        public void DeleteDocument(string id)
+        {
+            var interactor = UseCaseFactory.CreateDeleteDocumentUseCase(this);
+            var dto = Mapper.Map<WorkspaceDTO>(workspace);
+            interactor.Execute(dto, id);
+        }
+
+        /// <summary>
+        /// Deletes the specified folder.
+        /// </summary>
+        /// <param name="key">The key that identifies the folder to be deleted.</param>
+        public void DeleteFolder(string key)
+        {
+            var interactor = UseCaseFactory.CreateDeleteFolderUseCase(this);
+            var dto = Mapper.Map<WorkspaceDTO>(workspace);
+            interactor.Execute(dto, key);
+        }
+
+        /// <summary>
+        /// Deletes the specified project.
+        /// </summary>
+        /// <param name="key">The key that identifies the project to be deleted.</param>
+        public void DeleteProject(string key)
+        {
+            var interactor = UseCaseFactory.CreateDeleteFolderUseCase(this);
+            var dto = Mapper.Map<WorkspaceDTO>(workspace);
+            interactor.Execute(dto, key);
         }
 
         /// <summary>
@@ -224,6 +279,15 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
         }
 
         /// <summary>
+        /// Removes the specified document.
+        /// </summary>
+        /// <param name="id">The document ID.</param>
+        public void RemoveDocument(string id)
+        {
+            AppController.DeleteView(id);
+        }
+
+        /// <summary>
         /// Renames the specified node in the workspace hierarchy.
         /// </summary>
         /// <param name="key">The key of the node to be renamed.</param>
@@ -241,23 +305,38 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
         }
 
         /// <summary>
-        /// Renames the specified document.
+        /// Renames the specified document node.
         /// </summary>
-        /// <param name="id">The node key.</param>
+        /// <param name="key">The node key.</param>
         /// <param name="name">The new name.</param>
         public void RenameDocument(string key, string name)
         {
-            AppController.GetWorkspaceController().RenameDocument(key, name);
+            var interactor = UseCaseFactory.CreateRenameDocumentUseCase(this);
+            var dto = Mapper.Map<WorkspaceDTO>(workspace);
+            interactor.Execute(dto, key, name);
         }
 
         /// <summary>
-        /// Renames the specified folder.
+        /// Renames the specified folder node.
         /// </summary>
         /// <param name="key">The node key.</param>
         /// <param name="name">The new name.</param>
         public void RenameFolder(string key, string name)
         {
-            AppController.GetWorkspaceController().RenameFolder(key, name);
+            var interactor = UseCaseFactory.CreateRenameFolderUseCase(this);
+            var dto = Mapper.Map<WorkspaceDTO>(workspace);
+            interactor.Execute(dto, key, name);
+        }
+
+        /// <summary>
+        /// Renames the specified folder node.
+        /// </summary>
+        /// <param name="key">The node key.</param>
+        public void RenameFolder(string key)
+        {
+            var folder = workspace.GetFolder(key);
+            Expand(folder.ParentKey);
+            Rename(key);
         }
 
         /// <summary>
@@ -266,7 +345,9 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
         /// <param name="name">The new name.</param>
         public void RenameWorkspace(string name)
         {
-            AppController.GetWorkspaceController().RenameWorkspace(name);
+            var interactor = UseCaseFactory.CreateRenameWorkspaceUseCase(this);
+            var dto = Mapper.Map<WorkspaceDTO>(workspace);
+            interactor.Execute(dto, name);
         }
 
         /// <summary>
@@ -284,6 +365,25 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
         public void Synchronise()
         {
             throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Updates the state of the workspace represented by the <see cref="WorkspaceDTO"/> provided.
+        /// </summary>
+        /// <param name="dto">The <see cref="WorkspaceDTO"/> that contains the updated workspace state.</param>
+        /// <param name="id">The ID of the document that was modified.</param>
+        public void UpdateDocument(WorkspaceDTO dto, string id)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Updates the state of the workspace represented by the <see cref="WorkspaceDTO"/> provided.
+        /// </summary>
+        /// <param name="dto">The <see cref="WorkspaceDTO"/> that contains the updated workspace state.</param>
+        public void UpdateWorkspace(WorkspaceDTO dto)
+        {
+            if (AppController.GetController(ControllerNames.APPLICATION_VIEW_CONTROLLER) is IApplicationOutputPort port) port.UpdateWorkspace(dto);
         }
 
         /// <summary>
@@ -375,14 +475,12 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
         {
             var manager = View.CreateDocumentMenuManager(document.ID);
 
-            var workspaceController = AppController.GetWorkspaceController();
-
             manager.AddMenuItem(Constants.OPEN, StringResources.Open, ImageResources.Open, GetCommand(Actions.OPEN_DOCUMENT, document.ID));
             manager.AddMenuSeparator();
             manager.AddMenuItem(Constants.CUT, StringResources.Cut, ImageResources.Cut);
             manager.AddMenuItem(Constants.COPY, StringResources.Copy, ImageResources.Copy);
             manager.AddMenuItem(Constants.PASTE, StringResources.Paste, ImageResources.Paste);
-            manager.AddMenuItem(Constants.DELETE, StringResources.Delete, GetCommand(workspaceController, Actions.DELETE_DOCUMENT, document.ID));
+            manager.AddMenuItem(Constants.DELETE, StringResources.Delete, GetCommand(this, Actions.DELETE_DOCUMENT, document.ID));
             manager.AddMenuItem(Constants.RENAME, StringResources.Rename, ImageResources.Rename, GetCommand(Actions.RENAME, document.ID));
         }
 
@@ -406,19 +504,17 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
         {
             var manager = View.CreateFolderMenuManager(folder.Key);
 
-            var workspaceController = AppController.GetWorkspaceController();
-
             manager.AddMenuItem(Constants.ADD, StringResources.Add);
             manager.AddMenuItem(Constants.ADD, Constants.ADD_CHART, StringResources.Chart + Constants.ELLIPSIS, GetCommand(this, Actions.ADD_CHART, folder.Key));
             manager.AddMenuItem(Constants.ADD, Constants.ADD_TABLE, StringResources.Table + Constants.ELLIPSIS, GetCommand(this, Actions.ADD_TABLE, folder.Key));
-            manager.AddMenuItem(Constants.ADD, Constants.ADD_FOLDER, StringResources.NewFolder, ImageResources.NewFolder, GetCommand(workspaceController, Actions.ADD_FOLDER, folder.Key));
+            manager.AddMenuItem(Constants.ADD, Constants.ADD_FOLDER, StringResources.NewFolder, ImageResources.NewFolder, GetCommand(this, Actions.ADD_FOLDER, folder.Key));
             manager.AddMenuSeparator();
             manager.AddMenuItem(Constants.COLLAPSE_ALL, StringResources.CollapseAllDescendants, ImageResources.Collapse, GetCommand(Actions.COLLAPSE, folder.Key));
             manager.AddMenuSeparator();
             manager.AddMenuItem(Constants.CUT, StringResources.Cut, ImageResources.Cut);
             manager.AddMenuItem(Constants.COPY, StringResources.Copy, ImageResources.Copy);
             manager.AddMenuItem(Constants.PASTE, StringResources.Paste, ImageResources.Paste);
-            manager.AddMenuItem(Constants.DELETE, StringResources.Delete, GetCommand(workspaceController, Actions.DELETE_FOLDER, folder.Key));
+            manager.AddMenuItem(Constants.DELETE, StringResources.Delete, GetCommand(this, Actions.DELETE_FOLDER, folder.Key));
             manager.AddMenuItem(Constants.RENAME, StringResources.Rename, ImageResources.Rename, GetCommand(Actions.RENAME, folder.Key));
         }
 
@@ -450,19 +546,19 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
         {
             var manager = View.CreateProjectMenuManager(project.Key);
 
-            var workspaceController = AppController.GetWorkspaceController();
+            //var workspaceController = AppController.GetWorkspaceController();
 
             manager.AddMenuItem(Constants.ADD, StringResources.Add);
-            manager.AddMenuItem(Constants.ADD, Constants.ADD_CHART, StringResources.Chart + Constants.ELLIPSIS, GetCommand(workspaceController, Actions.ADD_CHART, project.Key));
-            manager.AddMenuItem(Constants.ADD, Constants.ADD_TABLE, StringResources.Table + Constants.ELLIPSIS, GetCommand(workspaceController, Actions.ADD_TABLE, project.Key));
-            manager.AddMenuItem(Constants.ADD, Constants.ADD_FOLDER, StringResources.NewFolder, ImageResources.NewFolder, GetCommand(workspaceController, Actions.ADD_FOLDER, project.Key));
+            manager.AddMenuItem(Constants.ADD, Constants.ADD_CHART, StringResources.Chart + Constants.ELLIPSIS, GetCommand(this, Actions.ADD_CHART, project.Key));
+            manager.AddMenuItem(Constants.ADD, Constants.ADD_TABLE, StringResources.Table + Constants.ELLIPSIS, GetCommand(this, Actions.ADD_TABLE, project.Key));
+            manager.AddMenuItem(Constants.ADD, Constants.ADD_FOLDER, StringResources.NewFolder, ImageResources.NewFolder, GetCommand(this, Actions.ADD_FOLDER, project.Key));
             manager.AddMenuSeparator();
             manager.AddMenuItem(Constants.COLLAPSE_ALL, StringResources.CollapseAllDescendants, ImageResources.Collapse, GetCommand(Actions.COLLAPSE, project.Key));
             manager.AddMenuSeparator();
             manager.AddMenuItem(Constants.CUT, StringResources.Cut, ImageResources.Cut);
             manager.AddMenuItem(Constants.COPY, StringResources.Copy, ImageResources.Copy);
             manager.AddMenuItem(Constants.PASTE, StringResources.Paste, ImageResources.Paste);
-            manager.AddMenuItem(Constants.DELETE, StringResources.Delete, GetCommand(workspaceController, Actions.DELETE_FOLDER, project.Key));
+            manager.AddMenuItem(Constants.DELETE, StringResources.Delete, GetCommand(this, Actions.DELETE_FOLDER, project.Key));
             manager.AddMenuItem(Constants.RENAME, StringResources.Rename, ImageResources.Rename, GetCommand(Actions.RENAME, project.Key));
         }
 
@@ -497,7 +593,7 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
             manager.AddMenuItem(Constants.COLLAPSE_ALL, StringResources.CollapseAllDescendants, ImageResources.Collapse, GetCommand(Actions.COLLAPSE, Constants.WORKSPACE));
             manager.AddMenuSeparator();
             manager.AddMenuItem(Constants.ADD, StringResources.Add);
-            manager.AddMenuItem(Constants.ADD, Constants.ADD_PROJECT, StringResources.Project + Constants.ELLIPSIS);
+            manager.AddMenuItem(Constants.ADD, Constants.ADD_PROJECT, StringResources.Project + Constants.ELLIPSIS, GetCommand(this, Actions.ADD_PROJECT));
             manager.AddMenuSeparator();
             manager.AddMenuItem(Constants.RENAME, StringResources.Rename, ImageResources.Rename, GetCommand(Actions.RENAME, Constants.WORKSPACE));
         }
@@ -554,22 +650,6 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
         }
 
         /// <summary>
-        /// Updates the dirty folder if one exists.
-        /// </summary>
-        private void UpdateDirtyFolder()
-        {
-            foreach (var folder in workspace.Folders)
-            {
-                if (folder.Dirty)
-                {
-                    Expand(folder.ParentKey);
-                    Rename(folder.Key);
-                    break;
-                }
-            }
-        }
-
-        /// <summary>
         /// Updates the states of the view nodes to match the states of the workspace nodes.
         /// </summary>
         private void UpdateNodes()
@@ -620,7 +700,6 @@ namespace StarLab.Application.Workspace.WorkspaceExplorer
                 CreateFolderNodes();
                 CreateDocumentNodes();
                 UpdateNodes();
-                UpdateDirtyFolder();
                 
                 enabled = true;
             }

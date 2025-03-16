@@ -109,7 +109,7 @@ namespace StarLab.Application
             switch (configuration.Type)
             {
                 case ViewTypes.Application:
-                    view = new WorkspaceView(Resources.StarLab, this);
+                    view = new ApplicationView(Resources.StarLab, this);
                     break;
 
                 case ViewTypes.Dialog:

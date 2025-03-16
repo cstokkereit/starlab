@@ -1,4 +1,4 @@
-﻿namespace StarLab.Application.Workspace
+﻿namespace StarLab.Application
 {
     /// <summary>
     /// Represents a use case that loads a workspace from a file.

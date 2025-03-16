@@ -35,7 +35,7 @@ namespace StarLab.Application.Workspace
         /// <summary>
         /// Gets the name of the controller.
         /// </summary>
-        public override string Name => $"{view.ID}{Constants.CONTROLLER}";
+        public override string Name => ControllerNames.GetViewControllerName(view.ID);
 
         /// <summary>
         /// Initialises the view.

@@ -6,12 +6,12 @@ namespace StarLab.Application.Workspace
     /// <summary>
     /// A use case that adds a folder at a specified location within the workspace hierarchy.
     /// </summary>
-    internal class AddFolderInteractor : WorkspaceInteractor, IAddFolderUseCase
+    internal class AddFolderInteractor : UseCaseInteractor<IWorkspaceOutputPort>, IAddFolderUseCase
     {
         /// <summary>
         /// Initialises a new instance of the <see cref="AddFolderInteractor"/> class.
         /// </summary>
-        /// <param name="outputPort">An <see cref="IWorkspaceOutputPort"/> that updates the UI in response to the ouputs of the use case.</param>
+        /// <param name="outputPort">An <see cref="IWorkspaceOutputPort"/> that updates the UI in response to the execution of the use case.</param>
         /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
         public AddFolderInteractor(IWorkspaceOutputPort outputPort, IMapper mapper)
             : base(outputPort, mapper) { }
@@ -27,9 +27,11 @@ namespace StarLab.Application.Workspace
             var parent = workspace.GetFolder(key);
             var name = GetName(parent);
 
-            workspace.AddFolder(name, parent);
+            var folder = workspace.AddFolder(name, parent);
 
             OutputPort.UpdateWorkspace(Mapper.Map<WorkspaceDTO>(workspace));
+
+            OutputPort.RenameFolder(folder.Path);
         }
 
         /// <summary>

@@ -14,7 +14,7 @@ namespace StarLab.Application
         [Test]
         public void TestAddDocument()
         {
-            var port = Substitute.For<IWorkspaceOutputPort>();
+            var port = Substitute.For<IApplicationOutputPort>();
 
             var interactor = Factory.CreateAddDocumentUseCase(port);
 
@@ -52,7 +52,7 @@ namespace StarLab.Application
         [Test]
         public void TestAddDocumentWhenDocumentWithSameNameExists()
         {
-            var port = Substitute.For<IWorkspaceOutputPort>();
+            var port = Substitute.For<IApplicationOutputPort>();
 
             var interactor = Factory.CreateAddDocumentUseCase(port);
 
@@ -86,7 +86,7 @@ namespace StarLab.Application
         [Test]
         public void TestAddDocumentWhenNameIsAnEmptyString()
         {
-            var port = Substitute.For<IWorkspaceOutputPort>();
+            var port = Substitute.For<IApplicationOutputPort>();
 
             var interactor = Factory.CreateAddDocumentUseCase(port);
 
@@ -119,7 +119,7 @@ namespace StarLab.Application
         [Test]
         public void TestAddDocumentWhenNameIsInvalid()
         {
-            var port = Substitute.For<IWorkspaceOutputPort>();
+            var port = Substitute.For<IApplicationOutputPort>();
 
             var interactor = Factory.CreateAddDocumentUseCase(port);
 

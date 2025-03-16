@@ -1,19 +1,15 @@
 ﻿using AutoMapper;
-using StarLab.Application.Configuration;
 using StarLab.Commands;
 using StarLab.Properties;
+using System.Diagnostics;
 
 namespace StarLab.Application.Workspace.Documents
 {
     /// <summary>
     /// Controls the behaviour of an <see cref="IAddDocumentView"/>.
     /// </summary>
-    public class AddDocumentViewPresenter : ChildViewPresenter<IAddDocumentView, IDialogController>, IAddDocumentViewPresenter, IChildViewController
+    public class AddDocumentViewPresenter : ChildViewPresenter<IAddDocumentView, IDialogController>, IAddDocumentViewPresenter, IChildViewController, IApplicationOutputPort
     {
-        private string path = string.Empty; // The path to the workspace folder.
-
-        private IWorkspace? workspace; // TODO - needed?
-
         /// <summary>
         /// Initialises a new instance of the <see cref="AddDocumentViewPresenter"> class.
         /// </summary>
@@ -31,27 +27,18 @@ namespace StarLab.Application.Workspace.Documents
         /// </summary>
         public void AddDocument()
         {
-            if (InteractionContext is AddDocumentInteractionContext context && AppController.GetWorkspaceController() is IWorkspaceOutputPort port)
+            if (InteractionContext is AddDocumentInteractionContext context)
             {
-                try
+                var document = new DocumentDTO
                 {
-                    var document = new DocumentDTO
-                    {
-                        Name = View.DocumentName,
-                        Path = context.Path,
-                        View = View.DocumentType
-                    };
+                    Name = View.DocumentName,
+                    Path = context.Path,
+                    View = View.DocumentType
+                };
 
-                    var interactor = UseCaseFactory.CreateAddDocumentUseCase(port);
+                var interactor = UseCaseFactory.CreateAddDocumentUseCase(this);
 
-                    interactor.Execute(Mapper.Map<WorkspaceDTO>(context.Workspace), document);
-
-                    ParentController.Close();
-                }
-                catch (Exception ex)
-                {
-                    // TODO
-                }
+                interactor.Execute(Mapper.Map<WorkspaceDTO>(context.Workspace), document);
             }
         }
 
@@ -82,6 +69,15 @@ namespace StarLab.Application.Workspace.Documents
         }
 
         /// <summary>
+        /// Opens the specified document.
+        /// </summary>
+        /// <param name="id">The document ID.</param>
+        public void OpenDocument(string id)
+        {
+            if (AppController.GetController(ControllerNames.APPLICATION_VIEW_CONTROLLER) is IApplicationOutputPort port) port.OpenDocument(id);
+        }
+
+        /// <summary>
         /// Runs the controller as part of a use case.
         /// </summary>
         /// <param name="context"></param> TODO - This may not be necessary
@@ -92,6 +88,26 @@ namespace StarLab.Application.Workspace.Documents
             View.DocumentName = string.Empty;
 
             ParentController.Show();
+        }
+
+        /// <summary>
+        /// Updates the state of the workspace represented by the <see cref="WorkspaceDTO"/> provided and applies the layout.
+        /// </summary>
+        /// <param name="dto">The <see cref="WorkspaceDTO"/> that contains the updated workspace state.</param>
+        public void SetWorkspace(WorkspaceDTO dto)
+        {
+            throw new NotImplementedException(); // This should never be called.
+        }
+
+        /// <summary>
+        /// Updates the state of the workspace represented by the <see cref="WorkspaceDTO"/> provided.
+        /// </summary>
+        /// <param name="dto">The <see cref="WorkspaceDTO"/> that contains the updated workspace state.</param>
+        public void UpdateWorkspace(WorkspaceDTO dto)
+        {
+            if (AppController.GetController(ControllerNames.APPLICATION_VIEW_CONTROLLER) is IApplicationOutputPort port) port.UpdateWorkspace(dto);
+
+            ParentController.Close();
         }
 
         /// <summary>

@@ -31,7 +31,7 @@ namespace StarLab.Application
         [Test]
         public void TestSaveWorkspace()
         {
-            var port = Substitute.For<IWorkspaceOutputPort>();
+            var port = Substitute.For<IApplicationOutputPort>();
 
             var interactor = Factory.CreateSaveWorkspaceUseCase(port);
 
@@ -59,7 +59,7 @@ namespace StarLab.Application
         [Test]
         public void TestSaveExistingWorkspace()
         {
-            var port = Substitute.For<IWorkspaceOutputPort>();
+            var port = Substitute.For<IApplicationOutputPort>();
 
             var interactor = Factory.CreateSaveWorkspaceUseCase(port);
 
@@ -89,7 +89,7 @@ namespace StarLab.Application
         [Test]
         public void TestSavedWorkspaceCanBeOpened()
         {
-            var port = Substitute.For<IWorkspaceOutputPort>();
+            var port = Substitute.For<IApplicationOutputPort>();
 
             var saveInteractor = Factory.CreateSaveWorkspaceUseCase(port);
 
@@ -117,7 +117,7 @@ namespace StarLab.Application
 
             openInteractor.Execute(filename);
 
-            port.Received().UpdateWorkspace(Arg.Is<WorkspaceDTO>(ws =>
+            port.Received().SetWorkspace(Arg.Is<WorkspaceDTO>(ws =>
                 ws.Projects.Count == 2 &&
                 ws.Projects[0].Folders.Count == 1 &&
                 ws.Projects[0].Folders[0].Path == "Workspace1/Project1/Folder1" &&

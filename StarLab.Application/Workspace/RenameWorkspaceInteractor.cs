@@ -6,7 +6,7 @@ namespace StarLab.Application.Workspace
     /// <summary>
     /// A use case that renames the workspace.
     /// </summary>
-    internal class RenameWorkspaceInteractor : WorkspaceInteractor, IRenameWorkspaceUseCase
+    internal class RenameWorkspaceInteractor : UseCaseInteractor<IWorkspaceOutputPort>, IRenameWorkspaceUseCase
     {
         private readonly ISerialisationProvider serialiser; // Used to serialise the workspace to a file.
 
@@ -14,7 +14,7 @@ namespace StarLab.Application.Workspace
         /// Initialises a new instance of the <see cref="RenameWorkspaceInteractor"/> class.
         /// </summary>
         /// <param name="serialiser">An <see cref="ISerialisationProvider"/> that will be used to serialise the <see cref="WorkspaceDTO"/>.</param>
-        /// <param name="outputPort">An <see cref="IWorkspaceOutputPort"/> that updates the UI in response to the ouputs of the use case.</param>
+        /// <param name="outputPort">An <see cref="IWorkspaceOutputPort"/> that updates the UI in response to the execution of the use case.</param>
         /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
         public RenameWorkspaceInteractor(ISerialisationProvider serialiser, IWorkspaceOutputPort outputPort, IMapper mapper)
             : base(outputPort, mapper)
@@ -31,7 +31,7 @@ namespace StarLab.Application.Workspace
         {
             var filename = dto.FileName;
 
-            if (IsValid(name) && !string.IsNullOrEmpty(filename))
+            if (WorkspaceInteractionHelper.IsValid(name) && !string.IsNullOrEmpty(filename))
             {
                 dto.FileName = Path.ChangeExtension(Path.Join(Path.GetDirectoryName(filename), name), Constants.WORKSPACE_EXTENSION);
                
@@ -54,12 +54,12 @@ namespace StarLab.Application.Workspace
                 }
                 else
                 {
-                    throw new Exception (CreateTargetExistsMessage(Path.GetFileName(filename), Path.GetFileName(dto.FileName), Resources.Workspace));
+                    throw new Exception (WorkspaceInteractionHelper.CreateTargetExistsMessage(Path.GetFileName(filename), Path.GetFileName(dto.FileName), Resources.Workspace));
                 }
             }
             else
             {
-                throw new Exception(CreateInvalidNameMessage(name, Resources.Workspace));
+                throw new Exception(WorkspaceInteractionHelper.CreateInvalidNameMessage(name, Resources.Workspace));
             }
         }
     }

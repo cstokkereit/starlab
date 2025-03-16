@@ -8,20 +8,20 @@ namespace StarLab.Application.Workspace
     /// <summary>
     /// A <see cref="Form"/> that is the main application window.
     /// </summary>
-    public sealed partial class WorkspaceView : Form, IWorkspaceView
+    public sealed partial class ApplicationView : Form, IApplicationView
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(WorkspaceView)); // The logger that will be used for writing log messages.
+        private static readonly ILog log = LogManager.GetLogger(typeof(ApplicationView)); // The logger that will be used for writing log messages.
 
-        private readonly IWorkspaceViewPresenter presenter; // The presenter that controls the view.
+        private readonly IApplicationViewPresenter presenter; // The presenter that controls the view.
 
         private readonly string id; // The view ID.
 
         /// <summary>
-        /// Initialises a new instance of the <see cref="WorkspaceView"/> class.
+        /// Initialises a new instance of the <see cref="ApplicationView"/> class.
         /// </summary>
         /// <param name="text">The window text.</param>
         /// <param name="factory">An <see cref="IViewFactory"/> that will be used to create the presenter.</param>
-        public WorkspaceView(string text, IViewFactory factory)
+        public ApplicationView(string text, IViewFactory factory)
         {
             ArgumentNullException.ThrowIfNull(factory, nameof(factory));
             ArgumentException.ThrowIfNullOrEmpty(text, nameof(text));
@@ -32,7 +32,7 @@ namespace StarLab.Application.Workspace
             id = Views.WORKSPACE;
             Text = text;
 
-            presenter = (IWorkspaceViewPresenter)factory.CreatePresenter(Views.WORKSPACE, this);
+            presenter = (IApplicationViewPresenter)factory.CreatePresenter(Views.WORKSPACE, this);
 
             dockPanel.Theme = new VS2015LightTheme();
 
@@ -168,8 +168,8 @@ namespace StarLab.Application.Workspace
         /// </summary>
         /// <param name="name">The name of the button.</param>
         /// <param name="tooltip">The tooltip text.</param>
-        /// <param name="image">The <see cref="Image"> to use for the button.</param>
-        /// <param name="command">The <see cref="ICommand"> to invoke when the button is clicked.</param>
+        /// <param name="image">The <see cref="Image"/> to use for the button.</param>
+        /// <param name="command">The <see cref="ICommand"/> to invoke when the button is clicked.</param>
         public void AddToolbarButton(string name, string tooltip, Image image, ICommand command)
         {
             toolStrip.AddButton(name, tooltip, image, command);

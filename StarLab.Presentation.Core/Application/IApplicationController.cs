@@ -1,5 +1,4 @@
-﻿using StarLab.Application.Workspace;
-using StarLab.Application.Workspace.Documents;
+﻿using StarLab.Application.Workspace.Documents;
 using StarLab.Commands;
 
 namespace StarLab.Application
@@ -25,12 +24,12 @@ namespace StarLab.Application
         ICommand CreateCommand(ICommandManager commands, IController controller, string action, string target);
 
         /// <summary>
-        /// Creates the <see cref="ICommand"> specified by the controller and action provided.
+        /// Creates the <see cref="ICommand"/> specified by the controller and action provided.
         /// </summary>
         /// <param name="commands">An instance of <see cref="ICommandManager"/> that is required for the creation of the command.</param>
         /// <param name="controller">The <see cref="IController"/> that contains the method that will be invoked by the <see cref="ICommand"/> when the <see cref="ICommand.Execute"/> method is called.</param>
         /// <param name="action">The action to be performed when the <see cref="ICommand.Execute"/> method is called.</param>
-        /// <returns>An instance of <see cref="ICommand"> that can be used to invoke the specified action.</returns>
+        /// <returns>An instance of <see cref="ICommand"/> that can be used to invoke the specified action.</returns>
         ICommand CreateCommand(ICommandManager commands, IController controller, string action);
 
         /// <summary>
@@ -38,7 +37,7 @@ namespace StarLab.Application
         /// </summary>
         /// <param name="commands">An instance of <see cref="ICommandManager"/> that is required for the creation of the command.</param>
         /// <param name="view">The name of the <see cref="IView"/> to be shown.</param>
-        /// <returns>An instance of <see cref="ICommand"> that can be used to show the specified view.</returns>
+        /// <returns>An instance of <see cref="ICommand"/> that can be used to show the specified view.</returns>
         ICommand CreateCommand(ICommandManager commands, string view);
 
         /// <summary>
@@ -62,24 +61,25 @@ namespace StarLab.Application
         IDocumentController GetController(IDocument document);
 
         /// <summary>
+        /// Gets the specified <see cref="IController"/>.
+        /// </summary>
+        /// <param name="name">The name of the controller.</param>
+        /// <returns>The required <see cref="IController">.</returns>
+        IController? GetController(string id);
+
+        /// <summary>
         /// Gets the <see cref="IView"/> specified by the <see cref="IDocument"/> provided. If the view does not already exist it will be created.
         /// </summary>
         /// <param name="document">An instance of <see cref="IDocument"/> that specifies which instance of <see cref="IView"/> is required.</param>
-        /// <returns>The required instance of <see cref="IView">.</returns>
+        /// <returns>The required <see cref="IView"/>.</returns>
         IView GetView(IDocument document);
 
         /// <summary>
         /// Gets the <see cref="IView"/> with the specified ID. If the view does not exist <see cref="null"/> will be returned.
         /// </summary>
         /// <param name="id">The ID of the required <see cref="IView"/>.</param>
-        /// <returns>The required <see cref="IView"> or <see cref="null"/>.</returns>
+        /// <returns>The required <see cref="IView"/> or <see cref="null"/>.</returns>
         IView? GetView(string id);
-
-        /// <summary>
-        /// TODO - This may be replaced by an indexed element e.g. Controllers[id]
-        /// </summary>
-        /// <returns></returns>
-        IWorkspaceController GetWorkspaceController();
 
         /// <summary> 
         /// Registers the available command invokers with the instance of <see cref="ICommandManager"/> provided.
@@ -93,7 +93,7 @@ namespace StarLab.Application
         void Run();
 
         /// <summary>
-        /// Shows the <see cref="IView"> provided.
+        /// Shows the <see cref="IView"/> provided.
         /// </summary>
         /// <param name="view">The <see cref="IView"> to be shown.</param>
         void Show(IView view);

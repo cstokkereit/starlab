@@ -7,14 +7,14 @@ namespace StarLab.Application.Workspace.Documents
     /// <summary>
     /// A use case that removes a document from the workspace hierarchy.
     /// </summary>
-    internal class DeleteDocumentInteractor : WorkspaceInteractor, IDeleteItemUseCase
+    internal class DeleteDocumentInteractor : UseCaseInteractor<IWorkspaceOutputPort>, IDeleteItemUseCase
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(DeleteDocumentInteractor)); // The logger that will be used for writing log messages.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="DeleteDocumentInteractor"/> class.
         /// </summary>
-        /// <param name="outputPort">An <see cref="IWorkspaceOutputPort"/> that updates the UI in response to the ouputs of the use case.</param>
+        /// <param name="outputPort">An <see cref="IWorkspaceOutputPort"/> that updates the UI in response to the execution of the use case.</param>
         /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
         public DeleteDocumentInteractor(IWorkspaceOutputPort outputPort, IMapper mapper)
             : base(outputPort, mapper) { }

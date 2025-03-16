@@ -111,7 +111,7 @@ namespace StarLab.Application
             switch (configuration.Type)
             {
                 case ViewTypes.Application:
-                    presenter = new WorkspaceViewPresenter((IWorkspaceView)view, commands, factory, this.configuration, mapper, events);
+                    presenter = new ApplicationViewPresenter((IApplicationView)view, commands, factory, this.configuration, mapper, events);
                     break;
 
                 case ViewTypes.Dialog:

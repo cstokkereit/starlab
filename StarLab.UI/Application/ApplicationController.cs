@@ -42,9 +42,9 @@ namespace StarLab.Application
         }
 
         /// <summary>
-        /// 
+        /// Gets the name of the controller.
         /// </summary>
-        public override string Name => Constants.APPLICATION + Constants.CONTROLLER;
+        public override string Name => ControllerNames.APPLICATION_CONTROLLER;
 
         /// <summary>
         /// Creates the <see cref="ICommand"> specified by the controller, action and target provided.
@@ -72,11 +72,11 @@ namespace StarLab.Application
         }
 
         /// <summary>
-        /// Creates an <see cref="ICommand"> that will show the specified view.
+        /// Creates an <see cref="ICommand"/> that will show the specified view.
         /// </summary>
         /// <param name="commands">An instance of <see cref="ICommandManager"/> that is required for the creation of the command.</param>
         /// <param name="view">The name of the <see cref="IView"/> to be shown.</param>
-        /// <returns>An instance of <see cref="ICommand"> that can be used to show the specified view.</returns>
+        /// <returns>An instance of <see cref="ICommand"/> that can be used to show the specified view.</returns>
         public ICommand CreateCommand(ICommandManager commands, string view)
         {
             return CreateCommand(commands, this, Actions.SHOW, view);
@@ -106,7 +106,7 @@ namespace StarLab.Application
         /// </summary>
         public void Exit()
         {
-            if (controllers[Constants.WORKSPACE_VIEW_CONTROLLER] is IWorkspaceController controller) controller.Exit();
+            if (controllers[ControllerNames.APPLICATION_VIEW_CONTROLLER] is IApplicationViewController controller) controller.Exit();
         }
 
         /// <summary>
@@ -141,10 +141,20 @@ namespace StarLab.Application
         }
 
         /// <summary>
+        /// Gets the specified <see cref="IController"/>.
+        /// </summary>
+        /// <param name="name">The name of the controller.</param>
+        /// <returns>The required <see cref="IController"/>.</returns>
+        public IController GetController(string name)
+        {
+            return controllers[name];
+        }
+
+        /// <summary>
         /// Gets the <see cref="IView"/> specified by the <see cref="IDocument"/> provided. If the view does not already exist it will be created.
         /// </summary>
         /// <param name="document">An instance of <see cref="IDocument"/> that specifies which instance of <see cref="IView"/> is required.</param>
-        /// <returns>The required instance of <see cref="IView">.</returns>
+        /// <returns>The required <see cref="IView">.</returns>
         public IView GetView(IDocument document)
         {
             IView view;
@@ -171,7 +181,7 @@ namespace StarLab.Application
         /// Gets the <see cref="IView"/> with the specified ID. If the view does not exist <see cref="null"/> will be returned.
         /// </summary>
         /// <param name="id">The ID of the required <see cref="IView"/>.</param>
-        /// <returns>The required <see cref="IView"> or <see cref="null"/>.</returns>
+        /// <returns>The required <see cref="IView"/> or <see cref="null"/>.</returns>
         public IView? GetView(string id)
         {
             if (views.TryGetValue(id, out IView? view))
@@ -180,15 +190,6 @@ namespace StarLab.Application
             }
 
             return null;
-        }
-
-        /// <summary>
-        /// TODO - Is there a better way than doing this?
-        /// </summary>
-        /// <returns></returns>
-        public IWorkspaceController GetWorkspaceController()
-        {
-            return (IWorkspaceController)controllers[Constants.WORKSPACE_VIEW_CONTROLLER];
         }
 
         /// <summary>
@@ -238,19 +239,19 @@ namespace StarLab.Application
         }
 
         /// <summary>
-        /// Shows the <see cref="IView"> provided.
+        /// Shows the <see cref="IView"/> provided.
         /// </summary>
-        /// <param name="view">The <see cref="IView"> to be shown.</param>
+        /// <param name="view">The <see cref="IView"/> to be shown.</param>
         public void Show(IView view)
         {
             var controller = GetController(view);
             controller.Initialise(this);
 
-            controllers[Constants.WORKSPACE_VIEW_CONTROLLER].Show(view); // Need to pick this based on the view in question - somne sort of map?
+            controllers[ControllerNames.APPLICATION_VIEW_CONTROLLER].Show(view);
         }
 
         /// <summary>
-        /// Shows the <see cref="IView"> with the specified ID. A view with the specified ID must already exist or an exception will be thrown.
+        /// Shows the <see cref="IView"/> with the specified ID. A view with the specified ID must already exist or an exception will be thrown.
         /// </summary>
         /// <param name="id">The ID of the view to be shown.</param>
         public void Show(string id)
@@ -262,10 +263,7 @@ namespace StarLab.Application
             var controller = GetController(view);
             controller.Initialise(this);
 
-            //if (view is IDialog dialog)
-            //    dialog.Show(new AddDocumentDialogConfiguration(workspace, path, DocumentType.Chart)); This is how AddDcoumentView gets shown from WorkspaceExplorerViewPresenter
-
-            controllers[Constants.WORKSPACE_VIEW_CONTROLLER].Show(view); // Need to pick this based on the view in question - some sort of map?
+            controllers[ControllerNames.APPLICATION_VIEW_CONTROLLER].Show(view); // Need to pick this based on the view in question - some sort of map?
         }
 
         /// <summary>
@@ -283,7 +281,7 @@ namespace StarLab.Application
             switch (configuration.GetViewConfiguration(name).Type)
             {
                 case ViewTypes.Application:
-                    controller = ((WorkspaceView)view).Controller;
+                    controller = ((ApplicationView)view).Controller;
                     break;
 
                 case ViewTypes.Dialog:
@@ -328,30 +326,26 @@ namespace StarLab.Application
         /// <exception cref="Exception"></exception>
         private IViewController GetController(IView view)
         {
-            string id;
+            string name;
 
-            if (view is IWorkspaceView)
+            if (view is IApplicationView)
             {
-                id = Views.WORKSPACE + Constants.CONTROLLER;
-            } 
+                name = ControllerNames.APPLICATION_VIEW_CONTROLLER;
+            }
             else if (view is IDialogView)
             {
-                id = view.ID + Constants.CONTROLLER;
-            }
-            else if (view is IDocumentView)
-            {
-                id = $"{Constants.DOCUMENT}({view.ID}) {Constants.CONTROLLER}";
+                name = ControllerNames.GetViewControllerName(view.ID);
             }
             else if (view is IDockableView)
             {
-                id = view.ID + Constants.CONTROLLER;
+                name = view is IDocumentView ? ControllerNames.GetDocumentControllerName(view.ID) : ControllerNames.GetViewControllerName(view.ID);
             }
             else
             {
                 throw new Exception(); // TODO
             }
 
-            return controllers[id];
+            return controllers[name];
         }
 
         /// <summary>

@@ -6,12 +6,12 @@ namespace StarLab.Application.Workspace.Documents
     /// <summary>
     /// A use case that renames a document in the workspace hierarchy.
     /// </summary>
-    internal class RenameDocumentInteractor : WorkspaceInteractor, IRenameItemUseCase
+    internal class RenameDocumentInteractor : UseCaseInteractor<IWorkspaceOutputPort>, IRenameItemUseCase
     {
         /// <summary>
         /// Initialises a new instance of the <see cref="AddDocumentInteractor"/> class.
         /// </summary>
-        /// <param name="outputPort">An <see cref="IWorkspaceOutputPort"/> that updates the UI in response to the ouputs of the use case.</param>
+        /// <param name="outputPort">An <see cref="IWorkspaceOutputPort"/> that updates the UI in response to the execution of the use case.</param>
         /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
         public RenameDocumentInteractor(IWorkspaceOutputPort outputPort, IMapper mapper)
             : base(outputPort, mapper) { }
@@ -24,7 +24,7 @@ namespace StarLab.Application.Workspace.Documents
         /// <param name="name">The new document name.</param>
         public void Execute(WorkspaceDTO dto, string id, string name)
         {
-            if (IsValid(name))
+            if (WorkspaceInteractionHelper.IsValid(name))
             {
                 var workspace = new Workspace(dto);
                 var document = workspace.GetDocument(id);
@@ -35,16 +35,16 @@ namespace StarLab.Application.Workspace.Documents
                 {
                     workspace.RenameDocument(document, name);
 
-                    OutputPort.UpdateWorkspace(Mapper.Map<WorkspaceDTO>(workspace), id);
+                    OutputPort.UpdateDocument(Mapper.Map<WorkspaceDTO>(workspace), id);
                 }
                 else
                 {
-                    throw new Exception(CreateTargetExistsMessage(document.Name, name, Resources.Document));
+                    throw new Exception(WorkspaceInteractionHelper.CreateTargetExistsMessage(document.Name, name, Resources.Document));
                 }
             }
             else
             {
-                throw new Exception(CreateInvalidNameMessage(name, Resources.Document));
+                throw new Exception(WorkspaceInteractionHelper.CreateInvalidNameMessage(name, Resources.Document));
             }
         }
 

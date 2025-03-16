@@ -29,7 +29,7 @@ namespace StarLab.Application
         /// <summary>
         /// Gets the name of the controller.
         /// </summary>
-        public override string Name => $"{view.Name}{Constants.CONTROLLER}";
+        public override string Name => ControllerNames.GetViewControllerName(view.Name);
 
         /// <summary>
         /// Closes the dialog box.

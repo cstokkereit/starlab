@@ -13,7 +13,7 @@ namespace StarLab.Application.Workspace
 
         private readonly Dictionary<string, IFolder> folders = new Dictionary<string, IFolder>(); // A dictionary containing all of the folders within the workspace hierarchy.
 
-        private readonly string? layout;
+        private readonly string? layout; // Holds the position, size and state of the dockable views.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="Workspace"/> class.
@@ -78,8 +78,11 @@ namespace StarLab.Application.Workspace
         /// Adds the <see cref="Document"/> provided to the workspace hierarchy.
         /// </summary>
         /// <param name="document">The <see cref="Document"/> to be added.</param>
+        /// <exception cref="InvalidOperationException"></exception>
         public void AddDocument(Document document)
         {
+            if (DocumentExists(document)) throw new InvalidOperationException(nameof(document)); // TODO
+
             var folder = GetFolder(document.Path);
             folder.AddDocument(document);
 
@@ -92,13 +95,13 @@ namespace StarLab.Application.Workspace
         /// <param name="name">The name of the new folder.</param>
         /// <param name="parent">The parent <see cref="IFolder"/>.</param>
         /// <exception cref="InvalidOperationException"></exception>
-        public void AddFolder(string name, IFolder parent)
+        public Folder AddFolder(string name, IFolder parent)
         {
-            if (parent is Workspace) throw new InvalidOperationException();
-
             var folder = new Folder(name, parent);
+            
+            AddFolder(folder);
 
-            folders.Add(folder.Path, folder);
+            return folder;
         }
 
         /// <summary>
@@ -108,7 +111,28 @@ namespace StarLab.Application.Workspace
         /// <exception cref="InvalidOperationException"></exception>
         public void AddFolder(IFolder folder)
         {
-            throw new InvalidOperationException();
+            if (folder is Workspace) throw new ArgumentException(); // TODO
+
+            if (folder is Project)
+            {
+                AddProject((Project)folder);
+            }
+            else
+            {
+                folders.Add(folder.Path, folder);
+            }
+        }
+
+        /// <summary>
+        /// Adds the <see cref="Project"/> provided to the workspace.
+        /// </summary>
+        /// <param name="project">The <see cref="Project"/> being added.</param>
+        /// <exception cref="InvalidOperationException"></exception>
+        public void AddProject(Project project)
+        {
+            if (projects.ContainsKey(project.Name)) throw new InvalidOperationException(); // TODO
+
+            projects.Add(project.Name, project);
         }
 
         /// <summary>
@@ -211,23 +235,6 @@ namespace StarLab.Application.Workspace
             return (Project)projects[$"{Constants.WORKSPACE}/{name}"];
         }
 
-
-        /// <summary>
-        /// Determines if the workspace contains a document with the specified name and path.
-        /// </summary>
-        /// <param name="name">The document name.</param>
-        /// <param name="path">The document path.</param>
-        /// <returns>true if the workspace contains a document with the specified name and path; false otherwise.</returns>
-        public bool HasDocument(string? name, string? path)
-        {
-            foreach (var document in documents.Values)
-            {
-                if (document.Name == name && document.Path == path) return true;
-            }
-
-            return false;
-        }
-
         /// <summary>
         /// Renames the <see cref="Document"/> provided.
         /// </summary>
@@ -326,6 +333,21 @@ namespace StarLab.Application.Workspace
             }
 
             throw new ArgumentException(nameof(folder)); // TODO
+        }
+
+        /// <summary>
+        /// Determines if the workspace contains a document with the same name and path as the document provided.
+        /// </summary>
+        /// <param name="document">A <see cref="Document"/> that may have the same name and path as an existing document.</param>
+        /// <returns>true if the workspace contains a document with the same name and path as the document provided; false otherwise.</returns>
+        private bool DocumentExists(Document document)
+        {
+            foreach (var value in documents.Values)
+            {
+                if (value.Name == document.Name && value.Path == document.Path) return true;
+            }
+
+            return false;
         }
 
         /// <summary>

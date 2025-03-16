@@ -17,7 +17,7 @@ namespace StarLab.Application.Workspace.Documents
         private readonly string id; // The view ID.
 
         /// <summary>
-        /// Initialises a new instance of the <see cref="DocumentView"> class.
+        /// Initialises a new instance of the <see cref="DocumentView"/> class.
         /// </summary>
         /// <param name="document">The <see cref="IDocument"/> that this view represents.</param>
         /// <param name="factory">An <see cref="IViewFactory"/> that will be used to create the presenter and child view.</param>
@@ -44,7 +44,7 @@ namespace StarLab.Application.Workspace.Documents
         }
 
         /// <summary>
-        /// Gets the <see cref="IViewController"> that controls this view.
+        /// Gets the <see cref="IViewController"/> that controls this view.
         /// </summary>
         public IViewController Controller => (IViewController)presenter;
 
@@ -58,8 +58,8 @@ namespace StarLab.Application.Workspace.Documents
         /// </summary>
         /// <param name="name">The name of the button.</param>
         /// <param name="tooltip">The tooltip text.</param>
-        /// <param name="image">The <see cref="Image"> to use for the button.</param>
-        /// <param name="command">The <see cref="ICommand"> to invoke when the button is clicked.</param>
+        /// <param name="image">The <see cref="Image"/> to use for the button.</param>
+        /// <param name="command">The <see cref="ICommand"/> to invoke when the button is clicked.</param>
         public void AddToolbarButton(string name, string tooltip, Image image, ICommand command)
         {
             splitContainer.AddToolbarButton(name, tooltip, image, command);
@@ -203,42 +203,5 @@ namespace StarLab.Application.Workspace.Documents
         {
             return ID;
         }
-
-
-        // TODO
-
-        //        /// <summary>
-        //        /// 
-        //        /// </summary>
-        //        private void AttachEventHandlers()
-        //        {
-        //            DockStateChanged += OnDockStateChanged;
-        //        }
-
-        //        /// <summary>
-        //        /// 
-        //        /// </summary>
-        //        private void DetachEventHandlers()
-        //        {
-        //            DockStateChanged -= OnDockStateChanged;
-        //        }
-
-        //        /// <summary>
-        //        /// 
-        //        /// </summary>
-        //        /// <param name="sender"></param>
-        //        /// <param name="e"></param>
-        //        private void OnDockStateChanged(object? sender, EventArgs? e)
-        //        {
-        //            if (DockState != DockState.Hidden && DockState != DockState.Unknown)
-        //            {
-        //                presenter.Location = DockState.ToString();
-        //            }
-        //        }
-
-        //        private void OnFormClosed(object? sender, EventArgs? e)
-        //        {
-        //            DetachEventHandlers();
-        //        }
     }
 }

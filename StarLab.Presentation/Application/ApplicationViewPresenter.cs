@@ -1,18 +1,19 @@
 ﻿using AutoMapper;
-using StarLab.Application.Workspace.WorkspaceExplorer;
+using StarLab.Application.Workspace;
 using StarLab.Commands;
 using System.ComponentModel;
+
 using ImageResources = StarLab.Properties.Resources;
 using StringResources = StarLab.Shared.Properties.Resources;
 
-namespace StarLab.Application.Workspace
+namespace StarLab.Application
 {
     /// <summary>
-    /// Controls the behaviour of an <see cref="IWorkspaceView"/>.
+    /// Controls the behaviour of an <see cref="IApplicationView"/>.
     /// </summary>
-    internal class WorkspaceViewPresenter : Presenter, IWorkspaceViewPresenter, IWorkspaceController, IWorkspaceOutputPort, ISubscriber<ActiveDocumentChangedEventArgs>
+    internal class ApplicationViewPresenter : Presenter, IApplicationViewPresenter, IApplicationViewController, IApplicationOutputPort, ISubscriber<ActiveDocumentChangedEventArgs>
     {
-        private readonly IWorkspaceView view; // The view controlled by the presenter.
+        private readonly IApplicationView view; // The view controlled by the presenter.
 
         private IWorkspace workspace; // The workspace that the view represents.
 
@@ -21,15 +22,15 @@ namespace StarLab.Application.Workspace
         private bool dirty = false; // A flag that, when set to true, indicates that the workspace has unsaved changes.
 
         /// <summary>
-        /// Initialises a new instance of the <see cref="WorkspaceViewPresenter"> class.
+        /// Initialises a new instance of the <see cref="ApplicationViewPresenter"> class.
         /// </summary>
-        /// <param name="view">The <see cref="IWorkspaceView"/> controlled by this presenter.</param>
+        /// <param name="view">The <see cref="IApplicationView"/> controlled by this presenter.</param>
         /// <param name="commands">An <see cref="ICommandManager"/> that is required for the creation of <see cref="ICommand">s.</param>
         /// <param name="factory">An <see cref="IUseCaseFactory"/> that will be used to create use case interactors.</param>
         /// <param name="configuration">The <see cref="Configuration.IConfigurationProvider"/> that will be used to get configuration information.</param>
         /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
         /// <param name="events">The <see cref="IEventAggregator"/> that manages application events.</param>
-        public WorkspaceViewPresenter(IWorkspaceView view, ICommandManager commands, IUseCaseFactory factory, Configuration.IConfigurationProvider configuration, IMapper mapper, IEventAggregator events)
+        public ApplicationViewPresenter(IApplicationView view, ICommandManager commands, IUseCaseFactory factory, Configuration.IConfigurationProvider configuration, IMapper mapper, IEventAggregator events)
             : base(commands, factory, configuration, mapper, events)
         {
             workspace = new EmptyWorkspace();
@@ -40,18 +41,7 @@ namespace StarLab.Application.Workspace
         /// <summary>
         /// Gets the name of the controller.
         /// </summary>
-        public override string Name => $"{Views.WORKSPACE}{Constants.CONTROLLER}";
-
-        /// <summary>
-        /// Adds a folder with the specified parent folder.
-        /// </summary>
-        /// <param name="key">The key that identifies the parent folder.</param>
-        public void AddFolder(string key)
-        {
-            var interactor = UseCaseFactory.CreateAddFolderUseCase(this);
-            var dto = Mapper.Map<IWorkspace, WorkspaceDTO>(workspace);
-            interactor.Execute(dto, key);
-        }
+        public override string Name => ControllerNames.APPLICATION_VIEW_CONTROLLER;
 
         /// <summary>
         /// Clears the active document.
@@ -81,9 +71,9 @@ namespace StarLab.Application.Workspace
             if (dirty)
             {
                 var result = ShowMessage(StringResources.StarLab, StringResources.WorkspaceClosing, InteractionResponses.YesNoCancel);
-                
+
                 if (result == InteractionResult.Yes) SaveWorkspace();
-                
+
                 close = result != InteractionResult.Cancel;
             }
 
@@ -117,46 +107,13 @@ namespace StarLab.Application.Workspace
             if (workspace.HasDocument(id))
             {
                 view = AppController.GetView(workspace.GetDocument(id));
-            }  
+            }
             else
             {
-               view = AppController.GetView(id);
+                view = AppController.GetView(id);
             }
-            
+
             return (IDockableView?)view;
-        }
-
-        /// <summary>
-        /// Deletes the document with the specified ID.
-        /// </summary>
-        /// <param name="id">The ID of the document to be deleted.</param>
-        public void DeleteDocument(string id)
-        {
-            var interactor = UseCaseFactory.CreateDeleteDocumentUseCase(this);
-            var dto = Mapper.Map<IWorkspace, WorkspaceDTO>(workspace);
-            interactor.Execute(dto, id);
-        }
-
-        /// <summary>
-        /// Deletes the specified folder.
-        /// </summary>
-        /// <param name="key">The key that identifies the folder to be deleted.</param>
-        public void DeleteFolder(string key)
-        {
-            var interactor = UseCaseFactory.CreateDeleteFolderUseCase(this);
-            var dto = Mapper.Map<IWorkspace, WorkspaceDTO>(workspace);
-            interactor.Execute(dto, key);
-        }
-
-        /// <summary>
-        /// Deletes the specified project.
-        /// </summary>
-        /// <param name="key">The key that identifies the project to be deleted.</param>
-        public void DeleteProject(string key)
-        {
-            var interactor = UseCaseFactory.CreateDeleteFolderUseCase(this);
-            var dto = Mapper.Map<IWorkspace, WorkspaceDTO>(workspace);
-            interactor.Execute(dto, key);
         }
 
         /// <summary>
@@ -175,7 +132,7 @@ namespace StarLab.Application.Workspace
         /// <param name="controller">The <see cref="IApplicationController"/>.</param>
         public override void Initialise(IApplicationController controller)
         {
-            if(!Initialised)
+            if (!Initialised)
             {
                 base.Initialise(controller);
 
@@ -227,57 +184,13 @@ namespace StarLab.Application.Workspace
         }
 
         /// <summary>
-        /// Removes the specified document.
-        /// </summary>
-        /// <param name="id">The document ID.</param>
-        public void RemoveDocument(string id)
-        {
-            AppController.DeleteView(id);
-        }
-
-        /// <summary>
-        /// Renames the specified document.
-        /// </summary>
-        /// <param name="id">The ID of the document to be renamed.</param>
-        /// <param name="name">The new name.</param>
-        public void RenameDocument(string id, string name)
-        {
-            var interactor = UseCaseFactory.CreateRenameDocumentUseCase(this);
-            var dto = Mapper.Map<IWorkspace, WorkspaceDTO>(workspace);
-            interactor.Execute(dto, id, name);
-        }
-
-        /// <summary>
-        /// Renames the specified folder.
-        /// </summary>
-        /// <param name="key">The key that identifies the folder to be renamed.</param>
-        /// <param name="name">The new name.</param>
-        public void RenameFolder(string key, string name)
-        {
-            var interactor = UseCaseFactory.CreateRenameFolderUseCase(this);
-            var dto = Mapper.Map<IWorkspace, WorkspaceDTO>(workspace);
-            interactor.Execute(dto, key, name);
-        }
-
-        /// <summary>
-        /// Renames the workspace.
-        /// </summary>
-        /// <param name="name">The new name.</param>
-        public void RenameWorkspace(string name)
-        {
-            var interactor = UseCaseFactory.CreateRenameWorkspaceUseCase(this);
-            var dto = Mapper.Map<IWorkspace, WorkspaceDTO>(workspace);
-            interactor.Execute(dto, name);
-        }
-
-        /// <summary>
         /// Saves the workspace.
         /// </summary>
         public void SaveWorkspace()
         {
             workspace.UpdateLayout(view.GetLayout());
             var interactor = UseCaseFactory.CreateSaveWorkspaceUseCase(this);
-            var dto = Mapper.Map<IWorkspace, WorkspaceDTO>(workspace);
+            var dto = Mapper.Map<WorkspaceDTO>(workspace);
             interactor.Execute(dto);
         }
 
@@ -292,6 +205,31 @@ namespace StarLab.Application.Workspace
             Events.Publish(new ActiveDocumentChangedEventArgs(workspace));
         }
 
+
+        /// <summary>
+        /// Updates the state of the workspace represented by the <see cref="WorkspaceDTO"/> provided and applies the layout.
+        /// </summary>
+        /// <param name="dto">The <see cref="WorkspaceDTO"/> that contains the updated workspace state.</param>
+        public void SetWorkspace(WorkspaceDTO dto)
+        {
+            workspace = new Workspace.Workspace(dto);
+
+            view.CloseAll();
+
+            if (!string.IsNullOrEmpty(workspace.Layout)) view.SetLayout(workspace.Layout);
+
+            Events.Publish(new WorkspaceChangedEventArgs(workspace));
+
+            if (!string.IsNullOrEmpty(dto.FileName) && !Configuration.Workspace.Equals(dto.FileName))
+            {
+                Configuration.Workspace = dto.FileName;
+            }
+
+            UpdateCommandState(Actions.CLOSE_DOCUMENT, workspace.ActiveDocument != null);
+        }
+
+
+
         /// <summary>
         /// Shows the <see cref="IView"/> provided.
         /// </summary>
@@ -303,11 +241,11 @@ namespace StarLab.Application.Workspace
                 this.view.Show(dockable);
                 workspace.UpdateLayout(this.view.GetLayout());
                 Events.Publish(new WorkspaceChangedEventArgs(workspace));
-            } 
+            }
             else
             {
                 this.view.Show(view);
-            }   
+            }
         }
 
         /// <summary>
@@ -379,44 +317,13 @@ namespace StarLab.Application.Workspace
         }
 
         /// <summary>
-        /// Replaces the current workspace state with that specified by the <see cref="WorkspaceDTO"/> provided.
-        /// </summary>
-        /// <param name="dto">A <see cref="WorkspaceDTO"/> that represents the new workspace state.</param>
-        public void UpdateWorkspace(WorkspaceDTO dto)
-        {
-            if (workspace.ActiveDocument != null && string.IsNullOrEmpty(dto.ActiveDocument)) dto.ActiveDocument = workspace.ActiveDocument.ID;
-
-            var updateLayout = workspace.Layout != dto.Layout;
-
-            workspace = new Workspace(dto);
-
-            if (updateLayout)
-            {
-                view.CloseAll();
-
-                if (!string.IsNullOrEmpty(workspace.Layout)) view.SetLayout(workspace.Layout);
-            }
-
-            dirty = true;
-
-            Events.Publish(new WorkspaceChangedEventArgs(workspace));
-
-            if (!string.IsNullOrEmpty(dto.FileName) && !Configuration.Workspace.Equals(dto.FileName))
-            {
-                Configuration.Workspace = dto.FileName;
-            }
-
-            UpdateCommandState(Actions.CLOSE_DOCUMENT, workspace.ActiveDocument != null);
-        }
-
-        /// <summary>
         /// Updates the state of the workspace represented by the <see cref="WorkspaceDTO"/> provided.
         /// </summary>
         /// <param name="dto">The <see cref="WorkspaceDTO"/> that contains the updated workspace state.</param>
         /// <param name="documentId">The ID of the document that was modified.</param>
-        public void UpdateWorkspace(WorkspaceDTO dto, string documentId)
+        public void UpdateDocument(WorkspaceDTO dto, string documentId)
         {
-            workspace = new Workspace(dto);
+            workspace = new Workspace.Workspace(dto);
 
             var document = workspace.GetDocument(documentId);
 
@@ -424,9 +331,29 @@ namespace StarLab.Application.Workspace
 
             controller.UpdateDocument(document);
 
-            dirty = true;
-
             Events.Publish(new WorkspaceChangedEventArgs(workspace));
+
+            dirty = true;
+        }
+
+        /// <summary>
+        /// Replaces the current workspace state with that specified by the <see cref="WorkspaceDTO"/> provided.
+        /// </summary>
+        /// <param name="dto">A <see cref="WorkspaceDTO"/> that represents the new workspace state.</param>
+        public void UpdateWorkspace(WorkspaceDTO dto)
+        {
+            workspace = new Workspace.Workspace(dto);
+
+            Events.Publish(new WorkspaceChangedEventArgs(workspace), true); // Event published synchronously to allow renaming of folder in WorkspaceExplorer. Could make this a more specific event type if necessary.
+
+            if (!string.IsNullOrEmpty(dto.FileName) && !Configuration.Workspace.Equals(dto.FileName))
+            {
+                Configuration.Workspace = dto.FileName;
+            }
+
+            UpdateCommandState(Actions.CLOSE_DOCUMENT, workspace.ActiveDocument != null);
+
+            dirty = true;
         }
 
         /// <summary>
@@ -546,7 +473,7 @@ namespace StarLab.Application.Workspace
             {
                 filename = view.ShowOpenFileDialog(StringResources.OpenWorkspace, StringResources.WorkspaceFileFilter);
             }
-            
+
             var interactor = UseCaseFactory.CreateOpenWorkspaceUseCase(this);
 
             interactor.Execute(filename);
