@@ -6,11 +6,11 @@
     <Nullable>enable</Nullable>
 	<UseWindowsForms>True</UseWindowsForms>
 	<OutputType>Library</OutputType>
-	<RootNamespace>StarLab</RootNamespace>
+	<RootNamespace>StarLab.UI.Controls</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\StarLab.Commands\StarLab.Commands.csproj" />
+    <ProjectReference Include="..\..\stratosoft\Stratosoft.Commands\Stratosoft.Commands.csproj" />
     <ProjectReference Include="..\StarLab.Presentation.Core\StarLab.Presentation.Core.csproj" />
   </ItemGroup>
 
@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Application\SplitContainer.cs" />
+    <Compile Update="SplitContainer.cs" />
   </ItemGroup>
 
 </Project>

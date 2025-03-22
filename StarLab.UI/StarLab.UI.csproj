@@ -7,7 +7,7 @@
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <StartupObject>StarLab.Program</StartupObject>
-    <RootNamespace>StarLab</RootNamespace>
+    <RootNamespace>StarLab.UI</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -28,26 +28,26 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Application\Help\AboutView.cs">
+    <Compile Update="Help\AboutView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="Application\Options\OptionsView.cs">
+    <Compile Update="Options\OptionsView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="Application\DialogView.cs">
+    <Compile Update="DialogView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Application\Workspace\Documents\Charts\ChartSettingsView.cs">
+    <Compile Update="Workspace\Documents\Charts\ChartSettingsView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="Application\Workspace\Documents\Charts\ChartView.cs" />
-    <Compile Update="Application\Workspace\Documents\DocumentView.cs" />
-    <Compile Update="Application\Workspace\SizeableFloatWindow.cs" />
-    <Compile Update="Application\Workspace\ToolView.cs" />
-    <Compile Update="Application\Workspace\WorkspaceExplorer\WorkspaceExplorerView.cs">
+    <Compile Update="Workspace\Documents\Charts\ChartView.cs" />
+    <Compile Update="Workspace\Documents\DocumentView.cs" />
+    <Compile Update="Workspace\SizeableFloatWindow.cs" />
+    <Compile Update="Workspace\ToolView.cs" />
+    <Compile Update="Workspace\WorkspaceExplorer\WorkspaceExplorerView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="Application\Workspace\ApplicationView.cs">
+    <Compile Update="Workspace\ApplicationView.cs">
       <SubType>Form</SubType>
     </Compile>
   </ItemGroup>

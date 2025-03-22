@@ -1,7 +1,8 @@
 using Castle.MicroKernel.Resolvers.SpecializedResolvers;
 using Castle.Windsor;
 using log4net.Config;
-using StarLab.Application;
+using StarLab.Presentation;
+using StarLab.UI;
 
 namespace StarLab
 {
@@ -17,8 +18,6 @@ namespace StarLab
         static void Main()
         {
             XmlConfigurator.Configure();
-
-            ApplicationConfiguration.Initialize();
 
             var container = new WindsorContainer();
 
