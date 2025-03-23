@@ -1,7 +1,4 @@
-﻿using StarLab.Application.Workspace;
-using StarLab.Application.Workspace.Documents;
-
-namespace StarLab.Application
+﻿namespace StarLab.Application.Workspace.Documents
 {
     /// <summary>
     /// A class for performing unit tests on the <see cref="RenameDocumentInteractor"/> class.
@@ -33,7 +30,7 @@ namespace StarLab.Application
                 ws.Projects[0].Documents[0].Path == "Workspace/Project1/Folder1" &&
                 ws.Projects[0].Documents[0].Name == "Document3" &&
                 ws.Projects[0].Documents[1].Path == "Workspace/Project1/Folder1" &&
-                ws.Projects[0].Documents[1].Name == "Document2"), Arg.Is<string>("1"));
+                ws.Projects[0].Documents[1].Name == "Document2"), Arg.Is("1"));
         }
 
         /// <summary>

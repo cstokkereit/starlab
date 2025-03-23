@@ -1,6 +1,4 @@
-﻿using StarLab.Application.Workspace;
-
-namespace StarLab.Application
+﻿namespace StarLab.Application.Workspace
 {
     /// <summary>
     /// A class for performing unit tests on the <see cref="RenameWorkspaceInteractor"/> class.

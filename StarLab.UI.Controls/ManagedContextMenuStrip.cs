@@ -4,9 +4,9 @@ using Stratosoft.Commands;
 namespace StarLab.UI.Controls
 {
     /// <summary>
-    /// Extends the <see cref="System.Windows.Forms.ContextMenuStrip"/> control.
+    /// Extends the <see cref="ContextMenuStrip"/> control.
     /// </summary>
-    public class ContextMenuStrip : System.Windows.Forms.ContextMenuStrip, IMenuManager
+    public class ManagedContextMenuStrip : ContextMenuStrip, IMenuManager
     {
         private Dictionary<string, ToolStripMenuItem> menuItems = new Dictionary<string, ToolStripMenuItem>(); // A dictionary containing the menu items indexed by name.
 

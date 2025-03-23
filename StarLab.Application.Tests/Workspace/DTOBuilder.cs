@@ -1,7 +1,6 @@
-﻿using StarLab.Application.Workspace;
-using StarLab.Application.Workspace.Documents;
+﻿using StarLab.Application.Workspace.Documents;
 
-namespace StarLab
+namespace StarLab.Application.Workspace
 {
     /// <summary>
     /// A helper class that uses the Builder Pattern to construct the <see cref="WorkspaceDTO"/>s used for unit testing.

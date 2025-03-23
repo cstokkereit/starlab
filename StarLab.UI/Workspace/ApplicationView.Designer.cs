@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            menuStrip = new UI.Controls.MenuStrip();
+            menuStrip = new UI.Controls.ManagedMenuStrip();
             statusStrip = new StatusStrip();
             toolStripContainer = new ToolStripContainer();
             dockPanel = new WeifenLuo.WinFormsUI.Docking.DockPanel();
@@ -113,7 +113,7 @@
 
         #endregion
 
-        private UI.Controls.MenuStrip menuStrip;
+        private UI.Controls.ManagedMenuStrip menuStrip;
         private StatusStrip statusStrip;
         private ToolStripContainer toolStripContainer;
         private WeifenLuo.WinFormsUI.Docking.DockPanel dockPanel;

@@ -1,7 +1,6 @@
 ﻿using StarLab.Application.Workspace;
-using StarLab.Application.Workspace.Documents;
 
-namespace StarLab.Application;
+namespace StarLab.Application.Workspace.Documents;
 
 /// <summary>
 /// A class for performing unit tests on the <see cref="DeleteDocumentInteractor"/> class.

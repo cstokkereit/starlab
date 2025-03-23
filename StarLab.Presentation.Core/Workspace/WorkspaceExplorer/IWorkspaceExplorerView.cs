@@ -71,33 +71,6 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         void CollapseNode(string key);
 
         /// <summary>
-        /// Creates an <see cref="IMenuManager"> that controls the context menu for the specified document.
-        /// </summary>
-        /// <param name="document">The document ID.</param>
-        /// <returns>An <see cref="IMenuManager"/> that can be used to configure the context menu.</returns>
-        IMenuManager CreateDocumentMenuManager(string document);
-
-        /// <summary>
-        /// Creates an <see cref="IMenuManager"> that controls the context menu for the specified folder.
-        /// </summary>
-        /// <param name="folder">The folder key.</param>
-        /// <returns>An <see cref="IMenuManager"/> that can be used to configure the context menu.</returns>
-        IMenuManager CreateFolderMenuManager(string folder);
-
-        /// <summary>
-        /// Creates an <see cref="IMenuManager"> that controls the context menu for the specified project.
-        /// </summary>
-        /// <param name="project">The project key.</param>
-        /// <returns>An <see cref="IMenuManager"/> that can be used to configure the context menu.</returns>
-        IMenuManager CreateProjectMenuManager(string project);
-
-        /// <summary>
-        /// Creates an <see cref="IMenuManager"> that controls the context menu for the workspace.
-        /// </summary>
-        /// <returns>An <see cref="IMenuManager"/> that can be used to configure the context menu.</returns>
-        IMenuManager CreateWorkspaceMenuManager();
-
-        /// <summary>
         /// Gets the default location for the Workspace Explorer tool window.
         /// </summary>
         string DefaultLocation { get; }
@@ -113,6 +86,11 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// </summary>
         /// <param name="key">The key that identifies the node.</param>
         void ExpandNode(string key);
+
+        /// <summary>
+        /// Sets the focus to the currently selected node.
+        /// </summary>
+        void FocusOnSelectedNode();
 
         /// <summary>
         /// Gets the key of the currently selected node.

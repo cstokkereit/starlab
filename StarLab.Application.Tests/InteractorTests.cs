@@ -1,6 +1,7 @@
 ﻿using Castle.MicroKernel.Resolvers.SpecializedResolvers;
 using Castle.Windsor;
 using StarLab.Application;
+using StarLab.Application.Workspace;
 using System.Reflection;
 
 namespace StarLab

@@ -1,7 +1,6 @@
 ﻿using StarLab.Application.Workspace;
-using StarLab.Application.Workspace.Documents;
 
-namespace StarLab.Application
+namespace StarLab.Application.Workspace.Documents
 {
     /// <summary>
     /// A class for performing unit tests on the <see cref="AddDocumentInteractor"/> class.
@@ -14,7 +13,7 @@ namespace StarLab.Application
         [Test]
         public void TestAddDocument()
         {
-            var port = Substitute.For<IApplicationOutputPort>();
+            var port = Substitute.For<IAddDocumentOutputPort>();
 
             var interactor = Factory.CreateAddDocumentUseCase(port);
 
@@ -30,7 +29,7 @@ namespace StarLab.Application
                 Path = "Workspace/Project1/Folder1",
                 View = "View1"
             };
-            
+
             interactor.Execute(workspace, document);
 
             port.Received().UpdateWorkspace(Arg.Is<WorkspaceDTO>(ws =>
@@ -52,7 +51,7 @@ namespace StarLab.Application
         [Test]
         public void TestAddDocumentWhenDocumentWithSameNameExists()
         {
-            var port = Substitute.For<IApplicationOutputPort>();
+            var port = Substitute.For<IAddDocumentOutputPort>();
 
             var interactor = Factory.CreateAddDocumentUseCase(port);
 
@@ -86,7 +85,7 @@ namespace StarLab.Application
         [Test]
         public void TestAddDocumentWhenNameIsAnEmptyString()
         {
-            var port = Substitute.For<IApplicationOutputPort>();
+            var port = Substitute.For<IAddDocumentOutputPort>();
 
             var interactor = Factory.CreateAddDocumentUseCase(port);
 
@@ -119,7 +118,7 @@ namespace StarLab.Application
         [Test]
         public void TestAddDocumentWhenNameIsInvalid()
         {
-            var port = Substitute.For<IApplicationOutputPort>();
+            var port = Substitute.For<IAddDocumentOutputPort>();
 
             var interactor = Factory.CreateAddDocumentUseCase(port);
 

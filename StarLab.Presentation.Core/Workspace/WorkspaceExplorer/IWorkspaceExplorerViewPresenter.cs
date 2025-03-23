@@ -6,6 +6,33 @@
     public interface IWorkspaceExplorerViewPresenter : IChildViewPresenter
     {
         /// <summary>
+        /// Creates a context menu for the specified document node using the <see cref="IMenuManager"/> provided.
+        /// </summary>
+        /// <param name="id">The document ID.</param>
+        /// <param name="manager">The <see cref="IMenuManager"/> </param>
+        void CreateDocumentContextMenu(string id, IMenuManager manager);
+
+        /// <summary>
+        /// Creates a context menu for the specified folder node using the <see cref="IMenuManager"/> provided.
+        /// </summary>
+        /// <param name="folder">The folder path.</param>
+        /// <param name="manager">The context menu manager.</param>
+        void CreateFolderContextMenu(string folder, IMenuManager manager);
+
+        /// <summary>
+        /// Creates a context menu for the specified project node using the <see cref="IMenuManager"/> provided.
+        /// </summary>
+        /// <param name="project">The project name.</param>
+        /// <param name="manager">The context menu manager.</param>
+        void CreateProjectContextMenu(string project, IMenuManager manager);
+
+        /// <summary>
+        /// Creates a context menu for the workspace node using the <see cref="IMenuManager"/> provided.
+        /// </summary>
+        /// <param name="manager">The context menu manager.</param>
+        void CreateWorkspaceContextMenu(IMenuManager manager);
+
+        /// <summary>
         /// Notifies the presenter that the specified document node has been selected.
         /// </summary>
         /// <param name="key">The node key.</param>

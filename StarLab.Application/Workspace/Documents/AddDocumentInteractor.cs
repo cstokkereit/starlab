@@ -6,14 +6,14 @@ namespace StarLab.Application.Workspace.Documents
     /// <summary>
     /// A use case that adds a document to a folder in the workspace hierarchy.
     /// </summary>
-    internal class AddDocumentInteractor : UseCaseInteractor<IApplicationOutputPort>, IAddDocumentUseCase
+    internal class AddDocumentInteractor : UseCaseInteractor<IAddDocumentOutputPort>, IAddDocumentUseCase
     {
         /// <summary>
         /// Initialises a new instance of the <see cref="AddDocumentInteractor"/> class.
         /// </summary>
-        /// <param name="outputPort">An <see cref="IApplicationOutputPort"/> that updates the UI in response to the execution of the use case.</param>
+        /// <param name="outputPort">An <see cref="IAddDocumentOutputPort"/> that updates the UI in response to the execution of the use case.</param>
         /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
-        public AddDocumentInteractor(IApplicationOutputPort outputPort, IMapper mapper)
+        public AddDocumentInteractor(IAddDocumentOutputPort outputPort, IMapper mapper)
             : base(outputPort, mapper) { }
 
         /// <summary>

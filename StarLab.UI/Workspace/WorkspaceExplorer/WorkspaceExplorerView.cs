@@ -35,8 +35,6 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
             panel = (SplitViewPanels)configuration.Panel;
 
             presenter = (IWorkspaceExplorerViewPresenter)factory.CreatePresenter(parent, this);
-
-            treeView.ContextMenuStrip = new UI.Controls.ContextMenuStrip();
         }
 
         /// <summary>
@@ -142,14 +140,7 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         /// </summary>
         public void Clear()
         {
-            foreach (TreeNode node in treeView.Nodes)
-            {
-                if ((string)node.Tag == Constants.DOCUMENT)
-                {
-                    treeView.ContextMenuManager.Remove(node.Name); // Remove method if never called
-                }
-            }
-
+            treeView.ContextMenuStrip = null;
             treeView.Nodes.Clear();
             nodes.Clear();
         }
@@ -161,53 +152,6 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         public void CollapseNode(string key)
         {
             if (nodes.ContainsKey(key)) nodes[key].Collapse();
-        }
-
-        /// <summary>
-        /// Creates an <see cref="IMenuManager"> that controls the context menu for the specified document.
-        /// </summary>
-        /// <param name="document">The document ID.</param>
-        /// <returns>An <see cref="IMenuManager"/> that can be used to configure the context menu.</returns>
-        public IMenuManager CreateDocumentMenuManager(string document)
-        {
-            var manager = new NodeMenuManager(document, Constants.DOCUMENT);
-            treeView.ContextMenuManager.Add(manager);
-            return manager;
-        }
-
-        /// <summary>
-        /// Creates an <see cref="IMenuManager"> that controls the context menu for the specified folder.
-        /// </summary>
-        /// <param name="folder">The folder key.</param>
-        /// <returns>An <see cref="IMenuManager"/> that can be used to configure the context menu.</returns>
-        public IMenuManager CreateFolderMenuManager(string folder)
-        {
-            var manager = new NodeMenuManager(folder, Constants.FOLDER);
-            treeView.ContextMenuManager.Add(manager);
-            return manager;
-        }
-
-        /// <summary>
-        /// Creates an <see cref="IMenuManager"> that controls the context menu for the specified project.
-        /// </summary>
-        /// <param name="project">The project key.</param>
-        /// <returns>An <see cref="IMenuManager"/> that can be used to configure the context menu.</returns>
-        public IMenuManager CreateProjectMenuManager(string project)
-        {
-            var manager = new NodeMenuManager(project, Constants.PROJECT);
-            treeView.ContextMenuManager.Add(manager);
-            return manager;
-        }
-
-        /// <summary>
-        /// Creates an <see cref="IMenuManager"> that controls the context menu for the workspace.
-        /// </summary>
-        /// <returns>An <see cref="IMenuManager"/> that can be used to configure the context menu.</returns>
-        public IMenuManager CreateWorkspaceMenuManager()
-        {
-            var manager = new NodeMenuManager(Constants.WORKSPACE);
-            treeView.ContextMenuManager.Add(manager);
-            return manager;
         }
 
         /// <summary>
@@ -230,6 +174,14 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         public void ExpandNode(string key)
         {
             if (nodes.ContainsKey(key)) nodes[key].Expand();
+        }
+
+        /// <summary>
+        /// Sets the focus to the currently selected node.
+        /// </summary>
+        public void FocusOnSelectedNode()
+        {
+            treeView.Focus();
         }
 
         /// <summary>
@@ -286,7 +238,7 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         }
 
         /// <summary>
-        /// Event handler for the <see cref="System.Windows.Forms.TreeView.AfterCollapse"/> event.
+        /// Event handler for the <see cref="TreeView.AfterCollapse"/> event.
         /// </summary>
         /// <param name="sender">The <see cref="object"> that was the originator of the event.</param>
         /// <param name="e">A <see cref="TreeViewEventArgs"/> that provides context for the event.</param>
@@ -316,7 +268,7 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         }
 
         /// <summary>
-        /// Event handler for the <see cref="System.Windows.Forms.TreeView.AfterExpand"/> event.
+        /// Event handler for the <see cref="TreeView.AfterExpand"/> event.
         /// </summary>
         /// <param name="sender">The <see cref="object"> that was the originator of the event.</param>
         /// <param name="e">A <see cref="TreeViewEventArgs"/> that provides context for the event.</param>
@@ -346,7 +298,7 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         }
 
         /// <summary>
-        /// Event handler for the <see cref="System.Windows.Forms.TreeView.AfterLabelEdit"/> event.
+        /// Event handler for the <see cref="TreeView.AfterLabelEdit"/> event.
         /// </summary>
         /// <param name="sender">The <see cref="object"> that was the originator of the event.</param>
         /// <param name="e">A <see cref="NodeLabelEditEventArgs"/> that provides context for the event.</param>
@@ -388,7 +340,7 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         }
 
         /// <summary>
-        /// Event handler for the <see cref="System.Windows.Forms.TreeView.Enter"/> event.
+        /// Event handler for the <see cref="TreeView.Enter"/> event.
         /// </summary>
         /// <param name="sender">The <see cref="object"> that was the originator of the event.</param>
         /// <param name="e">An <see cref="EventArgs"/> that provides context for the event.</param>
@@ -398,7 +350,7 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         }
 
         /// <summary>
-        /// Event handler for the <see cref="System.Windows.Forms.TreeView.Leave"/> event.
+        /// Event handler for the <see cref="TreeView.Leave"/> event.
         /// </summary>
         /// <param name="sender">The <see cref="object"> that was the originator of the event.</param>
         /// <param name="e">An <see cref="EventArgs"/> that provides context for the event.</param>
@@ -408,7 +360,7 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         }
 
         /// <summary>
-        /// Event handler for the <see cref="System.Windows.Forms.TreeView.MouseDown"/> event.
+        /// Event handler for the <see cref="TreeView.MouseDown"/> event.
         /// </summary>
         /// <param name="sender">The <see cref="object"> that was the originator of the event.</param>
         /// <param name="e">A <see cref="MouseEventArgs"/> that provides context for the event.</param>
@@ -426,7 +378,6 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
 
                     case Constants.FOLDER:
                         presenter.FolderSelected(node.Name);
-                        
                         break;
 
                     case Constants.PROJECT:
@@ -441,7 +392,7 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         }
 
         /// <summary>
-        /// Event handler for the <see cref="System.Windows.Forms.TreeView.NodeMouseDoubleClick"/> event.
+        /// Event handler for the <see cref="TreeView.NodeMouseDoubleClick"/> event.
         /// </summary>
         /// <param name="sender">The <see cref="object"> that was the originator of the event.</param>
         /// <param name="e">A <see cref="TreeNodeMouseClickEventArgs"/> that provides context for the event.</param>
@@ -450,6 +401,42 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
             if (e != null && e.Node != null)
             {
                 if (GetNodeType(e.Node) == Constants.DOCUMENT) presenter.OpenDocument(e.Node.Name);
+            }
+        }
+
+        /// <summary>
+        /// Event handler for the <see cref="TreeView.NodeMouseDoubleClick"/> event.
+        /// </summary>
+        /// <param name="sender">The <see cref="object"> that was the originator of the event.</param>
+        /// <param name="e">A <see cref="TreeNodeMouseClickEventArgs"/> that provides context for the event.</param>
+        private void TreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            if (e != null && e.Button == MouseButtons.Right)
+            {
+                var menu = new ManagedContextMenuStrip();
+
+                var node = treeView.GetNodeAt(e.X, e.Y);
+
+                switch (GetNodeType(node))
+                {
+                    case Constants.DOCUMENT:
+                        presenter.CreateDocumentContextMenu(node.Name, menu);
+                        break;
+
+                    case Constants.FOLDER:
+                        presenter.CreateFolderContextMenu(node.Name, menu);
+                        break;
+
+                    case Constants.PROJECT:
+                        presenter.CreateProjectContextMenu(node.Name, menu);
+                        break;
+
+                    case Constants.WORKSPACE:
+                        presenter.WorkspaceSelected();
+                        break;
+                }
+
+                treeView.ContextMenuStrip = menu;
             }
         }
 

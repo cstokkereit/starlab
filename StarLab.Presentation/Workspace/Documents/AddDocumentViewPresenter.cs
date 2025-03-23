@@ -10,7 +10,7 @@ namespace StarLab.Presentation.Workspace.Documents
     /// <summary>
     /// Controls the behaviour of an <see cref="IAddDocumentView"/>.
     /// </summary>
-    public class AddDocumentViewPresenter : ChildViewPresenter<IAddDocumentView, IDialogController>, IAddDocumentViewPresenter, IChildViewController, IApplicationOutputPort
+    public class AddDocumentViewPresenter : ChildViewPresenter<IAddDocumentView, IDialogController>, IAddDocumentViewPresenter, IChildViewController, IAddDocumentOutputPort
     {
         /// <summary>
         /// Initialises a new instance of the <see cref="AddDocumentViewPresenter"> class.
@@ -90,15 +90,6 @@ namespace StarLab.Presentation.Workspace.Documents
             View.DocumentName = string.Empty;
 
             ParentController.Show();
-        }
-
-        /// <summary>
-        /// Updates the state of the workspace represented by the <see cref="WorkspaceDTO"/> provided and applies the layout.
-        /// </summary>
-        /// <param name="dto">The <see cref="WorkspaceDTO"/> that contains the updated workspace state.</param>
-        public void SetWorkspace(WorkspaceDTO dto)
-        {
-            throw new NotImplementedException(); // This should never be called.
         }
 
         /// <summary>

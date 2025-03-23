@@ -19,9 +19,9 @@ namespace StarLab.Application
         /// <summary>
         /// Creates a use case interactor that adds a document to the workspace.
         /// </summary>
-        /// <param name="outputPort">An <see cref="IApplicationOutputPort"/> that updates the UI in response to the ouputs of the use case.</param>
+        /// <param name="outputPort">An <see cref="IAddDocumentOutputPort"/> that updates the UI in response to the ouputs of the use case.</param>
         /// <returns>An instance of <see cref="IAddDocumentUseCase"/> that implements the use case.</returns>
-        IAddDocumentUseCase CreateAddDocumentUseCase(IApplicationOutputPort outputPort);
+        IAddDocumentUseCase CreateAddDocumentUseCase(IAddDocumentOutputPort outputPort);
 
         /// <summary>
         /// Creates a use case interactor that adds a folder to the workspace.

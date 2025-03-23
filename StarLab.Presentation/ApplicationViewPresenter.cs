@@ -322,14 +322,14 @@ namespace StarLab.Presentation
         /// Updates the state of the workspace represented by the <see cref="WorkspaceDTO"/> provided.
         /// </summary>
         /// <param name="dto">The <see cref="WorkspaceDTO"/> that contains the updated workspace state.</param>
-        /// <param name="documentId">The ID of the document that was modified.</param>
-        public void UpdateDocument(WorkspaceDTO dto, string documentId)
+        /// <param name="id">The ID of the document that was modified.</param>
+        public void UpdateDocument(WorkspaceDTO dto, string id)
         {
             workspace = new Workspace.Workspace(dto);
 
-            var document = workspace.GetDocument(documentId);
+            var document = workspace.GetDocument(id);
 
-            var controller = AppController.GetController(workspace.GetDocument(documentId));
+            var controller = AppController.GetController(workspace.GetDocument(id));
 
             controller.UpdateDocument(document);
 

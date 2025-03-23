@@ -95,9 +95,7 @@ namespace StarLab.UI
         {
             if (views.ContainsKey(id))
             {
-                var view = views[id];
-
-                if (controllers[$"Document({view.ID}) Controller"] is IDocumentController controller) // If other types move to IViewController
+                if (controllers[ControllerNames.GetDocumentControllerName(id)] is IDocumentController controller)
                 {
                     controller.Close();
                 }

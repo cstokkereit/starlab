@@ -103,6 +103,78 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         }
 
         /// <summary>
+        /// Creates a context menu for the specified document node using the <see cref="IMenuManager"/> provided.
+        /// </summary>
+        /// <param name="id">The document ID.</param>
+        /// <param name="manager">The context menu manager.</param>
+        public void CreateDocumentContextMenu(string id, IMenuManager manager)
+        {
+            manager.AddMenuItem(Constants.OPEN, StringResources.Open, ImageResources.Open, GetCommand(Actions.OPEN_DOCUMENT, id));
+            manager.AddMenuSeparator();
+            manager.AddMenuItem(Constants.CUT, StringResources.Cut, ImageResources.Cut);
+            manager.AddMenuItem(Constants.COPY, StringResources.Copy, ImageResources.Copy);
+            manager.AddMenuItem(Constants.PASTE, StringResources.Paste, ImageResources.Paste);
+            manager.AddMenuItem(Constants.DELETE, StringResources.Delete, GetCommand(this, Actions.DELETE_DOCUMENT, id));
+            manager.AddMenuItem(Constants.RENAME, StringResources.Rename, ImageResources.Rename, GetCommand(Actions.RENAME, id));
+        }
+
+        /// <summary>
+        /// Creates a context menu for the specified folder node using the <see cref="IMenuManager"/> provided.
+        /// </summary>
+        /// <param name="folder">The folder path.</param>
+        /// <param name="manager">The context menu manager.</param>
+        public void CreateFolderContextMenu(string folder, IMenuManager manager)
+        {
+            manager.AddMenuItem(Constants.ADD, StringResources.Add);
+            manager.AddMenuItem(Constants.ADD, Constants.ADD_CHART, StringResources.Chart + Constants.ELLIPSIS, GetCommand(this, Actions.ADD_CHART, folder));
+            manager.AddMenuItem(Constants.ADD, Constants.ADD_TABLE, StringResources.Table + Constants.ELLIPSIS, GetCommand(this, Actions.ADD_TABLE, folder));
+            manager.AddMenuItem(Constants.ADD, Constants.ADD_FOLDER, StringResources.NewFolder, ImageResources.NewFolder, GetCommand(this, Actions.ADD_FOLDER, folder));
+            manager.AddMenuSeparator();
+            manager.AddMenuItem(Constants.COLLAPSE_ALL, StringResources.CollapseAllDescendants, ImageResources.Collapse, GetCommand(Actions.COLLAPSE, folder));
+            manager.AddMenuSeparator();
+            manager.AddMenuItem(Constants.CUT, StringResources.Cut, ImageResources.Cut);
+            manager.AddMenuItem(Constants.COPY, StringResources.Copy, ImageResources.Copy);
+            manager.AddMenuItem(Constants.PASTE, StringResources.Paste, ImageResources.Paste);
+            manager.AddMenuItem(Constants.DELETE, StringResources.Delete, GetCommand(this, Actions.DELETE_FOLDER, folder));
+            manager.AddMenuItem(Constants.RENAME, StringResources.Rename, ImageResources.Rename, GetCommand(Actions.RENAME, folder));
+        }
+
+        /// <summary>
+        /// Creates a context menu for the specified project node using the <see cref="IMenuManager"/> provided.
+        /// </summary>
+        /// <param name="project">The project name.</param>
+        /// <param name="manager">The context menu manager.</param>
+        public void CreateProjectContextMenu(string project, IMenuManager manager)
+        {
+            manager.AddMenuItem(Constants.ADD, StringResources.Add);
+            manager.AddMenuItem(Constants.ADD, Constants.ADD_CHART, StringResources.Chart + Constants.ELLIPSIS, GetCommand(this, Actions.ADD_CHART, project));
+            manager.AddMenuItem(Constants.ADD, Constants.ADD_TABLE, StringResources.Table + Constants.ELLIPSIS, GetCommand(this, Actions.ADD_TABLE, project));
+            manager.AddMenuItem(Constants.ADD, Constants.ADD_FOLDER, StringResources.NewFolder, ImageResources.NewFolder, GetCommand(this, Actions.ADD_FOLDER, project));
+            manager.AddMenuSeparator();
+            manager.AddMenuItem(Constants.COLLAPSE_ALL, StringResources.CollapseAllDescendants, ImageResources.Collapse, GetCommand(Actions.COLLAPSE, project));
+            manager.AddMenuSeparator();
+            manager.AddMenuItem(Constants.CUT, StringResources.Cut, ImageResources.Cut);
+            manager.AddMenuItem(Constants.COPY, StringResources.Copy, ImageResources.Copy);
+            manager.AddMenuItem(Constants.PASTE, StringResources.Paste, ImageResources.Paste);
+            manager.AddMenuItem(Constants.DELETE, StringResources.Delete, GetCommand(this, Actions.DELETE_FOLDER, project));
+            manager.AddMenuItem(Constants.RENAME, StringResources.Rename, ImageResources.Rename, GetCommand(Actions.RENAME, project));
+        }
+
+        /// <summary>
+        /// Creates a context menu for the workspace node using the <see cref="IMenuManager"/> provided.
+        /// </summary>
+        /// <param name="manager">The context menu manager.</param>
+        public void CreateWorkspaceContextMenu(IMenuManager manager)
+        {
+            manager.AddMenuItem(Constants.COLLAPSE_ALL, StringResources.CollapseAllDescendants, ImageResources.Collapse, GetCommand(Actions.COLLAPSE, Constants.WORKSPACE));
+            manager.AddMenuSeparator();
+            manager.AddMenuItem(Constants.ADD, StringResources.Add);
+            manager.AddMenuItem(Constants.ADD, Constants.ADD_PROJECT, StringResources.Project + Constants.ELLIPSIS, GetCommand(this, Actions.ADD_PROJECT));
+            manager.AddMenuSeparator();
+            manager.AddMenuItem(Constants.RENAME, StringResources.Rename, ImageResources.Rename, GetCommand(Actions.RENAME, Constants.WORKSPACE));
+        }
+
+        /// <summary>
         /// Deletes the document with the specified ID.
         /// </summary>
         /// <param name="id">The ID of the document to be deleted.</param>
@@ -366,7 +438,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// </summary>
         public void Synchronise()
         {
-            throw new NotImplementedException();
+            UpdateSelectedNode(true);
         }
 
         /// <summary>
@@ -376,7 +448,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="id">The ID of the document that was modified.</param>
         public void UpdateDocument(WorkspaceDTO dto, string id)
         {
-            throw new NotImplementedException();
+            if (AppController.GetController(ControllerNames.APPLICATION_VIEW_CONTROLLER) is IApplicationOutputPort port) port.UpdateDocument(dto, id);
         }
 
         /// <summary>
@@ -470,23 +542,6 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         }
 
         /// <summary>
-        /// Creates the menu manager responsible for generating the context menu for the node that represents the specified document.
-        /// </summary>
-        /// <param name="document">The <see cref="IDocument"/> that the node represents.</param>
-        private void CreateDocumentMenuManager(IDocument document)
-        {
-            var manager = View.CreateDocumentMenuManager(document.ID);
-
-            manager.AddMenuItem(Constants.OPEN, StringResources.Open, ImageResources.Open, GetCommand(Actions.OPEN_DOCUMENT, document.ID));
-            manager.AddMenuSeparator();
-            manager.AddMenuItem(Constants.CUT, StringResources.Cut, ImageResources.Cut);
-            manager.AddMenuItem(Constants.COPY, StringResources.Copy, ImageResources.Copy);
-            manager.AddMenuItem(Constants.PASTE, StringResources.Paste, ImageResources.Paste);
-            manager.AddMenuItem(Constants.DELETE, StringResources.Delete, GetCommand(this, Actions.DELETE_DOCUMENT, document.ID));
-            manager.AddMenuItem(Constants.RENAME, StringResources.Rename, ImageResources.Rename, GetCommand(Actions.RENAME, document.ID));
-        }
-
-        /// <summary>
         /// Creates the nodes that represent the documents contained within the workspace hierarchy.
         /// </summary>
         private void CreateDocumentNodes()
@@ -494,30 +549,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
             foreach (var document in workspace.Documents)
             {
                 View.AddDocumentNode(document.ID, document.Path, document.Name, images[NodeImages.ColourMagnitudeDiagram]);
-                CreateDocumentMenuManager(document);
             }
-        }
-
-        /// <summary>
-        /// Creates the menu manager responsible for generating the context menu for the node that represents the specified folder.
-        /// </summary>
-        /// <param name="folder">The <see cref="IFolder"/> that the node represents.</param>
-        private void CreateFolderMenuManager(IFolder folder)
-        {
-            var manager = View.CreateFolderMenuManager(folder.Key);
-
-            manager.AddMenuItem(Constants.ADD, StringResources.Add);
-            manager.AddMenuItem(Constants.ADD, Constants.ADD_CHART, StringResources.Chart + Constants.ELLIPSIS, GetCommand(this, Actions.ADD_CHART, folder.Key));
-            manager.AddMenuItem(Constants.ADD, Constants.ADD_TABLE, StringResources.Table + Constants.ELLIPSIS, GetCommand(this, Actions.ADD_TABLE, folder.Key));
-            manager.AddMenuItem(Constants.ADD, Constants.ADD_FOLDER, StringResources.NewFolder, ImageResources.NewFolder, GetCommand(this, Actions.ADD_FOLDER, folder.Key));
-            manager.AddMenuSeparator();
-            manager.AddMenuItem(Constants.COLLAPSE_ALL, StringResources.CollapseAllDescendants, ImageResources.Collapse, GetCommand(Actions.COLLAPSE, folder.Key));
-            manager.AddMenuSeparator();
-            manager.AddMenuItem(Constants.CUT, StringResources.Cut, ImageResources.Cut);
-            manager.AddMenuItem(Constants.COPY, StringResources.Copy, ImageResources.Copy);
-            manager.AddMenuItem(Constants.PASTE, StringResources.Paste, ImageResources.Paste);
-            manager.AddMenuItem(Constants.DELETE, StringResources.Delete, GetCommand(this, Actions.DELETE_FOLDER, folder.Key));
-            manager.AddMenuItem(Constants.RENAME, StringResources.Rename, ImageResources.Rename, GetCommand(Actions.RENAME, folder.Key));
         }
 
         /// <summary>
@@ -535,33 +567,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
                 {
                     View.AddFolderNode(folder.Key, folder.ParentKey, folder.Name, images[NodeImages.ClosedFolder], images[NodeImages.SelectedClosedFolder]);
                 }
-
-                CreateFolderMenuManager(folder);
             }
-        }
-
-        /// <summary>
-        /// Creates the menu manager responsible for generating the context menu for the node that represents the specified project.
-        /// </summary>
-        /// <param name="project">The <see cref="IProject"/> that the node represents.</param>
-        private void CreateProjectMenuManager(IProject project)
-        {
-            var manager = View.CreateProjectMenuManager(project.Key);
-
-            //var workspaceController = AppController.GetWorkspaceController();
-
-            manager.AddMenuItem(Constants.ADD, StringResources.Add);
-            manager.AddMenuItem(Constants.ADD, Constants.ADD_CHART, StringResources.Chart + Constants.ELLIPSIS, GetCommand(this, Actions.ADD_CHART, project.Key));
-            manager.AddMenuItem(Constants.ADD, Constants.ADD_TABLE, StringResources.Table + Constants.ELLIPSIS, GetCommand(this, Actions.ADD_TABLE, project.Key));
-            manager.AddMenuItem(Constants.ADD, Constants.ADD_FOLDER, StringResources.NewFolder, ImageResources.NewFolder, GetCommand(this, Actions.ADD_FOLDER, project.Key));
-            manager.AddMenuSeparator();
-            manager.AddMenuItem(Constants.COLLAPSE_ALL, StringResources.CollapseAllDescendants, ImageResources.Collapse, GetCommand(Actions.COLLAPSE, project.Key));
-            manager.AddMenuSeparator();
-            manager.AddMenuItem(Constants.CUT, StringResources.Cut, ImageResources.Cut);
-            manager.AddMenuItem(Constants.COPY, StringResources.Copy, ImageResources.Copy);
-            manager.AddMenuItem(Constants.PASTE, StringResources.Paste, ImageResources.Paste);
-            manager.AddMenuItem(Constants.DELETE, StringResources.Delete, GetCommand(this, Actions.DELETE_FOLDER, project.Key));
-            manager.AddMenuItem(Constants.RENAME, StringResources.Rename, ImageResources.Rename, GetCommand(Actions.RENAME, project.Key));
         }
 
         /// <summary>
@@ -572,7 +578,6 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
             foreach (var project in workspace.Projects)
             {
                 View.AddProjectNode(project.Key, project.ParentKey, project.Name, images[NodeImages.Workspace]);
-                CreateProjectMenuManager(project);
             }
         }
 
@@ -586,27 +591,11 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         }
 
         /// <summary>
-        /// Creates the menu manager responsible for generating the context menu for the node that represents the workspace.
-        /// </summary>
-        private void CreateWorkspaceMenuManager()
-        {
-            var manager = View.CreateWorkspaceMenuManager();
-
-            manager.AddMenuItem(Constants.COLLAPSE_ALL, StringResources.CollapseAllDescendants, ImageResources.Collapse, GetCommand(Actions.COLLAPSE, Constants.WORKSPACE));
-            manager.AddMenuSeparator();
-            manager.AddMenuItem(Constants.ADD, StringResources.Add);
-            manager.AddMenuItem(Constants.ADD, Constants.ADD_PROJECT, StringResources.Project + Constants.ELLIPSIS, GetCommand(this, Actions.ADD_PROJECT));
-            manager.AddMenuSeparator();
-            manager.AddMenuItem(Constants.RENAME, StringResources.Rename, ImageResources.Rename, GetCommand(Actions.RENAME, Constants.WORKSPACE));
-        }
-
-        /// <summary>
         /// Creates the node that represents the workspace.
         /// </summary>
         private void CreateWorkspaceNode()
         {
             View.AddWorkspaceNode(Constants.WORKSPACE, GetWorkspaceName(), images[NodeImages.Workspace]);
-            CreateWorkspaceMenuManager();
         }
 
         /// <summary>
@@ -684,6 +673,23 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         }
 
         /// <summary>
+        /// Selects the node that represents the active document.
+        /// </summary>
+        /// <param name="highlight">true to set the focus on the selected node; false otherwise.</param>
+        private void UpdateSelectedNode(bool highlight)
+        {
+            if (workspace.ActiveDocument != null)
+            {
+                if (highlight)
+                {
+                    View.FocusOnSelectedNode();
+                }
+
+                View.SelectNode(workspace.ActiveDocument.ID);
+            }
+        }
+
+        /// <summary>
         /// Updates the <see cref="IWorkspace"/> and the <see cref="IView"/> in response to a change in the workspace state.
         /// </summary>
         /// <param name="workspace">The new <see cref="IWorkspace"/>.</param>
@@ -702,6 +708,8 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
                 CreateFolderNodes();
                 CreateDocumentNodes();
                 UpdateNodes();
+
+                UpdateSelectedNode(false);
 
                 enabled = true;
             }

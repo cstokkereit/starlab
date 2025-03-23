@@ -1,6 +1,4 @@
-﻿using StarLab.Application.Workspace;
-
-namespace StarLab.Application
+﻿namespace StarLab.Application.Workspace
 {
     /// <summary>
     /// A class for performing unit tests on the <see cref="RenameFolderInteractor"/> class.
@@ -24,7 +22,7 @@ namespace StarLab.Application
 
             interactor.Execute(dto, "Workspace/Project1/Folder1", "Folder2");
 
-            port.Received().UpdateWorkspace(Arg.Is<WorkspaceDTO>(ws => 
+            port.Received().UpdateWorkspace(Arg.Is<WorkspaceDTO>(ws =>
                 ws.Projects.Count == 1 &&
                 ws.Projects[0].Folders.Count == 1 &&
                 ws.Projects[0].Folders[0].Path == "Workspace/Project1/Folder2"));
