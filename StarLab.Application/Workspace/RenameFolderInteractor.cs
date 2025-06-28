@@ -42,7 +42,7 @@ namespace StarLab.Application.Workspace
                 }
                 else
                 {
-                    throw new Exception(WorkspaceInteractionHelper.CreateTargetExistsMessage(key.Substring(key.LastIndexOf('/') + 1), name, type));
+                    throw new Exception(WorkspaceInteractionHelper.CreateCannotRenameItemMessage(key.Substring(key.LastIndexOf('/') + 1), name, type));
                 }
             }
             else

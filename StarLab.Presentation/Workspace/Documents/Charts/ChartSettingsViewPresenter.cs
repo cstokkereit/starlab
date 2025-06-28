@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using StarLab.Application;
 using Stratosoft.Commands;
+
 using ImageResources = StarLab.Presentation.Properties.Resources;
 using StringResources = StarLab.Shared.Properties.Resources;
 
@@ -20,7 +21,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// <param name="configuration">The <see cref="IConfigurationProvider"/> that will be used to get configuration information.</param>
         /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
         /// <param name="events">The <see cref="IEventAggregator"/> that manages application events.</param>
-        public ChartSettingsViewPresenter(IChartSettingsView view, ICommandManager commands, IUseCaseFactory factory, Configuration.IConfigurationProvider configuration, IMapper mapper, IEventAggregator events)
+        public ChartSettingsViewPresenter(IChartSettingsView view, ICommandManager commands, IUseCaseFactory factory, Configuration.IApplicationConfiguration configuration, IMapper mapper, IEventAggregator events)
             : base(view, commands, factory, configuration, mapper, events) { }
 
         /// <summary>
@@ -38,12 +39,12 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             {
                 base.Initialise(controller);
 
-                ParentController.AddToolbarButton(Constants.SHOW_SETTINGS, StringResources.Settings, ImageResources.Settings, GetCommand(ParentController, Actions.SHOW_SPLIT_CONTENT, View.Name));
-                View.AttachCancelButtonCommand(GetCommand(ParentController, Actions.HIDE_SPLIT_CONTENT, View.Name));
+                ParentController.AddToolbarButton(Constants.ShowSettings, StringResources.Settings, ImageResources.Settings, GetCommand(ParentController, Actions.ShowSplitContent, View.Name));
+                View.AttachCancelButtonCommand(GetCommand(ParentController, Actions.HideSplitContent, View.Name));
 
                 var chain = GetCommandChain();
-                chain.Add(GetCommand(this, Actions.APPLY_SETTINGS));
-                chain.Add(GetCommand(ParentController, Actions.HIDE_SPLIT_CONTENT, View.Name));
+                chain.Add(GetCommand(this, Actions.ApplySettings));
+                chain.Add(GetCommand(ParentController, Actions.HideSplitContent, View.Name));
 
                 View.AttachOKButtonCommand(chain);
 

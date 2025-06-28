@@ -11,11 +11,29 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Properties\**" />
+    <EmbeddedResource Remove="Properties\**" />
+    <None Remove="Properties\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Configuration.xml~RF5677c5fe.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Castle.Windsor" Version="6.0.0" />
     <PackageReference Include="DockPanelSuite" Version="3.1.1" />
     <PackageReference Include="DockPanelSuite.ThemeVS2015" Version="3.1.1" />
-    <PackageReference Include="log4net" Version="3.0.3" />
-    <PackageReference Include="ScottPlot.WinForms" Version="5.0.47" />
+    <PackageReference Include="log4net" Version="3.1.0" />
+    <PackageReference Include="ScottPlot.WinForms" Version="5.0.55" />
   </ItemGroup>
 
   <ItemGroup>
@@ -56,10 +74,16 @@
     <None Update="app.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="TypeDefinitions.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Properties\" />
+    <None Include="Properties\Settings.settings">
+      <Generator>PublicSettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
 
 </Project>

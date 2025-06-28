@@ -22,7 +22,7 @@ namespace StarLab.Application.Workspace
         /// <exception cref="ArgumentNullException"></exception>
         public Folder(FolderDTO dto, IFolder parent)
         {
-            if (string.IsNullOrEmpty(dto.Path)) throw new ArgumentException(); // TODO
+            if (string.IsNullOrEmpty(dto.Path)) throw new ArgumentException(Constants.InvalidPathMessage);
 
             Parent = parent ?? throw new ArgumentNullException(nameof(parent));
             Name = dto.Path.Substring(dto.Path.LastIndexOf('/') + 1);
@@ -114,7 +114,24 @@ namespace StarLab.Application.Workspace
         /// <param name="folder">The <see cref="IFolder"/> to be added.</param>
         public void AddFolder(IFolder folder)
         {
+            if (folder.Parent != this && folder is Folder child) child.Parent = this;
+
             folders.Add(folder);
+        }
+
+        /// <summary>
+        /// Determines if this <see cref="IFolder"> contains a child folder with the specified name.
+        /// </summary>
+        /// <param name="name">The name of the child folder.</param>
+        /// <returns><see cref="true"/> if this folder contains a child folder with the specified name; <see cref="false"/> otherwise.</returns>
+        public bool ContainsFolder(string name)
+        {
+            foreach (IFolder child in folders)
+            {
+                if (child.Name == name) return true;
+            }
+
+            return false;
         }
 
         /// <summary>

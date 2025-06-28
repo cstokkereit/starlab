@@ -5,7 +5,8 @@
     /// </summary>
     public enum ViewTypes
     {
-        Application, 
+        Application,
+        Content,
         Dialog, 
         Document, 
         Tool

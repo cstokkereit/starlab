@@ -117,6 +117,22 @@ namespace StarLab.Presentation.Workspace
         }
 
         /// <summary>
+        /// Gets a <see cref="List{String}"/> containing the IDs of all documents in the workspace hierarchy.
+        /// </summary>
+        /// <returns>A <see cref="List{String}"/> of document IDs.</returns>
+        public List<string> GetDocumentIDs()
+        {
+            var ids = new List<string>();
+
+            foreach (var id in documents.Keys)
+            {
+                ids.Add(id);
+            }
+
+            return ids;
+        }
+
+        /// <summary>
         /// Gets the <see cref="IFolder"/> with the specified key.
         /// </summary>
         /// <param name="key">The key of the required <see cref="IFolder"/>.</param>

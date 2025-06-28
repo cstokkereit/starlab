@@ -89,7 +89,7 @@
 
             var dto = new DTOBuilder(Path.Combine(Folder, "Workspace1.slw")).CreateWworkspace();
 
-            var e = Assert.Throws<Exception>(() => interactor.Execute(dto, "Wworkspace1/"));
+            var e = Assert.Throws<Exception>(() => interactor.Execute(dto, "Workspace1/"));
 
             Assert.That(e.Message, Is.EqualTo("Workspace names cannot include any of the following:\r\n\r\n                               \\ / : * ? ' \" < > |\r\n\r\nPlease enter a valid name."));
         }

@@ -8,6 +8,11 @@ namespace StarLab.Presentation
     public interface IView
     {
         /// <summary>
+        /// Gets the <see cref="IChildViewController"/> that controls the view.
+        /// </summary>
+        IViewController Controller { get; }
+
+        /// <summary>
         /// Gets or sets a flag that determines whether the view will be hidden or unloaded when it is closed.
         /// </summary>
         bool HideOnClose { get; set; }

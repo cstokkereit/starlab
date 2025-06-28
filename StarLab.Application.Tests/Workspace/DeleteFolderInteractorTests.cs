@@ -59,10 +59,6 @@
 
             interactor.Execute(dto, "Workspace/Project1/Folder2");
 
-            port.Received().RemoveDocument(Arg.Is("21"));
-
-            port.Received().RemoveDocument(Arg.Is("22"));
-
             port.Received().UpdateWorkspace(Arg.Is<WorkspaceDTO>(ws =>
                 ws.Projects.Count == 1 &&
                 ws.Projects[0].Folders.Count == 2 &&
@@ -97,10 +93,6 @@
                              Arg.Is(InteractionResponses.OKCancel)).Returns(InteractionResult.Cancel);
 
             interactor.Execute(dto, "Workspace/Project1/Folder2");
-
-            port.DidNotReceive().RemoveDocument(Arg.Is("21"));
-
-            port.DidNotReceive().RemoveDocument(Arg.Is("22"));
 
             port.DidNotReceive().UpdateWorkspace(Arg.Any<WorkspaceDTO>());
         }
@@ -139,16 +131,6 @@
                              Arg.Is(InteractionResponses.OKCancel)).Returns(InteractionResult.OK);
 
             interactor.Execute(dto, "Workspace/Project1/Folder1");
-
-            port.Received().RemoveDocument(Arg.Is("111"));
-            port.Received().RemoveDocument(Arg.Is("112"));
-            port.Received().RemoveDocument(Arg.Is("121"));
-            port.Received().RemoveDocument(Arg.Is("122"));
-
-            port.DidNotReceive().RemoveDocument(Arg.Is("211"));
-            port.DidNotReceive().RemoveDocument(Arg.Is("212"));
-            port.DidNotReceive().RemoveDocument(Arg.Is("221"));
-            port.DidNotReceive().RemoveDocument(Arg.Is("222"));
 
             port.Received().UpdateWorkspace(Arg.Is<WorkspaceDTO>(ws =>
                 ws.Projects.Count == 1 &&
@@ -235,10 +217,6 @@
 
             interactor.Execute(dto, "Workspace/Project2");
 
-            port.Received().RemoveDocument(Arg.Is("21"));
-
-            port.Received().RemoveDocument(Arg.Is("22"));
-
             port.Received().UpdateWorkspace(Arg.Is<WorkspaceDTO>(ws =>
                 ws.Projects.Count == 2 &&
                 ws.Projects[0].Name == "Project1" &&
@@ -271,10 +249,6 @@
                              Arg.Is(InteractionResponses.OKCancel)).Returns(InteractionResult.Cancel);
 
             interactor.Execute(dto, "Workspace/Project2");
-
-            port.DidNotReceive().RemoveDocument(Arg.Is("21"));
-
-            port.DidNotReceive().RemoveDocument(Arg.Is("22"));
 
             port.DidNotReceive().UpdateWorkspace(Arg.Any<WorkspaceDTO>());
         }
@@ -314,16 +288,6 @@
                              Arg.Is(InteractionResponses.OKCancel)).Returns(InteractionResult.OK);
 
             interactor.Execute(dto, "Workspace/Project1");
-
-            port.Received().RemoveDocument(Arg.Is("1111"));
-            port.Received().RemoveDocument(Arg.Is("1112"));
-            port.Received().RemoveDocument(Arg.Is("1121"));
-            port.Received().RemoveDocument(Arg.Is("1122"));
-
-            port.DidNotReceive().RemoveDocument(Arg.Is("2111"));
-            port.DidNotReceive().RemoveDocument(Arg.Is("2112"));
-            port.DidNotReceive().RemoveDocument(Arg.Is("2121"));
-            port.DidNotReceive().RemoveDocument(Arg.Is("2122"));
 
             port.Received().UpdateWorkspace(Arg.Is<WorkspaceDTO>(ws =>
                 ws.Projects.Count == 1 &&

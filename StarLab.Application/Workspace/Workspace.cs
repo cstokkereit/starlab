@@ -56,12 +56,12 @@ namespace StarLab.Application.Workspace
         /// <summary>
         /// Gets the workspace name.
         /// </summary>
-        public string Name { get => Constants.WORKSPACE; set => throw new InvalidOperationException(); }
+        public string Name { get => Constants.Workspace; set => throw new InvalidOperationException(); }
 
         /// <summary>
         /// Gets the workspace path.
         /// </summary>
-        public string Path { get => Constants.WORKSPACE; }
+        public string Path { get => Constants.Workspace; }
 
         /// <summary>
         /// The <see cref="Workspace"/> is the top most element in the workspace hierarchy and therefore has no parent.
@@ -78,10 +78,10 @@ namespace StarLab.Application.Workspace
         /// Adds the <see cref="Document"/> provided to the workspace hierarchy.
         /// </summary>
         /// <param name="document">The <see cref="Document"/> to be added.</param>
-        /// <exception cref="InvalidOperationException"></exception>
+        /// <exception cref="NameExistsException"></exception>
         public void AddDocument(Document document)
         {
-            if (DocumentExists(document)) throw new InvalidOperationException(nameof(document)); // TODO
+            if (DocumentExists(document)) throw new NameExistsException(ItemTypes.Document, document.Name);
 
             var folder = GetFolder(document.Path);
             folder.AddDocument(document);
@@ -105,13 +105,32 @@ namespace StarLab.Application.Workspace
         }
 
         /// <summary>
+        /// Adds the <see cref="IFolder"/> provided at the specified location within the workspace hierarchy.
+        /// </summary>
+        /// <param name="folder">The <see cref="IFolder"/> being added.</param>
+        /// <param name="path">The path to the parent folder.</param>
+        public void AddFolder(IFolder folder, string path)
+        {
+            if (folders.ContainsKey($"{path}/{folder.Name}")) throw new NameExistsException(ItemTypes.Folder, folder.Name);
+
+            var parent = GetFolder(path);
+
+            if (parent != null && folder is Folder child)
+            {
+                parent.AddFolder(child);
+
+                folders.Add(folder.Path, folder);
+            }
+        }
+
+        /// <summary>
         /// Adds the <see cref="IFolder"/> provided to the workspace hierarchy.
         /// </summary>
         /// <param name="folder">The <see cref="IFolder"/> being added.</param>
-        /// <exception cref="InvalidOperationException"></exception>
+        /// <exception cref="ArgumentException"></exception>
         public void AddFolder(IFolder folder)
         {
-            if (folder is Workspace) throw new ArgumentException(); // TODO
+            if (folder is Workspace) throw new ArgumentException(); // TODO - Exception message
 
             if (folder is Project)
             {
@@ -127,12 +146,22 @@ namespace StarLab.Application.Workspace
         /// Adds the <see cref="Project"/> provided to the workspace.
         /// </summary>
         /// <param name="project">The <see cref="Project"/> being added.</param>
-        /// <exception cref="InvalidOperationException"></exception>
+        /// <exception cref="NameExistsException"></exception>
         public void AddProject(Project project)
         {
-            if (projects.ContainsKey(project.Name)) throw new InvalidOperationException(); // TODO
+            if (projects.ContainsKey(project.Path)) throw new NameExistsException(ItemTypes.Project, project.Name);
 
-            projects.Add(project.Name, project);
+            projects.Add(project.Path, project);
+        }
+
+        /// <summary>
+        /// Determines if this <see cref="IFolder"> contains a child folder with the specified name.
+        /// </summary>
+        /// <param name="name">The name of the child folder.</param>
+        /// <returns><see cref="true"/> if this folder contains a child folder with the specified name; <see cref="false"/> otherwise.</returns>
+        public bool ContainsFolder(string name)
+        {
+            return false;
         }
 
         /// <summary>
@@ -141,15 +170,26 @@ namespace StarLab.Application.Workspace
         /// <param name="document">The <see cref="Document"/> to be deleted.</param>
         public void DeleteDocument(Document document)
         {
-            if (document != null && folders.ContainsKey(document.Path))
+            if (document != null)
             {
-                var folder = folders[document.Path];
+                IFolder folder;
 
-                if (folder != null)
+                if (IsProject(document.Path))
                 {
-                    folder.DeleteDocument(document);
-                    documents.Remove(document.ID);
+                    folder = projects[document.Path];
                 }
+                else if (IsFolder(document.Path))
+                {
+                    folder = folders[document.Path]; 
+                }
+                else
+                {
+                    throw new Exception(); // TODO - Exception message.
+                }
+
+                folder.DeleteDocument(document);
+
+                documents.Remove(document.ID);
             }
         }
 
@@ -163,7 +203,7 @@ namespace StarLab.Application.Workspace
         }
 
         /// <summary>
-        /// Removes the folder provided from the workspace hierarchy.
+        /// Removes the folder provided along with any child folders and their contents from the workspace hierarchy.
         /// </summary>
         /// <param name="folder">The <see cref="IFolder"/> being removed.</param>
         public void DeleteFolder(IFolder folder)
@@ -216,7 +256,7 @@ namespace StarLab.Application.Workspace
         {
             ArgumentException.ThrowIfNullOrEmpty(path, nameof(path));
 
-            if (path.Equals(Constants.WORKSPACE)) return this;
+            if (path.Equals(Constants.Workspace)) return this;
             
             if (projects.ContainsKey(path)) return projects[path];
             
@@ -232,7 +272,37 @@ namespace StarLab.Application.Workspace
         /// <returns>The required <see cref="Project"/>.</returns>
         public Project GetProject(string name)
         {
-            return (Project)projects[$"{Constants.WORKSPACE}/{name}"];
+            return (Project)projects[$"{Constants.Workspace}/{name}"];
+        }
+
+        /// <summary>
+        /// Determines if the specified ID refers to a workspace document.
+        /// </summary>
+        /// <param name="id">A possible document ID.</param>
+        /// <returns>true if the ID refers to a document in the workspace hierarchy; false otherwise.</returns>
+        public bool IsDocument(string id)
+        {
+            return documents.ContainsKey(id);
+        }
+
+        /// <summary>
+        /// Determines if the specified key refers to a workspace folder.
+        /// </summary>
+        /// <param name="key">A possible folder key.</param>
+        /// <returns>true if the key refers to a folder in the workspace hierarchy; false otherwise.</returns>
+        public bool IsFolder(string key)
+        {
+            return folders.ContainsKey(key);
+        }
+
+        /// <summary>
+        /// Determines if the specified key refers to a workspace project.
+        /// </summary>
+        /// <param name="key">A possible project key.</param>
+        /// <returns>true if the key refers to a project in the workspace hierarchy; false otherwise.</returns>
+        public bool IsProject(string key)
+        {
+            return projects.ContainsKey(key);
         }
 
         /// <summary>
@@ -332,7 +402,7 @@ namespace StarLab.Application.Workspace
                 if (folder.Path.StartsWith(project.Path)) return (Project)project;
             }
 
-            throw new ArgumentException(nameof(folder)); // TODO
+            throw new ArgumentException(nameof(folder)); // TODO - Exception message
         }
 
         /// <summary>

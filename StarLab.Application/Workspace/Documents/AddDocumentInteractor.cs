@@ -33,13 +33,15 @@ namespace StarLab.Application.Workspace.Documents
                     var document = new Document(dtoDocument, folder);
                     workspace.AddDocument(document);
 
+                    var dto = Mapper.Map<WorkspaceDTO>(workspace);
+
                     OutputPort.UpdateWorkspace(Mapper.Map<WorkspaceDTO>(workspace));
 
                     OutputPort.OpenDocument(document.ID);
                 }
-                catch(InvalidOperationException)
+                catch(NameExistsException e)
                 {
-                    OutputPort.ShowMessage(Resources.StarLab, string.Format(Resources.DocumentExistsWarning, dtoDocument.Name), InteractionType.Error, InteractionResponses.OK);
+                    OutputPort.ShowMessage(Resources.StarLab, string.Format(Resources.NameAlreadyExists, e.Target, e.Name), InteractionType.Error, InteractionResponses.OK);
                 }
             }
             else

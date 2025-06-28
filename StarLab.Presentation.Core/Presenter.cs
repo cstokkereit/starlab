@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using StarLab.Application;
+using StarLab.Presentation.Configuration;
 using Stratosoft.Commands;
 using System.Diagnostics;
 
@@ -10,7 +11,7 @@ namespace StarLab.Presentation
     /// </summary>
     public abstract class Presenter : Controller, IPresenter
     {
-        private readonly Configuration.IConfigurationProvider configuration; // A service that provides the configuration information.
+        private readonly IApplicationConfiguration configuration; // A service that provides the configuration information.
 
         private readonly ICommandManager commands; // Required for the creation and management of commands.
 
@@ -23,11 +24,11 @@ namespace StarLab.Presentation
         /// </summary>
         /// <param name="commands">An instance of <see cref="ICommandManager"/> that is required for the creation of commands.</param>
         /// <param name="factory">An <see cref="IUseCaseFactory"/> that will be used to create use case interactors.</param>
-        /// <param name="configuration">The <see cref="Configuration.IConfigurationProvider"/> that will be used to get configuration information.</param>
+        /// <param name="configuration">The <see cref="IApplicationConfiguration"/> that will be used to get configuration information.</param>
         /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
         /// <param name="events">The <see cref="IEventAggregator"/> that manages application events.</param>
         /// <exception cref="ArgumentNullException"></exception>
-        public Presenter(ICommandManager commands, IUseCaseFactory factory, Configuration.IConfigurationProvider configuration, IMapper mapper, IEventAggregator events)
+        public Presenter(ICommandManager commands, IUseCaseFactory factory, IApplicationConfiguration configuration, IMapper mapper, IEventAggregator events)
             : base(factory, events)
         {
             this.configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
@@ -63,9 +64,9 @@ namespace StarLab.Presentation
         }
 
         /// <summary>
-        /// Gets the <see cref="Configuration.IConfigurationProvider"/> that provides the configuration information.
+        /// Gets the <see cref="IApplicationConfiguration"/> that provides the configuration information.
         /// </summary>
-        protected Configuration.IConfigurationProvider Configuration => configuration;
+        protected IApplicationConfiguration Configuration => configuration;
 
         /// <summary>
         /// Returns true if the presenter has been initialised; false otherwise.
@@ -176,7 +177,7 @@ namespace StarLab.Presentation
         /// <returns>An instance of <see cref="ICommand"> that can be used to show the specified <see cref="IView"/>.</returns>
         protected ICommand GetShowViewCommand(string view)
         {
-            var name = Actions.SHOW + view;
+            var name = Actions.Show + view;
 
             if (!commands.ContainsCommand(name))
             {

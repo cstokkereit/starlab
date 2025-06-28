@@ -5,63 +5,64 @@
     /// </summary>
     public static class Constants
     {
-        public const string ADD = "Add";
-        public const string ADD_CHART = "AddChart";
-        public const string ADD_FOLDER = "AddFolder";
-        public const string ADD_PROJECT = "AddProject";
-        public const string ADD_TABLE = "AddTable";
+        public const string Add = "Add";
+        public const string AddChart = "AddChart";
+        public const string AddFolder = "AddFolder";
+        public const string AddProject = "AddProject";
+        public const string AddTable = "AddTable";
 
-        public const string COLLAPSE_ALL = "CollapseAll";
-        public const string COPY = "Copy";
-        public const string CUT = "Cut";
+        public const string CollapseAll = "CollapseAll";
+        public const string Copy = "Copy";
+        public const string Cut = "Cut";
 
-        public const string DELETE = "delete";
-        public const string DOCK_BOTTOM = "DockBottom";
-        public const string DOCK_LEFT = "DockLeft";
-        public const string DOCK_RIGHT = "DockRight";
-        public const string DOCK_TOP = "DockTop";
-        public const string DOCUMENT = "Document";
+        public const string Delete = "Delete";
+        public const string DockBottom = "DockBottom";
+        public const string DockLeft = "DockLeft";
+        public const string DockRight = "DockRight";
+        public const string DockTop = "DockTop";
+        public const string Document = "Document";
 
-        public const string ELLIPSIS = "...";
+        public const string Ellipsis = "...";
 
-        public const string FILE = "File";
-        public const string FILE_CLOSE = "FileClose";
-        public const string FILE_CLOSE_WORKSPACE = "FileCloseWorkspace";
-        public const string FILE_EXIT = "FileExit";
-        public const string FILE_NEW = "FileNew";
-        public const string FILE_NEW_PROJECT = "FileNewProject";
-        public const string FILE_NEW_WORKSPACE = "FileNewWorkspace";
-        public const string FILE_OPEN = "FileOpen";
-        public const string FILE_OPEN_WORKSPACE = "FileOpenWorkspace";
-        public const string FILE_PAGE_SETUP = "FilePageSetup";
-        public const string FILE_PRINT = "FilePrint";
-        public const string FILE_SAVE_ALL = "FileSaveAll";
-        public const string FOLDER = "Folder";
+        public const string File = "File";
+        public const string FileClose = "FileClose";
+        public const string FileCloseWorkspace = "FileCloseWorkspace";
+        public const string FileExit = "FileExit";
+        public const string FileNew = "FileNew";
+        public const string FileNewProject = "FileNewProject";
+        public const string FileNewWorkspace = "FileNewWorkspace";
+        public const string FileOpen = "FileOpen";
+        public const string FileOpenWorkspace = "FileOpenWorkspace";
+        public const string FilePageSetup = "FilePageSetup";
+        public const string FilePrint = "FilePrint";
+        public const string FileSaveAll = "FileSaveAll";
+        public const string Folder = "Folder";
 
-        public const string HELP = "Help";
-        public const string HELP_ABOUT = "HelpAbout";
-        public const string HELP_VIEW = "HelpView";
-        public const string HELP_VIEW_HELP = "HelpViewHelp";
+        public const string Help = "Help";
+        public const string HelpAbout = "HelpAbout";
+        public const string HelpView = "HelpView";
+        public const string HelpViewHelp = "HelpViewHelp";
 
-        public const string OPEN = "Open";
+        public const string InvalidPathMessage = "The path cannot be an empty string.";
 
-        public const string PASTE = "Paste";
-        public const string PROJECT = "Project";
+        public const string Open = "Open";
 
-        public const string RENAME = "Rename";
+        public const string Paste = "Paste";
+        public const string Project = "Project";
 
-        public const string SHOW_SETTINGS = "ShowSettings";
-        public const string SPLIT_VIEW = "StarLab.UI.SplitView";
-        public const string STARLAB = "StarLab";
-        public const string SYNCHRONISE = "Synchronise";
+        public const string Rename = "Rename";
 
-        public const string TOOLS = "Tools";
-        public const string TOOLS_OPTIONS = "ToolsOptions";
+        public const string ShowSettings = "ShowSettings";
+        public const string StarLab = "StarLab";
+        public const string Synchronise = "Synchronise";
 
-        public const string VIEW = "View";
-        public const string VIEW_WORKSPACE_EXPLORER = "ViewWorkspaceExplorer";
+        public const string Tools = "Tools";
+        public const string ToolsOptions = "ToolsOptions";
 
-        public const string WINDOW = "Window";
-        public const string WORKSPACE = "Workspace";
+        public const string View = "View";
+        public const string ViewWorkspaceExplorer = "ViewWorkspaceExplorer";
+
+        public const string Window = "Window";
+        public const string Workspace = "Workspace";
     }
 }

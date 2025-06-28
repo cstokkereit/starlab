@@ -1,9 +1,10 @@
 ﻿using AutoMapper;
+using StarLab.Shared.Properties;
 
 namespace StarLab.Application.Workspace
 {
     /// <summary>
-    /// TODO
+    /// A use case that adds a project to the workspace.
     /// </summary>
     internal class AddProjectInteractor : UseCaseInteractor<IWorkspaceOutputPort>, IAddProjectUseCase
     {
@@ -34,14 +35,14 @@ namespace StarLab.Application.Workspace
 
                     OutputPort.UpdateWorkspace(Mapper.Map<WorkspaceDTO>(workspace));
                 }
-                catch (InvalidOperationException)
+                catch (NameExistsException e)
                 {
-                    //OutputPort.ShowMessage(Resources.StarLab, string.Format(Resources.DocumentExistsWarning, dtoDocument.Name), InteractionType.Error, InteractionResponses.OK);
+                    OutputPort.ShowMessage(Resources.StarLab, string.Format(Resources.NameAlreadyExists, e.Target, e.Name), InteractionType.Error, InteractionResponses.OK);
                 }
             }
             else
             {
-                //OutputPort.ShowMessage(Resources.StarLab, CreateInvalidNameMessage(dtoDocument.Name, Resources.Document), InteractionType.Error, InteractionResponses.OK);
+                OutputPort.ShowMessage(Resources.StarLab, WorkspaceInteractionHelper.CreateInvalidNameMessage(dtoProject.Name, Resources.Project), InteractionType.Error, InteractionResponses.OK);
             }
         }
     }

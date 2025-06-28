@@ -1,5 +1,4 @@
 ﻿using StarLab.Application.Workspace;
-using StarLab.Presentation;
 
 namespace StarLab.Presentation.Workspace
 {
@@ -26,7 +25,7 @@ namespace StarLab.Presentation.Workspace
         {
             ArgumentNullException.ThrowIfNull(dto, nameof(dto));
 
-            if (string.IsNullOrEmpty(dto.Path)) throw new ArgumentException(); // TODO
+            if (string.IsNullOrEmpty(dto.Path)) throw new ArgumentException(Constants.InvalidPathMessage);
 
             key = dto.Path;
 
@@ -49,7 +48,7 @@ namespace StarLab.Presentation.Workspace
 
             this.name = name;
 
-            parentKey = Constants.WORKSPACE;
+            parentKey = Constants.Workspace;
             key = $"{parentKey}/{name}";
 
             Expanded = expanded;

@@ -99,9 +99,10 @@ namespace StarLab.Presentation
         void Show(IView view);
 
         /// <summary>
-        /// Shows the <see cref="IView"> with the specified ID. A view with the specified ID must already exist or an exception will be thrown.
+        /// Shows the <see cref="IView"/> with the specified ID. A view with the specified ID must already exist or an exception will be thrown.
         /// </summary>
         /// <param name="id">The ID of the view to be shown.</param>
+        /// <exception cref="ViewNotFoundException"></exception>
         void Show(string id);
     }
 }

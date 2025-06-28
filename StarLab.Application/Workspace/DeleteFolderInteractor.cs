@@ -36,14 +36,7 @@ namespace StarLab.Application.Workspace
 
                 if (folder.IsEmpty || ConfirmAction(GetConfirmationMessage(folder)))
                 {
-                    var ids = GetDocumentIds(folder);
-
                     workspace.DeleteFolder(key);
-
-                    foreach (var id in ids)
-                    {
-                        OutputPort.RemoveDocument(id);
-                    }
 
                     OutputPort.UpdateWorkspace(Mapper.Map<WorkspaceDTO>(workspace));
                 }
@@ -62,36 +55,6 @@ namespace StarLab.Application.Workspace
         private static string GetConfirmationMessage(IFolder target)
         {
             return string.Format(Resources.FolderDeletionWarning, (target is Project ? Resources.Project : Resources.Folder).ToLower(), target.Name);
-        }
-
-        /// <summary>
-        /// Recursively populates the <see cref="List{string}"/> provided with the IDs of all documents owned by the parent <see cref="IFolder"/> provided and its child folders.
-        /// </summary>
-        /// <param name="folder">The <see cref="IFolder"/> that contains the documents.</param>
-        /// <param name="documents">An <see cref="List{string}"/> that will be populated with the IDs of the documents.</param>
-        private static void GetDocumentIds(IFolder folder, List<string> documents)
-        {
-            foreach (var document in folder.Documents)
-            {
-                documents.Add(document.ID);
-            }
-
-            foreach (var child in folder.Folders)
-            {
-                GetDocumentIds(child, documents);
-            }
-        }
-
-        /// <summary>
-        /// Gets the IDs of all documents owned by the parent <see cref="IFolder"/> provided and its child folders.
-        /// </summary>
-        /// <param name="folder">The <see cref="IFolder"/> that contains the documents.</param>
-        /// <returns>An <see cref="IEnumerable{string}"/> containing the required document IDs.</returns>
-        private static IEnumerable<string> GetDocumentIds(IFolder folder)
-        {
-            var ids = new List<string>();
-            GetDocumentIds(folder, ids);
-            return ids;
         }
     }
 }

@@ -5,36 +5,40 @@
     /// </summary>
     public static class Actions
     {
-        public const string ADD_CHART = "AddChart";
-        public const string ADD_DOCUMENT = "AddDocument";
-        public const string ADD_FOLDER = "AddFolder";
-        public const string ADD_PROJECT = "AddProject";
-        public const string ADD_TABLE = "AddTable";
-        public const string APPLY_SETTINGS = "ApplySettings";
+        public const string AddChart = "AddChart";
+        public const string AddDocument = "AddDocument";
+        public const string AddFolder = "AddFolder";
+        public const string AddProject = "AddProject";
+        public const string AddTable = "AddTable";
+        public const string ApplySettings = "ApplySettings";
 
-        public const string CANCEL = "Cancel";
-        public const string CLOSE_DOCUMENT = "CloseDocument";
-        public const string CLOSE_WORKSPACE = "CloseWorkspace";
-        public const string COLLAPSE = "Collapse";
+        public const string Cancel = "Cancel";
+        public const string CloseDocument = "CloseDocument";
+        public const string CloseWorkspace = "CloseWorkspace";
+        public const string Collapse = "Collapse";
+        public const string Copy = "Copy";
+        public const string Cut = "Cut";
 
-        public const string DELETE_DOCUMENT = "DeleteDocument";
-        public const string DELETE_FOLDER = "DeleteFolder";
+        public const string DeleteDocument = "DeleteDocument";
+        public const string DeleteFolder = "DeleteFolder";
 
-        public const string EXIT = "Exit";
+        public const string Exit = "Exit";
 
-        public const string HIDE_SPLIT_CONTENT = "HideSplitContent";
+        public const string HideSplitContent = "HideSplitContent";
 
-        public const string NEW_WORKSPACE = "NewWorkspace";
+        public const string NewWorkspace = "NewWorkspace";
 
-        public const string OPEN_DOCUMENT = "OpenDocument";
-        public const string OPEN_WORKSPACE = "OpenWorkspace";
+        public const string OpenDocument = "OpenDocument";
+        public const string OpenWorkspace = "OpenWorkspace";
 
-        public const string RENAME_DOCUMENT = "RenameDocument";
-        public const string RENAME = "Rename";
+        public const string Paste = "Paste";
 
-        public const string SAVE_WORKSPACE = "SaveWorkspace";
-        public const string SHOW = "Show";
-        public const string SHOW_SPLIT_CONTENT = "ShowSplitContent";
-        public const string SYNCHRONISE = "Synchronise";
+        public const string RenameDocument = "RenameDocument";
+        public const string Rename = "Rename";
+
+        public const string SaveWorkspace = "SaveWorkspace";
+        public const string Show = "Show";
+        public const string ShowSplitContent = "ShowSplitContent";
+        public const string Synchronise = "Synchronise";
     }
 }

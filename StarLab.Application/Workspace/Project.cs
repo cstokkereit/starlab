@@ -36,6 +36,8 @@ namespace StarLab.Application.Workspace
             {
                 var documents = new List<Document>();
 
+                GetDocuments(documents);
+
                 foreach (var folder in Folders)
                 {
                     GetDocuments(folder, documents);
@@ -103,12 +105,22 @@ namespace StarLab.Application.Workspace
         }
 
         /// <summary>
+        /// Determines if this <see cref="IFolder"> contains a child folder with the specified name.
+        /// </summary>
+        /// <param name="name">The name of the child folder.</param>
+        /// <returns><see cref="true"/> if this folder contains a child folder with the specified name; <see cref="false"/> otherwise.</returns>
+        public bool ContainsFolder(string name)
+        {
+            return folder.ContainsFolder(name);
+        }
+
+        /// <summary>
         /// Adds the <see cref="IFolder"/> provided to the project folder.
         /// </summary>
         /// <param name="folder">The <see cref="IFolder"/> to be added.</param>
         public void AddFolder(IFolder folder)
         {
-            if (folder is not Folder) throw new InvalidOperationException(); // TODO
+            if (folder is not Folder) throw new InvalidOperationException(); // TODO - Exception message
 
             this.folder.AddFolder(folder);
         }
@@ -129,7 +141,7 @@ namespace StarLab.Application.Workspace
         /// <exception cref="InvalidOperationException"></exception>
         public void DeleteFolder(IFolder folder)
         {
-            if (folder is not Folder) throw new InvalidOperationException(); // TODO
+            if (folder is not Folder) throw new InvalidOperationException(); // TODO - Exception message
 
             this.folder.DeleteFolder(folder);
         }
@@ -141,7 +153,7 @@ namespace StarLab.Application.Workspace
         /// <param name="name">The new folder name.</param>
         public void RenameFolder(IFolder folder, string name)
         {
-            if (folder is Project) throw new ArgumentException(); // TODO
+            if (folder is Project) throw new ArgumentException(); // TODO - Exception message
 
             var project = folder.Path == this.folder.Path;
 
@@ -251,6 +263,18 @@ namespace StarLab.Application.Workspace
             foreach (var child in folder.Folders)
             {
                 GetDocuments(child, documents);
+            }
+        }
+
+        /// <summary>
+        /// A method that collects the documents that are within the project folder.
+        /// </summary>
+        /// <param name="documents">A <see cref="List{Document}"/> containing the documents that have been collected.</param>
+        private void GetDocuments(List<Document> documents)
+        {
+            foreach (Document document in folder.Documents)
+            {
+                documents.Add(document);
             }
         }
 

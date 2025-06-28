@@ -6,7 +6,6 @@ using StarLab.Presentation.Workspace;
 using StarLab.Presentation.Workspace.Documents;
 using StarLab.Shared.Properties;
 using StarLab.UI.Controls;
-using StarLab.UI.Workspace;
 using StarLab.UI.Workspace.Documents;
 using Stratosoft.Commands;
 
@@ -27,19 +26,19 @@ namespace StarLab.UI
 
         private readonly IDictionary<string, IView> views = new Dictionary<string, IView>(); // A dictionary containing the views indexed by ID. 
 
-        private readonly IConfigurationProvider configuration; // A service that provides the configuration information.
+        private readonly IApplicationConfiguration configuration; // A service that provides the configuration information.
 
         private readonly IViewFactory factory; // A factory for creating views.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="ApplicationController"/> class.
         /// </summary>
-        /// <param name="configuration">The <see cref="IConfigurationProvider"> that provides the configuration information.</param>
+        /// <param name="configuration">The <see cref="IApplicationConfiguration"> that provides the configuration information.</param>
         /// <param name="factory">An <see cref="IViewFactory"/> that will be used to create the views.</param>
         /// <param name="interactorFactory">An <see cref="IUseCaseFactory"> that will be used to create the use case interactors.</param>
         /// <param name="events">An <see cref="IEventAggregator"> that can be used for subscribing to and publishing events.</param>
         /// <exception cref="ArgumentNullException"></exception>
-        public ApplicationController(IConfigurationProvider configuration, IViewFactory factory, IUseCaseFactory interactorFactory, IEventAggregator events)
+        public ApplicationController(IApplicationConfiguration configuration, IViewFactory factory, IUseCaseFactory interactorFactory, IEventAggregator events)
             : base(interactorFactory, events)
         {
             this.configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
@@ -49,7 +48,7 @@ namespace StarLab.UI
         /// <summary>
         /// Gets the name of the controller.
         /// </summary>
-        public override string Name => ControllerNames.APPLICATION_CONTROLLER;
+        public override string Name => ControllerNames.ApplicationController;
 
         /// <summary>
         /// Creates the <see cref="ICommand"> specified by the controller, action and target provided.
@@ -84,7 +83,7 @@ namespace StarLab.UI
         /// <returns>An instance of <see cref="ICommand"/> that can be used to show the specified view.</returns>
         public ICommand CreateCommand(ICommandManager commands, string view)
         {
-            return CreateCommand(commands, this, Actions.SHOW, view);
+            return CreateCommand(commands, this, Actions.Show, view);
         }
 
         /// <summary>
@@ -95,8 +94,11 @@ namespace StarLab.UI
         {
             if (views.ContainsKey(id))
             {
-                if (controllers[ControllerNames.GetDocumentControllerName(id)] is IDocumentController controller)
+                var name = ControllerNames.GetDocumentControllerName(id);
+
+                if (controllers[name] is IDocumentController controller)
                 {
+                    controllers.Remove(name);
                     controller.Close();
                 }
 
@@ -109,29 +111,8 @@ namespace StarLab.UI
         /// </summary>
         public void Exit()
         {
-            if (controllers[ControllerNames.APPLICATION_VIEW_CONTROLLER] is IApplicationViewController controller) controller.Exit();
+            if (controllers[ControllerNames.ApplicationViewController] is IApplicationViewController controller) controller.Exit();
         }
-
-        /// <summary>
-        /// Gets the <see cref="IChildViewController"/> that controls the content of the specified view.
-        /// </summary>
-        /// <param name="name">The name of the view.</param>
-        /// <returns>The required <see cref="IChildViewController"/>.</returns>
-        //public IChildViewController GetContentController(string name)
-        //{
-        //    IChildViewController? controller = null;
-
-        //    var view = GetView(name);
-
-        //    if (view != null)
-        //    {
-        //        //if (view is ToolView toolView) controller = toolView.ContentController;
-        //    }
-
-        //    if (controller == null) throw new Exception(); // TODO
-
-        //    return controller;
-        //}
 
         /// <summary>
         /// Gets the <see cref="IDocumentController"/> that controls the view representing the <see cref="IDocument"/> provided.
@@ -196,21 +177,21 @@ namespace StarLab.UI
         }
 
         /// <summary>
-        /// TODO
+        /// Event handler for the WorkspaceClosedEvent event.
         /// </summary>
-        /// <param name="args"></param>
+        /// <param name="args">A <see cref="WorkspaceClosedEventArgs"/> that provides context for the event.</param>
         public void OnEvent(WorkspaceClosedEventArgs args)
         {
-            // TODO
+            // TODO - Close workspace properly
             // Change to a custom dialog that will centre on the application
             // Perform any cleanup here prior to closing the workspace
             // Teardown parent child relationships
 
-            //foreach (var document in args.Workspace.Documents)
-            //{
-            //    controllers.Remove($"Document ({document.ID}) Controller");
-            //    views.Remove(document.ID);
-            //}
+            foreach (var document in args.Workspace.Documents)
+            {
+                controllers.Remove(ControllerNames.GetDocumentControllerName(document.ID));
+                views.Remove(document.ID);
+            }
         }
 
         /// <summary> 
@@ -229,16 +210,17 @@ namespace StarLab.UI
         /// </summary>
         public void Run()
         {
-            log.Info(Resources.InitialisationComplete);
-
             Events.Subsribe(this);
 
             InitialiseServices();
+
+            log.Info(Resources.InitialisationComplete);
+
             CreateViews();
 
-            var view = views[Views.WORKSPACE];
+            var view = views[Views.Workspace];
 
-            if (views[Views.WORKSPACE] is Form form) System.Windows.Forms.Application.Run(form);
+            if (views[Views.Workspace] is Form form) System.Windows.Forms.Application.Run(form);
         }
 
         /// <summary>
@@ -250,23 +232,24 @@ namespace StarLab.UI
             var controller = GetController(view);
             controller.Initialise(this);
 
-            controllers[ControllerNames.APPLICATION_VIEW_CONTROLLER].Show(view);
+            controllers[ControllerNames.ApplicationViewController].Show(view);
         }
 
         /// <summary>
         /// Shows the <see cref="IView"/> with the specified ID. A view with the specified ID must already exist or an exception will be thrown.
         /// </summary>
         /// <param name="id">The ID of the view to be shown.</param>
+        /// <exception cref="ViewNotFoundException"></exception>
         public void Show(string id)
         {
-            if (!views.ContainsKey(id)) throw new ArgumentOutOfRangeException(nameof(id)); // TODO
+            if (!views.ContainsKey(id)) throw new ViewNotFoundException(id);
 
             var view = views[id];
 
             var controller = GetController(view);
             controller.Initialise(this);
 
-            controllers[ControllerNames.APPLICATION_VIEW_CONTROLLER].Show(view); // Need to pick this based on the view in question - some sort of map?
+            controllers[ControllerNames.ApplicationViewController].Show(view); // TODO - May need to include an overload of this that includes the parent view
         }
 
         /// <summary>
@@ -278,29 +261,8 @@ namespace StarLab.UI
         private void CreateView(string name, string text)
         {
             var view = factory.CreateView(name, text);
-
-            IViewController controller;
-
-            switch (configuration.GetViewConfiguration(name).Type)
-            {
-                case ViewTypes.Application:
-                    controller = ((ApplicationView)view).Controller;
-                    break;
-
-                case ViewTypes.Dialog:
-                    controller = ((DialogView)view).Controller;
-                    break;
-
-                case ViewTypes.Document:
-                    throw new NotImplementedException();
-
-                case ViewTypes.Tool:
-                    controller = ((ToolView)view).Controller;
-                    break;
-
-                default:
-                    throw new NotImplementedException(); // TODO
-            }
+            
+            IViewController controller = view.Controller;
 
             controllers.Add(controller.Name, controller);
             controller.Initialise(this);
@@ -312,13 +274,13 @@ namespace StarLab.UI
         /// </summary>
         private void CreateViews()
         {
-            CreateView(Views.ABOUT, Resources.AboutStarLab);
-            CreateView(Views.ADD_DOCUMENT, Resources.AddDocument);
-            CreateView(Views.OPTIONS, Resources.Options);
-            CreateView(Views.WORKSPACE_EXPLORER, Resources.WorkspaceExplorer);
+            CreateView(Views.About, Resources.AboutStarLab);
+            CreateView(Views.AddDocument, Resources.AddDocument);
+            CreateView(Views.Options, Resources.Options);
+            CreateView(Views.WorkspaceExplorer, Resources.WorkspaceExplorer);
 
             // NOTE - This must be the last view to be created.
-            CreateView(Views.WORKSPACE, Resources.StarLab);
+            CreateView(Views.Workspace, Resources.StarLab);
         }
 
         /// <summary>
@@ -333,7 +295,7 @@ namespace StarLab.UI
 
             if (view is IApplicationView)
             {
-                name = ControllerNames.APPLICATION_VIEW_CONTROLLER;
+                name = ControllerNames.ApplicationViewController;
             }
             else if (view is IDialogView)
             {
@@ -345,7 +307,7 @@ namespace StarLab.UI
             }
             else
             {
-                throw new Exception(); // TODO
+                throw new Exception(string.Format(Resources.UnexpectedViewType, view.GetType().Name));
             }
 
             return controllers[name];
@@ -356,7 +318,7 @@ namespace StarLab.UI
         /// </summary>
         private void InitialiseServices()
         {
-            configuration.Initialise();
+            // Do Nothing
         }
     }
 }

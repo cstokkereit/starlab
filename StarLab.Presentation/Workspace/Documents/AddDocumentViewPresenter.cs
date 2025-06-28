@@ -13,15 +13,15 @@ namespace StarLab.Presentation.Workspace.Documents
     public class AddDocumentViewPresenter : ChildViewPresenter<IAddDocumentView, IDialogController>, IAddDocumentViewPresenter, IChildViewController, IAddDocumentOutputPort
     {
         /// <summary>
-        /// Initialises a new instance of the <see cref="AddDocumentViewPresenter"> class.
+        /// Initialises a new instance of the <see cref="AddDocumentViewPresenter"/> class.
         /// </summary>
         /// <param name="view">The <see cref="IAddDocumentView"/> controlled by this presenter.</param>
         /// <param name="commands">An <see cref="ICommandManager"/> that is required for the creation of <see cref="ICommand">s.</param>
         /// <param name="factory">An <see cref="IUseCaseFactory"/> that will be used to create use case interactors.</param>
-        /// <param name="configuration">The <see cref="Configuration.IConfigurationProvider"/> that will be used to get configuration information.</param>
+        /// <param name="configuration">The <see cref="Configuration.IApplicationConfiguration"/> that will be used to get configuration information.</param>
         /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
         /// <param name="events">The <see cref="IEventAggregator"/> that manages application events.</param>
-        public AddDocumentViewPresenter(IAddDocumentView view, ICommandManager commands, IUseCaseFactory factory, Configuration.IConfigurationProvider configuration, IMapper mapper, IEventAggregator events)
+        public AddDocumentViewPresenter(IAddDocumentView view, ICommandManager commands, IUseCaseFactory factory, Configuration.IApplicationConfiguration configuration, IMapper mapper, IEventAggregator events)
             : base(view, commands, factory, configuration, mapper, events) { }
 
         /// <summary>
@@ -62,8 +62,8 @@ namespace StarLab.Presentation.Workspace.Documents
             {
                 base.Initialise(controller);
 
-                View.AttachAddButtonCommand(GetCommand(Actions.ADD_DOCUMENT));
-                View.AttachCancelButtonCommand(GetCommand(Actions.CANCEL));
+                View.AttachAddButtonCommand(GetCommand(Actions.AddDocument));
+                View.AttachCancelButtonCommand(GetCommand(Actions.Cancel));
 
                 AddImages();
                 AddDocumentTypes();
@@ -76,7 +76,7 @@ namespace StarLab.Presentation.Workspace.Documents
         /// <param name="id">The document ID.</param>
         public void OpenDocument(string id)
         {
-            if (AppController.GetController(ControllerNames.APPLICATION_VIEW_CONTROLLER) is IApplicationOutputPort port) port.OpenDocument(id);
+            if (AppController.GetController(ControllerNames.ApplicationViewController) is IApplicationOutputPort port) port.OpenDocument(id);
         }
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace StarLab.Presentation.Workspace.Documents
         /// <param name="dto">The <see cref="WorkspaceDTO"/> that contains the updated workspace state.</param>
         public void UpdateWorkspace(WorkspaceDTO dto)
         {
-            if (AppController.GetController(ControllerNames.APPLICATION_VIEW_CONTROLLER) is IApplicationOutputPort port) port.UpdateWorkspace(dto);
+            if (AppController.GetController(ControllerNames.ApplicationViewController) is IApplicationOutputPort port) port.UpdateWorkspace(dto);
 
             ParentController.Close();
         }
@@ -109,8 +109,6 @@ namespace StarLab.Presentation.Workspace.Documents
         private void AddDocumentTypes()
         {
             //view.ClearChartTypes();
-
-            //TODO - Should be configured or discovered -> plugin
 
             View.AddDocument("HRDiagram", "Colour-Magnitude Diagram", "HRDiagram");
             //view.AddChart("TwoColourDiagram", "Two-Colour Diagram", "HRDiagram");

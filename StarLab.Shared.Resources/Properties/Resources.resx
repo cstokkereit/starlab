@@ -129,6 +129,12 @@
   <data name="AddDocument" xml:space="preserve">
     <value>Add New Document</value>
   </data>
+  <data name="CannotRenameItem" xml:space="preserve">
+    <value>Cannot rename '{0}' to '{1}' because a {2} with that name already exists.</value>
+  </data>
+  <data name="CannotRenameWorkspace" xml:space="preserve">
+    <value>Cannot rename '{0}' to '{1}' because a workspace with that name already exists at this location.</value>
+  </data>
   <data name="Chart" xml:space="preserve">
     <value>Chart</value>
   </data>
@@ -153,9 +159,6 @@
   <data name="Copyright" xml:space="preserve">
     <value>© 2024 All rights reserved etc.</value>
   </data>
-  <data name="CouldNotBeCreated" xml:space="preserve">
-    <value>{0} could not be created.</value>
-  </data>
   <data name="Cut" xml:space="preserve">
     <value>Cut</value>
   </data>
@@ -168,12 +171,14 @@
   <data name="DeletionWarning" xml:space="preserve">
     <value>'{0}' will be deleted permanently.</value>
   </data>
+  <data name="DestinationSameAsSource" xml:space="preserve">
+    <value>Cannot move '{0}'. The destination folder is the same as the source folder.</value>
+  </data>
   <data name="Document" xml:space="preserve">
     <value>Document</value>
   </data>
-  <data name="DocumentExistsWarning" xml:space="preserve">
-    <value>A document with the name '{0}' already exists at this location.
-Please provide a unique name for the document.</value>
+  <data name="DocumentAlreadyExists" xml:space="preserve">
+    <value>A document with the name '{0}' already exists. Do you want to replace it?</value>
   </data>
   <data name="Exit" xml:space="preserve">
     <value>Exit</value>
@@ -188,6 +193,11 @@ Check the filename and try again.</value>
   <data name="Folder" xml:space="preserve">
     <value>Folder</value>
   </data>
+  <data name="FolderAlreadyExists" xml:space="preserve">
+    <value>This folder already contains a folder called '{0}'.
+
+If documents in the existing folder have the same names as documents in the folder you are copying, do you want to replace the existing documents?</value>
+  </data>
   <data name="FolderDeletionWarning" xml:space="preserve">
     <value>The {0} '{1}' and all of its contents will be deleted permanently.</value>
   </data>
@@ -197,8 +207,15 @@ Check the filename and try again.</value>
   <data name="InitialisationComplete" xml:space="preserve">
     <value>Initialisation complete. Starting the application.</value>
   </data>
+  <data name="InitialisationFailed" xml:space="preserve">
+    <value>Initialisation failed. The application configuration could not be loaded.</value>
+  </data>
+  <data name="InvalidContentType" xml:space="preserve">
+    <value>Invalid content type: {0}</value>
+  </data>
   <data name="NameAlreadyExists" xml:space="preserve">
-    <value>Cannot rename '{0}' to '{1}' because a {2} with that name already exists.</value>
+    <value>A {0} with the name '{1}' already exists at this location.
+Please provide a unique name for the {0}.</value>
   </data>
   <data name="NameCannotInclude" xml:space="preserve">
     <value>{0} names cannot include any of the following:
@@ -215,6 +232,9 @@ Please enter a valid name.</value>
   </data>
   <data name="NewFolder" xml:space="preserve">
     <value>New Folder</value>
+  </data>
+  <data name="NotInitialised" xml:space="preserve">
+    <value>This instance has not been properly initialised.</value>
   </data>
   <data name="ObjectNotInitialised" xml:space="preserve">
     <value>This object has not been properly initialised.</value>
@@ -279,6 +299,15 @@ Please enter a valid name.</value>
   <data name="Tools" xml:space="preserve">
     <value>Tools</value>
   </data>
+  <data name="UnexpectedViewType" xml:space="preserve">
+    <value>Unexpected view type: {0}</value>
+  </data>
+  <data name="UnknownType" xml:space="preserve">
+    <value>Unknown type: {0}</value>
+  </data>
+  <data name="UnrecognisedViewType" xml:space="preserve">
+    <value>Unrecognised view type: {0}</value>
+  </data>
   <data name="Version" xml:space="preserve">
     <value>Version {0}</value>
   </data>
@@ -293,9 +322,6 @@ Please enter a valid name.</value>
   </data>
   <data name="Workspace" xml:space="preserve">
     <value>Workspace</value>
-  </data>
-  <data name="WorkspaceAlreadyExists" xml:space="preserve">
-    <value>Cannot rename '{0}' to '{1}' because a workspace with that name already exists at this location.</value>
   </data>
   <data name="WorkspaceClosing" xml:space="preserve">
     <value>The workspace contains items with unsaved changes. Do you want to save your changes?</value>

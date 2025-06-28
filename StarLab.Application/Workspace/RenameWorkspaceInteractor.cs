@@ -33,7 +33,7 @@ namespace StarLab.Application.Workspace
 
             if (WorkspaceInteractionHelper.IsValid(name) && !string.IsNullOrEmpty(filename))
             {
-                dto.FileName = Path.ChangeExtension(Path.Join(Path.GetDirectoryName(filename), name), Constants.WORKSPACE_EXTENSION);
+                dto.FileName = Path.ChangeExtension(Path.Join(Path.GetDirectoryName(filename), name), Constants.WorkspaceExtension);
                
                 if (!File.Exists(dto.FileName))
                 {
@@ -54,7 +54,7 @@ namespace StarLab.Application.Workspace
                 }
                 else
                 {
-                    throw new Exception (WorkspaceInteractionHelper.CreateTargetExistsMessage(Path.GetFileName(filename), Path.GetFileName(dto.FileName), Resources.Workspace));
+                    throw new Exception(WorkspaceInteractionHelper.CreateCannotRenameItemMessage(Path.GetFileName(filename), Path.GetFileName(dto.FileName), Resources.Workspace)); // TODO - Can these be changed to show messages
                 }
             }
             else

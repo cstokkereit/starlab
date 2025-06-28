@@ -1,6 +1,4 @@
-﻿using StarLab.Application.Workspace;
-
-namespace StarLab.Application.Workspace.Documents
+﻿namespace StarLab.Application.Workspace.Documents
 {
     /// <summary>
     /// A class for performing unit tests on the <see cref="AddDocumentInteractor"/> class.
@@ -8,10 +6,10 @@ namespace StarLab.Application.Workspace.Documents
     public class AddDocumentInteractorTests : InteractorTests
     {
         /// <summary>
-        /// Test that the <see cref="AddDocumentInteractor.Execute"/> method correctly adds a document to a project in the workspace hierarchy.
+        /// Test that the <see cref="AddDocumentInteractor.Execute"/> method correctly adds a document to a folder in a project in the workspace hierarchy.
         /// </summary>
         [Test]
-        public void TestAddDocument()
+        public void TestAddDocumentToFolder()
         {
             var port = Substitute.For<IAddDocumentOutputPort>();
 
@@ -40,6 +38,44 @@ namespace StarLab.Application.Workspace.Documents
                 ws.Projects[0].Documents[0].ID == "1" &&
                 ws.Projects[0].Documents[0].Name == "Document1" &&
                 ws.Projects[0].Documents[0].Path == "Workspace/Project1/Folder1" &&
+                ws.Projects[0].Documents[0].View == "View1"));
+
+            port.Received().OpenDocument(Arg.Is("1"));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="AddDocumentInteractor.Execute"/> method correctly adds a document to a project in the workspace hierarchy.
+        /// </summary>
+        [Test]
+        public void TestAddDocumentToProject()
+        {
+            var port = Substitute.For<IAddDocumentOutputPort>();
+
+            var interactor = Factory.CreateAddDocumentUseCase(port);
+
+            var workspace = new DTOBuilder("Workspace")
+                .AddProject("Project1")
+                .AddFolder("Workspace/Project1/Folder1")
+                .CreateWworkspace();
+
+            var document = new DocumentDTO
+            {
+                ID = "1",
+                Name = "Document1",
+                Path = "Workspace/Project1",
+                View = "View1"
+            };
+
+            interactor.Execute(workspace, document);
+
+            port.Received().UpdateWorkspace(Arg.Is<WorkspaceDTO>(ws =>
+                ws.Projects.Count == 1 &&
+                ws.Projects[0].Folders.Count == 1 &&
+                ws.Projects[0].Folders[0].Path == "Workspace/Project1/Folder1" &&
+                ws.Projects[0].Documents.Count == 1 &&
+                ws.Projects[0].Documents[0].ID == "1" &&
+                ws.Projects[0].Documents[0].Name == "Document1" &&
+                ws.Projects[0].Documents[0].Path == "Workspace/Project1" &&
                 ws.Projects[0].Documents[0].View == "View1"));
 
             port.Received().OpenDocument(Arg.Is("1"));

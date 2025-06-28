@@ -73,7 +73,16 @@ namespace StarLab.Presentation.Workspace
         /// <returns>The <see cref="IDocument"/> with the specified ID.</returns>
         public IDocument GetDocument(string id)
         {
-            throw new NotImplementedException();
+            throw new InvalidOperationException();
+        }
+
+        /// <summary>
+        /// Gets a <see cref="List{String}"/> containing the IDs of all documents in the workspace hierarchy.
+        /// </summary>
+        /// <returns>A <see cref="List{String}"/> of document IDs.</returns>
+        public List<string> GetDocumentIDs()
+        {
+            return new List<string>();
         }
 
         /// <summary>
@@ -83,7 +92,7 @@ namespace StarLab.Presentation.Workspace
         /// <returns>The <see cref="IFolder"/> with the specified key.</returns>
         public IFolder GetFolder(string key)
         {
-            throw new NotImplementedException();
+            throw new InvalidOperationException();
         }
 
         /// <summary>
@@ -93,7 +102,7 @@ namespace StarLab.Presentation.Workspace
         /// <returns>The <see cref="IProject"/> with the specified key.</returns>
         public IProject GetProject(string key)
         {
-            throw new NotImplementedException();
+            throw new InvalidOperationException();
         }
 
         /// <summary>

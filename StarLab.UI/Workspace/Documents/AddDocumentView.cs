@@ -1,13 +1,12 @@
 ﻿using log4net;
 using StarLab.Presentation;
-using StarLab.Presentation.Configuration;
 using StarLab.Presentation.Workspace.Documents;
 using Stratosoft.Commands;
 
 namespace StarLab.UI.Workspace.Documents
 {
     /// <summary>
-    /// TODO
+    /// A <see cref="UserControl"/> that implements the behaviour that is specific to the Add Document dialog.
     /// </summary>
     public partial class AddDocumentView : UserControl, IAddDocumentView
     {
@@ -18,20 +17,23 @@ namespace StarLab.UI.Workspace.Documents
         private readonly SplitViewPanels panel; // The panel that will contain the view.
 
         /// <summary>
-        /// 
+        /// Initialises a new instance of the <see cref="AddDocumentView"/> class.
         /// </summary>
-        /// <param name="config"></param>
-        /// <param name="parent"></param>
-        /// <param name="factory"></param>
-        public AddDocumentView(IChildViewConfiguration config, IViewConfiguration parent, IViewFactory factory)
+        /// <param name="definition">An <see cref="IViewDefinition"/> that holds the information required to construct this view.</param>
+        /// <param name="factory">An <see cref="IViewFactory"/> that will be used to create the presenter.</param>
+        /// <summary>
+        public AddDocumentView(IViewDefinition definition, IViewFactory factory)
         {
+            ArgumentNullException.ThrowIfNull(definition, nameof(definition));
+            ArgumentNullException.ThrowIfNull(factory, nameof(factory));
+
             InitializeComponent();
 
-            Name = Views.ADD_DOCUMENT;
+            Name = Views.AddDocument;
 
-            panel = (SplitViewPanels)config.Panel;
+            panel = (SplitViewPanels)definition.Panel;
 
-            presenter = (IAddDocumentViewPresenter)factory.CreatePresenter(parent, this);
+            presenter = (IAddDocumentViewPresenter)factory.CreatePresenter(this);
         }
 
         /// <summary>
@@ -40,17 +42,17 @@ namespace StarLab.UI.Workspace.Documents
         public IChildViewController Controller => (IChildViewController)presenter;
 
         /// <summary>
-        /// 
+        /// Gets the preferred panel, if any, in which to display the view.
         /// </summary>
         public SplitViewPanels Panel => panel;
 
         /// <summary>
-        /// 
+        /// Gets the <see cref="DocumentType"/>.
         /// </summary>
-        public string DocumentType => "ColourMagnitudeChartView"; // TODO
+        public string DocumentType => "ColourMagnitudeChartView"; // TODO - Other document/chart types
 
         /// <summary>
-        /// 
+        /// Gets or sets the document name.
         /// </summary>
         public string DocumentName
         {
@@ -59,7 +61,7 @@ namespace StarLab.UI.Workspace.Documents
         }
 
         /// <summary>
-        /// 
+        /// TODO - Implement this properly and provide a summary.
         /// </summary>
         /// <param name="key"></param>
         /// <param name="text"></param>
@@ -87,19 +89,19 @@ namespace StarLab.UI.Workspace.Documents
         }
 
         /// <summary>
-        /// 
+        /// Adds the <see cref="Image"/> provided to the <see cref="ImageList"/> used by the document types <see cref="ListView"/>.
         /// </summary>
-        /// <param name="key"></param>
-        /// <param name="image"></param>
+        /// <param name="key">The key used to identify the image being added.</param>
+        /// <param name="image">The <see cref="Image"/> being added.</param>
         public void AddImage(string key, Image image)
         {
             imageList.Images.Add(image);
         }
 
         /// <summary>
-        /// 
+        /// Attaches the 'Add' button to the the <see cref="ICommand"/> provided.
         /// </summary>
-        /// <param name="command"></param>
+        /// <param name="command">The <see cref="ICommand"/> that will be executed when the 'Add' button is clicked.</param>
         public void AttachAddButtonCommand(ICommand command)
         {
             if (command is IComponentCommand componentCommand)
@@ -109,9 +111,9 @@ namespace StarLab.UI.Workspace.Documents
         }
 
         /// <summary>
-        /// 
+        /// Attaches the 'Cancel' button to the the <see cref="ICommand"/> provided.
         /// </summary>
-        /// <param name="command"></param>
+        /// <param name="command">The <see cref="ICommand"/> that will be executed when the 'Cancel' button is clicked.</param>
         public void AttachCancelButtonCommand(ICommand command)
         {
             if (command is IComponentCommand componentCommand)
@@ -126,7 +128,7 @@ namespace StarLab.UI.Workspace.Documents
         /// <param name="controller">The <see cref="IApplicationController"/>.</param>
         public void Initialise(IApplicationController controller)
         {
-
+            // TODO - Add implementation if necessary.
         }
     }
 }

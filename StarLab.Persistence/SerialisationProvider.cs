@@ -10,14 +10,12 @@ namespace StarLab.Serialisation
     /// </summary>
     public class SerialisationProvider : ISerialisationProvider
     {
-        private const string WORKSPACE_EXTENSION = ".slw"; // The workspace file extension.
-
-        private readonly IMapper mapper; // Maps POCOs to data transfer objects and vice versa.
+        private readonly IMapper mapper; // Maps POCOs to DTOs and vice versa.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="SerialisationProvider"/> class.
         /// </summary>
-        /// <param name="mapper">An <see cref="IMapper"/> that will be used to map POCOs to data transfer objects and vice versa.</param>
+        /// <param name="mapper">An <see cref="IMapper"/> that will be used to map POCOs to DTOs and vice versa.</param>
         /// <exception cref="ArgumentNullException"></exception>
         public SerialisationProvider(IMapper mapper)
         {
@@ -33,7 +31,7 @@ namespace StarLab.Serialisation
         {
             Workspace.Workspace? workspace = null;
 
-            if (!string.IsNullOrEmpty(filename) && Path.GetExtension(filename) == WORKSPACE_EXTENSION)
+            if (!string.IsNullOrEmpty(filename) && Path.GetExtension(filename) == Constants.WorkspaceExtension)
             {
                 using (var stream = new FileStream(filename, FileMode.Open, FileAccess.Read))
                 {
@@ -42,7 +40,7 @@ namespace StarLab.Serialisation
                 }
             }
 
-            if (workspace == null) throw new Exception(); // TODO
+            if (workspace == null) throw new Exception(); // TODO - Exception message
 
             return mapper.Map<Workspace.Workspace, WorkspaceDTO>(workspace);
         }

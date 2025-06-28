@@ -1,9 +1,9 @@
 ﻿using log4net;
 using StarLab.Application;
 using StarLab.Presentation;
-using StarLab.Presentation.Configuration;
 using StarLab.Presentation.Workspace;
-using StarLab.UI;
+using StarLab.Shared.Properties;
+using System.Diagnostics;
 using WeifenLuo.WinFormsUI.Docking;
 
 namespace StarLab.UI.Workspace
@@ -17,7 +17,7 @@ namespace StarLab.UI.Workspace
 
         private readonly IDockableViewPresenter presenter; // The presenter that controls the view.
 
-        private readonly IChildView content; // TODO
+        private readonly IChildView content; // A view that implements the tool specific behaviour.
 
         private readonly string id; // The view ID.
 
@@ -27,16 +27,16 @@ namespace StarLab.UI.Workspace
         /// <param name="name">The name of the tool window.</param>
         /// <param name="text">The tool window text.</param>
         /// <param name="factory">An <see cref="IViewFactory"/> that will be used to create the presenter and child view.</param>
-        /// <param name="configuration">An <see cref="IViewConfiguration"/> that holds the configuration information required to construct this view.</param>
+        /// <param name="definition">The <see cref="ViewDefinition"/> used to construct this view.</param>
         /// <exception cref="ArgumentException"></exception>
-        public ToolView(string name, string text, IViewFactory factory, IViewConfiguration configuration)
+        public ToolView(string name, string text, IViewFactory factory, ViewDefinition definition)
         {
-            ArgumentNullException.ThrowIfNull(configuration, nameof(configuration));
+            ArgumentNullException.ThrowIfNull(definition, nameof(definition));
             ArgumentNullException.ThrowIfNull(factory, nameof(factory));
             ArgumentException.ThrowIfNullOrEmpty(name, nameof(name));
             ArgumentException.ThrowIfNullOrEmpty(text, nameof(text));
 
-            if (configuration.ChildViews.Count > 1) throw new ArgumentException(); // TODO
+            Debug.Assert(definition.ChildViews.Count == 1);
 
             InitializeComponent();
 
@@ -46,9 +46,9 @@ namespace StarLab.UI.Workspace
    
             SuspendLayout();
 
-            presenter = (IDockableViewPresenter)factory.CreatePresenter(configuration.Name, this);
+            presenter = (IDockableViewPresenter)factory.CreatePresenter(this);
 
-            content = factory.CreateView(configuration.ChildViews[0], configuration);
+            content = factory.CreateView(definition.ChildViews[0]);
 
             content.Controller.RegisterController((IViewController)presenter);
 
@@ -59,16 +59,11 @@ namespace StarLab.UI.Workspace
             }
             else
             {
-                throw new Exception(); // TODO - This should never happen
+                throw new Exception(string.Format(Resources.InvalidContentType, content.GetType()));
             }
 
             ResumeLayout();
         }
-
-        /// <summary>
-        /// Gets the <see cref="IChildViewController"/> that controls the view content.
-        /// </summary>
-        //public IChildViewController ContentController => content.Controller; TODO - Remove if never needed
 
         /// <summary>
         /// Gets the <see cref="IViewController"/> that controls this view.
@@ -97,6 +92,7 @@ namespace StarLab.UI.Workspace
         {
             if (DockState == DockState.Hidden || DockState == DockState.Unknown)
             {
+                // TODO - Finish this or remove it
                 //Height = presenter.Height;
                 //Width = presenter.Width;
             }

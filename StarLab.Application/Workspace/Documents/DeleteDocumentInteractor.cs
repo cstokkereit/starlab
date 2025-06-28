@@ -38,8 +38,6 @@ namespace StarLab.Application.Workspace.Documents
                 {
                     workspace.DeleteDocument(key);
 
-                    OutputPort.RemoveDocument(key);
-
                     OutputPort.UpdateWorkspace(Mapper.Map<WorkspaceDTO>(workspace));
                 }
             }

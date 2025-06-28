@@ -1,6 +1,5 @@
 ﻿using log4net;
 using StarLab.Presentation;
-using StarLab.Presentation.Configuration;
 using StarLab.Presentation.Help;
 
 namespace StarLab.UI.Help
@@ -19,18 +18,17 @@ namespace StarLab.UI.Help
         /// <summary>
         /// Initialises a new instance of the <see cref="AboutView"> class.
         /// </summary>
-        /// <param name="configuration">An <see cref="IChildViewConfiguration"/> that holds the configuration information required to construct this view.</param>
-        /// <param name="parent">An <see cref="IViewConfiguration"/> that holds the configuration information that was used to construct the parent view.</param>
+        /// <param name="definition">An <see cref="IViewDefinition"/> that holds the information required to construct this view.</param>
         /// <param name="factory">An <see cref="IViewFactory"/> that will be used to create the presenter and child view.</param>
-        public AboutView(IChildViewConfiguration config, IViewConfiguration parent, IViewFactory factory)
+        public AboutView(IViewDefinition definition, IViewFactory factory)
         {
             InitializeComponent();
 
-            Name = Views.ABOUT;
+            Name = Views.About;
 
-            panel = (SplitViewPanels)config.Panel;
+            panel = (SplitViewPanels)definition.Panel;
 
-            presenter = (IAboutViewPresenter)factory.CreatePresenter(parent, this);
+            presenter = (IAboutViewPresenter)factory.CreatePresenter(this);
         }
 
         /// <summary>

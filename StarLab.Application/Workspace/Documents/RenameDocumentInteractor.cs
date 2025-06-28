@@ -39,7 +39,7 @@ namespace StarLab.Application.Workspace.Documents
                 }
                 else
                 {
-                    throw new Exception(WorkspaceInteractionHelper.CreateTargetExistsMessage(document.Name, name, Resources.Document));
+                    throw new Exception(WorkspaceInteractionHelper.CreateCannotRenameItemMessage(document.Name, name, Resources.Document));
                 }
             }
             else

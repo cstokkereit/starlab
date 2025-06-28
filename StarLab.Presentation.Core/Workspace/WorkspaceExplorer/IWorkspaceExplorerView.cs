@@ -71,11 +71,6 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         void CollapseNode(string key);
 
         /// <summary>
-        /// Gets the default location for the Workspace Explorer tool window.
-        /// </summary>
-        string DefaultLocation { get; }
-
-        /// <summary>
         /// Initiates editing of the specified tree node label.
         /// </summary>
         /// <param name="key">The node key.</param>

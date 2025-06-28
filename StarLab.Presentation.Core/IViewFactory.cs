@@ -1,5 +1,4 @@
-﻿using StarLab.Presentation.Configuration;
-using StarLab.Presentation.Workspace;
+﻿using StarLab.Presentation.Workspace;
 using StarLab.Presentation.Workspace.Documents;
 
 namespace StarLab.Presentation
@@ -12,10 +11,9 @@ namespace StarLab.Presentation
         /// <summary>
         /// Creates an <see cref="IPresenter"/> to control the <see cref="IView"/> provided.
         /// </summary>
-        /// <param name="name">The name of the configuration section.</param>
         /// <param name="view">The <see cref="IView"/> that the presenter will control.</param>
         /// <returns>An <see cref="IPresenter"/> that can be used to control the <see cref="IView"/> provided.</returns>
-        IPresenter CreatePresenter(string name, IView view);
+        IPresenter CreatePresenter(IView view);
 
         /// <summary>
         /// Creates an <see cref="IDockableViewPresenter"/> to control the <see cref="IDocumentView"/> provided.
@@ -28,10 +26,17 @@ namespace StarLab.Presentation
         /// <summary>
         /// Creates an <see cref="IChildViewPresenter"/> to control the <see cref="IChildView"/> provided.
         /// </summary>
-        /// <param name="parent">The <see cref="IViewConfiguration"/> of the parent view.</param>
-        /// <param name="child">The <see cref="IChildView"/> that the presenter will control.</param>
+        /// <param name="definition">An <see cref="IViewDefinition"/> that holds the information used to construct the view.</param>
+        /// <param name="view">The <see cref="IChildView"/> that the presenter will control.</param>
+        /// <returns>An <see cref="IChildViewPresenter"/> that can be used to control the <see cref="IView"/> provided.</returns>
+        IChildViewPresenter CreatePresenter(IViewDefinition definition, IChildView view);
+
+        /// <summary>
+        /// Creates an <see cref="IChildViewPresenter"/> to control the <see cref="IChildView"/> provided.
+        /// </summary>
+        /// <param name="view">The <see cref="IChildView"/> that the presenter will control.</param>
         /// <returns>An <see cref="IChildViewPresenter"/> that can be used to control the <see cref="IChildView"/> provided.</returns>
-        IChildViewPresenter CreatePresenter(IViewConfiguration parent, IChildView child);
+        IChildViewPresenter CreatePresenter(IChildView view);
 
         /// <summary>
         /// Creates the specified <see cref="IView"/>.
@@ -51,9 +56,8 @@ namespace StarLab.Presentation
         /// <summary>
         /// Creates the specified <see cref="IChildView"/>.
         /// </summary>
-        /// <param name="config">The <see cref="IChildViewConfiguration"/> that specifies the view to be created.</param>
-        /// <param name="parent">The <see cref="IViewConfiguration"/> of the parent view.</param>
+        /// <param name="definition">An <see cref="IViewDefinition"/> that holds the information required to construct the view.</param>
         /// <returns>The specified <see cref="IChildView"/>.</returns>
-        IChildView CreateView(IChildViewConfiguration config, IViewConfiguration parent);
+        IChildView CreateView(IViewDefinition definition);
     }
 }

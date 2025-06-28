@@ -1,5 +1,6 @@
 ﻿using StarLab.Application.Workspace;
 using StarLab.Application.Workspace.Documents;
+using System.Windows.Forms;
 
 namespace StarLab.Application
 {
@@ -85,5 +86,13 @@ namespace StarLab.Application
         /// <param name="outputPort">An <see cref="IWorkspaceOutputPort"/> that updates the UI in response to the ouputs of the use case.</param>
         /// <returns>An instance of <see cref="ISaveWorkspaceUseCase"/> that implements the use case.</returns>
         ISaveWorkspaceUseCase CreateSaveWorkspaceUseCase(IApplicationOutputPort outputPort);
+
+        /// <summary>
+        /// Creates a use case interactor that copies a folder in the workspace hierarchy. 
+        /// </summary>
+        /// <param name="outputPort">An <see cref="IWorkspaceOutputPort"/> that updates the UI in response to the ouputs of the use case.</param>
+        /// <param name="operation"></param>
+        /// <returns>An instance of <see cref="IClipboardInteractionUseCase"/> that implements the use case.</returns>
+        IClipboardInteractionUseCase CreateUseCase(IWorkspaceOutputPort outputPort, ClipboardOperations operation);
     }
 }

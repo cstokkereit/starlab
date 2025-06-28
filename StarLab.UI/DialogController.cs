@@ -124,7 +124,7 @@ namespace StarLab.UI
         /// </summary>
         /// <param name="responses">The <see cref="InteractionResponses"/> enum value to be converted.</param>
         /// <returns>A <see cref="MessageBoxButtons"/> enum value.</returns>
-        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
         private static MessageBoxButtons GetButtons(InteractionResponses responses)
         {
             switch (responses)
@@ -142,7 +142,7 @@ namespace StarLab.UI
                     return MessageBoxButtons.YesNoCancel;
 
                 default:
-                    throw new ArgumentException(nameof(responses)); // TODO
+                    throw new ArgumentOutOfRangeException(nameof(responses));
             }
         }
 
@@ -151,7 +151,7 @@ namespace StarLab.UI
         /// </summary>
         /// <param name="type">The <see cref="InteractionType"/> enum value to be converted.</param>
         /// <returns>A <see cref="MessageBoxIcon"/> enum value.</returns>
-        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
         private static MessageBoxIcon GetIcon(InteractionType type)
         {
             switch (type)
@@ -169,7 +169,7 @@ namespace StarLab.UI
                     return MessageBoxIcon.Warning;
 
                 default:
-                    throw new ArgumentException(nameof(type)); // TODO
+                    throw new ArgumentOutOfRangeException(nameof(type));
             }
         }
 
@@ -178,7 +178,7 @@ namespace StarLab.UI
         /// </summary>
         /// <param name="result">The <see cref="DialogResult"/> enum value to be converted.</param>
         /// <returns>An <see cref="InteractionResult"/> enum value.</returns>
-        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
         private static InteractionResult GetResult(DialogResult result)
         {
             switch (result)
@@ -196,7 +196,7 @@ namespace StarLab.UI
                     return InteractionResult.Yes;
 
                 default:
-                    throw new ArgumentException(nameof(result)); // TODO
+                    throw new ArgumentOutOfRangeException(nameof(result));
             }
         }
     }

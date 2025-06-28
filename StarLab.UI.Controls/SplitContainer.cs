@@ -71,7 +71,23 @@ namespace StarLab.UI.Controls
 
             views.Add(control.Name, control);
 
-            MinimumSize = GetMinimumSize();
+            var size1 = GetMinimumSize(splitContainer.Panel1.Controls);
+            var size2 = GetMinimumSize(splitContainer.Panel2.Controls);
+
+            switch (splitContainer.Orientation)
+            {
+                case Orientation.Horizontal:
+                    splitContainer.Panel1MinSize = size1.Height;
+                    splitContainer.Panel2MinSize = size2.Height;
+                    break;
+
+                case Orientation.Vertical:
+                    splitContainer.Panel1MinSize = size1.Width;
+                    splitContainer.Panel2MinSize = size2.Width;
+                    break;
+            }
+
+            MinimumSize = GetMinimumSize(size1, size2);
 
             control.Dock = DockStyle.Fill;
             control.Visible = true;
@@ -138,28 +154,23 @@ namespace StarLab.UI.Controls
         }
 
         /// <summary>
-        /// TODO - Refactor, functions should not have side effects
+        /// Gets the minimum <see cref="Size"/> that satisfies the minimum size requirements of the controls in the left and right or top and bottom panels.
         /// </summary>
-        /// <returns></returns>
-        private Size GetMinimumSize()
+        /// <param name="size1">The left or top panel depending on the orientation of the splitter bar.</param>
+        /// <param name="size2">The right or bottom panel depending on the orientation of the splitter bar.</param>
+        /// <returns>A <see cref="Size"/> struct that specifies the minimum height and width.</returns>
+        private Size GetMinimumSize(Size size1, Size size2)
         {
-            var size1 = GetMinimumSize(splitContainer.Panel1.Controls);
-            var size2 = GetMinimumSize(splitContainer.Panel2.Controls);
-
             Size size = new Size();
 
             switch (splitContainer.Orientation)
             {
                 case Orientation.Horizontal:
                     size = new Size(size1.Width > size2.Width ? size1.Width : size2.Width, size1.Height + size2.Height);
-                    splitContainer.Panel1MinSize = size1.Height;
-                    splitContainer.Panel2MinSize = size2.Height;
                     break;
 
                 case Orientation.Vertical:
                     size = new Size(size1.Width + size2.Width, size1.Height > size2.Height ? size1.Height : size2.Height);
-                    splitContainer.Panel1MinSize = size1.Width;
-                    splitContainer.Panel2MinSize = size2.Width;
                     break;
             }
 

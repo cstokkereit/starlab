@@ -1,10 +1,13 @@
 ﻿using AutoMapper;
 using Castle.Windsor;
+using log4net;
 using StarLab.Application;
 using StarLab.Presentation.Configuration;
 using StarLab.Presentation.Workspace;
 using StarLab.Presentation.Workspace.Documents;
+using StarLab.Shared.Properties;
 using Stratosoft.Commands;
+using System.Diagnostics;
 
 namespace StarLab.Presentation
 {
@@ -13,7 +16,11 @@ namespace StarLab.Presentation
     /// </summary>
     public class PresenterFactory : Factory, IPresenterFactory
     {
-        private readonly Configuration.IConfigurationProvider configuration; // A service that provides the configuration information.
+        private static readonly ILog log = LogManager.GetLogger(typeof(PresenterFactory)); // The logger that will be used for writing log messages.
+
+        private readonly Dictionary<string, string> types = new Dictionary<string, string>();  // A dictionary that holds the presenter type names indexed by view name.
+
+        private readonly IApplicationConfiguration configuration; // A service that provides the configuration information.
 
         private readonly IWindsorContainer container; // Used to resolve dependencies at run time.
 
@@ -28,28 +35,55 @@ namespace StarLab.Presentation
         /// </summary>
         /// <param name="container">An <see cref="IWindsorContainer"/> that will be used to resolve dependencies.</param>
         /// <param name="factory">An <see cref="IUseCaseFactory"/> that will be used to create use case interactors.</param>
-        /// <param name="configuration">The <see cref="Configuration.IConfigurationProvider"/> that will be used to get configuration information.</param>
+        /// <param name="configuration">The <see cref="IApplicationConfiguration"/> that will be used to get configuration information.</param>
         /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
         /// <param name="events">The <see cref="IEventAggregator"/> that manages application events.</param>
         /// <exception cref="ArgumentNullException"></exception>
-        public PresenterFactory(IWindsorContainer container, IUseCaseFactory factory, Configuration.IConfigurationProvider configuration, IMapper mapper, IEventAggregator events)
+        public PresenterFactory(IWindsorContainer container, IUseCaseFactory factory, IApplicationConfiguration configuration, IMapper mapper, IEventAggregator events)
         {
             this.configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
             this.container = container ?? throw new ArgumentNullException(nameof(container));
             this.factory = factory ?? throw new ArgumentNullException(nameof(factory));
             this.events = events ?? throw new ArgumentNullException(nameof(events));
             this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+
+            InitialiseDialogViewPresenterTypes();
+            InitialiseDocumentViewPresenterTypes();
+            InitialiseToolViewPresenterTypes();
         }
 
         /// <summary>
         /// Creates an <see cref="IPresenter"/> to control the <see cref="IView"/> provided.
         /// </summary>
-        /// <param name="name">The name of the configuration section.</param>
         /// <param name="view">The <see cref="IView"/> that the presenter will control.</param>
         /// <returns>An <see cref="IPresenter"/> that can be used to control the <see cref="IView"/> provided.</returns>
-        public IPresenter CreatePresenter(string name, IView view)
+        public IPresenter CreatePresenter(IView view)
         {
-            return CreatePresenter(view, configuration.GetViewConfiguration(name));
+            var commands = container.Resolve<ICommandManager>();
+
+            IPresenter presenter;
+
+            switch (view.GetType().Name)
+            {
+                case "ApplicationView":
+                    presenter = new ApplicationViewPresenter((IApplicationView)view, commands, factory, configuration, mapper, events);
+                    break;
+
+                case "DialogView":
+                    presenter = new DialogViewPresenter((IDialogView)view, commands, factory, configuration, mapper, events);
+                    break;
+
+                case "ToolView":
+                    presenter = new ToolViewPresenter((IDockableView)view, commands, factory, configuration, mapper, events);
+                    break;
+
+                default:
+                    var message = string.Format(string.Format(Resources.UnexpectedViewType, view.GetType().Name));
+                    if (log.IsFatalEnabled) log.Fatal(message);
+                    throw new Exception(message);
+            }
+
+            return presenter;
         }
 
         /// <summary>
@@ -66,68 +100,53 @@ namespace StarLab.Presentation
         /// <summary>
         /// Creates an <see cref="IChildViewPresenter"/> to control the <see cref="IChildView"/> provided.
         /// </summary>
-        /// <param name="parent">The <see cref="IViewConfiguration"/> of the parent view.</param>
-        /// <param name="child">The <see cref="IChildView"/> that the presenter will control.</param>
+        /// <param name="definition">An <see cref="IViewDefinition"/> that holds the information used to construct the view.</param>
+        /// <param name="view">The <see cref="IChildView"/> that the presenter will control.</param>
         /// <returns>An <see cref="IChildViewPresenter"/> that can be used to control the <see cref="IChildView"/> provided.</returns>
-        public IChildViewPresenter CreatePresenter(IViewConfiguration parent, IChildView child)
+        public IChildViewPresenter CreatePresenter(IViewDefinition definition, IChildView view)
         {
-            IChildViewPresenter presenter;
+            Debug.Assert(types.ContainsKey(definition.Name)); // If this assertion fails you will need to create the required view defintion.
 
-            if (parent.ChildViews.Count > 1)
-            {
-                presenter = CreatePresenter(child, parent.GetChildViewConfiguration(child.Name));
-            }
-            else
-            {
-                presenter = CreatePresenter(child, parent.ChildViews[0]);
-            }
-
-            return presenter;
+            return (IChildViewPresenter)CreateInstance(types[definition.Name], new object[] { view, container.Resolve<ICommandManager>(), factory, configuration, mapper, events });
         }
 
         /// <summary>
         /// Creates an <see cref="IChildViewPresenter"/> to control the <see cref="IChildView"/> provided.
         /// </summary>
-        /// <param name="view">The <see cref="IChildView"/> that the presenter will control.</param>
-        /// <param name="configuration">The <see cref="IChildViewConfiguration"/> for the child view.</param>
+        /// <param name="child">The <see cref="IChildView"/> that the presenter will control.</param>
         /// <returns>An <see cref="IChildViewPresenter"/> that can be used to control the <see cref="IChildView"/> provided.</returns>
-        private IChildViewPresenter CreatePresenter(IChildView view, IChildViewConfiguration configuration)
+        public IChildViewPresenter CreatePresenter(IChildView view)
         {
-            return (IChildViewPresenter)CreateInstance(configuration.Presenter, new object[] { view, container.Resolve<ICommandManager>(), factory, this.configuration, mapper, events });
+            Debug.Assert(types.ContainsKey(view.Name)); // If this assertion fails you will need to create the required view defintion.
+
+            return (IChildViewPresenter)CreateInstance(types[view.Name], new object[] { view, container.Resolve<ICommandManager>(), factory, configuration, mapper, events });
         }
 
         /// <summary>
-        /// Creates an <see cref="IPresenter"/> to control the <see cref="IView"/> provided.
+        /// Adds the dialog view presenter type names to the dictionary.
         /// </summary>
-        /// <param name="view">The <see cref="IView"/> that the presenter will control.</param>
-        /// <param name="configuration">The <see cref="IViewConfiguration"/> for the view.</param>
-        /// <returns>An <see cref="IPresenter"/> that can be used to control the <see cref="IView"/> provided.</returns>
-        /// <exception cref="Exception"></exception>
-        private IPresenter CreatePresenter(IView view, IViewConfiguration configuration)
+        private void InitialiseDialogViewPresenterTypes()
         {
-            var commands = container.Resolve<ICommandManager>();
+            types.Add(Views.About, "StarLab.Presentation.Help.AboutViewPresenter, StarLab.Presentation");
+            types.Add(Views.AddDocument, "StarLab.Presentation.Workspace.Documents.AddDocumentViewPresenter, StarLab.Presentation");
+            types.Add(Views.Options, "StarLab.Presentation.Options.OptionsViewPresenter, StarLab.Presentation");
+        }
 
-            IPresenter presenter;
+        /// <summary>
+        /// Adds the document view presenter type names to the dictionary.
+        /// </summary>
+        private void InitialiseDocumentViewPresenterTypes()
+        {
+            types.Add($"ColourMagnitudeChartView::{Views.ChartSettings}", "StarLab.Presentation.Workspace.Documents.Charts.ChartSettingsViewPresenter, StarLab.Presentation");
+            types.Add($"ColourMagnitudeChartView::{Views.Chart}", "StarLab.Presentation.Workspace.Documents.Charts.ColourMagnitudeChartViewPresenter, StarLab.Presentation");
+        }
 
-            switch (configuration.Type)
-            {
-                case ViewTypes.Application:
-                    presenter = new ApplicationViewPresenter((IApplicationView)view, commands, factory, this.configuration, mapper, events);
-                    break;
-
-                case ViewTypes.Dialog:
-                    presenter = new DialogViewPresenter((IDialogView)view, commands, factory, this.configuration, mapper, events);
-                    break;
-
-                case ViewTypes.Tool:
-                    presenter = new ToolViewPresenter((IDockableView)view, commands, factory, this.configuration, mapper, events);
-                    break;
-
-                default:
-                    throw new Exception(); // TODO
-            }
-
-            return presenter;
+        /// <summary>
+        /// Adds the tool view presenter type names to the dictionary.
+        /// </summary>
+        private void InitialiseToolViewPresenterTypes()
+        {
+            types.Add(Views.WorkspaceExplorer, "StarLab.Presentation.Workspace.WorkspaceExplorer.WorkspaceExplorerViewPresenter, StarLab.Presentation");
         }
     }
 }

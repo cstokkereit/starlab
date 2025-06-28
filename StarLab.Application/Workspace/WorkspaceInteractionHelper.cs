@@ -4,10 +4,27 @@ using StarLab.Shared.Properties;
 namespace StarLab.Application.Workspace
 {
     /// <summary>
-    /// 
+    /// A helper class that exposes functions that can be used by any of the workspace interactors.
     /// </summary>
     internal static class WorkspaceInteractionHelper
     {
+        /// <summary>
+        /// Creates an error message in response to a duplicate name being provided when renaming an item.
+        /// </summary>
+        /// <param name="oldName">The current name of the item being renamed.</param>
+        /// <param name="newName">A name that is not valid because an item of the same type with the same name already exists.</param>
+        /// <param name="target">The item being renamed.</param>
+        /// <returns>An error message identifying the issue with the name provided.</returns>
+        public static string CreateCannotRenameItemMessage(string oldName, string newName, string target)
+        {
+            if (target == Resources.Workspace)
+            {
+                return string.Format(Resources.CannotRenameWorkspace, Path.GetFileNameWithoutExtension(oldName), Path.GetFileNameWithoutExtension(newName));
+            }
+
+            return string.Format(Resources.CannotRenameItem, oldName, newName, target.ToLower());
+        }
+
         /// <summary>
         /// Creates an error message in response to an invalid name being provided.
         /// </summary>
@@ -22,23 +39,6 @@ namespace StarLab.Application.Workspace
             }
 
             return string.Format(Resources.NameNullOrEmpty, target.ToLower());
-        }
-
-        /// <summary>
-        /// Creates an error message in response to a duplicate name being provided.
-        /// </summary>
-        /// <param name="oldName">The current name of the item being renamed.</param>
-        /// <param name="newName">A name that is not valid because an item of the same type with the same name already exists.</param>
-        /// <param name="target">The item being renamed.</param>
-        /// <returns>An error message identifying the issue with the name provided.</returns>
-        public static string CreateTargetExistsMessage(string oldName, string newName, string target)
-        {
-            if (target == Resources.Workspace)
-            {
-                return string.Format(Resources.WorkspaceAlreadyExists, Path.GetFileNameWithoutExtension(oldName), Path.GetFileNameWithoutExtension(newName));
-            }
-
-            return string.Format(Resources.NameAlreadyExists, oldName, newName, target.ToLower());
         }
 
         /// <summary>
@@ -57,23 +57,6 @@ namespace StarLab.Application.Workspace
             }
 
             return dtos;
-        }
-
-        /// <summary>
-        /// Checks the name provided to make sure that it does not contain any illegal characters.
-        /// </summary>
-        /// <param name="name">A name that may contain illegal characters.</param>
-        /// <returns>true if the name does not contain illegal characters; false otherwise.</returns>
-        public static bool IsValid(string? name)
-        {
-            if (string.IsNullOrEmpty(name)) return false;
-
-            foreach (var character in Constants.IllegalCharacters)
-            {
-                if (name.Contains(character)) return false;
-            }
-
-            return true;
         }
 
         /// <summary>
@@ -109,6 +92,23 @@ namespace StarLab.Application.Workspace
             }
 
             return documents;
+        }
+
+        /// <summary>
+        /// Checks the name provided to make sure that it does not contain any illegal characters.
+        /// </summary>
+        /// <param name="name">A name that may contain illegal characters.</param>
+        /// <returns><see cref="true"/> if the name does not contain illegal characters; <see cref="false"/> otherwise.</returns>
+        public static bool IsValid(string? name)
+        {
+            if (string.IsNullOrEmpty(name)) return false;
+
+            foreach (var character in Constants.IllegalCharacters)
+            {
+                if (name.Contains(character)) return false;
+            }
+
+            return true;
         }
     }
 }

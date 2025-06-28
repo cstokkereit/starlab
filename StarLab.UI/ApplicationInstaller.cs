@@ -5,6 +5,7 @@ using Castle.Windsor;
 using StarLab.Application;
 using StarLab.Configuration;
 using StarLab.Presentation;
+using StarLab.Presentation.Configuration;
 using StarLab.Serialisation;
 using Stratosoft.Commands;
 
@@ -49,7 +50,7 @@ namespace StarLab.UI
         private void InstallInfrastructureClasses(IWindsorContainer container)
         {
             container.Register(
-                Component.For<Presentation.Configuration.IConfigurationProvider>().ImplementedBy<ConfigurationProvider>(),
+                Component.For<IApplicationConfiguration>().ImplementedBy<ApplicationConfiguration>(),
                 Component.For<ISerialisationProvider>().ImplementedBy<SerialisationProvider>(),
                 Classes.FromAssemblyNamed("StarLab.Serialisation").BasedOn<Profile>().WithServiceBase()
             );
@@ -97,6 +98,7 @@ namespace StarLab.UI
         {
             container.Register(
                 Classes.FromAssemblyNamed("StarLab.UI").Where(t => t.Name.EndsWith("Factory")).WithServiceDefaultInterfaces(),
+                Component.For<IApplicationSettings>().ImplementedBy<ApplicationSettings>(),
                 Component.For<IApplicationController>().ImplementedBy<ApplicationController>()
             );
         }

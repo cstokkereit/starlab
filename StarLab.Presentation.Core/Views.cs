@@ -5,21 +5,21 @@
     /// </summary>
     public static class Views
     {
-        public const string ABOUT = "AboutView";
-        public const string ADD_DOCUMENT = "AddDocumentView";
+        public const string About = "AboutView";
+        public const string AddDocument = "AddDocumentView";
 
-        public const string CHART_SETTINGS = "ChartSettingsView";
-        public const string CHART = "ChartView";
+        public const string ChartSettings = "ChartSettingsView";
+        public const string Chart = "ChartView";
 
-        public const string DOCUMENT = "DocumentView";
+        public const string Document = "DocumentView";
 
-        public const string OPTIONS = "OptionsView";
+        public const string Options = "OptionsView";
 
-        public const string SPLIT_CONTAINER = "SplitView";
+        public const string Split = "SplitView";
 
-        public const string TOOL = "ToolView";
+        public const string Tool = "ToolView";
 
-        public const string WORKSPACE = "WorkspaceView";
-        public const string WORKSPACE_EXPLORER = "WorkspaceExplorerView";
+        public const string Workspace = "WorkspaceView";
+        public const string WorkspaceExplorer = "WorkspaceExplorerView";
     }
 }

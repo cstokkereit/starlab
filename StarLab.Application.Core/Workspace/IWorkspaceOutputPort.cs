@@ -12,12 +12,6 @@
         void OpenDocument(string id);
 
         /// <summary>
-        /// Removes the specified document.
-        /// </summary>
-        /// <param name="id">The document ID.</param>
-        void RemoveDocument(string id);
-
-        /// <summary>
         /// Renames the specified folder.
         /// </summary>
         /// <param name="path">The folder path.</param>

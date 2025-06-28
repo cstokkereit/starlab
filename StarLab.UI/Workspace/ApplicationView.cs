@@ -31,11 +31,11 @@ namespace StarLab.UI.Workspace
 
             InitializeComponent();
 
-            Name = Views.WORKSPACE;
-            id = Views.WORKSPACE;
+            Name = Views.Workspace;
+            id = Views.Workspace;
             Text = text;
 
-            presenter = (IApplicationViewPresenter)factory.CreatePresenter(Views.WORKSPACE, this);
+            presenter = (IApplicationViewPresenter)factory.CreatePresenter(this);
 
             dockPanel.Theme = new VS2015LightTheme();
 

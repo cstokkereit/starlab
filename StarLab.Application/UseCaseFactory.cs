@@ -123,5 +123,16 @@ namespace StarLab.Application
         {
             return new SaveWorkspaceInteractor(serialiser, outputPort, mapper);
         }
+
+        /// <summary>
+        /// Creates a use case interactor that copies a folder in the workspace hierarchy.
+        /// </summary>
+        /// <param name="outputPort">An <see cref="IWorkspaceOutputPort"/> that updates the UI in response to the ouputs of the use case.</param>
+        /// <param name="operation"></param>
+        /// <returns>An instance of <see cref="IClipboardInteractionUseCase"/> that implements the use case.</returns>
+        public IClipboardInteractionUseCase CreateUseCase(IWorkspaceOutputPort outputPort, ClipboardOperations operation)
+        {
+            return new ClipboardInteractor(outputPort, mapper, operation);
+        }
     }
 }

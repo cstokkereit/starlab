@@ -1,6 +1,5 @@
 ﻿using log4net;
 using StarLab.Presentation;
-using StarLab.Presentation.Configuration;
 using StarLab.Presentation.Options;
 
 namespace StarLab.UI.Options
@@ -19,18 +18,17 @@ namespace StarLab.UI.Options
         /// <summary>
         /// Initialises a new instance of the <see cref="OptionsView"> class.
         /// </summary>
-        /// <param name="configuration">An <see cref="IChildViewConfiguration"/> that holds the configuration information required to construct this view.</param>
-        /// <param name="parent">An <see cref="IViewConfiguration"/> that holds the configuration information that was used to construct the parent view.</param>
+        /// <param name="definition">An <see cref="IViewDefinition"/> that holds the information required to construct this view.</param>
         /// <param name="factory">An <see cref="IViewFactory"/> that will be used to create the presenter and child view.</param>
-        public OptionsView(IChildViewConfiguration configuration, IViewConfiguration parent, IViewFactory factory)
+        public OptionsView(IViewDefinition definition, IViewFactory factory)
         {
             InitializeComponent();
 
-            Name = Views.OPTIONS;
+            Name = Views.Options;
 
-            panel = (SplitViewPanels)configuration.Panel;
+            panel = (SplitViewPanels)definition.Panel;
 
-            presenter = (IOptionsViewPresenter)factory.CreatePresenter(parent, this);
+            presenter = (IOptionsViewPresenter)factory.CreatePresenter(this);
         }
 
         /// <summary>

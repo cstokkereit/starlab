@@ -1,7 +1,6 @@
 ﻿using log4net;
 using StarLab.Application;
 using StarLab.Presentation;
-using StarLab.Presentation.Configuration;
 using StarLab.Presentation.Workspace;
 using StarLab.Presentation.Workspace.Documents;
 using Stratosoft.Commands;
@@ -25,12 +24,12 @@ namespace StarLab.UI.Workspace.Documents
         /// </summary>
         /// <param name="document">The <see cref="IDocument"/> that this view represents.</param>
         /// <param name="factory">An <see cref="IViewFactory"/> that will be used to create the presenter and child view.</param>
-        /// <param name="configuration">An <see cref="IViewConfiguration"/> that holds the configuration information required to construct this view.</param>
-        public DocumentView(IDocument document, IViewFactory factory, IViewConfiguration configuration)
+        /// <param name="definition">The <see cref="ViewDefinition"/> used to construct this view.</param>
+        public DocumentView(IDocument document, IViewFactory factory, ViewDefinition definition)
         {
+            ArgumentNullException.ThrowIfNull(definition, nameof(definition));
             ArgumentNullException.ThrowIfNull(document, nameof(document));
             ArgumentNullException.ThrowIfNull(factory, nameof(factory));
-            ArgumentNullException.ThrowIfNull(configuration, nameof(configuration));
 
             InitializeComponent();
 
@@ -40,9 +39,9 @@ namespace StarLab.UI.Workspace.Documents
 
             presenter = factory.CreatePresenter(document, this);
 
-            foreach (var content in configuration.ChildViews)
+            foreach (var content in definition.ChildViews)
             {
-                var view = factory.CreateView(content, configuration);
+                var view = factory.CreateView(content);
                 splitContainer.AddControl((Control)view, view.Panel);
             }
         }

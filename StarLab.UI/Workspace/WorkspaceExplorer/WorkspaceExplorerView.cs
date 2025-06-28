@@ -1,6 +1,5 @@
 ﻿using log4net;
 using StarLab.Presentation;
-using StarLab.Presentation.Configuration;
 using StarLab.Presentation.Workspace.WorkspaceExplorer;
 using StarLab.UI.Controls;
 using Stratosoft.Commands;
@@ -23,29 +22,23 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         /// <summary>
         /// Initialises a new instance of the <see cref="WorkspaceExplorerView"/> class.
         /// </summary>
-        /// <param name="configuration">An <see cref="IChildViewConfiguration"/> that holds the configuration information required to construct this view.</param>
-        /// <param name="parent">An <see cref="IViewConfiguration"/> that holds the configuration information that was used to construct the parent view.</param>
+        /// <param name="definition">An <see cref="IViewDefinition"/> that holds the configuration information required to construct this view.</param>
         /// <param name="factory">An <see cref="IViewFactory"/> that will be used to create the presenter and child view.</param>
-        public WorkspaceExplorerView(IChildViewConfiguration configuration, IViewConfiguration parent, IViewFactory factory)
+        public WorkspaceExplorerView(IViewDefinition definition, IViewFactory factory)
         {
             InitializeComponent();
 
-            Name = Views.WORKSPACE_EXPLORER;
+            Name = Views.WorkspaceExplorer;
 
-            panel = (SplitViewPanels)configuration.Panel;
+            panel = (SplitViewPanels)definition.Panel;
 
-            presenter = (IWorkspaceExplorerViewPresenter)factory.CreatePresenter(parent, this);
+            presenter = (IWorkspaceExplorerViewPresenter)factory.CreatePresenter(this);
         }
 
         /// <summary>
         /// Gets the <see cref="IChildViewController"> that controls this view.
         /// </summary>
         public IChildViewController Controller => (IChildViewController)presenter;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public string DefaultLocation => Constants.DOCK_RIGHT; // TODO - This belongs in the parent configuration
 
         /// <summary>
         /// Gets the preferred panel, if any, in which to display the view.
@@ -75,7 +68,7 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         {
             var parent = nodes[parentKey];
             var node = parent.Nodes.Add(key, text, imageIndex, imageIndex);
-            node.Tag = Constants.DOCUMENT;
+            node.Tag = Constants.Document;
             nodes.Add(key, node);
         }
 
@@ -91,7 +84,7 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         {
             var parent = nodes[parentKey];
             var node = parent.Nodes.Add(key, text, imageIndex, selectedImageIndex);
-            node.Tag = Constants.FOLDER;
+            node.Tag = Constants.Folder;
             nodes.Add(key, node);
         }
 
@@ -106,7 +99,7 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         {
             var parent = nodes[parentKey];
             var node = parent.Nodes.Add(key, text, imageIndex, imageIndex);
-            node.Tag = Constants.PROJECT;
+            node.Tag = Constants.Project;
             nodes.Add(key, node);
         }
 
@@ -119,7 +112,7 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         public void AddWorkspaceNode(string key, string text, int imageIndex)
         {
             var node = treeView.Nodes.Add(key, text, imageIndex, imageIndex);
-            node.Tag = Constants.WORKSPACE;
+            node.Tag = Constants.Workspace;
             nodes.Add(key, node);
         }
 
@@ -250,17 +243,17 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
 
                 switch (GetNodeType(node))
                 {
-                    case Constants.FOLDER:
+                    case Constants.Folder:
                         presenter.FolderCollapsed(node.Name);
-                        node.SelectedImageIndex = presenter.GetImageIndex(Constants.FOLDER, node.IsExpanded, true);
-                        node.ImageIndex = presenter.GetImageIndex(Constants.FOLDER, node.IsExpanded, false);
+                        node.SelectedImageIndex = presenter.GetImageIndex(Constants.Folder, node.IsExpanded, true);
+                        node.ImageIndex = presenter.GetImageIndex(Constants.Folder, node.IsExpanded, false);
                         break;
 
-                    case Constants.PROJECT:
+                    case Constants.Project:
                         presenter.ProjectCollapsed(node.Name);
                         break;
 
-                    case Constants.WORKSPACE:
+                    case Constants.Workspace:
                         presenter.WorkspaceCollapsed();
                         break;
                 }
@@ -280,17 +273,17 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
 
                 switch (GetNodeType(node))
                 {
-                    case Constants.FOLDER:
+                    case Constants.Folder:
                         presenter.FolderExpanded(node.Name);
-                        node.SelectedImageIndex = presenter.GetImageIndex(Constants.FOLDER, node.IsExpanded, true);
-                        node.ImageIndex = presenter.GetImageIndex(Constants.FOLDER, node.IsExpanded, false);
+                        node.SelectedImageIndex = presenter.GetImageIndex(Constants.Folder, node.IsExpanded, true);
+                        node.ImageIndex = presenter.GetImageIndex(Constants.Folder, node.IsExpanded, false);
                         break;
 
-                    case Constants.PROJECT:
+                    case Constants.Project:
                         presenter.ProjectExpanded(node.Name);
                         break;
 
-                    case Constants.WORKSPACE:
+                    case Constants.Workspace:
                         presenter.WorkspaceExpanded();
                         break;
                 }
@@ -312,16 +305,16 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
 
                     switch (GetNodeType(node))
                     {
-                        case Constants.DOCUMENT:
+                        case Constants.Document:
                             presenter.RenameDocument(e.Node.Name, e.Label);
                             break;
 
-                        case Constants.FOLDER:
-                        case Constants.PROJECT:
+                        case Constants.Folder:
+                        case Constants.Project:
                             presenter.RenameFolder(e.Node.Name, e.Label);
                             break;
 
-                        case Constants.WORKSPACE:
+                        case Constants.Workspace:
                             presenter.RenameWorkspace(e.Label);
                             break;
                     }
@@ -372,19 +365,19 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
 
                 switch (GetNodeType(node))
                 {
-                    case Constants.DOCUMENT:
+                    case Constants.Document:
                         presenter.DocumentSelected(node.Name);
                         break;
 
-                    case Constants.FOLDER:
+                    case Constants.Folder:
                         presenter.FolderSelected(node.Name);
                         break;
 
-                    case Constants.PROJECT:
+                    case Constants.Project:
                         presenter.ProjectSelected(node.Name);
                         break;
 
-                    case Constants.WORKSPACE:
+                    case Constants.Workspace:
                         presenter.WorkspaceSelected();
                         break;
                 }
@@ -400,7 +393,7 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         {
             if (e != null && e.Node != null)
             {
-                if (GetNodeType(e.Node) == Constants.DOCUMENT) presenter.OpenDocument(e.Node.Name);
+                if (GetNodeType(e.Node) == Constants.Document) presenter.OpenDocument(e.Node.Name);
             }
         }
 
@@ -419,20 +412,20 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
 
                 switch (GetNodeType(node))
                 {
-                    case Constants.DOCUMENT:
+                    case Constants.Document:
                         presenter.CreateDocumentContextMenu(node.Name, menu);
                         break;
 
-                    case Constants.FOLDER:
+                    case Constants.Folder:
                         presenter.CreateFolderContextMenu(node.Name, menu);
                         break;
 
-                    case Constants.PROJECT:
+                    case Constants.Project:
                         presenter.CreateProjectContextMenu(node.Name, menu);
                         break;
 
-                    case Constants.WORKSPACE:
-                        presenter.WorkspaceSelected();
+                    case Constants.Workspace:
+                        presenter.CreateWorkspaceContextMenu(menu);
                         break;
                 }
 

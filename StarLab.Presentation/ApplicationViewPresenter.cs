@@ -19,7 +19,7 @@ namespace StarLab.Presentation
 
         private IWorkspace workspace; // The workspace that the view represents.
 
-        private bool confirmExit = true; // TODO
+        private bool confirmExit = true; // A flag that, when set to true, indicates that a confirmation dialog must be shown prior to exiting the application.
 
         private bool dirty = false; // A flag that, when set to true, indicates that the workspace has unsaved changes.
 
@@ -29,10 +29,10 @@ namespace StarLab.Presentation
         /// <param name="view">The <see cref="IApplicationView"/> controlled by this presenter.</param>
         /// <param name="commands">An <see cref="ICommandManager"/> that is required for the creation of <see cref="ICommand">s.</param>
         /// <param name="factory">An <see cref="IUseCaseFactory"/> that will be used to create use case interactors.</param>
-        /// <param name="configuration">The <see cref="Configuration.IConfigurationProvider"/> that will be used to get configuration information.</param>
+        /// <param name="configuration">The <see cref="Configuration.IApplicationConfiguration"/> that will be used to get configuration information.</param>
         /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
         /// <param name="events">The <see cref="IEventAggregator"/> that manages application events.</param>
-        public ApplicationViewPresenter(IApplicationView view, ICommandManager commands, IUseCaseFactory factory, Configuration.IConfigurationProvider configuration, IMapper mapper, IEventAggregator events)
+        public ApplicationViewPresenter(IApplicationView view, ICommandManager commands, IUseCaseFactory factory, Configuration.IApplicationConfiguration configuration, IMapper mapper, IEventAggregator events)
             : base(commands, factory, configuration, mapper, events)
         {
             workspace = new EmptyWorkspace();
@@ -43,7 +43,7 @@ namespace StarLab.Presentation
         /// <summary>
         /// Gets the name of the controller.
         /// </summary>
-        public override string Name => ControllerNames.APPLICATION_VIEW_CONTROLLER;
+        public override string Name => ControllerNames.ApplicationViewController;
 
         /// <summary>
         /// Clears the active document.
@@ -81,7 +81,7 @@ namespace StarLab.Presentation
 
             if (close)
             {
-                UpdateCommandState(Actions.CLOSE_WORKSPACE, false);
+                UpdateCommandState(Actions.CloseWorkspace, false);
 
                 var layout = workspace.Layout;
 
@@ -165,7 +165,7 @@ namespace StarLab.Presentation
         /// <param name="args">An <see cref="ActiveDocumentChangedEventArgs"/> that provides context for the event.</param>
         public void OnEvent(ActiveDocumentChangedEventArgs args)
         {
-            UpdateCommandState(Actions.CLOSE_DOCUMENT, args.Workspace.ActiveDocument != null);
+            UpdateCommandState(Actions.CloseDocument, args.Workspace.ActiveDocument != null);
         }
 
         /// <summary>
@@ -207,7 +207,6 @@ namespace StarLab.Presentation
             Events.Publish(new ActiveDocumentChangedEventArgs(workspace));
         }
 
-
         /// <summary>
         /// Updates the state of the workspace represented by the <see cref="WorkspaceDTO"/> provided and applies the layout.
         /// </summary>
@@ -227,10 +226,8 @@ namespace StarLab.Presentation
                 Configuration.Workspace = dto.FileName;
             }
 
-            UpdateCommandState(Actions.CLOSE_DOCUMENT, workspace.ActiveDocument != null);
+            UpdateCommandState(Actions.CloseDocument, workspace.ActiveDocument != null);
         }
-
-
 
         /// <summary>
         /// Shows the <see cref="IView"/> provided.
@@ -344,7 +341,19 @@ namespace StarLab.Presentation
         /// <param name="dto">A <see cref="WorkspaceDTO"/> that represents the new workspace state.</param>
         public void UpdateWorkspace(WorkspaceDTO dto)
         {
+            var idsOld = workspace.GetDocumentIDs();
+
             workspace = new Workspace.Workspace(dto);
+
+            var idsNew = workspace.GetDocumentIDs();
+
+            foreach (var id in idsOld)
+            {
+                if (!idsNew.Contains(id))
+                {
+                    AppController.DeleteView(id);
+                }
+            }
 
             Events.Publish(new WorkspaceChangedEventArgs(workspace), true); // Event published synchronously to allow renaming of folder in WorkspaceExplorer. Could make this a more specific event type if necessary.
 
@@ -353,7 +362,7 @@ namespace StarLab.Presentation
                 Configuration.Workspace = dto.FileName;
             }
 
-            UpdateCommandState(Actions.CLOSE_DOCUMENT, workspace.ActiveDocument != null);
+            UpdateCommandState(Actions.CloseDocument, workspace.ActiveDocument != null);
 
             dirty = true;
         }
@@ -366,90 +375,90 @@ namespace StarLab.Presentation
         {
             if (confirmExit)
             {
-                GetCommand(Actions.EXIT).Execute();
+                GetCommand(Actions.Exit).Execute();
                 e.Cancel = true;
             }
         }
 
         /// <summary>
-        /// Creates the file menu.
+        /// Creates the File menu.
         /// </summary>
         private void CreateFileMenu()
         {
-            view.AddMenuItem(Constants.FILE, StringResources.File);
-            view.AddMenuItem(Constants.FILE, Constants.FILE_NEW, StringResources.New);
-            view.AddMenuItem(Constants.FILE_NEW, Constants.FILE_NEW_PROJECT, StringResources.Project + Constants.ELLIPSIS);
-            view.AddMenuItem(Constants.FILE_NEW, Constants.FILE_NEW_WORKSPACE, StringResources.Workspace + Constants.ELLIPSIS);
-            view.AddMenuSeparator(Constants.FILE);
-            view.AddMenuItem(Constants.FILE, Constants.FILE_OPEN, StringResources.Open);
-            view.AddMenuItem(Constants.FILE_OPEN, Constants.FILE_OPEN_WORKSPACE, StringResources.Workspace + Constants.ELLIPSIS, ImageResources.OpenWorkspace, GetCommand(Actions.OPEN_WORKSPACE));
-            view.AddMenuSeparator(Constants.FILE);
-            view.AddMenuItem(Constants.FILE, Constants.FILE_CLOSE, StringResources.Close, GetCommand(Actions.CLOSE_DOCUMENT));
-            view.AddMenuItem(Constants.FILE, Constants.FILE_CLOSE_WORKSPACE, StringResources.CloseWorkspace, ImageResources.CloseWorkspace, GetCommand(Actions.CLOSE_WORKSPACE));
-            view.AddMenuSeparator(Constants.FILE);
-            view.AddMenuItem(Constants.FILE, Constants.FILE_SAVE_ALL, StringResources.SaveAll, ImageResources.SaveAll, GetCommand(Actions.SAVE_WORKSPACE));
-            view.AddMenuSeparator(Constants.FILE);
-            view.AddMenuItem(Constants.FILE, Constants.FILE_PAGE_SETUP, StringResources.PageSetup + Constants.ELLIPSIS, ImageResources.PageSetup); //, AppController.GetCommand(this, Constants.FILE_PAGE_SETUP));
-            view.AddMenuItem(Constants.FILE, Constants.FILE_PRINT, StringResources.Print + Constants.ELLIPSIS, ImageResources.Print); //, AppController.GetCommand(this, Constants.FILE_PRINT));
-            view.AddMenuSeparator(Constants.FILE);
-            view.AddMenuItem(Constants.FILE, Constants.FILE_EXIT, StringResources.Exit, GetCommand(AppController, Actions.EXIT));
+            view.AddMenuItem(Constants.File, StringResources.File);
+            view.AddMenuItem(Constants.File, Constants.FileNew, StringResources.New);
+            view.AddMenuItem(Constants.FileNew, Constants.FileNewProject, StringResources.Project + Constants.Ellipsis);
+            view.AddMenuItem(Constants.FileNew, Constants.FileNewWorkspace, StringResources.Workspace + Constants.Ellipsis);
+            view.AddMenuSeparator(Constants.File);
+            view.AddMenuItem(Constants.File, Constants.FileOpen, StringResources.Open);
+            view.AddMenuItem(Constants.FileOpen, Constants.FileOpenWorkspace, StringResources.Workspace + Constants.Ellipsis, ImageResources.OpenWorkspace, GetCommand(Actions.OpenWorkspace));
+            view.AddMenuSeparator(Constants.File);
+            view.AddMenuItem(Constants.File, Constants.FileClose, StringResources.Close, GetCommand(Actions.CloseDocument));
+            view.AddMenuItem(Constants.File, Constants.FileCloseWorkspace, StringResources.CloseWorkspace, ImageResources.CloseWorkspace, GetCommand(Actions.CloseWorkspace));
+            view.AddMenuSeparator(Constants.File);
+            view.AddMenuItem(Constants.File, Constants.FileSaveAll, StringResources.SaveAll, ImageResources.SaveAll, GetCommand(Actions.SaveWorkspace));
+            view.AddMenuSeparator(Constants.File);
+            view.AddMenuItem(Constants.File, Constants.FilePageSetup, StringResources.PageSetup + Constants.Ellipsis, ImageResources.PageSetup); //, AppController.GetCommand(this, Constants.FILE_PAGE_SETUP));
+            view.AddMenuItem(Constants.File, Constants.FilePrint, StringResources.Print + Constants.Ellipsis, ImageResources.Print); //, AppController.GetCommand(this, Constants.FILE_PRINT));
+            view.AddMenuSeparator(Constants.File);
+            view.AddMenuItem(Constants.File, Constants.FileExit, StringResources.Exit, GetCommand(AppController, Actions.Exit));
         }
 
         /// <summary>
-        /// Creates the help menu.
+        /// Creates the Help menu.
         /// </summary>
         private void CreateHelpMenu()
         {
-            view.AddMenuItem(Constants.HELP, StringResources.Help);
+            view.AddMenuItem(Constants.Help, StringResources.Help);
             //view.AddMenuItem(Constants.HELP, Constants.HELP_VIEW_HELP, Resources.ViewHelp, AppController.GetCommand(this, Constants.VIEW_HELP));
-            view.AddMenuSeparator(Constants.HELP);
-            view.AddMenuItem(Constants.HELP, Constants.HELP_ABOUT, StringResources.AboutStarLab, GetShowViewCommand(Views.ABOUT));
+            view.AddMenuSeparator(Constants.Help);
+            view.AddMenuItem(Constants.Help, Constants.HelpAbout, StringResources.AboutStarLab, GetShowViewCommand(Views.About));
         }
 
         /// <summary>
-        /// TODO
+        /// Creates the standard toolbar.
         /// </summary>
         private void CreateStandardToolbar()
         {
-            view.AddToolbarButton(Constants.FILE_OPEN_WORKSPACE, StringResources.OpenWorkspace, ImageResources.OpenWorkspace, GetCommand(Actions.OPEN_WORKSPACE));
-            view.AddToolbarButton(Constants.FILE_SAVE_ALL, StringResources.SaveAll, ImageResources.SaveAll, GetCommand(Actions.SAVE_WORKSPACE));
+            view.AddToolbarButton(Constants.FileOpenWorkspace, StringResources.OpenWorkspace, ImageResources.OpenWorkspace, GetCommand(Actions.OpenWorkspace));
+            view.AddToolbarButton(Constants.FileSaveAll, StringResources.SaveAll, ImageResources.SaveAll, GetCommand(Actions.SaveWorkspace));
         }
 
         /// <summary>
-        /// Creates the tools menu.
+        /// Creates the Tools menu.
         /// </summary>
         private void CreateToolsMenu()
         {
-            view.AddMenuItem(Constants.TOOLS, StringResources.Tools);
-            view.AddMenuItem(Constants.TOOLS, Constants.TOOLS_OPTIONS, StringResources.Options, ImageResources.Settings, GetShowViewCommand(Views.OPTIONS));
+            view.AddMenuItem(Constants.Tools, StringResources.Tools);
+            view.AddMenuItem(Constants.Tools, Constants.ToolsOptions, StringResources.Options, ImageResources.Settings, GetShowViewCommand(Views.Options));
         }
 
         /// <summary>
-        /// Creates the view menu.
+        /// Creates the View menu.
         /// </summary>
         private void CreateViewMenu()
         {
-            view.AddMenuItem(Constants.VIEW, StringResources.View);
-            view.AddMenuItem(Constants.VIEW, Constants.VIEW_WORKSPACE_EXPLORER, StringResources.WorkspaceExplorer, GetShowViewCommand(Views.WORKSPACE_EXPLORER));
+            view.AddMenuItem(Constants.View, StringResources.View);
+            view.AddMenuItem(Constants.View, Constants.ViewWorkspaceExplorer, StringResources.WorkspaceExplorer, GetShowViewCommand(Views.WorkspaceExplorer));
         }
 
         /// <summary>
-        /// Creates the window menu.
+        /// Creates the Window menu.
         /// </summary>
         private void CreateWindowMenu()
         {
-            view.AddMenuItem(Constants.WINDOW, StringResources.Window);
+            view.AddMenuItem(Constants.Window, StringResources.Window);
         }
 
         /// <summary>
-        /// Creates the Workspace menu and sub menus.
+        /// Creates the Workspace menu.
         /// </summary>
         private void CreateWorkspaceMenu()
         {
-            view.AddMenuItem(Constants.WORKSPACE, StringResources.Workspace);
+            view.AddMenuItem(Constants.Workspace, StringResources.Workspace);
             //view.AddMenuItem(Constants.WORKSPACE, Constants.WORKSPACE_ADD_CHART, StringResources.AddChart + Constants.ELLIPSIS, commands.GetCommand(Constants.WORKSPACE_ADD_CHART));
             //view.AddMenuItem(Constants.WORKSPACE, Constants.WORKSPACE_ADD_TABLE, StringResources.AddTable + Constants.ELLIPSIS, ImageResources.NewTable, commands.GetCommand(Constants.WORKSPACE_ADD_TABLE));
-            view.AddMenuSeparator(Constants.WORKSPACE);
+            view.AddMenuSeparator(Constants.Workspace);
             //view.AddMenuItem(Constants.WORKSPACE, Constants.WORKSPACE_NEW_FOLDER, StringResources.NewFolder + Constants.ELLIPSIS, ImageResources.NewFolder, commands.GetCommand(Constants.WORKSPACE_NEW_FOLDER));
         }
 
@@ -458,10 +467,9 @@ namespace StarLab.Presentation
         /// </summary>
         private void OpenDefaultWorkspace()
         {
-            // TODO Handle any errors
             if (!string.IsNullOrEmpty(Configuration.Workspace))
             {
-                OpenWorkspace(Configuration.Workspace); // TODO - Need to set the default workspace to the current workspace when the app closes
+                OpenWorkspace(Configuration.Workspace);
             }
         }
 
@@ -480,7 +488,7 @@ namespace StarLab.Presentation
 
             interactor.Execute(filename);
 
-            UpdateCommandState(Actions.CLOSE_WORKSPACE, true);
+            UpdateCommandState(Actions.CloseWorkspace, true);
         }
     }
 }

@@ -2,7 +2,6 @@
 using ScottPlot;
 using ScottPlot.Plottables;
 using StarLab.Presentation;
-using StarLab.Presentation.Configuration;
 using StarLab.Presentation.Workspace.Documents.Charts;
 using System.Text.RegularExpressions;
 
@@ -30,14 +29,12 @@ namespace StarLab.UI.Workspace.Documents.Charts
         /// <summary>
         /// Initialises a new instance of the <see cref="ChartView"> class.
         /// </summary>
-        /// <param name="configuration">An <see cref="IChildViewConfiguration"/> that holds the configuration information required to construct this view.</param>
-        /// <param name="parent">An <see cref="IViewConfiguration"/> that holds the configuration information that was used to construct the parent view.</param>
+        /// <param name="definition">An <see cref="IViewDefinition"/> that holds the information required to construct this view.</param>
         /// <param name="factory">An <see cref="IViewFactory"/> that will be used to create the presenter and child view.</param>
-        public ChartView(IChildViewConfiguration configuration, IViewConfiguration parent, IViewFactory factory)
+        public ChartView(IViewDefinition definition, IViewFactory factory)
         {
-            ArgumentNullException.ThrowIfNull(configuration, nameof(configuration));
+            ArgumentNullException.ThrowIfNull(definition, nameof(definition));
             ArgumentNullException.ThrowIfNull(factory, nameof(factory));
-            ArgumentNullException.ThrowIfNull(parent, nameof(parent));
 
             // Scale points with zoom
             // Dragable axis lines
@@ -48,11 +45,11 @@ namespace StarLab.UI.Workspace.Documents.Charts
 
             InitializeComponent();
 
-            Name = Views.CHART;
+            Name = Views.Chart;
 
-            panel = (SplitViewPanels)configuration.Panel;
+            panel = (SplitViewPanels)definition.Panel;
 
-            presenter = (IChartViewPresenter)factory.CreatePresenter(parent, this);
+            presenter = (IChartViewPresenter)factory.CreatePresenter(definition, this);
 
 
 
@@ -282,7 +279,7 @@ namespace StarLab.UI.Workspace.Documents.Charts
             MouseIsDown = true;
             RectanglePlot.IsVisible = true;
             MouseDownCoordinates = formsPlot.Plot.GetCoordinates(e.X, e.Y);
-            formsPlot.Interaction.Disable(); // disable the default click-drag-pan behavior
+            //formsPlot.Interaction.Disable(); TODO - disable the default click-drag-pan behavior 
         }
 
         private void FormsPlot1_MouseUp(object? sender, MouseEventArgs e)
@@ -316,7 +313,7 @@ namespace StarLab.UI.Workspace.Documents.Charts
 
             // update the plot
             formsPlot.Refresh();
-            formsPlot.Interaction.Enable(); // re-enable the default click-drag-pan behavior
+            //formsPlot.Interaction.Enable(); // re-enable the default click-drag-pan behavior
         }
 
         private void FormsPlot1_MouseMove(object? sender, MouseEventArgs e)
@@ -344,6 +341,4 @@ namespace StarLab.UI.Workspace.Documents.Charts
 
         }
     }
-
-
 }

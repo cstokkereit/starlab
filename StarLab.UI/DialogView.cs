@@ -1,8 +1,8 @@
 ﻿using log4net;
 using StarLab.Application;
 using StarLab.Presentation;
-using StarLab.Presentation.Configuration;
 using StarLab.UI;
+using System.Diagnostics;
 
 namespace StarLab
 {
@@ -25,17 +25,17 @@ namespace StarLab
         /// <param name="name">The name of the dialog.</param>
         /// <param name="text">The dialog text.</param>
         /// <param name="factory">An <see cref="IViewFactory"/> that will be used to create the presenter and child view.</param>
-        /// <param name="configuration">An <see cref="IViewConfiguration"/> that holds the configuration information required to construct this view.</param>
+        /// <param name="definition">The <see cref="IViewDefinition"/> used to construct this view.</param>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="ArgumentException"></exception>
-        public DialogView(string name, string text, IViewFactory factory, IViewConfiguration configuration)
+        public DialogView(string name, string text, IViewFactory factory, IViewDefinition definition)
         {
-            ArgumentNullException.ThrowIfNull(configuration, nameof(configuration));
+            ArgumentNullException.ThrowIfNull(factory, nameof(definition));
             ArgumentNullException.ThrowIfNull(factory, nameof(factory));
             ArgumentException.ThrowIfNullOrEmpty(name, nameof(name));
             ArgumentException.ThrowIfNullOrEmpty(text, nameof(text));
 
-            if (configuration.ChildViews.Count > 1) throw new ArgumentException(); // TODO
+            Debug.Assert(definition.ChildViews.Count == 1);
 
             InitializeComponent();
 
@@ -45,9 +45,9 @@ namespace StarLab
             Text = text;
             id = name;
 
-            presenter = (IDialogViewPresenter)factory.CreatePresenter(configuration.Name, this);
+            presenter = (IDialogViewPresenter)factory.CreatePresenter(this);
 
-            childView = factory.CreateView(configuration.ChildViews[0], configuration);
+            childView = factory.CreateView(definition.ChildViews[0]);
             childView.Controller.RegisterController((IViewController)presenter);
 
             SuspendLayout();

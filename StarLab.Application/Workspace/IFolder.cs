@@ -50,6 +50,13 @@ namespace StarLab.Application.Workspace
         void AddFolder(IFolder folder);
 
         /// <summary>
+        /// Determines if this <see cref="IFolder"> contains a child folder with the specified name.
+        /// </summary>
+        /// <param name="name">The name of the child folder.</param>
+        /// <returns><see cref="true"/> if this folder contains a child folder with the specified name; <see cref="false"/> otherwise.</returns>
+        bool ContainsFolder(string name);
+
+        /// <summary>
         /// Deletes the <see cref="Document"/> provided from the folder.
         /// </summary>
         /// <param name="document">The <see cref="Document"/> to be deleted.</param>

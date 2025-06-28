@@ -1,6 +1,5 @@
 ﻿using log4net;
 using StarLab.Presentation;
-using StarLab.Presentation.Configuration;
 using StarLab.Presentation.Workspace.Documents.Charts;
 using Stratosoft.Commands;
 
@@ -20,18 +19,17 @@ namespace StarLab.UI.Workspace.Documents.Charts
         /// <summary>
         /// Initialises a new instance of the <see cref="ChartSettingsView"> class.
         /// </summary>
-        /// <param name="configuration">An <see cref="IChildViewConfiguration"/> that holds the configuration information required to construct this view.</param>
-        /// <param name="parent">An <see cref="IViewConfiguration"/> that holds the configuration information that was used to construct the parent view.</param>
+        /// <param name="definition">An <see cref="IViewDefinition"/> that holds the configuration information required to construct this view.</param>
         /// <param name="factory">An <see cref="IViewFactory"/> that will be used to create the presenter and child view.</param>
-        public ChartSettingsView(IChildViewConfiguration configuration, IViewConfiguration parent, IViewFactory factory)
+        public ChartSettingsView(IViewDefinition definition, IViewFactory factory)
         {
             InitializeComponent();
 
-            Name = Views.CHART_SETTINGS;
+            Name = Views.ChartSettings;
 
-            panel = (SplitViewPanels)configuration.Panel;
+            panel = (SplitViewPanels)definition.Panel;
 
-            presenter = (IChartSettingsViewPresenter)factory.CreatePresenter(parent, this);
+            presenter = (IChartSettingsViewPresenter)factory.CreatePresenter(definition, this);
         }
 
         /// <summary>

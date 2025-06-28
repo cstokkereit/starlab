@@ -65,6 +65,12 @@ namespace StarLab.Presentation.Workspace
         IDocument GetDocument(string id);
 
         /// <summary>
+        /// Gets a <see cref="List{String}"/> containing the IDs of all documents in the workspace hierarchy.
+        /// </summary>
+        /// <returns>A <see cref="List{String}"/> of document IDs.</returns>
+        List<string> GetDocumentIDs();
+
+        /// <summary>
         /// Gets the <see cref="IFolder"/> with the specified key.
         /// </summary>
         /// <param name="key">The key of the required <see cref="IFolder"/>.</param>
@@ -96,7 +102,7 @@ namespace StarLab.Presentation.Workspace
         /// Determines if the workspace contains the specified project.
         /// </summary>
         /// <param name="key">The key of the required project.</param>
-        /// <returns>true if the workspace contains a project with the specified key; false otherwise.</returns>
+        /// <returns><see cref="true"/> if the workspace contains a project with the specified key; <see cref="false"/> otherwise.</returns>
         bool HasProject(string key);
 
         /// <summary>
