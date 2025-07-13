@@ -103,6 +103,16 @@ namespace StarLab.Presentation.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap ColourMagnitudeDiagramSelected {
+            get {
+                object obj = ResourceManager.GetObject("ColourMagnitudeDiagramSelected", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap Copy {
             get {
                 object obj = ResourceManager.GetObject("Copy", resourceCulture);
@@ -123,9 +133,9 @@ namespace StarLab.Presentation.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap FolderClosed {
+        public static System.Drawing.Bitmap Folder {
             get {
-                object obj = ResourceManager.GetObject("FolderClosed", resourceCulture);
+                object obj = ResourceManager.GetObject("Folder", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -133,9 +143,9 @@ namespace StarLab.Presentation.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap FolderOpened {
+        public static System.Drawing.Bitmap FolderSelected {
             get {
-                object obj = ResourceManager.GetObject("FolderOpened", resourceCulture);
+                object obj = ResourceManager.GetObject("FolderSelected", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -253,6 +263,26 @@ namespace StarLab.Presentation.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap Project {
+            get {
+                object obj = ResourceManager.GetObject("Project", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap ProjectSelected {
+            get {
+                object obj = ResourceManager.GetObject("ProjectSelected", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap Rename {
             get {
                 object obj = ResourceManager.GetObject("Rename", resourceCulture);
@@ -293,26 +323,6 @@ namespace StarLab.Presentation.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap SelectedFolderClosed {
-            get {
-                object obj = ResourceManager.GetObject("SelectedFolderClosed", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap SelectedFolderOpened {
-            get {
-                object obj = ResourceManager.GetObject("SelectedFolderOpened", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         public static System.Drawing.Bitmap Settings {
             get {
                 object obj = ResourceManager.GetObject("Settings", resourceCulture);
@@ -336,6 +346,16 @@ namespace StarLab.Presentation.Properties {
         public static System.Drawing.Bitmap Workspace {
             get {
                 object obj = ResourceManager.GetObject("Workspace", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap WorkspaceSelected {
+            get {
+                object obj = ResourceManager.GetObject("WorkspaceSelected", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

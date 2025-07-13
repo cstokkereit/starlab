@@ -64,10 +64,11 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         /// <param name="parentKey">The parent node key.</param>
         /// <param name="text">The node text.</param>
         /// <param name="imageIndex">The index of the node image.</param>
-        public void AddDocumentNode(string key, string parentKey, string text, int imageIndex)
+        /// <param name="selectedImageIndex">The index of the image to use when the node is selected.</param>
+        public void AddDocumentNode(string key, string parentKey, string text, int imageIndex, int selectedImageIndex)
         {
             var parent = nodes[parentKey];
-            var node = parent.Nodes.Add(key, text, imageIndex, imageIndex);
+            var node = parent.Nodes.Add(key, text, imageIndex, selectedImageIndex);
             node.Tag = Constants.Document;
             nodes.Add(key, node);
         }
@@ -95,10 +96,11 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         /// <param name="parentKey">The parent node key.</param>
         /// <param name="text">The node text.</param>
         /// <param name="imageIndex">The index of the node image.</param>
-        public void AddProjectNode(string key, string parentKey, string text, int imageIndex)
+        /// <param name="selectedImageIndex">The index of the image to use when the node is selected.</param>
+        public void AddProjectNode(string key, string parentKey, string text, int imageIndex, int selectedImageIndex)
         {
             var parent = nodes[parentKey];
-            var node = parent.Nodes.Add(key, text, imageIndex, imageIndex);
+            var node = parent.Nodes.Add(key, text, imageIndex, selectedImageIndex);
             node.Tag = Constants.Project;
             nodes.Add(key, node);
         }
@@ -109,9 +111,10 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         /// <param name="key">The node key.</param>
         /// <param name="text">The node text.</param>
         /// <param name="imageIndex">The index of the node image.</param>
-        public void AddWorkspaceNode(string key, string text, int imageIndex)
+        /// <param name="selectedImageIndex">The index of the image to use when the node is selected.</param>
+        public void AddWorkspaceNode(string key, string text, int imageIndex, int selectedImageIndex)
         {
-            var node = treeView.Nodes.Add(key, text, imageIndex, imageIndex);
+            var node = treeView.Nodes.Add(key, text, imageIndex, selectedImageIndex);
             node.Tag = Constants.Workspace;
             nodes.Add(key, node);
         }
@@ -245,8 +248,6 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
                 {
                     case Constants.Folder:
                         presenter.FolderCollapsed(node.Name);
-                        node.SelectedImageIndex = presenter.GetImageIndex(Constants.Folder, node.IsExpanded, true);
-                        node.ImageIndex = presenter.GetImageIndex(Constants.Folder, node.IsExpanded, false);
                         break;
 
                     case Constants.Project:
@@ -275,8 +276,6 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
                 {
                     case Constants.Folder:
                         presenter.FolderExpanded(node.Name);
-                        node.SelectedImageIndex = presenter.GetImageIndex(Constants.Folder, node.IsExpanded, true);
-                        node.ImageIndex = presenter.GetImageIndex(Constants.Folder, node.IsExpanded, false);
                         break;
 
                     case Constants.Project:
@@ -350,38 +349,6 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         private void TreeView_Leave(object sender, EventArgs e)
         {
             presenter.ViewDeactivated();
-        }
-
-        /// <summary>
-        /// Event handler for the <see cref="TreeView.MouseDown"/> event.
-        /// </summary>
-        /// <param name="sender">The <see cref="object"> that was the originator of the event.</param>
-        /// <param name="e">A <see cref="MouseEventArgs"/> that provides context for the event.</param>
-        private void TreeView_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e != null)
-            {
-                var node = treeView.GetNodeAt(e.X, e.Y);
-
-                switch (GetNodeType(node))
-                {
-                    case Constants.Document:
-                        presenter.DocumentSelected(node.Name);
-                        break;
-
-                    case Constants.Folder:
-                        presenter.FolderSelected(node.Name);
-                        break;
-
-                    case Constants.Project:
-                        presenter.ProjectSelected(node.Name);
-                        break;
-
-                    case Constants.Workspace:
-                        presenter.WorkspaceSelected();
-                        break;
-                }
-            }
         }
 
         /// <summary>

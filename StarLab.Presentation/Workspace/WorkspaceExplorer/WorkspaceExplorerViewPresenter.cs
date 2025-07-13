@@ -20,12 +20,14 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// </summary>
         private enum NodeImages
         {
-            ClosedFolder,
             ColourMagnitudeDiagram,
-            OpenFolder,
-            SelectedClosedFolder,
-            SelectedOpenFolder,
-            Workspace
+            ColourMagnitudeDiagramSelected,
+            Folder,
+            FolderSelected,
+            Project,
+            ProjectSelected,
+            Workspace,
+            WorkspaceSelected
         }
 
         private readonly Dictionary<NodeImages, int> images = new Dictionary<NodeImages, int>(); // A dictionary that holds the node image indices.
@@ -229,15 +231,6 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         }
 
         /// <summary>
-        /// Notifies the presenter that the specified document node has been selected.
-        /// </summary>
-        /// <param name="key">The node key.</param>
-        public void DocumentSelected(string key)
-        {
-            DeselectFolders();
-        }
-
-        /// <summary>
         /// Notifies the presenter that the specified folder node has been collapsed.
         /// </summary>
         /// <param name="key">The node key.</param>
@@ -253,55 +246,6 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         public void FolderExpanded(string key)
         {
             workspace.GetFolder(key).Expand();
-        }
-
-        /// <summary>
-        /// Notifies the presenter that the specified folder node has been selected.
-        /// </summary>
-        /// <param name="key">The node key.</param>
-        public void FolderSelected(string key)
-        {
-            int imageIndex;
-
-            foreach (var folder in workspace.Folders)
-            {
-                if (folder.Key == key)
-                {
-                    imageIndex = GetImageIndex(Constants.Folder, folder.Expanded, true);
-                    View.UpdateNodeState(folder.Key, imageIndex, imageIndex);
-                }
-                else
-                {
-                    imageIndex = GetImageIndex(Constants.Folder, folder.Expanded, false);
-                    View.UpdateNodeState(folder.Key, imageIndex, imageIndex);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets the index of the image that will be used to represent the specified node in the workspace hierarchy based on the type of node and its current state.
-        /// </summary>
-        /// <param name="nodeType">The node type.</param>
-        /// <param name="expanded">A flag that indicates whether the node is collapsed or expanded.</param>
-        /// <param name="selected">A flag that indicates whether the node is selected or not.</param>
-        /// <returns>The index of the image to be used.</returns>
-        public int GetImageIndex(string nodeType, bool expanded, bool selected)
-        {
-            int index = images[NodeImages.Workspace];
-
-            if (nodeType == Constants.Folder)
-            {
-                if (selected)
-                {
-                    index = expanded ? images[NodeImages.SelectedOpenFolder] : images[NodeImages.SelectedClosedFolder];
-                }
-                else
-                {
-                    index = expanded ? images[NodeImages.OpenFolder] : images[NodeImages.ClosedFolder];
-                }
-            }
-
-            return index;
         }
 
         /// <summary>
@@ -375,15 +319,6 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         public void ProjectExpanded(string key)
         {
             workspace.GetProject(key).Expand();
-        }
-
-        /// <summary>
-        /// Notifies the presenter that the specified project node has been selected.
-        /// </summary>
-        /// <param name="key">The node key.</param>
-        public void ProjectSelected(string key)
-        {
-            DeselectFolders();
         }
 
         /// <summary>
@@ -490,21 +425,21 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// </summary>
         public void ViewActivated()
         {
-            var key = View.GetSelectedNode();
+            //var key = View.GetSelectedNode();
 
-            if (workspace.HasFolder(key))
-            {
-                var folder = workspace.GetFolder(key);
+            //if (workspace.HasFolder(key))
+            //{
+            //    var folder = workspace.GetFolder(key);
 
-                if (folder.Expanded)
-                {
-                    View.UpdateNodeState(folder.Key, images[NodeImages.OpenFolder], images[NodeImages.SelectedOpenFolder]);
-                }
-                else
-                {
-                    View.UpdateNodeState(folder.Key, images[NodeImages.ClosedFolder], images[NodeImages.SelectedClosedFolder]);
-                }
-            }
+            //    if (folder.Expanded)
+            //    {
+            //        View.UpdateNodeState(folder.Key, images[NodeImages.OpenFolder], images[NodeImages.SelectedOpenFolder]);
+            //    }
+            //    else
+            //    {
+            //        View.UpdateNodeState(folder.Key, images[NodeImages.Folder], images[NodeImages.FolderSelected]);
+            //    }
+            //}
         }
 
         /// <summary>
@@ -512,21 +447,21 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// </summary>
         public void ViewDeactivated()
         {
-            var key = View.GetSelectedNode();
+            //var key = View.GetSelectedNode();
 
-            if (workspace.HasFolder(key))
-            {
-                var folder = workspace.GetFolder(key);
+            //if (workspace.HasFolder(key))
+            //{
+            //    var folder = workspace.GetFolder(key);
 
-                if (folder.Expanded)
-                {
-                    View.UpdateNodeState(folder.Key, images[NodeImages.OpenFolder], images[NodeImages.OpenFolder]);
-                }
-                else
-                {
-                    View.UpdateNodeState(folder.Key, images[NodeImages.ClosedFolder], images[NodeImages.ClosedFolder]);
-                }
-            }
+            //    if (folder.Expanded)
+            //    {
+            //        View.UpdateNodeState(folder.Key, images[NodeImages.OpenFolder], images[NodeImages.OpenFolder]);
+            //    }
+            //    else
+            //    {
+            //        View.UpdateNodeState(folder.Key, images[NodeImages.Folder], images[NodeImages.Folder]);
+            //    }
+            //}
         }
 
         /// <summary>
@@ -546,24 +481,18 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         }
 
         /// <summary>
-        /// Notifies the presenter that the workspace node has been selected.
-        /// </summary>
-        public void WorkspaceSelected()
-        {
-            DeselectFolders();
-        }
-
-        /// <summary>
         /// Adds the images that represent the various node types and their states.
         /// </summary>
         private void AddImages()
         {
-            images.Add(NodeImages.Workspace, View.AddImage(ImageResources.Workspace));
-            images.Add(NodeImages.ClosedFolder, View.AddImage(ImageResources.FolderClosed));
-            images.Add(NodeImages.SelectedClosedFolder, View.AddImage(ImageResources.SelectedFolderClosed));
-            images.Add(NodeImages.OpenFolder, View.AddImage(ImageResources.FolderOpened));
-            images.Add(NodeImages.SelectedOpenFolder, View.AddImage(ImageResources.SelectedFolderOpened));
             images.Add(NodeImages.ColourMagnitudeDiagram, View.AddImage(ImageResources.ColourMagnitudeDiagram));
+            images.Add(NodeImages.ColourMagnitudeDiagramSelected, View.AddImage(ImageResources.ColourMagnitudeDiagramSelected));
+            images.Add(NodeImages.Folder, View.AddImage(ImageResources.Folder));
+            images.Add(NodeImages.FolderSelected, View.AddImage(ImageResources.FolderSelected));
+            images.Add(NodeImages.Project, View.AddImage(ImageResources.Project));
+            images.Add(NodeImages.ProjectSelected, View.AddImage(ImageResources.ProjectSelected));
+            images.Add(NodeImages.Workspace, View.AddImage(ImageResources.Workspace));
+            images.Add(NodeImages.WorkspaceSelected, View.AddImage(ImageResources.WorkspaceSelected));
         }
 
         /// <summary>
@@ -573,7 +502,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         {
             foreach (var document in workspace.Documents)
             {
-                View.AddDocumentNode(document.ID, document.Path, document.Name, images[NodeImages.ColourMagnitudeDiagram]);
+                View.AddDocumentNode(document.ID, document.Path, document.Name, images[NodeImages.ColourMagnitudeDiagram], images[NodeImages.ColourMagnitudeDiagramSelected]);
             }
         }
 
@@ -584,14 +513,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         {
             foreach (var folder in workspace.Folders)
             {
-                if (folder.Expanded)
-                {
-                    View.AddFolderNode(folder.Key, folder.ParentKey, folder.Name, images[NodeImages.OpenFolder], images[NodeImages.SelectedOpenFolder]);
-                }
-                else
-                {
-                    View.AddFolderNode(folder.Key, folder.ParentKey, folder.Name, images[NodeImages.ClosedFolder], images[NodeImages.SelectedClosedFolder]);
-                }
+                View.AddFolderNode(folder.Key, folder.ParentKey, folder.Name, images[NodeImages.Folder], images[NodeImages.FolderSelected]);
             }
         }
 
@@ -602,7 +524,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         {
             foreach (var project in workspace.Projects)
             {
-                View.AddProjectNode(project.Key, project.ParentKey, project.Name, images[NodeImages.Workspace]);
+                View.AddProjectNode(project.Key, project.ParentKey, project.Name, images[NodeImages.Project], images[NodeImages.ProjectSelected]);
             }
         }
 
@@ -620,21 +542,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// </summary>
         private void CreateWorkspaceNode()
         {
-            View.AddWorkspaceNode(Constants.Workspace, GetWorkspaceName(), images[NodeImages.Workspace]);
-        }
-
-        /// <summary>
-        /// Deselects the folders.
-        /// </summary>
-        private void DeselectFolders()
-        {
-            int imageIndex;
-
-            foreach (var folder in workspace.Folders)
-            {
-                imageIndex = GetImageIndex(Constants.Folder, folder.Expanded, false);
-                View.UpdateNodeState(folder.Key, imageIndex, imageIndex);
-            }
+            View.AddWorkspaceNode(Constants.Workspace, GetWorkspaceName(), images[NodeImages.Workspace], images[NodeImages.WorkspaceSelected]);
         }
 
         /// <summary>

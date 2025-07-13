@@ -21,7 +21,8 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="parentKey">The parent node key.</param>
         /// <param name="text">The node text.</param>
         /// <param name="imageIndex">The index of the node image.</param>
-        void AddDocumentNode(string key, string parentKey, string text, int imageIndex);
+        /// <param name="selectedImageIndex">The index of the image to use when the node is selected.</param>
+        void AddDocumentNode(string key, string parentKey, string text, int imageIndex, int selectedImageIndex);
 
         /// <summary>
         /// Adds a folder node to the tree view that displays the structure of the workspace.
@@ -40,7 +41,8 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="parentKey">The parent node key.</param>
         /// <param name="text">The node text.</param>
         /// <param name="imageIndex">The index of the node image.</param>
-        void AddProjectNode(string key, string parentKey, string text, int imageIndex);
+        /// <param name="selectedImageIndex">The index of the image to use when the node is selected.</param>
+        void AddProjectNode(string key, string parentKey, string text, int imageIndex, int selectedImageIndex);
 
         /// <summary>
         /// Adds the workspace node to the tree view that displays the structure of the workspace.
@@ -48,7 +50,8 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="key">The node key.</param>
         /// <param name="text">The node text.</param>
         /// <param name="imageIndex">The index of the node image.</param>
-        void AddWorkspaceNode(string key, string text, int imageIndex);
+        /// <param name="selectedImageIndex">The index of the image to use when the node is selected.</param>
+        void AddWorkspaceNode(string key, string text, int imageIndex, int selectedImageIndex);
 
         /// <summary>
         /// Adds a toolbar button to the Workspace Explorer toolstrip.

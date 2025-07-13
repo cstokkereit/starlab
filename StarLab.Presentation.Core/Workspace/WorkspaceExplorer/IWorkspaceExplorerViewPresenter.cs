@@ -33,12 +33,6 @@
         void CreateWorkspaceContextMenu(IMenuManager manager);
 
         /// <summary>
-        /// Notifies the presenter that the specified document node has been selected.
-        /// </summary>
-        /// <param name="key">The node key.</param>
-        void DocumentSelected(string key);
-
-        /// <summary>
         /// Notifies the presenter that the specified folder node has been collapsed.
         /// </summary>
         /// <param name="key">The node key.</param>
@@ -49,21 +43,6 @@
         /// </summary>
         /// <param name="key">The node key.</param>
         void FolderExpanded(string key);
-
-        /// <summary>
-        /// Notifies the presenter that the specified folder node has been selected.
-        /// </summary>
-        /// <param name="key">The node key.</param>
-        void FolderSelected(string key);
-
-        /// <summary>
-        /// Gets the index of the image that will be used to represent the specified node in the workspace hierarchy based on the type of node and its current state.
-        /// </summary>
-        /// <param name="nodeType">The node type.</param>
-        /// <param name="expanded">A flag that indicates whether the node is collapsed or expanded.</param>
-        /// <param name="selected">A flag that indicates whether the node is selected or not.</param>
-        /// <returns>The index of the image to be used.</returns>
-        int GetImageIndex(string nodeType, bool expanded, bool selected);
 
         /// <summary>
         /// Initialises the view.
@@ -88,12 +67,6 @@
         /// </summary>
         /// <param name="key">The node key.</param>
         void ProjectExpanded(string key);
-
-        /// <summary>
-        /// Notifies the presenter that the specified project node has been selected.
-        /// </summary>
-        /// <param name="key">The node key.</param>
-        void ProjectSelected(string key);
 
         /// <summary>
         /// Renames the specified document.
@@ -145,10 +118,5 @@
         /// Notifies the presenter that the workspace node has been expanded.
         /// </summary>
         void WorkspaceExpanded();
-
-        /// <summary>
-        /// Notifies the presenter that the workspace node has been selected.
-        /// </summary>
-        void WorkspaceSelected();
     }
 }
