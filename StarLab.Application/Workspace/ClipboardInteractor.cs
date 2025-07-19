@@ -37,16 +37,19 @@ namespace StarLab.Application.Workspace
             {
                 case ClipboardOperations.Copy:
                     command = new CopyAndPasteCommand(workspace, key, Mapper, OutputPort);
+                    OutputPort.UpdateClipboard(key);
                     break;
 
                 case ClipboardOperations.Cut:
                     command = new CutAndPasteCommand(workspace, key, Mapper, OutputPort);
+                    OutputPort.UpdateClipboard(key);
                     break;
 
                 case ClipboardOperations.Paste:
                     if (command != null)
                     {
                         command.Execute(workspace, key);
+                        OutputPort.ClearClipboard();
                         command = null;
                     }
                     break;

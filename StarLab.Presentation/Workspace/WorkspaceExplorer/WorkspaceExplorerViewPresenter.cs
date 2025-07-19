@@ -32,6 +32,8 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
 
         private readonly Dictionary<NodeImages, int> images = new Dictionary<NodeImages, int>(); // A dictionary that holds the node image indices.
 
+        private string clipboard = string.Empty; // The key that identifies the current contents of the clipboard.
+
         private IWorkspace workspace; // The workspace that the view represents.
 
         /// <summary>
@@ -78,6 +80,14 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         public void AddProject()
         {
             throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Clears the clipboard.
+        /// </summary>
+        public void ClearClipboard()
+        {
+            clipboard = string.Empty;
         }
 
         /// <summary>
@@ -148,8 +158,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
             manager.AddMenuItem(Constants.Delete, StringResources.Delete, GetCommand(Actions.DeleteFolder, folder));
             manager.AddMenuItem(Constants.Rename, StringResources.Rename, ImageResources.Rename, GetCommand(Actions.Rename, folder));
 
-            // TODO - Need to update the state of the cut, copy and paste commands to reflect the currently available operations
-            //UpdateCommandState(Actions.Paste, Constants.Workspace, clipboard.GetDataFormat() == "Workspace.Folder");
+            UpdateCommandState(Actions.Paste, folder, !string.IsNullOrEmpty(clipboard));
         }
 
         /// <summary>
@@ -170,6 +179,8 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
             manager.AddMenuItem(Constants.Paste, StringResources.Paste, ImageResources.Paste, GetCommand(Actions.Paste, project));
             manager.AddMenuItem(Constants.Delete, StringResources.Delete, GetCommand(Actions.DeleteFolder, project));
             manager.AddMenuItem(Constants.Rename, StringResources.Rename, ImageResources.Rename, GetCommand(Actions.Rename, project));
+
+            UpdateCommandState(Actions.Paste, project, !string.IsNullOrEmpty(clipboard));
         }
 
         /// <summary>
@@ -402,6 +413,15 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         }
 
         /// <summary>
+        /// Updates the contents of the clipboard.
+        /// </summary>
+        /// <param name="key">The key that identifies the target of the current clipboard operation.</param>
+        public void UpdateClipboard(string key)
+        {
+            clipboard = key;
+        }
+
+        /// <summary>
         /// Updates the state of the workspace represented by the <see cref="WorkspaceDTO"/> provided.
         /// </summary>
         /// <param name="dto">The <see cref="WorkspaceDTO"/> that contains the updated workspace state.</param>
@@ -425,21 +445,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// </summary>
         public void ViewActivated()
         {
-            //var key = View.GetSelectedNode();
-
-            //if (workspace.HasFolder(key))
-            //{
-            //    var folder = workspace.GetFolder(key);
-
-            //    if (folder.Expanded)
-            //    {
-            //        View.UpdateNodeState(folder.Key, images[NodeImages.OpenFolder], images[NodeImages.SelectedOpenFolder]);
-            //    }
-            //    else
-            //    {
-            //        View.UpdateNodeState(folder.Key, images[NodeImages.Folder], images[NodeImages.FolderSelected]);
-            //    }
-            //}
+            // TODO - Remove if no longer needed
         }
 
         /// <summary>
@@ -447,21 +453,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// </summary>
         public void ViewDeactivated()
         {
-            //var key = View.GetSelectedNode();
-
-            //if (workspace.HasFolder(key))
-            //{
-            //    var folder = workspace.GetFolder(key);
-
-            //    if (folder.Expanded)
-            //    {
-            //        View.UpdateNodeState(folder.Key, images[NodeImages.OpenFolder], images[NodeImages.OpenFolder]);
-            //    }
-            //    else
-            //    {
-            //        View.UpdateNodeState(folder.Key, images[NodeImages.Folder], images[NodeImages.Folder]);
-            //    }
-            //}
+            // TODO - Remove if no longer needed
         }
 
         /// <summary>

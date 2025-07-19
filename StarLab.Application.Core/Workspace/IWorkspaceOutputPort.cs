@@ -6,6 +6,11 @@
     public interface IWorkspaceOutputPort : IOutputPort
     {
         /// <summary>
+        /// Clears the clipboard.
+        /// </summary>
+        void ClearClipboard();
+
+        /// <summary>
         /// Opens the specified document.
         /// </summary>
         /// <param name="id">The document ID.</param>
@@ -16,6 +21,12 @@
         /// </summary>
         /// <param name="path">The folder path.</param>
         void RenameFolder(string path);
+
+        /// <summary>
+        /// Updates the contents of the clipboard.
+        /// </summary>
+        /// <param name="key">The key that identifies the target of the current clipboard operation.</param>
+        void UpdateClipboard(string key);
 
         /// <summary>
         /// Updates the state of the workspace represented by the <see cref="WorkspaceDTO"/> provided.
