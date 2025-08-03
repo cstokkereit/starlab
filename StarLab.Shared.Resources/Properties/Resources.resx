@@ -180,8 +180,14 @@
   <data name="DocumentAlreadyExists" xml:space="preserve">
     <value>A document with the name '{0}' already exists. Do you want to replace it?</value>
   </data>
+  <data name="EndOfFile" xml:space="preserve">
+    <value>Cannot read past the end of the file.</value>
+  </data>
   <data name="Exit" xml:space="preserve">
     <value>Exit</value>
+  </data>
+  <data name="FieldMapNotSet" xml:space="preserve">
+    <value>The field map has not been set.</value>
   </data>
   <data name="File" xml:space="preserve">
     <value>File</value>

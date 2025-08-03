@@ -250,11 +250,29 @@ namespace StarLab.Shared.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cannot read past the end of the file..
+        /// </summary>
+        public static string EndOfFile {
+            get {
+                return ResourceManager.GetString("EndOfFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exit.
         /// </summary>
         public static string Exit {
             get {
                 return ResourceManager.GetString("Exit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The field map has not been set..
+        /// </summary>
+        public static string FieldMapNotSet {
+            get {
+                return ResourceManager.GetString("FieldMapNotSet", resourceCulture);
             }
         }
         

@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>StarLab.Data</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\StarLab.Domain.Core\StarLab.Domain.Core.csproj" />
+    <ProjectReference Include="..\Stratosoft.File.IO\Stratosoft.File.IO.csproj" />
+  </ItemGroup>
+
+</Project>

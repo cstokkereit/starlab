@@ -65,7 +65,7 @@ namespace StarLab
         }
 
         /// <summary>
-        /// 
+        /// TODO
         /// </summary>
         protected IUseCaseFactory Factory => container.Resolve<IUseCaseFactory>();
 

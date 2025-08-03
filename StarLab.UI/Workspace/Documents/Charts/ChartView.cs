@@ -1,6 +1,7 @@
 ﻿using log4net;
 using ScottPlot;
 using ScottPlot.Plottables;
+using StarLab.Data;
 using StarLab.Presentation;
 using StarLab.Presentation.Workspace.Documents.Charts;
 using System.Text.RegularExpressions;
@@ -183,89 +184,72 @@ namespace StarLab.UI.Workspace.Documents.Charts
 
         bool selectPoints = false;
 
-        Regex regex = new Regex(@"([OBAFGKM]\d[\.\d]*[\/]?[OBAFGKM]?[\d\.\d]?)(I{0,3}V?[-|\/]?I{0,3}V?)(.*)", RegexOptions.Compiled);
-
         private Tuple<double[], double[]> GetData()
         {
+            var stars = new StarsRepository(); // TODO - This should be done through the presenter, this should not know about the Domain model
+
+            stars.Populate();
+
             List<double> xValues = new List<double>();
             List<double> yValues = new List<double>();
 
-            using (var reader = File.OpenText("D:\\Users\\Colin\\Documents\\Science\\Astronomy\\Catalogs\\Hipparcos\\hip_main.dat"))
+            var errors = 0;
+
+            foreach (var star in stars)
             {
-                string line;
-
-                while ((line = reader.ReadLine()) != null)
+                try
                 {
-                    try
+                    if (!string.IsNullOrEmpty(star.SpectralType.SpectralClass))
                     {
-                        var data = line.Split('|');
-
-                        var apparentMagnitude = data[5].Trim();
-                        var parallax = data[11].Trim();
-                        var spectralType = data[76].Trim();
-
-                        if (!string.IsNullOrEmpty(apparentMagnitude) && !string.IsNullOrEmpty(parallax) && !string.IsNullOrEmpty(spectralType))
-                        {
-                            var d = 1 / (double.Parse(parallax) / 1000);
-                            var M = 5 + double.Parse(apparentMagnitude) - (5 * Math.Log10(d));
-
-                            xValues.Add(Parse(spectralType));
-                            yValues.Add(M);
-                        }
+                        xValues.Add(Parse(star.SpectralType.SpectralClass));
+                        yValues.Add(star.AbsoluteMagnitude);
                     }
-                    catch (Exception e)
-                    {
-                        var a = e;
-
-                        //logger.Debug("Unable to parse spectral type: " + spectralType); // TODO
-                    }
+                }
+                catch (Exception e)
+                {
+                    errors++;
                 }
             }
 
             return new Tuple<double[], double[]>(xValues.ToArray(), yValues.ToArray());
         }
 
-        private double Parse(string s)
+        private double Parse(string spectralType)
         {
-            var parts = regex.Split(s);
-
-            string spectralType = "";
-
             double retval = 0;
 
-            if (parts.Length == 5)
+            if (!spectralType.Contains('/') && !spectralType.Contains('-'))
             {
-                spectralType = parts[1];
-
-                if (!spectralType.Contains('/'))
+                if (spectralType.StartsWith("B"))
                 {
-                    if (spectralType.StartsWith("B"))
-                    {
-                        retval = 10;
-                    }
-                    if (spectralType.StartsWith("A"))
-                    {
-                        retval = 20;
-                    }
-                    if (spectralType.StartsWith("F"))
-                    {
-                        retval = 30;
-                    }
-                    if (spectralType.StartsWith("G"))
-                    {
-                        retval = 40;
-                    }
-                    if (spectralType.StartsWith("K"))
-                    {
-                        retval = 50;
-                    }
-                    if (spectralType.StartsWith("M"))
-                    {
-                        retval = 60;
-                    }
-
-                    retval = retval + double.Parse(spectralType.Substring(1));
+                    retval = 10;
                 }
+                else if (spectralType.StartsWith("A"))
+                {
+                    retval = 20;
+                }
+                else if (spectralType.StartsWith("F"))
+                {
+                    retval = 30;
+                }
+                else if (spectralType.StartsWith("G"))
+                {
+                    retval = 40;
+                }
+                else if (spectralType.StartsWith("K"))
+                {
+                    retval = 50;
+                }
+                else if (spectralType.StartsWith("M"))
+                {
+                    retval = 60;
+                }
+                else
+                {
+                    throw new InvalidOperationException();
+                }
+
+                retval = retval + double.Parse(spectralType.Substring(1));
             }
 
             return retval;
