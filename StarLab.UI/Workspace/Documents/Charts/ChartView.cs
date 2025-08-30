@@ -4,7 +4,6 @@ using ScottPlot.Plottables;
 using StarLab.Data;
 using StarLab.Presentation;
 using StarLab.Presentation.Workspace.Documents.Charts;
-using System.Text.RegularExpressions;
 
 namespace StarLab.UI.Workspace.Documents.Charts
 {
@@ -93,53 +92,53 @@ namespace StarLab.UI.Workspace.Documents.Charts
             scatter = formsPlot.Plot.Add.ScatterPoints(data.Item1, data.Item2);
 
             scatter.MarkerColor = Colors.Green;
-            scatter.MarkerSize = 2;
+            scatter.MarkerSize = 1;
             formsPlot.Refresh();
 
-            formsPlot.Plot.Axes.Bottom.Label.Text = "Spectral Class";
+            formsPlot.Plot.Axes.Bottom.Label.Text = "B-V Magnitude";
 
-            double[] tickPositions = new double[70];
-            string[] tickLabels = new string[70]; // = { "O", "B", "A", "F", "G", "K", "M" };
+            //double[] tickPositions = new double[70];
+            //string[] tickLabels = new string[70]; // = { "O", "B", "A", "F", "G", "K", "M" };
 
-            string c = "O";
-            int s = 2;
+            //string c = "O";
+            //int s = 2;
 
-            for (int n = 2; n < 70; n++)
-            {
-                if (s > 9)
-                {
-                    s = 0;
-                }
+            //for (int n = 2; n < 70; n++)
+            //{
+            //    if (s > 9)
+            //    {
+            //        s = 0;
+            //    }
 
-                if (n > 9)
-                {
-                    c = "B";
-                }
-                if (n > 19)
-                {
-                    c = "A";
-                }
-                if (n > 29)
-                {
-                    c = "F";
-                }
-                if (n > 39)
-                {
-                    c = "G";
-                }
-                if (n > 49)
-                {
-                    c = "K";
-                }
-                if (n > 59)
-                {
-                    c = "M";
-                }
+            //    if (n > 9)
+            //    {
+            //        c = "B";
+            //    }
+            //    if (n > 19)
+            //    {
+            //        c = "A";
+            //    }
+            //    if (n > 29)
+            //    {
+            //        c = "F";
+            //    }
+            //    if (n > 39)
+            //    {
+            //        c = "G";
+            //    }
+            //    if (n > 49)
+            //    {
+            //        c = "K";
+            //    }
+            //    if (n > 59)
+            //    {
+            //        c = "M";
+            //    }
 
-                tickPositions[n] = n;
-                tickLabels[n] = c + s.ToString();
-                s++;
-            }
+            //    tickPositions[n] = n;
+            //    tickLabels[n] = c + s.ToString();
+            //    s++;
+            //}
 
             //ScottPlot.TickGenerators.NumericAutomatic tickGenX = new();
             //tickGenX.TargetTickCount = 10;
@@ -149,13 +148,13 @@ namespace StarLab.UI.Workspace.Documents.Charts
             //tickGenX.MinimumTickSpacing = 5;
             //formsPlot.Plot.Axes.Bottom.TickGenerator = tickGenX;
 
-            formsPlot.Plot.Axes.SetLimits(2, 69, 20, -10);
+            formsPlot.Plot.Axes.SetLimits(-0.5, 2, 15, -5);
 
-            formsPlot.Plot.Axes.Bottom.SetTicks(tickPositions, tickLabels);
+            //formsPlot.Plot.Axes.Bottom.SetTicks(tickPositions, tickLabels);
 
-            formsPlot.Plot.Axes.Left.Label.Text = "Luminosity";
+            formsPlot.Plot.Axes.Left.Label.Text = "Absolute Magnitude";
 
-            formsPlot.Plot.Axes.Title.Label.Text = "Plot Title";
+            formsPlot.Plot.Axes.Title.Label.Text = "HR-Diagram";
 
             formsPlot.Plot.Grid.XAxisStyle.IsVisible = false;
             formsPlot.Plot.Grid.YAxisStyle.IsVisible = false;
@@ -199,11 +198,11 @@ namespace StarLab.UI.Workspace.Documents.Charts
             {
                 try
                 {
-                    if (!string.IsNullOrEmpty(star.SpectralType.SpectralClass))
-                    {
-                        xValues.Add(Parse(star.SpectralType.SpectralClass));
+                    //if (!string.IsNullOrEmpty(star.SpectralType.SpectralClass))
+                    //{
+                        xValues.Add(star.BVColourIndex);
                         yValues.Add(star.AbsoluteMagnitude);
-                    }
+                    //}
                 }
                 catch (Exception e)
                 {
@@ -288,7 +287,7 @@ namespace StarLab.UI.Workspace.Documents.Charts
                 newMarker.MarkerStyle.Size = 10;
                 newMarker.MarkerStyle.FillColor = Colors.Red.WithAlpha(.2);
                 newMarker.MarkerStyle.LineColor = Colors.Red;
-                newMarker.MarkerStyle.LineWidth = 1;
+                newMarker.MarkerStyle.LineWidth = 2;
             }
 
             // reset the mouse positions
@@ -316,12 +315,12 @@ namespace StarLab.UI.Workspace.Documents.Charts
         public void Apply(RenderPack rp, bool beforeLayout)
         {
             IXAxis bottom = rp.Plot.Axes.Bottom;
-            if (bottom.Min < 2) bottom.Min = 2;
-            if (bottom.Max > 69) bottom.Max = 69;
+            if (bottom.Min < -0.5) bottom.Min = -0.5;
+            if (bottom.Max > 2) bottom.Max = 2;
 
             IYAxis left = rp.Plot.Axes.Left;
-            if (left.Min > 20) left.Min = 20;
-            if (left.Max < -10) left.Max = -10;
+            if (left.Min > 15) left.Min = 15;
+            if (left.Max < -5) left.Max = -5;
 
         }
     }

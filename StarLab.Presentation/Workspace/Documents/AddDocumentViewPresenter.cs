@@ -76,7 +76,7 @@ namespace StarLab.Presentation.Workspace.Documents
         /// <param name="id">The document ID.</param>
         public void OpenDocument(string id)
         {
-            if (AppController.GetController(ControllerNames.ApplicationViewController) is IApplicationOutputPort port) port.OpenDocument(id);
+            if (AppController.GetController(ControllerNames.WorkspaceController) is IApplicationOutputPort port) port.OpenDocument(id);
         }
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace StarLab.Presentation.Workspace.Documents
         /// <param name="dto">The <see cref="WorkspaceDTO"/> that contains the updated workspace state.</param>
         public void UpdateWorkspace(WorkspaceDTO dto)
         {
-            if (AppController.GetController(ControllerNames.ApplicationViewController) is IApplicationOutputPort port) port.UpdateWorkspace(dto);
+            if (AppController.GetController(ControllerNames.WorkspaceController) is IApplicationOutputPort port) port.UpdateWorkspace(dto);
 
             ParentController.Close();
         }

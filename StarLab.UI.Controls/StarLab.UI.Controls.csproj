@@ -10,8 +10,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\stratosoft\Stratosoft.Commands\Stratosoft.Commands.csproj" />
     <ProjectReference Include="..\StarLab.Presentation.Core\StarLab.Presentation.Core.csproj" />
+    <ProjectReference Include="..\Stratosoft.Commands\Stratosoft.Commands.csproj" />
   </ItemGroup>
 
   <ItemGroup>

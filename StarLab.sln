@@ -41,9 +41,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Persistence", "Persistence"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarLab.Configuration", "StarLab.Configuration\StarLab.Configuration.csproj", "{826C0E11-262C-4682-971D-0D76FEA8FD46}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stratosoft.Commands", "..\stratosoft\Stratosoft.Commands\Stratosoft.Commands.csproj", "{4E10851D-8E11-4FCC-8DBC-5983AC701CCE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stratosoft.Commands", "Stratosoft.Commands\Stratosoft.Commands.csproj", "{4E10851D-8E11-4FCC-8DBC-5983AC701CCE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stratosoft.Commands.Tests", "..\stratosoft\Stratosoft.Commands.Tests\Stratosoft.Commands.Tests.csproj", "{CFAE965A-4861-42E4-8A1C-F3F8138068EF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Stratosoft.Commands.Tests", "Stratosoft.Commands.Tests\Stratosoft.Commands.Tests.csproj", "{CFAE965A-4861-42E4-8A1C-F3F8138068EF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StarLab.Domain.Core", "StarLab.Domain.Core\StarLab.Domain.Core.csproj", "{86490402-1BA7-4AC7-AAF9-FD92C22B36C7}"
 EndProject
@@ -56,6 +56,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StarLab.Data.Tests", "StarLab.Data.Tests\StarLab.Data.Tests.csproj", "{8A4053B5-A65B-4519-9A11-5746EA6FC559}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StarLab.Domain.Core.Tests", "StarLab.Domain.Core.Tests\StarLab.Domain.Core.Tests.csproj", "{CC7F4285-644A-4B31-B419-0ECB6A48AB3C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MongoDB.Data", "MongoDB.Data\MongoDB.Data.csproj", "{ABCF829D-7DB8-462F-BF28-ACC565053536}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stratosoft.Nomenclature", "Stratosoft.Nomenclature\Stratosoft.Nomenclature.csproj", "{D4B3B344-9E42-7A7F-52FA-14CD6EB6A8F4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stratosoft.Nomenclature.Tests", "Stratosoft.Nomenclature.Tests\Stratosoft.Nomenclature.Tests.csproj", "{57CDC052-ED1C-C361-D31D-21AE0895E3E8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -143,6 +149,18 @@ Global
 		{CC7F4285-644A-4B31-B419-0ECB6A48AB3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC7F4285-644A-4B31-B419-0ECB6A48AB3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CC7F4285-644A-4B31-B419-0ECB6A48AB3C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ABCF829D-7DB8-462F-BF28-ACC565053536}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABCF829D-7DB8-462F-BF28-ACC565053536}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABCF829D-7DB8-462F-BF28-ACC565053536}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABCF829D-7DB8-462F-BF28-ACC565053536}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4B3B344-9E42-7A7F-52FA-14CD6EB6A8F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4B3B344-9E42-7A7F-52FA-14CD6EB6A8F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4B3B344-9E42-7A7F-52FA-14CD6EB6A8F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4B3B344-9E42-7A7F-52FA-14CD6EB6A8F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57CDC052-ED1C-C361-D31D-21AE0895E3E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57CDC052-ED1C-C361-D31D-21AE0895E3E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57CDC052-ED1C-C361-D31D-21AE0895E3E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57CDC052-ED1C-C361-D31D-21AE0895E3E8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -168,6 +186,9 @@ Global
 		{34D0162C-3F4F-4864-9A56-2127703C5449} = {839E7B8B-C86A-47E0-82F6-9E4F4CCD53EA}
 		{8A4053B5-A65B-4519-9A11-5746EA6FC559} = {839E7B8B-C86A-47E0-82F6-9E4F4CCD53EA}
 		{CC7F4285-644A-4B31-B419-0ECB6A48AB3C} = {FCC0C76B-ADB5-4FF9-8170-D171FC9532F0}
+		{ABCF829D-7DB8-462F-BF28-ACC565053536} = {839E7B8B-C86A-47E0-82F6-9E4F4CCD53EA}
+		{D4B3B344-9E42-7A7F-52FA-14CD6EB6A8F4} = {FCC0C76B-ADB5-4FF9-8170-D171FC9532F0}
+		{57CDC052-ED1C-C361-D31D-21AE0895E3E8} = {FCC0C76B-ADB5-4FF9-8170-D171FC9532F0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C901BDDE-CD19-4752-8A90-F4800FC22F0F}

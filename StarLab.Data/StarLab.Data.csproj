@@ -8,6 +8,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Import\DataField.cs~RF32162a3e.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MongoDB.Driver" Version="3.4.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\StarLab.Application.Core\StarLab.Application.Core.csproj" />
     <ProjectReference Include="..\StarLab.Domain.Core\StarLab.Domain.Core.csproj" />
     <ProjectReference Include="..\Stratosoft.File.IO\Stratosoft.File.IO.csproj" />
   </ItemGroup>

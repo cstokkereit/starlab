@@ -111,7 +111,7 @@ namespace StarLab.UI
         /// </summary>
         public void Exit()
         {
-            if (controllers[ControllerNames.ApplicationViewController] is IApplicationViewController controller) controller.Exit();
+            if (controllers[ControllerNames.WorkspaceController] is IApplicationViewController controller) controller.Exit();
         }
 
         /// <summary>
@@ -218,9 +218,9 @@ namespace StarLab.UI
 
             CreateViews();
 
-            var view = views[Views.Workspace];
+            var view = views[Views.Application];
 
-            if (views[Views.Workspace] is Form form) System.Windows.Forms.Application.Run(form);
+            if (views[Views.Application] is Form form) System.Windows.Forms.Application.Run(form);
         }
 
         /// <summary>
@@ -232,7 +232,7 @@ namespace StarLab.UI
             var controller = GetController(view);
             controller.Initialise(this);
 
-            controllers[ControllerNames.ApplicationViewController].Show(view);
+            controllers[ControllerNames.WorkspaceController].Show(view);
         }
 
         /// <summary>
@@ -249,7 +249,46 @@ namespace StarLab.UI
             var controller = GetController(view);
             controller.Initialise(this);
 
-            controllers[ControllerNames.ApplicationViewController].Show(view); // TODO - May need to include an overload of this that includes the parent view
+            controllers[ControllerNames.WorkspaceController].Show(view); // TODO - May need to include an overload of this that includes the parent view
+        }
+
+        /// <summary>
+        /// Displays a <see cref="MessageBox"/> with the specified caption, message, message type and available responses.
+        /// </summary>
+        /// <param name="caption">The message box caption.</param>
+        /// <param name="message">The message text.</param>
+        /// <param name="type">An <see cref="InteractionType"/> that specifies the type of message being displayed.</param>
+        /// <param name="responses">An <see cref="InteractionResponses"/> that specifies the available responses.</param>
+        /// <returns>An <see cref="InteractionResult"/> that identifies the chosen response.</returns>
+        public InteractionResult ShowMessage(string caption, string message, InteractionType type, InteractionResponses responses)
+        {
+            var controller = (IMessageBoxController)controllers[ControllerNames.MessageBoxController];
+            return controller.ShowMessage(GetMessageBoxOwner(), caption, message, type, responses);
+        }
+
+        /// <summary>
+        /// Displays a <see cref="MessageBox"/> with the specified caption, message and available responses.
+        /// </summary>
+        /// <param name="caption">The message box caption.</param>
+        /// <param name="message">The message text.</param>
+        /// <param name="responses">An <see cref="InteractionResponses"/> that specifies the available responses.</param>
+        /// <returns>An <see cref="InteractionResult"/> that identifies the chosen response.</returns>
+        public InteractionResult ShowMessage(string caption, string message, InteractionResponses responses)
+        {
+            var controller = (IMessageBoxController)controllers[ControllerNames.MessageBoxController];
+            return controller.ShowMessage(GetMessageBoxOwner(), caption, message, responses);
+        }
+
+        /// <summary>
+        /// Displays a <see cref="MessageBox"/> with the specified caption and message.
+        /// </summary>
+        /// <param name="caption">The message box caption.</param>
+        /// <param name="message">The message text.</param>
+        /// <returns>An <see cref="InteractionResult"/> that identifies the chosen response.</returns>
+        public InteractionResult ShowMessage(string caption, string message)
+        {
+            var controller = (IMessageBoxController)controllers[ControllerNames.MessageBoxController];
+            return controller.ShowMessage(GetMessageBoxOwner(), caption, message);
         }
 
         /// <summary>
@@ -276,11 +315,12 @@ namespace StarLab.UI
         {
             CreateView(Views.About, Resources.AboutStarLab);
             CreateView(Views.AddDocument, Resources.AddDocument);
+            CreateView(Views.MessageBox, Resources.StarLab);
             CreateView(Views.Options, Resources.Options);
             CreateView(Views.WorkspaceExplorer, Resources.WorkspaceExplorer);
 
             // NOTE - This must be the last view to be created.
-            CreateView(Views.Workspace, Resources.StarLab);
+            CreateView(Views.Application, Resources.StarLab);
         }
 
         /// <summary>
@@ -295,7 +335,7 @@ namespace StarLab.UI
 
             if (view is IApplicationView)
             {
-                name = ControllerNames.ApplicationViewController;
+                name = ControllerNames.WorkspaceController;
             }
             else if (view is IDialogView)
             {
@@ -311,6 +351,20 @@ namespace StarLab.UI
             }
 
             return controllers[name];
+        }
+
+        /// <summary>
+        /// Gets the <see cref="IView"/> that owns the message box.
+        /// </summary>
+        /// <returns></returns>
+        private IView GetMessageBoxOwner()
+        {
+            // TODO - Will need to determine the view based on te active view and or information supplied by the calling controller
+            // May need to determine the acitve view
+            // May need to supply the name of the calling controller or its poarent
+            // May need to take into accpunt if the view is docked or floating (centre on workspace or centre on view)
+
+            return views[Views.Application];
         }
 
         /// <summary>

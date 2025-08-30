@@ -30,6 +30,10 @@ namespace StarLab.UI
                     TypeName = "StarLab.UI.Workspace.Documents.DocumentView, StarLab.UI";
                     break;
 
+                case ViewTypes.MessageBox:
+                    TypeName = "StarLab.UI.MessageBoxView, StarLab.UI";
+                    break;
+
                 case ViewTypes.Tool:
                     TypeName = "StarLab.UI.ToolView, StarLab.UI";
                     break;

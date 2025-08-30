@@ -74,65 +74,6 @@ namespace StarLab.Presentation
         }
 
         /// <summary>
-        /// Displays a <see cref="MessageBox"/> with the specified options.
-        /// </summary>
-        /// <param name="caption">The message box caption.</param>
-        /// <param name="message">The message text.</param>
-        /// <param name="type">An <see cref="InteractionType"/> that specifies the type of message being displayed.</param>
-        /// <param name="responses">An <see cref="InteractionResponses"/> that specifies the available responses.</param>
-        /// <returns>An <see cref="InteractionResult"/> that identifies the chosen response.</returns>
-        public InteractionResult ShowMessage(string caption, string message, InteractionType type, InteractionResponses responses)
-        {
-            return view.ShowMessage(caption, message, type, responses);
-        }
-
-        /// <summary>
-        /// Displays a <see cref="MessageBox"/> with the specified options.
-        /// </summary>
-        /// <param name="caption">The message box caption.</param>
-        /// <param name="message">The message text.</param>
-        /// <param name="responses">An <see cref="InteractionResponses"/> that specifies the available responses.</param>
-        /// <returns>An <see cref="InteractionResult"/> that identifies the chosen response.</returns>
-        public InteractionResult ShowMessage(string caption, string message, InteractionResponses responses)
-        {
-            return view.ShowMessage(caption, message, responses);
-        }
-
-        /// <summary>
-        /// Displays a <see cref="MessageBox"/> with the specified options.
-        /// </summary>
-        /// <param name="caption">The message box caption.</param>
-        /// <param name="message">The message text.</param>
-        /// <returns>An <see cref="InteractionResult"/> that identifies the chosen response.</returns>
-        public InteractionResult ShowMessage(string caption, string message)
-        {
-            return view.ShowMessage(caption, message);
-        }
-
-        /// <summary>
-        /// Displays an <see cref="OpenFileDialog"/> with the specified options.
-        /// </summary>
-        /// <param name="title">The dialog title.</param>
-        /// <param name="filter">The file name filter.</param>
-        /// <returns>The filename selected in the dialog.</returns>
-        public string ShowOpenFileDialog(string title, string filter)
-        {
-            return view.ShowOpenFileDialog(title, filter);
-        }
-
-        /// <summary>
-        /// Displays a <see cref="SaveFileDialog"/> with the specified options. TODO - May want to split Save and Open file into their own FileManager? also PrintManager? interface maybe Show(IView) as well as only certain views will do this but messages are ubiquitous
-        /// </summary>
-        /// <param name="title">The dialog title.</param>
-        /// <param name="filter">The file name filter.</param>
-        /// <param name="extension">The default file extension.</param>
-        /// <returns>The filename selected in the dialog.</returns>
-        public string ShowSaveFileDialog(string title, string filter, string extension)
-        {
-            return view.ShowSaveFileDialog(title, filter, extension);
-        }
-
-        /// <summary>
         /// Notifies the presenter that the view is being closed.
         /// </summary>
         /// <param name="e">The <see cref="CancelEventArgs"/> that can be used to determine the reasons that the view is closing and, if necessary, cancel it.</param>

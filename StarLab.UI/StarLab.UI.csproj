@@ -33,7 +33,8 @@
     <PackageReference Include="DockPanelSuite" Version="3.1.1" />
     <PackageReference Include="DockPanelSuite.ThemeVS2015" Version="3.1.1" />
     <PackageReference Include="log4net" Version="3.1.0" />
-    <PackageReference Include="ScottPlot.WinForms" Version="5.0.55" />
+    <PackageReference Include="ScottPlot" Version="5.0.56" />
+    <PackageReference Include="ScottPlot.WinForms" Version="5.0.56" />
   </ItemGroup>
 
   <ItemGroup>
@@ -44,6 +45,7 @@
     <ProjectReference Include="..\StarLab.Presentation.Core\StarLab.Presentation.Core.csproj" />
     <ProjectReference Include="..\StarLab.Presentation\StarLab.Presentation.csproj" />
     <ProjectReference Include="..\StarLab.UI.Controls\StarLab.UI.Controls.csproj" />
+    <ProjectReference Include="..\Stratosoft.Commands\Stratosoft.Commands.csproj" />
   </ItemGroup>
 
   <ItemGroup>

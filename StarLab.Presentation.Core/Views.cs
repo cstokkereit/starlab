@@ -7,11 +7,15 @@
     {
         public const string About = "AboutView";
         public const string AddDocument = "AddDocumentView";
+        public const string Application = "ApplicationView";
 
         public const string ChartSettings = "ChartSettingsView";
         public const string Chart = "ChartView";
 
+        public const string Dialog = "DialogView";
         public const string Document = "DocumentView";
+
+        public const string MessageBox = "MessageBoxView";
 
         public const string Options = "OptionsView";
 
@@ -19,7 +23,6 @@
 
         public const string Tool = "ToolView";
 
-        public const string Workspace = "WorkspaceView";
         public const string WorkspaceExplorer = "WorkspaceExplorerView";
     }
 }

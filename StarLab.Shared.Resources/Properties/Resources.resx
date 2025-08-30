@@ -129,6 +129,9 @@
   <data name="AddDocument" xml:space="preserve">
     <value>Add New Document</value>
   </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
   <data name="CannotRenameItem" xml:space="preserve">
     <value>Cannot rename '{0}' to '{1}' because a {2} with that name already exists.</value>
   </data>
@@ -239,11 +242,17 @@ Please enter a valid name.</value>
   <data name="NewFolder" xml:space="preserve">
     <value>New Folder</value>
   </data>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
+  </data>
   <data name="NotInitialised" xml:space="preserve">
     <value>This instance has not been properly initialised.</value>
   </data>
   <data name="ObjectNotInitialised" xml:space="preserve">
     <value>This object has not been properly initialised.</value>
+  </data>
+  <data name="OK" xml:space="preserve">
+    <value>OK</value>
   </data>
   <data name="Open" xml:space="preserve">
     <value>Open</value>
@@ -340,5 +349,8 @@ Please enter a valid name.</value>
   </data>
   <data name="WorkspaceFileFilter" xml:space="preserve">
     <value>(*.slw)|*.slw</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Yes</value>
   </data>
 </root>

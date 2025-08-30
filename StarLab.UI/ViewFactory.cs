@@ -138,6 +138,10 @@ namespace StarLab.UI
                     view = new DialogView(definition.Name, text, this, definition);
                     break;
 
+                case ViewTypes.MessageBox:
+                    view = new MessageBoxView(definition.Name, this);
+                    break;
+
                 case ViewTypes.Tool:
                     view = new ToolView(definition.Name, text, this, definition);
                     break;
@@ -183,7 +187,8 @@ namespace StarLab.UI
         /// </summary>
         private void CreateViewDefinitions()
         {
-            AddViewDefinition(new ViewDefinition(Views.Workspace, ViewTypes.Application));
+            AddViewDefinition(new ViewDefinition(Views.Application, ViewTypes.Application));
+            AddViewDefinition(new ViewDefinition(Views.MessageBox, ViewTypes.MessageBox));
 
             CreateDialogViewDefinitions();
             CreateDocumentViewDefinitions();

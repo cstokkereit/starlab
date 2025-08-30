@@ -5,8 +5,9 @@
     /// </summary>
     public static class ControllerNames
     {
-        public const string ApplicationController = "ApplicationController";
-        public const string ApplicationViewController = "ApplicationViewController";
+        public const string ApplicationController = "ApplicationController";        
+        public const string MessageBoxController = "MessageBoxController";
+        public const string WorkspaceController = "WorkspaceController";
 
         /// <summary>
         /// Generates a name for a content controller.

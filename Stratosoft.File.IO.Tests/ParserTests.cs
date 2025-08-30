@@ -10,7 +10,7 @@ namespace Stratosoft.File.IO
         protected readonly string resources; // The path to the test resources folder.
 
         /// <summary>
-        /// Initialises a new instance of the <see cref="DelimitedValueFileParserTests"/> class.
+        /// Initialises a new instance of the <see cref="DelimitedValueParserTests"/> class.
         /// </summary>
         public ParserTests()
         {

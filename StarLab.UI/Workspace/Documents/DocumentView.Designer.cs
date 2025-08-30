@@ -30,7 +30,7 @@ namespace StarLab.UI.Workspace.Documents
         /// </summary>
         private void InitializeComponent()
         {
-            splitContainer = new UI.Controls.SplitContainer();
+            splitContainer = new StarLab.UI.Controls.SplitContainer();
             SuspendLayout();
             // 
             // splitContainer
@@ -48,7 +48,6 @@ namespace StarLab.UI.Workspace.Documents
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
             Controls.Add(splitContainer);
-            DoubleBuffered = true;
             HideOnClose = true;
             Name = "DocumentView";
             Text = "DocumentView";

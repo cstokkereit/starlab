@@ -7,12 +7,20 @@
 
     public class Star : IStar
     {
-        public Star(double apparentMagnitude, double parallax, string spectralType)
+        private readonly Dictionary<string, IDesignation> designations = new Dictionary<string, IDesignation>();
+
+        private readonly Designation designation;
+
+        private readonly string name = string.Empty;
+
+        public Star(double apparentMagnitude, double parallax, string spectralType, double bvColourIndex)
         {
             ApparentMagnitude = apparentMagnitude;
 
-            var d = 1 / (parallax / 1000);
-            AbsoluteMagnitude = 5 + ApparentMagnitude - (5 * Math.Log10(d));
+            //var d = 1 / (parallax / 1000);
+            AbsoluteMagnitude = ApparentMagnitude + 5 * (Math.Log10(parallax / 1000) + 1);
+
+            BVColourIndex = bvColourIndex;
 
             SpectralType = new SpectralType(spectralType);
         }
@@ -20,6 +28,12 @@
         public double AbsoluteMagnitude { get; private set; }
 
         public double ApparentMagnitude { get; private set; }
+
+        public double BVColourIndex { get; private set; }
+
+        public IDesignation Designation => designation;
+
+        public string Name => name;
 
         public SpectralType SpectralType { get; private set; }
     }

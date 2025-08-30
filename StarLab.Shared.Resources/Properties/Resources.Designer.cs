@@ -97,6 +97,15 @@ namespace StarLab.Shared.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string Cancel {
+            get {
+                return ResourceManager.GetString("Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cannot rename &apos;{0}&apos; to &apos;{1}&apos; because a {2} with that name already exists..
         /// </summary>
         public static string CannotRenameItem {
@@ -411,6 +420,15 @@ namespace StarLab.Shared.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No.
+        /// </summary>
+        public static string No {
+            get {
+                return ResourceManager.GetString("No", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This instance has not been properly initialised..
         /// </summary>
         public static string NotInitialised {
@@ -425,6 +443,15 @@ namespace StarLab.Shared.Properties {
         public static string ObjectNotInitialised {
             get {
                 return ResourceManager.GetString("ObjectNotInitialised", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OK.
+        /// </summary>
+        public static string OK {
+            get {
+                return ResourceManager.GetString("OK", resourceCulture);
             }
         }
         
@@ -713,6 +740,15 @@ namespace StarLab.Shared.Properties {
         public static string WorkspaceFileFilter {
             get {
                 return ResourceManager.GetString("WorkspaceFileFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes.
+        /// </summary>
+        public static string Yes {
+            get {
+                return ResourceManager.GetString("Yes", resourceCulture);
             }
         }
     }

@@ -8,7 +8,8 @@
         Application,
         Content,
         Dialog, 
-        Document, 
+        Document,
+        MessageBox,
         Tool
     }
 }

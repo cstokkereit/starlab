@@ -1,6 +1,4 @@
-﻿using NUnit.Framework.Constraints;
-
-namespace StarLab.Data
+﻿namespace StarLab.Data
 {
     
     public class StarsRpositoryTests

@@ -65,15 +65,19 @@ namespace StarLab.Presentation
 
             switch (view.GetType().Name)
             {
-                case "ApplicationView":
+                case Views.Application:
                     presenter = new ApplicationViewPresenter((IApplicationView)view, commands, factory, configuration, mapper, events);
                     break;
 
-                case "DialogView":
+                case Views.Dialog:
                     presenter = new DialogViewPresenter((IDialogView)view, commands, factory, configuration, mapper, events);
                     break;
 
-                case "ToolView":
+                case Views.MessageBox:
+                    presenter = new MessageBoxViewPresenter((IMessageBoxView)view, commands, factory, configuration, mapper, events);
+                    break;
+
+                case Views.Tool:
                     presenter = new ToolViewPresenter((IDockableView)view, commands, factory, configuration, mapper, events);
                     break;
 

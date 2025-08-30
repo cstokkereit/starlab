@@ -428,7 +428,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="id">The ID of the document that was modified.</param>
         public void UpdateDocument(WorkspaceDTO dto, string id)
         {
-            if (AppController.GetController(ControllerNames.ApplicationViewController) is IApplicationOutputPort port) port.UpdateDocument(dto, id);
+            if (AppController.GetController(ControllerNames.WorkspaceController) is IApplicationOutputPort port) port.UpdateDocument(dto, id);
         }
 
         /// <summary>
@@ -437,7 +437,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="dto">The <see cref="WorkspaceDTO"/> that contains the updated workspace state.</param>
         public void UpdateWorkspace(WorkspaceDTO dto)
         {
-            if (AppController.GetController(ControllerNames.ApplicationViewController) is IApplicationOutputPort port) port.UpdateWorkspace(dto);
+            if (AppController.GetController(ControllerNames.WorkspaceController) is IApplicationOutputPort port) port.UpdateWorkspace(dto);
         }
 
         /// <summary>

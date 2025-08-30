@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Nomenclature id="4B9A3242-B224-4172-B76A-C2A9A48F09DD" name="Test Nomenclature" description="This is a test nomenclature.">
+  <Terms>
+    <Term id="C5237DDF-50DB-45A1-9594-C35C552623BD" name="Term-1" description="This is term 1.">
+      <Properties>
+        <Property id="6EF2519D-46CA-44F3-98F5-3F66B38680E7" name="Property-1" description="This is property 1."/>
+        <Property id="DE5EC403-25BC-47E4-87C3-055DC8709445" name="Property-2" description="This is property 2."/>
+        <Property id="4054323F-D30A-48B7-AB2C-5D631F3AB5C9" name="Property-3" description="This is property 3."/>
+      </Properties>
+    </Term>
+    <Term id="4DB50D11-D3D4-4F43-AAD5-2A9A07DD3E73" name="Term-2" description="This is term 2."/>
+    <Term id="D4F5A109-2DA7-43B1-861E-674A1FD5E56E" name="Term-3" description="This is term 3."/>
+    <Term id="2E04B62F-1FF8-4C9F-862E-B5C543F19302" name="Term-4" description="This is term 4."/>
+  </Terms>
+</Nomenclature>

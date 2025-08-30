@@ -19,4 +19,8 @@
     <ProjectReference Include="..\StarLab.Shared.Resources\StarLab.Shared.Resources.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="File\IO\" />
+  </ItemGroup>
+
 </Project>

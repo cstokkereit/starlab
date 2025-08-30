@@ -8,50 +8,50 @@ namespace StarLab.UI
     /// </summary>
     internal static class DialogController
     {
-        /// <summary>
-        /// Displays a <see cref="MessageBox"/> with the specified owner and options.
-        /// </summary>
-        /// <param name="owner">The <see cref="IView"/> that will own the message box.</param>
-        /// <param name="caption">The message box caption.</param>
-        /// <param name="message">The message text.</param>
-        /// <param name="type">An <see cref="InteractionType"/> that specifies the type of message being displayed.</param>
-        /// <param name="responses">An <see cref="InteractionResponses"/> that specifies the available responses.</param>
-        /// <returns>An <see cref="InteractionResult"/> that identifies the chosen response.</returns>
-        public static InteractionResult ShowMessage(IView owner, string caption, string message, InteractionType type, InteractionResponses responses)
-        {
-            if (owner is Form form) return GetResult(MessageBox.Show(form, message, caption, GetButtons(responses), GetIcon(type)));
+        ///// <summary>
+        ///// Displays a <see cref="MessageBox"/> with the specified owner and options.
+        ///// </summary>
+        ///// <param name="owner">The <see cref="IView"/> that will own the message box.</param>
+        ///// <param name="caption">The message box caption.</param>
+        ///// <param name="message">The message text.</param>
+        ///// <param name="type">An <see cref="InteractionType"/> that specifies the type of message being displayed.</param>
+        ///// <param name="responses">An <see cref="InteractionResponses"/> that specifies the available responses.</param>
+        ///// <returns>An <see cref="InteractionResult"/> that identifies the chosen response.</returns>
+        //public static InteractionResult ShowMessage(IView owner, string caption, string message, InteractionType type, InteractionResponses responses)
+        //{
+        //    if (owner is Form form) return GetResult(MessageBox.Show(form, message, caption, GetButtons(responses), GetIcon(type)));
 
-            throw new ArgumentException(nameof(owner));
-        }
+        //    throw new ArgumentException(nameof(owner));
+        //}
 
-        /// <summary>
-        /// Displays a <see cref="MessageBox"/> with the specified owner and options.
-        /// </summary>
-        /// <param name="owner">The <see cref="IView"/> that will own the message box.</param>
-        /// <param name="caption">The message box caption.</param>
-        /// <param name="message">The message text.</param>
-        /// <param name="responses">An <see cref="InteractionResponses"/> that specifies the available responses.</param>
-        /// <returns>An <see cref="InteractionResult"/> that identifies the chosen response.</returns>
-        public static InteractionResult ShowMessage(IView owner, string caption, string message, InteractionResponses responses)
-        {
-            if (owner is Form form) return GetResult(MessageBox.Show(form, message, caption, GetButtons(responses)));
+        ///// <summary>
+        ///// Displays a <see cref="MessageBox"/> with the specified owner and options.
+        ///// </summary>
+        ///// <param name="owner">The <see cref="IView"/> that will own the message box.</param>
+        ///// <param name="caption">The message box caption.</param>
+        ///// <param name="message">The message text.</param>
+        ///// <param name="responses">An <see cref="InteractionResponses"/> that specifies the available responses.</param>
+        ///// <returns>An <see cref="InteractionResult"/> that identifies the chosen response.</returns>
+        //public static InteractionResult ShowMessage(IView owner, string caption, string message, InteractionResponses responses)
+        //{
+        //    if (owner is Form form) return GetResult(MessageBox.Show(form, message, caption, GetButtons(responses)));
 
-            throw new ArgumentException(nameof(owner));
-        }
+        //    throw new ArgumentException(nameof(owner));
+        //}
 
-        /// <summary>
-        /// Displays a <see cref="MessageBox"/> with the specified owner and options.
-        /// </summary>
-        /// <param name="owner">The <see cref="IView"/> that will own the message box.</param>
-        /// <param name="caption">The message box caption.</param>
-        /// <param name="message">The message text.</param>
-        /// <returns>An <see cref="InteractionResult"/> that identifies the chosen response.</returns>
-        public static InteractionResult ShowMessage(IView owner, string caption, string message)
-        {
-            if (owner is Form form) return GetResult(MessageBox.Show(form, message, caption));
+        ///// <summary>
+        ///// Displays a <see cref="MessageBox"/> with the specified owner and options.
+        ///// </summary>
+        ///// <param name="owner">The <see cref="IView"/> that will own the message box.</param>
+        ///// <param name="caption">The message box caption.</param>
+        ///// <param name="message">The message text.</param>
+        ///// <returns>An <see cref="InteractionResult"/> that identifies the chosen response.</returns>
+        //public static InteractionResult ShowMessage(IView owner, string caption, string message)
+        //{
+        //    if (owner is Form form) return GetResult(MessageBox.Show(form, message, caption));
 
-            throw new ArgumentException(nameof(owner));
-        }
+        //    throw new ArgumentException(nameof(owner));
+        //}
 
         /// <summary>
         /// Displays an <see cref="OpenFileDialog"/> with the specified owner and options.
@@ -119,85 +119,85 @@ namespace StarLab.UI
             return filename;
         }
 
-        /// <summary>
-        /// Converts the <see cref="InteractionResponses"/> enum value provided to the equivalent <see cref="MessageBoxButtons"/> enum value.
-        /// </summary>
-        /// <param name="responses">The <see cref="InteractionResponses"/> enum value to be converted.</param>
-        /// <returns>A <see cref="MessageBoxButtons"/> enum value.</returns>
-        /// <exception cref="ArgumentOutOfRangeException"></exception>
-        private static MessageBoxButtons GetButtons(InteractionResponses responses)
-        {
-            switch (responses)
-            {
-                case InteractionResponses.OK:
-                    return MessageBoxButtons.OK;
+        ///// <summary>
+        ///// Converts the <see cref="InteractionResponses"/> enum value provided to the equivalent <see cref="MessageBoxButtons"/> enum value.
+        ///// </summary>
+        ///// <param name="responses">The <see cref="InteractionResponses"/> enum value to be converted.</param>
+        ///// <returns>A <see cref="MessageBoxButtons"/> enum value.</returns>
+        ///// <exception cref="ArgumentOutOfRangeException"></exception>
+        //private static MessageBoxButtons GetButtons(InteractionResponses responses)
+        //{
+        //    switch (responses)
+        //    {
+        //        case InteractionResponses.OK:
+        //            return MessageBoxButtons.OK;
 
-                case InteractionResponses.OKCancel:
-                    return MessageBoxButtons.OKCancel;
+        //        case InteractionResponses.OKCancel:
+        //            return MessageBoxButtons.OKCancel;
 
-                case InteractionResponses.YesNo:
-                    return MessageBoxButtons.YesNo;
+        //        case InteractionResponses.YesNo:
+        //            return MessageBoxButtons.YesNo;
 
-                case InteractionResponses.YesNoCancel:
-                    return MessageBoxButtons.YesNoCancel;
+        //        case InteractionResponses.YesNoCancel:
+        //            return MessageBoxButtons.YesNoCancel;
 
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(responses));
-            }
-        }
+        //        default:
+        //            throw new ArgumentOutOfRangeException(nameof(responses));
+        //    }
+        //}
 
-        /// <summary>
-        /// Converts the <see cref="InteractionType"/> enum value provided to the equivalent <see cref="MessageBoxIcon"/> enum value.
-        /// </summary>
-        /// <param name="type">The <see cref="InteractionType"/> enum value to be converted.</param>
-        /// <returns>A <see cref="MessageBoxIcon"/> enum value.</returns>
-        /// <exception cref="ArgumentOutOfRangeException"></exception>
-        private static MessageBoxIcon GetIcon(InteractionType type)
-        {
-            switch (type)
-            {
-                case InteractionType.Error:
-                    return MessageBoxIcon.Error;
+        ///// <summary>
+        ///// Converts the <see cref="InteractionType"/> enum value provided to the equivalent <see cref="MessageBoxIcon"/> enum value.
+        ///// </summary>
+        ///// <param name="type">The <see cref="InteractionType"/> enum value to be converted.</param>
+        ///// <returns>A <see cref="MessageBoxIcon"/> enum value.</returns>
+        ///// <exception cref="ArgumentOutOfRangeException"></exception>
+        //private static MessageBoxIcon GetIcon(InteractionType type)
+        //{
+        //    switch (type)
+        //    {
+        //        case InteractionType.Error:
+        //            return MessageBoxIcon.Error;
 
-                case InteractionType.Info:
-                    return MessageBoxIcon.Information;
+        //        case InteractionType.Info:
+        //            return MessageBoxIcon.Information;
 
-                case InteractionType.Question:
-                    return MessageBoxIcon.Question;
+        //        case InteractionType.Question:
+        //            return MessageBoxIcon.Question;
 
-                case InteractionType.Warning:
-                    return MessageBoxIcon.Warning;
+        //        case InteractionType.Warning:
+        //            return MessageBoxIcon.Warning;
 
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(type));
-            }
-        }
+        //        default:
+        //            throw new ArgumentOutOfRangeException(nameof(type));
+        //    }
+        //}
 
-        /// <summary>
-        /// Converts the <see cref="DialogResult"/> enum value provided to the equivalent <see cref="InteractionResult"/> enum value.
-        /// </summary>
-        /// <param name="result">The <see cref="DialogResult"/> enum value to be converted.</param>
-        /// <returns>An <see cref="InteractionResult"/> enum value.</returns>
-        /// <exception cref="ArgumentOutOfRangeException"></exception>
-        private static InteractionResult GetResult(DialogResult result)
-        {
-            switch (result)
-            {
-                case DialogResult.Cancel:
-                    return InteractionResult.Cancel;
+        ///// <summary>
+        ///// Converts the <see cref="DialogResult"/> enum value provided to the equivalent <see cref="InteractionResult"/> enum value.
+        ///// </summary>
+        ///// <param name="result">The <see cref="DialogResult"/> enum value to be converted.</param>
+        ///// <returns>An <see cref="InteractionResult"/> enum value.</returns>
+        ///// <exception cref="ArgumentOutOfRangeException"></exception>
+        //private static InteractionResult GetResult(DialogResult result)
+        //{
+        //    switch (result)
+        //    {
+        //        case DialogResult.Cancel:
+        //            return InteractionResult.Cancel;
 
-                case DialogResult.No:
-                    return InteractionResult.No;
+        //        case DialogResult.No:
+        //            return InteractionResult.No;
 
-                case DialogResult.OK:
-                    return InteractionResult.OK;
+        //        case DialogResult.OK:
+        //            return InteractionResult.OK;
 
-                case DialogResult.Yes:
-                    return InteractionResult.Yes;
+        //        case DialogResult.Yes:
+        //            return InteractionResult.Yes;
 
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(result));
-            }
-        }
+        //        default:
+        //            throw new ArgumentOutOfRangeException(nameof(result));
+        //    }
+        //}
     }
 }

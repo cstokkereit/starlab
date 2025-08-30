@@ -1,63 +1,99 @@
-﻿namespace Stratosoft.File.IO
+﻿using StarLab.Shared.Properties;
+
+namespace Stratosoft.File.IO
 {
     /// <summary>
-    /// Represents a file parser that can be used to extract the individual data values from a file.
+    /// A class that can be used to parse a data file.
     /// </summary>
-    public abstract class FileParser : IDisposable
+    public class FileParser : IFileParser
     {
-        private TextReader reader; // The TextReader used to read the data from the file.
+        private readonly Dictionary<string, int>? map; // Maps the field names to their respective array indices.
+
+        private readonly Parser parser; // The file parser that will be used to read the data from the file.
+
+        private string[] data = []; // The data values from a line in the data file.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="FileParser"/> class.
         /// </summary>
-        /// <param name="filename">The path to the file containing the data.</param>
-        public FileParser(string filename)
+        /// <param name="parser">The <see cref="Parser"/> that will be used to read the data from the file.</param>
+        /// <param name="map">A <see cref="Dictionary{string, int}"/> that maps the field names to their respective array indices.</param>
+        public FileParser(Parser parser, Dictionary<string, int> map)
         {
-            reader = new StreamReader(filename);
+            this.parser = parser;
+            this.map = map;
         }
 
         /// <summary>
-        /// Closes the <see cref="FileParser"/> and releases any system resources associated with it.
+        /// Initialises a new instance of the <see cref="FileParser"/> class.
         /// </summary>
-        public void Close()
+        /// <param name="parser">The <see cref="Parser"/> that will be used to read the data from the file.</param>
+        public FileParser(Parser parser)
         {
-            reader.Close();
+            this.parser = parser;
         }
+
+        /// <summary>
+        /// Returns <see cref="true"/> if the end of the file has been reached; <see cref="false"/> otherwise.
+        /// </summary>
+        public bool EOF { get; private set; }
 
         /// <summary>
         /// Releases all resources used by the <see cref="FileParser"/> object.
         /// </summary>
         public void Dispose()
         {
-            reader.Dispose();
+            Dispose(true);
+
+            GC.SuppressFinalize(this);
         }
 
         /// <summary>
-        /// Parses a single row from the file and returns a <see cref="string"/> array containg the data.
+        /// Gets the value of the field with the specified index.
         /// </summary>
-        /// <returns>A <see cref="string"/> array containing the data.</returns>
-        public abstract string[] Parse();
-
-        /// <summary>
-        /// Parses the specified number of rows from the file and returns a <see cref="List{string[]}"/>. Each element in the list holds a <see cref="string"/> array containg the data from a single row of data.
-        /// </summary>
-        /// <param name="count">The number of rows to parse.</param>
-        /// <returns>A <see cref="List{string[]}"/> containing the data from the specified rows in the file.</returns>
-        public abstract List<string[]> Parse(int count);
-
-        /// <summary>
-        /// Parses the entire file and returns a <see cref="List{string[]}"/>. Each element in the list holds a <see cref="string"/> array containg the data from a single row of data.
-        /// </summary>
-        /// <returns>A <see cref="List{string[]}"/> containing the data from all of the rows in the file.</returns>
-        public abstract List<string[]> ParseAll();
-
-        /// <summary>
-        /// Reads a line of data from the file.
-        /// </summary>
-        /// <returns>A <see cref="string"/> containing the line of data or <see cref="null"/> if all lines have been read.</returns>
-        protected string? ReadLine()
+        /// <param name="index">The index of the required field.</param>
+        /// <returns>A string representing the specified field value.</returns>
+        /// <exception cref="InvalidOperationException"></exception>
+        public string GetValue(int index)
         {
-            return reader.ReadLine();
+            if (EOF) throw new InvalidOperationException(Resources.EndOfFile);
+
+            return data[index].Trim();
+        }
+
+        /// <summary>
+        /// Gets the value of the field with the specified name.
+        /// </summary>
+        /// <param name="field">The name of the required field.</param>
+        /// <returns>A string representing the specified field value.</returns>
+        /// <exception cref="InvalidOperationException"></exception>
+        public string GetValue(string field)
+        {
+            if (map == null) throw new InvalidOperationException(Resources.FieldMapNotSet);
+
+            return GetValue(map[field]);
+        }
+
+        /// <summary>
+        /// Parses the next line of data from the catalogue file. If no data is found the <see cref="EOF"/> property will be set to <see cref="true"/>.
+        /// </summary>
+        public void Parse()
+        {
+            data = parser.Parse();
+
+            if (data.Length == 0)
+            {
+                EOF = true;
+            }
+        }
+
+        /// <summary>
+        /// Releases all resources used by the <see cref="FileParser"/> object.
+        /// </summary>
+        /// <param name="disposing"><see cref="true"/> if called by my code; <see cref="false"/> otherwise.</param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing && parser != null) parser.Dispose();
         }
     }
 }

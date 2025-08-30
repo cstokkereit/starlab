@@ -1,5 +1,4 @@
 ﻿using log4net;
-using StarLab.Application;
 using StarLab.Presentation;
 using StarLab.UI;
 using System.Diagnostics;
@@ -101,42 +100,6 @@ namespace StarLab
         public void Show(IInteractionContext context)
         {
             childView.Controller.Run(context);
-        }
-
-        /// <summary>
-        /// Displays a <see cref="MessageBox"/> with the specified options.
-        /// </summary>
-        /// <param name="caption">The message box caption.</param>
-        /// <param name="message">The message text.</param>
-        /// <param name="type">An <see cref="InteractionType"/> that specifies the type of message being displayed.</param>
-        /// <param name="responses">An <see cref="InteractionResponses"/> that specifies the available responses.</param>
-        /// <returns>An <see cref="InteractionResult"/> that identifies the chosen response.</returns>
-        public InteractionResult ShowMessage(string caption, string message, InteractionType type, InteractionResponses responses)
-        {
-            return DialogController.ShowMessage(this, caption, message, type, responses);
-        }
-
-        /// <summary>
-        /// Displays a <see cref="MessageBox"/> with the specified options.
-        /// </summary>
-        /// <param name="caption">The message box caption.</param>
-        /// <param name="message">The message text.</param>
-        /// <param name="responses">An <see cref="InteractionResponses"/> that specifies the available responses.</param>
-        /// <returns>An <see cref="InteractionResult"/> that identifies the chosen response.</returns>
-        public InteractionResult ShowMessage(string caption, string message, InteractionResponses responses)
-        {
-            return DialogController.ShowMessage(this, caption, message, responses);
-        }
-
-        /// <summary>
-        /// Displays a <see cref="MessageBox"/> with the specified options.
-        /// </summary>
-        /// <param name="caption">The message box caption.</param>
-        /// <param name="message">The message text.</param>
-        /// <returns>An <see cref="InteractionResult"/> that identifies the chosen response.</returns>
-        public InteractionResult ShowMessage(string caption, string message)
-        {
-            return DialogController.ShowMessage(this, caption, message);
         }
 
         /// <summary>

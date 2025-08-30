@@ -82,7 +82,7 @@ namespace StarLab.Presentation
         protected TView View { get; }
 
         /// <summary>
-        /// Displays a <see cref="MessageBox"/> with the specified options.
+        /// Displays a <see cref="MessageBox"/> with the specified caption, message, message type and available responses.
         /// </summary>
         /// <param name="caption">The message box caption.</param>
         /// <param name="message">The message text.</param>
@@ -91,11 +91,11 @@ namespace StarLab.Presentation
         /// <returns>An <see cref="InteractionResult"/> that identifies the chosen response.</returns>
         public InteractionResult ShowMessage(string caption, string message, InteractionType type, InteractionResponses responses)
         {
-            return ParentController.ShowMessage(caption, message, type, responses);
+            return AppController.ShowMessage(caption, message, type, responses);
         }
 
         /// <summary>
-        /// Displays a <see cref="MessageBox"/> with the specified options.
+        /// Displays a <see cref="MessageBox"/> with the specified caption, message and available responses.
         /// </summary>
         /// <param name="caption">The message box caption.</param>
         /// <param name="message">The message text.</param>
@@ -103,18 +103,18 @@ namespace StarLab.Presentation
         /// <returns>An <see cref="InteractionResult"/> that identifies the chosen response.</returns>
         public InteractionResult ShowMessage(string caption, string message, InteractionResponses responses)
         {
-            return ParentController.ShowMessage(caption, message, responses);
+            return AppController.ShowMessage(caption, message, responses);
         }
 
         /// <summary>
-        /// Displays a <see cref="MessageBox"/> with the specified options.
+        /// Displays a <see cref="MessageBox"/> with the specified caption and message.
         /// </summary>
         /// <param name="caption">The message box caption.</param>
         /// <param name="message">The message text.</param>
         /// <returns>An <see cref="InteractionResult"/> that identifies the chosen response.</returns>
         public InteractionResult ShowMessage(string caption, string message)
         {
-            return ParentController.ShowMessage(caption, message);
+            return AppController.ShowMessage(caption, message);
         }
     }
 }
