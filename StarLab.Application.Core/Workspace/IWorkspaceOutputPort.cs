@@ -1,7 +1,7 @@
 ﻿namespace StarLab.Application.Workspace
 {
     /// <summary>
-    /// Used by a <see cref="UseCaseInteractor{TOutputPort}"/> to update the workspace.
+    /// Used by a <see cref="UseCaseInteractor{IWorkspaceOutputPort}"/> to update the workspace.
     /// </summary>
     public interface IWorkspaceOutputPort : IOutputPort
     {

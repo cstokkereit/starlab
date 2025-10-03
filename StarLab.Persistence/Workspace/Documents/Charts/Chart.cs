@@ -8,40 +8,28 @@ namespace StarLab.Serialisation.Workspace.Documents.Charts
     [XmlType]
     public class Chart
     {
-        [XmlAttribute("id")]
-        public int ID;
-
-        [XmlAttribute("name")]
-        public string? Name;
-
-        [XmlAttribute("path")]
-        public string? Path;
-
-        [XmlAttribute("type")]
-        public string? Type;
-
-        [XmlAttribute("backColor")]
-        public int BackColor;
-
-        [XmlAttribute("foreColor")]
-        public int ForeColor;
+        [XmlAttribute("backColour")]
+        public string? BackColour;
 
         [XmlElement]
-        public Grid? MajorGrid;
+        public Font? Font;
+
+        [XmlAttribute("foreColour")]
+        public string? ForeColour;
 
         [XmlElement]
-        public Grid? MinorGrid;
+        public Label? Title;
 
         [XmlElement]
-        public Axis? XAxis;
+        public Axis? X1;
 
         [XmlElement]
-        public Axis? XAxis2;
+        public Axis? X2;
 
         [XmlElement]
-        public Axis? YAxis;
+        public Axis? Y1;
 
         [XmlElement]
-        public Axis? YAxis2;
+        public Axis? Y2;
     }
 }

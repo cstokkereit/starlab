@@ -1,4 +1,6 @@
-﻿namespace StarLab.Application.Workspace
+﻿using StarLab.Tests;
+
+namespace StarLab.Application.Workspace
 {
     /// <summary>
     /// A class for performing unit tests on the <see cref="SaveWorkspaceInteractor"/> class.
@@ -35,11 +37,11 @@
 
             var filename = Path.Combine(Folder, "Workspace1.slw");
 
-            var dto = new DTOBuilder(filename)
+            var dto = new WorkspaceDtoBuilder(filename)
                 .AddProject("Project1")
                 .AddFolder("Workspace1/Project1/Folder1")
                 .AddDocument("1", "Document1", "Workspace1/Project1/Folder1")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             interactor.Execute(dto);
 
@@ -63,11 +65,11 @@
 
             var filename = Path.Combine(Folder, "Workspace1.slw");
 
-            var dto = new DTOBuilder(filename)
+            var dto = new WorkspaceDtoBuilder(filename)
                 .AddProject("Project1")
                 .AddFolder("Workspace1/Project1/Folder1")
                 .AddDocument("1", "Document1", "Workspace1/Project1/Folder1")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             CopyFile(Path.Combine(Resources, "Workspace1.slw"), filename);
 
@@ -93,7 +95,7 @@
 
             var filename = Path.Combine(Folder, "Workspace1.slw");
 
-            var dto = new DTOBuilder(filename)
+            var dto = new WorkspaceDtoBuilder(filename)
                 .AddProject("Project1")
                 .AddFolder("Workspace1/Project1/Folder1")
                 .AddDocument("1", "Document1", "Workspace1/Project1/Folder1")
@@ -102,7 +104,7 @@
                 .AddFolder("Workspace1/Project2/Folder1")
                 .AddDocument("3", "Document3", "Workspace1/Project2/Folder1")
                 .AddDocument("4", "Document4", "Workspace1/Project2/Folder1")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             saveInteractor.Execute(dto);
 

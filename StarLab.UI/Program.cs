@@ -17,6 +17,8 @@ namespace StarLab
         [STAThread]
         static void Main()
         {
+            System.Windows.Forms.Application.EnableVisualStyles();
+
             XmlConfigurator.Configure();
 
             var container = new WindsorContainer();

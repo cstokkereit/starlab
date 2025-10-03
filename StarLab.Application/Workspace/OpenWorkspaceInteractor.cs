@@ -7,7 +7,7 @@ namespace StarLab.Application.Workspace
     /// <summary>
     /// A use case that loads a workspace from a file.
     /// </summary>
-    internal class OpenWorkspaceInteractor : UseCaseInteractor<IApplicationOutputPort>, IOpenWorkspaceUseCase
+    internal class OpenWorkspaceInteractor : UseCaseInteractor<IApplicationOutputPort>, IUseCase<string>
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(OpenWorkspaceInteractor)); // The logger that will be used for writing log messages.
 

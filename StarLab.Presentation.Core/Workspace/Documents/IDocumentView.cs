@@ -1,12 +1,17 @@
-﻿using StarLab.Presentation.Workspace;
-
-namespace StarLab.Presentation.Workspace.Documents
+﻿namespace StarLab.Presentation.Workspace.Documents
 {
     /// <summary>
     /// Defines the properties and methods used by an <see cref="IDockableViewPresenter"/> to control the behaviour of a document window.
     /// </summary>
     public interface IDocumentView : IDockableView, IToolbarManager
     {
+        /// <summary>
+        /// Gets the specified <see cref="IChildViewController"/>.
+        /// </summary>
+        /// <param name="name">The name of the required controller.</param>
+        /// <returns>The required <see cref="IChildViewController"/>.</returns>
+        IChildViewController GetController(string name);
+
         /// <summary>
         /// Hides the specified split content.
         /// </summary>

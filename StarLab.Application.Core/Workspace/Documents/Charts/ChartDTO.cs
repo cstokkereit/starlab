@@ -1,30 +1,24 @@
 ﻿namespace StarLab.Application.Workspace.Documents.Charts
 {
     /// <summary>
-    /// A data transfer object that represents a chart document.
+    /// A data transfer object that represents a chart.
     /// </summary>
     public class ChartDTO
     {
-        public int BackColor;
+        public string? BackColour;
 
-        public int ForeColor;
+        public FontDTO? Font;
 
-        public GridDTO? MajorGrid;
+        public string? ForeColour;
 
-        public GridDTO? MinorGrid;
+        public LabelDTO? Title;
 
-        public string? Name;
+        public AxisDTO? X1;
 
-        public string? Path;
+        public AxisDTO? X2;
 
-        public string? Type;
+        public AxisDTO? Y1;
 
-        public AxisDTO? XAxis;
-
-        public AxisDTO? XAxis2;
-
-        public AxisDTO? YAxis;
-
-        public AxisDTO? YAxis2;
+        public AxisDTO? Y2;
     }
 }

@@ -3,7 +3,7 @@
 namespace StarLab.Application.Workspace
 {
     /// <summary>
-    /// Represents the state of a folder within the workspace hierarchy.
+    /// Domain model represention of a folder.
     /// </summary>
     internal class Folder : IFolder
     {

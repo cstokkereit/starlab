@@ -8,13 +8,19 @@ namespace StarLab.Serialisation
     [XmlType]
     public class Font
     {
-        [XmlAttribute("familyName")]
-        public string? FamilyName;
+        [XmlAttribute("bold")]
+        public bool Bold;
+
+        [XmlAttribute("family")]
+        public string? Family;
+
+        [XmlAttribute("italic")]
+        public bool Italic;
 
         [XmlAttribute("size")]
         public float Size;
 
-        [XmlAttribute("fontStyle")]
-        public string? FontStyle;
+        [XmlAttribute("underline")]
+        public bool Underline;
     }
 }

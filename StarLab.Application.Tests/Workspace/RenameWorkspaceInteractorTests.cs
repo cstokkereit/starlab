@@ -1,4 +1,6 @@
-﻿namespace StarLab.Application.Workspace
+﻿using StarLab.Tests;
+
+namespace StarLab.Application.Workspace
 {
     /// <summary>
     /// A class for performing unit tests on the <see cref="RenameWorkspaceInteractor"/> class.
@@ -34,7 +36,7 @@
 
             var interactor = Factory.CreateRenameWorkspaceUseCase(port);
 
-            var dto = new DTOBuilder(Path.Combine(Folder, "Workspace1.slw")).CreateWworkspace();
+            var dto = new WorkspaceDtoBuilder(Path.Combine(Folder, "Workspace1.slw")).CreateWorkspace();
 
             interactor.Execute(dto, "Workspace2");
 
@@ -51,7 +53,7 @@
 
             var interactor = Factory.CreateRenameWorkspaceUseCase(port);
 
-            var dto = new DTOBuilder(Path.Combine(Folder, "Workspace1.slw")).CreateWworkspace();
+            var dto = new WorkspaceDtoBuilder(Path.Combine(Folder, "Workspace1.slw")).CreateWorkspace();
 
             var e = Assert.Throws<Exception>(() => interactor.Execute(dto, string.Empty));
 
@@ -68,7 +70,7 @@
 
             var interactor = Factory.CreateRenameWorkspaceUseCase(port);
 
-            var dto = new DTOBuilder(Path.Combine(Folder, "Workspace1.slw")).CreateWworkspace();
+            var dto = new WorkspaceDtoBuilder(Path.Combine(Folder, "Workspace1.slw")).CreateWorkspace();
 
             CopyFile(Path.Combine(Resources, "Workspace2.slw"), Path.Combine(Folder, "Workspace2.slw"));
 
@@ -87,7 +89,7 @@
 
             var interactor = Factory.CreateRenameWorkspaceUseCase(port);
 
-            var dto = new DTOBuilder(Path.Combine(Folder, "Workspace1.slw")).CreateWworkspace();
+            var dto = new WorkspaceDtoBuilder(Path.Combine(Folder, "Workspace1.slw")).CreateWorkspace();
 
             var e = Assert.Throws<Exception>(() => interactor.Execute(dto, "Workspace1/"));
 

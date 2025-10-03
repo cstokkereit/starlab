@@ -5,19 +5,11 @@
     /// </summary>
     public class AxisDTO
     {
-        public int Color;
+        public string? BackColour;
 
-        public FontDTO? Font;
+        public string? ForeColour;
 
-        public double Interval;
-
-        public bool IsReversed;
-
-        public double Maximum;
-
-        public double Minimum;
-
-        public TitleDTO? Title;
+        public LabelDTO? Label;
 
         public bool Visible;
     }

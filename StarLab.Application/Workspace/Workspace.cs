@@ -3,7 +3,7 @@
 namespace StarLab.Application.Workspace
 {
     /// <summary>
-    /// Represents the current state of a workspace.
+    /// Domain model represention of the workspace.
     /// </summary>
     internal class Workspace : IFolder
     {

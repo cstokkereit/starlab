@@ -1,4 +1,6 @@
-﻿namespace StarLab.Application.Workspace
+﻿using StarLab.Tests;
+
+namespace StarLab.Application.Workspace
 {
     /// <summary>
     /// A class for performing unit tests on the <see cref="AddFolderInteractor"/> class.
@@ -15,12 +17,12 @@
 
             var copyInteractor = Factory.CreateUseCase(port, ClipboardOperations.Copy);
 
-            var dto = new DTOBuilder("Workspace")
+            var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .AddDocument("1", "Document1", "Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder2")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             copyInteractor.Execute(dto, "1");
 
@@ -52,12 +54,12 @@
 
             var copyInteractor = Factory.CreateUseCase(port, ClipboardOperations.Copy);
 
-            var dto = new DTOBuilder("Workspace")
+            var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .AddDocument("1", "Document1", "Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder2")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             copyInteractor.Execute(dto, "1");
 
@@ -89,12 +91,12 @@
 
             var copyInteractor = Factory.CreateUseCase(port, ClipboardOperations.Copy);
 
-            var dto = new DTOBuilder("Workspace")
+            var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder2")
                 .AddFolder("Workspace/Project1/Folder3")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             copyInteractor.Execute(dto, "Workspace/Project1/Folder1");
 
@@ -121,13 +123,13 @@
 
             var copyInteractor = Factory.CreateUseCase(port, ClipboardOperations.Copy);
 
-            var dto = new DTOBuilder("Workspace")
+            var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder1/Folder11")
                 .AddFolder("Workspace/Project1/Folder1/Folder12")
                 .AddFolder("Workspace/Project1/Folder2")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             copyInteractor.Execute(dto, "Workspace/Project1/Folder1");
 
@@ -157,13 +159,13 @@
 
             var copyInteractor = Factory.CreateUseCase(port, ClipboardOperations.Copy);
 
-            var dto = new DTOBuilder("Workspace")
+            var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .AddDocument("1", "Document1", "Workspace/Project1/Folder1")
                 .AddDocument("2", "Document2", "Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder2")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             copyInteractor.Execute(dto, "Workspace/Project1/Folder1");
 
@@ -202,7 +204,7 @@
 
             var copyInteractor = Factory.CreateUseCase(port, ClipboardOperations.Copy);
 
-            var dto = new DTOBuilder("Workspace")
+            var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .AddDocument("1", "Document1", "Workspace/Project1/Folder1")
@@ -218,7 +220,7 @@
                 .AddFolder("Workspace/Project1/Folder3/Folder31")
                 .AddFolder("Workspace/Project1/Folder3/Folder32")
                 .AddDocument("6", "Document6", "Workspace/Project1/Folder3/Folder32")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             copyInteractor.Execute(dto, "Workspace/Project1/Folder1");
 
@@ -283,7 +285,7 @@
 
             var copyInteractor = Factory.CreateUseCase(port, ClipboardOperations.Copy);
 
-            var dto = new DTOBuilder("Workspace")
+            var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder1/Folder11")
@@ -296,7 +298,7 @@
                 .AddDocument("3", "Document3", "Workspace/Project2/Folder2")
                 .AddDocument("4", "Document4", "Workspace/Project2/Folder2")
                 .AddFolder("Workspace/Project2/Folder3")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             copyInteractor.Execute(dto, "Workspace/Project1/Folder1");
 
@@ -349,7 +351,7 @@
 
             var copyInteractor = Factory.CreateUseCase(port, ClipboardOperations.Copy);
 
-            var dto = new DTOBuilder("Workspace")
+            var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder1/Folder11")
@@ -362,7 +364,7 @@
                 .AddDocument("3", "Document3", "Workspace/Project2/Folder1")
                 .AddDocument("4", "Document4", "Workspace/Project2/Folder1")
                 .AddFolder("Workspace/Project2/Folder2")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             copyInteractor.Execute(dto, "Workspace/Project1/Folder1");
 
@@ -415,12 +417,12 @@
 
             var cutInteractor = Factory.CreateUseCase(port, ClipboardOperations.Cut);
 
-            var dto = new DTOBuilder("Workspace")
+            var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .AddDocument("1", "Document1", "Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder2")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             cutInteractor.Execute(dto, "1");
 
@@ -449,12 +451,12 @@
 
             var cutInteractor = Factory.CreateUseCase(port, ClipboardOperations.Cut);
 
-            var dto = new DTOBuilder("Workspace")
+            var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .AddDocument("1", "Document1", "Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder2")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             cutInteractor.Execute(dto, "1");
 
@@ -480,13 +482,13 @@
 
             var cutInteractor = Factory.CreateUseCase(port, ClipboardOperations.Cut);
 
-            var dto = new DTOBuilder("Workspace")
+            var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .AddDocument("1", "Document1", "Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder2")
                 .AddDocument("2", "Document1", "Workspace/Project1/Folder2")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             cutInteractor.Execute(dto, "1");
 
@@ -512,13 +514,13 @@
 
             var cutInteractor = Factory.CreateUseCase(port, ClipboardOperations.Cut);
 
-            var dto = new DTOBuilder("Workspace")
+            var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .AddDocument("1", "Document1", "Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder2")
                 .AddDocument("2", "Document1", "Workspace/Project1/Folder2")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             cutInteractor.Execute(dto, "1");
 
@@ -552,13 +554,13 @@
 
             var cutInteractor = Factory.CreateUseCase(port, ClipboardOperations.Cut);
 
-            var dto = new DTOBuilder("Workspace")
+            var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .AddDocument("1", "Document1", "Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder2")
                 .AddDocument("2", "Document1", "Workspace/Project1/Folder2")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             cutInteractor.Execute(dto, "1");
 
@@ -592,12 +594,12 @@
 
             var cutInteractor = Factory.CreateUseCase(port, ClipboardOperations.Cut);
 
-            var dto = new DTOBuilder("Workspace")
+            var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder2")
                 .AddFolder("Workspace/Project1/Folder3")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             cutInteractor.Execute(dto, "Workspace/Project1/Folder1");
 
@@ -623,13 +625,13 @@
 
             var cutInteractor = Factory.CreateUseCase(port, ClipboardOperations.Cut);
 
-            var dto = new DTOBuilder("Workspace")
+            var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder1/Folder3")
                 .AddFolder("Workspace/Project1/Folder2")
                 .AddFolder("Workspace/Project1/Folder2/Folder3")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             cutInteractor.Execute(dto, "Workspace/Project1/Folder1/Folder3");
 
@@ -655,7 +657,7 @@
 
             var cutInteractor = Factory.CreateUseCase(port, ClipboardOperations.Cut);
 
-            var dto = new DTOBuilder("Workspace")
+            var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .AddDocument("1", "Document1", "Workspace/Project1/Folder1")
@@ -670,7 +672,7 @@
                 .AddFolder("Workspace/Project1/Folder3/Folder1/Folder2")
                 .AddDocument("7", "Document1", "Workspace/Project1/Folder3/Folder1/Folder2")
                 .AddDocument("8", "Document3", "Workspace/Project1/Folder3/Folder1/Folder2")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             cutInteractor.Execute(dto, "Workspace/Project1/Folder1");
 
@@ -720,7 +722,7 @@
 
             var cutInteractor = Factory.CreateUseCase(port, ClipboardOperations.Cut);
 
-            var dto = new DTOBuilder("Workspace")
+            var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .AddDocument("1", "Document1", "Workspace/Project1/Folder1")
@@ -735,7 +737,7 @@
                 .AddFolder("Workspace/Project1/Folder3/Folder1/Folder2")
                 .AddDocument("7", "Document1", "Workspace/Project1/Folder3/Folder1/Folder2")
                 .AddDocument("8", "Document3", "Workspace/Project1/Folder3/Folder1/Folder2")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             cutInteractor.Execute(dto, "Workspace/Project1/Folder1");
 
@@ -785,13 +787,13 @@
 
             var cutInteractor = Factory.CreateUseCase(port, ClipboardOperations.Cut);
 
-            var dto = new DTOBuilder("Workspace")
+            var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder1/Folder11")
                 .AddFolder("Workspace/Project1/Folder1/Folder12")
                 .AddFolder("Workspace/Project1/Folder2")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             cutInteractor.Execute(dto, "Workspace/Project1/Folder1");
 
@@ -818,13 +820,13 @@
 
             var cutInteractor = Factory.CreateUseCase(port, ClipboardOperations.Cut);
 
-            var dto = new DTOBuilder("Workspace")
+            var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .AddDocument("1", "Document1", "Workspace/Project1/Folder1")
                 .AddDocument("2", "Document2", "Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder2")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             cutInteractor.Execute(dto, "Workspace/Project1/Folder1");
 
@@ -856,7 +858,7 @@
 
             var cutInteractor = Factory.CreateUseCase(port, ClipboardOperations.Cut);
 
-            var dto = new DTOBuilder("Workspace")
+            var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .AddDocument("1", "Document1", "Workspace/Project1/Folder1")
@@ -872,7 +874,7 @@
                 .AddFolder("Workspace/Project1/Folder3/Folder31")
                 .AddFolder("Workspace/Project1/Folder3/Folder32")
                 .AddDocument("6", "Document6", "Workspace/Project1/Folder3/Folder32")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             cutInteractor.Execute(dto, "Workspace/Project1/Folder1");
 
@@ -922,7 +924,7 @@
 
             var cutInteractor = Factory.CreateUseCase(port, ClipboardOperations.Cut);
 
-            var dto = new DTOBuilder("Workspace")
+            var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder1/Folder11")
@@ -935,7 +937,7 @@
                 .AddDocument("3", "Document3", "Workspace/Project2/Folder2")
                 .AddDocument("4", "Document4", "Workspace/Project2/Folder2")
                 .AddFolder("Workspace/Project2/Folder3")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             cutInteractor.Execute(dto, "Workspace/Project1/Folder1");
 
@@ -979,7 +981,7 @@
 
             var cutInteractor = Factory.CreateUseCase(port, ClipboardOperations.Cut);
 
-            var dto = new DTOBuilder("Workspace")
+            var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder1/Folder11")
@@ -992,7 +994,7 @@
                 .AddDocument("3", "Document3", "Workspace/Project2/Folder1")
                 .AddDocument("4", "Document4", "Workspace/Project2/Folder1")
                 .AddFolder("Workspace/Project2/Folder2")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             cutInteractor.Execute(dto, "Workspace/Project1/Folder1");
 

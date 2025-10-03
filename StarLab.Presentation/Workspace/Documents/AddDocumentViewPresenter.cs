@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
+using log4net;
 using StarLab.Application;
 using StarLab.Application.Workspace;
 using StarLab.Application.Workspace.Documents;
-using StarLab.Presentation.Properties;
 using Stratosoft.Commands;
+
+using ImageResources = StarLab.Presentation.Properties.Resources;
+using StringResources = StarLab.Shared.Properties.Resources;
 
 namespace StarLab.Presentation.Workspace.Documents
 {
@@ -12,17 +15,22 @@ namespace StarLab.Presentation.Workspace.Documents
     /// </summary>
     public class AddDocumentViewPresenter : ChildViewPresenter<IAddDocumentView, IDialogController>, IAddDocumentViewPresenter, IChildViewController, IAddDocumentOutputPort
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(AddDocumentViewPresenter)); // The logger that will be used for writing log messages.
+
         /// <summary>
         /// Initialises a new instance of the <see cref="AddDocumentViewPresenter"/> class.
         /// </summary>
         /// <param name="view">The <see cref="IAddDocumentView"/> controlled by this presenter.</param>
         /// <param name="commands">An <see cref="ICommandManager"/> that is required for the creation of <see cref="ICommand">s.</param>
         /// <param name="factory">An <see cref="IUseCaseFactory"/> that will be used to create use case interactors.</param>
-        /// <param name="configuration">The <see cref="Configuration.IApplicationConfiguration"/> that will be used to get configuration information.</param>
+        /// <param name="settings">An <see cref="IApplicationSettings"/> that provides access to the application configuration.</param>
         /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
         /// <param name="events">The <see cref="IEventAggregator"/> that manages application events.</param>
-        public AddDocumentViewPresenter(IAddDocumentView view, ICommandManager commands, IUseCaseFactory factory, Configuration.IApplicationConfiguration configuration, IMapper mapper, IEventAggregator events)
-            : base(view, commands, factory, configuration, mapper, events) { }
+        public AddDocumentViewPresenter(IAddDocumentView view, ICommandManager commands, IUseCaseFactory factory, IApplicationSettings settings, IMapper mapper, IEventAggregator events)
+            : base(view, commands, factory, settings, mapper, events) 
+        {
+            log.Debug(string.Format(StringResources.InstanceCreated, nameof(AddDocumentViewPresenter)));
+        }
 
         /// <summary>
         /// Initiates the add document use case.
@@ -76,7 +84,7 @@ namespace StarLab.Presentation.Workspace.Documents
         /// <param name="id">The document ID.</param>
         public void OpenDocument(string id)
         {
-            if (AppController.GetController(ControllerNames.WorkspaceController) is IApplicationOutputPort port) port.OpenDocument(id);
+            if (AppController.GetController(Controllers.ApplicationViewController) is IApplicationOutputPort port) port.OpenDocument(id);
         }
 
         /// <summary>
@@ -98,7 +106,7 @@ namespace StarLab.Presentation.Workspace.Documents
         /// <param name="dto">The <see cref="WorkspaceDTO"/> that contains the updated workspace state.</param>
         public void UpdateWorkspace(WorkspaceDTO dto)
         {
-            if (AppController.GetController(ControllerNames.WorkspaceController) is IApplicationOutputPort port) port.UpdateWorkspace(dto);
+            if (AppController.GetController(Controllers.ApplicationViewController) is IApplicationOutputPort port) port.UpdateWorkspace(dto);
 
             ParentController.Close();
         }
@@ -127,7 +135,7 @@ namespace StarLab.Presentation.Workspace.Documents
 
             //TODO - Image should be contained within the plug-in
 
-            View.AddImage("HRDiagram", Resources.HRDiagram);
+            View.AddImage("HRDiagram", ImageResources.HRDiagram);
         }
     }
 }

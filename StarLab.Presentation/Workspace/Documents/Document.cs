@@ -1,9 +1,10 @@
 ﻿using StarLab.Application.Workspace.Documents;
+using StarLab.Presentation.Workspace.Documents.Charts;
 
 namespace StarLab.Presentation.Workspace.Documents
 {
     /// <summary>
-    /// Represents a document in the workspace hierarchy.
+    /// View model representation of a document in the workspace hierarchy.
     /// </summary>
     internal class Document : IDocument
     {
@@ -30,11 +31,18 @@ namespace StarLab.Presentation.Workspace.Documents
             if (string.IsNullOrEmpty(dto.View)) throw new ArgumentException(nameof(dto.View));
             if (string.IsNullOrEmpty(dto.ID)) throw new ArgumentException(nameof(dto.ID));
 
+            Chart = new Chart(dto.Chart);
+
             name = dto.Name;
             path = dto.Path;
             view = dto.View;
             id = dto.ID;
         }
+
+        /// <summary>
+        /// Gets the chart.
+        /// </summary>
+        public IChart Chart { get; }
 
         /// <summary>
         /// Gets the document name including the path.

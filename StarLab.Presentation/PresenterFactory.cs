@@ -2,7 +2,6 @@
 using Castle.Windsor;
 using log4net;
 using StarLab.Application;
-using StarLab.Presentation.Configuration;
 using StarLab.Presentation.Workspace;
 using StarLab.Presentation.Workspace.Documents;
 using StarLab.Shared.Properties;
@@ -20,7 +19,7 @@ namespace StarLab.Presentation
 
         private readonly Dictionary<string, string> types = new Dictionary<string, string>();  // A dictionary that holds the presenter type names indexed by view name.
 
-        private readonly IApplicationConfiguration configuration; // A service that provides the configuration information.
+        private readonly IApplicationSettings settings; // Provides access to the application configuration.
 
         private readonly IWindsorContainer container; // Used to resolve dependencies at run time.
 
@@ -35,13 +34,13 @@ namespace StarLab.Presentation
         /// </summary>
         /// <param name="container">An <see cref="IWindsorContainer"/> that will be used to resolve dependencies.</param>
         /// <param name="factory">An <see cref="IUseCaseFactory"/> that will be used to create use case interactors.</param>
-        /// <param name="configuration">The <see cref="IApplicationConfiguration"/> that will be used to get configuration information.</param>
+        /// <param name="settings">An <see cref="IApplicationSettings"/> that provides access to the application configuration.</param>
         /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
         /// <param name="events">The <see cref="IEventAggregator"/> that manages application events.</param>
         /// <exception cref="ArgumentNullException"></exception>
-        public PresenterFactory(IWindsorContainer container, IUseCaseFactory factory, IApplicationConfiguration configuration, IMapper mapper, IEventAggregator events)
+        public PresenterFactory(IWindsorContainer container, IUseCaseFactory factory, IApplicationSettings settings, IMapper mapper, IEventAggregator events)
         {
-            this.configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            this.settings = settings ?? throw new ArgumentNullException(nameof(settings));
             this.container = container ?? throw new ArgumentNullException(nameof(container));
             this.factory = factory ?? throw new ArgumentNullException(nameof(factory));
             this.events = events ?? throw new ArgumentNullException(nameof(events));
@@ -66,19 +65,19 @@ namespace StarLab.Presentation
             switch (view.GetType().Name)
             {
                 case Views.Application:
-                    presenter = new ApplicationViewPresenter((IApplicationView)view, commands, factory, configuration, mapper, events);
+                    presenter = new ApplicationViewPresenter((IApplicationView)view, commands, factory, settings, mapper, events);
                     break;
 
                 case Views.Dialog:
-                    presenter = new DialogViewPresenter((IDialogView)view, commands, factory, configuration, mapper, events);
+                    presenter = new DialogViewPresenter((IDialogView)view, commands, factory, settings, mapper, events);
                     break;
 
                 case Views.MessageBox:
-                    presenter = new MessageBoxViewPresenter((IMessageBoxView)view, commands, factory, configuration, mapper, events);
+                    presenter = new MessageBoxViewPresenter((IMessageBoxView)view, commands, factory, settings, mapper, events);
                     break;
 
                 case Views.Tool:
-                    presenter = new ToolViewPresenter((IDockableView)view, commands, factory, configuration, mapper, events);
+                    presenter = new ToolViewPresenter((IDockableView)view, commands, factory, settings, mapper, events);
                     break;
 
                 default:
@@ -98,7 +97,7 @@ namespace StarLab.Presentation
         /// <returns>An <see cref="IDockableViewPresenter"/> that can be used to control the <see cref="IDocumentView"/> provided.</returns>
         public IDockableViewPresenter CreatePresenter(IDocument document, IDocumentView view)
         {
-            return new DocumentViewPresenter(view, document, container.Resolve<ICommandManager>(), factory, configuration, mapper, events);
+            return new DocumentViewPresenter(view, document, container.Resolve<ICommandManager>(), factory, settings, mapper, events);
         }
 
         /// <summary>
@@ -111,7 +110,7 @@ namespace StarLab.Presentation
         {
             Debug.Assert(types.ContainsKey(definition.Name)); // If this assertion fails you will need to create the required view defintion.
 
-            return (IChildViewPresenter)CreateInstance(types[definition.Name], new object[] { view, container.Resolve<ICommandManager>(), factory, configuration, mapper, events });
+            return (IChildViewPresenter)CreateInstance(types[definition.Name], new object[] { view, container.Resolve<ICommandManager>(), factory, settings, mapper, events });
         }
 
         /// <summary>
@@ -123,7 +122,7 @@ namespace StarLab.Presentation
         {
             Debug.Assert(types.ContainsKey(view.Name)); // If this assertion fails you will need to create the required view defintion.
 
-            return (IChildViewPresenter)CreateInstance(types[view.Name], new object[] { view, container.Resolve<ICommandManager>(), factory, configuration, mapper, events });
+            return (IChildViewPresenter)CreateInstance(types[view.Name], new object[] { view, container.Resolve<ICommandManager>(), factory, settings, mapper, events });
         }
 
         /// <summary>

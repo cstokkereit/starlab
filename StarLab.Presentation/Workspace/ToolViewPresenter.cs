@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
+using log4net;
 using StarLab.Application;
-using StarLab.Presentation.Configuration;
+using StarLab.Shared.Properties;
 using Stratosoft.Commands;
 
 namespace StarLab.Presentation.Workspace
@@ -10,6 +11,8 @@ namespace StarLab.Presentation.Workspace
     /// </summary>
     public class ToolViewPresenter : Presenter, IDockableViewPresenter, IViewController
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(ToolViewPresenter)); // The logger that will be used for writing log messages.
+
         private readonly IDockableView view; // The view controlled by the presenter.
 
         /// <summary>
@@ -18,15 +21,17 @@ namespace StarLab.Presentation.Workspace
         /// <param name="view">The <see cref="IDockableView"/> controlled by this presenter.</param>
         /// <param name="commands">An <see cref="ICommandManager"/> that is required for the creation of <see cref="ICommand">s.</param>
         /// <param name="factory">An <see cref="IUseCaseFactory"/> that will be used to create use case interactors.</param>
-        /// <param name="configuration">The <see cref="IApplicationConfiguration"/> that will be used to get configuration information.</param>
+        /// <param name="settings">An <see cref="IApplicationSettings"/> that provides access to the application configuration.</param>
         /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
         /// <param name="events">The <see cref="IEventAggregator"/> that manages application events.</param>
-        public ToolViewPresenter(IDockableView view, ICommandManager commands, IUseCaseFactory useCaseFactory, IApplicationConfiguration configuration, IMapper mapper, IEventAggregator events)
-            : base(commands, useCaseFactory, configuration, mapper, events)
+        public ToolViewPresenter(IDockableView view, ICommandManager commands, IUseCaseFactory useCaseFactory, IApplicationSettings settings, IMapper mapper, IEventAggregator events)
+            : base(commands, useCaseFactory, settings, mapper, events)
         {
             this.view = view;
 
             Location = Constants.DockRight; // TODO - Optional default locations?
+
+            log.Debug(string.Format(Resources.InstanceCreated, nameof(ToolViewPresenter)));
         }
 
         /// <summary>
@@ -37,7 +42,7 @@ namespace StarLab.Presentation.Workspace
         /// <summary>
         /// Gets the name of the controller.
         /// </summary>
-        public override string Name => ControllerNames.GetViewControllerName(view.ID);
+        public override string Name => Controllers.GetViewControllerName(view.ID);
 
         /// <summary>
         /// Initialises the view.

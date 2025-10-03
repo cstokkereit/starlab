@@ -6,7 +6,7 @@ namespace StarLab.Application.Workspace
     /// <summary>
     /// A use case that renames the workspace.
     /// </summary>
-    internal class RenameWorkspaceInteractor : UseCaseInteractor<IWorkspaceOutputPort>, IRenameWorkspaceUseCase
+    internal class RenameWorkspaceInteractor : UseCaseInteractor<IWorkspaceOutputPort>, IUseCase<WorkspaceDTO, string>
     {
         private readonly ISerialisationProvider serialiser; // Used to serialise the workspace to a file.
 
@@ -29,6 +29,8 @@ namespace StarLab.Application.Workspace
         /// <param name="name">The new workspace name.</param>
         public void Execute(WorkspaceDTO dto, string name)
         {
+            ArgumentNullException.ThrowIfNull(nameof(dto));
+
             var filename = dto.FileName;
 
             if (WorkspaceInteractionHelper.IsValid(name) && !string.IsNullOrEmpty(filename))

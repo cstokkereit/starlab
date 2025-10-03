@@ -16,7 +16,7 @@ namespace StarLab.Data.Import
 
         public void Import(string filename, IImportDefinition importDefinition)
         {
-            using (var dataset = new Dataset(filename, importDefinition))
+            using (var dataset = new FileBackedDataset(filename, importDefinition))
             {
                 provider.Import(dataset);
             }

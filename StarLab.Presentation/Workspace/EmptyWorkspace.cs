@@ -3,7 +3,7 @@
 namespace StarLab.Presentation.Workspace
 {
     /// <summary>
-    /// Represents an empty workspace.
+    /// View model representation of an empty workspace.
     /// </summary>
     internal class EmptyWorkspace : IWorkspace
     {

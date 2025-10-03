@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using log4net;
 using StarLab.Application;
+using StarLab.Shared.Properties;
 using Stratosoft.Commands;
 using System.Reflection;
 
@@ -10,7 +12,9 @@ namespace StarLab.Presentation.Help
     /// </summary>
     internal class AboutViewPresenter : ChildViewPresenter<IAboutView, IDialogController>, IAboutViewPresenter, IChildViewController
     {
-        private IDialogController parentController; // The controller that can be used to control the parent dialog box. TODO - probably not needed
+        private static readonly ILog log = LogManager.GetLogger(typeof(AboutViewPresenter)); // The logger that will be used for writing log messages.
+
+        //private IDialogController parentController; // The controller that can be used to control the parent dialog box. TODO - probably not needed
 
         /// <summary>
         /// Initialises a new instance of the <see cref="AboutViewPresenter"> class.
@@ -18,11 +22,14 @@ namespace StarLab.Presentation.Help
         /// <param name="view">The <see cref="IAboutView"/> controlled by this presenter.</param>
         /// <param name="commands">An <see cref="ICommandManager"/> that is required for the creation of <see cref="ICommand">s.</param>
         /// <param name="factory">An <see cref="IUseCaseFactory"/> that will be used to create use case interactors.</param>
-        /// <param name="configuration">The <see cref="Configuration.IApplicationConfiguration"/> that will be used to get configuration information.</param>
+        /// <param name="settings">An <see cref="IApplicationSettings"/> that provides access to the application configuration.</param>
         /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
         /// <param name="events">The <see cref="IEventAggregator"/> that manages application events.</param>
-        public AboutViewPresenter(IAboutView view, ICommandManager commands, IUseCaseFactory factory, Configuration.IApplicationConfiguration configuration, IMapper mapper, IEventAggregator events)
-            : base(view, commands, factory, configuration, mapper, events) { }
+        public AboutViewPresenter(IAboutView view, ICommandManager commands, IUseCaseFactory factory, IApplicationSettings settings, IMapper mapper, IEventAggregator events)
+            : base(view, commands, factory, settings, mapper, events)
+        {
+            log.Debug(string.Format(Resources.InstanceCreated, nameof(AboutViewPresenter)));
+        }
 
         /// <summary>
         /// Initialises the view.

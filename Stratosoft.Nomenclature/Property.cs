@@ -2,6 +2,9 @@
 
 namespace Stratosoft.Nomenclature
 {
+    /// <summary>
+    /// TODO
+    /// </summary>
     public class Property
     {
         #region Constructors

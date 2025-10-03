@@ -6,7 +6,7 @@ namespace StarLab.Application.Workspace.Documents
     /// <summary>
     /// A use case that adds a document to a folder in the workspace hierarchy.
     /// </summary>
-    internal class AddDocumentInteractor : UseCaseInteractor<IAddDocumentOutputPort>, IAddDocumentUseCase
+    internal class AddDocumentInteractor : UseCaseInteractor<IAddDocumentOutputPort>, IUseCase<WorkspaceDTO, DocumentDTO>
     {
         /// <summary>
         /// Initialises a new instance of the <see cref="AddDocumentInteractor"/> class.
@@ -23,6 +23,9 @@ namespace StarLab.Application.Workspace.Documents
         /// <param name="dtoDocument">A <see cref="DocumentDTO"/> that defines the document being added.</param>
         public void Execute(WorkspaceDTO dtoWorkspace, DocumentDTO dtoDocument)
         {
+            ArgumentNullException.ThrowIfNull(nameof(dtoWorkspace));
+            ArgumentNullException.ThrowIfNull(nameof(dtoDocument));
+
             var workspace = new Workspace(dtoWorkspace);
             
             if (WorkspaceInteractionHelper.IsValid(dtoDocument.Name))

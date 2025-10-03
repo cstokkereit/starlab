@@ -75,7 +75,7 @@ namespace StarLab
         protected string Folder => folder;
 
         /// <summary>
-        /// 
+        /// TODO
         /// </summary>
         protected string Resources => resources;
 

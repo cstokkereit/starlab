@@ -1,50 +1,62 @@
-﻿//using StarLab.Application.DataTransfer;
+﻿using System.Diagnostics;
 
-//namespace StarLab.Application.Model
-//{
-//    public class Axis
-//    {
-//        public Axis(AxisDTO dto)
-//        {
-//            if (dto != null)
-//            {
-//                Color = dto.Color;
-//                Font = new Font(dto.Font);
-//                Interval = dto.Interval;
-//                IsReversed = dto.IsReversed;
-//                Maximum = dto.Maximum;
-//                Minimum = dto.Minimum;
-//                Title = new Title(dto.Title);
-//                Visible = dto.Visible;
-//            }
-//        }
+namespace StarLab.Application.Workspace.Documents.Charts
+{
+    /// <summary>
+    /// Domain model representation of a chart axis.
+    /// </summary>
+    internal class Axis
+    {
+        /// <summary>
+        /// Initialises a new instance of the <see cref="Axis"> class.
+        /// </summary>
+        /// <param name="dto">A data transfer object that specifies the initial state of the <see cref="Axis"/>.</param>
+        public Axis(AxisDTO dto) 
+        {
+            ArgumentNullException.ThrowIfNull(nameof(dto));
 
-//        public Axis()
-//        {
-//            //Color = Color.Black;
-//            Font = new Font();
-//            Interval = 1;
-//            IsReversed = false;
-//            Maximum = 1;
-//            Minimum = 0;
-//            Title = new Title();
-//            Visible = false;
-//        }
+            Debug.Assert(dto.Label != null);
 
-//        public int Color { get; private set; }
+            if (string.IsNullOrEmpty(dto.BackColour))
+            {
+                BackColour = Constants.DefaultBackColour;
+            }
+            else
+            {
+                BackColour = dto.BackColour;
+            }
 
-//        public Font Font { get; private set; }
+            if (string.IsNullOrEmpty(dto.ForeColour))
+            {
+                ForeColour = Constants.DefaultForeColour;
+            }
+            else
+            {
+                ForeColour = dto.ForeColour;
+            }
 
-//        public double Interval { get; private set; }
+            Label = new Label(dto.Label);
+            Visible = dto.Visible;
+        }
 
-//        public bool IsReversed { get; private set; }
+        /// <summary>
+        /// Gets the background colour.
+        /// </summary>
+        public string BackColour { get; }
 
-//        public double Maximum { get; private set; }
+        /// <summary>
+        /// Gets the foreground colour.
+        /// </summary>
+        public string ForeColour { get; }
 
-//        public double Minimum { get; private set; }
+        /// <summary>
+        /// Gets the axis label.
+        /// </summary>
+        public Label Label { get; }
 
-//        public Title Title { get; private set; }
-
-//        public bool Visible { get; private set; }
-//    }
-//}
+        /// <summary>
+        /// A flag indicating whether the axis is visible.
+        /// </summary>
+        public bool Visible { get; }
+    }
+}

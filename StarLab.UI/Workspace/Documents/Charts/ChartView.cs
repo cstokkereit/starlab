@@ -1,7 +1,6 @@
 ﻿using log4net;
 using ScottPlot;
 using ScottPlot.Plottables;
-using StarLab.Data;
 using StarLab.Presentation;
 using StarLab.Presentation.Workspace.Documents.Charts;
 
@@ -95,8 +94,6 @@ namespace StarLab.UI.Workspace.Documents.Charts
             scatter.MarkerSize = 1;
             formsPlot.Refresh();
 
-            formsPlot.Plot.Axes.Bottom.Label.Text = "B-V Magnitude";
-
             //double[] tickPositions = new double[70];
             //string[] tickLabels = new string[70]; // = { "O", "B", "A", "F", "G", "K", "M" };
 
@@ -152,28 +149,130 @@ namespace StarLab.UI.Workspace.Documents.Charts
 
             //formsPlot.Plot.Axes.Bottom.SetTicks(tickPositions, tickLabels);
 
-            formsPlot.Plot.Axes.Left.Label.Text = "Absolute Magnitude";
-
-            formsPlot.Plot.Axes.Title.Label.Text = "HR-Diagram";
-
             formsPlot.Plot.Grid.XAxisStyle.IsVisible = false;
             formsPlot.Plot.Grid.YAxisStyle.IsVisible = false;
 
-            // some items must be styled directly
-            formsPlot.Plot.Grid.MajorLineColor = Colors.Green;
-            formsPlot.Plot.FigureBackground.Color = Colors.Black;
-            formsPlot.Plot.DataBackground.Color = Colors.Black;
-
-            // the Style object contains helper methods to style many items at once
-            formsPlot.Plot.Axes.Color(Colors.Green);
 
             // Lock the X axis min and max
             formsPlot.Plot.Axes.Rules.Clear();
             formsPlot.Plot.Axes.Rules.Add(new LockAxisRule());
-
         }
 
-        
+        /// <summary>
+        /// Updates the state of the chart following a change.
+        /// </summary>
+        /// <param name="chart">An <see cref="IChart"/> that specifies the new state of the chart.</param>
+        public void UpdateChart(IChart chart)
+        {
+            ApplyChartSettings(formsPlot.Plot, chart);
+
+            formsPlot.Refresh();
+        }
+
+        /// <summary>
+        /// Updates the state of a chart axis following a change.
+        /// </summary>
+        /// <param name="chartAxis">The <see cref="ScottPlot.IAxis"/> to update.</param>
+        /// <param name="axis">An <see cref="Presentation.Workspace.Documents.Charts.IAxis"/> that specifies the new state of the axis.</param>
+        private void ApplyAxisSettings(ScottPlot.IAxis chartAxis, Presentation.Workspace.Documents.Charts.IAxis axis)
+        {
+            ApplyLabelSettings(chartAxis.Label, axis.Label);
+
+            //axis.TickLabelStyle.BackgroundColor = GetColour(settings.BackColour);
+            chartAxis.TickLabelStyle.ForeColor = GetColour(axis.ForeColour);
+
+            var foreColour = GetColour(axis.ForeColour);
+
+            chartAxis.MajorTickStyle.Color = foreColour;
+            chartAxis.MinorTickStyle.Color = foreColour;
+            chartAxis.FrameLineStyle.Color = foreColour;
+
+            chartAxis.IsVisible = axis.Visible;
+        }
+
+        /// <summary>
+        /// Updates the state of the chart following a change.
+        /// </summary>
+        /// <param name="chartPlot">The <see cref="Plot"/> to update.</param>
+        /// <param name="chart">An <see cref="IChart"/> that specifies the new state of the chart.</param>
+        private void ApplyChartSettings(Plot chartPlot, IChart chart)
+        {
+            var backColour = GetColour(chart.BackColour);
+            var foreColour = GetColour(chart.ForeColour);
+
+            chartPlot.FigureBackground.Color = backColour;
+            chartPlot.DataBackground.Color = backColour;
+
+            //plot.Grid.MajorLineColor = foreColour;
+
+            ApplyLabelSettings(chartPlot.Axes.Title.Label, chart.Title);
+
+            ApplyAxisSettings(chartPlot.Axes.Bottom, chart.X1);
+            ApplyAxisSettings(chartPlot.Axes.Top, chart.X2);
+
+            ApplyAxisSettings(chartPlot.Axes.Left, chart.Y1);
+            ApplyAxisSettings(chartPlot.Axes.Right, chart.Y2);
+        }
+
+        /// <summary>
+        /// Updates the state of a chart label following a change.
+        /// </summary>
+        /// <param name="chartLabel">The <see cref="LabelStyle"/> to update.</param>
+        /// <param name="label">An <see cref="ILabel"/> that specifies the new state of the chart.</param>
+        private void ApplyLabelSettings(LabelStyle chartLabel, ILabel label)
+        {
+            chartLabel.BackgroundColor = GetColour(label.BackColour);
+            chartLabel.ForeColor = GetColour(label.ForeColour);
+
+            chartLabel.IsVisible = label.Visible;
+
+            var font = label.Font;
+
+            chartLabel.Underline = font.Underline;
+            chartLabel.FontName = font.Family;
+            chartLabel.FontSize = font.Size;
+            chartLabel.Italic = font.Italic;
+            chartLabel.Bold = font.Bold;
+
+            chartLabel.Text = label.Text;
+        }
+
+        /// <summary>
+        /// Gets the specifed <see cref="ScottPlot.Color"/> from the colour name or RGB value provided.
+        /// </summary>
+        /// <param name="colour">A <see cref="string"/> value that specifies the colour either by name or as an RGB value.</param>
+        /// <returns>The required <see cref="ScottPlot.Color"/>.</returns>
+        private static ScottPlot.Color GetColour(string colour)
+        {
+            var argb = 0;
+
+            if (int.TryParse(colour, out argb))
+            {
+                return ScottPlot.Color.FromARGB(argb);
+            }
+
+            return ScottPlot.Color.FromColor(System.Drawing.Color.FromName(colour));
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         readonly Coordinates[] DataPoints;
         Coordinates MouseDownCoordinates;
@@ -185,23 +284,23 @@ namespace StarLab.UI.Workspace.Documents.Charts
 
         private Tuple<double[], double[]> GetData()
         {
-            var stars = new StarsRepository(); // TODO - This should be done through the presenter, this should not know about the Domain model
+            //var stars = new StarsRepository(); // TODO - This should be done through the presenter, this should not know about the Domain model
 
-            stars.Populate();
+            //stars.Populate();
 
             List<double> xValues = new List<double>();
             List<double> yValues = new List<double>();
 
             var errors = 0;
 
-            foreach (var star in stars)
+            //foreach (var star in stars)
             {
                 try
                 {
                     //if (!string.IsNullOrEmpty(star.SpectralType.SpectralClass))
                     //{
-                        xValues.Add(star.BVColourIndex);
-                        yValues.Add(star.AbsoluteMagnitude);
+                        //xValues.Add(star.BVColourIndex);
+                        //yValues.Add(star.AbsoluteMagnitude);
                     //}
                 }
                 catch (Exception e)

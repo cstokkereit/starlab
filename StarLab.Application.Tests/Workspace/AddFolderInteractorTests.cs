@@ -1,4 +1,6 @@
-﻿namespace StarLab.Application.Workspace
+﻿using StarLab.Tests;
+
+namespace StarLab.Application.Workspace
 {
     /// <summary>
     /// A class for performing unit tests on the <see cref="AddFolderInteractor"/> class.
@@ -15,10 +17,10 @@
 
             var interactor = Factory.CreateAddFolderUseCase(port);
 
-            var dto = new DTOBuilder("Workspace")
+            var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             interactor.Execute(dto, "Workspace/Project1/Folder1");
 
@@ -41,11 +43,11 @@
 
             var interactor = Factory.CreateAddFolderUseCase(port);
 
-            var dto = new DTOBuilder("Workspace")
+            var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder1/New Folder")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             interactor.Execute(dto, "Workspace/Project1/Folder1");
 
@@ -69,9 +71,9 @@
 
             var interactor = Factory.CreateAddFolderUseCase(port);
 
-            var dto = new DTOBuilder("Workspace")
+            var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             interactor.Execute(dto, "Workspace/Project1");
 
@@ -93,10 +95,10 @@
 
             var interactor = Factory.CreateAddFolderUseCase(port);
 
-            var dto = new DTOBuilder("Workspace")
+            var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/New Folder")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             interactor.Execute(dto, "Workspace/Project1");
 

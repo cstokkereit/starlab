@@ -1,8 +1,13 @@
 ﻿using AutoMapper;
 using StarLab.Application.Workspace;
 using StarLab.Application.Workspace.Documents;
+using StarLab.Application.Workspace.Documents.Charts;
 using StarLab.Presentation.Workspace;
 using StarLab.Presentation.Workspace.Documents;
+using StarLab.Presentation.Workspace.Documents.Charts;
+using System.Runtime.CompilerServices;
+
+[assembly: InternalsVisibleTo("StarLab.Presentation.Tests")]
 
 namespace StarLab.Presentation
 {
@@ -16,9 +21,24 @@ namespace StarLab.Presentation
         /// </summary>
         public PresentationProfile()
         {
+            CreateMap<IAxis, AxisDTO>();
+            CreateMap<IAxisSettings, AxisDTO>();
+            CreateMap<IChart, ChartDTO>();
+
+            CreateMap<IChartSettings, ChartDTO>()
+                .ForMember(dest => dest.X1, opt => opt.MapFrom(src => src.Axes.X1))
+                .ForMember(dest => dest.X2, opt => opt.MapFrom(src => src.Axes.X2))
+                .ForMember(dest => dest.Y1, opt => opt.MapFrom(src => src.Axes.Y1))
+                .ForMember(dest => dest.Y2, opt => opt.MapFrom(src => src.Axes.Y2));
+
             CreateMap<IDocument, DocumentDTO>();
             CreateMap<IFolder, FolderDTO>().ForMember(dest => dest.Path, opt => opt.MapFrom(src => src.Key));
+            CreateMap<IFont, FontDTO>();
+            CreateMap<IFontSettings, FontDTO>();
+            CreateMap<ILabel, LabelDTO>();
+            CreateMap<ILabelSettings, LabelDTO>();
             CreateMap<IProject, ProjectDTO>();
+
             CreateMap<IWorkspace, WorkspaceDTO>().ForMember(dest => dest.ActiveDocument, opt => opt.MapFrom(src => src.ActiveDocument == null ? string.Empty : src.ActiveDocument.ID));
         }
     }

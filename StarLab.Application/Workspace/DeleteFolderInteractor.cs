@@ -7,7 +7,7 @@ namespace StarLab.Application.Workspace
     /// <summary>
     /// A use case that removes a folder from the workspace hierarchy.
     /// </summary>
-    public class DeleteFolderInteractor : UseCaseInteractor<IWorkspaceOutputPort>, IDeleteItemUseCase
+    public class DeleteFolderInteractor : UseCaseInteractor<IWorkspaceOutputPort>, IUseCase<WorkspaceDTO, string>
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(DeleteFolderInteractor)); // The logger that will be used for writing log messages.
 
@@ -26,6 +26,8 @@ namespace StarLab.Application.Workspace
         /// <param name="key">The key that identifies the folder being deleted.</param>
         public void Execute(WorkspaceDTO dto, string key)
         {
+            ArgumentNullException.ThrowIfNull(nameof(dto));
+
             dto.ActiveDocument = string.Empty;
 
             try

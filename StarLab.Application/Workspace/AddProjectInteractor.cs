@@ -6,7 +6,7 @@ namespace StarLab.Application.Workspace
     /// <summary>
     /// A use case that adds a project to the workspace.
     /// </summary>
-    internal class AddProjectInteractor : UseCaseInteractor<IWorkspaceOutputPort>, IAddProjectUseCase
+    internal class AddProjectInteractor : UseCaseInteractor<IWorkspaceOutputPort>, IUseCase<WorkspaceDTO, ProjectDTO>
     {
         /// <summary>
         /// Initialises a new instance of the <see cref="AddProjectInteractor"/> class.
@@ -23,6 +23,9 @@ namespace StarLab.Application.Workspace
         /// <param name="dtoProject">A <see cref="ProjectDTO"/> that defines the project being added.</param>
         public void Execute(WorkspaceDTO dtoWorkspace, ProjectDTO dtoProject)
         {
+            ArgumentNullException.ThrowIfNull(nameof(dtoWorkspace));
+            ArgumentNullException.ThrowIfNull(nameof(dtoProject));
+
             var workspace = new Workspace(dtoWorkspace);
 
             if (WorkspaceInteractionHelper.IsValid(dtoProject.Name))

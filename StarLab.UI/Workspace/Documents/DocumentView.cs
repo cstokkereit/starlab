@@ -1,5 +1,4 @@
 ﻿using log4net;
-using StarLab.Application;
 using StarLab.Presentation;
 using StarLab.Presentation.Workspace;
 using StarLab.Presentation.Workspace.Documents;
@@ -66,6 +65,32 @@ namespace StarLab.UI.Workspace.Documents
         public void AddToolbarButton(string name, string tooltip, Image image, ICommand command)
         {
             splitContainer.AddToolbarButton(name, tooltip, image, command);
+        }
+
+        /// <summary>
+        /// Gets the specified <see cref="IChildViewController"/>.
+        /// </summary>
+        /// <param name="name">The name of the required controller.</param>
+        /// <returns>The required <see cref="IChildViewController"/>.</returns>
+        public IChildViewController GetController(string name)
+        {
+            foreach (var control in splitContainer.Panel1.Controls)
+            {
+                if (control is IChildView content && content.Controller.Name == name)
+                {
+                    return content.Controller;
+                }
+            }
+
+            foreach (var control in splitContainer.Panel2.Controls)
+            {
+                if (control is IChildView content && content.Controller.Name == name)
+                {
+                    return content.Controller;
+                }
+            }
+
+            throw new IndexOutOfRangeException(); // TODO
         }
 
         /// <summary>

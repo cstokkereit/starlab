@@ -3,7 +3,7 @@
 namespace StarLab.Application
 {
     /// <summary>
-    /// Used by a <see cref="UseCaseInteractor{TOutputPort}"/> to update the application.
+    /// Used by a <see cref="UseCaseInteractor{IApplicationOutputPort}"/> to update the application.
     /// </summary>
     public interface IApplicationOutputPort : IOutputPort
     {

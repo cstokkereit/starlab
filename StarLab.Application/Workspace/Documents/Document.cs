@@ -1,7 +1,9 @@
-﻿namespace StarLab.Application.Workspace.Documents
+﻿using StarLab.Application.Workspace.Documents.Charts;
+
+namespace StarLab.Application.Workspace.Documents
 {
     /// <summary>
-    /// Represents the state of a document within the workspace hierarchy.
+    /// Domain model represention of a document.
     /// </summary>
     internal class Document
     {
@@ -26,6 +28,11 @@
             Name = dto.Name ?? throw new ArgumentException();
 
             view = dto.View ?? throw new ArgumentException();
+
+            if (dto.Chart != null)
+            {
+                Chart = new Chart(dto.Chart);
+            }
         }
 
         /// <summary>
@@ -42,6 +49,8 @@
             this.folder = folder ?? throw new ArgumentNullException();
 
             id = Guid.NewGuid().ToString();
+
+            Chart = document.Chart;
 
             view = document.view;
 
@@ -62,10 +71,16 @@
 
             id = Guid.NewGuid().ToString();
 
+            Chart = document.Chart;
             Name = document.Name;
 
             view = document.view;
         }
+
+        /// <summary>
+        /// Gets or sets the chart.
+        /// </summary>
+        public Chart? Chart { get; set; }
 
         /// <summary>
         /// Gets the document ID.

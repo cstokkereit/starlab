@@ -1,6 +1,5 @@
 ﻿using log4net;
 using StarLab.Shared.Properties;
-using System.Windows.Forms;
 
 namespace StarLab.Presentation
 {

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using log4net;
 using StarLab.Application;
 using Stratosoft.Commands;
 using System.ComponentModel;
@@ -10,6 +11,8 @@ namespace StarLab.Presentation
     /// </summary>
     public class DialogViewPresenter : Presenter, IDialogViewPresenter, IDialogController
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(DialogViewPresenter)); // The logger that will be used for writing log messages.
+
         private readonly IDialogView view; // The view controlled by the presenter.
 
         /// <summary>
@@ -18,11 +21,11 @@ namespace StarLab.Presentation
         /// <param name="view">The <see cref="IDialogView"/> controlled by this presenter.</param>
         /// <param name="commands">An <see cref="ICommandManager"/> that is required for the creation of <see cref="ICommand">s.</param>
         /// <param name="factory">An <see cref="IUseCaseFactory"/> that will be used to create use case interactors.</param>
-        /// <param name="configuration">The <see cref="Configuration.IApplicationConfiguration"/> that will be used to get configuration information.</param>
+        /// <param name="settings">An <see cref="IApplicationSettings"/> that provides access to the application configuration.</param>
         /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
         /// <param name="events">The <see cref="IEventAggregator"/> that manages application events.</param>
-        public DialogViewPresenter(IDialogView view, ICommandManager commands, IUseCaseFactory factory, Configuration.IApplicationConfiguration configuration, IMapper mapper, IEventAggregator events)
-            : base(commands, factory, configuration, mapper, events)
+        public DialogViewPresenter(IDialogView view, ICommandManager commands, IUseCaseFactory factory, IApplicationSettings settings, IMapper mapper, IEventAggregator events)
+            : base(commands, factory, settings, mapper, events)
         {
             this.view = view;
         }
@@ -30,7 +33,7 @@ namespace StarLab.Presentation
         /// <summary>
         /// Gets the name of the controller.
         /// </summary>
-        public override string Name => ControllerNames.GetViewControllerName(view.Name);
+        public override string Name => Controllers.GetViewControllerName(view.Name);
 
         /// <summary>
         /// Closes the dialog box.

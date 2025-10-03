@@ -2,6 +2,9 @@
 
 namespace Stratosoft.Nomenclature.Serialisation
 {
+    /// <summary>
+    /// TODO
+    /// </summary>
     static class NomenclatureSerialiser
     {
         public static Nomenclature Load(FileStream stream)

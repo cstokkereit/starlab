@@ -12,6 +12,9 @@
             this.catalogue = catalogue;
         }
 
+        public Designation(string designation)
+            : this(designation, string.Empty) { }
+
         public string Catalogue => catalogue;
 
         public override string ToString() => designation;

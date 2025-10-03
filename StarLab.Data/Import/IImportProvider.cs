@@ -1,4 +1,6 @@
-﻿namespace StarLab.Data.Import
+﻿using StarLab.Domain;
+
+namespace StarLab.Data.Import
 {
     /// <summary>
     /// TODO

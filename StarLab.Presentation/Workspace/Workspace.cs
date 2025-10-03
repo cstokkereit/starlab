@@ -4,7 +4,7 @@ using StarLab.Presentation.Workspace.Documents;
 namespace StarLab.Presentation.Workspace
 {
     /// <summary>
-    /// Represents a workspace.
+    /// View model representation of a workspace.
     /// </summary>
     internal class Workspace : IWorkspace
     {

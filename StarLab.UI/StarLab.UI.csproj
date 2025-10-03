@@ -39,7 +39,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\StarLab.Application.Core\StarLab.Application.Core.csproj" />
-    <ProjectReference Include="..\StarLab.Configuration\StarLab.Configuration.csproj" />
     <ProjectReference Include="..\StarLab.Data\StarLab.Data.csproj" />
     <ProjectReference Include="..\StarLab.Persistence\StarLab.Serialisation.csproj" />
     <ProjectReference Include="..\StarLab.Presentation.Core\StarLab.Presentation.Core.csproj" />

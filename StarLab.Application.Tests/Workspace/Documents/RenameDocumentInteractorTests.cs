@@ -1,4 +1,6 @@
-﻿namespace StarLab.Application.Workspace.Documents
+﻿using StarLab.Tests;
+
+namespace StarLab.Application.Workspace.Documents
 {
     /// <summary>
     /// A class for performing unit tests on the <see cref="RenameDocumentInteractor"/> class.
@@ -15,12 +17,12 @@
 
             var interactor = Factory.CreateRenameDocumentUseCase(port);
 
-            var dto = new DTOBuilder("Workspace")
+            var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .AddDocument("1", "Document1", "Workspace/Project1/Folder1")
                 .AddDocument("2", "Document2", "Workspace/Project1/Folder1")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             interactor.Execute(dto, "1", "Document3");
 
@@ -43,11 +45,11 @@
 
             var interactor = Factory.CreateRenameDocumentUseCase(port);
 
-            var dto = new DTOBuilder("Workspace")
+            var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .AddDocument("1", "Document1", "Workspace/Project1/Folder1")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             var e = Assert.Throws<Exception>(() => interactor.Execute(dto, "1", string.Empty));
 
@@ -64,12 +66,12 @@
 
             var interactor = Factory.CreateRenameDocumentUseCase(port);
 
-            var dto = new DTOBuilder("Workspace")
+            var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .AddDocument("1", "Document1", "Workspace/Project1/Folder1")
                 .AddDocument("2", "Document2", "Workspace/Project1/Folder1")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             var e = Assert.Throws<Exception>(() => interactor.Execute(dto, "1", "Document2"));
 
@@ -86,11 +88,11 @@
 
             var interactor = Factory.CreateRenameDocumentUseCase(port);
 
-            var dto = new DTOBuilder("Workspace")
+            var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .AddDocument("1", "Document1", "Workspace/Project1/Folder1")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             var e = Assert.Throws<Exception>(() => interactor.Execute(dto, "1", "Document1/"));
 

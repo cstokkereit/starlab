@@ -5,7 +5,7 @@ using StarLab.Presentation.Workspace.Documents;
 namespace StarLab.Presentation.Workspace
 {
     /// <summary>
-    /// Represents a project in the workspace hierarchy.
+    /// View model representation of a project in the workspace hierarchy.
     /// </summary>
     internal class Project : IProject
     {

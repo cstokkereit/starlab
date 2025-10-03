@@ -61,15 +61,6 @@ namespace StarLab.Shared.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to About.
-        /// </summary>
-        public static string About {
-            get {
-                return ResourceManager.GetString("About", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to About StarLab.
         /// </summary>
         public static string AboutStarLab {
@@ -93,6 +84,60 @@ namespace StarLab.Shared.Properties {
         public static string AddDocument {
             get {
                 return ResourceManager.GetString("AddDocument", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Axes.
+        /// </summary>
+        public static string Axes {
+            get {
+                return ResourceManager.GetString("Axes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to X1.
+        /// </summary>
+        public static string AxisX1 {
+            get {
+                return ResourceManager.GetString("AxisX1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to X2.
+        /// </summary>
+        public static string AxisX2 {
+            get {
+                return ResourceManager.GetString("AxisX2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Y1.
+        /// </summary>
+        public static string AxisY1 {
+            get {
+                return ResourceManager.GetString("AxisY1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Y2.
+        /// </summary>
+        public static string AxisY2 {
+            get {
+                return ResourceManager.GetString("AxisY2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Back Colour.
+        /// </summary>
+        public static string BackColour {
+            get {
+                return ResourceManager.GetString("BackColour", resourceCulture);
             }
         }
         
@@ -201,6 +246,15 @@ namespace StarLab.Shared.Properties {
         public static string Cut {
             get {
                 return ResourceManager.GetString("Cut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Data.
+        /// </summary>
+        public static string Data {
+            get {
+                return ResourceManager.GetString("Data", resourceCulture);
             }
         }
         
@@ -361,11 +415,29 @@ namespace StarLab.Shared.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} created..
+        /// </summary>
+        public static string InstanceCreated {
+            get {
+                return ResourceManager.GetString("InstanceCreated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid content type: {0}.
         /// </summary>
         public static string InvalidContentType {
             get {
                 return ResourceManager.GetString("InvalidContentType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Label.
+        /// </summary>
+        public static string Label {
+            get {
+                return ResourceManager.GetString("Label", resourceCulture);
             }
         }
         
@@ -501,6 +573,15 @@ namespace StarLab.Shared.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Plot Area.
+        /// </summary>
+        public static string PlotArea {
+            get {
+                return ResourceManager.GetString("PlotArea", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Print.
         /// </summary>
         public static string Print {
@@ -623,6 +704,15 @@ namespace StarLab.Shared.Properties {
         public static string Table {
             get {
                 return ResourceManager.GetString("Table", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title.
+        /// </summary>
+        public static string Title {
+            get {
+                return ResourceManager.GetString("Title", resourceCulture);
             }
         }
         

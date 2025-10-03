@@ -1,10 +1,17 @@
-﻿namespace StarLab.Presentation.Workspace.Documents
+﻿using StarLab.Presentation.Workspace.Documents.Charts;
+
+namespace StarLab.Presentation.Workspace.Documents
 {
     /// <summary>
     /// Represents a document within a workspace.
     /// </summary>
     public interface IDocument
     {
+        /// <summary>
+        /// Gets the chart.
+        /// </summary>
+        IChart Chart { get; }
+
         /// <summary>
         /// Gets the document name including the path.
         /// </summary>

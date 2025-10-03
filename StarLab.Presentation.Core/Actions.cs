@@ -35,6 +35,7 @@
 
         public const string RenameDocument = "RenameDocument";
         public const string Rename = "Rename";
+        public const string RevertSettings = "RevertSettings";
 
         public const string SaveWorkspace = "SaveWorkspace";
         public const string Show = "Show";

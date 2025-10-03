@@ -3,7 +3,7 @@
 namespace StarLab.Presentation.Workspace
 {
     /// <summary>
-    /// Represents a folder in the workspace hierarchy.
+    /// View model representation of a folder in the workspace hierarchy.
     /// </summary>
     internal class Folder : IFolder
     {

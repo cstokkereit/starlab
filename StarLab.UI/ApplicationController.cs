@@ -1,7 +1,6 @@
 ﻿using log4net;
 using StarLab.Application;
 using StarLab.Presentation;
-using StarLab.Presentation.Configuration;
 using StarLab.Presentation.Workspace;
 using StarLab.Presentation.Workspace.Documents;
 using StarLab.Shared.Properties;
@@ -24,9 +23,7 @@ namespace StarLab.UI
 
         private static readonly ILog log = LogManager.GetLogger(typeof(ApplicationController)); // The logger that will be used for writing log messages.
 
-        private readonly IDictionary<string, IView> views = new Dictionary<string, IView>(); // A dictionary containing the views indexed by ID. 
-
-        private readonly IApplicationConfiguration configuration; // A service that provides the configuration information.
+        private readonly IDictionary<string, IView> views = new Dictionary<string, IView>(); // A dictionary containing the views indexed by ID.
 
         private readonly IViewFactory factory; // A factory for creating views.
 
@@ -38,17 +35,16 @@ namespace StarLab.UI
         /// <param name="interactorFactory">An <see cref="IUseCaseFactory"> that will be used to create the use case interactors.</param>
         /// <param name="events">An <see cref="IEventAggregator"> that can be used for subscribing to and publishing events.</param>
         /// <exception cref="ArgumentNullException"></exception>
-        public ApplicationController(IApplicationConfiguration configuration, IViewFactory factory, IUseCaseFactory interactorFactory, IEventAggregator events)
+        public ApplicationController(IViewFactory factory, IUseCaseFactory interactorFactory, IEventAggregator events)
             : base(interactorFactory, events)
         {
-            this.configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
             this.factory = factory ?? throw new ArgumentNullException(nameof(factory));
         }
 
         /// <summary>
         /// Gets the name of the controller.
         /// </summary>
-        public override string Name => ControllerNames.ApplicationController;
+        public override string Name => Controllers.ApplicationController;
 
         /// <summary>
         /// Creates the <see cref="ICommand"> specified by the controller, action and target provided.
@@ -94,7 +90,7 @@ namespace StarLab.UI
         {
             if (views.ContainsKey(id))
             {
-                var name = ControllerNames.GetDocumentControllerName(id);
+                var name = Controllers.GetDocumentControllerName(id);
 
                 if (controllers[name] is IDocumentController controller)
                 {
@@ -111,7 +107,7 @@ namespace StarLab.UI
         /// </summary>
         public void Exit()
         {
-            if (controllers[ControllerNames.WorkspaceController] is IApplicationViewController controller) controller.Exit();
+            if (controllers[Controllers.ApplicationViewController] is IApplicationViewController controller) controller.Exit();
         }
 
         /// <summary>
@@ -189,7 +185,7 @@ namespace StarLab.UI
 
             foreach (var document in args.Workspace.Documents)
             {
-                controllers.Remove(ControllerNames.GetDocumentControllerName(document.ID));
+                controllers.Remove(Controllers.GetDocumentControllerName(document.ID));
                 views.Remove(document.ID);
             }
         }
@@ -232,7 +228,7 @@ namespace StarLab.UI
             var controller = GetController(view);
             controller.Initialise(this);
 
-            controllers[ControllerNames.WorkspaceController].Show(view);
+            controllers[Controllers.ApplicationViewController].Show(view);
         }
 
         /// <summary>
@@ -249,7 +245,7 @@ namespace StarLab.UI
             var controller = GetController(view);
             controller.Initialise(this);
 
-            controllers[ControllerNames.WorkspaceController].Show(view); // TODO - May need to include an overload of this that includes the parent view
+            controllers[Controllers.ApplicationViewController].Show(view); // TODO - May need to include an overload of this that includes the parent view
         }
 
         /// <summary>
@@ -262,7 +258,7 @@ namespace StarLab.UI
         /// <returns>An <see cref="InteractionResult"/> that identifies the chosen response.</returns>
         public InteractionResult ShowMessage(string caption, string message, InteractionType type, InteractionResponses responses)
         {
-            var controller = (IMessageBoxController)controllers[ControllerNames.MessageBoxController];
+            var controller = (IMessageBoxController)controllers[Controllers.MessageBoxController];
             return controller.ShowMessage(GetMessageBoxOwner(), caption, message, type, responses);
         }
 
@@ -275,7 +271,7 @@ namespace StarLab.UI
         /// <returns>An <see cref="InteractionResult"/> that identifies the chosen response.</returns>
         public InteractionResult ShowMessage(string caption, string message, InteractionResponses responses)
         {
-            var controller = (IMessageBoxController)controllers[ControllerNames.MessageBoxController];
+            var controller = (IMessageBoxController)controllers[Controllers.MessageBoxController];
             return controller.ShowMessage(GetMessageBoxOwner(), caption, message, responses);
         }
 
@@ -287,7 +283,7 @@ namespace StarLab.UI
         /// <returns>An <see cref="InteractionResult"/> that identifies the chosen response.</returns>
         public InteractionResult ShowMessage(string caption, string message)
         {
-            var controller = (IMessageBoxController)controllers[ControllerNames.MessageBoxController];
+            var controller = (IMessageBoxController)controllers[Controllers.MessageBoxController];
             return controller.ShowMessage(GetMessageBoxOwner(), caption, message);
         }
 
@@ -335,15 +331,15 @@ namespace StarLab.UI
 
             if (view is IApplicationView)
             {
-                name = ControllerNames.WorkspaceController;
+                name = Controllers.ApplicationViewController;
             }
             else if (view is IDialogView)
             {
-                name = ControllerNames.GetViewControllerName(view.ID);
+                name = Controllers.GetViewControllerName(view.ID);
             }
             else if (view is IDockableView)
             {
-                name = view is IDocumentView ? ControllerNames.GetDocumentControllerName(view.ID) : ControllerNames.GetViewControllerName(view.ID);
+                name = view is IDocumentView ? Controllers.GetDocumentControllerName(view.ID) : Controllers.GetViewControllerName(view.ID);
             }
             else
             {

@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            treeView = new UI.Controls.TreeView();
+            treeView = new StarLab.UI.Controls.TreeView();
             buttonCancel = new Button();
             buttonOK = new Button();
             panelSettings = new Panel();
@@ -37,15 +37,22 @@
             // treeView
             // 
             treeView.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
+            treeView.BackColor = SystemColors.Control;
+            treeView.FullRowSelect = true;
+            treeView.HideSelection = false;
             treeView.Location = new Point(10, 10);
             treeView.Name = "treeView";
-            treeView.Size = new Size(220, 338);
+            treeView.ShowLines = false;
+            treeView.ShowNodeToolTips = true;
+            treeView.ShowRootLines = false;
+            treeView.Size = new Size(180, 338);
             treeView.TabIndex = 1;
+            treeView.AfterSelect += TreeView_AfterSelect;
             // 
             // buttonCancel
             // 
             buttonCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            buttonCancel.Location = new Point(503, 363);
+            buttonCancel.Location = new Point(483, 363);
             buttonCancel.Name = "buttonCancel";
             buttonCancel.Size = new Size(85, 25);
             buttonCancel.TabIndex = 2;
@@ -55,7 +62,7 @@
             // buttonOK
             // 
             buttonOK.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            buttonOK.Location = new Point(408, 363);
+            buttonOK.Location = new Point(388, 363);
             buttonOK.Name = "buttonOK";
             buttonOK.Size = new Size(85, 25);
             buttonOK.TabIndex = 3;
@@ -65,9 +72,9 @@
             // panelSettings
             // 
             panelSettings.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            panelSettings.Location = new Point(250, 10);
+            panelSettings.Location = new Point(210, 10);
             panelSettings.Name = "panelSettings";
-            panelSettings.Size = new Size(338, 338);
+            panelSettings.Size = new Size(360, 338);
             panelSettings.TabIndex = 5;
             // 
             // ChartSettingsView
@@ -78,9 +85,9 @@
             Controls.Add(buttonOK);
             Controls.Add(buttonCancel);
             Controls.Add(treeView);
-            MinimumSize = new Size(440, 150);
+            MinimumSize = new Size(360, 150);
             Name = "ChartSettingsView";
-            Size = new Size(600, 400);
+            Size = new Size(580, 400);
             ResumeLayout(false);
         }
 

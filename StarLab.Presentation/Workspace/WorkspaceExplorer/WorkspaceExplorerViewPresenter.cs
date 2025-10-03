@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
+using log4net;
 using StarLab.Application;
 using StarLab.Application.Workspace;
-using StarLab.Presentation.Configuration;
 using StarLab.Presentation.Workspace.Documents;
+using StarLab.Shared.Properties;
 using Stratosoft.Commands;
 
 using ImageResources = StarLab.Presentation.Properties.Resources;
@@ -21,14 +22,12 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         private enum NodeImages
         {
             ColourMagnitudeDiagram,
-            ColourMagnitudeDiagramSelected,
             Folder,
-            FolderSelected,
             Project,
-            ProjectSelected,
-            Workspace,
-            WorkspaceSelected
+            Workspace
         }
+
+        private static readonly ILog log = LogManager.GetLogger(typeof(WorkspaceExplorerViewPresenter)); // The logger that will be used for writing log messages.
 
         private readonly Dictionary<NodeImages, int> images = new Dictionary<NodeImages, int>(); // A dictionary that holds the node image indices.
 
@@ -42,13 +41,15 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="view">The <see cref="IWorkspaceExplorerView"/> controlled by this presenter.</param>
         /// <param name="commands">An <see cref="ICommandManager"/> that is required for the creation of <see cref="ICommand">s.</param>
         /// <param name="factory">An <see cref="IUseCaseFactory"/> that will be used to create use case interactors.</param>
-        /// <param name="configuration">The <see cref="IApplicationConfiguration"/> that will be used to get configuration information.</param>
+        /// <param name="settings">An <see cref="IApplicationSettings"/> that provides access to the application configuration.</param>
         /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
         /// <param name="events">The <see cref="IEventAggregator"/> that manages application events.</param>
-        public WorkspaceExplorerViewPresenter(IWorkspaceExplorerView view, ICommandManager commands, IUseCaseFactory factory, IApplicationConfiguration configuration, IMapper mapper, IEventAggregator events)
-            : base(view, commands, factory, configuration, mapper, events)
+        public WorkspaceExplorerViewPresenter(IWorkspaceExplorerView view, ICommandManager commands, IUseCaseFactory factory, IApplicationSettings settings, IMapper mapper, IEventAggregator events)
+            : base(view, commands, factory, settings, mapper, events)
         {
             workspace = new EmptyWorkspace();
+
+            log.Debug(string.Format(Resources.InstanceCreated, nameof(WorkspaceExplorerViewPresenter)));
         }
 
         /// <summary>
@@ -428,7 +429,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="id">The ID of the document that was modified.</param>
         public void UpdateDocument(WorkspaceDTO dto, string id)
         {
-            if (AppController.GetController(ControllerNames.WorkspaceController) is IApplicationOutputPort port) port.UpdateDocument(dto, id);
+            if (AppController.GetController(Controllers.ApplicationViewController) is IApplicationOutputPort port) port.UpdateDocument(dto, id);
         }
 
         /// <summary>
@@ -437,7 +438,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="dto">The <see cref="WorkspaceDTO"/> that contains the updated workspace state.</param>
         public void UpdateWorkspace(WorkspaceDTO dto)
         {
-            if (AppController.GetController(ControllerNames.WorkspaceController) is IApplicationOutputPort port) port.UpdateWorkspace(dto);
+            if (AppController.GetController(Controllers.ApplicationViewController) is IApplicationOutputPort port) port.UpdateWorkspace(dto);
         }
 
         /// <summary>
@@ -478,13 +479,9 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         private void AddImages()
         {
             images.Add(NodeImages.ColourMagnitudeDiagram, View.AddImage(ImageResources.ColourMagnitudeDiagram));
-            images.Add(NodeImages.ColourMagnitudeDiagramSelected, View.AddImage(ImageResources.ColourMagnitudeDiagramSelected));
             images.Add(NodeImages.Folder, View.AddImage(ImageResources.Folder));
-            images.Add(NodeImages.FolderSelected, View.AddImage(ImageResources.FolderSelected));
             images.Add(NodeImages.Project, View.AddImage(ImageResources.Project));
-            images.Add(NodeImages.ProjectSelected, View.AddImage(ImageResources.ProjectSelected));
             images.Add(NodeImages.Workspace, View.AddImage(ImageResources.Workspace));
-            images.Add(NodeImages.WorkspaceSelected, View.AddImage(ImageResources.WorkspaceSelected));
         }
 
         /// <summary>
@@ -494,7 +491,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         {
             foreach (var document in workspace.Documents)
             {
-                View.AddDocumentNode(document.ID, document.Path, document.Name, images[NodeImages.ColourMagnitudeDiagram], images[NodeImages.ColourMagnitudeDiagramSelected]);
+                View.AddDocumentNode(document.ID, document.Path, document.Name, images[NodeImages.ColourMagnitudeDiagram]);
             }
         }
 
@@ -505,7 +502,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         {
             foreach (var folder in workspace.Folders)
             {
-                View.AddFolderNode(folder.Key, folder.ParentKey, folder.Name, images[NodeImages.Folder], images[NodeImages.FolderSelected]);
+                View.AddFolderNode(folder.Key, folder.ParentKey, folder.Name, images[NodeImages.Folder]);
             }
         }
 
@@ -516,7 +513,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         {
             foreach (var project in workspace.Projects)
             {
-                View.AddProjectNode(project.Key, project.ParentKey, project.Name, images[NodeImages.Project], images[NodeImages.ProjectSelected]);
+                View.AddProjectNode(project.Key, project.ParentKey, project.Name, images[NodeImages.Project]);
             }
         }
 
@@ -534,7 +531,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// </summary>
         private void CreateWorkspaceNode()
         {
-            View.AddWorkspaceNode(Constants.Workspace, GetWorkspaceName(), images[NodeImages.Workspace], images[NodeImages.WorkspaceSelected]);
+            View.AddWorkspaceNode(Constants.Workspace, GetWorkspaceName(), images[NodeImages.Workspace]);
         }
 
         /// <summary>

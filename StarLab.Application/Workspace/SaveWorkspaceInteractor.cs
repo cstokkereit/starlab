@@ -6,7 +6,7 @@ namespace StarLab.Application.Workspace
     /// <summary>
     /// A use case that saves the current workspace to a file.
     /// </summary>
-    internal class SaveWorkspaceInteractor : UseCaseInteractor<IApplicationOutputPort>, ISaveWorkspaceUseCase
+    internal class SaveWorkspaceInteractor : UseCaseInteractor<IApplicationOutputPort>, IUseCase<WorkspaceDTO>
     {
         private readonly ISerialisationProvider serialiser; // Used to serialise the workspace to a file.
 
@@ -28,6 +28,8 @@ namespace StarLab.Application.Workspace
         /// <param name="dto">A <see cref="WorkspaceDTO"/> that specifies the current state of the workspace.</param>
         public void Execute(WorkspaceDTO dto)
         {
+            ArgumentNullException.ThrowIfNull(nameof(dto));
+
             try
             {
                 if (!string.IsNullOrEmpty(dto.FileName)) serialiser.SerialiseWorkspace(dto, dto.FileName);

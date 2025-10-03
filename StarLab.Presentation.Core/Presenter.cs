@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using StarLab.Application;
-using StarLab.Presentation.Configuration;
 using Stratosoft.Commands;
 using System.Diagnostics;
 
@@ -11,7 +10,7 @@ namespace StarLab.Presentation
     /// </summary>
     public abstract class Presenter : Controller, IPresenter
     {
-        private readonly IApplicationConfiguration configuration; // A service that provides the configuration information.
+        private readonly IApplicationSettings settings; // Provides access to the application configuration.
 
         private readonly ICommandManager commands; // Required for the creation and management of commands.
 
@@ -24,14 +23,14 @@ namespace StarLab.Presentation
         /// </summary>
         /// <param name="commands">An instance of <see cref="ICommandManager"/> that is required for the creation of commands.</param>
         /// <param name="factory">An <see cref="IUseCaseFactory"/> that will be used to create use case interactors.</param>
-        /// <param name="configuration">The <see cref="IApplicationConfiguration"/> that will be used to get configuration information.</param>
+        /// <param name="settings">An <see cref="IApplicationSettings"/> that provides access to the application configuration.</param>
         /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
         /// <param name="events">The <see cref="IEventAggregator"/> that manages application events.</param>
         /// <exception cref="ArgumentNullException"></exception>
-        public Presenter(ICommandManager commands, IUseCaseFactory factory, IApplicationConfiguration configuration, IMapper mapper, IEventAggregator events)
+        public Presenter(ICommandManager commands, IUseCaseFactory factory, IApplicationSettings settings, IMapper mapper, IEventAggregator events)
             : base(factory, events)
         {
-            this.configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            this.settings = settings ?? throw new ArgumentNullException(nameof(settings));
             this.commands = commands ?? throw new ArgumentNullException(nameof(commands));
             this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
@@ -66,7 +65,7 @@ namespace StarLab.Presentation
         /// <summary>
         /// Gets the <see cref="IApplicationConfiguration"/> that provides the configuration information.
         /// </summary>
-        protected IApplicationConfiguration Configuration => configuration;
+        protected IApplicationSettings Configuration => settings;
 
         /// <summary>
         /// Returns true if the presenter has been initialised; false otherwise.

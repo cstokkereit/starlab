@@ -1,4 +1,6 @@
-﻿namespace StarLab.Application.Workspace.Documents
+﻿using StarLab.Tests;
+
+namespace StarLab.Application.Workspace.Documents
 {
     /// <summary>
     /// A class for performing unit tests on the <see cref="AddDocumentInteractor"/> class.
@@ -15,10 +17,10 @@
 
             var interactor = Factory.CreateAddDocumentUseCase(port);
 
-            var workspace = new DTOBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             var document = new DocumentDTO
             {
@@ -53,10 +55,10 @@
 
             var interactor = Factory.CreateAddDocumentUseCase(port);
 
-            var workspace = new DTOBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             var document = new DocumentDTO
             {
@@ -91,11 +93,11 @@
 
             var interactor = Factory.CreateAddDocumentUseCase(port);
 
-            var workspace = new DTOBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .AddDocument("1", "Document1", "Workspace/Project1/Folder1")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             var document = new DocumentDTO
             {
@@ -125,10 +127,10 @@
 
             var interactor = Factory.CreateAddDocumentUseCase(port);
 
-            var workspace = new DTOBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             var document = new DocumentDTO
             {
@@ -158,10 +160,10 @@
 
             var interactor = Factory.CreateAddDocumentUseCase(port);
 
-            var workspace = new DTOBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             var document = new DocumentDTO
             {

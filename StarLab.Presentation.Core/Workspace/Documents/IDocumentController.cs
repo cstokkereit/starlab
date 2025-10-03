@@ -11,6 +11,13 @@
         void Close();
 
         /// <summary>
+        /// Gets the specified <see cref="IChildViewController"/> 
+        /// </summary>
+        /// <param name="name">The name of the required controller.</param>
+        /// <returns>The required <see cref="IChildViewController"/>.</returns>
+        IChildViewController GetController(string name);
+
+        /// <summary>
         /// Hides the specified split content.
         /// </summary>
         /// <param name="name">The name of the content to be hidden.</param>

@@ -5,48 +5,18 @@
     /// </summary>
     public class TreeView : System.Windows.Forms.TreeView
     {
-        private int selectedImageIndex = -1; // The selected image index of the last node that was selected.
-
         /// <summary>
-        /// Event handler for the <see cref="TreeView.AfterSelect"/> event.
-        /// </summary>
-        /// <param name="e">A <see cref="TreeViewEventArgs"/> that provides context for the event.</param>
-        protected override void OnAfterSelect(TreeViewEventArgs e)
-        {
-            if (!Focused)
-            {
-                selectedImageIndex = SelectedNode.SelectedImageIndex;
-                SelectedNode.SelectedImageIndex = SelectedNode.ImageIndex;
-            }
-
-            base.OnAfterSelect(e);
-        }
-
-        /// <summary>
-        /// Event handler for the <see cref="Control.OnGotFocus"/> event.
+        /// Event handler for the <see cref="Control.OnHandleCreated"/> event.
         /// </summary>
         /// <param name="e">An <see cref="EventArgs"/> that provides context for the event.</param>
-        protected override void OnGotFocus(EventArgs e)
+        protected override void OnHandleCreated(EventArgs e)
         {
-            if (selectedImageIndex != -1)
+            base.OnHandleCreated(e);
+
+            if (!DesignMode && Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 6)
             {
-                SelectedNode.SelectedImageIndex = selectedImageIndex;
-                selectedImageIndex = -1;
+                Win32Api.SetWindowTheme(Handle, Win32Api.ExplorerTheme, null);
             }
-
-            base.OnGotFocus(e);
-        }
-
-        /// <summary>
-        /// Event handler for the <see cref="Control.OnLostFocus"/> event.
-        /// </summary>
-        /// <param name="e">An <see cref="EventArgs"/> that provides context for the event.</param>
-        protected override void OnLostFocus(EventArgs e)
-        {
-            selectedImageIndex = SelectedNode.SelectedImageIndex;
-            SelectedNode.SelectedImageIndex = SelectedNode.ImageIndex;
-
-            base.OnLostFocus(e);
         }
 
         /// <summary>

@@ -21,8 +21,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="parentKey">The parent node key.</param>
         /// <param name="text">The node text.</param>
         /// <param name="imageIndex">The index of the node image.</param>
-        /// <param name="selectedImageIndex">The index of the image to use when the node is selected.</param>
-        void AddDocumentNode(string key, string parentKey, string text, int imageIndex, int selectedImageIndex);
+        void AddDocumentNode(string key, string parentKey, string text, int imageIndex);
 
         /// <summary>
         /// Adds a folder node to the tree view that displays the structure of the workspace.
@@ -30,9 +29,8 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="key">The node key.</param>
         /// <param name="parentKey">The parent node key.</param>
         /// <param name="text">The node text.</param>
-        /// <param name="imageIndex">The index of the image to use when the node is not selected.</param>
-        /// <param name="selectedImageIndex">The index of the image to use when the node is selected.</param>
-        void AddFolderNode(string key, string parentKey, string text, int imageIndex, int selectedImageIndex);
+        /// <param name="imageIndex">The index of the node image.</param>
+        void AddFolderNode(string key, string parentKey, string text, int imageIndex);
 
         /// <summary>
         /// Adds a project node to the tree view that displays the structure of the workspace.
@@ -41,8 +39,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="parentKey">The parent node key.</param>
         /// <param name="text">The node text.</param>
         /// <param name="imageIndex">The index of the node image.</param>
-        /// <param name="selectedImageIndex">The index of the image to use when the node is selected.</param>
-        void AddProjectNode(string key, string parentKey, string text, int imageIndex, int selectedImageIndex);
+        void AddProjectNode(string key, string parentKey, string text, int imageIndex);
 
         /// <summary>
         /// Adds the workspace node to the tree view that displays the structure of the workspace.
@@ -50,8 +47,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="key">The node key.</param>
         /// <param name="text">The node text.</param>
         /// <param name="imageIndex">The index of the node image.</param>
-        /// <param name="selectedImageIndex">The index of the image to use when the node is selected.</param>
-        void AddWorkspaceNode(string key, string text, int imageIndex, int selectedImageIndex);
+        void AddWorkspaceNode(string key, string text, int imageIndex);
 
         /// <summary>
         /// Adds a toolbar button to the Workspace Explorer toolstrip.
@@ -108,13 +104,5 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="key">The node key.</param>
         /// <param name="text">The label text.</param>
         void SetNodeText(string key, string text);
-
-        /// <summary>
-        /// Updates the images to be used for the selected and unselected states of the specified node.
-        /// </summary>
-        /// <param name="key">The node key.</param>
-        /// <param name="imageIndex">The index of the image to use when the node is not selected.</param>
-        /// <param name="selectedImageIndex">The index of the image to use when the node is selected.</param>
-        void UpdateNodeState(string key, int imageIndex, int selectedImageIndex);
     }
 }

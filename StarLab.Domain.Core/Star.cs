@@ -9,7 +9,7 @@
     {
         private readonly Dictionary<string, IDesignation> designations = new Dictionary<string, IDesignation>();
 
-        private readonly Designation designation;
+        private readonly string designation;
 
         private readonly string name = string.Empty;
 
@@ -31,7 +31,7 @@
 
         public double BVColourIndex { get; private set; }
 
-        public IDesignation Designation => designation;
+        public string Designation => designation;
 
         public string Name => name;
 

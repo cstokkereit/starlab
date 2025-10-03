@@ -22,7 +22,7 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         /// <summary>
         /// Initialises a new instance of the <see cref="WorkspaceExplorerView"/> class.
         /// </summary>
-        /// <param name="definition">An <see cref="IViewDefinition"/> that holds the configuration information required to construct this view.</param>
+        /// <param name="definition">An <see cref="IViewDefinition"/> that provides access to the application settings required to construct this view.</param>
         /// <param name="factory">An <see cref="IViewFactory"/> that will be used to create the presenter and child view.</param>
         public WorkspaceExplorerView(IViewDefinition definition, IViewFactory factory)
         {
@@ -64,11 +64,10 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         /// <param name="parentKey">The parent node key.</param>
         /// <param name="text">The node text.</param>
         /// <param name="imageIndex">The index of the node image.</param>
-        /// <param name="selectedImageIndex">The index of the image to use when the node is selected.</param>
-        public void AddDocumentNode(string key, string parentKey, string text, int imageIndex, int selectedImageIndex)
+        public void AddDocumentNode(string key, string parentKey, string text, int imageIndex)
         {
             var parent = nodes[parentKey];
-            var node = parent.Nodes.Add(key, text, imageIndex, selectedImageIndex);
+            var node = parent.Nodes.Add(key, text, imageIndex, imageIndex);
             node.Tag = Constants.Document;
             nodes.Add(key, node);
         }
@@ -79,12 +78,11 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         /// <param name="key">The node key.</param>
         /// <param name="parentKey">The parent node key.</param>
         /// <param name="text">The node text.</param>
-        /// <param name="imageIndex">The index of the image to use when the node is not selected.</param>
-        /// <param name="selectedImageIndex">The index of the image to use when the node is selected.</param>
-        public void AddFolderNode(string key, string parentKey, string text, int imageIndex, int selectedImageIndex)
+        /// <param name="imageIndex">The index of the node image.</param>
+        public void AddFolderNode(string key, string parentKey, string text, int imageIndex)
         {
             var parent = nodes[parentKey];
-            var node = parent.Nodes.Add(key, text, imageIndex, selectedImageIndex);
+            var node = parent.Nodes.Add(key, text, imageIndex, imageIndex);
             node.Tag = Constants.Folder;
             nodes.Add(key, node);
         }
@@ -96,11 +94,10 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         /// <param name="parentKey">The parent node key.</param>
         /// <param name="text">The node text.</param>
         /// <param name="imageIndex">The index of the node image.</param>
-        /// <param name="selectedImageIndex">The index of the image to use when the node is selected.</param>
-        public void AddProjectNode(string key, string parentKey, string text, int imageIndex, int selectedImageIndex)
+        public void AddProjectNode(string key, string parentKey, string text, int imageIndex)
         {
             var parent = nodes[parentKey];
-            var node = parent.Nodes.Add(key, text, imageIndex, selectedImageIndex);
+            var node = parent.Nodes.Add(key, text, imageIndex, imageIndex);
             node.Tag = Constants.Project;
             nodes.Add(key, node);
         }
@@ -111,10 +108,9 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         /// <param name="key">The node key.</param>
         /// <param name="text">The node text.</param>
         /// <param name="imageIndex">The index of the node image.</param>
-        /// <param name="selectedImageIndex">The index of the image to use when the node is selected.</param>
-        public void AddWorkspaceNode(string key, string text, int imageIndex, int selectedImageIndex)
+        public void AddWorkspaceNode(string key, string text, int imageIndex)
         {
-            var node = treeView.Nodes.Add(key, text, imageIndex, selectedImageIndex);
+            var node = treeView.Nodes.Add(key, text, imageIndex, imageIndex);
             node.Tag = Constants.Workspace;
             nodes.Add(key, node);
         }
@@ -215,22 +211,6 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         public void SetNodeText(string key, string text)
         {
             if (nodes.ContainsKey(key)) nodes[key].Text = text;
-        }
-
-        /// <summary>
-        /// Updates the images to be used for the selected and unselected states of the specified node.
-        /// </summary>
-        /// <param name="key">The node key.</param>
-        /// <param name="imageIndex">The index of the image to use when the node is not selected.</param>
-        /// <param name="selectedImageIndex">The index of the image to use when the node is selected.</param>
-        public void UpdateNodeState(string key, int imageIndex, int selectedImageIndex)
-        {
-            if (nodes.ContainsKey(key))
-            {
-                var node = nodes[key];
-                node.SelectedImageIndex = selectedImageIndex;
-                node.ImageIndex = imageIndex;
-            }
         }
 
         /// <summary>

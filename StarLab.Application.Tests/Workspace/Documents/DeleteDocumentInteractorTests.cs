@@ -1,4 +1,6 @@
-﻿namespace StarLab.Application.Workspace.Documents;
+﻿using StarLab.Tests;
+
+namespace StarLab.Application.Workspace.Documents;
 
 /// <summary>
 /// A class for performing unit tests on the <see cref="DeleteDocumentInteractor"/> class.
@@ -15,12 +17,12 @@ public class DeleteDocumentInteractorTests : InteractorTests
 
         var interactor = Factory.CreateDeleteDocumentUseCase(port);
 
-        var dto = new DTOBuilder("Workspace")
+        var dto = new WorkspaceDtoBuilder("Workspace")
             .AddProject("Project1")
             .AddFolder("Workspace/Project1/Folder1")
             .AddDocument("1", "Document1", "Workspace/Project1/Folder1")
             .AddDocument("2", "Document2", "Workspace/Project1/Folder1")
-            .CreateWworkspace();
+            .CreateWorkspace();
 
         port.ShowMessage(Arg.Any<string>(),
                              Arg.Is("'Document1' will be deleted permanently."),
@@ -44,12 +46,12 @@ public class DeleteDocumentInteractorTests : InteractorTests
 
         var interactor = Factory.CreateDeleteDocumentUseCase(port);
 
-        var dto = new DTOBuilder("Workspace")
+        var dto = new WorkspaceDtoBuilder("Workspace")
             .AddProject("Project1")
             .AddFolder("Workspace/Project1/Folder1")
             .AddDocument("1", "Document1", "Workspace/Project1")
             .AddDocument("2", "Document2", "Workspace/Project1")
-            .CreateWworkspace();
+            .CreateWorkspace();
 
         port.ShowMessage(Arg.Any<string>(),
                          Arg.Is("'Document1' will be deleted permanently."),
@@ -73,11 +75,11 @@ public class DeleteDocumentInteractorTests : InteractorTests
 
         var interactor = Factory.CreateDeleteDocumentUseCase(port);
 
-        var dto = new DTOBuilder("Workspace")
+        var dto = new WorkspaceDtoBuilder("Workspace")
             .AddProject("Project1")
             .AddFolder("Workspace/Project1/Folder1")
             .AddDocument("1", "Document1", "Workspace/Project1/Folder1")
-            .CreateWworkspace();
+            .CreateWorkspace();
 
         interactor.Execute(dto, "2");
 

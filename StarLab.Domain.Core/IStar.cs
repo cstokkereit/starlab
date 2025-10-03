@@ -10,7 +10,7 @@ namespace StarLab
 
         double BVColourIndex { get; }
 
-        IDesignation Designation { get; }
+        string Designation { get; }
 
         string Name { get; }
 

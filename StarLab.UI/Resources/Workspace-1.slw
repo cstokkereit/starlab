@@ -1,21 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Workspace xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ActiveDocument="c46d67b8-78b6-4d34-9527-3f479131f5f3">
   <Projects>
-    <Project expanded="true" name="Yale Bright Star Catalog">
-      <Documents>
-        <Document id="577cb05b-c02f-499c-bc36-deb47aff9029" name="HR-Diagram-1" path="Workspace/Yale Bright Star Catalog/Charts/HRDiagrams" view="ColourMagnitudeChartView" />
-        <Document id="f7f6ec62-39d9-411e-ab6a-af547dca8dc5" name="HR-Diagram1" path="Workspace/Yale Bright Star Catalog/Charts/HRDiagrams" view="ColourMagnitudeChartView" />
-        <Document id="c46d67b8-78b6-4d34-9527-3f479131f5f3" name="HR-Diagram2" path="Workspace/Yale Bright Star Catalog/Charts/HRDiagrams" view="ColourMagnitudeChartView" />
-      </Documents>
-      <Folders>
-        <Folder expanded="true" path="Workspace/Yale Bright Star Catalog/Charts" />
-        <Folder expanded="true" path="Workspace/Yale Bright Star Catalog/Charts/HRDiagrams" />
-        <Folder expanded="true" path="Workspace/Yale Bright Star Catalog/Charts/Spectra" />
-        <Folder expanded="true" path="Workspace/Yale Bright Star Catalog/Tables" />
-        <Folder expanded="true" path="Workspace/Yale Bright Star Catalog/Tables/Brightest" />
-        <Folder expanded="true" path="Workspace/Yale Bright Star Catalog/Tables/Closest" />
-      </Folders>
-    </Project>
     <Project expanded="true" name="Henry Draper Catalog">
       <Documents />
       <Folders>
@@ -25,6 +10,102 @@
         <Folder expanded="false" path="Workspace/Henry Draper Catalog/Tables" />
         <Folder expanded="false" path="Workspace/Henry Draper Catalog/Tables/Brightest" />
         <Folder expanded="false" path="Workspace/Henry Draper Catalog/Tables/Closest" />
+      </Folders>
+    </Project>
+    <Project expanded="true" name="Yale Bright Star Catalog">
+      <Documents>
+        <Document id="577cb05b-c02f-499c-bc36-deb47aff9029" name="HR-Diagram 1" path="Workspace/Yale Bright Star Catalog/Charts/HRDiagrams" view="ColourMagnitudeChartView">
+          <Chart backColour="Black" foreColour="Green" >
+            <Font family="Segoe UI" size="16" bold="false" italic="false" underline="false" />
+            <Title backColour="Black" foreColour="Green" text="HR-Diagram 1" visible="true">
+              <Font family="Segoe UI" size="20" bold="true" italic="false" underline="false" />
+            </Title>
+            <X1 backColour="Black" foreColour="Green" visible="true">
+              <Label backColour="Black" foreColour="Green" text="Colour Index (B-V)" visible="true">
+                <Font family="Segoe UI" size="16" bold="false" italic="false" underline="false" />
+              </Label>
+            </X1>
+            <X2 backColour="Black" foreColour="Green" visible="true">
+              <Label backColour="Black" foreColour="Green" text="" visible="false">
+                <Font family="Segoe UI" size="16" bold="false" italic="false" underline="false" />
+              </Label>
+            </X2>
+            <Y1 backColour="Black" foreColour="Green" visible="true">
+              <Label backColour="Black" foreColour="Green" text="Absolute Magnitude" visible="true">
+                <Font family="Segoe UI" size="16" bold="false" italic="false" underline="false" />
+              </Label>
+            </Y1>
+            <Y2 backColour="Black" foreColour="Green" visible="true">
+              <Label backColour="Black" foreColour="Green" text="" visible="false">
+                <Font family="Segoe UI" size="16" bold="false" italic="false" underline="false" />
+              </Label>
+            </Y2>
+          </Chart>
+        </Document>
+        <Document id="f7f6ec62-39d9-411e-ab6a-af547dca8dc5" name="HR-Diagram 2" path="Workspace/Yale Bright Star Catalog/Charts/HRDiagrams" view="ColourMagnitudeChartView" >
+          <Chart backColour="Black" foreColour="Green" >
+            <Font family="Segoe UI" size="16" bold="false" italic="false" underline="false" />
+            <Title backColour="Black" foreColour="Green" text="HR-Diagram 2" visible="true">
+              <Font family="Segoe UI" size="20" bold="true" italic="false" underline="false" />
+            </Title>
+            <X1 backColour="Black" foreColour="Green" visible="true">
+              <Label backColour="Black" foreColour="Green" text="Colour Index (B-V)" visible="true">
+                <Font family="Segoe UI" size="16" bold="false" italic="false" underline="false" />
+              </Label>
+            </X1>
+            <X2 backColour="Black" foreColour="Green" visible="true">
+              <Label backColour="Black" foreColour="Green" text="" visible="false">
+                <Font family="Segoe UI" size="16" bold="false" italic="false" underline="false" />
+              </Label>
+            </X2>
+            <Y1 backColour="Black" foreColour="Green" visible="true">
+              <Label backColour="Black" foreColour="Green" text="Absolute Magnitude" visible="true">
+                <Font family="Segoe UI" size="16" bold="false" italic="false" underline="false" />
+              </Label>
+            </Y1>
+            <Y2 backColour="Black" foreColour="Green" visible="true">
+              <Label backColour="Black" foreColour="Green" text="" visible="false">
+                <Font family="Segoe UI" size="16" bold="false" italic="false" underline="false" />
+              </Label>
+            </Y2>
+          </Chart>
+        </Document>
+        <Document id="c46d67b8-78b6-4d34-9527-3f479131f5f3" name="HR-Diagram 3" path="Workspace/Yale Bright Star Catalog/Charts/HRDiagrams" view="ColourMagnitudeChartView" >
+          <Chart backColour="Black" foreColour="Green" >
+            <Font family="Segoe UI" size="16" bold="false" italic="false" underline="false" />
+            <Title backColour="Black" foreColour="Green" text="HR-Diagram 3" visible="true">
+              <Font family="Segoe UI" size="20" bold="true" italic="false" underline="false" />
+            </Title>
+            <X1 backColour="Black" foreColour="Green" visible="true">
+              <Label backColour="Black" foreColour="Green" text="Colour Index (B-V)" visible="true">
+                <Font family="Segoe UI" size="16" bold="false" italic="false" underline="false" />
+              </Label>
+            </X1>
+            <X2 backColour="Black" foreColour="Green" visible="true">
+              <Label backColour="Black" foreColour="Green" text="" visible="false">
+                <Font family="Segoe UI" size="16" bold="false" italic="false" underline="false" />
+              </Label>
+            </X2>
+            <Y1 backColour="Black" foreColour="Green" visible="true">
+              <Label backColour="Black" foreColour="Green" text="Absolute Magnitude" visible="true">
+                <Font family="Segoe UI" size="16" bold="false" italic="false" underline="false" />
+              </Label>
+            </Y1>
+            <Y2 backColour="Black" foreColour="Green" visible="true">
+              <Label backColour="Black" foreColour="Green" text="" visible="false">
+                <Font family="Segoe UI" size="16" bold="false" italic="false" underline="false" />
+              </Label>
+            </Y2>
+          </Chart>
+        </Document>
+      </Documents>
+      <Folders>
+        <Folder expanded="true" path="Workspace/Yale Bright Star Catalog/Charts" />
+        <Folder expanded="true" path="Workspace/Yale Bright Star Catalog/Charts/HRDiagrams" />
+        <Folder expanded="true" path="Workspace/Yale Bright Star Catalog/Charts/Spectra" />
+        <Folder expanded="true" path="Workspace/Yale Bright Star Catalog/Tables" />
+        <Folder expanded="true" path="Workspace/Yale Bright Star Catalog/Tables/Brightest" />
+        <Folder expanded="true" path="Workspace/Yale Bright Star Catalog/Tables/Closest" />
       </Folders>
     </Project>
   </Projects>

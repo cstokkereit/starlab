@@ -1,4 +1,6 @@
-﻿namespace StarLab.Application.Workspace
+﻿using StarLab.Tests;
+
+namespace StarLab.Application.Workspace
 {
     /// <summary>
     /// A class for performing unit tests on the <see cref="DeleteFolderInteractor"/> class.
@@ -15,12 +17,12 @@
 
             var interactor = Factory.CreateDeleteFolderUseCase(port);
 
-            var dto = new DTOBuilder("Workspace")
+            var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder2")
                 .AddFolder("Workspace/Project1/Folder3")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             interactor.Execute(dto, "Workspace/Project1/Folder2");
 
@@ -41,7 +43,7 @@
 
             var interactor = Factory.CreateDeleteFolderUseCase(port);
 
-            var dto = new DTOBuilder("Workspace")
+            var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .AddDocument("1", "Document1", "Workspace/Project1/Folder1")
@@ -50,7 +52,7 @@
                 .AddDocument("22", "Document3", "Workspace/Project1/Folder2")
                 .AddFolder("Workspace/Project1/Folder3")
                 .AddDocument("3", "Document4", "Workspace/Project1/Folder3")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             port.ShowMessage(Arg.Any<string>(),
                              Arg.Is("The folder 'Folder2' and all of its contents will be deleted permanently."),
@@ -76,7 +78,7 @@
 
             var interactor = Factory.CreateDeleteFolderUseCase(port);
 
-            var dto = new DTOBuilder("Workspace")
+            var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .AddDocument("1", "Document1", "Workspace/Project1/Folder1")
@@ -85,7 +87,7 @@
                 .AddDocument("22", "Document3", "Workspace/Project1/Folder2")
                 .AddFolder("Workspace/Project1/Folder3")
                 .AddDocument("3", "Document4", "Workspace/Project1/Folder3")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             port.ShowMessage(Arg.Any<string>(),
                              Arg.Is("The folder 'Folder2' and all of its contents will be deleted permanently."),
@@ -107,7 +109,7 @@
 
             var interactor = Factory.CreateDeleteFolderUseCase(port);
 
-            var dto = new DTOBuilder("Workspace")
+            var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder1/Folder1")
@@ -123,7 +125,7 @@
                 .AddFolder("Workspace/Project1/Folder2/Folder2")
                 .AddDocument("221", "Document7", "Workspace/Project1/Folder2/Folder2")
                 .AddDocument("222", "Document8", "Workspace/Project1/Folder2/Folder2")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             port.ShowMessage(Arg.Any<string>(),
                              Arg.Is("The folder 'Folder1' and all of its contents will be deleted permanently."),
@@ -159,10 +161,10 @@
 
             var interactor = Factory.CreateDeleteFolderUseCase(port);
 
-            var dto = new DTOBuilder("Workspace")
+            var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             interactor.Execute(dto, "Workspace/Project1/Folder2");
 
@@ -181,9 +183,9 @@
 
             var interactor = Factory.CreateDeleteFolderUseCase(port);
 
-            var dto = new DTOBuilder("Workspace")
+            var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             interactor.Execute(dto, "Workspace/Project1");
 
@@ -200,7 +202,7 @@
 
             var interactor = Factory.CreateDeleteFolderUseCase(port);
 
-            var dto = new DTOBuilder("Workspace")
+            var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddDocument("1", "Document1", "Workspace/Project1")
                 .AddProject("Project2")
@@ -208,7 +210,7 @@
                 .AddDocument("22", "Document3", "Workspace/Project2")
                 .AddProject("Project3")
                 .AddDocument("3", "Document4", "Workspace/Project3")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             port.ShowMessage(Arg.Any<string>(),
                              Arg.Is("The project 'Project2' and all of its contents will be deleted permanently."),
@@ -233,7 +235,7 @@
 
             var interactor = Factory.CreateDeleteFolderUseCase(port);
 
-            var dto = new DTOBuilder("Workspace")
+            var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddDocument("1", "Document1", "Workspace/Project1")
                 .AddProject("Project2")
@@ -241,7 +243,7 @@
                 .AddDocument("22", "Document3", "Workspace/Project2")
                 .AddProject("Project3")
                 .AddDocument("3", "Document4", "Workspace/Project3")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             port.ShowMessage(Arg.Any<string>(),
                              Arg.Is("The project 'Project2' and all of its contents will be deleted permanently."),
@@ -263,7 +265,7 @@
 
             var interactor = Factory.CreateDeleteFolderUseCase(port);
 
-            var dto = new DTOBuilder("Workspace")
+            var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder1/Folder1")
@@ -280,7 +282,7 @@
                 .AddFolder("Workspace/Project2/Folder1/Folder2")
                 .AddDocument("2121", "Document7", "Workspace/Project2/Folder1/Folder2")
                 .AddDocument("2122", "Document8", "Workspace/Project2/Folder1/Folder2")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             port.ShowMessage(Arg.Any<string>(),
                              Arg.Is("The project 'Project1' and all of its contents will be deleted permanently."),
@@ -316,9 +318,9 @@
 
             var interactor = Factory.CreateDeleteFolderUseCase(port);
 
-            var dto = new DTOBuilder("Workspace")
+            var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             interactor.Execute(dto, "Workspace/Project2");
 

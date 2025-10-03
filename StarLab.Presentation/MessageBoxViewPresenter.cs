@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
+using log4net;
 using StarLab.Application;
-using StarLab.Presentation.Configuration;
+using StarLab.Shared.Properties;
 using Stratosoft.Commands;
 
 using ImageResources = StarLab.Presentation.Properties.Resources;
@@ -13,6 +14,8 @@ namespace StarLab.Presentation
     /// </summary>
     public class MessageBoxViewPresenter : Presenter, IMessageBoxViewPresenter, IMessageBoxController
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(MessageBoxViewPresenter)); // The logger that will be used for writing log messages.
+
         private readonly IMessageBoxView view; // The view controlled by the presenter.
 
         /// <summary>
@@ -21,19 +24,21 @@ namespace StarLab.Presentation
         /// <param name="view">The <see cref="IMessageBoxView"/> controlled by this presenter.</param>
         /// <param name="commands">An <see cref="ICommandManager"/> that is required for the creation of <see cref="ICommand">s.</param>
         /// <param name="factory">An <see cref="IUseCaseFactory"/> that will be used to create use case interactors.</param>
-        /// <param name="configuration">The <see cref="Configuration.IApplicationConfiguration"/> that will be used to get configuration information.</param>
+        /// <param name="settings">An <see cref="IApplicationSettings"/> that provides access to the application configuration.</param>
         /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
         /// <param name="events">The <see cref="IEventAggregator"/> that manages application events.</param>
-        public MessageBoxViewPresenter(IMessageBoxView view, ICommandManager commands, IUseCaseFactory factory, IApplicationConfiguration configuration, IMapper mapper, IEventAggregator events) 
-            : base(commands, factory, configuration, mapper, events) 
+        public MessageBoxViewPresenter(IMessageBoxView view, ICommandManager commands, IUseCaseFactory factory, IApplicationSettings settings, IMapper mapper, IEventAggregator events) 
+            : base(commands, factory, settings, mapper, events) 
         { 
             this.view = view;
+
+            log.Debug(string.Format(Resources.InstanceCreated, nameof(MessageBoxViewPresenter)));
         }
 
         /// <summary>
         /// Gets the name of the controller.
         /// </summary>
-        public override string Name => ControllerNames.MessageBoxController;
+        public override string Name => Controllers.MessageBoxController;
 
         /// <summary>
         /// Shows the <see cref="IView"/> provided.

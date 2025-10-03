@@ -32,9 +32,9 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         {
             components = new System.ComponentModel.Container();
             toolStripContainer = new ToolStripContainer();
-            treeView = new Controls.TreeView();
+            treeView = new StarLab.UI.Controls.TreeView();
             imageList = new ImageList(components);
-            toolStrip = new Controls.ToolStrip();
+            toolStrip = new StarLab.UI.Controls.ToolStrip();
             toolStripContainer.ContentPanel.SuspendLayout();
             toolStripContainer.TopToolStripPanel.SuspendLayout();
             toolStripContainer.SuspendLayout();
@@ -75,7 +75,7 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
             treeView.SelectedImageIndex = 0;
             treeView.ShowLines = false;
             treeView.ShowNodeToolTips = true;
-            treeView.ShowPlusMinus = false;
+            treeView.ShowRootLines = false;
             treeView.Size = new Size(300, 525);
             treeView.TabIndex = 5;
             treeView.AfterLabelEdit += TreeView_AfterLabelEdit;

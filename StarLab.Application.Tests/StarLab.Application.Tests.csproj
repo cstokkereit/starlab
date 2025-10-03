@@ -25,6 +25,7 @@
     <ProjectReference Include="..\StarLab.Application.Core\StarLab.Application.Core.csproj" />
     <ProjectReference Include="..\StarLab.Application\StarLab.Application.csproj" />
     <ProjectReference Include="..\StarLab.Persistence\StarLab.Serialisation.csproj" />
+    <ProjectReference Include="..\StarLab.Tests\StarLab.Tests.csproj" />
   </ItemGroup>
 
   <ItemGroup>

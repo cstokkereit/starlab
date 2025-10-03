@@ -1,75 +1,91 @@
-﻿//using StarLab.Application.DataTransfer;
+﻿using System.Diagnostics;
 
-//namespace StarLab.Application.Model
-//{
-//    public class Chart
-//    {
-//        public Chart(ChartDTO dto)
-//        {
-//            BackColor = dto.BackColor;
-//            ForeColor = dto.ForeColor;
+namespace StarLab.Application.Workspace.Documents.Charts
+{
+    /// <summary>
+    /// Domain model representation of a chart.
+    /// </summary>
+    internal class Chart
+    {
+        /// <summary>
+        /// Initialises a new instance of the <see cref="Chart"> class.
+        /// </summary>
+        /// <param name="dto">A data transfer object that specifies the initial state of the <see cref="Chart"/>.</param>
+        public Chart(ChartDTO dto)
+        {
+            ArgumentNullException.ThrowIfNull(nameof(dto));
 
-//            Type = dto.Type;
+            Debug.Assert(dto.Title != null);
+            Debug.Assert(dto.Font != null);
+            Debug.Assert(dto.X1 != null);
+            Debug.Assert(dto.X2 != null);
+            Debug.Assert(dto.Y1 != null);
+            Debug.Assert(dto.Y2 != null);
 
-//            if (dto.MajorGrid != null)
-//            {
-//                MajorGrid = new Grid(dto.MajorGrid);
-//            }
+            if (string.IsNullOrEmpty(dto.BackColour))
+            {
+                BackColour = Constants.DefaultBackColour;
+            }
+            else
+            {
+                BackColour = dto.BackColour;
+            }
 
-//            if (dto.MinorGrid != null)
-//            {
-//                MinorGrid = new Grid(dto.MinorGrid);
-//            }
+            if (string.IsNullOrEmpty(dto.ForeColour))
+            {
+                ForeColour = Constants.DefaultForeColour;
+            }
+            else
+            {
+                ForeColour = dto.ForeColour;
+            }
 
-//            if (dto.XAxis != null)
-//            {
-//                XAxis = new Axis(dto.XAxis);
-//            }
+            Title = new Label(dto.Title);
+            Font = new Font(dto.Font);
+            X1 = new Axis(dto.X1);
+            X2 = new Axis(dto.X2);
+            Y1 = new Axis(dto.Y1);
+            Y2 = new Axis(dto.Y2);
+        }
 
-//            if (dto.XAxis2 != null)
-//            {
-//                XAxis2 = new Axis(dto.XAxis2);
-//            }
+        /// <summary>
+        /// Gets the background colour.
+        /// </summary>
+        public string BackColour { get; }
 
-//            if (dto.YAxis != null)
-//            {
-//                YAxis = new Axis(dto.YAxis);
-//            }
+        /// <summary>
+        /// Gets the font.
+        /// </summary>
+        public Font Font { get; }
 
-//            if (dto.YAxis2 != null)
-//            {
-//                YAxis2 = new Axis(dto.YAxis2);
-//            }
-//        }
+        /// <summary>
+        /// Gets the foreground colour.
+        /// </summary>
+        public string ForeColour { get; }
 
-//        public Chart()
-//        {
-//            //BackColor = Color.White;
-//            //ForeColor = Color.Black;
-//            MajorGrid = new Grid();
-//            MinorGrid = new Grid();
-//            XAxis = new Axis();
-//            XAxis2 = new Axis();
-//            YAxis = new Axis();
-//            YAxis2 = new Axis();
-//        }
+        /// <summary>
+        /// Gets the chart title label.
+        /// </summary>
+        public Label Title { get; }
 
-//        public int BackColor { get; private set; }
+        /// <summary>
+        /// Gets the bottom axis.
+        /// </summary>
+        public Axis X1 { get; }
 
-//        public int ForeColor { get; private set; }
+        /// <summary>
+        /// Gets the top axis.
+        /// </summary>
+        public Axis X2 { get; }
 
-//        public Grid MajorGrid { get; private set; }
+        /// <summary>
+        /// Gets the left axis.
+        /// </summary>
+        public Axis Y1 { get; }
 
-//        public Grid MinorGrid { get; private set; }
-
-//        public string Type { get; private set; }
-
-//        public Axis XAxis { get; private set; }
-
-//        public Axis XAxis2 { get; private set; }
-
-//        public Axis YAxis { get; private set; }
-
-//        public Axis YAxis2 { get; private set; }
-//    }
-//}
+        /// <summary>
+        /// Gets the right axis.
+        /// </summary>
+        public Axis Y2 { get; }
+    }
+}

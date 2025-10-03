@@ -7,7 +7,7 @@ namespace StarLab.Application.Workspace.Documents
     /// <summary>
     /// A use case that removes a document from the workspace hierarchy.
     /// </summary>
-    internal class DeleteDocumentInteractor : UseCaseInteractor<IWorkspaceOutputPort>, IDeleteItemUseCase
+    internal class DeleteDocumentInteractor : UseCaseInteractor<IWorkspaceOutputPort>, IUseCase<WorkspaceDTO, string>
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(DeleteDocumentInteractor)); // The logger that will be used for writing log messages.
 
@@ -26,6 +26,8 @@ namespace StarLab.Application.Workspace.Documents
         /// <param name="key">The key that identifies the document being removed.</param>
         public void Execute(WorkspaceDTO dto, string key)
         {
+            ArgumentNullException.ThrowIfNull(nameof(dto));
+
             dto.ActiveDocument = string.Empty;
 
             try

@@ -3,7 +3,7 @@
 namespace StarLab.Application.Workspace
 {
     /// <summary>
-    /// Represents the state of a project within the workspace hierarchy.
+    /// Domain model represention of a project.
     /// </summary>
     internal class Project : IFolder
     {
@@ -18,8 +18,8 @@ namespace StarLab.Application.Workspace
         /// <param name="parent">The <see cref="IFolder"/> that contains the <see cref="Project"/></param>
         public Project(ProjectDTO dto, IFolder parent)
         {
-            ArgumentNullException.ThrowIfNull(parent, nameof(parent));
-            ArgumentNullException.ThrowIfNull(dto, nameof(dto));
+            ArgumentNullException.ThrowIfNull(nameof(parent));
+            ArgumentNullException.ThrowIfNull(nameof(dto));
 
             folder = new Folder(dto.Name, dto.Expanded, parent);
 

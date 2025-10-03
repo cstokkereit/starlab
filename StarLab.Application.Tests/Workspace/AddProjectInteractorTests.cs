@@ -1,4 +1,6 @@
-﻿namespace StarLab.Application.Workspace
+﻿using StarLab.Tests;
+
+namespace StarLab.Application.Workspace
 {
     /// <summary>
     /// A class for performing unit tests on the <see cref="AddProjectInteractor"/> class.
@@ -15,10 +17,10 @@
 
             var interactor = Factory.CreateAddProjectUseCase(port);
 
-            var workspace = new DTOBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             var project = new ProjectDTO
             {
@@ -46,9 +48,9 @@
 
             var interactor = Factory.CreateAddProjectUseCase(port);
 
-            var workspace = new DTOBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             var project = new ProjectDTO
             {
@@ -75,9 +77,9 @@
 
             var interactor = Factory.CreateAddProjectUseCase(port);
 
-            var workspace = new DTOBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             var project = new ProjectDTO
             {
@@ -104,9 +106,9 @@
 
             var interactor = Factory.CreateAddProjectUseCase(port);
 
-            var workspace = new DTOBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             var project = new ProjectDTO
             {

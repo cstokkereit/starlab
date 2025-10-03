@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
+using log4net;
 using StarLab.Application;
-using StarLab.Presentation.Configuration;
 using StarLab.Shared.Properties;
 using Stratosoft.Commands;
 
@@ -15,6 +15,8 @@ namespace StarLab.Presentation
         where TParent : IViewController
         where TView : IChildView
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(ChildViewPresenter<TView, TParent>)); // The logger that will be used for writing log messages.
+
         private TParent? parentController; // The parent view controller.
 
         /// <summary>
@@ -23,12 +25,12 @@ namespace StarLab.Presentation
         /// <param name="view">The <see cref="TView"/> controlled by the presenter.</param>
         /// <param name="commands">An instance of <see cref="ICommandManager"/> that is required for the creation of commands.</param>
         /// <param name="factory">An <see cref="IUseCaseFactory"/> that will be used to create use case interactors.</param>
-        /// <param name="configuration">The <see cref="IApplicationConfiguration"/> that will be used to get configuration information.</param>
+        /// <param name="settings">An <see cref="IApplicationSettings"/> that provides access to the application configuration.</param>
         /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
         /// <param name="events">The <see cref="IEventAggregator"/> that manages application events.</param>
         /// <exception cref="ArgumentNullException"></exception>
-        public ChildViewPresenter(TView view, ICommandManager commands, IUseCaseFactory factory, IApplicationConfiguration configuration, IMapper mapper, IEventAggregator events)
-            : base(commands, factory, configuration, mapper, events)
+        public ChildViewPresenter(TView view, ICommandManager commands, IUseCaseFactory factory, IApplicationSettings settings, IMapper mapper, IEventAggregator events)
+            : base(commands, factory, settings, mapper, events)
         {
             View = view ?? throw new ArgumentNullException(nameof(view));
         }
@@ -36,7 +38,7 @@ namespace StarLab.Presentation
         /// <summary>
         /// Gets the name of the controller.
         /// </summary>
-        public override string Name => ControllerNames.GetContentControllerName(View.Name);
+        public override string Name => Controllers.GetContentControllerName(View.Name);
 
         /// <summary>
         /// Registers the parent <see cref="IViewController"/> with the <see cref="ChildViewPresenter{TView, TParent}"/>.

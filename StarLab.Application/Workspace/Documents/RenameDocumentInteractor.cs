@@ -6,7 +6,7 @@ namespace StarLab.Application.Workspace.Documents
     /// <summary>
     /// A use case that renames a document in the workspace hierarchy.
     /// </summary>
-    internal class RenameDocumentInteractor : UseCaseInteractor<IWorkspaceOutputPort>, IRenameItemUseCase
+    internal class RenameDocumentInteractor : UseCaseInteractor<IWorkspaceOutputPort>, IUseCase<WorkspaceDTO, string, string>
     {
         /// <summary>
         /// Initialises a new instance of the <see cref="AddDocumentInteractor"/> class.
@@ -24,6 +24,8 @@ namespace StarLab.Application.Workspace.Documents
         /// <param name="name">The new document name.</param>
         public void Execute(WorkspaceDTO dto, string id, string name)
         {
+            ArgumentNullException.ThrowIfNull(nameof(dto));
+
             if (WorkspaceInteractionHelper.IsValid(name))
             {
                 var workspace = new Workspace(dto);

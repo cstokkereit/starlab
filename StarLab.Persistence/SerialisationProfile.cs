@@ -21,12 +21,11 @@ namespace StarLab.Serialisation
         {
             CreateMap<Axis, AxisDTO>().ReverseMap();
             CreateMap<Chart, ChartDTO>().ReverseMap();
+            CreateMap<Font, FontDTO>().ReverseMap();
             CreateMap<Document, DocumentDTO>().ReverseMap();
             CreateMap<Folder, FolderDTO>().ReverseMap();
-            CreateMap<Font, FontDTO>().ReverseMap();
-            CreateMap<Grid, GridDTO>().ReverseMap();
+            CreateMap<Label, LabelDTO>().ReverseMap();
             CreateMap<Project, ProjectDTO>().ReverseMap();
-            CreateMap<Title, TitleDTO>().ReverseMap();
             CreateMap<Workspace.Workspace, WorkspaceDTO>().ReverseMap();
         }
     }

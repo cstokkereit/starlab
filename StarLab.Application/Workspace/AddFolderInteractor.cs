@@ -6,7 +6,7 @@ namespace StarLab.Application.Workspace
     /// <summary>
     /// A use case that adds a folder at a specified location within the workspace hierarchy.
     /// </summary>
-    internal class AddFolderInteractor : UseCaseInteractor<IWorkspaceOutputPort>, IAddFolderUseCase
+    internal class AddFolderInteractor : UseCaseInteractor<IWorkspaceOutputPort>, IUseCase<WorkspaceDTO, string>
     {
         /// <summary>
         /// Initialises a new instance of the <see cref="AddFolderInteractor"/> class.
@@ -23,6 +23,8 @@ namespace StarLab.Application.Workspace
         /// <param name="key">The key that identifies the parent folder of the folder being created.</param>
         public void Execute(WorkspaceDTO dto, string key)
         {
+            ArgumentNullException.ThrowIfNull(nameof(dto));
+
             var workspace = new Workspace(dto);
             var parent = workspace.GetFolder(key);
             var name = GetName(parent);

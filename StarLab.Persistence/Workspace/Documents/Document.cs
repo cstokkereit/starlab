@@ -1,4 +1,5 @@
-﻿using System.Xml.Serialization;
+﻿using StarLab.Serialisation.Workspace.Documents.Charts;
+using System.Xml.Serialization;
 
 namespace StarLab.Serialisation.Workspace.Documents
 {
@@ -8,6 +9,9 @@ namespace StarLab.Serialisation.Workspace.Documents
     [XmlType]
     public class Document
     {
+        [XmlElement]
+        public Chart? Chart;
+
         [XmlAttribute("id")]
         public string? ID;
 

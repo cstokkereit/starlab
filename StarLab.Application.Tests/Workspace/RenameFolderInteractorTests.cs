@@ -1,4 +1,6 @@
-﻿namespace StarLab.Application.Workspace
+﻿using StarLab.Tests;
+
+namespace StarLab.Application.Workspace
 {
     /// <summary>
     /// A class for performing unit tests on the <see cref="RenameFolderInteractor"/> class.
@@ -15,10 +17,10 @@
 
             var interactor = Factory.CreateRenameFolderUseCase(port);
 
-            var dto = new DTOBuilder("Workspace")
+            var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             interactor.Execute(dto, "Workspace/Project1/Folder1", "Folder2");
 
@@ -38,10 +40,10 @@
 
             var interactor = Factory.CreateRenameFolderUseCase(port);
 
-            var dto = new DTOBuilder("Workspace")
+            var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             var e = Assert.Throws<Exception>(() => interactor.Execute(dto, "Workspace/Project1/Folder1", string.Empty));
 
@@ -58,11 +60,11 @@
 
             var interactor = Factory.CreateRenameFolderUseCase(port);
 
-            var dto = new DTOBuilder("Workspace")
+            var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder2")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             var e = Assert.Throws<Exception>(() => interactor.Execute(dto, "Workspace/Project1/Folder1", "Folder2"));
 
@@ -79,10 +81,10 @@
 
             var interactor = Factory.CreateRenameFolderUseCase(port);
 
-            var dto = new DTOBuilder("Workspace")
+            var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             var e = Assert.Throws<Exception>(() => interactor.Execute(dto, "Workspace/Project1/Folder1", "Folder1/"));
 
@@ -99,12 +101,12 @@
 
             var interactor = Factory.CreateRenameFolderUseCase(port);
 
-            var dto = new DTOBuilder("Workspace")
+            var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder1/Folder11")
                 .AddFolder("Workspace/Project1/Folder1/Folder12")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             interactor.Execute(dto, "Workspace/Project1/Folder1", "Folder2");
 
@@ -126,12 +128,12 @@
 
             var interactor = Factory.CreateRenameFolderUseCase(port);
 
-            var dto = new DTOBuilder("Workspace")
+            var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .AddDocument("1", "Document1", "Workspace/Project1/Folder1")
                 .AddDocument("2", "Document2", "Workspace/Project1/Folder1")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             interactor.Execute(dto, "Workspace/Project1/Folder1", "Folder2");
 
@@ -156,7 +158,7 @@
 
             var interactor = Factory.CreateRenameFolderUseCase(port);
 
-            var dto = new DTOBuilder("Workspace")
+            var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder1/Folder11")
@@ -172,7 +174,7 @@
                 .AddDocument("5", "Document5", "Workspace/Project1/Folder1/Folder11/Folder112")
                 .AddDocument("6", "Document6", "Workspace/Project1/Folder1/Folder12/Folder121")
                 .AddDocument("7", "Document7", "Workspace/Project1/Folder1/Folder12/Folder122")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             interactor.Execute(dto, "Workspace/Project1/Folder1", "Folder2");
 
@@ -213,7 +215,7 @@
 
             var interactor = Factory.CreateRenameFolderUseCase(port);
 
-            var dto = new DTOBuilder("Workspace")
+            var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder1/Folder11")
@@ -229,7 +231,7 @@
                 .AddDocument("5", "Document5", "Workspace/Project1/Folder1/Folder11/Folder112")
                 .AddDocument("6", "Document6", "Workspace/Project1/Folder1/Folder12/Folder121")
                 .AddDocument("7", "Document7", "Workspace/Project1/Folder1/Folder12/Folder122")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             interactor.Execute(dto, "Workspace/Project1/Folder1/Folder12", "Folder2");
 
@@ -260,7 +262,6 @@
                 ws.Projects[0].Documents[6].Name == "Document7"));
         }
 
-
         /// <summary>
         /// Test that the <see cref="RenameFolderInteractor.Execute"/> method correctly renames a project.
         /// </summary>
@@ -271,7 +272,7 @@
 
             var interactor = Factory.CreateRenameFolderUseCase(port);
 
-            var dto = new DTOBuilder("Workspace")
+            var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddProject("Project2")
                 .AddFolder("Workspace/Project1/Folder1")
@@ -294,7 +295,7 @@
                 .AddDocument("6", "Document6", "Workspace/Project2/Folder1/Folder11/Folder111")
                 .AddDocument("7", "Document7", "Workspace/Project2/Folder1/Folder11/Folder112")
                 .AddDocument("8", "Document8", "Workspace/Project2/Folder1/Folder11/Folder112")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             interactor.Execute(dto, "Workspace/Project2", "Project3");
 
@@ -334,7 +335,6 @@
                 ws.Projects[1].Documents[3].Name == "Document8"));
         }
 
-
         /// <summary>
         /// Test that the <see cref="RenameFolderInteractor.Execute"/> method throws an exception if the new project name is an empty string.
         /// </summary>
@@ -345,9 +345,9 @@
 
             var interactor = Factory.CreateRenameFolderUseCase(port);
 
-            var dto = new DTOBuilder("Workspace")
+            var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             var e = Assert.Throws<Exception>(() => interactor.Execute(dto, "Workspace/Project1", string.Empty));
 
@@ -364,10 +364,10 @@
 
             var interactor = Factory.CreateRenameFolderUseCase(port);
 
-            var dto = new DTOBuilder("Workspace")
+            var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddProject("Project2")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             var e = Assert.Throws<Exception>(() => interactor.Execute(dto, "Workspace/Project1", "Project2"));
 
@@ -384,9 +384,9 @@
 
             var interactor = Factory.CreateRenameFolderUseCase(port);
 
-            var dto = new DTOBuilder("Workspace")
+            var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
-                .CreateWworkspace();
+                .CreateWorkspace();
 
             var e = Assert.Throws<Exception>(() => interactor.Execute(dto, "Workspace/Project1", "Project1/"));
 

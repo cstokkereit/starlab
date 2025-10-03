@@ -6,7 +6,7 @@ namespace StarLab.Application.Workspace
     /// <summary>
     /// A use case that renames a folder in the workspace hierarchy.
     /// </summary>
-    internal class RenameFolderInteractor : UseCaseInteractor<IWorkspaceOutputPort>, IRenameItemUseCase
+    internal class RenameFolderInteractor : UseCaseInteractor<IWorkspaceOutputPort>, IUseCase<WorkspaceDTO, string, string>
     {
         /// <summary>
         /// Initialises a new instance of the <see cref="RenameFolderInteractor"/> class.
@@ -19,11 +19,13 @@ namespace StarLab.Application.Workspace
         /// <summary>
         /// Executes the use case.
         /// </summary>
-        /// <param name="dtoWorkspace">A <see cref="WorkspaceDTO"/> that specifies the current state of the workspace.</param>
+        /// <param name="dto">A <see cref="WorkspaceDTO"/> that specifies the current state of the workspace.</param>
         /// <param name="key">The key that identifies the folder being renamed.</param>
         /// <param name="name">The new folder name.</param>
         public void Execute(WorkspaceDTO dto, string key, string name)
         {
+            ArgumentNullException.ThrowIfNull(nameof(dto));
+
             var workspace = new Workspace(dto);
 
             var folder = workspace.GetFolder(key);
