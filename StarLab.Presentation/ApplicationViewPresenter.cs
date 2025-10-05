@@ -15,11 +15,9 @@ namespace StarLab.Presentation
     /// <summary>
     /// Controls the behaviour of an <see cref="IApplicationView"/>.
     /// </summary>
-    internal class ApplicationViewPresenter : Presenter, IApplicationViewPresenter, IApplicationViewController, IApplicationOutputPort, ISubscriber<ActiveDocumentChangedEventArgs>
+    internal class ApplicationViewPresenter : Presenter<IApplicationView>, IApplicationViewPresenter, IApplicationViewController, IApplicationOutputPort, ISubscriber<ActiveDocumentChangedEventArgs>
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(ApplicationViewPresenter)); // The logger that will be used for writing log messages.
-
-        private readonly IApplicationView view; // The view controlled by the presenter.
 
         private IWorkspace workspace; // The workspace that the view represents.
 
@@ -37,13 +35,13 @@ namespace StarLab.Presentation
         /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
         /// <param name="events">The <see cref="IEventAggregator"/> that manages application events.</param>
         public ApplicationViewPresenter(IApplicationView view, ICommandManager commands, IUseCaseFactory factory, IApplicationSettings settings, IMapper mapper, IEventAggregator events)
-            : base(commands, factory, settings, mapper, events)
+            : base(view, commands, factory, settings, mapper, events)
         {
+            View.Attach(this);
+
             workspace = new EmptyWorkspace();
 
-            this.view = view;
-
-            log.Debug(string.Format(Resources.InstanceCreated, nameof(ApplicationViewPresenter)));
+            if (log.IsDebugEnabled) log.Debug(string.Format(Resources.InstanceCreated, nameof(ApplicationViewPresenter)));
         }
 
         /// <summary>
@@ -66,7 +64,7 @@ namespace StarLab.Presentation
         /// </summary>
         public void CloseActiveDocument()
         {
-            view.CloseActiveDocument();
+            View.CloseActiveDocument();
         }
 
         /// <summary>
@@ -91,13 +89,13 @@ namespace StarLab.Presentation
 
                 var layout = workspace.Layout;
 
-                view.CloseAll();
+                View.CloseAll();
 
                 Events.Publish(new WorkspaceClosedEventArgs(workspace));
 
                 workspace = new EmptyWorkspace();
 
-                view.SetLayout(layout); // This will restore any open tool windows
+                View.SetLayout(layout); // This will restore any open tool windows
 
                 Events.Publish(new WorkspaceChangedEventArgs(workspace));
             }
@@ -130,8 +128,8 @@ namespace StarLab.Presentation
         public void Exit()
         {
             confirmExit = false;
-            view.CloseAll();
-            view.Close();
+            View.CloseAll();
+            View.Close();
         }
 
         /// <summary>
@@ -196,7 +194,7 @@ namespace StarLab.Presentation
         /// </summary>
         public void SaveWorkspace()
         {
-            workspace.UpdateLayout(view.GetLayout());
+            workspace.UpdateLayout(View.GetLayout());
             var interactor = UseCaseFactory.CreateSaveWorkspaceUseCase(this);
             var dto = Mapper.Map<WorkspaceDTO>(workspace);
             interactor.Execute(dto);
@@ -221,15 +219,15 @@ namespace StarLab.Presentation
         {
             workspace = new Workspace.Workspace(dto);
 
-            view.CloseAll();
+            View.CloseAll();
 
-            if (!string.IsNullOrEmpty(workspace.Layout)) view.SetLayout(workspace.Layout);
+            if (!string.IsNullOrEmpty(workspace.Layout)) View.SetLayout(workspace.Layout);
 
             Events.Publish(new WorkspaceChangedEventArgs(workspace));
 
-            if (!string.IsNullOrEmpty(dto.FileName) && !Configuration.Workspace.Equals(dto.FileName))
+            if (!string.IsNullOrEmpty(dto.FileName) && !Settings.Workspace.Equals(dto.FileName))
             {
-                Configuration.Workspace = dto.FileName;
+                Settings.Workspace = dto.FileName;
             }
 
             UpdateCommandState(Actions.CloseDocument, workspace.ActiveDocument != null);
@@ -243,13 +241,13 @@ namespace StarLab.Presentation
         {
             if (view is IDockableView dockable)
             {
-                this.view.Show(dockable);
-                workspace.UpdateLayout(this.view.GetLayout());
+                View.Show(dockable);
+                workspace.UpdateLayout(View.GetLayout());
                 Events.Publish(new WorkspaceChangedEventArgs(workspace));
             }
             else
             {
-                this.view.Show(view);
+                View.Show(view);
             }
         }
 
@@ -306,7 +304,7 @@ namespace StarLab.Presentation
         /// <returns>The filename selected in the dialog.</returns>
         public string ShowOpenFileDialog(string title, string filter)
         {
-            return view.ShowOpenFileDialog(title, filter);
+            return View.ShowOpenFileDialog(title, filter);
         }
 
         /// <summary>
@@ -318,7 +316,7 @@ namespace StarLab.Presentation
         /// <returns>The filename selected in the dialog.</returns>
         public string ShowSaveFileDialog(string title, string filter, string extension)
         {
-            return view.ShowSaveFileDialog(title, filter, extension);
+            return View.ShowSaveFileDialog(title, filter, extension);
         }
 
         /// <summary>
@@ -363,9 +361,9 @@ namespace StarLab.Presentation
 
             Events.Publish(new WorkspaceChangedEventArgs(workspace), true); // Event published synchronously to allow renaming of folder in WorkspaceExplorer. Could make this a more specific event type if necessary.
 
-            if (!string.IsNullOrEmpty(dto.FileName) && !Configuration.Workspace.Equals(dto.FileName))
+            if (!string.IsNullOrEmpty(dto.FileName) && !Settings.Workspace.Equals(dto.FileName))
             {
-                Configuration.Workspace = dto.FileName;
+                Settings.Workspace = dto.FileName;
             }
 
             UpdateCommandState(Actions.CloseDocument, workspace.ActiveDocument != null);
@@ -391,23 +389,23 @@ namespace StarLab.Presentation
         /// </summary>
         private void CreateFileMenu()
         {
-            view.AddMenuItem(Constants.File, StringResources.File);
-            view.AddMenuItem(Constants.File, Constants.FileNew, StringResources.New);
-            view.AddMenuItem(Constants.FileNew, Constants.FileNewProject, StringResources.Project + Constants.Ellipsis);
-            view.AddMenuItem(Constants.FileNew, Constants.FileNewWorkspace, StringResources.Workspace + Constants.Ellipsis);
-            view.AddMenuSeparator(Constants.File);
-            view.AddMenuItem(Constants.File, Constants.FileOpen, StringResources.Open);
-            view.AddMenuItem(Constants.FileOpen, Constants.FileOpenWorkspace, StringResources.Workspace + Constants.Ellipsis, ImageResources.OpenWorkspace, GetCommand(Actions.OpenWorkspace));
-            view.AddMenuSeparator(Constants.File);
-            view.AddMenuItem(Constants.File, Constants.FileClose, StringResources.Close, GetCommand(Actions.CloseDocument));
-            view.AddMenuItem(Constants.File, Constants.FileCloseWorkspace, StringResources.CloseWorkspace, ImageResources.CloseWorkspace, GetCommand(Actions.CloseWorkspace));
-            view.AddMenuSeparator(Constants.File);
-            view.AddMenuItem(Constants.File, Constants.FileSaveAll, StringResources.SaveAll, ImageResources.SaveAll, GetCommand(Actions.SaveWorkspace));
-            view.AddMenuSeparator(Constants.File);
-            view.AddMenuItem(Constants.File, Constants.FilePageSetup, StringResources.PageSetup + Constants.Ellipsis, ImageResources.PageSetup); //, AppController.GetCommand(this, Constants.FILE_PAGE_SETUP));
-            view.AddMenuItem(Constants.File, Constants.FilePrint, StringResources.Print + Constants.Ellipsis, ImageResources.Print); //, AppController.GetCommand(this, Constants.FILE_PRINT));
-            view.AddMenuSeparator(Constants.File);
-            view.AddMenuItem(Constants.File, Constants.FileExit, StringResources.Exit, GetCommand(AppController, Actions.Exit));
+            View.AddMenuItem(Constants.File, StringResources.File);
+            View.AddMenuItem(Constants.File, Constants.FileNew, StringResources.New);
+            View.AddMenuItem(Constants.FileNew, Constants.FileNewProject, StringResources.Project + Constants.Ellipsis);
+            View.AddMenuItem(Constants.FileNew, Constants.FileNewWorkspace, StringResources.Workspace + Constants.Ellipsis);
+            View.AddMenuSeparator(Constants.File);
+            View.AddMenuItem(Constants.File, Constants.FileOpen, StringResources.Open);
+            View.AddMenuItem(Constants.FileOpen, Constants.FileOpenWorkspace, StringResources.Workspace + Constants.Ellipsis, ImageResources.OpenWorkspace, GetCommand(Actions.OpenWorkspace));
+            View.AddMenuSeparator(Constants.File);
+            View.AddMenuItem(Constants.File, Constants.FileClose, StringResources.Close, GetCommand(Actions.CloseDocument));
+            View.AddMenuItem(Constants.File, Constants.FileCloseWorkspace, StringResources.CloseWorkspace, ImageResources.CloseWorkspace, GetCommand(Actions.CloseWorkspace));
+            View.AddMenuSeparator(Constants.File);
+            View.AddMenuItem(Constants.File, Constants.FileSaveAll, StringResources.SaveAll, ImageResources.SaveAll, GetCommand(Actions.SaveWorkspace));
+            View.AddMenuSeparator(Constants.File);
+            View.AddMenuItem(Constants.File, Constants.FilePageSetup, StringResources.PageSetup + Constants.Ellipsis, ImageResources.PageSetup); //, AppController.GetCommand(this, Constants.FILE_PAGE_SETUP));
+            View.AddMenuItem(Constants.File, Constants.FilePrint, StringResources.Print + Constants.Ellipsis, ImageResources.Print); //, AppController.GetCommand(this, Constants.FILE_PRINT));
+            View.AddMenuSeparator(Constants.File);
+            View.AddMenuItem(Constants.File, Constants.FileExit, StringResources.Exit, GetCommand(AppController, Actions.Exit));
         }
 
         /// <summary>
@@ -415,10 +413,10 @@ namespace StarLab.Presentation
         /// </summary>
         private void CreateHelpMenu()
         {
-            view.AddMenuItem(Constants.Help, StringResources.Help);
+            View.AddMenuItem(Constants.Help, StringResources.Help);
             //view.AddMenuItem(Constants.HELP, Constants.HELP_VIEW_HELP, Resources.ViewHelp, AppController.GetCommand(this, Constants.VIEW_HELP));
-            view.AddMenuSeparator(Constants.Help);
-            view.AddMenuItem(Constants.Help, Constants.HelpAbout, StringResources.AboutStarLab, GetShowViewCommand(Views.About));
+            View.AddMenuSeparator(Constants.Help);
+            View.AddMenuItem(Constants.Help, Constants.HelpAbout, StringResources.AboutStarLab, GetShowViewCommand(Views.About));
         }
 
         /// <summary>
@@ -426,8 +424,8 @@ namespace StarLab.Presentation
         /// </summary>
         private void CreateStandardToolbar()
         {
-            view.AddToolbarButton(Constants.FileOpenWorkspace, StringResources.OpenWorkspace, ImageResources.OpenWorkspace, GetCommand(Actions.OpenWorkspace));
-            view.AddToolbarButton(Constants.FileSaveAll, StringResources.SaveAll, ImageResources.SaveAll, GetCommand(Actions.SaveWorkspace));
+            View.AddToolbarButton(Constants.FileOpenWorkspace, StringResources.OpenWorkspace, ImageResources.OpenWorkspace, GetCommand(Actions.OpenWorkspace));
+            View.AddToolbarButton(Constants.FileSaveAll, StringResources.SaveAll, ImageResources.SaveAll, GetCommand(Actions.SaveWorkspace));
         }
 
         /// <summary>
@@ -435,8 +433,8 @@ namespace StarLab.Presentation
         /// </summary>
         private void CreateToolsMenu()
         {
-            view.AddMenuItem(Constants.Tools, StringResources.Tools);
-            view.AddMenuItem(Constants.Tools, Constants.ToolsOptions, StringResources.Options, ImageResources.Settings, GetShowViewCommand(Views.Options));
+            View.AddMenuItem(Constants.Tools, StringResources.Tools);
+            View.AddMenuItem(Constants.Tools, Constants.ToolsOptions, StringResources.Options, ImageResources.Settings, GetShowViewCommand(Views.Options));
         }
 
         /// <summary>
@@ -444,8 +442,8 @@ namespace StarLab.Presentation
         /// </summary>
         private void CreateViewMenu()
         {
-            view.AddMenuItem(Constants.View, StringResources.View);
-            view.AddMenuItem(Constants.View, Constants.ViewWorkspaceExplorer, StringResources.WorkspaceExplorer, GetShowViewCommand(Views.WorkspaceExplorer));
+            View.AddMenuItem(Constants.View, StringResources.View);
+            View.AddMenuItem(Constants.View, Constants.ViewWorkspaceExplorer, StringResources.WorkspaceExplorer, GetShowViewCommand(Views.WorkspaceExplorer));
         }
 
         /// <summary>
@@ -453,7 +451,7 @@ namespace StarLab.Presentation
         /// </summary>
         private void CreateWindowMenu()
         {
-            view.AddMenuItem(Constants.Window, StringResources.Window);
+            View.AddMenuItem(Constants.Window, StringResources.Window);
         }
 
         /// <summary>
@@ -461,10 +459,10 @@ namespace StarLab.Presentation
         /// </summary>
         private void CreateWorkspaceMenu()
         {
-            view.AddMenuItem(Constants.Workspace, StringResources.Workspace);
+            View.AddMenuItem(Constants.Workspace, StringResources.Workspace);
             //view.AddMenuItem(Constants.WORKSPACE, Constants.WORKSPACE_ADD_CHART, StringResources.AddChart + Constants.ELLIPSIS, commands.GetCommand(Constants.WORKSPACE_ADD_CHART));
             //view.AddMenuItem(Constants.WORKSPACE, Constants.WORKSPACE_ADD_TABLE, StringResources.AddTable + Constants.ELLIPSIS, ImageResources.NewTable, commands.GetCommand(Constants.WORKSPACE_ADD_TABLE));
-            view.AddMenuSeparator(Constants.Workspace);
+            View.AddMenuSeparator(Constants.Workspace);
             //view.AddMenuItem(Constants.WORKSPACE, Constants.WORKSPACE_NEW_FOLDER, StringResources.NewFolder + Constants.ELLIPSIS, ImageResources.NewFolder, commands.GetCommand(Constants.WORKSPACE_NEW_FOLDER));
         }
 
@@ -473,9 +471,9 @@ namespace StarLab.Presentation
         /// </summary>
         private void OpenDefaultWorkspace()
         {
-            if (!string.IsNullOrEmpty(Configuration.Workspace))
+            if (!string.IsNullOrEmpty(Settings.Workspace))
             {
-                OpenWorkspace(Configuration.Workspace);
+                OpenWorkspace(Settings.Workspace);
             }
         }
 
@@ -487,7 +485,7 @@ namespace StarLab.Presentation
         {
             if (string.IsNullOrEmpty(filename))
             {
-                filename = view.ShowOpenFileDialog(StringResources.OpenWorkspace, StringResources.WorkspaceFileFilter);
+                filename = View.ShowOpenFileDialog(StringResources.OpenWorkspace, StringResources.WorkspaceFileFilter);
             }
 
             var interactor = UseCaseFactory.CreateOpenWorkspaceUseCase(this);

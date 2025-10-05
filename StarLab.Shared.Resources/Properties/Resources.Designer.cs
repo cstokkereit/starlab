@@ -178,6 +178,15 @@ namespace StarLab.Shared.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid content type: {0}.
+        /// </summary>
+        public static string ChildViewNotAControl {
+            get {
+                return ResourceManager.GetString("ChildViewNotAControl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Close.
         /// </summary>
         public static string Close {
@@ -420,15 +429,6 @@ namespace StarLab.Shared.Properties {
         public static string InstanceCreated {
             get {
                 return ResourceManager.GetString("InstanceCreated", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Invalid content type: {0}.
-        /// </summary>
-        public static string InvalidContentType {
-            get {
-                return ResourceManager.GetString("InvalidContentType", resourceCulture);
             }
         }
         
@@ -767,6 +767,15 @@ namespace StarLab.Shared.Properties {
         public static string View {
             get {
                 return ResourceManager.GetString("View", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} attached to {1}..
+        /// </summary>
+        public static string ViewAttached {
+            get {
+                return ResourceManager.GetString("ViewAttached", resourceCulture);
             }
         }
         

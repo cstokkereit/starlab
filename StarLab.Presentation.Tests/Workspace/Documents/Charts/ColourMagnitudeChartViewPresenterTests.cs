@@ -3,7 +3,7 @@
     /// <summary>
     /// 
     /// </summary>
-    public class ColourMagnitudeChartViewPresenterTests : PresenterTests
+    public class ColourMagnitudeChartViewPresenterTests : PresentationTests
     {
         private IChartView view; //
 

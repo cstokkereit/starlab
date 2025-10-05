@@ -22,7 +22,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
 
         private SettingsGroupManager<IChartSettingsView>? groupManager; // Displays the currently selected settings group.
 
-        private IChartSettings? settings; // Represents the current state of the chart.
+        private IChartSettings? chart; // Represents the current state of the chart.
 
         private IWorkspace? workspace; // The workspace that contains the chart.
 
@@ -40,9 +40,11 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         public ChartSettingsViewPresenter(IChartSettingsView view, ICommandManager commands, IUseCaseFactory factory, IApplicationSettings settings, IMapper mapper, IEventAggregator events)
             : base(view, commands, factory, settings, mapper, events) 
         {
+            View.Attach(this);
+
             id = string.Empty;
 
-            log.Debug(string.Format(StringResources.InstanceCreated, nameof(ChartSettingsViewPresenter)));
+            if (log.IsDebugEnabled) log.Debug(string.Format(StringResources.InstanceCreated, nameof(ChartSettingsViewPresenter)));
         }
 
         /// <summary>
@@ -53,15 +55,15 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// <summary>
         /// Applies the preview settings to the chart view.
         /// </summary>
-        /// <param name="settings">The <see cref="IChartSettings"/> that specifies the state of the chart.</param>
-        public void ApplyPreviewSettings(IChartSettings settings)
+        /// <param name="chart">The <see cref="IChartSettings"/> that specifies the state of the chart.</param>
+        public void ApplyPreviewSettings(IChartSettings chart)
         {
-            this.settings = settings;
+            this.chart = chart;
 
             if (ParentController.GetController(Controllers.ChartController) is IChartOutputPort outputPort)
             {
                 var interactor = UseCaseFactory.CreateUpdateChartUseCase(outputPort);
-                var dto = Mapper.Map<ChartDTO>(settings);
+                var dto = Mapper.Map<ChartDTO>(chart);
                 interactor.Execute(dto);
             }
         }
@@ -71,11 +73,11 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// </summary>
         public void ApplySettings()
         {
-            if (settings != null && AppController.GetController(Controllers.ApplicationViewController) is IApplicationOutputPort outputPort)
+            if (chart != null && AppController.GetController(Controllers.ApplicationViewController) is IApplicationOutputPort outputPort)
             {
                 var interactor = UseCaseFactory.CreateUpdateDocumentUseCase(outputPort);
                 var workspaceDTO = Mapper.Map<WorkspaceDTO>(workspace);
-                var chartDto = Mapper.Map<ChartDTO>(settings);
+                var chartDto = Mapper.Map<ChartDTO>(chart);
                 interactor.Execute(workspaceDTO, id, chartDto);
             }
         }
@@ -135,13 +137,13 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         public void ShowSettingsGroup(string group)
         {
             Debug.Assert(groupManagers.ContainsKey(group));
-            Debug.Assert(settings != null);
+            Debug.Assert(chart != null);
 
             View.Clear();
 
             groupManager = groupManagers[group];
 
-            groupManager.ShowSettings(settings);
+            groupManager.ShowSettings(chart);
         }
 
         /// <summary>
@@ -179,7 +181,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// <param name="document">The <see cref="IDocument"/> that contains the chart.</param>
         public void UpdateSettings(IDocument document)
         {
-            settings = new ChartSettings(document.Chart);
+            chart = new ChartSettings(document.Chart);
 
             id = document.ID;
         }

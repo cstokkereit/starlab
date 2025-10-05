@@ -1,6 +1,7 @@
 ﻿using log4net;
 using StarLab.Presentation;
 using StarLab.Presentation.Workspace.Documents;
+using StarLab.Shared.Properties;
 using Stratosoft.Commands;
 
 namespace StarLab.UI.Workspace.Documents
@@ -12,39 +13,28 @@ namespace StarLab.UI.Workspace.Documents
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(AddDocumentView)); // The logger that will be used for writing log messages.
 
-        private readonly IAddDocumentViewPresenter presenter; // The presenter that controls the view.
-
-        private readonly SplitViewPanels panel; // The panel that will contain the view.
+        private IAddDocumentViewPresenter? presenter; // The presenter that controls the view.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="AddDocumentView"/> class.
         /// </summary>
-        /// <param name="definition">An <see cref="IViewDefinition"/> that holds the information required to construct this view.</param>
-        /// <param name="factory">An <see cref="IViewFactory"/> that will be used to create the presenter.</param>
         /// <summary>
-        public AddDocumentView(IViewDefinition definition, IViewFactory factory)
+        public AddDocumentView()
         {
-            ArgumentNullException.ThrowIfNull(definition, nameof(definition));
-            ArgumentNullException.ThrowIfNull(factory, nameof(factory));
-
             InitializeComponent();
 
             Name = Views.AddDocument;
-
-            panel = (SplitViewPanels)definition.Panel;
-
-            presenter = (IAddDocumentViewPresenter)factory.CreatePresenter(this);
         }
 
         /// <summary>
         /// Gets the <see cref="IChildViewController"> that controls this view.
         /// </summary>
-        public IChildViewController Controller => (IChildViewController)presenter;
+        public IChildViewController? Controller => (IChildViewController?)presenter;
 
         /// <summary>
         /// Gets the preferred panel, if any, in which to display the view.
         /// </summary>
-        public SplitViewPanels Panel => panel;
+        public SplitViewPanels Panel => SplitViewPanels.Any;
 
         /// <summary>
         /// Gets the <see cref="DocumentType"/>.
@@ -86,6 +76,8 @@ namespace StarLab.UI.Workspace.Documents
             listDocumentTypes.Columns[0].Width = listDocumentTypes.Width;
 
             listDocumentTypes.View = View.Details;
+
+            if (log.IsDebugEnabled) log.Debug(string.Format(Resources.InstanceCreated, nameof(AddDocumentView)));
         }
 
         /// <summary>
@@ -96,6 +88,17 @@ namespace StarLab.UI.Workspace.Documents
         public void AddImage(string key, Image image)
         {
             imageList.Images.Add(image);
+        }
+
+        /// <summary>
+        /// Attaches the <see cref="IPresenter"/> that controls the view.
+        /// </summary>
+        /// <param name="presenter">The <see cref="IChildViewPresenter"/> that controls the view.</param>
+        public void Attach(IChildViewPresenter presenter)
+        {
+            if (this.presenter != null) throw new InvalidOperationException(); // TODO
+
+            this.presenter = (IAddDocumentViewPresenter)presenter;
         }
 
         /// <summary>

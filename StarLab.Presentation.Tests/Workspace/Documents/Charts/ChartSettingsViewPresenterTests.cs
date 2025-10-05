@@ -11,7 +11,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
     /// <summary>
     /// A class for performing unit tests on the <see cref="ChartSettingsViewPresenter"/> class.
     /// </summary>  
-    public class ChartSettingsViewPresenterTests : PresenterTests
+    public class ChartSettingsViewPresenterTests : PresentationTests
     {
         private IChartSettingsView view; //
 

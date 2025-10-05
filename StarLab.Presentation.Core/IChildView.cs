@@ -9,7 +9,7 @@
         /// <summary>
         /// Gets the <see cref="IChildViewController"/> that controls the view.
         /// </summary>
-        IChildViewController Controller { get; }
+        IChildViewController? Controller { get; }
 
         /// <summary>
         /// Gets or sets the minimum size of the view.
@@ -30,6 +30,12 @@
         /// Gets the current size of the view.
         /// </summary>
         Size Size { get; }
+
+        /// <summary>
+        /// Attaches the <see cref="IPresenter"/> that controls the view.
+        /// </summary>
+        /// <param name="presenter">The <see cref="IPresenter"/> that controls the view.</param>
+        void Attach(IChildViewPresenter presenter);
 
         /// <summary>
         /// Initialises the view.

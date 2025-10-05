@@ -9,8 +9,10 @@ namespace StarLab.Presentation
     /// <summary>
     /// Base class for testing classes that are derived from <see cref="Presenter"/>.
     /// </summary>
-    public abstract class PresenterTests
+    public abstract class PresentationTests
     {
+        protected WindsorContainer container; // The Inversion of Control (IoC) container.
+
         protected IApplicationController controller; // The application controller.
 
         protected IApplicationSettings settings; // The application settings.
@@ -22,8 +24,6 @@ namespace StarLab.Presentation
         protected IUseCaseFactory factory; // The use case factory.
 
         protected IMapper mapper; // The object mapper.
-
-        private WindsorContainer container; // The Inversion of Control (IoC) container.
 
         /// <summary>
         /// Registers the dependencies with the IoC container and initialises the class level variables before each test.

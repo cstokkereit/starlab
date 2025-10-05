@@ -1,5 +1,4 @@
 ﻿using log4net;
-using StarLab.Application;
 using StarLab.Presentation;
 using StarLab.Presentation.Workspace;
 using StarLab.Shared.Properties;
@@ -15,60 +14,40 @@ namespace StarLab.UI.Workspace
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(ToolView)); // The logger that will be used for writing log messages.
 
-        private readonly IDockableViewPresenter presenter; // The presenter that controls the view.
-
-        private readonly IChildView content; // A view that implements the tool specific behaviour.
-
         private readonly string id; // The view ID.
+
+        private IChildView? childView; // A view that implements the tool specific behaviour.
+
+        private IDockableViewPresenter? presenter; // The presenter that controls the view.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="ToolView"> class.
         /// </summary>
         /// <param name="name">The name of the tool window.</param>
         /// <param name="text">The tool window text.</param>
-        /// <param name="factory">An <see cref="IViewFactory"/> that will be used to create the presenter and child view.</param>
         /// <param name="definition">The <see cref="ViewDefinition"/> used to construct this view.</param>
         /// <exception cref="ArgumentException"></exception>
-        public ToolView(string name, string text, IViewFactory factory, ViewDefinition definition)
+        public ToolView(string name, string text, ViewDefinition definition)
         {
             ArgumentNullException.ThrowIfNull(definition, nameof(definition));
-            ArgumentNullException.ThrowIfNull(factory, nameof(factory));
             ArgumentException.ThrowIfNullOrEmpty(name, nameof(name));
             ArgumentException.ThrowIfNullOrEmpty(text, nameof(text));
 
-            Debug.Assert(definition.ChildViews.Count == 1);
+            Debug.Assert(definition.ChildViewDefinitions.Count == 1);
 
             InitializeComponent();
 
             Name = name;
             Text = text;
             id = name;
-   
-            SuspendLayout();
 
-            presenter = (IDockableViewPresenter)factory.CreatePresenter(this);
-
-            content = factory.CreateView(definition.ChildViews[0]);
-
-            content.Controller.RegisterController((IViewController)presenter);
-
-            if (content is Control control)
-            {
-                control.Dock = DockStyle.Fill;
-                Controls.Add(control);
-            }
-            else
-            {
-                throw new Exception(string.Format(Resources.InvalidContentType, content.GetType()));
-            }
-
-            ResumeLayout();
+            if (log.IsDebugEnabled) log.Debug(string.Format(Resources.InstanceCreated, nameof(ToolView)));
         }
 
         /// <summary>
         /// Gets the <see cref="IViewController"/> that controls this view.
         /// </summary>
-        public IViewController Controller => (IViewController)presenter;
+        public IViewController? Controller => (IViewController?)presenter;
 
         /// <summary>
         /// Gets the view ID.
@@ -76,12 +55,68 @@ namespace StarLab.UI.Workspace
         public string ID => id;
 
         /// <summary>
+        /// Attaches the <see cref="IPresenter"/> that controls the view.
+        /// </summary>
+        /// <param name="presenter">The <see cref="IPresenter"/> that controls the view.</param>
+        public void Attach(IPresenter presenter)
+        {
+            if (this.presenter != null) throw new InvalidOperationException(); // TODO
+
+            this.presenter = (IDockableViewPresenter)presenter;
+        }
+
+        /// <summary>
+        /// Attaches the <see cref="IChildView"/> to the view.
+        /// </summary>
+        /// <param name="childView">The <see cref="IChildView"/> to attach.</param>
+        public void Attach(IChildView childView)
+        {
+            ArgumentNullException.ThrowIfNull(nameof(childView));
+
+            Debug.Assert(childView.Controller != null);
+
+            if (presenter is IViewController controller)
+            {
+                childView.Controller.RegisterController(controller);
+            }
+            
+            SuspendLayout();
+
+            if (childView is Control control)
+            {
+                control.Dock = DockStyle.Fill;
+                Controls.Add(control);
+            }
+            else
+            {
+                throw new ArgumentException(string.Format(Resources.ChildViewNotAControl, childView.GetType()));
+            }
+
+            ResumeLayout();
+
+            this.childView = childView;
+
+            if (log.IsDebugEnabled) log.Debug(string.Format(Resources.ViewAttached, childView.Name, nameof(ToolView)));
+        }
+
+        /// <summary>
+        /// Detaches the <see cref="IPresenter"/> that controls the view.
+        /// </summary>
+        public void Detach()
+        {
+            presenter = null;
+        }
+
+        /// <summary>
         /// Initialises the view.
         /// </summary>
         /// <param name="controller">The <see cref="IApplicationController"/>.</param>
         public void Initialise(IApplicationController controller)
         {
-            content.Controller.Initialise(controller);
+            Debug.Assert(childView != null);
+            Debug.Assert(childView.Controller != null);
+
+            childView.Controller.Initialise(controller);
         }
 
         /// <summary>
@@ -96,6 +131,8 @@ namespace StarLab.UI.Workspace
                 //Height = presenter.Height;
                 //Width = presenter.Width;
             }
+
+            Debug.Assert(presenter != null);
 
             Show(dockPanel, (DockState)Enum.Parse(DockState.GetType(), presenter.Location));
         }

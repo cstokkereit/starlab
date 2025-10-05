@@ -3,7 +3,7 @@
     /// <summary>
     /// 
     /// </summary>
-    public class ToolViewPresenterTests : PresenterTests
+    public class ToolViewPresenterTests : PresentationTests
     {
         private IDockableView view; //
 

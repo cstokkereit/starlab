@@ -47,9 +47,11 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         public WorkspaceExplorerViewPresenter(IWorkspaceExplorerView view, ICommandManager commands, IUseCaseFactory factory, IApplicationSettings settings, IMapper mapper, IEventAggregator events)
             : base(view, commands, factory, settings, mapper, events)
         {
+            view.Attach(this);
+
             workspace = new EmptyWorkspace();
 
-            log.Debug(string.Format(Resources.InstanceCreated, nameof(WorkspaceExplorerViewPresenter)));
+            if (log.IsDebugEnabled) log.Debug(string.Format(Resources.InstanceCreated, nameof(WorkspaceExplorerViewPresenter)));
         }
 
         /// <summary>

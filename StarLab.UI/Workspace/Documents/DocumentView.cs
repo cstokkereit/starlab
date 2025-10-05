@@ -2,7 +2,9 @@
 using StarLab.Presentation;
 using StarLab.Presentation.Workspace;
 using StarLab.Presentation.Workspace.Documents;
+using StarLab.Shared.Properties;
 using Stratosoft.Commands;
+using System.Diagnostics;
 using WeifenLuo.WinFormsUI.Docking;
 
 namespace StarLab.UI.Workspace.Documents
@@ -14,21 +16,17 @@ namespace StarLab.UI.Workspace.Documents
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(DocumentView)); // The logger that will be used for writing log messages.
 
-        private readonly IDockableViewPresenter presenter; // The presenter that controls the view.
-
         private readonly string id; // The view ID.
+
+        private IDockableViewPresenter? presenter; // The presenter that controls the view.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="DocumentView"/> class.
         /// </summary>
         /// <param name="document">The <see cref="IDocument"/> that this view represents.</param>
-        /// <param name="factory">An <see cref="IViewFactory"/> that will be used to create the presenter and child view.</param>
-        /// <param name="definition">The <see cref="ViewDefinition"/> used to construct this view.</param>
-        public DocumentView(IDocument document, IViewFactory factory, ViewDefinition definition)
+        public DocumentView(IDocument document)
         {
-            ArgumentNullException.ThrowIfNull(definition, nameof(definition));
             ArgumentNullException.ThrowIfNull(document, nameof(document));
-            ArgumentNullException.ThrowIfNull(factory, nameof(factory));
 
             InitializeComponent();
 
@@ -36,19 +34,13 @@ namespace StarLab.UI.Workspace.Documents
             Text = document.Name;
             id = document.ID;
 
-            presenter = factory.CreatePresenter(document, this);
-
-            foreach (var content in definition.ChildViews)
-            {
-                var view = factory.CreateView(content);
-                splitContainer.AddControl((Control)view, view.Panel);
-            }
+            if (log.IsDebugEnabled) log.Debug(string.Format(Resources.InstanceCreated, $"{nameof(DocumentView)}({ID})"));
         }
 
         /// <summary>
         /// Gets the <see cref="IViewController"/> that controls this view.
         /// </summary>
-        public IViewController Controller => (IViewController)presenter;
+        public IViewController? Controller => (IViewController?)presenter;
 
         /// <summary>
         /// Gets the view ID.
@@ -65,6 +57,36 @@ namespace StarLab.UI.Workspace.Documents
         public void AddToolbarButton(string name, string tooltip, Image image, ICommand command)
         {
             splitContainer.AddToolbarButton(name, tooltip, image, command);
+        }
+
+        /// <summary>
+        /// Attaches the <see cref="IPresenter"/> that controls the view.
+        /// </summary>
+        /// <param name="presenter">The <see cref="IPresenter"/> that controls the view.</param>
+        public void Attach(IPresenter presenter)
+        {
+            if (this.presenter != null) throw new InvalidOperationException(); // TODO
+
+            this.presenter = (IDockableViewPresenter)presenter;
+        }
+
+        /// <summary>
+        /// Attaches the <see cref="IChildView"/> to the view.
+        /// </summary>
+        /// <param name="view">The <see cref="IChildView"/> to attach.</param>
+        public void Attach(IChildView view)
+        {
+            splitContainer.AddControl((Control)view, view.Panel);
+
+            if (log.IsDebugEnabled) log.Debug(string.Format(Resources.ViewAttached, view.Name, $"{nameof(DocumentView)}({ID})"));
+        }
+
+        /// <summary>
+        /// Detaches the <see cref="IPresenter"/> that controls the view.
+        /// </summary>
+        public void Detach()
+        {
+            presenter = null;
         }
 
         /// <summary>
@@ -114,6 +136,7 @@ namespace StarLab.UI.Workspace.Documents
                 {
                     if (control is IChildView content)
                     {
+                        Debug.Assert(content.Controller != null);
                         content.Controller.RegisterController(parentController);
                         content.Controller.Initialise(controller);
                     }
@@ -123,6 +146,7 @@ namespace StarLab.UI.Workspace.Documents
                 {
                     if (control is IChildView content)
                     {
+                        Debug.Assert(content.Controller != null);
                         content.Controller.RegisterController(parentController);
                         content.Controller.Initialise(controller);
                     }

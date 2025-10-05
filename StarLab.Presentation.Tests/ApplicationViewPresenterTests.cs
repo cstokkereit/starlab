@@ -1,9 +1,9 @@
 ﻿namespace StarLab.Presentation
 {
     /// <summary>
-    /// 
+    /// A class for performing unit tests on the <see cref="ApplicationViewPresenter"/> class.
     /// </summary>
-    public class ApplicationViewPresenterTests : PresenterTests
+    public class ApplicationViewPresenterTests : PresentationTests
     {
         private IApplicationView view; //
 

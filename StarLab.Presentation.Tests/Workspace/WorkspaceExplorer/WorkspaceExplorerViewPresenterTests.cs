@@ -3,7 +3,7 @@
     /// <summary>
     /// 
     /// </summary>
-    public class WorkspaceExplorerViewPresenterTests : PresenterTests
+    public class WorkspaceExplorerViewPresenterTests : PresentationTests
     {
         private IWorkspaceExplorerView view; //
 

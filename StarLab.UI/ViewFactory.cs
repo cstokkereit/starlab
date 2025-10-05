@@ -1,6 +1,5 @@
 ﻿using log4net;
 using StarLab.Presentation;
-using StarLab.Presentation.Workspace;
 using StarLab.Presentation.Workspace.Documents;
 using StarLab.Shared.Properties;
 using StarLab.UI.Workspace;
@@ -32,48 +31,6 @@ namespace StarLab.UI
         }
 
         /// <summary>
-        /// Creates an <see cref="IPresenter"/> to control the <see cref="IView"/> provided.
-        /// </summary>
-        /// <param name="view">The <see cref="IView"/> that the presenter will control.</param>
-        /// <returns>An <see cref="IPresenter"/> that can be used to control the <see cref="IView"/> provided.</returns>
-        public IPresenter CreatePresenter(IView view)
-        {
-            return factory.CreatePresenter(view);
-        }
-
-        /// <summary>
-        /// Creates an <see cref="IDockableViewPresenter"/> to control the <see cref="IDocumentView"/> provided.
-        /// </summary>
-        /// <param name="document">An <see cref="IDocument"/> that the view represents.</param>
-        /// <param name="view">The <see cref="IDocumentView"/> that the presenter will control.</param>
-        /// <returns>An <see cref="IDockableViewPresenter"/> that can be used to control the <see cref="IDocumentView"/> provided.</returns>
-        public IDockableViewPresenter CreatePresenter(IDocument document, IDocumentView view)
-        {
-            return factory.CreatePresenter(document, view);
-        }
-
-        /// <summary>
-        /// Creates an <see cref="IChildViewPresenter"/> to control the <see cref="IChildView"/> provided.
-        /// </summary>
-        /// <param name="definition">An <see cref="IViewDefinition"/> that holds the information used to construct the view.</param>
-        /// <param name="view">The <see cref="IChildView"/> that the presenter will control.</param>
-        /// <returns>An <see cref="IChildViewPresenter"/> that can be used to control the <see cref="IView"/> provided.</returns>
-        public IChildViewPresenter CreatePresenter(IViewDefinition definition, IChildView view)
-        {
-            return factory.CreatePresenter(definition, view);
-        }
-
-        /// <summary>
-        /// Creates an <see cref="IChildViewPresenter"/> to control the <see cref="IChildView"/> provided.
-        /// </summary>
-        /// <param name="view">The <see cref="IChildView"/> that the presenter will control.</param>
-        /// <returns>An <see cref="IChildViewPresenter"/> that can be used to control the <see cref="IChildView"/> provided.</returns>
-        public IChildViewPresenter CreatePresenter(IChildView view)
-        {
-            return factory.CreatePresenter(view);
-        }
-
-        /// <summary>
         /// Creates the specified <see cref="IView"/>.
         /// </summary>
         /// <param name="name">The name of the view.</param>
@@ -95,17 +52,17 @@ namespace StarLab.UI
         {
             Debug.Assert(definitions.ContainsKey(document.View)); // If this assertion fails you will need to create the required view defintion.
 
-            return new DocumentView(document, this, definitions[document.View]);
-        }
+            var view = new DocumentView(document);
+            var presenter = factory.CreatePresenter(document, view);
 
-        /// <summary>
-        /// Creates the specified <see cref="IChildView"/>.
-        /// </summary>
-        /// <param name="definition">An <see cref="IViewDefinition"/> that holds the information required to construct the view.</param>
-        /// <returns>The specified <see cref="IChildView"/>.</returns>
-        public IChildView CreateView(IViewDefinition definition)
-        {
-            return (IChildView)CreateInstance(definition.TypeName, new object[] { definition, this });
+            var children = definitions[document.View].ChildViewDefinitions;
+
+            foreach (var child in children)
+            {
+                view.Attach(CreateView(child));
+            }
+
+            return view;
         }
 
         /// <summary>
@@ -115,6 +72,75 @@ namespace StarLab.UI
         private void AddViewDefinition(ViewDefinition view)
         {
             definitions.Add(view.Name, view);
+        }
+
+        /// <summary>
+        /// Creates the application view.
+        /// </summary>
+        /// <param name="text">The view text.</param>
+        /// <returns>The required <see cref="IView"/>.</returns>
+        private IView CreateApplicationView(string text)
+        {
+            var view = new ApplicationView(text);
+            var presenter = factory.CreatePresenter(view);
+            return view;
+        }
+
+        /// <summary>
+        /// Creates a dialog view.
+        /// </summary>
+        /// <param name="definition">An <see cref="IViewDefinition"/> that holds the information required to construct the view.</param>
+        /// <param name="text">The view text.</param>
+        /// <returns>The required <see cref="IView"/>.</returns>
+        private IView CreateDialogView(ViewDefinition definition, string text)
+        {
+            var view = new DialogView(definition.Name, text, definition);
+            var presenter = factory.CreatePresenter(view);
+
+            view.Attach(CreateView(definition.ChildViewDefinitions[0]));
+
+            return view;
+        }
+
+        /// <summary>
+        /// Creates a message box view.
+        /// </summary>
+        /// <param name="text">The view name.</param>
+        /// <returns>The required <see cref="IView"/>.</returns>
+        private IView CreateMessageBoxView(string name)
+        {
+            var view = new MessageBoxView(name);
+            var presenter = factory.CreatePresenter(view);
+            return view;
+        }
+
+        /// <summary>
+        /// Creates a tool view.
+        /// </summary>
+        /// <param name="definition">An <see cref="IViewDefinition"/> that holds the information required to construct the view.</param>
+        /// <param name="text">The view text.</param>
+        /// <returns>The required <see cref="IView"/>.</returns>
+        private IView CreateToolView(ViewDefinition definition, string text)
+        {
+            var view = new ToolView(definition.Name, text, definition);
+            var presenter = factory.CreatePresenter(view);
+
+            view.Attach(CreateView(definition.ChildViewDefinitions[0]));
+
+            return view;
+        }
+
+        /// <summary>
+        /// Creates the specified <see cref="IChildView"/>.
+        /// </summary>
+        /// <param name="definition">An <see cref="IViewDefinition"/> that holds the information required to construct the view.</param>
+        /// <returns>The specified <see cref="IChildView"/>.</returns>
+        private IChildView CreateView(IViewDefinition definition)
+        {
+            var view = (IChildView)CreateInstance(definition.TypeName);
+            var presenter = factory.CreatePresenter(definition, view);
+
+            return view;
         }
 
         /// <summary>
@@ -131,25 +157,23 @@ namespace StarLab.UI
             switch (definition.ViewType)
             {
                 case ViewTypes.Application:
-                    view = new ApplicationView(Resources.StarLab, this);
+                    view = CreateApplicationView(text);
                     break;
 
                 case ViewTypes.Dialog:
-                    view = new DialogView(definition.Name, text, this, definition);
+                    view = CreateDialogView(definition, text);
                     break;
 
                 case ViewTypes.MessageBox:
-                    view = new MessageBoxView(definition.Name, this);
+                    view = CreateMessageBoxView(definition.Name);
                     break;
 
                 case ViewTypes.Tool:
-                    view = new ToolView(definition.Name, text, this, definition);
+                    view = CreateToolView(definition, text);
                     break;
 
                 default:
-                    var message = string.Format(string.Format(Resources.UnexpectedViewType, definition.ViewType));
-                    if (log.IsFatalEnabled) log.Fatal(message);
-                    throw new Exception(message);
+                    throw new Exception(string.Format(string.Format(Resources.UnexpectedViewType, definition.ViewType)));
             }
 
             return view;
@@ -170,8 +194,8 @@ namespace StarLab.UI
         /// </summary>
         private void CreateDocumentViewDefinitions()
         {
-            AddViewDefinition(new ViewDefinition("ColourMagnitudeChartView", ViewTypes.Document).AddChild(Views.ChartSettings, "StarLab.UI.Workspace.Documents.Charts.ChartSettingsView, StarLab.UI", 1)
-                                                                                                .AddChild(Views.Chart, "StarLab.UI.Workspace.Documents.Charts.ChartView, StarLab.UI", 2));
+            AddViewDefinition(new ViewDefinition(Views.ColourMagnitudeChart, ViewTypes.Document).AddChild(Views.ChartSettings, "StarLab.UI.Workspace.Documents.Charts.ChartSettingsView, StarLab.UI")
+                                                                                                .AddChild(Views.Chart, "StarLab.UI.Workspace.Documents.Charts.ChartView, StarLab.UI"));
         }
 
         /// <summary>

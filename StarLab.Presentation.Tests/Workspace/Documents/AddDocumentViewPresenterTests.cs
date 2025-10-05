@@ -1,6 +1,6 @@
 ﻿namespace StarLab.Presentation.Workspace.Documents
 {
-    public class AddDocumentViewPresenterTests : PresenterTests
+    public class AddDocumentViewPresenterTests : PresentationTests
     {
         private IAddDocumentView view; //
 

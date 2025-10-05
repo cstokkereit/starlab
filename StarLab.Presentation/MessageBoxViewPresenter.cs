@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using log4net;
 using StarLab.Application;
-using StarLab.Shared.Properties;
 using Stratosoft.Commands;
 
 using ImageResources = StarLab.Presentation.Properties.Resources;
@@ -12,11 +11,9 @@ namespace StarLab.Presentation
     /// <summary>
     /// Controls the behaviour of an <see cref="IMessageBoxView"/>.
     /// </summary>
-    public class MessageBoxViewPresenter : Presenter, IMessageBoxViewPresenter, IMessageBoxController
+    public class MessageBoxViewPresenter : Presenter<IMessageBoxView>, IMessageBoxViewPresenter, IMessageBoxController
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(MessageBoxViewPresenter)); // The logger that will be used for writing log messages.
-
-        private readonly IMessageBoxView view; // The view controlled by the presenter.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="MessageBoxViewPresenter"> class.
@@ -28,11 +25,11 @@ namespace StarLab.Presentation
         /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
         /// <param name="events">The <see cref="IEventAggregator"/> that manages application events.</param>
         public MessageBoxViewPresenter(IMessageBoxView view, ICommandManager commands, IUseCaseFactory factory, IApplicationSettings settings, IMapper mapper, IEventAggregator events) 
-            : base(commands, factory, settings, mapper, events) 
+            : base(view, commands, factory, settings, mapper, events)
         { 
-            this.view = view;
+            View.Attach(this);
 
-            log.Debug(string.Format(Resources.InstanceCreated, nameof(MessageBoxViewPresenter)));
+            if (log.IsDebugEnabled) log.Debug(string.Format(StringResources.InstanceCreated, nameof(MessageBoxViewPresenter)));
         }
 
         /// <summary>
@@ -63,28 +60,28 @@ namespace StarLab.Presentation
             switch (type)
             {
                 case InteractionType.Error:
-                    view.ConfigureDialog(caption, message, ImageResources.Error);
+                    View.ConfigureDialog(caption, message, ImageResources.Error);
                     break;
 
                 case InteractionType.Info:
                     throw new NotImplementedException();
-                    //view.ConfigureDialog(caption, message, ImageResources.Info);
+                    //View.ConfigureDialog(caption, message, ImageResources.Info);
                     break;
 
                 case InteractionType.Question:
                     throw new NotImplementedException();
-                    //view.ConfigureDialog(caption, message, ImageResources.Question);
+                    //View.ConfigureDialog(caption, message, ImageResources.Question);
                     break;
 
                 case InteractionType.Warning:
                     throw new NotImplementedException();
-                    //view.ConfigureDialog(caption, message, ImageResources.Warning);
+                    //View.ConfigureDialog(caption, message, ImageResources.Warning);
                     break;
             }
 
             ConfigureView(responses);
 
-            return view.ShowModal(owner);
+            return View.ShowModal(owner);
         }
 
         /// <summary>
@@ -122,23 +119,23 @@ namespace StarLab.Presentation
             switch (responses)
             {
                 case InteractionResponses.OK:
-                    view.ConfigureButton(2, StringResources.OK, InteractionResult.OK);
+                    View.ConfigureButton(2, StringResources.OK, InteractionResult.OK);
                     break;
 
                 case InteractionResponses.OKCancel:
-                    view.ConfigureButton(1, StringResources.OK, InteractionResult.OK);
-                    view.ConfigureButton(2, StringResources.Cancel, InteractionResult.Cancel);
+                    View.ConfigureButton(1, StringResources.OK, InteractionResult.OK);
+                    View.ConfigureButton(2, StringResources.Cancel, InteractionResult.Cancel);
                     break;
 
                 case InteractionResponses.YesNo:
-                    view.ConfigureButton(1, StringResources.Yes, InteractionResult.Yes);
-                    view.ConfigureButton(2, StringResources.No, InteractionResult.No);
+                    View.ConfigureButton(1, StringResources.Yes, InteractionResult.Yes);
+                    View.ConfigureButton(2, StringResources.No, InteractionResult.No);
                     break;
 
                 case InteractionResponses.YesNoCancel:
-                    view.ConfigureButton(0, StringResources.Yes, InteractionResult.Yes);
-                    view.ConfigureButton(1, StringResources.No, InteractionResult.No);
-                    view.ConfigureButton(2, StringResources.Cancel, InteractionResult.Cancel);
+                    View.ConfigureButton(0, StringResources.Yes, InteractionResult.Yes);
+                    View.ConfigureButton(1, StringResources.No, InteractionResult.No);
+                    View.ConfigureButton(2, StringResources.Cancel, InteractionResult.Cancel);
                     break;
 
                 default:

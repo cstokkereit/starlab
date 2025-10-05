@@ -29,7 +29,9 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         public ColourMagnitudeChartViewPresenter(IChartView view, ICommandManager commands, IUseCaseFactory factory, IApplicationSettings settings, IMapper mapper, IEventAggregator events)
             : base(view, commands, factory, settings, mapper, events) 
         {
-            log.Debug(string.Format(Resources.InstanceCreated, nameof(ColourMagnitudeChartViewPresenter)));
+            View.Attach(this);
+            
+            if (log.IsDebugEnabled) log.Debug(string.Format(Resources.InstanceCreated, nameof(ColourMagnitudeChartViewPresenter)));
         }
 
         /// <summary>

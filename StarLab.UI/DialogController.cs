@@ -1,5 +1,4 @@
-﻿using StarLab.Application;
-using StarLab.Presentation;
+﻿using StarLab.Presentation;
 
 namespace StarLab.UI
 {

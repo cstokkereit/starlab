@@ -7,6 +7,7 @@ using StarLab.Shared.Properties;
 using StarLab.UI.Controls;
 using StarLab.UI.Workspace.Documents;
 using Stratosoft.Commands;
+using System.Diagnostics;
 
 namespace StarLab.UI
 {
@@ -25,20 +26,19 @@ namespace StarLab.UI
 
         private readonly IDictionary<string, IView> views = new Dictionary<string, IView>(); // A dictionary containing the views indexed by ID.
 
-        private readonly IViewFactory factory; // A factory for creating views.
+        private readonly IViewFactory viewFactory; // A factory for creating views.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="ApplicationController"/> class.
         /// </summary>
-        /// <param name="configuration">The <see cref="IApplicationConfiguration"> that provides the configuration information.</param>
-        /// <param name="factory">An <see cref="IViewFactory"/> that will be used to create the views.</param>
+        /// <param name="viewFactory">An <see cref="IViewFactory"/> that will be used to create the views.</param>
         /// <param name="interactorFactory">An <see cref="IUseCaseFactory"> that will be used to create the use case interactors.</param>
         /// <param name="events">An <see cref="IEventAggregator"> that can be used for subscribing to and publishing events.</param>
         /// <exception cref="ArgumentNullException"></exception>
-        public ApplicationController(IViewFactory factory, IUseCaseFactory interactorFactory, IEventAggregator events)
+        public ApplicationController(IViewFactory viewFactory, IUseCaseFactory interactorFactory, IEventAggregator events)
             : base(interactorFactory, events)
         {
-            this.factory = factory ?? throw new ArgumentNullException(nameof(factory));
+            this.viewFactory = viewFactory ?? throw new ArgumentNullException(nameof(viewFactory));
         }
 
         /// <summary>
@@ -145,9 +145,12 @@ namespace StarLab.UI
             }
             else
             {
-                view = factory.CreateView(document);
+                view = viewFactory.CreateView(document);
 
                 var controller = ((DocumentView)view).Controller;
+
+                Debug.Assert(controller != null);
+
                 controllers.Add(controller.Name, controller);
                 controller.Initialise(this);
 
@@ -295,13 +298,22 @@ namespace StarLab.UI
         /// <exception cref="NotImplementedException"></exception>
         private void CreateView(string name, string text)
         {
-            var view = factory.CreateView(name, text);
-            
-            IViewController controller = view.Controller;
+            try
+            {
+                var view = viewFactory.CreateView(name, text);
 
-            controllers.Add(controller.Name, controller);
-            controller.Initialise(this);
-            views.Add(view.ID, view);
+                IViewController? controller = view.Controller;
+
+                Debug.Assert(controller != null);
+
+                views.Add(view.ID, view);
+                controllers.Add(controller.Name, controller);
+                controller.Initialise(this);
+            }
+            catch (Exception e)
+            {
+                if (log.IsErrorEnabled) log.Error(e.Message, e);
+            }
         }
 
         /// <summary>

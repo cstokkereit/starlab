@@ -237,7 +237,7 @@ If documents in the existing folder have the same names as documents in the fold
   <data name="InitialisationFailed" xml:space="preserve">
     <value>Initialisation failed. The application configuration could not be loaded.</value>
   </data>
-  <data name="InvalidContentType" xml:space="preserve">
+  <data name="ChildViewNotAControl" xml:space="preserve">
     <value>Invalid content type: {0}</value>
   </data>
   <data name="Label" xml:space="preserve">
@@ -382,5 +382,8 @@ Please enter a valid name.</value>
   </data>
   <data name="InstanceCreated" xml:space="preserve">
     <value>{0} created.</value>
+  </data>
+  <data name="ViewAttached" xml:space="preserve">
+    <value>{0} attached to {1}.</value>
   </data>
 </root>

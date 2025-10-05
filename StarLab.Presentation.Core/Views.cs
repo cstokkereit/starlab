@@ -11,6 +11,7 @@
 
         public const string ChartSettings = "ChartSettingsView";
         public const string Chart = "ChartView";
+        public const string ColourMagnitudeChart = "ColourMagnitudeChartView";
 
         public const string Dialog = "DialogView";
         public const string Document = "DocumentView";

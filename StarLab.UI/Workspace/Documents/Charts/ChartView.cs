@@ -3,6 +3,7 @@ using ScottPlot;
 using ScottPlot.Plottables;
 using StarLab.Presentation;
 using StarLab.Presentation.Workspace.Documents.Charts;
+using StarLab.Shared.Properties;
 
 namespace StarLab.UI.Workspace.Documents.Charts
 {
@@ -17,24 +18,17 @@ namespace StarLab.UI.Workspace.Documents.Charts
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(ChartView)); // The logger that will be used for writing log messages.
 
-        private readonly IChartViewPresenter presenter; // The presenter that controls the view.
-
-        private readonly SplitViewPanels panel; // The panel that will contain the view.
-
         readonly ScottPlot.Plottables.Rectangle RectanglePlot; //
+
+        private IChartViewPresenter? presenter; // The presenter that controls the view.
 
         private Scatter scatter; //
 
         /// <summary>
         /// Initialises a new instance of the <see cref="ChartView"> class.
         /// </summary>
-        /// <param name="definition">An <see cref="IViewDefinition"/> that holds the information required to construct this view.</param>
-        /// <param name="factory">An <see cref="IViewFactory"/> that will be used to create the presenter and child view.</param>
-        public ChartView(IViewDefinition definition, IViewFactory factory)
+        public ChartView()
         {
-            ArgumentNullException.ThrowIfNull(definition, nameof(definition));
-            ArgumentNullException.ThrowIfNull(factory, nameof(factory));
-
             // Scale points with zoom
             // Dragable axis lines
             // scale points according to number of stars
@@ -46,11 +40,7 @@ namespace StarLab.UI.Workspace.Documents.Charts
 
             Name = Views.Chart;
 
-            panel = (SplitViewPanels)definition.Panel;
-
-            presenter = (IChartViewPresenter)factory.CreatePresenter(definition, this);
-
-
+            if (log.IsDebugEnabled) log.Debug(string.Format(Resources.InstanceCreated, nameof(ChartView)));
 
 
 
@@ -69,12 +59,23 @@ namespace StarLab.UI.Workspace.Documents.Charts
         /// <summary>
         /// Gets the <see cref="IChildViewController"> that controls this view.
         /// </summary>
-        public IChildViewController Controller => (IChildViewController)presenter;
+        public IChildViewController? Controller => (IChildViewController?)presenter;
 
         /// <summary>
         /// Gets the preferred panel, if any, in which to display the view.
         /// </summary>
-        public SplitViewPanels Panel => panel;
+        public SplitViewPanels Panel => SplitViewPanels.Panel2;
+
+        /// <summary>
+        /// Attaches the <see cref="IChildViewPresenter"/> that controls the view.
+        /// </summary>
+        /// <param name="presenter">The <see cref="IChildViewPresenter"/> that controls the view.</param>
+        public void Attach(IChildViewPresenter presenter)
+        {
+            if (this.presenter != null) throw new InvalidOperationException(); // TODO
+
+            this.presenter = (IChartViewPresenter)presenter;
+        }
 
         /// <summary>
         /// Initialises the view.

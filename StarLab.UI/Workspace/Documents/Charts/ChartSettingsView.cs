@@ -1,6 +1,7 @@
 ﻿using log4net;
 using StarLab.Presentation;
 using StarLab.Presentation.Workspace.Documents.Charts;
+using StarLab.Shared.Properties;
 using StarLab.UI.Controls.Workspace.Documents.Charts;
 using Stratosoft.Commands;
 
@@ -17,37 +18,31 @@ namespace StarLab.UI.Workspace.Documents.Charts
 
         private readonly Dictionary<string, TreeNode> nodes = new Dictionary<string, TreeNode>(); // A dictionary containing the tree nodes indexed by node key.
 
-        private readonly IChartSettingsViewPresenter presenter; // The presenter that controls the view.
-
-        private readonly SplitViewPanels panel; // The panel that will contain the view.
-
         private readonly List<ISettingsSection> sections = new List<ISettingsSection>(); // A list containing the settings sections applicable to the current settings group.
+
+        private IChartSettingsViewPresenter? presenter; // The presenter that controls the view.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="ChartSettingsView"> class.
         /// </summary>
-        /// <param name="definition">An <see cref="IViewDefinition"/> that provides access to the application settings required to construct this view.</param>
-        /// <param name="factory">An <see cref="IViewFactory"/> that will be used to create the presenter and child view.</param>
-        public ChartSettingsView(IViewDefinition definition, IViewFactory factory)
+        public ChartSettingsView()
         {
             InitializeComponent();
 
             Name = Views.ChartSettings;
 
-            panel = (SplitViewPanels)definition.Panel;
-
-            presenter = (IChartSettingsViewPresenter)factory.CreatePresenter(definition, this);
+            if (log.IsDebugEnabled) log.Debug(string.Format(Resources.InstanceCreated, nameof(ChartSettingsView)));
         }
 
         /// <summary>
         /// Gets the <see cref="IChildViewController"> that controls this view.
         /// </summary>
-        public IChildViewController Controller => (IChildViewController)presenter;
+        public IChildViewController? Controller => (IChildViewController?)presenter;
 
         /// <summary>
         /// Gets the panel that will contain the view.
         /// </summary>
-        public SplitViewPanels Panel => panel;
+        public SplitViewPanels Panel => SplitViewPanels.Panel1;
 
         /// <summary>
         /// Adds a node to the tree view that displays the chart property groups.
@@ -138,6 +133,17 @@ namespace StarLab.UI.Workspace.Documents.Charts
             section.SectionChanged += Section_SettingsChanged;
 
             AppendSection(section);
+        }
+
+        /// <summary>
+        /// Attaches the <see cref="IChildViewPresenter"/> that controls the view.
+        /// </summary>
+        /// <param name="presenter">The <see cref="IChildViewPresenter"/> that controls the view.</param>
+        public void Attach(IChildViewPresenter presenter)
+        {
+            if (this.presenter != null) throw new InvalidOperationException(); // TODO
+
+            this.presenter = (IChartSettingsViewPresenter)presenter;
         }
 
         /// <summary>

@@ -5,7 +5,8 @@
     /// </summary>
     public enum SplitViewPanels
     {
-        Panel1 = 1,
+        Any,
+        Panel1,
         Panel2
     }
 }

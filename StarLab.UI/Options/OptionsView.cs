@@ -1,6 +1,7 @@
 ﻿using log4net;
 using StarLab.Presentation;
 using StarLab.Presentation.Options;
+using StarLab.Shared.Properties;
 
 namespace StarLab.UI.Options
 {
@@ -11,35 +12,40 @@ namespace StarLab.UI.Options
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(OptionsView)); // The logger that will be used for writing log messages.
 
-        private readonly IOptionsViewPresenter presenter; // The presenter that controls the view.
-
-        private readonly SplitViewPanels panel; // The panel that will contain the view.
+        private IOptionsViewPresenter? presenter; // The presenter that controls the view.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="OptionsView"> class.
         /// </summary>
-        /// <param name="definition">An <see cref="IViewDefinition"/> that holds the information required to construct this view.</param>
-        /// <param name="factory">An <see cref="IViewFactory"/> that will be used to create the presenter and child view.</param>
-        public OptionsView(IViewDefinition definition, IViewFactory factory)
+        public OptionsView()
         {
             InitializeComponent();
 
             Name = Views.Options;
 
-            panel = (SplitViewPanels)definition.Panel;
-
-            presenter = (IOptionsViewPresenter)factory.CreatePresenter(this);
+            if (log.IsDebugEnabled) log.Debug(string.Format(Resources.InstanceCreated, nameof(OptionsView)));
         }
 
         /// <summary>
         /// Gets the <see cref="IChildViewController"> that controls this view.
         /// </summary>
-        public IChildViewController Controller => (IChildViewController)presenter;
+        public IChildViewController? Controller => (IChildViewController?)presenter;
 
         /// <summary>
         /// Gets the panel that will contain the view.
         /// </summary>
-        public SplitViewPanels Panel => panel;
+        public SplitViewPanels Panel => SplitViewPanels.Any;
+
+        /// <summary>
+        /// Attaches the <see cref="IChildViewPresenter"/> that controls the view.
+        /// </summary>
+        /// <param name="presenter">The <see cref="IChildViewPresenter"/> that controls the view.</param>
+        public void Attach(IChildViewPresenter presenter)
+        {
+            if (this.presenter != null) throw new InvalidOperationException(); // TODO
+
+            this.presenter = (IOptionsViewPresenter)presenter;
+        }
 
         /// <summary>
         /// Initialises the view.

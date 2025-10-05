@@ -8,7 +8,7 @@ namespace StarLab.Presentation
     /// <summary>
     /// The base class for all presenters.
     /// </summary>
-    public abstract class Presenter : Controller, IPresenter
+    public abstract class Presenter<TView> : Controller, IPresenter
     {
         private readonly IApplicationSettings settings; // Provides access to the application configuration.
 
@@ -21,18 +21,21 @@ namespace StarLab.Presentation
         /// <summary>
         /// Initialises a new instance of the <see cref="Presenter"/> class.
         /// </summary>
+        /// <param name="view">The <see cref="TView"/> controlled by the presenter.</param>
         /// <param name="commands">An instance of <see cref="ICommandManager"/> that is required for the creation of commands.</param>
         /// <param name="factory">An <see cref="IUseCaseFactory"/> that will be used to create use case interactors.</param>
         /// <param name="settings">An <see cref="IApplicationSettings"/> that provides access to the application configuration.</param>
         /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
         /// <param name="events">The <see cref="IEventAggregator"/> that manages application events.</param>
         /// <exception cref="ArgumentNullException"></exception>
-        public Presenter(ICommandManager commands, IUseCaseFactory factory, IApplicationSettings settings, IMapper mapper, IEventAggregator events)
+        public Presenter(TView view, ICommandManager commands, IUseCaseFactory factory, IApplicationSettings settings, IMapper mapper, IEventAggregator events)
             : base(factory, events)
         {
             this.settings = settings ?? throw new ArgumentNullException(nameof(settings));
             this.commands = commands ?? throw new ArgumentNullException(nameof(commands));
             this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+
+            View = view;
         }
 
         /// <summary>
@@ -63,9 +66,9 @@ namespace StarLab.Presentation
         }
 
         /// <summary>
-        /// Gets the <see cref="IApplicationConfiguration"/> that provides the configuration information.
+        /// Gets the <see cref="IApplicationSettings"/> that provides the configuration information.
         /// </summary>
-        protected IApplicationSettings Configuration => settings;
+        protected IApplicationSettings Settings => settings;
 
         /// <summary>
         /// Returns true if the presenter has been initialised; false otherwise.
@@ -76,6 +79,11 @@ namespace StarLab.Presentation
         /// Gets the <see cref="IMapper"/> used to copy data from model objects to data transfer objects and vice versa.
         /// </summary>
         protected IMapper Mapper => mapper;
+
+        /// <summary>
+        /// Gets the <see cref="TView"/> that is controlled by the presenter.
+        /// </summary>
+        protected TView View { get; }
 
         /// <summary>
         /// Gets the specified <see cref="ICommand"/>. 

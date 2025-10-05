@@ -6,9 +6,9 @@
     public interface IView
     {
         /// <summary>
-        /// Gets the <see cref="IChildViewController"/> that controls the view.
+        /// Gets the <see cref="IViewController"/> that controls the view.
         /// </summary>
-        IViewController Controller { get; }
+        IViewController? Controller { get; }
 
         /// <summary>
         /// Gets or sets a flag that determines whether the view will be hidden or unloaded when it is closed.
@@ -31,9 +31,20 @@
         string Text { get; set; }
 
         /// <summary>
+        /// Attaches the <see cref="IPresenter"/> that controls the view.
+        /// </summary>
+        /// <param name="presenter">The <see cref="IPresenter"/> that controls the view.</param>
+        void Attach(IPresenter presenter);
+
+        /// <summary>
         /// Closes the view.
         /// </summary>
         void Close();
+
+        /// <summary>
+        /// Detaches the <see cref="IPresenter"/> that controls the view.
+        /// </summary>
+        void Detach();
 
         /// <summary>
         /// Shows the specified view.

@@ -1,5 +1,7 @@
-﻿using StarLab.Application;
+﻿using log4net;
+using StarLab.Application;
 using StarLab.Presentation;
+using StarLab.Shared.Properties;
 
 namespace StarLab.UI
 {
@@ -8,6 +10,8 @@ namespace StarLab.UI
     /// </summary>
     public partial class MessageBoxView : Form, IMessageBoxView
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(MessageBoxView)); // The logger that will be used for writing log messages.
+
         // TODO - Some of these constants should be moved to a static class (when we implement another view that needs them)
         private const int TOOLBOX_HEIGHT = 40;
 
@@ -19,33 +23,32 @@ namespace StarLab.UI
 
         private const int MARGIN = 15;
 
-        private readonly IMessageBoxViewPresenter presenter; // The presenter that controls the view.
-
         private readonly string id; // The view ID.
 
         private InteractionResult result; // The value that will be returned by the ShowModal method when the message box is closed.
 
         private Image? image; // The image that identifies the type of message being displayed.
 
+        private IMessageBoxViewPresenter? presenter; // The presenter that controls the view.
+
         /// <summary>
         /// Initialises a new instance of the <see cref="MessageBoxView"> class.
         /// </summary>
         /// <param name="name">The name of the dialog.</param>
-        /// <param name="factory">An <see cref="IViewFactory"/> that will be used to create the presenter.</param>
-        public MessageBoxView(string name, IViewFactory factory)
+        public MessageBoxView(string name)
         {
             InitializeComponent();
 
             Name = name;
             id = name;
 
-            presenter = (IMessageBoxViewPresenter)factory.CreatePresenter(this);
+            if (log.IsDebugEnabled) log.Debug(string.Format(Resources.InstanceCreated, nameof(MessageBoxView)));
         }
 
         /// <summary>
         /// Gets the <see cref="IViewController"> that controls this view.
         /// </summary>
-        public IViewController Controller => (IViewController)presenter;
+        public IViewController? Controller => (IViewController?)presenter;
 
         /// <summary>
         /// Gets or sets a flag that determines whether the dialog box will be hidden or unloaded when it is closed.
@@ -56,6 +59,17 @@ namespace StarLab.UI
         /// Gets the view ID.
         /// </summary>
         public string ID => id;
+
+        /// <summary>
+        /// Attaches the <see cref="IPresenter"/> that controls the view.
+        /// </summary>
+        /// <param name="presenter">The <see cref="IPresenter"/> that controls the view.</param>
+        public void Attach(IPresenter presenter)
+        {
+            if (this.presenter != null) throw new InvalidOperationException(); // TODO
+
+            this.presenter = (IMessageBoxViewPresenter)presenter;
+        }
 
         /// <summary>
         /// Configures one of the message box response buttons.
@@ -127,6 +141,14 @@ namespace StarLab.UI
             this.image = image;
 
             Text = caption;
+        }
+
+        /// <summary>
+        /// Detaches the <see cref="IPresenter"/> that controls the view.
+        /// </summary>
+        public void Detach()
+        {
+            presenter = null;
         }
 
         /// <summary>

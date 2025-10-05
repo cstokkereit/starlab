@@ -11,12 +11,10 @@ namespace StarLab.Presentation
     /// </summary>
     /// <typeparam name="TView">The <see cref="IChildView"/> controlled by the presenter.</typeparam>
     /// <typeparam name="TParent">The <see cref="IViewController"/> that controls the parent view.</typeparam>
-    public abstract class ChildViewPresenter<TView, TParent> : Presenter, IChildViewPresenter
+    public abstract class ChildViewPresenter<TView, TParent> : Presenter<TView>, IChildViewPresenter
         where TParent : IViewController
         where TView : IChildView
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(ChildViewPresenter<TView, TParent>)); // The logger that will be used for writing log messages.
-
         private TParent? parentController; // The parent view controller.
 
         /// <summary>
@@ -30,10 +28,7 @@ namespace StarLab.Presentation
         /// <param name="events">The <see cref="IEventAggregator"/> that manages application events.</param>
         /// <exception cref="ArgumentNullException"></exception>
         public ChildViewPresenter(TView view, ICommandManager commands, IUseCaseFactory factory, IApplicationSettings settings, IMapper mapper, IEventAggregator events)
-            : base(commands, factory, settings, mapper, events)
-        {
-            View = view ?? throw new ArgumentNullException(nameof(view));
-        }
+            : base(view, commands, factory, settings, mapper, events) { }
 
         /// <summary>
         /// Gets the name of the controller.
@@ -77,11 +72,6 @@ namespace StarLab.Presentation
 
             private set { parentController = value; }
         }
-
-        /// <summary>
-        /// Gets the <see cref="TView"/> that is controlled by the presenter.
-        /// </summary>
-        protected TView View { get; }
 
         /// <summary>
         /// Displays a <see cref="MessageBox"/> with the specified caption, message, message type and available responses.

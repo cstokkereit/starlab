@@ -7,7 +7,7 @@ namespace StarLab.UI
     /// </summary>
     public class ViewDefinition : IViewDefinition
     {
-        private readonly List<IViewDefinition> content = new List<IViewDefinition>(); // A list containing the child view configurations.
+        private readonly List<IViewDefinition> definitions = new List<IViewDefinition>(); // A list containing the child view configurations.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="ViewDefinition"/> class. 
@@ -51,29 +51,22 @@ namespace StarLab.UI
         /// </summary>
         /// <param name="name">The view name.</param>
         /// <param name="type">The view type.</param>
-        /// <param name="panel">The panel index.</param>
-        private ViewDefinition(string name, string type, int panel)
+        private ViewDefinition(string name, string type)
         {
             ViewType = ViewTypes.Content;
             TypeName = type;
-            Panel = panel;
             Name = name;
         }
 
         /// <summary>
         /// Gets an <see cref="IReadOnlyList{IViewDefinition}"/> containing the child view definitions.
         /// </summary>
-        public IReadOnlyList<IViewDefinition> ChildViews => content;
+        public IReadOnlyList<IViewDefinition> ChildViewDefinitions => definitions;
 
         /// <summary>
         /// Gets the view name.
         /// </summary>
         public string Name { get; }
-
-        /// <summary>
-        /// Gets the index of the panel that will be used to display the child view.
-        /// </summary>
-        public int Panel { get; }
 
         /// <summary>
         /// Gets the name of the class that implements the view.
@@ -90,11 +83,10 @@ namespace StarLab.UI
         /// </summary>
         /// <param name="name">The child view name.</param>
         /// <param name="type">The child view type.</param>
-        /// <param name="panel">The panel index.</param>
         /// <returns>The <see cref="ViewDefinition"/> being configured.</returns>
-        public ViewDefinition AddChild(string name, string type, int panel)
+        public ViewDefinition AddChild(string name, string type)
         {
-            content.Add(new ViewDefinition($"{Name}::{name}", type, panel));
+            definitions.Add(new ViewDefinition($"{Name}::{name}", type));
 
             return this;
         }
@@ -106,7 +98,7 @@ namespace StarLab.UI
         /// <returns>The <see cref="ViewDefinition"/> being configured.</returns>
         public ViewDefinition AddChild(string type)
         {
-            content.Add(new ViewDefinition(Name, type, 0));
+            definitions.Add(new ViewDefinition(Name, type));
 
             return this;
         }

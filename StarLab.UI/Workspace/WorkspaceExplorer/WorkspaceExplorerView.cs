@@ -1,8 +1,10 @@
 ﻿using log4net;
 using StarLab.Presentation;
 using StarLab.Presentation.Workspace.WorkspaceExplorer;
+using StarLab.Shared.Properties;
 using StarLab.UI.Controls;
 using Stratosoft.Commands;
+using System.Diagnostics;
 
 namespace StarLab.UI.Workspace.WorkspaceExplorer
 {
@@ -15,35 +17,29 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
 
         private readonly Dictionary<string, TreeNode> nodes = new Dictionary<string, TreeNode>(); // A dictionary containing the tree nodes indexed by node key.
 
-        private readonly IWorkspaceExplorerViewPresenter presenter; // The presenter that controls the view.
-
-        private readonly SplitViewPanels panel; // The panel that will contain the view.
+        private IWorkspaceExplorerViewPresenter? presenter; // The presenter that controls the view.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="WorkspaceExplorerView"/> class.
         /// </summary>
-        /// <param name="definition">An <see cref="IViewDefinition"/> that provides access to the application settings required to construct this view.</param>
-        /// <param name="factory">An <see cref="IViewFactory"/> that will be used to create the presenter and child view.</param>
-        public WorkspaceExplorerView(IViewDefinition definition, IViewFactory factory)
+        public WorkspaceExplorerView()
         {
             InitializeComponent();
 
             Name = Views.WorkspaceExplorer;
 
-            panel = (SplitViewPanels)definition.Panel;
-
-            presenter = (IWorkspaceExplorerViewPresenter)factory.CreatePresenter(this);
+            if (log.IsDebugEnabled) log.Debug(string.Format(Resources.InstanceCreated, nameof(WorkspaceExplorerView)));
         }
 
         /// <summary>
         /// Gets the <see cref="IChildViewController"> that controls this view.
         /// </summary>
-        public IChildViewController Controller => (IChildViewController)presenter;
+        public IChildViewController? Controller => (IChildViewController?)presenter;
 
         /// <summary>
         /// Gets the preferred panel, if any, in which to display the view.
         /// </summary>
-        public SplitViewPanels Panel => panel;
+        public SplitViewPanels Panel => SplitViewPanels.Any;
 
         /// <summary>
         /// Adds an <see cref="Image"/> to the list of available images.
@@ -125,6 +121,17 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         public void AddToolbarButton(string name, string tooltip, Image image, ICommand command)
         {
             toolStrip.AddButton(name, tooltip, image, command);
+        }
+
+        /// <summary>
+        /// Attaches the <see cref="IChildViewPresenter"/> that controls the view.
+        /// </summary>
+        /// <param name="presenter">The <see cref="IChildViewPresenter"/> that controls the view.</param>
+        public void Attach(IChildViewPresenter presenter)
+        {
+            if (this.presenter != null) throw new InvalidOperationException(); // TODO
+
+            this.presenter = (IWorkspaceExplorerViewPresenter)presenter;
         }
 
         /// <summary>
@@ -220,6 +227,8 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         /// <param name="e">A <see cref="TreeViewEventArgs"/> that provides context for the event.</param>
         private void TreeView_AfterCollapse(object sender, TreeViewEventArgs e)
         {
+            Debug.Assert(presenter != null);
+
             if (e != null && e.Node != null)
             {
                 var node = e.Node;
@@ -248,6 +257,8 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         /// <param name="e">A <see cref="TreeViewEventArgs"/> that provides context for the event.</param>
         private void TreeView_AfterExpand(object sender, TreeViewEventArgs e)
         {
+            Debug.Assert(presenter != null);
+
             if (e != null && e.Node != null)
             {
                 var node = e.Node;
@@ -276,6 +287,8 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         /// <param name="e">A <see cref="NodeLabelEditEventArgs"/> that provides context for the event.</param>
         private void TreeView_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)
         {
+            Debug.Assert(presenter != null);
+
             if (e != null && e.Label != null && e.Node != null)
             {
                 try
@@ -318,6 +331,8 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         /// <param name="e">An <see cref="EventArgs"/> that provides context for the event.</param>
         private void TreeView_Enter(object sender, EventArgs e)
         {
+            Debug.Assert(presenter != null);
+
             presenter.ViewActivated();
         }
 
@@ -328,6 +343,8 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         /// <param name="e">An <see cref="EventArgs"/> that provides context for the event.</param>
         private void TreeView_Leave(object sender, EventArgs e)
         {
+            Debug.Assert(presenter != null);
+
             presenter.ViewDeactivated();
         }
 
@@ -338,6 +355,8 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         /// <param name="e">A <see cref="TreeNodeMouseClickEventArgs"/> that provides context for the event.</param>
         private void TreeView_NodeDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
         {
+            Debug.Assert(presenter != null);
+
             if (e != null && e.Node != null)
             {
                 if (GetNodeType(e.Node) == Constants.Document) presenter.OpenDocument(e.Node.Name);
@@ -351,6 +370,8 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         /// <param name="e">A <see cref="TreeNodeMouseClickEventArgs"/> that provides context for the event.</param>
         private void TreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
+            Debug.Assert(presenter != null);
+
             if (e != null && e.Button == MouseButtons.Right)
             {
                 var menu = new ManagedContextMenuStrip();

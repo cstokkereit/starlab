@@ -28,7 +28,9 @@ namespace StarLab.Presentation.Help
         public AboutViewPresenter(IAboutView view, ICommandManager commands, IUseCaseFactory factory, IApplicationSettings settings, IMapper mapper, IEventAggregator events)
             : base(view, commands, factory, settings, mapper, events)
         {
-            log.Debug(string.Format(Resources.InstanceCreated, nameof(AboutViewPresenter)));
+            View.Attach(this);
+
+            if (log.IsDebugEnabled) log.Debug(string.Format(Resources.InstanceCreated, nameof(AboutViewPresenter)));
         }
 
         /// <summary>

@@ -3,7 +3,7 @@
     /// <summary>
     /// 
     /// </summary>
-    public class AboutViewPresenterTests : PresenterTests
+    public class AboutViewPresenterTests : PresentationTests
     {
         private IAboutView view; //
 

@@ -1,6 +1,7 @@
 ﻿using log4net;
 using StarLab.Presentation;
 using StarLab.Presentation.Help;
+using StarLab.Shared.Properties;
 
 namespace StarLab.UI.Help
 {
@@ -11,35 +12,40 @@ namespace StarLab.UI.Help
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(AboutView)); // The logger that will be used for writing log messages.
 
-        private readonly IAboutViewPresenter presenter; // The presenter that controls the view.
-
-        private readonly SplitViewPanels panel; // The panel that will contain the view.
+        private IAboutViewPresenter? presenter; // The presenter that controls the view.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="AboutView"> class.
         /// </summary>
-        /// <param name="definition">An <see cref="IViewDefinition"/> that holds the information required to construct this view.</param>
-        /// <param name="factory">An <see cref="IViewFactory"/> that will be used to create the presenter and child view.</param>
-        public AboutView(IViewDefinition definition, IViewFactory factory)
+        public AboutView()
         {
             InitializeComponent();
 
             Name = Views.About;
 
-            panel = (SplitViewPanels)definition.Panel;
-
-            presenter = (IAboutViewPresenter)factory.CreatePresenter(this);
+            if (log.IsDebugEnabled) log.Debug(string.Format(Resources.InstanceCreated, nameof(AboutView)));
         }
 
         /// <summary>
         /// Gets the <see cref="IChildViewController"> that controls this view.
         /// </summary>
-        public IChildViewController Controller => (IChildViewController)presenter;
+        public IChildViewController? Controller => (IChildViewController?)presenter;
 
         /// <summary>
         /// Gets the panel that will contain the view.
         /// </summary>
-        public SplitViewPanels Panel => panel;
+        public SplitViewPanels Panel => SplitViewPanels.Any;
+
+        /// <summary>
+        /// Attaches the <see cref="IPresenter"/> that controls the view.
+        /// </summary>
+        /// <param name="presenter">The <see cref="IPresenter"/> that controls the view.</param>
+        public void Attach(IChildViewPresenter presenter)
+        {
+            if (this.presenter != null) throw new InvalidOperationException(); // TODO
+
+            this.presenter = (IAboutViewPresenter)presenter;
+        }
 
         /// <summary>
         /// Initialises the view.

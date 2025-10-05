@@ -1,5 +1,4 @@
-﻿using log4net;
-using StarLab.Shared.Properties;
+﻿using System.Diagnostics;
 
 namespace StarLab.Presentation
 {
@@ -8,8 +7,6 @@ namespace StarLab.Presentation
     /// </summary>
     public abstract class Factory
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(Factory)); // The logger that will be used for writing log messages.
-
         /// <summary>
         /// Creates an object instance from the type name and arguments provided.
         /// </summary>
@@ -28,11 +25,7 @@ namespace StarLab.Presentation
                 instance = Activator.CreateInstance(type, args);
             }
             
-            if (instance == null)
-            {
-                if (log.IsFatalEnabled) log.Fatal(string.Format(Resources.UnknownType, typeName));
-                throw new UnknownTypeException(typeName);
-            }
+            Debug.Assert(instance != null);
             
             return instance;
         }

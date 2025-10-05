@@ -10,11 +10,9 @@ namespace StarLab.Presentation.Workspace.Documents
     /// <summary>
     /// Controls the behaviour of an <see cref="IDocumentView"/>.
     /// </summary>
-    public sealed class DocumentViewPresenter : Presenter, IDockableViewPresenter, IDocumentController, ISubscriber<WorkspaceChangedEventArgs>
+    public sealed class DocumentViewPresenter : Presenter<IDocumentView>, IDockableViewPresenter, IDocumentController, ISubscriber<WorkspaceChangedEventArgs>
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(DocumentViewPresenter)); // The logger that will be used for writing log messages.
-
-        private readonly IDocumentView view; // The view controlled by the presenter.
 
         private IDocument document; // The document that the view represents.
 
@@ -29,14 +27,17 @@ namespace StarLab.Presentation.Workspace.Documents
         /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
         /// <param name="events">The <see cref="IEventAggregator"/> that manages application events.</param>
         public DocumentViewPresenter(IDocumentView view, IDocument document, ICommandManager commands, IUseCaseFactory factory, IApplicationSettings settings, IMapper mapper, IEventAggregator events)
-            : base(commands, factory, settings, mapper, events)
+            : base(view, commands, factory, settings, mapper, events)
         {
-            this.document = document;
-            this.view = view;
+            View.Attach(this);
+
+            Name = Controllers.GetDocumentControllerName(document.ID);
 
             Location = Constants.Document;
 
-            log.Debug(string.Format(Resources.InstanceCreated, nameof(DocumentViewPresenter)));
+            this.document = document;
+
+            if (log.IsDebugEnabled) log.Debug(string.Format(Resources.InstanceCreated, nameof(DocumentViewPresenter)));
         }
 
         /// <summary>
@@ -47,7 +48,7 @@ namespace StarLab.Presentation.Workspace.Documents
         /// <summary>
         /// Gets the name of the controller.
         /// </summary>
-        public override string Name => Controllers.GetDocumentControllerName(document.ID);
+        public override string Name { get; }
 
         /// <summary>
         /// Adds a button to the tool bar.
@@ -58,7 +59,7 @@ namespace StarLab.Presentation.Workspace.Documents
         /// <param name="command">The <see cref="ICommand"> to invoke when the button is clicked.</param>
         public void AddToolbarButton(string name, string tooltip, Image image, ICommand command)
         {
-            view.AddToolbarButton(name, tooltip, image, command);
+            View.AddToolbarButton(name, tooltip, image, command);
         }
 
         /// <summary>
@@ -66,8 +67,8 @@ namespace StarLab.Presentation.Workspace.Documents
         /// </summary>
         public void Close()
         {
-            view.HideOnClose = false;
-            view.Close();
+            View.HideOnClose = false;
+            View.Close();
         }
 
         /// <summary>
@@ -77,7 +78,7 @@ namespace StarLab.Presentation.Workspace.Documents
         /// <returns>The required <see cref="IChildViewController"/>.</returns>
         public IChildViewController GetController(string name)
         {
-            return view.GetController(name);
+            return View.GetController(name);
         }
 
         /// <summary>
@@ -86,7 +87,7 @@ namespace StarLab.Presentation.Workspace.Documents
         /// <param name="name">The name of the content to be hidden.</param>
         public void HideSplitContent(string name)
         {
-            view.HideSplitContent(name);
+            View.HideSplitContent(name);
         }
 
         /// <summary>
@@ -99,7 +100,7 @@ namespace StarLab.Presentation.Workspace.Documents
             {
                 base.Initialise(controller);
 
-                view.Initialise(controller);
+                View.Initialise(controller);
 
                 if (document.Chart != null)
                 {
@@ -137,7 +138,7 @@ namespace StarLab.Presentation.Workspace.Documents
                 ((IChartSettingsController)GetController(Controllers.ChartSettingsController)).UpdateSettings(document);
             }
             
-            view.ShowSplitContent(name);
+            View.ShowSplitContent(name);
         }
 
         /// <summary>
@@ -150,8 +151,8 @@ namespace StarLab.Presentation.Workspace.Documents
 
             ((IChartController)GetController(Controllers.ChartController)).UpdateChart(document.Chart);
 
-            view.Name = document.Name;
-            view.Text = document.Name;
+            View.Name = document.Name;
+            View.Text = document.Name;
 
             this.document = document;
         }

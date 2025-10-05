@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using log4net;
 using StarLab.Application;
+using StarLab.Presentation.Workspace.Documents;
+using StarLab.Shared.Properties;
 using Stratosoft.Commands;
 using System.ComponentModel;
 
@@ -9,11 +11,9 @@ namespace StarLab.Presentation
     /// <summary>
     /// Controls the behaviour of an <see cref="IDialogView"/>.
     /// </summary>
-    public class DialogViewPresenter : Presenter, IDialogViewPresenter, IDialogController
+    public class DialogViewPresenter : Presenter<IDialogView>, IDialogViewPresenter, IDialogController
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(DialogViewPresenter)); // The logger that will be used for writing log messages.
-
-        private readonly IDialogView view; // The view controlled by the presenter.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="DialogViewPresenter"> class.
@@ -25,22 +25,24 @@ namespace StarLab.Presentation
         /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
         /// <param name="events">The <see cref="IEventAggregator"/> that manages application events.</param>
         public DialogViewPresenter(IDialogView view, ICommandManager commands, IUseCaseFactory factory, IApplicationSettings settings, IMapper mapper, IEventAggregator events)
-            : base(commands, factory, settings, mapper, events)
+            : base(view, commands, factory, settings, mapper, events)
         {
-            this.view = view;
+            View.Attach(this);
+
+            if (log.IsDebugEnabled) log.Debug(string.Format(Resources.InstanceCreated, nameof(DialogViewPresenter)));
         }
 
         /// <summary>
         /// Gets the name of the controller.
         /// </summary>
-        public override string Name => Controllers.GetViewControllerName(view.Name);
+        public override string Name => Controllers.GetViewControllerName(View.Name);
 
         /// <summary>
         /// Closes the dialog box.
         /// </summary>
         public void Close()
         {
-            view.Close();
+            View.Close();
         }
 
         /// <summary>
@@ -53,9 +55,9 @@ namespace StarLab.Presentation
             {
                 base.Initialise(controller);
 
-                view.Initialise(controller);
+                View.Initialise(controller);
 
-                view.HideOnClose = true;
+                View.HideOnClose = true;
             }
         }
 
@@ -65,7 +67,7 @@ namespace StarLab.Presentation
         /// <param name="view">The <see cref="IView"/> to be shown.</param>
         public void Show(IView view)
         {
-            this.view.Show(view);
+            View.Show(view);
         }
 
         /// <summary>
@@ -73,7 +75,7 @@ namespace StarLab.Presentation
         /// </summary>
         public void Show()
         {
-            AppController.Show(view);
+            AppController.Show(View);
         }
 
         /// <summary>

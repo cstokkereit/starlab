@@ -1,7 +1,9 @@
 ﻿using log4net;
 using StarLab.Presentation;
 using StarLab.Presentation.Workspace;
+using StarLab.Shared.Properties;
 using Stratosoft.Commands;
+using System.Diagnostics;
 using System.Text;
 using WeifenLuo.WinFormsUI.Docking;
 
@@ -14,19 +16,17 @@ namespace StarLab.UI.Workspace
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(ApplicationView)); // The logger that will be used for writing log messages.
 
-        private readonly IApplicationViewPresenter presenter; // The presenter that controls the view.
-
         private readonly string id; // The view ID.
+
+        private IApplicationViewPresenter? presenter; // The presenter that controls the view.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="ApplicationView"/> class.
         /// </summary>
         /// <param name="text">The window text.</param>
-        /// <param name="factory">An <see cref="IViewFactory"/> that will be used to create the presenter.</param>
-        public ApplicationView(string text, IViewFactory factory)
+        public ApplicationView(string text)
         {
-            ArgumentNullException.ThrowIfNull(factory, nameof(factory));
-            ArgumentException.ThrowIfNullOrEmpty(text, nameof(text));
+            ArgumentException.ThrowIfNullOrEmpty(nameof(text));
 
             InitializeComponent();
 
@@ -34,17 +34,17 @@ namespace StarLab.UI.Workspace
             id = Views.Application;
             Text = text;
 
-            presenter = (IApplicationViewPresenter)factory.CreatePresenter(this);
-
             dockPanel.Theme = new VS2015LightTheme();
 
             dockPanel.Theme.Extender.FloatWindowFactory = new FloatWindowFactory();
+
+            if (log.IsDebugEnabled) log.Debug(string.Format(Resources.InstanceCreated, nameof(ApplicationView)));
         }
 
         /// <summary>
         /// Gets the <see cref="IViewController"> that controls this view.
         /// </summary>
-        public IViewController Controller => (IViewController)presenter;
+        public IViewController? Controller => (IViewController?)presenter;
 
         /// <summary>
         /// Gets or sets a flag that determines whether the dialog box will be hidden or unloaded when it is closed.
@@ -178,6 +178,17 @@ namespace StarLab.UI.Workspace
         }
 
         /// <summary>
+        /// Attaches the <see cref="IPresenter"/> that controls the view.
+        /// </summary>
+        /// <param name="presenter">The <see cref="IPresenter"/> that controls the view.</param>
+        public void Attach(IPresenter presenter)
+        {
+            if (this.presenter != null) throw new InvalidOperationException(); // TODO
+
+            this.presenter = (IApplicationViewPresenter)presenter;
+        }
+
+        /// <summary>
         /// Closes the currently selected document.
         /// </summary>
         public void CloseActiveDocument()
@@ -196,6 +207,14 @@ namespace StarLab.UI.Workspace
             {
                 document.DockHandler.DockPanel = null;
             }
+        }
+
+        /// <summary>
+        /// Detaches the <see cref="IPresenter"/> that controls the view.
+        /// </summary>
+        public void Detach()
+        {
+            presenter = null;
         }
 
         /// <summary>
@@ -227,6 +246,8 @@ namespace StarLab.UI.Workspace
         /// <param name="layout">An XML representation of the workspace.</param>
         public void SetLayout(string layout)
         {
+            Debug.Assert(presenter != null);
+
             using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(layout)))
             {
                 dockPanel.LoadFromXml(stream, new DeserializeDockContent(config =>
@@ -302,6 +323,8 @@ namespace StarLab.UI.Workspace
         /// <param name="e">A <see cref="FormClosingEventArgs"/> that provides context for the event.</param>
         private void Form_Closing(object sender, FormClosingEventArgs e)
         {
+            Debug.Assert(presenter != null);
+
             presenter.ViewClosing(e);
         }
 
@@ -310,6 +333,8 @@ namespace StarLab.UI.Workspace
         /// </summary>
         private void UpdateActiveDocument()
         {
+            Debug.Assert(presenter != null);
+
             if (dockPanel.ActiveDocument is IDockableView view)
             {
                 presenter.SetActiveDocument(view.ID);

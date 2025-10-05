@@ -29,7 +29,9 @@ namespace StarLab.Presentation.Workspace.Documents
         public AddDocumentViewPresenter(IAddDocumentView view, ICommandManager commands, IUseCaseFactory factory, IApplicationSettings settings, IMapper mapper, IEventAggregator events)
             : base(view, commands, factory, settings, mapper, events) 
         {
-            log.Debug(string.Format(StringResources.InstanceCreated, nameof(AddDocumentViewPresenter)));
+            View.Attach(this);
+
+            if (log.IsDebugEnabled) log.Debug(string.Format(StringResources.InstanceCreated, nameof(AddDocumentViewPresenter)));
         }
 
         /// <summary>

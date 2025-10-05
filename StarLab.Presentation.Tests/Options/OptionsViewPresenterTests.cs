@@ -3,7 +3,7 @@
     /// <summary>
     /// 
     /// </summary>
-    public class OptionsViewPresenterTests : PresenterTests
+    public class OptionsViewPresenterTests : PresentationTests
     {
         private IOptionsView view; //
 

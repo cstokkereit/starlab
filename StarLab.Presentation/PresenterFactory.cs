@@ -39,9 +39,9 @@ namespace StarLab.Presentation
         /// <param name="events">The <see cref="IEventAggregator"/> that manages application events.</param>
         /// <exception cref="ArgumentNullException"></exception>
         public PresenterFactory(IWindsorContainer container, IUseCaseFactory factory, IApplicationSettings settings, IMapper mapper, IEventAggregator events)
-        {
-            this.settings = settings ?? throw new ArgumentNullException(nameof(settings));
+        {   
             this.container = container ?? throw new ArgumentNullException(nameof(container));
+            this.settings = settings ?? throw new ArgumentNullException(nameof(settings));
             this.factory = factory ?? throw new ArgumentNullException(nameof(factory));
             this.events = events ?? throw new ArgumentNullException(nameof(events));
             this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
@@ -81,9 +81,7 @@ namespace StarLab.Presentation
                     break;
 
                 default:
-                    var message = string.Format(string.Format(Resources.UnexpectedViewType, view.GetType().Name));
-                    if (log.IsFatalEnabled) log.Fatal(message);
-                    throw new Exception(message);
+                    throw new ArgumentException(string.Format(string.Format(Resources.UnexpectedViewType, view.GetType().Name)));
             }
 
             return presenter;
@@ -120,7 +118,7 @@ namespace StarLab.Presentation
         /// <returns>An <see cref="IChildViewPresenter"/> that can be used to control the <see cref="IChildView"/> provided.</returns>
         public IChildViewPresenter CreatePresenter(IChildView view)
         {
-            Debug.Assert(types.ContainsKey(view.Name)); // If this assertion fails you will need to create the required view defintion.
+            //Debug.Assert(types.ContainsKey(view.Name)); // If this assertion fails you will need to create the required view defintion.
 
             return (IChildViewPresenter)CreateInstance(types[view.Name], new object[] { view, container.Resolve<ICommandManager>(), factory, settings, mapper, events });
         }
