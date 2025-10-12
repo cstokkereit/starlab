@@ -38,22 +38,10 @@ namespace StarLab.UI.Controls.Workspace.Documents.Charts
             this.group = group;
             this.settings = settings;
 
-            var converter = new ColorConverter();
-            var colours = converter.GetStandardValues();
-
-            if (colours != null)
-            {
-                foreach (var colour in colours)
-                {
-                    comboBoxBackground.Items.Add(colour);
-                    comboBoxForeground.Items.Add(colour);
-                }
-            }
-
             var colourSettings = GetSettings();
 
-            comboBoxForeground.SelectedIndex = comboBoxForeground.FindStringExact(colourSettings.ForeColour);
-            comboBoxBackground.SelectedIndex = comboBoxBackground.FindStringExact(colourSettings.BackColour);
+            comboBoxForeground.SelectedText = colourSettings.ForeColour;
+            comboBoxBackground.SelectedText = colourSettings.BackColour;
 
             AttachEventHandlers();
         }
@@ -126,7 +114,8 @@ namespace StarLab.UI.Controls.Workspace.Documents.Charts
                     break;
 
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(group), group);
+                    settings = this.settings; // TODO 
+                    break;
             }
 
             return settings;
@@ -145,6 +134,29 @@ namespace StarLab.UI.Controls.Workspace.Documents.Charts
             colourSettings.BackColour = comboBoxBackground.Text;
 
             SectionChanged?.Invoke(this, settings);
+        }
+
+        /// <summary>
+        /// Event handler for the <see cref="ComboBox.DropDown"> event.
+        /// </summary>
+        /// <param name="sender">The <see cref="object"> that was the originator of the event.</param>
+        /// <param name="e">An <see cref="EventArgs"/> that provides context for the event.</param>
+        private void OnDropDown(object sender, EventArgs e)
+        {
+            if (sender is ComboBox combo && combo.Items.Count == 0)
+            {
+                var converter = new ColorConverter();
+
+                var colours = converter.GetStandardValues();
+
+                if (colours != null)
+                {
+                    foreach (var colour in colours)
+                    {
+                        combo.Items.Add(colour);
+                    }
+                }
+            }
         }
 
         //private void OnShowCustomForegroundColourDialog(object? sender, EventArgs e)

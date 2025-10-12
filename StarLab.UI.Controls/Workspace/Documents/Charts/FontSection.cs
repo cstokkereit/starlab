@@ -32,11 +32,6 @@ namespace StarLab.UI.Controls.Workspace.Documents.Charts
             this.group = group;
             this.settings = settings;
 
-            foreach (var family in FontFamily.Families)
-            {
-                comboFontFamilies.Items.Add(family.Name);
-            }
-
             for (int size = 6; size < 25; size++)
             {
                 comboFontSizes.Items.Add(size.ToString());
@@ -44,7 +39,7 @@ namespace StarLab.UI.Controls.Workspace.Documents.Charts
 
             var fontSettings = GetSettings();
 
-            comboFontFamilies.SelectedIndex = comboFontFamilies.FindStringExact(fontSettings.Family);
+            comboFontFamilies.SelectedText = fontSettings.Family;
             comboFontSizes.SelectedIndex = fontSettings.Size - 6;
             checkBoxUnderline.Checked = fontSettings.Underline;
             checkBoxItalic.Checked = fontSettings.Italic;
@@ -96,11 +91,27 @@ namespace StarLab.UI.Controls.Workspace.Documents.Charts
         /// </summary>
         private void AttachEventHandlers()
         {
-            comboFontFamilies.TextChanged += OnFontChanged;
             checkBoxUnderline.CheckStateChanged += OnFontChanged;
-            comboFontSizes.TextChanged += OnFontChanged;
             checkBoxItalic.CheckStateChanged += OnFontChanged;
             checkBoxBold.CheckStateChanged += OnFontChanged;
+            comboFontFamilies.TextChanged += OnFontChanged;
+            comboFontSizes.TextChanged += OnFontChanged;
+        }
+
+        /// <summary>
+        /// Event handler for the <see cref="ComboBox.DropDown"> event.
+        /// </summary>
+        /// <param name="sender">The <see cref="object"> that was the originator of the event.</param>
+        /// <param name="e">An <see cref="EventArgs"/> that provides context for the event.</param>
+        private void OnDropDown(object sender, EventArgs e)
+        {
+            if (comboFontFamilies.Items.Count == 0)
+            {
+                foreach (var family in FontFamily.Families)
+                {
+                    comboFontFamilies.Items.Add(family.Name);
+                }
+            }
         }
 
         /// <summary>

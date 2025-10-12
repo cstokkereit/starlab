@@ -1,11 +1,11 @@
 ﻿namespace StarLab.Presentation.Workspace.Documents.Charts
 {
     /// <summary>
-    /// 
+    /// A class for performing unit tests on the <see cref="ColourMagnitudeChartViewPresenter"/> class.
     /// </summary>
     public class ColourMagnitudeChartViewPresenterTests : PresentationTests
     {
-        private IChartView view; //
+        private IChartView view; // The mock IChartView used in the tests.
 
         /// <summary>
         /// Registers the dependencies with the IoC container and initialises the class level variables before each test.
@@ -18,7 +18,7 @@
         }
 
         /// <summary>
-        /// 
+        /// Test that the <see cref="ColourMagnitudeChartViewPresenter(IChartView, ICommandManager, IUseCaseFactory, IApplicationSettings, IMapper, IEventAggregator)"/> constructor works correctly.
         /// </summary>
         [Test]
         public void TestConstruction()
@@ -31,7 +31,7 @@
         }
 
         /// <summary>
-        /// 
+        /// Test that the <see cref="IChildViewController.Initialise(IApplicationController)"/> method works correctly.
         /// </summary>
         [Test]
         public void TestInitialise()
@@ -51,9 +51,9 @@
         }
 
         /// <summary>
-        /// 
+        /// Creates an instance of <see cref="ColourMagnitudeChartViewPresenter"/>.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Returns the <see cref="ColourMagnitudeChartViewPresenter"/>.</returns>
         private IChartViewPresenter CreatePresenter()
         {
             return new ColourMagnitudeChartViewPresenter(view, commands, factory, settings, mapper, events);

@@ -17,18 +17,19 @@ namespace StarLab.UI.Controls
         {
             InitializeComponent();
 
-            splitContainer.Panel1Collapsed = true;
+            container.FixedPanel = FixedPanel.Panel1;
+            container.Panel1Collapsed = true;
         }
 
         /// <summary>
         /// Gets the left or top panel of the <see cref="SplitContainer"/> depending on the <see cref="Orientation"/>.
         /// </summary>
-        public SplitterPanel Panel1 => splitContainer.Panel1;
+        public SplitterPanel Panel1 => container.Panel1;
 
         /// <summary>
         /// Gets the right or bottom panel of the <see cref="SplitContainer"/> depending on the <see cref="Orientation"/>.
         /// </summary>
-        public SplitterPanel Panel2 => splitContainer.Panel2;
+        public SplitterPanel Panel2 => container.Panel2;
 
         /// <summary>
         /// Adds a button to the tool bar.
@@ -61,29 +62,29 @@ namespace StarLab.UI.Controls
             switch (panel)
             {
                 case SplitViewPanels.Panel1:
-                    splitContainer.Panel1.Controls.Add(control);
+                    container.Panel1.Controls.Add(control);
                     break;
 
                 case SplitViewPanels.Panel2:
-                    splitContainer.Panel2.Controls.Add(control);
+                    container.Panel2.Controls.Add(control);
                     break;
             }
 
             views.Add(control.Name, control);
 
-            var size1 = GetMinimumSize(splitContainer.Panel1.Controls);
-            var size2 = GetMinimumSize(splitContainer.Panel2.Controls);
+            var size1 = GetMinimumSize(container.Panel1.Controls);
+            var size2 = GetMinimumSize(container.Panel2.Controls);
 
-            switch (splitContainer.Orientation)
+            switch (container.Orientation)
             {
                 case Orientation.Horizontal:
-                    splitContainer.Panel1MinSize = size1.Height;
-                    splitContainer.Panel2MinSize = size2.Height;
+                    container.Panel1MinSize = size1.Height;
+                    container.Panel2MinSize = size2.Height;
                     break;
 
                 case Orientation.Vertical:
-                    splitContainer.Panel1MinSize = size1.Width;
-                    splitContainer.Panel2MinSize = size2.Width;
+                    container.Panel1MinSize = size1.Width;
+                    container.Panel2MinSize = size2.Width;
                     break;
             }
 
@@ -101,14 +102,14 @@ namespace StarLab.UI.Controls
         {
             if (views.ContainsKey(name))
             {
-                if (splitContainer.Panel1.Controls.Contains(views[name]))
+                if (container.Panel1.Controls.Contains(views[name]))
                 {
-                    splitContainer.Panel1Collapsed = true;
+                    container.Panel1Collapsed = true;
                 }
 
-                if (splitContainer.Panel2.Controls.Contains(views[name]))
+                if (container.Panel2.Controls.Contains(views[name]))
                 {
-                    splitContainer.Panel2Collapsed = true;
+                    container.Panel2Collapsed = true;
                 }
             }
         }
@@ -121,18 +122,20 @@ namespace StarLab.UI.Controls
         {
             if (views.ContainsKey(name))
             {
-                if (splitContainer.Panel1.Controls.Contains(views[name]))
+                if (container.Panel1.Controls.Contains(views[name]))
                 {
-                    splitContainer.Panel1Collapsed = false;
+                    container.Panel1Collapsed = false;
                 }
 
-                if (splitContainer.Panel2.Controls.Contains(views[name]))
+                if (container.Panel2.Controls.Contains(views[name]))
                 {
-                    splitContainer.Panel2Collapsed = false;
+                    container.Panel2Collapsed = false;
                 }
 
                 // TODO - Show hide as appropriate if more than one view in a panel
             }
+
+            container.SplitterDistance = container.Panel1MinSize;
         }
 
         /// <summary>
@@ -163,7 +166,7 @@ namespace StarLab.UI.Controls
         {
             Size size = new Size();
 
-            switch (splitContainer.Orientation)
+            switch (container.Orientation)
             {
                 case Orientation.Horizontal:
                     size = new Size(size1.Width > size2.Width ? size1.Width : size2.Width, size1.Height + size2.Height);
@@ -182,18 +185,18 @@ namespace StarLab.UI.Controls
         /// </summary>
         /// <param name="sender">The <see cref="object"> that was the originator of the event.</param>
         /// <param name="e">A <see cref="PaintEventArgs"/> that provides context for the event.</param>
-        private void SplitContainer_Paint(object sender, PaintEventArgs e)
+        private void OnPaint(object sender, PaintEventArgs e)
         {
-            switch (splitContainer.Orientation)
+            switch (container.Orientation)
             {
                 case Orientation.Horizontal:
-                    e.Graphics.DrawLine(Pens.DarkGray, 0, splitContainer.SplitterDistance + (splitContainer.SplitterWidth / 2),
-                    splitContainer.Width, splitContainer.SplitterDistance + (splitContainer.SplitterWidth / 2));
+                    e.Graphics.DrawLine(Pens.DarkGray, 0, container.SplitterDistance + (container.SplitterWidth / 2),
+                    container.Width, container.SplitterDistance + (container.SplitterWidth / 2));
                     break;
 
                 case Orientation.Vertical:
-                    e.Graphics.DrawLine(Pens.DarkGray, splitContainer.SplitterDistance + (splitContainer.SplitterWidth / 2), 0,
-                    splitContainer.SplitterDistance + (splitContainer.SplitterWidth / 2), splitContainer.Height);
+                    e.Graphics.DrawLine(Pens.DarkGray, container.SplitterDistance + (container.SplitterWidth / 2), 0,
+                    container.SplitterDistance + (container.SplitterWidth / 2), container.Height);
                     break;
             }
         }

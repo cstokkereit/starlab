@@ -55,6 +55,7 @@
             comboBoxForeground.Name = "comboBoxForeground";
             comboBoxForeground.Size = new Size(159, 23);
             comboBoxForeground.TabIndex = 3;
+            comboBoxForeground.DropDown += OnDropDown;
             // 
             // comboBoxBackground
             // 

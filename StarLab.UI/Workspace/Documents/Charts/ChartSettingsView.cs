@@ -4,6 +4,7 @@ using StarLab.Presentation.Workspace.Documents.Charts;
 using StarLab.Shared.Properties;
 using StarLab.UI.Controls.Workspace.Documents.Charts;
 using Stratosoft.Commands;
+using System.Diagnostics;
 
 namespace StarLab.UI.Workspace.Documents.Charts
 {
@@ -198,15 +199,6 @@ namespace StarLab.UI.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// Sets the minimum size for the control.
-        /// </summary>
-        /// <param name="size">A <see cref="Size"/> that specifies the minimum height and width.</param>
-        public void SetMinimumSize(Size size)
-        {
-            MinimumSize = size;
-        }
-
-        /// <summary>
         /// Appends the <see cref="ISettingsSection"/> to the settings panel.
         /// </summary>
         /// <param name="section">The <see cref="ISettingsSection"/> to append.</param>
@@ -233,6 +225,8 @@ namespace StarLab.UI.Workspace.Documents.Charts
         /// <param name="e">An <see cref="EventArgs"/> that provides context for the event.</param>
         private void Section_SettingsChanged(object? sender, IChartSettings e)
         {
+            Debug.Assert(presenter != null);
+
             presenter.ApplyPreviewSettings(e);
         }
 
@@ -243,6 +237,8 @@ namespace StarLab.UI.Workspace.Documents.Charts
         /// <param name="e">An <see cref="EventArgs"/> that provides context for the event.</param>
         private void TreeView_AfterSelect(object sender, TreeViewEventArgs e)
         {
+            Debug.Assert(presenter != null);
+
             if (e != null && e.Node != null)
             {
                 presenter.ShowSettingsGroup(e.Node.Name);

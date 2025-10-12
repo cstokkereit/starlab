@@ -44,6 +44,7 @@
             comboFontFamilies.Name = "comboFontFamilies";
             comboFontFamilies.Size = new Size(215, 23);
             comboFontFamilies.TabIndex = 0;
+            comboFontFamilies.DropDown += OnDropDown;
             // 
             // label1
             // 

@@ -38,8 +38,10 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
         /// <param name="events">The <see cref="IEventAggregator"/> that manages application events.</param>
         public ChartSettingsViewPresenter(IChartSettingsView view, ICommandManager commands, IUseCaseFactory factory, IApplicationSettings settings, IMapper mapper, IEventAggregator events)
-            : base(view, commands, factory, settings, mapper, events) 
+            : base(view, commands, factory, settings, mapper, events)
         {
+            View.MinimumSize = new Size(600, 150);
+
             View.Attach(this);
 
             id = string.Empty;

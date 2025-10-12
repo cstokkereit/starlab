@@ -29,13 +29,13 @@
         private void InitializeComponent()
         {
             toolStripContainer = new ToolStripContainer();
-            splitContainer = new System.Windows.Forms.SplitContainer();
-            toolStrip = new UI.Controls.ToolStrip();
+            container = new System.Windows.Forms.SplitContainer();
+            toolStrip = new ToolStrip();
             toolStripContainer.ContentPanel.SuspendLayout();
             toolStripContainer.TopToolStripPanel.SuspendLayout();
             toolStripContainer.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)splitContainer).BeginInit();
-            splitContainer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)container).BeginInit();
+            container.SuspendLayout();
             SuspendLayout();
             // 
             // toolStripContainer
@@ -43,7 +43,7 @@
             // 
             // toolStripContainer.ContentPanel
             // 
-            toolStripContainer.ContentPanel.Controls.Add(splitContainer);
+            toolStripContainer.ContentPanel.Controls.Add(container);
             toolStripContainer.ContentPanel.Size = new Size(642, 542);
             toolStripContainer.Dock = DockStyle.Fill;
             toolStripContainer.Location = new Point(0, 0);
@@ -56,16 +56,16 @@
             // 
             toolStripContainer.TopToolStripPanel.Controls.Add(toolStrip);
             // 
-            // splitContainer
+            // container
             // 
-            splitContainer.Dock = DockStyle.Fill;
-            splitContainer.Location = new Point(0, 0);
-            splitContainer.Name = "splitContainer";
-            splitContainer.Size = new Size(642, 542);
-            splitContainer.Paint += SplitContainer_Paint;
-            splitContainer.SplitterDistance = 317;
-            splitContainer.SplitterWidth = 5;
-            splitContainer.TabIndex = 0;
+            container.Dock = DockStyle.Fill;
+            container.Location = new Point(0, 0);
+            container.Name = "container";
+            container.Size = new Size(642, 542);
+            container.SplitterDistance = 317;
+            container.SplitterWidth = 5;
+            container.TabIndex = 0;
+            container.Paint += OnPaint;
             // 
             // toolStrip
             // 
@@ -77,28 +77,28 @@
             toolStrip.Stretch = true;
             toolStrip.TabIndex = 0;
             // 
-            // SplitView
+            // SplitContainer
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BorderStyle = BorderStyle.FixedSingle;
             Controls.Add(toolStripContainer);
-            Name = "SplitView";
+            Name = "SplitContainer";
             Size = new Size(642, 567);
             toolStripContainer.ContentPanel.ResumeLayout(false);
             toolStripContainer.TopToolStripPanel.ResumeLayout(false);
             toolStripContainer.TopToolStripPanel.PerformLayout();
             toolStripContainer.ResumeLayout(false);
             toolStripContainer.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)splitContainer).EndInit();
-            splitContainer.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)container).EndInit();
+            container.ResumeLayout(false);
             ResumeLayout(false);
         }
 
         #endregion
 
         private ToolStripContainer toolStripContainer;
-        private System.Windows.Forms.SplitContainer splitContainer;
+        private System.Windows.Forms.SplitContainer container;
         private UI.Controls.ToolStrip toolStrip;
     }
 }
