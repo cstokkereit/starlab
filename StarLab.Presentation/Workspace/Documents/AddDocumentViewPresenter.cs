@@ -35,6 +35,14 @@ namespace StarLab.Presentation.Workspace.Documents
         }
 
         /// <summary>
+        /// Activates the view.
+        /// </summary>
+        public void Activate()
+        {
+            // Do Nothing
+        }
+
+        /// <summary>
         /// Initiates the add document use case.
         /// </summary>
         public void AddDocument()

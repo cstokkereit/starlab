@@ -1,6 +1,4 @@
-﻿using Castle.MicroKernel.Registration;
-using Castle.MicroKernel.Resolvers;
-using StarLab.Presentation.Help;
+﻿using StarLab.Presentation.Help;
 using StarLab.Presentation.Workspace.Documents;
 using StarLab.Presentation.Workspace.Documents.Charts;
 using StarLab.UI;
@@ -13,17 +11,7 @@ namespace StarLab.Presentation
     public class PresenterFactoryTests : PresentationTests
     {
         /// <summary>
-        /// 
-        /// </summary>
-        public override void SetUp()
-        {
-            base.SetUp();
-
-            container.Register(Component.For<ILazyComponentLoader>().ImplementedBy<LazyComponentAutoMocker>());
-        }
-
-        /// <summary>
-        /// 
+        /// Test that the <see cref="PresenterFactory.PresenterFactory(Castle.Windsor.IWindsorContainer, IUseCaseFactory, IApplicationSettings, IMapper, IEventAggregator)"/> constructor works correctly.
         /// </summary>
         [Test]
         public void TestConstruction()
@@ -36,7 +24,7 @@ namespace StarLab.Presentation
         }
 
         /// <summary>
-        /// 
+        /// Test that the <see cref="PresenterFactory.CreatePresenter(IChildView)"/> method works correctly.
         /// </summary>
         [Test]
         public void TestCreatePresenterFromChildView()
@@ -53,10 +41,11 @@ namespace StarLab.Presentation
             // Assert
             Assert.That(presenter, Is.Not.Null);
             Assert.That(presenter.Name, Is.EqualTo(Controllers.ChartSettingsController));
+            view.Received().Attach(Arg.Is(presenter));
         }
 
         /// <summary>
-        /// 
+        /// Test that the <see cref="PresenterFactory.CreatePresenter(IDocument, IDocumentView)"/> method works correctly.
         /// </summary>
         [Test]
         public void TestCreatePresenterFromDocumentAndView()
@@ -76,10 +65,11 @@ namespace StarLab.Presentation
             // Assert
             Assert.That(presenter, Is.Not.Null);
             Assert.That(presenter.Name, Is.EqualTo(Controllers.GetDocumentControllerName("Test")));
+            view.Received().Attach(Arg.Is(presenter));
         }
 
         /// <summary>
-        /// 
+        /// Test that the <see cref="PresenterFactory.CreatePresenter(string, string)"/> method works correctly.
         /// </summary>
         [Test]
         public void TestCreatePresenterFromView()
@@ -103,7 +93,7 @@ namespace StarLab.Presentation
         }
 
         /// <summary>
-        /// 
+        /// Test that the <see cref="PresenterFactory.CreatePresenter(string, string)"/> method works correctly.
         /// </summary>
         [Test]
         public void TestCreatePresenterFromViewDefinitionAndChildView()
@@ -123,8 +113,12 @@ namespace StarLab.Presentation
             // Assert
             Assert.That(presenter, Is.Not.Null);
             Assert.That(presenter.Name, Is.EqualTo(Controllers.GetContentControllerName(Views.About)));
+            view.Received().Attach(Arg.Is(presenter));
         }
 
+        /// <summary>
+        /// Test that the <see cref="PresenterFactory.CreatePresenter(IView)"/> method throws an exception if the view is of an unexpected type.
+        /// </summary>
         [Test]
         public void TestCreatePresenterThrowsAnExceptionForUnexpectedViewType()
         {
@@ -137,18 +131,7 @@ namespace StarLab.Presentation
             var e = Assert.Throws<ArgumentException>(() => sut.CreatePresenter(view));
 
             // Assert
-            Assert.That(e.Message.StartsWith("Unexpected view type: "));
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private class LazyComponentAutoMocker : ILazyComponentLoader
-        {
-            public IRegistration Load(string name, Type service, Castle.MicroKernel.Arguments arguments)
-            {
-                return Component.For(service).Instance(Substitute.For([service], null));
-            }
+            Assert.That(e.Message, Does.StartWith("Unexpected view type: "));
         }
     }
 }

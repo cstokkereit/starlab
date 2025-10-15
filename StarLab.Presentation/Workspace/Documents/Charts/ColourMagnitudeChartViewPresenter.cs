@@ -40,6 +40,14 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         public override string Name => Controllers.ChartController;
 
         /// <summary>
+        /// Activates the view.
+        /// </summary>
+        public void Activate()
+        {
+            // Do Nothing
+        }
+
+        /// <summary>
         /// Initialises the view.
         /// </summary>
         /// <param name="controller">The <see cref="IApplicationController"/>.</param>

@@ -55,6 +55,14 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         public override string Name => Controllers.ChartSettingsController;
 
         /// <summary>
+        /// Activates the view.
+        /// </summary>
+        public void Activate()
+        {
+            View.SelectNode(Constants.Chart);
+        }
+
+        /// <summary>
         /// Applies the preview settings to the chart view.
         /// </summary>
         /// <param name="chart">The <see cref="IChartSettings"/> that specifies the state of the chart.</param>

@@ -13,7 +13,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
     /// </summary>  
     public class ChartSettingsViewPresenterTests : PresentationTests
     {
-        private IChartSettingsView view; //
+        private IChartSettingsView view; // The mock IChartSettingsView used in the tests.
 
         /// <summary>
         /// Registers the dependencies with the IoC container and initialises the class level variables before each test.
@@ -59,6 +59,22 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
 
             // Assert
             Assert.That(presenter, Is.Not.Null);
+        }
+
+        /// <summary>
+        /// Test that the <see cref="IChartSettingsViewPresenter.Activate()"/> method selects the chart settings node.
+        /// </summary>
+        [Test]
+        public void TestActivate()
+        {
+            // Arrange
+            var presenter = (IChildViewController)CreatePresenter();
+
+            // Act
+            presenter.Activate();
+
+            // Assert
+            view.Received(1).SelectNode("Chart");
         }
 
         /// <summary>

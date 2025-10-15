@@ -1,8 +1,11 @@
 ﻿namespace StarLab.Presentation.Workspace.Documents
 {
+    /// <summary>
+    /// A class for performing unit tests on the <see cref="DocumentViewPresenter"/> class.
+    /// </summary>  
     public class DocumentViewPresenterTests : PresentationTests
     {
-        private IDocumentView view; //
+        private IDocumentView view; // The mock IDocumentView used in the tests.
 
         /// <summary>
         /// Registers the dependencies with the IoC container and initialises the class level variables before each test.
@@ -15,7 +18,7 @@
         }
 
         /// <summary>
-        /// 
+        /// Test that the <see cref="DocumentViewPresenter(IDocumentView, ICommandManager, IUseCaseFactory, IApplicationSettings, IMapper, IEventAggregator)"/> constructor works correctly.
         /// </summary>
         [Test]
         public void TestConstruction()
@@ -28,10 +31,10 @@
         }
 
         /// <summary>
-        /// 
+        /// Creates an instance of <see cref="DocumentViewPresenter"/>.
         /// </summary>
-        /// <param name="document"></param>
-        /// <returns></returns>
+        /// <param name="document">The <see cref="IDocument"/> that the view represents.</param>
+        /// <returns>Returns the <see cref="DocumentViewPresenter"/>.</returns>
         private IDockableViewPresenter CreatePresenter(IDocument document)
         {
             return new DocumentViewPresenter(view, document, commands, factory, settings, mapper, events);

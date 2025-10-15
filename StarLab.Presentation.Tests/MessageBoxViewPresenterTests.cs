@@ -5,7 +5,7 @@
     /// </summary>
     public class MessageBoxViewPresenterTests : PresentationTests
     {
-        private IMessageBoxView view; //
+        private IMessageBoxView view; // The mock IMessageBoxView used in the tests.
 
         /// <summary>
         /// Registers the dependencies with the IoC container and initialises the class level variables before each test.
@@ -18,7 +18,7 @@
         }
 
         /// <summary>
-        /// 
+        /// Test that the <see cref="MessageBoxViewPresenter(IMessageBoxView, ICommandManager, IUseCaseFactory, IApplicationSettings, IMapper, IEventAggregator)"/> constructor works correctly.
         /// </summary>
         [Test]
         public void TestConstruction()
@@ -31,9 +31,9 @@
         }
 
         /// <summary>
-        /// 
+        /// Creates an instance of <see cref="MessageBoxViewPresenter"/>.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Returns the <see cref="MessageBoxViewPresenter"/>.</returns>
         private IMessageBoxViewPresenter CreatePresenter()
         {
             return new MessageBoxViewPresenter(view, commands, factory, settings, mapper, events);

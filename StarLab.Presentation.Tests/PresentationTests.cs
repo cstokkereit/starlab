@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Castle.MicroKernel.Registration;
+using Castle.MicroKernel.Resolvers;
 using Castle.Windsor;
 using StarLab.Application;
 using Stratosoft.Commands;
@@ -59,6 +60,9 @@ namespace StarLab.Presentation
             events = Substitute.For<IEventAggregator>();
 
             mapper = container.Resolve<IMapper>();
+
+            // Register ILazyComponentLoader last
+            container.Register(Component.For<ILazyComponentLoader>().ImplementedBy<LazyComponentAutoMocker>());
         }
 
         /// <summary>
@@ -68,6 +72,17 @@ namespace StarLab.Presentation
         public virtual void TearDown()
         {
             container.Dispose();
+        }
+
+        /// <summary>
+        /// Uses <see cref="NSubstitute"/> to create mocked dependencies on demand.
+        /// </summary>
+        private class LazyComponentAutoMocker : ILazyComponentLoader
+        {
+            public IRegistration Load(string name, Type service, Castle.MicroKernel.Arguments arguments)
+            {
+                return Component.For(service).Instance(Substitute.For([service], null));
+            }
         }
     }
 }

@@ -6,6 +6,11 @@
     public interface IChildViewController : IController
     {
         /// <summary>
+        /// Activates the view.
+        /// </summary>
+        void Activate();
+
+        /// <summary>
         /// Initialises the controller.
         /// </summary>
         /// <param name="controller">The <see cref="IApplicationController"/>.</param>

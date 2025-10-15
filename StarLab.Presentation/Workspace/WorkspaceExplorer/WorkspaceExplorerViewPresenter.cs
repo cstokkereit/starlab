@@ -55,6 +55,14 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         }
 
         /// <summary>
+        /// Activates the view.
+        /// </summary>
+        public void Activate()
+        {
+            // Do Nothing
+        }
+
+        /// <summary>
         /// Adds a chart to the specified workspace folder.
         /// </summary>
         /// <param name="path">The path to the folder.</param>

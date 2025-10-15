@@ -118,7 +118,7 @@ namespace StarLab.Presentation
         /// <returns>An <see cref="IChildViewPresenter"/> that can be used to control the <see cref="IChildView"/> provided.</returns>
         public IChildViewPresenter CreatePresenter(IChildView view)
         {
-            //Debug.Assert(types.ContainsKey(view.Name)); // If this assertion fails you will need to create the required view defintion.
+            Debug.Assert(types.ContainsKey(view.Name)); // If this assertion fails you will need to create the required view defintion.
 
             return (IChildViewPresenter)CreateInstance(types[view.Name], new object[] { view, container.Resolve<ICommandManager>(), factory, settings, mapper, events });
         }

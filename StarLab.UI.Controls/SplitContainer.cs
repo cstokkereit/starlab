@@ -122,17 +122,22 @@ namespace StarLab.UI.Controls
         {
             if (views.ContainsKey(name))
             {
-                if (container.Panel1.Controls.Contains(views[name]))
+                var view = views[name];
+
+                if (container.Panel1.Controls.Contains(view))
                 {
                     container.Panel1Collapsed = false;
                 }
 
-                if (container.Panel2.Controls.Contains(views[name]))
+                if (container.Panel2.Controls.Contains(view))
                 {
                     container.Panel2Collapsed = false;
                 }
 
-                // TODO - Show hide as appropriate if more than one view in a panel
+                if (view is IChildView child && child.Controller != null)
+                {
+                    child.Controller.Activate();
+                }
             }
 
             container.SplitterDistance = container.Panel1MinSize;

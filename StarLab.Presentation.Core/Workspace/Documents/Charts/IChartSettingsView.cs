@@ -68,5 +68,11 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// Clears the settings panel.
         /// </summary>
         void Clear();
+
+        /// <summary>
+        /// Selects the specified tree view node.
+        /// </summary>
+        /// <param name="key">The node key.</param>
+        void SelectNode(string key);
     }
 }

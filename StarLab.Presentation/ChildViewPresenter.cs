@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using log4net;
 using StarLab.Application;
 using StarLab.Shared.Properties;
 using Stratosoft.Commands;

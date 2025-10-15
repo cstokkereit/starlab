@@ -33,6 +33,14 @@ namespace StarLab.Presentation.Options
         }
 
         /// <summary>
+        /// Activates the view.
+        /// </summary>
+        public void Activate()
+        {
+            // Do Nothing
+        }
+
+        /// <summary>
         /// Initialises the view.
         /// </summary>
         /// <param name="controller">The <see cref="IApplicationController"/>.</param>

@@ -152,15 +152,13 @@ namespace StarLab.UI
         }
 
         /// <summary>
-        /// TODO
+        /// Shows the specified view.
         /// </summary>
-        /// <param name="view"></param>
-        /// <exception cref="InvalidOperationException"></exception>
+        /// <param name="view">The <see cref="IView"/> to be shown.</param>
         public void Show(IView view)
         {
             throw new InvalidOperationException();
         }
-
 
         /// <summary>
         /// Shows the message box as a modal dialog with the specified owner.
@@ -181,25 +179,23 @@ namespace StarLab.UI
         }
 
         /// <summary>
-        /// TODO 
+        /// Displays an <see cref="OpenFileDialog"/> with the specified options.
         /// </summary>
-        /// <param name="title"></param>
-        /// <param name="filter"></param>
-        /// <returns></returns>
-        /// <exception cref="InvalidOperationException"></exception>
+        /// <param name="title">The dialog title.</param>
+        /// <param name="filter">The file name filter.</param>
+        /// <returns>The filename selected in the dialog.</returns>
         public string ShowOpenFileDialog(string title, string filter)
         {
             throw new InvalidOperationException();
         }
 
         /// <summary>
-        /// TODO
+        /// Displays a <see cref="SaveFileDialog"/> with the specified options.
         /// </summary>
-        /// <param name="title"></param>
-        /// <param name="filter"></param>
-        /// <param name="extension"></param>
-        /// <returns></returns>
-        /// <exception cref="InvalidOperationException"></exception>
+        /// <param name="title">The dialog title.</param>
+        /// <param name="filter">The file name filter.</param>
+        /// <param name="extension">The default file extension.</param>
+        /// <returns>The filename selected in the dialog.</returns>
         public string ShowSaveFileDialog(string title, string filter, string extension)
         {
             throw new InvalidOperationException();

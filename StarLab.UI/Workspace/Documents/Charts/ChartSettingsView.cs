@@ -199,6 +199,15 @@ namespace StarLab.UI.Workspace.Documents.Charts
         }
 
         /// <summary>
+        /// Selects the specified tree view node.
+        /// </summary>
+        /// <param name="key">The node key.</param>
+        public void SelectNode(string key)
+        {
+            if (nodes.ContainsKey(key)) treeView.SelectedNode = nodes[key];
+        }
+
+        /// <summary>
         /// Appends the <see cref="ISettingsSection"/> to the settings panel.
         /// </summary>
         /// <param name="section">The <see cref="ISettingsSection"/> to append.</param>
