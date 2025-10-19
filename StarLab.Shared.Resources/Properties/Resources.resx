@@ -386,4 +386,7 @@ Please enter a valid name.</value>
   <data name="ViewAttached" xml:space="preserve">
     <value>{0} attached to {1}.</value>
   </data>
+  <data name="Custom" xml:space="preserve">
+    <value>Custom</value>
+  </data>
 </root>

@@ -15,6 +15,8 @@ namespace StarLab.Application.Workspace
 
         private readonly string? layout; // Holds the position, size and state of the dockable views.
 
+        private readonly string filename;
+
         /// <summary>
         /// Initialises a new instance of the <see cref="Workspace"/> class.
         /// </summary>
@@ -22,7 +24,9 @@ namespace StarLab.Application.Workspace
         public Workspace(WorkspaceDTO dto)
         {
             ArgumentNullException.ThrowIfNull(dto, nameof(dto));
-            
+
+            filename = string.IsNullOrEmpty(dto.FileName) ? string.Empty : dto.FileName;
+
             CreateProjects(dto.Projects);
 
             layout = dto.Layout;
@@ -31,12 +35,20 @@ namespace StarLab.Application.Workspace
         /// <summary>
         /// Initialises a new instance of the <see cref="Workspace"/> class.
         /// </summary>
-        public Workspace() { }
+        public Workspace() 
+        {
+            filename = string.Empty;
+        }
 
         /// <summary>
         /// Gets an <see cref="IEnumerable{Document}"/> containing the documents in the workspace hierarchy.
         /// </summary>
         public IEnumerable<Document> Documents => documents.Values;
+
+        /// <summary>
+        /// Gets the workspace file name.
+        /// </summary>
+        public string FileName => filename;
 
         /// <summary>
         /// Gets an <see cref="IEnumerable{IFolder}"/> containing the folders in the workspace hierarchy.

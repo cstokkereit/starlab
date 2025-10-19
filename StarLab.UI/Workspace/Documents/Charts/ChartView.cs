@@ -245,6 +245,8 @@ namespace StarLab.UI.Workspace.Documents.Charts
         /// <returns>The required <see cref="ScottPlot.Color"/>.</returns>
         private static ScottPlot.Color GetColour(string colour)
         {
+            colour = colour.StartsWith('#') ? colour.Substring(1) : colour;
+
             var argb = 0;
 
             if (int.TryParse(colour, out argb))

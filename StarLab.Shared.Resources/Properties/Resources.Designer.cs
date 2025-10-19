@@ -250,6 +250,15 @@ namespace StarLab.Shared.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Custom.
+        /// </summary>
+        public static string Custom {
+            get {
+                return ResourceManager.GetString("Custom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cut.
         /// </summary>
         public static string Cut {

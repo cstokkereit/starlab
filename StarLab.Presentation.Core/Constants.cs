@@ -22,7 +22,6 @@
         public const string ChartSettings = "ChartSettings";
         public const string CollapseAll = "CollapseAll";
         public const string Copy = "Copy";
-        public const string Custom = "Custom";
         public const string Cut = "Cut";
 
         public const string Data = "Data";

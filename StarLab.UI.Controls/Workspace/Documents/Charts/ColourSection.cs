@@ -1,4 +1,5 @@
 ﻿using StarLab.Presentation;
+using StarLab.Shared.Properties;
 using StarLab.Presentation.Workspace.Documents.Charts;
 
 namespace StarLab.UI.Controls.Workspace.Documents.Charts
@@ -9,12 +10,21 @@ namespace StarLab.UI.Controls.Workspace.Documents.Charts
     public partial class ColourSection : UserControl, ISettingsSection
     {
         private const string AXES = $"{Constants.Chart}/{Constants.Axes}";
+
+        private const string BUTTON_BACKGROUND = "buttonBackground";
+        private const string BUTTON_FOREGROUND = "buttonForeground";
+
         private const string CHART = Constants.Chart;
+        private const string COMBO_BACKGROUND = "comboBackground";
+        private const string COMBO_FOREGROUND = "comboForeground";
+
         private const string TITLE = $"{Constants.Chart}/{Constants.Title}";
+
         private const string X1 = $"{Constants.Chart}/{Constants.Axes}/{Constants.AxisX1}";
         private const string X1_LABEL = $"{X1}/{Constants.Label}";
         private const string X2 = $"{Constants.Chart}/{Constants.Axes}/{Constants.AxisX2}";
         private const string X2_LABEL = $"{X2}/{Constants.Label}";
+
         private const string Y1 = $"{Constants.Chart}/{Constants.Axes}/{Constants.AxisY1}";
         private const string Y1_LABEL = $"{Y1}/{Constants.Label}";
         private const string Y2 = $"{Constants.Chart}/{Constants.Axes}/{Constants.AxisY2}";
@@ -23,6 +33,10 @@ namespace StarLab.UI.Controls.Workspace.Documents.Charts
         private readonly IChartSettings settings; // The chart settings that are bound to this control.
 
         private readonly string group; // The name of the settings group that this control represents.
+
+        private string customBackColour; // The custom background colour.
+
+        private string customForeColour; // The custom foreground colour.
 
         public event EventHandler<IChartSettings>? SectionChanged; // An event that gets fired whenever any of the section settings is changed.
 
@@ -35,27 +49,41 @@ namespace StarLab.UI.Controls.Workspace.Documents.Charts
         {
             InitializeComponent();
 
-            this.group = group;
+            customBackColour = settings.BackColour.StartsWith('#') ? settings.BackColour : string.Empty;
+            customForeColour = settings.ForeColour.StartsWith('#') ? settings.ForeColour : string.Empty;
+
             this.settings = settings;
+            this.group = group;
 
-            var colourSettings = GetSettings();
-
-            comboBoxForeground.SelectedText = colourSettings.ForeColour;
-            comboBoxBackground.SelectedText = colourSettings.BackColour;
-
-            AttachEventHandlers();
+            InitialiseComboBoxes();
         }
 
         /// <summary>
-        /// Attaches the event handlers for the child <see cref="Control"/>s that comprise this <see cref="UserControl"/>
+        /// Populates the <see cref="ComboBox"/> controls and wires up their event handlers.
         /// </summary>
-        private void AttachEventHandlers()
+        private void InitialiseComboBoxes()
         {
-            comboBoxForeground.TextChanged += OnColourChanged;
-            comboBoxBackground.TextChanged += OnColourChanged;
+            var settings = GetSettings();
 
-            //buttonCustom1.Click += OnShowCustomForegroundColourDialog;
-            //buttonCustom2.Click += OnShowCustomBackgroundColourDialog;
+            // NOTE - The SelectedText property must be set before wiring up the DropDown event handler.
+
+            comboForeground.SelectedText = GetColourName(settings.ForeColour);
+            comboForeground.TextChanged += OnColourChanged;
+            comboForeground.DropDown += OnDropDown;
+
+            comboBackground.SelectedText = GetColourName(settings.BackColour);
+            comboBackground.TextChanged += OnColourChanged;
+            comboBackground.DropDown += OnDropDown;
+        }
+
+        /// <summary>
+        /// Gets the name of the colour. Returns <<see cref="Resources.Custom"/>> for custom colours.
+        /// </summary>
+        /// <param name="colour">The name of the colour or its ARBG value prefixed by "#" for custom colours.</param>
+        /// <returns>The name of the colour.</returns>
+        private string GetColourName(string colour)
+        {
+            return colour.StartsWith('#') ? Resources.Custom : colour;
         }
 
         /// <summary>
@@ -122,18 +150,61 @@ namespace StarLab.UI.Controls.Workspace.Documents.Charts
         }
 
         /// <summary>
+        /// Event handler for the <see cref="Button.Click"> event.
+        /// </summary>
+        /// <param name="sender">The <see cref="object"> that was the originator of the event.</param>
+        /// <param name="e">An <see cref="EventArgs"/> that provides context for the event.</param>
+        private void OnClick(object? sender, EventArgs e)
+        {
+            if (dialogCustomColour.ShowDialog() == DialogResult.OK && sender is Button button)
+            {
+                var colour = dialogCustomColour.Color.ToArgb();
+
+                var settings = GetSettings();
+
+                // TODO - Will need to maintain a list of custom colours and use them to populate the dialog, save to settings etc.
+
+                switch (button.Name)
+                {
+                    case BUTTON_BACKGROUND:
+                        settings.BackColour = $"#{colour}";
+                        comboBackground.SelectAll();
+                        comboBackground.SelectedText = GetColourName(settings.BackColour);
+                        break;
+
+                    case BUTTON_FOREGROUND:
+                        settings.ForeColour = $"#{colour}";
+                        comboForeground.SelectAll();
+                        comboForeground.SelectedText = GetColourName(settings.ForeColour);
+                        break;
+                }
+            }
+        }
+
+        /// <summary>
         /// Event handler for the <see cref="ComboBox.TextChanged"> event.
         /// </summary>
         /// <param name="sender">The <see cref="object"> that was the originator of the event.</param>
         /// <param name="e">An <see cref="EventArgs"/> that provides context for the event.</param>
         private void OnColourChanged(object? sender, EventArgs e)
         {
-            var colourSettings = GetSettings();
+            if (sender is ComboBox combo)
+            {
+                var colourSettings = GetSettings();
 
-            colourSettings.ForeColour = comboBoxForeground.Text;
-            colourSettings.BackColour = comboBoxBackground.Text;
+                switch (combo.Name)
+                {
+                    case COMBO_BACKGROUND:
+                        colourSettings.BackColour = (combo.Text == Resources.Custom && !string.IsNullOrEmpty(customBackColour)) ? customBackColour : combo.Text;
+                        break;
 
-            SectionChanged?.Invoke(this, settings);
+                    case COMBO_FOREGROUND:
+                        colourSettings.ForeColour = (combo.Text == Resources.Custom && !string.IsNullOrEmpty(customForeColour)) ? customForeColour : combo.Text;
+                        break;
+                }
+
+                SectionChanged?.Invoke(this, settings);
+            }
         }
 
         /// <summary>
@@ -141,10 +212,21 @@ namespace StarLab.UI.Controls.Workspace.Documents.Charts
         /// </summary>
         /// <param name="sender">The <see cref="object"> that was the originator of the event.</param>
         /// <param name="e">An <see cref="EventArgs"/> that provides context for the event.</param>
-        private void OnDropDown(object sender, EventArgs e)
+        private void OnDropDown(object? sender, EventArgs e)
         {
             if (sender is ComboBox combo && combo.Items.Count == 0)
             {
+                switch (combo.Name)
+                {
+                    case COMBO_BACKGROUND:
+                        if (!string.IsNullOrEmpty(customBackColour)) combo.Items.Add(Resources.Custom);
+                        break;
+
+                    case COMBO_FOREGROUND:
+                        if (!string.IsNullOrEmpty(customForeColour)) combo.Items.Add(Resources.Custom);
+                        break;
+                }
+
                 var converter = new ColorConverter();
 
                 var colours = converter.GetStandardValues();
@@ -158,15 +240,5 @@ namespace StarLab.UI.Controls.Workspace.Documents.Charts
                 }
             }
         }
-
-        //private void OnShowCustomForegroundColourDialog(object? sender, EventArgs e)
-        //{
-        //    var colour = dialogCustomColour.ShowDialog(this);
-        //}
-
-        //private void OnShowCustomBackgroundColourDialog(object? sender, EventArgs e)
-        //{
-        //    var colour = dialogCustomColour.ShowDialog(this);
-        //}
     }
 }

@@ -28,53 +28,54 @@
         /// </summary>
         private void InitializeComponent()
         {
-            buttonCustom2 = new Button();
-            comboBoxForeground = new ComboBox();
-            comboBoxBackground = new ComboBox();
-            buttonCustom1 = new Button();
+            buttonBackground = new Button();
+            comboForeground = new ComboBox();
+            comboBackground = new ComboBox();
+            buttonForeground = new Button();
             label1 = new Label();
             label2 = new Label();
             dialogCustomColour = new ColorDialog();
             SuspendLayout();
             // 
-            // buttonCustom2
+            // buttonBackground
             // 
-            buttonCustom2.Location = new Point(169, 75);
-            buttonCustom2.Name = "buttonCustom2";
-            buttonCustom2.Size = new Size(85, 23);
-            buttonCustom2.TabIndex = 2;
-            buttonCustom2.Text = "Custom...";
-            buttonCustom2.UseVisualStyleBackColor = true;
+            buttonBackground.Location = new Point(169, 75);
+            buttonBackground.Name = "buttonBackground";
+            buttonBackground.Size = new Size(85, 23);
+            buttonBackground.TabIndex = 2;
+            buttonBackground.Text = "Custom...";
+            buttonBackground.UseVisualStyleBackColor = true;
+            buttonBackground.Click += OnClick;
             // 
-            // comboBoxForeground
+            // comboForeground
             // 
-            comboBoxForeground.AutoCompleteMode = AutoCompleteMode.Suggest;
-            comboBoxForeground.AutoCompleteSource = AutoCompleteSource.ListItems;
-            comboBoxForeground.FormattingEnabled = true;
-            comboBoxForeground.Location = new Point(3, 18);
-            comboBoxForeground.Name = "comboBoxForeground";
-            comboBoxForeground.Size = new Size(159, 23);
-            comboBoxForeground.TabIndex = 3;
-            comboBoxForeground.DropDown += OnDropDown;
+            comboForeground.AutoCompleteMode = AutoCompleteMode.Suggest;
+            comboForeground.AutoCompleteSource = AutoCompleteSource.ListItems;
+            comboForeground.FormattingEnabled = true;
+            comboForeground.Location = new Point(3, 18);
+            comboForeground.Name = "comboForeground";
+            comboForeground.Size = new Size(159, 23);
+            comboForeground.TabIndex = 3;
             // 
-            // comboBoxBackground
+            // comboBackground
             // 
-            comboBoxBackground.AutoCompleteMode = AutoCompleteMode.Suggest;
-            comboBoxBackground.AutoCompleteSource = AutoCompleteSource.ListItems;
-            comboBoxBackground.FormattingEnabled = true;
-            comboBoxBackground.Location = new Point(3, 75);
-            comboBoxBackground.Name = "comboBoxBackground";
-            comboBoxBackground.Size = new Size(160, 23);
-            comboBoxBackground.TabIndex = 4;
+            comboBackground.AutoCompleteMode = AutoCompleteMode.Suggest;
+            comboBackground.AutoCompleteSource = AutoCompleteSource.ListItems;
+            comboBackground.FormattingEnabled = true;
+            comboBackground.Location = new Point(3, 75);
+            comboBackground.Name = "comboBackground";
+            comboBackground.Size = new Size(160, 23);
+            comboBackground.TabIndex = 4;
             // 
-            // buttonCustom1
+            // buttonForeground
             // 
-            buttonCustom1.Location = new Point(168, 18);
-            buttonCustom1.Name = "buttonCustom1";
-            buttonCustom1.Size = new Size(85, 23);
-            buttonCustom1.TabIndex = 5;
-            buttonCustom1.Text = "Custom...";
-            buttonCustom1.UseVisualStyleBackColor = true;
+            buttonForeground.Location = new Point(168, 18);
+            buttonForeground.Name = "buttonForeground";
+            buttonForeground.Size = new Size(85, 23);
+            buttonForeground.TabIndex = 5;
+            buttonForeground.Text = "Custom...";
+            buttonForeground.UseVisualStyleBackColor = true;
+            buttonForeground.Click += OnClick;
             // 
             // label1
             // 
@@ -98,10 +99,10 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            Controls.Add(buttonCustom1);
-            Controls.Add(comboBoxBackground);
-            Controls.Add(comboBoxForeground);
-            Controls.Add(buttonCustom2);
+            Controls.Add(buttonForeground);
+            Controls.Add(comboBackground);
+            Controls.Add(comboForeground);
+            Controls.Add(buttonBackground);
             Controls.Add(label1);
             Controls.Add(label2);
             Name = "ColourSection";
@@ -112,10 +113,10 @@
 
         #endregion
 
-        private Button buttonCustom2;
-        private ComboBox comboBoxForeground;
-        private ComboBox comboBoxBackground;
-        private Button buttonCustom1;
+        private Button buttonBackground;
+        private ComboBox comboForeground;
+        private ComboBox comboBackground;
+        private Button buttonForeground;
         private Label label1;
         private Label label2;
         private ColorDialog dialogCustomColour;
