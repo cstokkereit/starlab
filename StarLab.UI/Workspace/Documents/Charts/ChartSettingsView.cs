@@ -87,7 +87,7 @@ namespace StarLab.UI.Workspace.Documents.Charts
         /// <param name="group">The name of the settings group.</param>
         public void AppendColourSection(IChartSettings settings, string group)
         {
-            var section = new ColourSection(settings, group);
+            var section = new ColourSection(settings, group, group == Constants.Chart);
 
             section.SectionChanged += Section_SettingsChanged;
 
@@ -102,6 +102,20 @@ namespace StarLab.UI.Workspace.Documents.Charts
         public void AppendFontSection(IChartSettings settings, string group)
         {
             var section = new FontSection(settings, group);
+
+            section.SectionChanged += Section_SettingsChanged;
+
+            AppendSection(section);
+        }
+
+        /// <summary>
+        /// Appends a scale settings section to the settings panel.
+        /// </summary>
+        /// <param name="settings">An <see cref="IChartSettings"/> that represents the current state of the chart.</param>
+        /// <param name="group">The name of the settings group.</param>
+        public void AppendScaleSection(IChartSettings settings, string group)
+        {
+            var section = new ScaleSection();
 
             section.SectionChanged += Section_SettingsChanged;
 

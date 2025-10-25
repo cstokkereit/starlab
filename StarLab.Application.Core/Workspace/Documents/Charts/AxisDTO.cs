@@ -11,6 +11,8 @@
 
         public LabelDTO? Label;
 
+        public ScaleDTO? Scale;
+
         public bool Visible;
     }
 }

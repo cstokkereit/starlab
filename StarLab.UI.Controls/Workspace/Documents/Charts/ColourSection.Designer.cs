@@ -32,8 +32,8 @@
             comboForeground = new ComboBox();
             comboBackground = new ComboBox();
             buttonForeground = new Button();
-            label1 = new Label();
-            label2 = new Label();
+            labelForeground = new Label();
+            labelBackground = new Label();
             dialogCustomColour = new ColorDialog();
             SuspendLayout();
             // 
@@ -77,23 +77,23 @@
             buttonForeground.UseVisualStyleBackColor = true;
             buttonForeground.Click += OnClick;
             // 
-            // label1
+            // labelForeground
             // 
-            label1.AutoSize = true;
-            label1.Location = new Point(0, 0);
-            label1.Name = "label1";
-            label1.Size = new Size(108, 15);
-            label1.TabIndex = 6;
-            label1.Text = "Foreground Colour";
+            labelForeground.AutoSize = true;
+            labelForeground.Location = new Point(0, 0);
+            labelForeground.Name = "labelForeground";
+            labelForeground.Size = new Size(108, 15);
+            labelForeground.TabIndex = 6;
+            labelForeground.Text = "Foreground Colour";
             // 
-            // label2
+            // labelBackground
             // 
-            label2.AutoSize = true;
-            label2.Location = new Point(0, 57);
-            label2.Name = "label2";
-            label2.Size = new Size(110, 15);
-            label2.TabIndex = 7;
-            label2.Text = "Background Colour";
+            labelBackground.AutoSize = true;
+            labelBackground.Location = new Point(0, 57);
+            labelBackground.Name = "labelBackground";
+            labelBackground.Size = new Size(110, 15);
+            labelBackground.TabIndex = 7;
+            labelBackground.Text = "Background Colour";
             // 
             // ColourSection
             // 
@@ -103,8 +103,8 @@
             Controls.Add(comboBackground);
             Controls.Add(comboForeground);
             Controls.Add(buttonBackground);
-            Controls.Add(label1);
-            Controls.Add(label2);
+            Controls.Add(labelForeground);
+            Controls.Add(labelBackground);
             Name = "ColourSection";
             Size = new Size(258, 100);
             ResumeLayout(false);
@@ -117,8 +117,8 @@
         private ComboBox comboForeground;
         private ComboBox comboBackground;
         private Button buttonForeground;
-        private Label label1;
-        private Label label2;
+        private Label labelForeground;
+        private Label labelBackground;
         private ColorDialog dialogCustomColour;
     }
 }

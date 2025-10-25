@@ -18,6 +18,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             BackColour = string.IsNullOrEmpty(dto.BackColour) ? Constants.White : dto.BackColour;
             ForeColour = string.IsNullOrEmpty(dto.ForeColour) ? Constants.Black : dto.ForeColour;
             Label = new Label(dto.Label);
+            Scale = new Scale(dto.Scale);
             Visible = dto.Visible;
         }
 
@@ -37,7 +38,12 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         public ILabel Label { get; }
 
         /// <summary>
-        /// A flag indicating whether the axis is visible.
+        /// Gets the axis <see cref="IScale"/>.
+        /// </summary>
+        public IScale Scale { get; }
+
+        /// <summary>
+        /// A flag indicating that the axis is visible.
         /// </summary>
         public bool Visible { get; }
     }

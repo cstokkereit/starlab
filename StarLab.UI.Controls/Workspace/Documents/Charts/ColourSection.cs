@@ -45,9 +45,21 @@ namespace StarLab.UI.Controls.Workspace.Documents.Charts
         /// </summary>
         /// <param name="settings">The <see cref="IChartSettings"/> that are bound to this control.</param>
         /// <param name="group">The name of the settings group that this control represents.</param>
-        public ColourSection(IChartSettings settings, string group)
+        public ColourSection(IChartSettings settings, string group, bool dualSelection)
         {
             InitializeComponent();
+
+            if (dualSelection)
+            {
+                labelBackground.Text = Resources.BackColour;
+                labelForeground.Text = Resources.ForeColour;
+                Height = 100;
+            }
+            else
+            {
+                labelForeground.Text = Resources.Colour;
+                Height = 43;
+            }
 
             customBackColour = settings.BackColour.StartsWith('#') ? settings.BackColour : string.Empty;
             customForeColour = settings.ForeColour.StartsWith('#') ? settings.ForeColour : string.Empty;

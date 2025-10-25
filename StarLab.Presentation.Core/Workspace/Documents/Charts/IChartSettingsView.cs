@@ -39,6 +39,13 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         void AppendFontSection(IChartSettings settings, string group);
 
         /// <summary>
+        /// Appends a scale settings section to the settings panel.
+        /// </summary>
+        /// <param name="settings">An <see cref="IChartSettings"/> that represents the current state of the chart.</param>
+        /// <param name="group">The name of the settings group.</param>
+        void AppendScaleSection(IChartSettings settings, string group);
+
+        /// <summary>
         /// Appends a text settings section to the settings panel.
         /// </summary>
         /// <param name="settings">An <see cref="IChartSettings"/> that represents the current state of the chart.</param>

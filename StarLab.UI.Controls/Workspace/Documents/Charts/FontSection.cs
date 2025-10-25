@@ -8,11 +8,15 @@ namespace StarLab.UI.Controls.Workspace.Documents.Charts
     /// </summary>
     public partial class FontSection : UserControl, ISettingsSection
     {
+        private const string LABEL_X1 = $"{Constants.Chart}/{Constants.Axes}/{Constants.AxisX1}/{Constants.Label}";
+        private const string LABEL_X2 = $"{Constants.Chart}/{Constants.Axes}/{Constants.AxisX2}/{Constants.Label}";
+        private const string LABEL_Y1 = $"{Constants.Chart}/{Constants.Axes}/{Constants.AxisY1}/{Constants.Label}";
+        private const string LABEL_Y2 = $"{Constants.Chart}/{Constants.Axes}/{Constants.AxisY2}/{Constants.Label}";
+        //private const string SCALE_X1 = $"{Constants.Chart}/{Constants.Axes}/{Constants.AxisX1}/{Constants.Scale}";
+        //private const string SCALE_X2 = $"{Constants.Chart}/{Constants.Axes}/{Constants.AxisX2}/{Constants.Scale}";
+        //private const string SCALE_Y1 = $"{Constants.Chart}/{Constants.Axes}/{Constants.AxisY1}/{Constants.Scale}";
+        //private const string SCALE_Y2 = $"{Constants.Chart}/{Constants.Axes}/{Constants.AxisY2}/{Constants.Scale}";
         private const string TITLE = $"{Constants.Chart}/{Constants.Title}";
-        private const string X1 = $"{Constants.Chart}/{Constants.Axes}/{Constants.AxisX1}/{Constants.Label}";
-        private const string X2 = $"{Constants.Chart}/{Constants.Axes}/{Constants.AxisX2}/{Constants.Label}";
-        private const string Y1 = $"{Constants.Chart}/{Constants.Axes}/{Constants.AxisY1}/{Constants.Label}";
-        private const string Y2 = $"{Constants.Chart}/{Constants.Axes}/{Constants.AxisY2}/{Constants.Label}";
 
         private readonly IChartSettings settings; // The chart settings that are bound to this control.
 
@@ -59,21 +63,37 @@ namespace StarLab.UI.Controls.Workspace.Documents.Charts
 
             switch (group)
             {
-                case X1:
+                case LABEL_X1:
                     settings = this.settings.Axes.X1.Label.Font;
                     break;
 
-                case X2:
+                case LABEL_X2:
                     settings = this.settings.Axes.X2.Label.Font;
                     break;
 
-                case Y1:
+                case LABEL_Y1:
                     settings = this.settings.Axes.Y1.Label.Font;
                     break;
 
-                case Y2:
+                case LABEL_Y2:
                     settings = this.settings.Axes.X2.Label.Font;
                     break;
+
+                //case SCALE_X1:
+                //    settings = this.settings.Axes.X1.Scale;
+                //    break;
+
+                //case SCALE_X2:
+                //    settings = this.settings.Axes.X2.Scale;
+                //    break;
+
+                //case SCALE_Y1:
+                //    settings = this.settings.Axes.Y1.Scale;
+                //    break;
+
+                //case SCALE_Y2:
+                //    settings = this.settings.Axes.X2.Scale;
+                //    break;
 
                 case TITLE:
                     settings = this.settings.Title.Font;

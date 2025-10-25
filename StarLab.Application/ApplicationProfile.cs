@@ -24,6 +24,9 @@ namespace StarLab.Application
             CreateMap<Project, ProjectDTO>().ForMember(dest => dest.Documents, opt => opt.MapFrom(src => src.AllDocuments))
                                             .ForMember(dest => dest.Folders, opt => opt.MapFrom(src => src.AllFolders));
 
+            CreateMap<Scale, ScaleDTO>();
+            CreateMap<TickLabelsDTO, TickLabelsDTO>();
+            CreateMap<TickMarksDTO, TickMarksDTO>();
             CreateMap<Workspace.Workspace, WorkspaceDTO>();
         }
     }

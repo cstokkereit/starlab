@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using StarLab.Application;
 using StarLab.Application.Workspace;
 using StarLab.Application.Workspace.Documents;
 using StarLab.Application.Workspace.Documents.Charts;
@@ -26,6 +25,9 @@ namespace StarLab.Serialisation
             CreateMap<Folder, FolderDTO>().ReverseMap();
             CreateMap<Label, LabelDTO>().ReverseMap();
             CreateMap<Project, ProjectDTO>().ReverseMap();
+            CreateMap<Scale, ScaleDTO>().ReverseMap();
+            CreateMap<TickLabels, TickLabelsDTO>().ReverseMap();
+            CreateMap<TickMarks, TickMarksDTO>().ReverseMap();
             CreateMap<Workspace.Workspace, WorkspaceDTO>().ReverseMap();
         }
     }

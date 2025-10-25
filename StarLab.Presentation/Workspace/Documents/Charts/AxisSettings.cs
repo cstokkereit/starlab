@@ -16,6 +16,7 @@
         public AxisSettings(IAxis axis)
         {
             Label = new LabelSettings(axis.Label);
+            Scale = new ScaleSettings(axis.Scale);
 
             backColour = axis.BackColour;
             foreColour = axis.ForeColour;
@@ -55,6 +56,12 @@
         /// Gets the label settings.
         /// </summary>
         public ILabelSettings Label { get; private set; }
+
+
+        /// <summary>
+        /// Gets the axis scale settings.
+        /// </summary>
+        public IScaleSettings Scale { get; private set; }
 
         /// <summary>
         /// Gets or sets a flag that determines whether the axis is visible.

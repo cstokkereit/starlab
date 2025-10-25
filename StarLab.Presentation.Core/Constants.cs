@@ -69,6 +69,7 @@
 
         public const string Rename = "Rename";
 
+        public const string Scale = "Scale";
         public const string ShowSettings = "ShowSettings";
         public const string StarLab = "StarLab";
         public const string Synchronise = "Synchronise";

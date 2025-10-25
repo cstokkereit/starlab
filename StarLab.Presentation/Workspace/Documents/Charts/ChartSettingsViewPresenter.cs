@@ -164,25 +164,29 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             var axes = View.AddNode(Constants.Axes, Constants.Chart, StringResources.Axes);
             AddGroupManager(new AxesSettingsGroupManager(View, axes));
 
-            var axis1 = View.AddNode(Constants.AxisX1, axes, StringResources.AxisX1);
-            AddGroupManager(new AxisSettingsGroupManager(View, axis1));
+            var axisX1 = View.AddNode(Constants.AxisX1, axes, StringResources.AxisX1);
+            AddGroupManager(new AxisSettingsGroupManager(View, axisX1));
 
-            AddGroupManager(new LabelSettingsGroupManager(View, View.AddNode(Constants.Label, axis1, StringResources.Label)));
+            AddGroupManager(new LabelSettingsGroupManager(View, View.AddNode(Constants.Label, axisX1, StringResources.Label)));
+            AddGroupManager(new ScaleSettingsGroupManager(View, View.AddNode(Constants.Scale, axisX1, StringResources.Scale)));
 
             var axisX2 = View.AddNode(Constants.AxisX2, axes, StringResources.AxisX2);
             AddGroupManager(new AxisSettingsGroupManager(View, axisX2));
 
             AddGroupManager(new LabelSettingsGroupManager(View, View.AddNode(Constants.Label, axisX2, StringResources.Label)));
+            AddGroupManager(new ScaleSettingsGroupManager(View, View.AddNode(Constants.Scale, axisX2, StringResources.Scale)));
 
             var axisY1 = View.AddNode(Constants.AxisY1, axes, StringResources.AxisY1);
             AddGroupManager(new AxisSettingsGroupManager(View, axisY1));
 
             AddGroupManager(new LabelSettingsGroupManager(View, View.AddNode(Constants.Label, axisY1, StringResources.Label)));
+            AddGroupManager(new ScaleSettingsGroupManager(View, View.AddNode(Constants.Scale, axisY1, StringResources.Scale)));
 
             var axisY2 = View.AddNode(Constants.AxisY2, axes, StringResources.AxisY2);
             AddGroupManager(new AxisSettingsGroupManager(View, axisY2));
 
             AddGroupManager(new LabelSettingsGroupManager(View, View.AddNode(Constants.Label, axisY2, StringResources.Label)));
+            AddGroupManager(new ScaleSettingsGroupManager(View, View.AddNode(Constants.Scale, axisY2, StringResources.Scale)));
         }
 
         /// <summary>

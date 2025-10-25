@@ -9,5 +9,10 @@
         /// Gets the axis label settings.
         /// </summary>
         ILabelSettings Label { get; }
+
+        /// <summary>
+        /// Gets the axis scale settings.
+        /// </summary>
+        IScaleSettings Scale { get; }
     }
 }

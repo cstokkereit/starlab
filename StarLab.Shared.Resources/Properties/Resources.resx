@@ -141,9 +141,6 @@
   <data name="AxisY2" xml:space="preserve">
     <value>Y2</value>
   </data>
-  <data name="BackColour" xml:space="preserve">
-    <value>Back Colour</value>
-  </data>
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
@@ -388,5 +385,17 @@ Please enter a valid name.</value>
   </data>
   <data name="Custom" xml:space="preserve">
     <value>Custom</value>
+  </data>
+  <data name="Colour" xml:space="preserve">
+    <value>Colour</value>
+  </data>
+  <data name="ForeColour" xml:space="preserve">
+    <value>Foreground Colour</value>
+  </data>
+  <data name="BackColour" xml:space="preserve">
+    <value>Background Colour</value>
+  </data>
+  <data name="Scale" xml:space="preserve">
+    <value>Scale</value>
   </data>
 </root>

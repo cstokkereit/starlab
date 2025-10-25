@@ -14,20 +14,11 @@ namespace StarLab.Serialisation.Workspace.Documents.Charts
         [XmlAttribute("foreColour")]
         public string? ForeColour;
 
-        //[XmlAttribute("interval")]
-        //public double Interval;
-
-        //[XmlAttribute("isReversed")]
-        //public bool IsReversed;
-
-        //[XmlAttribute("maximum")]
-        //public double Maximum;
-
-        //[XmlAttribute("minimum")]
-        //public double Minimum;
-
         [XmlElement]
         public Label? Label;
+
+        [XmlElement]
+        public Scale? Scale;
 
         [XmlAttribute("visible")]
         public bool Visible;

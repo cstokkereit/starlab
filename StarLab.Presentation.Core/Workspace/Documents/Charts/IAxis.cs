@@ -16,12 +16,17 @@
         string ForeColour { get; }
 
         /// <summary>
-        /// Gets the axis label.
+        /// Gets the axis <see cref="ILabel"/>.
         /// </summary>
         ILabel Label { get; }
 
         /// <summary>
-        /// A flag indicating whether the axis is visible.
+        /// Gets the axis <see cref="IScale"/>.
+        /// </summary>
+        IScale Scale { get; }
+
+        /// <summary>
+        /// A flag indicating that the axis is visible.
         /// </summary>
         bool Visible { get; }
     }

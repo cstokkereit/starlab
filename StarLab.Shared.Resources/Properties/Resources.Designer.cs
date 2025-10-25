@@ -133,7 +133,7 @@ namespace StarLab.Shared.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Back Colour.
+        ///   Looks up a localized string similar to Background Colour.
         /// </summary>
         public static string BackColour {
             get {
@@ -219,6 +219,15 @@ namespace StarLab.Shared.Properties {
         public static string CollapseAllDescendants {
             get {
                 return ResourceManager.GetString("CollapseAllDescendants", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Colour.
+        /// </summary>
+        public static string Colour {
+            get {
+                return ResourceManager.GetString("Colour", resourceCulture);
             }
         }
         
@@ -402,6 +411,15 @@ namespace StarLab.Shared.Properties {
         public static string FolderDeletionWarning {
             get {
                 return ResourceManager.GetString("FolderDeletionWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Foreground Colour.
+        /// </summary>
+        public static string ForeColour {
+            get {
+                return ResourceManager.GetString("ForeColour", resourceCulture);
             }
         }
         
@@ -677,6 +695,15 @@ namespace StarLab.Shared.Properties {
         public static string SaveWorkspace {
             get {
                 return ResourceManager.GetString("SaveWorkspace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scale.
+        /// </summary>
+        public static string Scale {
+            get {
+                return ResourceManager.GetString("Scale", resourceCulture);
             }
         }
         
