@@ -34,7 +34,7 @@
             // checkBoxVisible
             // 
             checkBoxVisible.AutoSize = true;
-            checkBoxVisible.Location = new Point(3, 3);
+            checkBoxVisible.Location = new Point(0, 0);
             checkBoxVisible.Name = "checkBoxVisible";
             checkBoxVisible.Size = new Size(60, 19);
             checkBoxVisible.TabIndex = 0;
@@ -47,7 +47,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(checkBoxVisible);
             Name = "VisibleSection";
-            Size = new Size(74, 23);
+            Size = new Size(278, 18);
             ResumeLayout(false);
             PerformLayout();
         }

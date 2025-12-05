@@ -19,7 +19,7 @@ namespace StarLab.Shared.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -469,6 +469,24 @@ namespace StarLab.Shared.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Major Tick Marks.
+        /// </summary>
+        public static string MajorTickMarks {
+            get {
+                return ResourceManager.GetString("MajorTickMarks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Minor Tick Marks.
+        /// </summary>
+        public static string MinorTickMarks {
+            get {
+                return ResourceManager.GetString("MinorTickMarks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A {0} with the name &apos;{1}&apos; already exists at this location.
         ///Please provide a unique name for the {0}..
         /// </summary>
@@ -740,6 +758,15 @@ namespace StarLab.Shared.Properties {
         public static string Table {
             get {
                 return ResourceManager.GetString("Table", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tick Labels.
+        /// </summary>
+        public static string TickLabels {
+            get {
+                return ResourceManager.GetString("TickLabels", resourceCulture);
             }
         }
         

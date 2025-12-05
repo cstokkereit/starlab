@@ -8,12 +8,6 @@ namespace StarLab.UI.Controls.Workspace.Documents.Charts
     /// </summary>
     public partial class TextSection : UserControl, ISettingsSection
     {
-        private const string TITLE = $"{Constants.Chart}/{Constants.Title}";
-        private const string X1 = $"{Constants.Chart}/{Constants.Axes}/{Constants.AxisX1}/{Constants.Label}";
-        private const string X2 = $"{Constants.Chart}/{Constants.Axes}/{Constants.AxisX2}/{Constants.Label}";
-        private const string Y1 = $"{Constants.Chart}/{Constants.Axes}/{Constants.AxisY1}/{Constants.Label}";
-        private const string Y2 = $"{Constants.Chart}/{Constants.Axes}/{Constants.AxisY2}/{Constants.Label}";
-
         private readonly IChartSettings settings; // The chart settings that are bound to this control.
 
         private readonly string group; // The name of the settings group that this control represents.
@@ -48,28 +42,28 @@ namespace StarLab.UI.Controls.Workspace.Documents.Charts
 
             switch (group)
             {
-                case TITLE:
+                case Constants.ChartTitle:
                     settings = this.settings.Title;
                     break;
 
-                case X1:
+                case Constants.ChartAxisX1Label:
                     settings = this.settings.Axes.X1.Label;
                     break;
 
-                case X2:
+                case Constants.ChartAxisX2Label:
                     settings = this.settings.Axes.X2.Label;
                     break;
 
-                case Y1:
+                case Constants.ChartAxisY1Label:
                     settings = this.settings.Axes.Y1.Label;
                     break;
 
-                case Y2:
+                case Constants.ChartAxisY2Label:
                     settings = this.settings.Axes.X2.Label;
                     break;
 
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(group), group);
+                    throw new ArgumentOutOfRangeException(nameof(group));
             }
 
             return settings;

@@ -398,4 +398,13 @@ Please enter a valid name.</value>
   <data name="Scale" xml:space="preserve">
     <value>Scale</value>
   </data>
+  <data name="TickLabels" xml:space="preserve">
+    <value>Tick Labels</value>
+  </data>
+  <data name="MajorTickMarks" xml:space="preserve">
+    <value>Major Tick Marks</value>
+  </data>
+  <data name="MinorTickMarks" xml:space="preserve">
+    <value>Minor Tick Marks</value>
+  </data>
 </root>

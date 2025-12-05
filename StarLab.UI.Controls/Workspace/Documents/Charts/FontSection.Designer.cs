@@ -40,7 +40,7 @@
             // comboFontFamilies
             // 
             comboFontFamilies.FormattingEnabled = true;
-            comboFontFamilies.Location = new Point(37, 3);
+            comboFontFamilies.Location = new Point(0, 18);
             comboFontFamilies.Name = "comboFontFamilies";
             comboFontFamilies.Size = new Size(215, 23);
             comboFontFamilies.TabIndex = 0;
@@ -49,7 +49,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(0, 6);
+            label1.Location = new Point(0, 0);
             label1.Name = "label1";
             label1.Size = new Size(31, 15);
             label1.TabIndex = 1;
@@ -58,7 +58,7 @@
             // checkBoxBold
             // 
             checkBoxBold.AutoSize = true;
-            checkBoxBold.Location = new Point(37, 38);
+            checkBoxBold.Location = new Point(5, 47);
             checkBoxBold.Name = "checkBoxBold";
             checkBoxBold.Size = new Size(50, 19);
             checkBoxBold.TabIndex = 2;
@@ -68,7 +68,7 @@
             // checkBoxItalic
             // 
             checkBoxItalic.AutoSize = true;
-            checkBoxItalic.Location = new Point(103, 38);
+            checkBoxItalic.Location = new Point(71, 47);
             checkBoxItalic.Name = "checkBoxItalic";
             checkBoxItalic.Size = new Size(51, 19);
             checkBoxItalic.TabIndex = 3;
@@ -78,7 +78,7 @@
             // checkBoxUnderline
             // 
             checkBoxUnderline.AutoSize = true;
-            checkBoxUnderline.Location = new Point(170, 38);
+            checkBoxUnderline.Location = new Point(138, 47);
             checkBoxUnderline.Name = "checkBoxUnderline";
             checkBoxUnderline.Size = new Size(77, 19);
             checkBoxUnderline.TabIndex = 4;
@@ -88,7 +88,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(269, 6);
+            label2.Location = new Point(233, 0);
             label2.Name = "label2";
             label2.Size = new Size(27, 15);
             label2.TabIndex = 5;
@@ -97,7 +97,7 @@
             // comboFontSizes
             // 
             comboFontSizes.FormattingEnabled = true;
-            comboFontSizes.Location = new Point(302, 3);
+            comboFontSizes.Location = new Point(233, 18);
             comboFontSizes.Name = "comboFontSizes";
             comboFontSizes.Size = new Size(45, 23);
             comboFontSizes.TabIndex = 6;
@@ -106,15 +106,15 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(comboFontFamilies);
             Controls.Add(comboFontSizes);
             Controls.Add(label2);
             Controls.Add(checkBoxUnderline);
             Controls.Add(checkBoxItalic);
             Controls.Add(checkBoxBold);
             Controls.Add(label1);
-            Controls.Add(comboFontFamilies);
             Name = "FontSection";
-            Size = new Size(350, 56);
+            Size = new Size(278, 64);
             ResumeLayout(false);
             PerformLayout();
         }

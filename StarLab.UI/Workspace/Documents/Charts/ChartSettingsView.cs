@@ -115,7 +115,7 @@ namespace StarLab.UI.Workspace.Documents.Charts
         /// <param name="group">The name of the settings group.</param>
         public void AppendScaleSection(IChartSettings settings, string group)
         {
-            var section = new ScaleSection();
+            var section = new ScaleSection(settings, group);
 
             section.SectionChanged += Section_SettingsChanged;
 

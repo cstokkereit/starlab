@@ -1,11 +1,32 @@
 ﻿namespace StarLab.Presentation.Workspace.Documents.Charts
 {
+    /// <summary>
+    /// TODO
+    /// </summary>
     internal class TickLabelSettings : ITickLabelSettings
     {
-        public IFontSettings Font => throw new NotImplementedException();
+        /// <summary>
+        /// TODO
+        /// </summary>
+        /// <param name="tickLabels"></param>
+        public TickLabelSettings(ITickLabels tickLabels) 
+        {
+            Font = new FontSettings(tickLabels.Font);
 
-        public int Rotation { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+            BackColour = tickLabels.BackColour;
+            ForeColour = tickLabels.ForeColour;
+            Rotation = tickLabels.Rotation;
+            Visible = tickLabels.Visible;
+        }
 
-        public bool Visible { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public string BackColour { get; set; }
+
+        public IFontSettings Font { get; private set; }
+
+        public string ForeColour { get; set; }
+
+        public int Rotation { get; set; }
+
+        public bool Visible { get; set; }
     }
 }

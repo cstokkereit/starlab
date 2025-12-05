@@ -38,6 +38,12 @@ namespace StarLab.Presentation
             CreateMap<ILabel, LabelDTO>();
             CreateMap<ILabelSettings, LabelDTO>();
             CreateMap<IProject, ProjectDTO>();
+            CreateMap<IScale, ScaleDTO>();
+            CreateMap<IScaleSettings, ScaleDTO>();
+            CreateMap<ITickLabels, TickLabelsDTO>();
+            CreateMap<ITickLabelSettings, TickLabelsDTO>();
+            CreateMap<ITickMarks, TickMarksDTO>();
+            CreateMap<ITickMarkSettings, TickMarksDTO>();
 
             CreateMap<IWorkspace, WorkspaceDTO>().ForMember(dest => dest.ActiveDocument, opt => opt.MapFrom(src => src.ActiveDocument == null ? string.Empty : src.ActiveDocument.ID));
         }

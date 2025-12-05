@@ -33,59 +33,75 @@
             label1 = new Label();
             label2 = new Label();
             checkReversed = new CheckBox();
+            checkAutoScale = new CheckBox();
             SuspendLayout();
             // 
             // textMinimum
             // 
-            textMinimum.Location = new Point(124, 3);
+            textMinimum.BorderStyle = BorderStyle.FixedSingle;
+            textMinimum.Location = new Point(0, 18);
             textMinimum.Name = "textMinimum";
-            textMinimum.Size = new Size(74, 23);
+            textMinimum.Size = new Size(60, 23);
             textMinimum.TabIndex = 2;
             // 
             // textMaximum
             // 
-            textMaximum.Location = new Point(371, 4);
+            textMaximum.BorderStyle = BorderStyle.FixedSingle;
+            textMaximum.Location = new Point(87, 18);
             textMaximum.Name = "textMaximum";
-            textMaximum.Size = new Size(74, 23);
+            textMaximum.Size = new Size(60, 23);
             textMaximum.TabIndex = 3;
             // 
             // label1
             // 
-            label1.Location = new Point(24, 7);
+            label1.AutoSize = true;
+            label1.Location = new Point(0, 0);
             label1.Name = "label1";
-            label1.Size = new Size(95, 19);
+            label1.Size = new Size(60, 15);
             label1.TabIndex = 4;
-            label1.Text = "Minimum Value";
+            label1.Text = "Minimum";
             // 
             // label2
             // 
-            label2.Location = new Point(270, 7);
+            label2.AutoSize = true;
+            label2.Location = new Point(87, 0);
             label2.Name = "label2";
-            label2.Size = new Size(95, 19);
+            label2.Size = new Size(61, 15);
             label2.TabIndex = 5;
-            label2.Text = "Maximum Value";
+            label2.Text = "Maximum";
             // 
             // checkReversed
             // 
             checkReversed.AutoSize = true;
-            checkReversed.Location = new Point(24, 48);
+            checkReversed.Location = new Point(5, 48);
             checkReversed.Name = "checkReversed";
             checkReversed.Size = new Size(73, 19);
             checkReversed.TabIndex = 6;
             checkReversed.Text = "Reversed";
             checkReversed.UseVisualStyleBackColor = true;
             // 
+            // checkAutoScale
+            // 
+            checkAutoScale.AutoSize = true;
+            checkAutoScale.Location = new Point(175, 22);
+            checkAutoScale.Name = "checkAutoScale";
+            checkAutoScale.Size = new Size(82, 19);
+            checkAutoScale.TabIndex = 7;
+            checkAutoScale.Text = "Automatic";
+            checkAutoScale.UseVisualStyleBackColor = true;
+            // 
             // ScaleSection
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(textMinimum);
+            Controls.Add(textMaximum);
+            Controls.Add(checkAutoScale);
             Controls.Add(checkReversed);
             Controls.Add(label2);
             Controls.Add(label1);
-            Controls.Add(textMaximum);
-            Controls.Add(textMinimum);
             Name = "ScaleSection";
-            Size = new Size(538, 150);
+            Size = new Size(278, 109);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -97,5 +113,6 @@
         private Label label1;
         private Label label2;
         private CheckBox checkReversed;
+        private CheckBox checkAutoScale;
     }
 }

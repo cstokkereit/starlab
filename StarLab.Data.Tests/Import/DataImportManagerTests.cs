@@ -31,12 +31,13 @@ namespace StarLab.Data.Import
             Assert.That(importer, Is.Not.Null);
         }
 
-        [Ignore("Needs a test database or mock implementation of one")]
+        //[Ignore("Needs a test database or mock implementation of one")]
+        [Test]
         public void TestImport()
         {
             var importer = new DataImportManager(new ImportProvider());
 
-            importer.Import("D:\\Users\\Colin\\Documents\\Science\\Astronomy\\Catalogs\\Hipparcos\\hip_main.dat", importDefinition);
+            importer.Import("D:\\Documents\\Science\\Astronomy\\Catalogs\\Hipparcos\\hip_main.dat", importDefinition);
         }
     }
 }

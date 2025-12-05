@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace StarLab.Application.Workspace.Documents.Charts
+﻿namespace StarLab.Application.Workspace.Documents.Charts
 {
+    /// <summary>
+    /// A data transfer object that represents the tick marks on a chart axis.
+    /// </summary>
     public class TickMarksDTO
     {
+        public string? BackColour;
+
+        public string? ForeColour;
+
+        public bool Visible;
     }
 }

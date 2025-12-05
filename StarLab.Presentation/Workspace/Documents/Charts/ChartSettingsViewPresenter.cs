@@ -159,34 +159,21 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// <summary>
         /// Creates the axis settings group nodes and their respective group managers.
         /// </summary>
-        private void CreateAxisSettingsGroups()
+        private void CreateAxisSettingsGroups(string name, string parentKey, string text)
         {
-            var axes = View.AddNode(Constants.Axes, Constants.Chart, StringResources.Axes);
-            AddGroupManager(new AxesSettingsGroupManager(View, axes));
+            var axis = View.AddNode(name, parentKey, text);
 
-            var axisX1 = View.AddNode(Constants.AxisX1, axes, StringResources.AxisX1);
-            AddGroupManager(new AxisSettingsGroupManager(View, axisX1));
+            AddGroupManager(new AxisSettingsGroupManager(View, axis));
 
-            AddGroupManager(new LabelSettingsGroupManager(View, View.AddNode(Constants.Label, axisX1, StringResources.Label)));
-            AddGroupManager(new ScaleSettingsGroupManager(View, View.AddNode(Constants.Scale, axisX1, StringResources.Scale)));
+            AddGroupManager(new LabelSettingsGroupManager(View, View.AddNode(Constants.Label, axis, StringResources.Label)));
 
-            var axisX2 = View.AddNode(Constants.AxisX2, axes, StringResources.AxisX2);
-            AddGroupManager(new AxisSettingsGroupManager(View, axisX2));
+            var scale = View.AddNode(Constants.Scale, axis, StringResources.Scale);
 
-            AddGroupManager(new LabelSettingsGroupManager(View, View.AddNode(Constants.Label, axisX2, StringResources.Label)));
-            AddGroupManager(new ScaleSettingsGroupManager(View, View.AddNode(Constants.Scale, axisX2, StringResources.Scale)));
+            AddGroupManager(new ScaleSettingsGroupManager(View, scale));
 
-            var axisY1 = View.AddNode(Constants.AxisY1, axes, StringResources.AxisY1);
-            AddGroupManager(new AxisSettingsGroupManager(View, axisY1));
-
-            AddGroupManager(new LabelSettingsGroupManager(View, View.AddNode(Constants.Label, axisY1, StringResources.Label)));
-            AddGroupManager(new ScaleSettingsGroupManager(View, View.AddNode(Constants.Scale, axisY1, StringResources.Scale)));
-
-            var axisY2 = View.AddNode(Constants.AxisY2, axes, StringResources.AxisY2);
-            AddGroupManager(new AxisSettingsGroupManager(View, axisY2));
-
-            AddGroupManager(new LabelSettingsGroupManager(View, View.AddNode(Constants.Label, axisY2, StringResources.Label)));
-            AddGroupManager(new ScaleSettingsGroupManager(View, View.AddNode(Constants.Scale, axisY2, StringResources.Scale)));
+            //AddGroupManager(new TickMarksSettingsGroupManager(View, View.AddNode(Constants.MinorTickMarks, scale, StringResources.MinorTickMarks)));
+            //AddGroupManager(new TickMarksSettingsGroupManager(View, View.AddNode(Constants.MajorTickMarks, scale, StringResources.MajorTickMarks)));
+            AddGroupManager(new TickLabelSettingsGroupManager(View, View.AddNode(Constants.TickLabels, scale, StringResources.TickLabels)));
         }
 
         /// <summary>
@@ -209,7 +196,14 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
 
             AddGroupManager(new LabelSettingsGroupManager(View, View.AddNode(Constants.Title, Constants.Chart, StringResources.Title)));
 
-            CreateAxisSettingsGroups();
+            var axes = View.AddNode(Constants.Axes, Constants.Chart, StringResources.Axes);
+
+            AddGroupManager(new AxesSettingsGroupManager(View, axes));
+
+            CreateAxisSettingsGroups(Constants.AxisX1, axes, StringResources.AxisX1);
+            CreateAxisSettingsGroups(Constants.AxisX2, axes, StringResources.AxisX2);
+            CreateAxisSettingsGroups(Constants.AxisY1, axes, StringResources.AxisY1);
+            CreateAxisSettingsGroups(Constants.AxisY2, axes, StringResources.AxisY2);
 
             AddGroupManager(new PlotAreaSettingsGroupManager(View, View.AddNode(Constants.PlotArea, Constants.Chart, StringResources.PlotArea)));
         }

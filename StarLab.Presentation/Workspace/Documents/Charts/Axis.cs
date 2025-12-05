@@ -17,6 +17,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
 
             BackColour = string.IsNullOrEmpty(dto.BackColour) ? Constants.White : dto.BackColour;
             ForeColour = string.IsNullOrEmpty(dto.ForeColour) ? Constants.Black : dto.ForeColour;
+
             Label = new Label(dto.Label);
             Scale = new Scale(dto.Scale);
             Visible = dto.Visible;

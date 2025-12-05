@@ -13,7 +13,7 @@ namespace StarLab.Application.Workspace.Documents.Charts
         /// <param name="dto">A data transfer object that specifies the initial state of the <see cref="Label"/>.</param>
         public Label(LabelDTO dto)
         {
-            ArgumentNullException.ThrowIfNull(nameof(dto));
+            ArgumentNullException.ThrowIfNull(dto, nameof(dto));
 
             Debug.Assert(dto.Font != null);
 

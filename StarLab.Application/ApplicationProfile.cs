@@ -25,8 +25,8 @@ namespace StarLab.Application
                                             .ForMember(dest => dest.Folders, opt => opt.MapFrom(src => src.AllFolders));
 
             CreateMap<Scale, ScaleDTO>();
-            CreateMap<TickLabelsDTO, TickLabelsDTO>();
-            CreateMap<TickMarksDTO, TickMarksDTO>();
+            CreateMap<TickLabels, TickLabelsDTO>();
+            CreateMap<TickMarks, TickMarksDTO>();
             CreateMap<Workspace.Workspace, WorkspaceDTO>();
         }
     }

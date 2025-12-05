@@ -39,7 +39,7 @@
             // 
             // buttonBackground
             // 
-            buttonBackground.Location = new Point(169, 75);
+            buttonBackground.Location = new Point(165, 74);
             buttonBackground.Name = "buttonBackground";
             buttonBackground.Size = new Size(85, 23);
             buttonBackground.TabIndex = 2;
@@ -52,7 +52,7 @@
             comboForeground.AutoCompleteMode = AutoCompleteMode.Suggest;
             comboForeground.AutoCompleteSource = AutoCompleteSource.ListItems;
             comboForeground.FormattingEnabled = true;
-            comboForeground.Location = new Point(3, 18);
+            comboForeground.Location = new Point(0, 18);
             comboForeground.Name = "comboForeground";
             comboForeground.Size = new Size(159, 23);
             comboForeground.TabIndex = 3;
@@ -62,14 +62,14 @@
             comboBackground.AutoCompleteMode = AutoCompleteMode.Suggest;
             comboBackground.AutoCompleteSource = AutoCompleteSource.ListItems;
             comboBackground.FormattingEnabled = true;
-            comboBackground.Location = new Point(3, 75);
+            comboBackground.Location = new Point(0, 75);
             comboBackground.Name = "comboBackground";
             comboBackground.Size = new Size(160, 23);
             comboBackground.TabIndex = 4;
             // 
             // buttonForeground
             // 
-            buttonForeground.Location = new Point(168, 18);
+            buttonForeground.Location = new Point(165, 18);
             buttonForeground.Name = "buttonForeground";
             buttonForeground.Size = new Size(85, 23);
             buttonForeground.TabIndex = 5;
@@ -80,6 +80,7 @@
             // labelForeground
             // 
             labelForeground.AutoSize = true;
+            labelForeground.Font = new Font("Segoe UI", 9F);
             labelForeground.Location = new Point(0, 0);
             labelForeground.Name = "labelForeground";
             labelForeground.Size = new Size(108, 15);
@@ -89,6 +90,7 @@
             // labelBackground
             // 
             labelBackground.AutoSize = true;
+            labelBackground.Font = new Font("Segoe UI", 9F);
             labelBackground.Location = new Point(0, 57);
             labelBackground.Name = "labelBackground";
             labelBackground.Size = new Size(110, 15);
@@ -106,7 +108,7 @@
             Controls.Add(labelForeground);
             Controls.Add(labelBackground);
             Name = "ColourSection";
-            Size = new Size(258, 100);
+            Size = new Size(278, 98);
             ResumeLayout(false);
             PerformLayout();
         }

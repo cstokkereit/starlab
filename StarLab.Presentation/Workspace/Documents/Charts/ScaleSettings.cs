@@ -11,6 +11,10 @@
         /// <param name="scale">An <see cref="IScale"/> that specifies the initial state of the scale.</param>
         public ScaleSettings(IScale scale)
         {
+            MajorTickMarks = new TickMarkSettings(scale.MajorTickMarks);
+            MinorTickMarks = new TickMarkSettings(scale.MinorTickMarks);
+            TickLabels = new TickLabelSettings(scale.TickLabels);
+
             Reversed = scale.Reversed;
             Maximum = scale.Maximum;
             Minimum = scale.Minimum;

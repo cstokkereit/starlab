@@ -1,7 +1,7 @@
 ﻿namespace StarLab.Presentation
 {
     /// <summary>
-    /// A static class containing <see cref="string"/> constants.
+    /// A static class containing <see cref="string"/> 
     /// </summary>
     public static class Constants
     {
@@ -19,7 +19,21 @@
         public const string Black = "Black";
 
         public const string Chart = "Chart";
+        public const string ChartAxes = $"{Chart}/{Axes}";
+        public const string ChartAxisX1 = $"{Chart}/{Axes}/{AxisX1}";
+        public const string ChartAxisX1Label = $"{ChartAxisX1}/{Label}";
+        public const string ChartAxisX1TickLabels = $"{Chart}/{Axes}/{AxisX1}/{Scale}/{TickLabels}";
+        public const string ChartAxisX2 = $"{Chart}/{Axes}/{AxisX2}";
+        public const string ChartAxisX2Label = $"{ChartAxisX2}/{Label}";
+        public const string ChartAxisX2TickLabels = $"{Chart}/{Axes}/{AxisX2}/{Scale}/{TickLabels}";
+        public const string ChartAxisY1 = $"{Chart}/{Axes}/{AxisY1}";
+        public const string ChartAxisY1Label = $"{ChartAxisY1}/{Label}";
+        public const string ChartAxisY1TickLabels = $"{Chart}/{Axes}/{AxisY1}/{Scale}/{TickLabels}";
+        public const string ChartAxisY2 = $"{Chart}/{Axes}/{AxisY2}";
+        public const string ChartAxisY2Label = $"{ChartAxisY2}/{Label}";
+        public const string ChartAxisY2TickLabels = $"{Chart}/{Axes}/{AxisY2}/{Scale}/{TickLabels}";
         public const string ChartSettings = "ChartSettings";
+        public const string ChartTitle = $"{Chart}/{Title}";
         public const string CollapseAll = "CollapseAll";
         public const string Copy = "Copy";
         public const string Cut = "Cut";
@@ -74,6 +88,8 @@
         public const string StarLab = "StarLab";
         public const string Synchronise = "Synchronise";
 
+        public const string TickLabels = "TickLabels";
+        public const string TickMarks = "TickMarks";
         public const string Title = "Title";
         public const string Tools = "Tools";
         public const string ToolsOptions = "ToolsOptions";

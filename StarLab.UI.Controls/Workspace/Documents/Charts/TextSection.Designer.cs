@@ -34,18 +34,21 @@
             // 
             // label1
             // 
-            label1.Location = new Point(0, 3);
+            label1.AutoSize = true;
+            label1.Location = new Point(0, 0);
             label1.Name = "label1";
-            label1.Size = new Size(36, 19);
+            label1.Size = new Size(28, 15);
             label1.TabIndex = 0;
             label1.Text = "Text";
             // 
-            // textTitle
+            // textLabel
             // 
-            textLabel.Location = new Point(37, 0);
-            textLabel.Name = "textTitle";
-            textLabel.Size = new Size(310, 23);
+            textLabel.BorderStyle = BorderStyle.FixedSingle;
+            textLabel.Location = new Point(0, 18);
+            textLabel.Name = "textLabel";
+            textLabel.Size = new Size(278, 23);
             textLabel.TabIndex = 1;
+            textLabel.WordWrap = false;
             textLabel.TextChanged += OnTextChanged;
             // 
             // TextSection
@@ -54,9 +57,8 @@
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(textLabel);
             Controls.Add(label1);
-            MinimumSize = new Size(290, 23);
             Name = "TextSection";
-            Size = new Size(350, 23);
+            Size = new Size(278, 41);
             ResumeLayout(false);
             PerformLayout();
         }

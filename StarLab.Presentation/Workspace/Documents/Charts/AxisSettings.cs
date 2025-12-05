@@ -9,6 +9,8 @@
 
         private string foreColour; // The foreground colour.
 
+        private bool visible; // A flag that determines whether the axis is visible.
+
         /// <summary>
         /// Initialises a new instance of the <see cref="AxisSettings"/> class.
         /// </summary>
@@ -20,8 +22,7 @@
 
             backColour = axis.BackColour;
             foreColour = axis.ForeColour;
-
-            Visible = axis.Visible;
+            visible = axis.Visible;
         }
 
         /// <summary>
@@ -33,6 +34,8 @@
 
             set
             {
+                Scale.MajorTickMarks.BackColour = value;
+                Scale.MinorTickMarks.BackColour = value;
                 Label.BackColour = value;
                 backColour = value;
             }
@@ -47,6 +50,8 @@
 
             set
             {
+                Scale.MajorTickMarks.ForeColour = value;
+                Scale.MinorTickMarks.ForeColour = value;
                 Label.ForeColour = value;
                 foreColour = value;
             }
@@ -66,6 +71,19 @@
         /// <summary>
         /// Gets or sets a flag that determines whether the axis is visible.
         /// </summary>
-        public bool Visible { get; set; }
+        public bool Visible
+        {
+            get => visible;
+
+            set
+            {
+                Scale.MajorTickMarks.Visible = value;
+                Scale.MinorTickMarks.Visible = value;
+                Scale.TickLabels.Visible = value;
+                Label.Visible = value;
+                Scale.Visible = value;
+                visible = value;
+            }
+        }
     }
 }

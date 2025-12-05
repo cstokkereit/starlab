@@ -179,6 +179,8 @@ namespace StarLab.UI.Workspace.Documents.Charts
         {
             ApplyLabelSettings(chartAxis.Label, axis.Label);
 
+            
+
             //axis.TickLabelStyle.BackgroundColor = GetColour(settings.BackColour);
             chartAxis.TickLabelStyle.ForeColor = GetColour(axis.ForeColour);
 

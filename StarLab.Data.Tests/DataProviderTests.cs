@@ -7,7 +7,8 @@
         // Remove test database
 
 
-        [Ignore("Crashes MongDB occasionally")]
+        //[Ignore("Crashes MongDB occasionally")]
+        [Test]
         public void TestGetStars()
         {
             var provider = new DataProvider();

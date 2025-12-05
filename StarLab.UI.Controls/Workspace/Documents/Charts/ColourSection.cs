@@ -9,26 +9,11 @@ namespace StarLab.UI.Controls.Workspace.Documents.Charts
     /// </summary>
     public partial class ColourSection : UserControl, ISettingsSection
     {
-        private const string AXES = $"{Constants.Chart}/{Constants.Axes}";
-
         private const string BUTTON_BACKGROUND = "buttonBackground";
         private const string BUTTON_FOREGROUND = "buttonForeground";
 
-        private const string CHART = Constants.Chart;
         private const string COMBO_BACKGROUND = "comboBackground";
         private const string COMBO_FOREGROUND = "comboForeground";
-
-        private const string TITLE = $"{Constants.Chart}/{Constants.Title}";
-
-        private const string X1 = $"{Constants.Chart}/{Constants.Axes}/{Constants.AxisX1}";
-        private const string X1_LABEL = $"{X1}/{Constants.Label}";
-        private const string X2 = $"{Constants.Chart}/{Constants.Axes}/{Constants.AxisX2}";
-        private const string X2_LABEL = $"{X2}/{Constants.Label}";
-
-        private const string Y1 = $"{Constants.Chart}/{Constants.Axes}/{Constants.AxisY1}";
-        private const string Y1_LABEL = $"{Y1}/{Constants.Label}";
-        private const string Y2 = $"{Constants.Chart}/{Constants.Axes}/{Constants.AxisY2}";
-        private const string Y2_LABEL = $"{Y2}/{Constants.Label}";
 
         private readonly IChartSettings settings; // The chart settings that are bound to this control.
 
@@ -109,47 +94,47 @@ namespace StarLab.UI.Controls.Workspace.Documents.Charts
 
             switch (group)
             {
-                case AXES:
+                case Constants.ChartAxes:
                     settings = this.settings.Axes;
                     break;
 
-                case CHART:
+                case Constants.Chart:
                     settings = this.settings;
                     break;
 
-                case TITLE:
+                case Constants.ChartTitle:
                     settings = this.settings.Title;
                     break;
 
-                case X1:
+                case Constants.ChartAxisX1:
                     settings = this.settings.Axes.X1;
                     break;
 
-                case X1_LABEL:
+                case Constants.ChartAxisX1Label:
                     settings = this.settings.Axes.X1.Label;
                     break;
 
-                case X2:
+                case Constants.ChartAxisX2:
                     settings = this.settings.Axes.X2;
                     break;
 
-                case X2_LABEL:
+                case Constants.ChartAxisX2Label:
                     settings = this.settings.Axes.X2.Label;
                     break;
 
-                case Y1:
+                case Constants.ChartAxisY1:
                     settings = this.settings.Axes.Y1;
                     break;
 
-                case Y1_LABEL:
+                case Constants.ChartAxisY1Label:
                     settings = this.settings.Axes.Y1.Label;
                     break;
 
-                case Y2:
+                case Constants.ChartAxisY2:
                     settings = this.settings.Axes.Y2;
                     break;
 
-                case Y2_LABEL:
+                case Constants.ChartAxisY2Label:
                     settings = this.settings.Axes.Y2.Label;
                     break;
 

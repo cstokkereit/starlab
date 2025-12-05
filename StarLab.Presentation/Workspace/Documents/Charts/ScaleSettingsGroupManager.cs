@@ -19,9 +19,7 @@
         /// <param name="settings">An <see cref="IChartSettings"/> that represents the current state of the chart.</param>
         public override void ShowSettings(IChartSettings settings)
         {
-            //View.AppendFontSection(settings, Group);
-            //View.AppendColourSection(settings, Group);
-            //View.AppendVisibleSection(settings, Group);
+            View.AppendScaleSection(settings, Group);
         }
     }
 }

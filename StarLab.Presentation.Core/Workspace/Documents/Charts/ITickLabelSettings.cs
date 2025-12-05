@@ -3,7 +3,7 @@
     /// <summary>
     /// TODO
     /// </summary>
-    public interface ITickLabelSettings : IVisibilitySettings
+    public interface ITickLabelSettings : IVisibilitySettings, IColourSettings
     {
         /// <summary>
         /// TODO
