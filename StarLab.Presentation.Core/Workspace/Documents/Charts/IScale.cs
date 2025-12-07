@@ -6,17 +6,27 @@
     public interface IScale
     {
         /// <summary>
-        /// TODO
+        /// A flag indicating that the scale is generated automatically to fit the data.
         /// </summary>
         bool Autoscale { get; }
 
         /// <summary>
-        /// TODO
+        /// Gets the background colour.
+        /// </summary>
+        string BackColour { get; }
+
+        /// <summary>
+        /// Gets the foreground colour.
+        /// </summary>
+        string ForeColour { get; }
+
+        /// <summary>
+        /// Gets the major tick marks.
         /// </summary>
         ITickMarks MajorTickMarks { get; }
 
         /// <summary>
-        /// Gets the maimum value.
+        /// Gets the maximum value.
         /// </summary>
         double Maximum { get; }
 
@@ -26,7 +36,7 @@
         double Minimum { get; }
 
         /// <summary>
-        /// TODO
+        /// Gets the minor tick marks.
         /// </summary>
         ITickMarks MinorTickMarks { get; }
 
@@ -36,8 +46,13 @@
         bool Reversed { get; }
 
         /// <summary>
-        /// TODO
+        /// Gets the tick labels.
         /// </summary>
         ITickLabels TickLabels { get; }
+
+        /// <summary>
+        /// A flag indicating whether the scale is visible.
+        /// </summary>
+        bool Visible { get; }
     }
 }

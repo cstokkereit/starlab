@@ -8,6 +8,8 @@ namespace StarLab.UI.Controls.Workspace.Documents.Charts
     /// </summary>
     public partial class FontSection : UserControl, ISettingsSection
     {
+        private readonly IDictionary<string, IFontSettings> settingsByGroup = new Dictionary<string, IFontSettings>(); // A dictionary containing the font settings indexed by settings group.
+
         private readonly IChartSettings settings; // The chart settings that are bound to this control.
 
         private readonly string group; // The name of the settings group that this control represents.
@@ -46,54 +48,22 @@ namespace StarLab.UI.Controls.Workspace.Documents.Charts
         /// Gets the <see cref="IFontSettings"/> for the specified settings group within the bound <see cref="IChartSettings"/>.
         /// </summary>
         /// <returns>The required <see cref="IFontSettings"/>.</returns>
-        /// <exception cref="ArgumentOutOfRangeException"></exception>
         private IFontSettings GetSettings()
         {
-            IFontSettings? settings = null;
-
-            switch (group)
+            if (settingsByGroup.Count == 0)
             {
-                case Constants.ChartTitle:
-                    settings = this.settings.Title.Font;
-                    break;
-
-                case Constants.ChartAxisX1Label:
-                    settings = this.settings.Axes.X1.Label.Font;
-                    break;
-
-                case Constants.ChartAxisX1TickLabels:
-                    settings = this.settings.Axes.X1.Scale.TickLabels.Font;
-                    break;
-
-                case Constants.ChartAxisX2Label:
-                    settings = this.settings.Axes.X2.Label.Font;
-                    break;
-
-                case Constants.ChartAxisX2TickLabels:
-                    settings = this.settings.Axes.X2.Scale.TickLabels.Font;
-                    break;
-
-                case Constants.ChartAxisY1Label:
-                    settings = this.settings.Axes.Y1.Label.Font;
-                    break;
-
-                case Constants.ChartAxisY1TickLabels:
-                    settings = this.settings.Axes.Y1.Scale.TickLabels.Font;
-                    break;
-
-                case Constants.ChartAxisY2Label:
-                    settings = this.settings.Axes.X2.Label.Font;
-                    break;
-
-                case Constants.ChartAxisY2TickLabels:
-                    settings = this.settings.Axes.X2.Scale.TickLabels.Font;
-                    break;
-
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(group), group);
+                settingsByGroup.Add(Constants.ChartAxisX1Label, settings.Axes.X1.Label.Font);
+                settingsByGroup.Add(Constants.ChartAxisX1TickLabels, settings.Axes.X1.Scale.TickLabels.Font);
+                settingsByGroup.Add(Constants.ChartAxisX2Label, settings.Axes.X2.Label.Font);
+                settingsByGroup.Add(Constants.ChartAxisX2TickLabels, settings.Axes.X2.Scale.TickLabels.Font);
+                settingsByGroup.Add(Constants.ChartAxisY1Label, settings.Axes.Y1.Label.Font);
+                settingsByGroup.Add(Constants.ChartAxisY1TickLabels, settings.Axes.Y1.Scale.TickLabels.Font);
+                settingsByGroup.Add(Constants.ChartAxisY2Label, settings.Axes.Y2.Label.Font);
+                settingsByGroup.Add(Constants.ChartAxisY2TickLabels, settings.Axes.Y2.Scale.TickLabels.Font);
+                settingsByGroup.Add(Constants.ChartTitle, settings.Title.Font);
             }
 
-            return settings;
+            return settingsByGroup[group];
         }
 
         /// <summary>

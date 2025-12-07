@@ -101,7 +101,7 @@
             Controls.Add(label2);
             Controls.Add(label1);
             Name = "ScaleSection";
-            Size = new Size(278, 109);
+            Size = new Size(278, 68);
             ResumeLayout(false);
             PerformLayout();
         }

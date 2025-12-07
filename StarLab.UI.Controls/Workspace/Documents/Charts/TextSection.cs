@@ -8,6 +8,8 @@ namespace StarLab.UI.Controls.Workspace.Documents.Charts
     /// </summary>
     public partial class TextSection : UserControl, ISettingsSection
     {
+        private readonly IDictionary<string, ILabelSettings> settingsByGroup = new Dictionary<string, ILabelSettings>(); // A dictionary containing the label settings indexed by settings group.
+
         private readonly IChartSettings settings; // The chart settings that are bound to this control.
 
         private readonly string group; // The name of the settings group that this control represents.
@@ -35,38 +37,18 @@ namespace StarLab.UI.Controls.Workspace.Documents.Charts
         /// Gets the <see cref="ILabelSettings"/> for the specified settings group within the bound <see cref="IChartSettings"/>.
         /// </summary>
         /// <returns>The required <see cref="ILabelSettings"/>.</returns>
-        /// <exception cref="ArgumentOutOfRangeException"></exception>
         private ILabelSettings GetSettings()
         {
-            ILabelSettings? settings = null;
-
-            switch (group)
+            if (settingsByGroup.Count == 0)
             {
-                case Constants.ChartTitle:
-                    settings = this.settings.Title;
-                    break;
-
-                case Constants.ChartAxisX1Label:
-                    settings = this.settings.Axes.X1.Label;
-                    break;
-
-                case Constants.ChartAxisX2Label:
-                    settings = this.settings.Axes.X2.Label;
-                    break;
-
-                case Constants.ChartAxisY1Label:
-                    settings = this.settings.Axes.Y1.Label;
-                    break;
-
-                case Constants.ChartAxisY2Label:
-                    settings = this.settings.Axes.X2.Label;
-                    break;
-
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(group));
+                settingsByGroup.Add(Constants.ChartAxisX1Label, settings.Axes.X1.Label);
+                settingsByGroup.Add(Constants.ChartAxisX2Label, settings.Axes.X2.Label);
+                settingsByGroup.Add(Constants.ChartAxisY1Label, settings.Axes.Y1.Label);
+                settingsByGroup.Add(Constants.ChartAxisY2Label, settings.Axes.Y2.Label);
+                settingsByGroup.Add(Constants.ChartTitle, settings.Title);
             }
 
-            return settings;
+            return settingsByGroup[group];
         }
 
         /// <summary>

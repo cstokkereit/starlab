@@ -1,4 +1,6 @@
-﻿namespace StarLab.Application.Workspace.Documents.Charts
+﻿using System.Runtime.InteropServices;
+
+namespace StarLab.Application.Workspace.Documents.Charts
 {
     /// <summary>
     /// Domain model representation of a chart axis scale.
@@ -17,10 +19,29 @@
             MinorTickMarks = new TickMarks(dto.MinorTickMarks);
             TickLabels = new TickLabels(dto.TickLabels);
 
+            if (string.IsNullOrEmpty(dto.BackColour))
+            {
+                BackColour = Constants.DefaultBackColour;
+            }
+            else
+            {
+                BackColour = dto.BackColour;
+            }
+
+            if (string.IsNullOrEmpty(dto.ForeColour))
+            {
+                ForeColour = Constants.DefaultForeColour;
+            }
+            else
+            {
+                ForeColour = dto.ForeColour;
+            }
+
             Autoscale = dto.Autoscale;
             Reversed = dto.Reversed;
             Maximum = dto.Maximum;
             Minimum = dto.Minimum;
+            Visible = dto.Visible;
         }
 
         /// <summary>
@@ -29,12 +50,22 @@
         public bool Autoscale { get; }
 
         /// <summary>
+        /// Gets the background colour.
+        /// </summary>
+        public string BackColour { get; }
+
+        /// <summary>
+        /// Gets the foreground colour.
+        /// </summary>
+        public string ForeColour { get; }
+
+        /// <summary>
         /// 
         /// </summary>
         public TickMarks MajorTickMarks { get; }
 
         /// <summary>
-        /// Gets the maimum value.
+        /// Gets the maximum value.
         /// </summary>
         public double Maximum { get; }
 
@@ -57,5 +88,10 @@
         /// 
         /// </summary>
         public TickLabels TickLabels { get; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool Visible { get; }
      }
 }

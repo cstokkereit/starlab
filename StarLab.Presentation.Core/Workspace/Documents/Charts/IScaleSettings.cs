@@ -3,20 +3,20 @@
     /// <summary>
     /// Represents the current state of an axis scale while the chart is being configured.
     /// </summary>
-    public interface IScaleSettings : IVisibilitySettings
+    public interface IScaleSettings :  IColourSettings, IVisibilitySettings
     {
         /// <summary>
-        /// TODO
+        /// Gets or sets a flag that determines whether the scale is generated automatically to fit the data.
         /// </summary>
         bool Autoscale { get; set; }
 
         /// <summary>
-        /// TODO
+        /// Gets the settings for the major tick marks.
         /// </summary>
         ITickMarkSettings MajorTickMarks { get; }
 
         /// <summary>
-        /// Gets or sets the maimum value.
+        /// Gets or sets the maximum value.
         /// </summary>
         double Maximum { get; set; }
 
@@ -26,7 +26,7 @@
         double Minimum { get; set; }
 
         /// <summary>
-        /// TODO
+        /// Gets the settings for the minor tick marks.
         /// </summary>
         ITickMarkSettings MinorTickMarks { get; }
 
@@ -36,7 +36,7 @@
         bool Reversed { get; set; }
 
         /// <summary>
-        /// TODO
+        /// Gets the tick label settings.
         /// </summary>
         ITickLabelSettings TickLabels { get; }
     }

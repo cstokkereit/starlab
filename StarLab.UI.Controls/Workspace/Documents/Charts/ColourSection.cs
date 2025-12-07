@@ -15,6 +15,8 @@ namespace StarLab.UI.Controls.Workspace.Documents.Charts
         private const string COMBO_BACKGROUND = "comboBackground";
         private const string COMBO_FOREGROUND = "comboForeground";
 
+        private readonly IDictionary<string, IColourSettings> settingsByGroup = new Dictionary<string, IColourSettings>(); // A dictionary containing the colour settings indexed by settings group.
+
         private readonly IChartSettings settings; // The chart settings that are bound to this control.
 
         private readonly string group; // The name of the settings group that this control represents.
@@ -87,63 +89,40 @@ namespace StarLab.UI.Controls.Workspace.Documents.Charts
         /// Gets the <see cref="IColourSettings"/> for the specified settings group within the bound <see cref="IChartSettings"/>.
         /// </summary>
         /// <returns>The required <see cref="IColourSettings"/>.</returns>
-        /// <exception cref="ArgumentOutOfRangeException"></exception>
         private IColourSettings GetSettings()
         {
-            IColourSettings? settings = null;
-
-            switch (group)
+            if (settingsByGroup.Count == 0)
             {
-                case Constants.ChartAxes:
-                    settings = this.settings.Axes;
-                    break;
-
-                case Constants.Chart:
-                    settings = this.settings;
-                    break;
-
-                case Constants.ChartTitle:
-                    settings = this.settings.Title;
-                    break;
-
-                case Constants.ChartAxisX1:
-                    settings = this.settings.Axes.X1;
-                    break;
-
-                case Constants.ChartAxisX1Label:
-                    settings = this.settings.Axes.X1.Label;
-                    break;
-
-                case Constants.ChartAxisX2:
-                    settings = this.settings.Axes.X2;
-                    break;
-
-                case Constants.ChartAxisX2Label:
-                    settings = this.settings.Axes.X2.Label;
-                    break;
-
-                case Constants.ChartAxisY1:
-                    settings = this.settings.Axes.Y1;
-                    break;
-
-                case Constants.ChartAxisY1Label:
-                    settings = this.settings.Axes.Y1.Label;
-                    break;
-
-                case Constants.ChartAxisY2:
-                    settings = this.settings.Axes.Y2;
-                    break;
-
-                case Constants.ChartAxisY2Label:
-                    settings = this.settings.Axes.Y2.Label;
-                    break;
-
-                default:
-                    settings = this.settings; // TODO 
-                    break;
+                settingsByGroup.Add(Constants.Chart, settings);
+                settingsByGroup.Add(Constants.ChartAxes, settings.Axes);
+                settingsByGroup.Add(Constants.ChartAxisX1, settings.Axes.X1);
+                settingsByGroup.Add(Constants.ChartAxisX1Label, settings.Axes.X1.Label);
+                settingsByGroup.Add(Constants.ChartAxisX1MajorTickMarks, settings.Axes.X1.Scale.MajorTickMarks);
+                settingsByGroup.Add(Constants.ChartAxisX1MinorTickMarks, settings.Axes.X1.Scale.MinorTickMarks);
+                settingsByGroup.Add(Constants.ChartAxisX1Scale, settings.Axes.X1.Scale);
+                settingsByGroup.Add(Constants.ChartAxisX1TickLabels, settings.Axes.X1.Scale.TickLabels);
+                settingsByGroup.Add(Constants.ChartAxisX2, settings.Axes.X2);
+                settingsByGroup.Add(Constants.ChartAxisX2Label, settings.Axes.X2.Label);
+                settingsByGroup.Add(Constants.ChartAxisX2MajorTickMarks, settings.Axes.X2.Scale.MajorTickMarks);
+                settingsByGroup.Add(Constants.ChartAxisX2MinorTickMarks, settings.Axes.X2.Scale.MinorTickMarks);
+                settingsByGroup.Add(Constants.ChartAxisX2Scale, settings.Axes.X2.Scale);
+                settingsByGroup.Add(Constants.ChartAxisX2TickLabels, settings.Axes.X2.Scale.TickLabels);
+                settingsByGroup.Add(Constants.ChartAxisY1, settings.Axes.Y1);
+                settingsByGroup.Add(Constants.ChartAxisY1Label, settings.Axes.Y1.Label);
+                settingsByGroup.Add(Constants.ChartAxisY1MajorTickMarks, settings.Axes.Y1.Scale.MajorTickMarks);
+                settingsByGroup.Add(Constants.ChartAxisY1MinorTickMarks, settings.Axes.Y1.Scale.MinorTickMarks);
+                settingsByGroup.Add(Constants.ChartAxisY1Scale, settings.Axes.Y1.Scale);
+                settingsByGroup.Add(Constants.ChartAxisY1TickLabels, settings.Axes.Y1.Scale.TickLabels);
+                settingsByGroup.Add(Constants.ChartAxisY2, settings.Axes.Y2);
+                settingsByGroup.Add(Constants.ChartAxisY2Label, settings.Axes.Y2.Label);
+                settingsByGroup.Add(Constants.ChartAxisY2MajorTickMarks, settings.Axes.Y2.Scale.MajorTickMarks);
+                settingsByGroup.Add(Constants.ChartAxisY2MinorTickMarks, settings.Axes.Y2.Scale.MinorTickMarks);
+                settingsByGroup.Add(Constants.ChartAxisY2Scale, settings.Axes.Y2.Scale);
+                settingsByGroup.Add(Constants.ChartAxisY2TickLabels, settings.Axes.Y2.Scale.TickLabels);
+                settingsByGroup.Add(Constants.ChartTitle, settings.Title);
             }
 
-            return settings;
+            return settingsByGroup[group];
         }
 
         /// <summary>

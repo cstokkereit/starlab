@@ -3,7 +3,7 @@
 namespace StarLab.Presentation.Workspace.Documents.Charts
 {
     /// <summary>
-    /// TODO
+    /// View model representation of a chart axis scale tick marks.
     /// </summary>
     internal class TickMarks : ITickMarks
     {
@@ -32,7 +32,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         public string ForeColour { get; }
 
         /// <summary>
-        /// A flag indicating that the axis is visible.
+        /// A flag indicating that the tick marks are visible.
         /// </summary>
         public bool Visible { get; }
     }

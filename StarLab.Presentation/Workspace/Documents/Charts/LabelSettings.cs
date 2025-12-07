@@ -26,7 +26,7 @@
         /// <summary>
         /// Gets the font settings.
         /// </summary>
-        public IFontSettings Font { get; private set; }
+        public IFontSettings Font { get; }
 
         /// <summary>
         /// Gets or sets the foreground colour.

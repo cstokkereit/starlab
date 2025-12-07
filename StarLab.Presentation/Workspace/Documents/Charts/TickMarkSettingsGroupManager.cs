@@ -1,16 +1,16 @@
 ﻿namespace StarLab.Presentation.Workspace.Documents.Charts
 {
     /// <summary>
-    /// Displays the settings sections applicable to the scale settings group.
+    /// Displays the settings sections applicable to the tick mark settings group.
     /// </summary>
-    internal class ScaleSettingsGroupManager : SettingsGroupManager<IChartSettingsView>
+    internal class TickMarkSettingsGroupManager : SettingsGroupManager<IChartSettingsView>
     {
         /// <summary>
-        /// Initialises a new instance of the <see cref="ScaleSettingsGroupManager"/> class.
+        /// Initialises a new instance of the <see cref="TickMarkSettingsGroupManager"/> class.
         /// </summary>
         /// <param name="view">The <see cref="IChartSettingsView"/> that this class uses to display the settings sections applicable to this settings group.</param>
         /// <param name="group">The name of the settings group managed by this settings manager.</param>
-        public ScaleSettingsGroupManager(IChartSettingsView view, string group)
+        public TickMarkSettingsGroupManager(IChartSettingsView view, string group)
             : base(view, group) { }
 
         /// <summary>
@@ -20,7 +20,6 @@
         public override void ShowSettings(IChartSettings settings)
         {
             View.AppendColourSection(settings, Group);
-            View.AppendScaleSection(settings, Group);
             View.AppendVisibleSection(settings, Group);
         }
     }

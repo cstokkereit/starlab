@@ -7,6 +7,10 @@
     {
         public bool Autoscale;
 
+        public string? BackColour;
+
+        public string? ForeColour;
+
         public TickMarksDTO? MajorTickMarks;
 
         public double Maximum;
@@ -18,5 +22,7 @@
         public bool Reversed;
 
         public TickLabelsDTO? TickLabels;
+
+        public bool Visible;
     }
 }

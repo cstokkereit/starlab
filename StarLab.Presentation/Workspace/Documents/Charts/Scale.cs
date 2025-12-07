@@ -18,18 +18,39 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             MajorTickMarks = new TickMarks(dto.MajorTickMarks);
             MinorTickMarks = new TickMarks(dto.MinorTickMarks);
             TickLabels = new TickLabels(dto.TickLabels);
+
+            BackColour = string.IsNullOrEmpty(dto.BackColour) ? Constants.White : dto.BackColour;
+            ForeColour = string.IsNullOrEmpty(dto.ForeColour) ? Constants.Black : dto.ForeColour;
+
             Autoscale = dto.Autoscale;
             Reversed = dto.Reversed;
             Maximum = dto.Maximum;
             Minimum = dto.Minimum;
+            Visible = dto.Visible;
         }
 
+        /// <summary>
+        /// A flag indicating that the scale is generated automatically to fit the data.
+        /// </summary>
         public bool Autoscale { get; }
 
+        /// <summary>
+        /// Gets the background colour.
+        /// </summary>
+        public string BackColour { get; }
+
+        /// <summary>
+        /// Gets the foreground colour.
+        /// </summary>
+        public string ForeColour { get; }
+
+        /// <summary>
+        /// Gets the major tick marks.
+        /// </summary>
         public ITickMarks MajorTickMarks { get; }
 
         /// <summary>
-        /// Gets the maimum value.
+        /// Gets the maximum value.
         /// </summary>
         public double Maximum { get; }
 
@@ -38,6 +59,9 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// </summary>
         public double Minimum { get; }
 
+        /// <summary>
+        /// Gets the minor tick marks.
+        /// </summary>
         public ITickMarks MinorTickMarks { get; }
 
         /// <summary>
@@ -45,6 +69,14 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// </summary>
         public bool Reversed { get; }
 
+        /// <summary>
+        /// Gets the tick labels.
+        /// </summary>
         public ITickLabels TickLabels { get; }
+
+        /// <summary>
+        /// A flag indicating whether the scale is visible.
+        /// </summary>
+        public bool Visible { get; }
     }
 }

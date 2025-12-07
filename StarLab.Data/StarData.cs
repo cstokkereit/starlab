@@ -14,16 +14,16 @@ namespace StarLab.Data
             SpectralType = new SpectralType(data.GetElement("Spectral Type").Value.AsString);
         }
 
-        public double AbsoluteMagnitude {  get; private set; }
+        public double AbsoluteMagnitude {  get; }
 
-        public double ApparentMagnitude { get; private set; }
+        public double ApparentMagnitude { get; }
 
-        public double BVColourIndex { get; private set; }
+        public double BVColourIndex { get; }
 
-        public string Designation { get; private set; }
+        public string Designation { get; }
 
-        public string Name { get; private set; }
+        public string Name { get; }
 
-        public SpectralType SpectralType { get; private set; }
+        public SpectralType SpectralType { get; }
     }
 }

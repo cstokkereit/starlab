@@ -54,7 +54,7 @@ namespace StarLab.Presentation.Workspace
         /// <summary>
         /// Gets the workspace file name.
         /// </summary>
-        public string FileName { get; private set; }
+        public string FileName { get; }
 
         /// <summary>
         /// Gets the folders within the workspace.
@@ -69,7 +69,7 @@ namespace StarLab.Presentation.Workspace
         /// <summary>
         /// Gets the workspace name.
         /// </summary>
-        public string Name { get; private set; }
+        public string Name { get; }
 
         /// <summary>
         /// Gets the projects within the workspace.

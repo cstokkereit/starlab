@@ -146,13 +146,8 @@ namespace StarLab.UI.Workspace.Documents.Charts
             //tickGenX.MinimumTickSpacing = 5;
             //formsPlot.Plot.Axes.Bottom.TickGenerator = tickGenX;
 
-            formsPlot.Plot.Axes.SetLimits(-0.5, 2, 15, -5);
 
             //formsPlot.Plot.Axes.Bottom.SetTicks(tickPositions, tickLabels);
-
-            formsPlot.Plot.Grid.XAxisStyle.IsVisible = false;
-            formsPlot.Plot.Grid.YAxisStyle.IsVisible = false;
-
 
             // Lock the X axis min and max
             formsPlot.Plot.Axes.Rules.Clear();
@@ -160,84 +155,139 @@ namespace StarLab.UI.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// Updates the state of the chart following a change.
+        /// Updates the state of the chart.
         /// </summary>
-        /// <param name="chart">An <see cref="IChart"/> that specifies the new state of the chart.</param>
+        /// <param name="chart">The <see cref="IChart"/> that specifies the new state of the chart.</param>
         public void UpdateChart(IChart chart)
         {
-            ApplyChartSettings(formsPlot.Plot, chart);
+            ConfigureChart(formsPlot.Plot, chart);
 
             formsPlot.Refresh();
         }
 
         /// <summary>
-        /// Updates the state of a chart axis following a change.
+        /// Configures a chart axis.
         /// </summary>
-        /// <param name="chartAxis">The <see cref="ScottPlot.IAxis"/> to update.</param>
-        /// <param name="axis">An <see cref="Presentation.Workspace.Documents.Charts.IAxis"/> that specifies the new state of the axis.</param>
-        private void ApplyAxisSettings(ScottPlot.IAxis chartAxis, Presentation.Workspace.Documents.Charts.IAxis axis)
+        /// <param name="axis">The <see cref="ScottPlot.IAxis"/> being configured.</param>
+        /// <param name="config">An <see cref="Presentation.Workspace.Documents.Charts.IAxis"/> configuration being applied.</param>
+        private void ConfigureAxis(ScottPlot.IAxis axis, Presentation.Workspace.Documents.Charts.IAxis config)
         {
-            ApplyLabelSettings(chartAxis.Label, axis.Label);
+            ConfigureLabel(axis.Label, config.Label);
+            ConfigureScale(axis, config.Scale);
 
-            
-
-            //axis.TickLabelStyle.BackgroundColor = GetColour(settings.BackColour);
-            chartAxis.TickLabelStyle.ForeColor = GetColour(axis.ForeColour);
-
-            var foreColour = GetColour(axis.ForeColour);
-
-            chartAxis.MajorTickStyle.Color = foreColour;
-            chartAxis.MinorTickStyle.Color = foreColour;
-            chartAxis.FrameLineStyle.Color = foreColour;
-
-            chartAxis.IsVisible = axis.Visible;
+            axis.FrameLineStyle.Color = GetColour(config.ForeColour);
+            axis.IsVisible = config.Visible;
         }
 
         /// <summary>
-        /// Updates the state of the chart following a change.
+        /// Configures a chart.
         /// </summary>
-        /// <param name="chartPlot">The <see cref="Plot"/> to update.</param>
-        /// <param name="chart">An <see cref="IChart"/> that specifies the new state of the chart.</param>
-        private void ApplyChartSettings(Plot chartPlot, IChart chart)
+        /// <param name="chart">The <see cref="Plot"/> being configured.</param>
+        /// <param name="config">The <see cref="IChart"/> configuration being applied.</param>
+        private void ConfigureChart(Plot chart, IChart config)
         {
-            var backColour = GetColour(chart.BackColour);
-            var foreColour = GetColour(chart.ForeColour);
+            ConfigureLabel(chart.Axes.Title.Label, config.Title);
+            ConfigureAxis(chart.Axes.Bottom, config.X1);
+            ConfigureAxis(chart.Axes.Right, config.Y2);
+            ConfigureAxis(chart.Axes.Left, config.Y1);
+            ConfigureAxis(chart.Axes.Top, config.X2);
+            ConfigurePlotArea(chart, config);
 
-            chartPlot.FigureBackground.Color = backColour;
-            chartPlot.DataBackground.Color = backColour;
+            chart.FigureBackground.Color = GetColour(config.BackColour);
+        }
+
+        /// <summary>
+        /// Configures a label.
+        /// </summary>
+        /// <param name="label">The <see cref="LabelStyle"/> being configured.</param>
+        /// <param name="config">The <see cref="ILabel"/> configuration being applied.</param>
+        private void ConfigureLabel(LabelStyle label, ILabel config)
+        {
+            label.BackgroundColor = GetColour(config.BackColour);
+            label.ForeColor = GetColour(config.ForeColour);
+            label.IsVisible = config.Visible;
+            label.Text = config.Text;
+
+            var font = config.Font;
+
+            label.Underline = font.Underline;
+            label.FontName = font.Family;
+            label.FontSize = font.Size;
+            label.Italic = font.Italic;
+            label.Bold = font.Bold;
+        }
+
+        /// <summary>
+        /// Configures the plot area.
+        /// </summary>
+        /// <param name="chart">The <see cref="Plot"/> being configured.</param>
+        /// <param name="config">The <see cref="IChart"/> configuration being applied.</param>
+        private void ConfigurePlotArea(Plot chart, IChart config)
+        {
+            chart.DataBackground.Color = GetColour(config.BackColour); // Should be plot area background colour
+
+            chart.Grid.XAxisStyle.IsVisible = false;
+            chart.Grid.YAxisStyle.IsVisible = false;
 
             //plot.Grid.MajorLineColor = foreColour;
-
-            ApplyLabelSettings(chartPlot.Axes.Title.Label, chart.Title);
-
-            ApplyAxisSettings(chartPlot.Axes.Bottom, chart.X1);
-            ApplyAxisSettings(chartPlot.Axes.Top, chart.X2);
-
-            ApplyAxisSettings(chartPlot.Axes.Left, chart.Y1);
-            ApplyAxisSettings(chartPlot.Axes.Right, chart.Y2);
         }
 
         /// <summary>
-        /// Updates the state of a chart label following a change.
+        /// Configures the axis scale.
         /// </summary>
-        /// <param name="chartLabel">The <see cref="LabelStyle"/> to update.</param>
-        /// <param name="label">An <see cref="ILabel"/> that specifies the new state of the chart.</param>
-        private void ApplyLabelSettings(LabelStyle chartLabel, ILabel label)
+        /// <param name="axis">The <see cref="ScottPlot.IAxis"/> being configured.</param>
+        /// <param name="config">The <see cref="IScale"/> configuration being applied.</param>
+        private void ConfigureScale(ScottPlot.IAxis axis, IScale config)
         {
-            chartLabel.BackgroundColor = GetColour(label.BackColour);
-            chartLabel.ForeColor = GetColour(label.ForeColour);
+            ConfigureTickLabels(axis.TickLabelStyle, config.TickLabels);
+            ConfigureTickMarks(axis.MajorTickStyle, config.MajorTickMarks);
+            ConfigureTickMarks(axis.MinorTickStyle, config.MinorTickMarks);
 
-            chartLabel.IsVisible = label.Visible;
+            axis.TickLabelStyle.IsVisible = config.Visible;
 
-            var font = label.Font;
+            if (config.Reversed)
+            {
+                axis.Max = config.Minimum;
+                axis.Min = config.Maximum;
+            }
+            else
+            {
+                axis.Max = config.Maximum;
+                axis.Min = config.Minimum;
+            }
+        }
 
-            chartLabel.Underline = font.Underline;
-            chartLabel.FontName = font.Family;
-            chartLabel.FontSize = font.Size;
-            chartLabel.Italic = font.Italic;
-            chartLabel.Bold = font.Bold;
+        /// <summary>
+        /// Configures the tick labels.
+        /// </summary>
+        /// <param name="tickLabels">The <see cref="LabelStyle"/> being configured.</param>
+        /// <param name="config">The <see cref="ITickLabels"/> configuration being applied.</param>
+        private void ConfigureTickLabels(LabelStyle tickLabels, ITickLabels config)
+        {
+            tickLabels.BackgroundColor = GetColour(config.BackColour);
+            tickLabels.ForeColor = GetColour(config.ForeColour);
+            tickLabels.Rotation = config.Rotation;
+            tickLabels.IsVisible = config.Visible;
 
-            chartLabel.Text = label.Text;
+            var font = config.Font;
+
+            tickLabels.Underline = font.Underline;
+            tickLabels.FontName = font.Family;
+            tickLabels.FontSize = font.Size;
+            tickLabels.Italic = font.Italic;
+            tickLabels.Bold = font.Bold;
+        }
+
+        /// <summary>
+        /// Configures the tick marks.
+        /// </summary>
+        /// <param name="tickMarks">The <see cref="TickMarkStyle"/> being configured.</param>
+        /// <param name="config">The <see cref="ITickMarks"/> configuration being applied.</param>
+        private void ConfigureTickMarks(TickMarkStyle tickMarks, ITickMarks config)
+        {
+            tickMarks.Color = GetColour(config.ForeColour);
+            //tickMarks.Length = config.Visible ? config.Length : 0;
+            tickMarks.Hairline = true;
         }
 
         /// <summary>

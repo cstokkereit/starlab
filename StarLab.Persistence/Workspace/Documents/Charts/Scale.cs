@@ -11,6 +11,12 @@ namespace StarLab.Serialisation.Workspace.Documents.Charts
         [XmlAttribute("autoscale")]
         public bool AutoScale;
 
+        [XmlAttribute("backColour")]
+        public string? BackColour;
+
+        [XmlAttribute("foreColour")]
+        public string? ForeColour;
+
         [XmlElement]
         public TickMarks? MajorTickMarks;
 

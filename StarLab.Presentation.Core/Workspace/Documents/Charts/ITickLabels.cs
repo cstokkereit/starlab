@@ -1,7 +1,7 @@
 ﻿namespace StarLab.Presentation.Workspace.Documents.Charts
 {
     /// <summary>
-    /// 
+    /// Represents the chart axis scale tick labels.
     /// </summary>
     public interface ITickLabels
     {
@@ -11,7 +11,7 @@
         string BackColour { get; }
 
         /// <summary>
-        /// TODO
+        /// Gets the tick label font.
         /// </summary>
         IFont Font { get; }
 
@@ -21,7 +21,7 @@
         public string ForeColour { get; }
 
         /// <summary>
-        /// TODO
+        /// Gets the rotation angle for the tick labels.
         /// </summary>
         int Rotation { get; }
 

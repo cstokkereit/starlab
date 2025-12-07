@@ -7,6 +7,12 @@ namespace StarLab.Serialisation.Workspace.Documents.Charts
     /// </summary>
     public class TickMarks
     {
+        [XmlAttribute("backColour")]
+        public string? BackColour;
+
+        [XmlAttribute("foreColour")]
+        public string? ForeColour;
+
         [XmlAttribute("visible")]
         public bool Visible;
     }

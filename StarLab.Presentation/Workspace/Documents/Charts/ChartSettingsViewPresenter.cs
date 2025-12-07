@@ -171,8 +171,8 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
 
             AddGroupManager(new ScaleSettingsGroupManager(View, scale));
 
-            //AddGroupManager(new TickMarksSettingsGroupManager(View, View.AddNode(Constants.MinorTickMarks, scale, StringResources.MinorTickMarks)));
-            //AddGroupManager(new TickMarksSettingsGroupManager(View, View.AddNode(Constants.MajorTickMarks, scale, StringResources.MajorTickMarks)));
+            AddGroupManager(new TickMarkSettingsGroupManager(View, View.AddNode(Constants.MinorTickMarks, scale, StringResources.MinorTickMarks)));
+            AddGroupManager(new TickMarkSettingsGroupManager(View, View.AddNode(Constants.MajorTickMarks, scale, StringResources.MajorTickMarks)));
             AddGroupManager(new TickLabelSettingsGroupManager(View, View.AddNode(Constants.TickLabels, scale, StringResources.TickLabels)));
         }
 

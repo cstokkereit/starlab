@@ -25,16 +25,16 @@
             SpectralType = new SpectralType(spectralType);
         }
 
-        public double AbsoluteMagnitude { get; private set; }
+        public double AbsoluteMagnitude { get; }
 
-        public double ApparentMagnitude { get; private set; }
+        public double ApparentMagnitude { get; }
 
-        public double BVColourIndex { get; private set; }
+        public double BVColourIndex { get; }
 
         public string Designation => designation;
 
         public string Name => name;
 
-        public SpectralType SpectralType { get; private set; }
+        public SpectralType SpectralType { get; }
     }
 }

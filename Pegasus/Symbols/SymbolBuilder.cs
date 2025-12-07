@@ -17,12 +17,12 @@
         /// <summary>
         /// Gets a cross symbol for use in products.
         /// </summary>
-        public static ISymbol Cross { get; private set; }
+        public static ISymbol Cross { get; }
 
         /// <summary>
         /// Gets a dot symbol for use in products.
         /// </summary>
-        public static ISymbol Dot { get; private set; }
+        public static ISymbol Dot { get; }
 
         /// <summary>
         /// Creates a symbol product from the specified symbols.

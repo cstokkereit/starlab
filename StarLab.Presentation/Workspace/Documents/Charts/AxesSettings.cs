@@ -43,7 +43,7 @@
         public IAxisSettings Y2 { get; }
 
         /// <summary>
-        /// Gets the background colour.
+        /// Gets or sets the background colour.
         /// </summary>
         public string BackColour
         {
@@ -62,7 +62,7 @@
         }
 
         /// <summary>
-        /// Gets the font settings.
+        /// Gets or sets the font settings.
         /// </summary>
         public IFontSettings Font { get; set; }
 
@@ -106,7 +106,7 @@
         /// </summary>
         /// <param name="Colour">A function that determines which colour setting is used.</param>
         /// <returns>A <see cref="string"/> that specifies the colour applicable to the greatest number of axes.</returns>
-        private string GetColour(Func<IAxisSettings, string> Colour)
+        private string GetColour(Func<IColourSettings, string> Colour)
         {
             var colours = new List<string>();
 
@@ -115,7 +115,7 @@
             if (Y1.Visible) colours.Add(Colour(Y1));
             if (Y2.Visible) colours.Add(Colour(Y2));
 
-            return colours.GroupBy(a => a).OrderByDescending(b => b.Count()).First().Key;
+            return colours.Count == 0 ? string.Empty : colours.GroupBy(a => a).OrderByDescending(b => b.Count()).First().Key;
         }
 
         /// <summary>

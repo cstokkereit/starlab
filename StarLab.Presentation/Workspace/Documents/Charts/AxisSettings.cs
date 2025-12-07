@@ -36,7 +36,9 @@
             {
                 Scale.MajorTickMarks.BackColour = value;
                 Scale.MinorTickMarks.BackColour = value;
+                Scale.TickLabels.BackColour = value;
                 Label.BackColour = value;
+
                 backColour = value;
             }
         }
@@ -52,7 +54,9 @@
             {
                 Scale.MajorTickMarks.ForeColour = value;
                 Scale.MinorTickMarks.ForeColour = value;
+                Scale.TickLabels.ForeColour = value;
                 Label.ForeColour = value;
+
                 foreColour = value;
             }
         }
@@ -60,13 +64,13 @@
         /// <summary>
         /// Gets the label settings.
         /// </summary>
-        public ILabelSettings Label { get; private set; }
+        public ILabelSettings Label { get; }
 
 
         /// <summary>
         /// Gets the axis scale settings.
         /// </summary>
-        public IScaleSettings Scale { get; private set; }
+        public IScaleSettings Scale { get; }
 
         /// <summary>
         /// Gets or sets a flag that determines whether the axis is visible.
@@ -82,6 +86,7 @@
                 Scale.TickLabels.Visible = value;
                 Label.Visible = value;
                 Scale.Visible = value;
+
                 visible = value;
             }
         }

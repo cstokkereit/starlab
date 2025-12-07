@@ -30,6 +30,5 @@
         /// Gets or sets a flag that determines whether the tick marks are visible.
         /// </summary>
         public bool Visible { get; set; }
-        
     }
 }

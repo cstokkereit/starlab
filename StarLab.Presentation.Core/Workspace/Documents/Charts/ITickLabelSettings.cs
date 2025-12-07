@@ -1,19 +1,17 @@
 ﻿namespace StarLab.Presentation.Workspace.Documents.Charts
 {
     /// <summary>
-    /// TODO
+    /// Represents the current state of the tick marks for an axis while the chart is being configured.
     /// </summary>
-    public interface ITickLabelSettings : IVisibilitySettings, IColourSettings
+    public interface ITickLabelSettings : IColourSettings, IVisibilitySettings
     {
         /// <summary>
-        /// TODO
+        /// Gets the font settings.
         /// </summary>
         IFontSettings Font { get; }
 
-        // Number/String/DateTime Format
-
         /// <summary>
-        /// TODO
+        /// Gets or sets the angle of rotation for the tick labels.
         /// </summary>
         int Rotation { get; set; }
     }
