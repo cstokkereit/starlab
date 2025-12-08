@@ -1,4 +1,6 @@
-﻿namespace StarLab.Application.Workspace.Documents.Charts
+﻿using System.Diagnostics;
+
+namespace StarLab.Application.Workspace.Documents.Charts
 {
     public class TickMarks
     {
@@ -6,7 +8,18 @@
         {
             ArgumentNullException.ThrowIfNull(dto, nameof(dto));
 
+            Debug.Assert(dto.BackColour != null);
+            Debug.Assert(dto.ForeColour != null);
 
+            BackColour = dto.BackColour;
+            ForeColour = dto.ForeColour;
+            Visible = dto.Visible;
         }
+
+        public string BackColour { get; }
+
+        public string ForeColour { get; }
+
+        public bool Visible { get; }
     }
 }

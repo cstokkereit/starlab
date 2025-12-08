@@ -16,6 +16,7 @@ namespace StarLab.Application.Workspace.Documents.Charts
             ArgumentNullException.ThrowIfNull(nameof(dto));
 
             Debug.Assert(dto.Label != null);
+            Debug.Assert(dto.Scale != null);
 
             if (string.IsNullOrEmpty(dto.BackColour))
             {
@@ -36,6 +37,7 @@ namespace StarLab.Application.Workspace.Documents.Charts
             }
 
             Label = new Label(dto.Label);
+            Scale = new Scale(dto.Scale);
             Visible = dto.Visible;
         }
 
@@ -53,6 +55,11 @@ namespace StarLab.Application.Workspace.Documents.Charts
         /// Gets the axis label.
         /// </summary>
         public Label Label { get; }
+
+        /// <summary>
+        /// Gets the axis scale.
+        /// </summary>
+        public Scale Scale { get; }
 
         /// <summary>
         /// A flag indicating whether the axis is visible.
