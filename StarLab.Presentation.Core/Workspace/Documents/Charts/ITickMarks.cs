@@ -16,6 +16,11 @@
         string ForeColour { get; }
 
         /// <summary>
+        /// Gets the length of the tickamrks.
+        /// </summary>
+        public int Length { get; }
+
+        /// <summary>
         /// A flag indicating that the axis is visible.
         /// </summary>
         bool Visible { get; }

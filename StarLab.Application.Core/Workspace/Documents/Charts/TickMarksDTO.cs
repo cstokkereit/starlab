@@ -9,6 +9,8 @@
 
         public string? ForeColour;
 
+        public int Length;
+
         public bool Visible;
     }
 }

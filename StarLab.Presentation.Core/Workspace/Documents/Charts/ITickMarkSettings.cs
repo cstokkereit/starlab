@@ -5,6 +5,9 @@
     /// </summary>
     public interface ITickMarkSettings : IColourSettings, IVisibilitySettings
     {
-
+        /// <summary>
+        /// Gets or sets the length of the tickamrks.
+        /// </summary>
+        public int Length { get; set; }
     }
 }

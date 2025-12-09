@@ -14,6 +14,7 @@
             BackColour = tickMarks.BackColour;
             ForeColour = tickMarks.ForeColour;
             Visible = tickMarks.Visible;
+            Length = tickMarks.Length;
         }
 
         /// <summary>
@@ -25,6 +26,11 @@
         /// Gets or sets the foreground colour.
         /// </summary>
         public string ForeColour { get; set; }
+
+        /// <summary>
+        /// Gets or sets the length of the tickamrks.
+        /// </summary>
+        public int Length { get; set; }
 
         /// <summary>
         /// Gets or sets a flag that determines whether the tick marks are visible.

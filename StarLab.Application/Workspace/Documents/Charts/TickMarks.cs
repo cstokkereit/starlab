@@ -21,6 +21,7 @@ namespace StarLab.Application.Workspace.Documents.Charts
             BackColour = dto.BackColour;
             ForeColour = dto.ForeColour;
             Visible = dto.Visible;
+            Length = dto.Length;
         }
 
         /// <summary>
@@ -32,6 +33,11 @@ namespace StarLab.Application.Workspace.Documents.Charts
         /// Gets the foreground colour.
         /// </summary>
         public string ForeColour { get; }
+
+        /// <summary>
+        /// Gets the length of the tickamrks.
+        /// </summary>
+        public int Length { get; }
 
         /// <summary>
         /// A flag indicating whether the tickmarks are visible.
