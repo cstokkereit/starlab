@@ -3,7 +3,7 @@
 namespace StarLab.Presentation.Workspace.Documents.Charts
 {
     /// <summary>
-    /// View model representation of a chart axis scale tick marks.
+    /// View model representation of the chart axis scale tick marks.
     /// </summary>
     internal class TickMarks : ITickMarks
     {

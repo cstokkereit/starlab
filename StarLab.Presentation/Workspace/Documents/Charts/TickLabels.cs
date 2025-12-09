@@ -3,7 +3,7 @@
 namespace StarLab.Presentation.Workspace.Documents.Charts
 {
     /// <summary>
-    /// View model representation of a chart axis scale tick labels.
+    /// View model representation of the chart axis scale tick labels.
     /// </summary>
     internal class TickLabels : ITickLabels
     {

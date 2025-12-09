@@ -45,7 +45,7 @@ namespace StarLab.Application.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// 
+        /// A flag indicating that the scale is generated automatically to fit the data.
         /// </summary>
         public bool Autoscale { get; }
 
@@ -60,7 +60,7 @@ namespace StarLab.Application.Workspace.Documents.Charts
         public string ForeColour { get; }
 
         /// <summary>
-        /// 
+        /// Gets the major tick marks.
         /// </summary>
         public TickMarks MajorTickMarks { get; }
 
@@ -75,7 +75,7 @@ namespace StarLab.Application.Workspace.Documents.Charts
         public double Minimum { get; }
 
         /// <summary>
-        /// 
+        /// Gets the minor tick marks.
         /// </summary>
         public TickMarks MinorTickMarks { get; }
 
@@ -85,12 +85,12 @@ namespace StarLab.Application.Workspace.Documents.Charts
         public bool Reversed { get; }
 
         /// <summary>
-        /// 
+        /// Gets the tick labels.
         /// </summary>
         public TickLabels TickLabels { get; }
 
         /// <summary>
-        /// 
+        /// A flag indicating whether the scale is visible.
         /// </summary>
         public bool Visible { get; }
      }
