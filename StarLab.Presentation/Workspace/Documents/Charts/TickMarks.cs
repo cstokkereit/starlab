@@ -7,6 +7,8 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
     /// </summary>
     internal class TickMarks : ITickMarks
     {
+        private int length;
+
         /// <summary>
         /// Initialises a new instance of the <see cref="TickMarks"> class.
         /// </summary>
@@ -19,7 +21,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             ForeColour = string.IsNullOrEmpty(dto.ForeColour) ? Constants.Black : dto.ForeColour;
 
             Visible = dto.Visible;
-            Length = dto.Length;
+            length = dto.Length;
         }
 
         /// <summary>
@@ -35,7 +37,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// <summary>
         /// Gets the length of the tickamrks.
         /// </summary>
-        public int Length { get; }
+        public int Length => Visible ? length : 0;
 
         /// <summary>
         /// A flag indicating that the tick marks are visible.

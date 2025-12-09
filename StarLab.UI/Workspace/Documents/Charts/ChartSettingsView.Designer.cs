@@ -45,7 +45,7 @@
             treeView.ShowLines = false;
             treeView.ShowNodeToolTips = true;
             treeView.ShowRootLines = false;
-            treeView.Size = new Size(180, 338);
+            treeView.Size = new Size(200, 338);
             treeView.TabIndex = 1;
             treeView.AfterSelect += TreeView_AfterSelect;
             // 
@@ -72,9 +72,9 @@
             // panelSettings
             // 
             panelSettings.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            panelSettings.Location = new Point(210, 10);
+            panelSettings.Location = new Point(220, 10);
             panelSettings.Name = "panelSettings";
-            panelSettings.Size = new Size(360, 338);
+            panelSettings.Size = new Size(350, 338);
             panelSettings.TabIndex = 5;
             // 
             // ChartSettingsView

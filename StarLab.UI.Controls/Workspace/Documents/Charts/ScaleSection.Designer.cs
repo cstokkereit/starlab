@@ -47,7 +47,7 @@
             // textMaximum
             // 
             textMaximum.BorderStyle = BorderStyle.FixedSingle;
-            textMaximum.Location = new Point(87, 18);
+            textMaximum.Location = new Point(78, 18);
             textMaximum.Name = "textMaximum";
             textMaximum.Size = new Size(60, 23);
             textMaximum.TabIndex = 3;
@@ -64,7 +64,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(87, 0);
+            label2.Location = new Point(78, 0);
             label2.Name = "label2";
             label2.Size = new Size(61, 15);
             label2.TabIndex = 5;
@@ -73,7 +73,7 @@
             // checkReversed
             // 
             checkReversed.AutoSize = true;
-            checkReversed.Location = new Point(5, 48);
+            checkReversed.Location = new Point(244, 20);
             checkReversed.Name = "checkReversed";
             checkReversed.Size = new Size(73, 19);
             checkReversed.TabIndex = 6;
@@ -83,7 +83,7 @@
             // checkAutoScale
             // 
             checkAutoScale.AutoSize = true;
-            checkAutoScale.Location = new Point(175, 22);
+            checkAutoScale.Location = new Point(156, 20);
             checkAutoScale.Name = "checkAutoScale";
             checkAutoScale.Size = new Size(82, 19);
             checkAutoScale.TabIndex = 7;
@@ -101,7 +101,7 @@
             Controls.Add(label2);
             Controls.Add(label1);
             Name = "ScaleSection";
-            Size = new Size(278, 68);
+            Size = new Size(324, 43);
             ResumeLayout(false);
             PerformLayout();
         }

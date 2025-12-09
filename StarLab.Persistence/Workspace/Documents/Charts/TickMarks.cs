@@ -13,6 +13,9 @@ namespace StarLab.Serialisation.Workspace.Documents.Charts
         [XmlAttribute("foreColour")]
         public string? ForeColour;
 
+        [XmlAttribute("length")]
+        public int Length;
+
         [XmlAttribute("visible")]
         public bool Visible;
     }

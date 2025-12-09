@@ -239,11 +239,11 @@ namespace StarLab.UI.Workspace.Documents.Charts
         /// <param name="config">The <see cref="IScale"/> configuration being applied.</param>
         private void ConfigureScale(ScottPlot.IAxis axis, IScale config)
         {
-            ConfigureTickLabels(axis.TickLabelStyle, config.TickLabels);
+            axis.TickLabelStyle.IsVisible = config.Visible;
+
             ConfigureTickMarks(axis.MajorTickStyle, config.MajorTickMarks);
             ConfigureTickMarks(axis.MinorTickStyle, config.MinorTickMarks);
-
-            axis.TickLabelStyle.IsVisible = config.Visible;
+            ConfigureTickLabels(axis.TickLabelStyle, config.TickLabels);
 
             if (config.Reversed)
             {
@@ -286,7 +286,7 @@ namespace StarLab.UI.Workspace.Documents.Charts
         private void ConfigureTickMarks(TickMarkStyle tickMarks, ITickMarks config)
         {
             tickMarks.Color = GetColour(config.ForeColour);
-            //tickMarks.Length = config.Visible ? config.Length : 0;
+            tickMarks.Length = config.Length;
             tickMarks.Hairline = true;
         }
 

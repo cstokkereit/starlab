@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Workspace xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ActiveDocument="">
+<Workspace xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ActiveDocument="c46d67b8-78b6-4d34-9527-3f479131f5f3">
   <Projects>
     <Project expanded="true" name="Henry Draper Catalog">
       <Documents />
@@ -24,10 +24,10 @@
               <Label backColour="Black" foreColour="Green" text="Colour Index (B-V)" visible="true">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
-              <Scale backColour="Black" foreColour="Green" autoscale="false" minimum="-0.5" maximum="2" reversed="false" visible="true">
+              <Scale autoscale="false" backColour="Black" foreColour="Green" maximum="2" minimum="-0.5" reversed="false" visible="true">
                 <MajorTickMarks backColour="Black" foreColour="Green" length="4" visible="true" />
                 <MinorTickMarks backColour="Black" foreColour="Green" length="2" visible="true" />
-                <TickLabels backColour="Black" foreColour="Green" rotation="0" visible="true">
+                <TickLabels backColour="Black" foreColour="Green" visible="true">
                   <Font bold="false" family="Segoe UI" italic="false" size="12" underline="false" />
                 </TickLabels>
               </Scale>
@@ -36,10 +36,10 @@
               <Label backColour="Black" foreColour="Green" text="" visible="false">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
-              <Scale backColour="Black" foreColour="Green" autoscale="false" minimum="0" maximum="10" reversed="false" visible="true">
+              <Scale autoscale="false" backColour="Black" foreColour="Green" maximum="10" minimum="0" reversed="false" visible="true">
                 <MajorTickMarks backColour="Black" foreColour="Green" length="4" visible="true" />
                 <MinorTickMarks backColour="Black" foreColour="Green" length="2" visible="true" />
-                <TickLabels backColour="Black" foreColour="Green" rotation="0" visible="false">
+                <TickLabels backColour="Black" foreColour="Green" visible="false">
                   <Font bold="false" family="Segoe UI" italic="false" size="12" underline="false" />
                 </TickLabels>
               </Scale>
@@ -48,10 +48,10 @@
               <Label backColour="Black" foreColour="Green" text="Absolute Magnitude" visible="true">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
-              <Scale backColour="Black" foreColour="Green" autoscale="false" minimum="-5" maximum="15" reversed="true" visible="true">
+              <Scale autoscale="false" backColour="Black" foreColour="Green" maximum="15" minimum="-5" reversed="true" visible="true">
                 <MajorTickMarks backColour="Black" foreColour="Green" length="4" visible="true" />
                 <MinorTickMarks backColour="Black" foreColour="Green" length="2" visible="true" />
-                <TickLabels backColour="Black" foreColour="Green" rotation="0" visible="true">
+                <TickLabels backColour="Black" foreColour="Green" visible="true">
                   <Font bold="false" family="Segoe UI" italic="false" size="12" underline="false" />
                 </TickLabels>
               </Scale>
@@ -60,10 +60,10 @@
               <Label backColour="Black" foreColour="Green" text="" visible="false">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
-              <Scale backColour="Black" foreColour="Green" autoscale="false" minimum="0" maximum="10" reversed="false" visible="true">
+              <Scale autoscale="false" backColour="Black" foreColour="Green" maximum="10" minimum="0" reversed="false" visible="true">
                 <MajorTickMarks backColour="Black" foreColour="Green" length="4" visible="true" />
                 <MinorTickMarks backColour="Black" foreColour="Green" length="2" visible="true" />
-                <TickLabels backColour="Black" foreColour="Green" rotation="0" visible="false">
+                <TickLabels backColour="Black" foreColour="Green" visible="false">
                   <Font bold="false" family="Segoe UI" italic="false" size="12" underline="false" />
                 </TickLabels>
               </Scale>
@@ -80,10 +80,10 @@
               <Label backColour="Black" foreColour="Green" text="Colour Index (B-V)" visible="true">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
-              <Scale backColour="Black" foreColour="Green" autoscale="false" minimum="-0.5" maximum="2" reversed="false" visible="true">
+              <Scale autoscale="false" backColour="Black" foreColour="Green" maximum="2" minimum="-0.5" reversed="false" visible="true">
                 <MajorTickMarks backColour="Black" foreColour="Green" length="4" visible="true" />
                 <MinorTickMarks backColour="Black" foreColour="Green" length="2" visible="true" />
-                <TickLabels backColour="Black" foreColour="Green" rotation="0" visible="true">
+                <TickLabels backColour="Black" foreColour="Green" visible="true">
                   <Font bold="false" family="Segoe UI" italic="false" size="12" underline="false" />
                 </TickLabels>
               </Scale>
@@ -92,10 +92,10 @@
               <Label backColour="Black" foreColour="Green" text="" visible="false">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
-              <Scale backColour="Black" foreColour="Green" autoscale="false" minimum="0" maximum="10" reversed="false" visible="true">
+              <Scale autoscale="false" backColour="Black" foreColour="Green" maximum="10" minimum="0" reversed="false" visible="true">
                 <MajorTickMarks backColour="Black" foreColour="Green" length="4" visible="true" />
                 <MinorTickMarks backColour="Black" foreColour="Green" length="2" visible="true" />
-                <TickLabels backColour="Black" foreColour="Green" rotation="0" visible="false">
+                <TickLabels backColour="Black" foreColour="Green" visible="false">
                   <Font bold="false" family="Segoe UI" italic="false" size="12" underline="false" />
                 </TickLabels>
               </Scale>
@@ -104,10 +104,10 @@
               <Label backColour="Black" foreColour="Green" text="Absolute Magnitude" visible="true">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
-              <Scale backColour="Black" foreColour="Green" autoscale="false" minimum="-5" maximum="15" reversed="true" visible="true">
+              <Scale autoscale="false" backColour="Black" foreColour="Green" maximum="15" minimum="-5" reversed="true" visible="true">
                 <MajorTickMarks backColour="Black" foreColour="Green" length="4" visible="true" />
                 <MinorTickMarks backColour="Black" foreColour="Green" length="2" visible="true" />
-                <TickLabels backColour="Black" foreColour="Green" rotation="0" visible="true">
+                <TickLabels backColour="Black" foreColour="Green" visible="true">
                   <Font bold="false" family="Segoe UI" italic="false" size="12" underline="false" />
                 </TickLabels>
               </Scale>
@@ -116,10 +116,10 @@
               <Label backColour="Black" foreColour="Green" text="" visible="false">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
-              <Scale backColour="Black" foreColour="Green" autoscale="false" minimum="0" maximum="10" reversed="false" visible="true">
+              <Scale autoscale="false" backColour="Black" foreColour="Green" maximum="10" minimum="0" reversed="false" visible="true">
                 <MajorTickMarks backColour="Black" foreColour="Green" length="4" visible="true" />
                 <MinorTickMarks backColour="Black" foreColour="Green" length="2" visible="true" />
-                <TickLabels backColour="Black" foreColour="Green" rotation="0" visible="false">
+                <TickLabels backColour="Black" foreColour="Green" visible="false">
                   <Font bold="false" family="Segoe UI" italic="false" size="12" underline="false" />
                 </TickLabels>
               </Scale>
@@ -136,10 +136,10 @@
               <Label backColour="Black" foreColour="Green" text="Colour Index (B-V)" visible="true">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
-              <Scale backColour="Black" foreColour="Green" autoscale="false" minimum="-0.5" maximum="2" reversed="false" visible="true">
+              <Scale autoscale="false" backColour="Black" foreColour="Green" maximum="2" minimum="-0.5" reversed="false" visible="true">
                 <MajorTickMarks backColour="Black" foreColour="Green" length="4" visible="true" />
                 <MinorTickMarks backColour="Black" foreColour="Green" length="2" visible="true" />
-                <TickLabels backColour="Black" foreColour="Green" rotation="0" visible="true">
+                <TickLabels backColour="Black" foreColour="Green" visible="true">
                   <Font bold="false" family="Segoe UI" italic="false" size="12" underline="false" />
                 </TickLabels>
               </Scale>
@@ -148,10 +148,10 @@
               <Label backColour="Black" foreColour="Green" text="" visible="false">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
-              <Scale backColour="Black" foreColour="Green" autoscale="false" minimum="0" maximum="10" reversed="false" visible="true">
+              <Scale autoscale="false" backColour="Black" foreColour="Green" maximum="10" minimum="0" reversed="false" visible="true">
                 <MajorTickMarks backColour="Black" foreColour="Green" length="4" visible="true" />
                 <MinorTickMarks backColour="Black" foreColour="Green" length="2" visible="true" />
-                <TickLabels backColour="Black" foreColour="Green" rotation="0" visible="false">
+                <TickLabels backColour="Black" foreColour="Green" visible="false">
                   <Font bold="false" family="Segoe UI" italic="false" size="12" underline="false" />
                 </TickLabels>
               </Scale>
@@ -160,10 +160,10 @@
               <Label backColour="Black" foreColour="Green" text="Absolute Magnitude" visible="true">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
-              <Scale backColour="Black" foreColour="Green" autoscale="false" minimum="-5" maximum="15" reversed="true" visible="true">
+              <Scale autoscale="false" backColour="Black" foreColour="Green" maximum="15" minimum="-5" reversed="true" visible="true">
                 <MajorTickMarks backColour="Black" foreColour="Green" length="4" visible="true" />
                 <MinorTickMarks backColour="Black" foreColour="Green" length="2" visible="true" />
-                <TickLabels backColour="Black" foreColour="Green" rotation="0" visible="true">
+                <TickLabels backColour="Black" foreColour="Green" visible="true">
                   <Font bold="false" family="Segoe UI" italic="false" size="12" underline="false" />
                 </TickLabels>
               </Scale>
@@ -172,10 +172,10 @@
               <Label backColour="Black" foreColour="Green" text="" visible="false">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
-              <Scale backColour="Black" foreColour="Green" autoscale="false" minimum="0" maximum="10" reversed="false" visible="true">
+              <Scale autoscale="false" backColour="Black" foreColour="Green" maximum="10" minimum="0" reversed="false" visible="true">
                 <MajorTickMarks backColour="Black" foreColour="Green" length="4" visible="true" />
                 <MinorTickMarks backColour="Black" foreColour="Green" length="2" visible="true" />
-                <TickLabels backColour="Black" foreColour="Green" rotation="0" visible="false">
+                <TickLabels backColour="Black" foreColour="Green" visible="false">
                   <Font bold="false" family="Segoe UI" italic="false" size="12" underline="false" />
                 </TickLabels>
               </Scale>
