@@ -1,6 +1,4 @@
-﻿using System.Runtime.InteropServices;
-
-namespace StarLab.Application.Workspace.Documents.Charts
+﻿namespace StarLab.Application.Workspace.Documents.Charts
 {
     /// <summary>
     /// Domain model representation of a chart axis scale.

@@ -3,20 +3,19 @@
 namespace StarLab.Application.Workspace.Documents.Charts
 {
     /// <summary>
-    /// Domain model representation of a chart axis.
+    /// Domain model representation of the chart plot area.
     /// </summary>
-    internal class Axis
+    internal class PlotArea
     {
         /// <summary>
-        /// Initialises a new instance of the <see cref="Axis"> class.
+        /// Initialises a new instance of the <see cref="PlotArea"> class.
         /// </summary>
-        /// <param name="dto">A data transfer object that specifies the initial state of the <see cref="Axis"/>.</param>
-        public Axis(AxisDTO dto) 
+        /// <param name="dto">A data transfer object that specifies the initial state of the <see cref="PlotArea"/>.</param>
+        public PlotArea(PlotAreaDTO dto)
         {
             ArgumentNullException.ThrowIfNull(nameof(dto));
 
-            Debug.Assert(dto.Label != null);
-            Debug.Assert(dto.Scale != null);
+            Debug.Assert(dto.Grid != null);
 
             if (string.IsNullOrEmpty(dto.BackColour))
             {
@@ -36,10 +35,7 @@ namespace StarLab.Application.Workspace.Documents.Charts
                 ForeColour = dto.ForeColour;
             }
 
-            Label = new Label(dto.Label);
-            Scale = new Scale(dto.Scale);
-
-            Visible = dto.Visible;
+            Grid = new Grid(dto.Grid);
         }
 
         /// <summary>
@@ -53,18 +49,8 @@ namespace StarLab.Application.Workspace.Documents.Charts
         public string ForeColour { get; }
 
         /// <summary>
-        /// Gets the axis label.
+        /// Gets the plot area grid.
         /// </summary>
-        public Label Label { get; }
-
-        /// <summary>
-        /// Gets the axis scale.
-        /// </summary>
-        public Scale Scale { get; }
-
-        /// <summary>
-        /// A flag indicating whether the axis is visible.
-        /// </summary>
-        public bool Visible { get; }
+        public Grid Grid { get; }
     }
 }

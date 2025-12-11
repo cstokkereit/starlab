@@ -11,6 +11,8 @@
 
         public string? ForeColour;
 
+        public PlotAreaDTO? PlotArea;
+
         public LabelDTO? Title;
 
         public AxisDTO? X1;

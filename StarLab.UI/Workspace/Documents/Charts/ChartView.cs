@@ -225,7 +225,7 @@ namespace StarLab.UI.Workspace.Documents.Charts
         private void ConfigurePlotArea(Plot chart, IChart config)
         {
             chart.DataBackground.Color = GetColour(config.BackColour); // Should be plot area background colour
-
+            
             chart.Grid.XAxisStyle.IsVisible = false;
             chart.Grid.YAxisStyle.IsVisible = false;
 

@@ -20,7 +20,10 @@ namespace StarLab.Application
             CreateMap<Document, DocumentDTO>();
             CreateMap<Folder, FolderDTO>();
             CreateMap<Font, FontDTO>();
+            CreateMap<Grid, GridDTO>();
+            CreateMap<GridLines, GridLinesDTO>();
             CreateMap<Label, LabelDTO>();
+            CreateMap<PlotArea, PlotAreaDTO>();
             CreateMap<Project, ProjectDTO>().ForMember(dest => dest.Documents, opt => opt.MapFrom(src => src.AllDocuments))
                                             .ForMember(dest => dest.Folders, opt => opt.MapFrom(src => src.AllFolders));
 

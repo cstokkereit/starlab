@@ -1,22 +1,17 @@
-﻿using System.Diagnostics;
-
-namespace StarLab.Application.Workspace.Documents.Charts
+﻿namespace StarLab.Application.Workspace.Documents.Charts
 {
     /// <summary>
-    /// Domain model representation of a chart axis.
+    /// Domain model representation of the chart grid lines.
     /// </summary>
-    internal class Axis
+    internal class GridLines
     {
         /// <summary>
-        /// Initialises a new instance of the <see cref="Axis"> class.
+        /// Initialises a new instance of the <see cref="GridLines"> class.
         /// </summary>
-        /// <param name="dto">A data transfer object that specifies the initial state of the <see cref="Axis"/>.</param>
-        public Axis(AxisDTO dto) 
+        /// <param name="dto">A data transfer object that specifies the initial state of the <see cref="GridLines"/>.</param>
+        public GridLines(GridLinesDTO dto)
         {
             ArgumentNullException.ThrowIfNull(nameof(dto));
-
-            Debug.Assert(dto.Label != null);
-            Debug.Assert(dto.Scale != null);
 
             if (string.IsNullOrEmpty(dto.BackColour))
             {
@@ -36,9 +31,6 @@ namespace StarLab.Application.Workspace.Documents.Charts
                 ForeColour = dto.ForeColour;
             }
 
-            Label = new Label(dto.Label);
-            Scale = new Scale(dto.Scale);
-
             Visible = dto.Visible;
         }
 
@@ -53,17 +45,7 @@ namespace StarLab.Application.Workspace.Documents.Charts
         public string ForeColour { get; }
 
         /// <summary>
-        /// Gets the axis label.
-        /// </summary>
-        public Label Label { get; }
-
-        /// <summary>
-        /// Gets the axis scale.
-        /// </summary>
-        public Scale Scale { get; }
-
-        /// <summary>
-        /// A flag indicating whether the axis is visible.
+        /// A flag indicating whether the grid lines are visible.
         /// </summary>
         public bool Visible { get; }
     }

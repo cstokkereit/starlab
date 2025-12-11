@@ -15,6 +15,7 @@ namespace StarLab.Application.Workspace.Documents.Charts
         {
             ArgumentNullException.ThrowIfNull(nameof(dto));
 
+            Debug.Assert(dto.PlotArea != null);
             Debug.Assert(dto.Title != null);
             Debug.Assert(dto.Font != null);
             Debug.Assert(dto.X1 != null);
@@ -40,6 +41,7 @@ namespace StarLab.Application.Workspace.Documents.Charts
                 ForeColour = dto.ForeColour;
             }
 
+            PlotArea = new PlotArea(dto.PlotArea);
             Title = new Label(dto.Title);
             Font = new Font(dto.Font);
             X1 = new Axis(dto.X1);
@@ -62,6 +64,11 @@ namespace StarLab.Application.Workspace.Documents.Charts
         /// Gets the foreground colour.
         /// </summary>
         public string ForeColour { get; }
+
+        /// <summary>
+        /// Gets the plot area.
+        /// </summary>
+        public PlotArea PlotArea { get; }
 
         /// <summary>
         /// Gets the chart title label.
