@@ -23,8 +23,8 @@ namespace StarLab.Application.Workspace.Documents
         /// <param name="dtoDocument">A <see cref="DocumentDTO"/> that defines the document being added.</param>
         public void Execute(WorkspaceDTO dtoWorkspace, DocumentDTO dtoDocument)
         {
-            ArgumentNullException.ThrowIfNull(nameof(dtoWorkspace));
-            ArgumentNullException.ThrowIfNull(nameof(dtoDocument));
+            ArgumentNullException.ThrowIfNull(dtoWorkspace, nameof(dtoWorkspace));
+            ArgumentNullException.ThrowIfNull(dtoDocument, nameof(dtoDocument));
 
             var workspace = new Workspace(dtoWorkspace);
             

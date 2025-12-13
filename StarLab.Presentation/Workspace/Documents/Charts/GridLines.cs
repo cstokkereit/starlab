@@ -1,35 +1,22 @@
-﻿namespace StarLab.Application.Workspace.Documents.Charts
+﻿using StarLab.Application.Workspace.Documents.Charts;
+
+namespace StarLab.Presentation.Workspace.Documents.Charts
 {
     /// <summary>
-    /// Domain model representation of the chart grid lines.
+    /// View model representation of the chart grid lines.
     /// </summary>
-    internal class GridLines
+    internal class GridLines : IGridLines
     {
         /// <summary>
         /// Initialises a new instance of the <see cref="GridLines"> class.
         /// </summary>
         /// <param name="dto">A data transfer object that specifies the initial state of the <see cref="GridLines"/>.</param>
-        public GridLines(GridLinesDTO dto)
+        public GridLines(GridLinesDTO? dto)
         {
             ArgumentNullException.ThrowIfNull(dto, nameof(dto));
 
-            if (string.IsNullOrEmpty(dto.BackColour))
-            {
-                BackColour = Constants.DefaultBackColour;
-            }
-            else
-            {
-                BackColour = dto.BackColour;
-            }
-
-            if (string.IsNullOrEmpty(dto.ForeColour))
-            {
-                ForeColour = Constants.DefaultForeColour;
-            }
-            else
-            {
-                ForeColour = dto.ForeColour;
-            }
+            BackColour = string.IsNullOrEmpty(dto.BackColour) ? Constants.White : dto.BackColour;
+            ForeColour = string.IsNullOrEmpty(dto.ForeColour) ? Constants.Black : dto.ForeColour;
 
             Visible = dto.Visible;
         }

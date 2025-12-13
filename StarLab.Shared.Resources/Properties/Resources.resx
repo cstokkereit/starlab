@@ -407,4 +407,13 @@ Please enter a valid name.</value>
   <data name="MinorTickMarks" xml:space="preserve">
     <value>Minor Tick Marks</value>
   </data>
+  <data name="Grid" xml:space="preserve">
+    <value>Grid</value>
+  </data>
+  <data name="MajorGridLines" xml:space="preserve">
+    <value>Major Grid Lines</value>
+  </data>
+  <data name="MinorGridLines" xml:space="preserve">
+    <value>Minor Grid Lines</value>
+  </data>
 </root>

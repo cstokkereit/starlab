@@ -205,7 +205,16 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             CreateAxisSettingsGroups(Constants.AxisY1, axes, StringResources.AxisY1);
             CreateAxisSettingsGroups(Constants.AxisY2, axes, StringResources.AxisY2);
 
-            AddGroupManager(new PlotAreaSettingsGroupManager(View, View.AddNode(Constants.PlotArea, Constants.Chart, StringResources.PlotArea)));
+            var plotArea = View.AddNode(Constants.PlotArea, Constants.Chart, StringResources.PlotArea);
+
+            AddGroupManager(new PlotAreaSettingsGroupManager(View, plotArea));
+
+            var grid = View.AddNode(Constants.Grid, plotArea, StringResources.Grid);
+
+            AddGroupManager(new GridSettingsGroupManager(View, grid));
+
+            AddGroupManager(new GridLineSettingsGroupManager(View, View.AddNode(Constants.MinorGridLines, grid, StringResources.MinorGridLines)));
+            AddGroupManager(new GridLineSettingsGroupManager(View, View.AddNode(Constants.MajorGridLines, grid, StringResources.MajorGridLines)));
         }
 
         /// <summary>

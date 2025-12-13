@@ -13,7 +13,7 @@ namespace StarLab.Application.Workspace.Documents.Charts
         /// <param name="dto">A data transfer object that specifies the initial state of the <see cref="Axis"/>.</param>
         public Axis(AxisDTO dto) 
         {
-            ArgumentNullException.ThrowIfNull(nameof(dto));
+            ArgumentNullException.ThrowIfNull(dto, nameof(dto));
 
             Debug.Assert(dto.Label != null);
             Debug.Assert(dto.Scale != null);

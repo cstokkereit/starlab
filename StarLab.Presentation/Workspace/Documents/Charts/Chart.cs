@@ -1,4 +1,5 @@
 ﻿using StarLab.Application.Workspace.Documents.Charts;
+using System.Diagnostics;
 
 namespace StarLab.Presentation.Workspace.Documents.Charts
 {
@@ -15,10 +16,15 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         {
             ArgumentNullException.ThrowIfNull(dto, nameof(dto));
 
+            Debug.Assert(dto.PlotArea != null);
+
             BackColour = string.IsNullOrEmpty(dto.BackColour) ? Constants.White : dto.BackColour;
             ForeColour = string.IsNullOrEmpty(dto.ForeColour) ? Constants.Black : dto.ForeColour;
+
+            PlotArea = new PlotArea(dto.PlotArea);
             Title = new Label(dto.Title);
             Font = new Font(dto.Font);
+            
             X1 = new Axis(dto.X1);
             X2 = new Axis(dto.X2);
             Y1 = new Axis(dto.Y1);
@@ -39,6 +45,11 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// Gets the foreground colour.
         /// </summary>
         public string ForeColour { get; }
+
+        /// <summary>
+        /// Gets the plot area.
+        /// </summary>
+        public IPlotArea PlotArea { get; }
 
         /// <summary>
         /// Gets the chart title <see cref="Label"/>.

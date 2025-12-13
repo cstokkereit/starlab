@@ -424,6 +424,15 @@ namespace StarLab.Shared.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Grid.
+        /// </summary>
+        public static string Grid {
+            get {
+                return ResourceManager.GetString("Grid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Help.
         /// </summary>
         public static string Help {
@@ -469,11 +478,29 @@ namespace StarLab.Shared.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Major Grid Lines.
+        /// </summary>
+        public static string MajorGridLines {
+            get {
+                return ResourceManager.GetString("MajorGridLines", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Major Tick Marks.
         /// </summary>
         public static string MajorTickMarks {
             get {
                 return ResourceManager.GetString("MajorTickMarks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Minor Grid Lines.
+        /// </summary>
+        public static string MinorGridLines {
+            get {
+                return ResourceManager.GetString("MinorGridLines", resourceCulture);
             }
         }
         

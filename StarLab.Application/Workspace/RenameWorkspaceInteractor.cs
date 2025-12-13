@@ -29,7 +29,7 @@ namespace StarLab.Application.Workspace
         /// <param name="name">The new workspace name.</param>
         public void Execute(WorkspaceDTO dto, string name)
         {
-            ArgumentNullException.ThrowIfNull(nameof(dto));
+            ArgumentNullException.ThrowIfNull(dto, nameof(dto));
 
             var filename = dto.FileName;
 

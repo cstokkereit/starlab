@@ -23,8 +23,8 @@ namespace StarLab.Application.Workspace.Documents.Charts
         /// <param name="dtoChart">A <see cref="ChartDTO"/> that specifies the current state of the chart.</param>
         public void Execute(WorkspaceDTO dtoWorkspace, string id, ChartDTO dtoChart)
         {
-            ArgumentNullException.ThrowIfNull(nameof(dtoWorkspace));
-            ArgumentNullException.ThrowIfNull(nameof(dtoChart));
+            ArgumentNullException.ThrowIfNull(dtoWorkspace, nameof(dtoWorkspace));
+            ArgumentNullException.ThrowIfNull(dtoChart, nameof(dtoChart));
 
             var workspace = new Workspace(dtoWorkspace);
 

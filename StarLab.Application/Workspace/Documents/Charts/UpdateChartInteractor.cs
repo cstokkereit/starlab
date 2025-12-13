@@ -21,7 +21,7 @@ namespace StarLab.Application.Workspace.Documents.Charts
         /// <param name="dto">A <see cref="ChartDTO"/> that specifies the current state of the chart.</param>
         public void Execute(ChartDTO dto)
         {
-            ArgumentNullException.ThrowIfNull(nameof(dto));
+            ArgumentNullException.ThrowIfNull(dto, nameof(dto));
 
             OutputPort.UpdateChart(dto);
         }

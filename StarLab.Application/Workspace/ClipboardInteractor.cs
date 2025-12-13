@@ -31,7 +31,7 @@ namespace StarLab.Application.Workspace
         /// <param name="key">The key that identifies the target of the current cut, copy or paste operation.</param>
         public void Execute(WorkspaceDTO dto, string key)
         {
-            ArgumentNullException.ThrowIfNull(nameof(dto));
+            ArgumentNullException.ThrowIfNull(dto, nameof(dto));
 
             var workspace = new Workspace(dto);
 

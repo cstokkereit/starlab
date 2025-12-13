@@ -35,8 +35,14 @@ namespace StarLab.Presentation
             CreateMap<IFolder, FolderDTO>().ForMember(dest => dest.Path, opt => opt.MapFrom(src => src.Key));
             CreateMap<IFont, FontDTO>();
             CreateMap<IFontSettings, FontDTO>();
+            CreateMap<IGrid, GridDTO>();
+            CreateMap<IGridLines, GridLinesDTO>();
+            CreateMap<IGridLineSettings, GridLinesDTO>();
+            CreateMap<IGridSettings, GridDTO>();
             CreateMap<ILabel, LabelDTO>();
             CreateMap<ILabelSettings, LabelDTO>();
+            CreateMap<IPlotArea, PlotAreaDTO>();
+            CreateMap<IPlotAreaSettings, PlotAreaDTO>();
             CreateMap<IProject, ProjectDTO>();
             CreateMap<IScale, ScaleDTO>();
             CreateMap<IScaleSettings, ScaleDTO>();

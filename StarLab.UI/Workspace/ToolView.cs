@@ -71,7 +71,7 @@ namespace StarLab.UI.Workspace
         /// <param name="childView">The <see cref="IChildView"/> to attach.</param>
         public void Attach(IChildView childView)
         {
-            ArgumentNullException.ThrowIfNull(nameof(childView));
+            ArgumentNullException.ThrowIfNull(childView, nameof(childView));
 
             Debug.Assert(childView.Controller != null);
 

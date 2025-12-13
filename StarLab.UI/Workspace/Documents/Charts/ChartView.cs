@@ -225,11 +225,31 @@ namespace StarLab.UI.Workspace.Documents.Charts
         private void ConfigurePlotArea(Plot chart, IChart config)
         {
             chart.DataBackground.Color = GetColour(config.BackColour); // Should be plot area background colour
-            
-            chart.Grid.XAxisStyle.IsVisible = false;
-            chart.Grid.YAxisStyle.IsVisible = false;
 
-            //plot.Grid.MajorLineColor = foreColour;
+            var majorGridLines = config.PlotArea.Grid.MajorGridLines;
+            var minorGridLines = config.PlotArea.Grid.MinorGridLines;
+
+            var grid = chart.Grid;
+
+            if (config.PlotArea.Grid.Visible)
+            {
+                chart.ShowGrid();
+
+                grid.MajorLineWidth = majorGridLines.Visible ? 2 : 0;
+
+                grid.MajorLineColor = GetColour(majorGridLines.ForeColour).WithOpacity(0.3);
+
+
+
+                grid.MinorLineWidth = minorGridLines.Visible ? 2 : 0;
+
+                grid.MinorLineColor = GetColour(minorGridLines.ForeColour).WithOpacity(0.1);
+
+            }
+            else
+            {
+                chart.HideGrid();
+            }
         }
 
         /// <summary>

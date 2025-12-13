@@ -44,6 +44,10 @@
         public const string ChartAxisY2MinorTickMarks = $"{Chart}/{Axes}/{AxisY2}/{Scale}/{MinorTickMarks}";
         public const string ChartAxisY2Scale = $"{Chart}/{Axes}/{AxisY2}/{Scale}";
         public const string ChartAxisY2TickLabels = $"{Chart}/{Axes}/{AxisY2}/{Scale}/{TickLabels}";
+        public const string ChartPlotArea = $"{Chart}/{PlotArea}";
+        public const string ChartPlotAreaGrid = $"{Chart}/{PlotArea}/{Grid}";
+        public const string ChartPlotAreaMajorGridLines = $"{Chart}/{PlotArea}/{Grid}/{MajorGridLines}";
+        public const string ChartPlotAreaMinorGridLines = $"{Chart}/{PlotArea}/{Grid}/{MinorGridLines}";
         public const string ChartSettings = "ChartSettings";
         public const string ChartTitle = $"{Chart}/{Title}";
         public const string CollapseAll = "CollapseAll";
@@ -74,6 +78,8 @@
         public const string FileSaveAll = "FileSaveAll";
         public const string Folder = "Folder";
 
+        public const string Grid = "Grid";
+
         public const string Help = "Help";
         public const string HelpAbout = "HelpAbout";
         public const string HelpView = "HelpView";
@@ -87,7 +93,9 @@
         public const string LabelY1 = $"{AxisY1}.{Label}";
         public const string LabelY2 = $"{AxisY2}.{Label}";
 
+        public const string MajorGridLines = "MajorGridLines";
         public const string MajorTickMarks = "MajorTickMarks";
+        public const string MinorGridLines = "MinorGridLines";
         public const string MinorTickMarks = "MinorTickMarks";
 
         public const string Open = "Open";

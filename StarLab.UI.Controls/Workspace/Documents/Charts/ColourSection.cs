@@ -119,6 +119,10 @@ namespace StarLab.UI.Controls.Workspace.Documents.Charts
                 settingsByGroup.Add(Constants.ChartAxisY2MinorTickMarks, settings.Axes.Y2.Scale.MinorTickMarks);
                 settingsByGroup.Add(Constants.ChartAxisY2Scale, settings.Axes.Y2.Scale);
                 settingsByGroup.Add(Constants.ChartAxisY2TickLabels, settings.Axes.Y2.Scale.TickLabels);
+                settingsByGroup.Add(Constants.ChartPlotArea, settings.PlotArea);
+                settingsByGroup.Add(Constants.ChartPlotAreaGrid, settings.PlotArea.Grid);
+                settingsByGroup.Add(Constants.ChartPlotAreaMajorGridLines, settings.PlotArea.Grid.MajorGridLines);
+                settingsByGroup.Add(Constants.ChartPlotAreaMinorGridLines, settings.PlotArea.Grid.MinorGridLines);
                 settingsByGroup.Add(Constants.ChartTitle, settings.Title);
             }
 

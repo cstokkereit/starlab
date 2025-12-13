@@ -18,8 +18,8 @@ namespace StarLab.Application.Workspace
         /// <param name="parent">The <see cref="IFolder"/> that contains the <see cref="Project"/></param>
         public Project(ProjectDTO dto, IFolder parent)
         {
-            ArgumentNullException.ThrowIfNull(nameof(parent));
-            ArgumentNullException.ThrowIfNull(nameof(dto));
+            ArgumentNullException.ThrowIfNull(parent, nameof(parent));
+            ArgumentNullException.ThrowIfNull(dto, nameof(dto));
 
             folder = new Folder(dto.Name, dto.Expanded, parent);
 

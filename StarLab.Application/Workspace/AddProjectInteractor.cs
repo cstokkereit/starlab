@@ -23,8 +23,8 @@ namespace StarLab.Application.Workspace
         /// <param name="dtoProject">A <see cref="ProjectDTO"/> that defines the project being added.</param>
         public void Execute(WorkspaceDTO dtoWorkspace, ProjectDTO dtoProject)
         {
-            ArgumentNullException.ThrowIfNull(nameof(dtoWorkspace));
-            ArgumentNullException.ThrowIfNull(nameof(dtoProject));
+            ArgumentNullException.ThrowIfNull(dtoWorkspace, nameof(dtoWorkspace));
+            ArgumentNullException.ThrowIfNull(dtoProject, nameof(dtoProject));
 
             var workspace = new Workspace(dtoWorkspace);
 

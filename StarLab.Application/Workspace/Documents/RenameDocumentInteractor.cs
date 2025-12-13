@@ -24,7 +24,7 @@ namespace StarLab.Application.Workspace.Documents
         /// <param name="name">The new document name.</param>
         public void Execute(WorkspaceDTO dto, string id, string name)
         {
-            ArgumentNullException.ThrowIfNull(nameof(dto));
+            ArgumentNullException.ThrowIfNull(dto, nameof(dto));
 
             if (WorkspaceInteractionHelper.IsValid(name))
             {

@@ -26,7 +26,7 @@ namespace StarLab.Application.Workspace
         /// <param name="key">The key that identifies the folder being deleted.</param>
         public void Execute(WorkspaceDTO dto, string key)
         {
-            ArgumentNullException.ThrowIfNull(nameof(dto));
+            ArgumentNullException.ThrowIfNull(dto, nameof(dto));
 
             dto.ActiveDocument = string.Empty;
 

@@ -18,6 +18,9 @@ namespace StarLab.Serialisation.Workspace.Documents.Charts
         public string? ForeColour;
 
         [XmlElement]
+        public PlotArea? PlotArea;
+
+        [XmlElement]
         public Label? Title;
 
         [XmlElement]

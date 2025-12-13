@@ -20,6 +20,12 @@
             <Title backColour="Black" foreColour="Green" text="HR-Diagram 1" visible="true">
               <Font bold="true" family="Segoe UI" italic="false" size="20" underline="false" />
             </Title>
+            <PlotArea backColour="Black" foreColour="Green">
+              <Grid backColour="Black" foreColour="Green" visible="true">
+                <MajorGridLines backColour="Black" foreColour="Green" visible="true" />
+                <MinorGridLines backColour="Black" foreColour="Green" visible="true" />
+              </Grid>
+            </PlotArea>
             <X1 backColour="Black" foreColour="Green" visible="true">
               <Label backColour="Black" foreColour="Green" text="Colour Index (B-V)" visible="true">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
@@ -76,6 +82,12 @@
             <Title backColour="Black" foreColour="Green" text="HR-Diagram 2" visible="true">
               <Font bold="true" family="Segoe UI" italic="false" size="20" underline="false" />
             </Title>
+            <PlotArea backColour="Black" foreColour="Green">
+              <Grid backColour="Black" foreColour="Green" visible="true">
+                <MajorGridLines backColour="Black" foreColour="Green" visible="true" />
+                <MinorGridLines backColour="Black" foreColour="Green" visible="true" />
+              </Grid>
+            </PlotArea>
             <X1 backColour="Black" foreColour="Green" visible="true">
               <Label backColour="Black" foreColour="Green" text="Colour Index (B-V)" visible="true">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
@@ -132,6 +144,12 @@
             <Title backColour="Black" foreColour="Green" text="HR-Diagram 3" visible="true">
               <Font bold="true" family="Segoe UI" italic="false" size="20" underline="false" />
             </Title>
+            <PlotArea backColour="Black" foreColour="Green">
+              <Grid backColour="Black" foreColour="Green" visible="true">
+                <MajorGridLines backColour="Black" foreColour="Green" visible="true" />
+                <MinorGridLines backColour="Black" foreColour="Green" visible="true" />
+              </Grid>
+            </PlotArea>
             <X1 backColour="Black" foreColour="Green" visible="true">
               <Label backColour="Black" foreColour="Green" text="Colour Index (B-V)" visible="true">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />

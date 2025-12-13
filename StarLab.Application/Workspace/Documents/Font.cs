@@ -11,7 +11,7 @@
         /// <param name="dto">A data transfer object that specifies the initial state of the <see cref="Font"/>.</param>
         public Font(FontDTO dto)
         {
-            ArgumentNullException.ThrowIfNull(nameof(dto));
+            ArgumentNullException.ThrowIfNull(dto, nameof(dto));
 
             if (string.IsNullOrEmpty(dto.Family))
             {

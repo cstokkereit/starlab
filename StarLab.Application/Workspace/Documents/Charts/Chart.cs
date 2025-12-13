@@ -13,7 +13,7 @@ namespace StarLab.Application.Workspace.Documents.Charts
         /// <param name="dto">A data transfer object that specifies the initial state of the <see cref="Chart"/>.</param>
         public Chart(ChartDTO dto)
         {
-            ArgumentNullException.ThrowIfNull(nameof(dto));
+            ArgumentNullException.ThrowIfNull(dto, nameof(dto));
 
             Debug.Assert(dto.PlotArea != null);
             Debug.Assert(dto.Title != null);

@@ -14,6 +14,7 @@
         public ChartSettings(IChart chart)
         {
             Axes = new AxesSettings(chart.X1, chart.X2, chart.Y1, chart.Y2);
+            PlotArea = new PlotAreaSettings(chart.PlotArea);
             Title = new LabelSettings(chart.Title);
 
             fontSettings = new FontSettings(chart.Font);
@@ -71,6 +72,11 @@
                 Axes.ForeColour = value;
             }
         }
+
+        /// <summary>
+        /// Gets the plot area settings.
+        /// </summary>
+        public IPlotAreaSettings PlotArea { get; }
 
         /// <summary>
         /// Gets the chart title.

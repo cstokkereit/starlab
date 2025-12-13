@@ -23,7 +23,7 @@ namespace StarLab.Application.Workspace
         /// <param name="key">The key that identifies the parent folder of the folder being created.</param>
         public void Execute(WorkspaceDTO dto, string key)
         {
-            ArgumentNullException.ThrowIfNull(nameof(dto));
+            ArgumentNullException.ThrowIfNull(dto, nameof(dto));
 
             var workspace = new Workspace(dto);
             var parent = workspace.GetFolder(key);

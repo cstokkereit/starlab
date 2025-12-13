@@ -21,6 +21,11 @@
         string ForeColour { get; }
 
         /// <summary>
+        /// Gets the plot area.
+        /// </summary>
+        IPlotArea PlotArea { get; }
+
+        /// <summary>
         /// Gets the chart title label.
         /// </summary>
         ILabel Title { get; }

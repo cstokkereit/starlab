@@ -28,7 +28,7 @@ namespace StarLab.Application.Workspace
         /// <param name="dto">A <see cref="WorkspaceDTO"/> that specifies the current state of the workspace.</param>
         public void Execute(WorkspaceDTO dto)
         {
-            ArgumentNullException.ThrowIfNull(nameof(dto));
+            ArgumentNullException.ThrowIfNull(dto, nameof(dto));
 
             try
             {

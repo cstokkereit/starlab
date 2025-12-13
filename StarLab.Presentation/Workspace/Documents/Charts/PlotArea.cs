@@ -1,11 +1,12 @@
-﻿using System.Diagnostics;
+﻿using StarLab.Application.Workspace.Documents.Charts;
+using System.Diagnostics;
 
-namespace StarLab.Application.Workspace.Documents.Charts
+namespace StarLab.Presentation.Workspace.Documents.Charts
 {
     /// <summary>
-    /// Domain model representation of the chart plot area.
+    /// View model representation of the chart plot area.
     /// </summary>
-    internal class PlotArea
+    internal class PlotArea : IPlotArea
     {
         /// <summary>
         /// Initialises a new instance of the <see cref="PlotArea"> class.
@@ -17,23 +18,8 @@ namespace StarLab.Application.Workspace.Documents.Charts
 
             Debug.Assert(dto.Grid != null);
 
-            if (string.IsNullOrEmpty(dto.BackColour))
-            {
-                BackColour = Constants.DefaultBackColour;
-            }
-            else
-            {
-                BackColour = dto.BackColour;
-            }
-
-            if (string.IsNullOrEmpty(dto.ForeColour))
-            {
-                ForeColour = Constants.DefaultForeColour;
-            }
-            else
-            {
-                ForeColour = dto.ForeColour;
-            }
+            BackColour = string.IsNullOrEmpty(dto.BackColour) ? Constants.White : dto.BackColour;
+            ForeColour = string.IsNullOrEmpty(dto.ForeColour) ? Constants.Black : dto.ForeColour;
 
             Grid = new Grid(dto.Grid);
         }
@@ -51,6 +37,6 @@ namespace StarLab.Application.Workspace.Documents.Charts
         /// <summary>
         /// Gets the chart grid.
         /// </summary>
-        public Grid Grid { get; }
+        public IGrid Grid { get; }
     }
 }
