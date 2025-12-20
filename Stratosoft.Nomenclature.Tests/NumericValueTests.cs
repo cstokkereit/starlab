@@ -1,52 +1,45 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Stratosoft.Nomenclature.Tests
+﻿namespace Stratosoft.Nomenclature.Tests
 {
-    [TestClass]
     public  class NumericValueTests
     {
-        [TestMethod]
+        [Test]
         public void TestCreateNumericValueFromDouble()
         {
             var value = new NumericValue(1.20);
 
-            Assert.IsNotNull(value);
+            Assert.That(value, Is.Not.Null);
         }
 
-        [TestMethod]
+        [Test]
         public void TestCreateNumericValueFromInteger()
         {
             var value = new NumericValue(120);
 
-            Assert.IsNotNull(value);
+            Assert.That(value, Is.Not.Null);
         }
 
-        [TestMethod]
+        [Test]
         public void TestToStringForZeroValue()
         {
             var value = new NumericValue(0);
 
-            Assert.AreEqual("0", value.ToString());
+            Assert.That(value.ToString(), Is.EqualTo("0"));
         }
 
-        [TestMethod]
+        [Test]
         public void TestToStringForDoubleValue()
         {
             var value = new NumericValue(3.14159);
 
-            Assert.AreEqual("3.14159", value.ToString());
+            Assert.That(value.ToString(), Is.EqualTo("3.14159"));
         }
 
-        [TestMethod]
+        [Test]
         public void TestToStringForIntegerValue()
         {
             var value = new NumericValue(1024);
 
-            Assert.AreEqual("1024", value.ToString());
+            Assert.That(value.ToString(), Is.EqualTo("1024"));
         }
     }
 }

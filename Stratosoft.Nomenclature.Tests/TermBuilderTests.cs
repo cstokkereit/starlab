@@ -1,16 +1,15 @@
 ﻿namespace Stratosoft.Nomenclature.Tests
 {
-    [TestClass]
     public class TermBuilderTests
     {
-        [TestMethod]
+        [Test]
         public void TestConstructor()
         {
             TermBuilder builder = new TermBuilder();
-            Assert.IsNotNull(builder);
+            Assert.That(builder, Is.Not.Null);
         }
 
-        [TestMethod]
+        [Test]
         public void TestAddProperties()
         {
             List<Property> properties = new List<Property>();
@@ -21,106 +20,96 @@
 
             Term term = new TermBuilder().AddProperties(properties).CreateTerm("Test");
 
-            Assert.IsNotNull(term);
-            Assert.IsNotNull(term.ID);
-            Assert.AreEqual("Test", term.Name);
-            Assert.AreEqual(string.Empty, term.Description);
+            Assert.That(term, Is.Not.Null);
+            Assert.That(term.Name, Is.EqualTo("Test"));
+            Assert.That(term.Description, Is.EqualTo(string.Empty));
 
-            Assert.IsNotNull(term.Properties);
-            Assert.AreEqual(3, term.Properties.Count);
+            Assert.That(term.Properties, Is.Not.Null);
+            Assert.That(term.Properties.Count, Is.EqualTo(3));
 
             Property property1 = term["Property-1"];
 
-            Assert.IsNotNull(property1);
-            Assert.IsNotNull(property1.ID);
-            Assert.AreEqual("Property-1", property1.Name);
-            Assert.AreEqual("This is a test property", property1.Description);
-            Assert.AreEqual(term.ID, property1.TermID);
+            Assert.That(property1, Is.Not.Null);
+            Assert.That(property1.Name, Is.EqualTo("Property-1"));
+            Assert.That(property1.Description, Is.EqualTo("This is a test property"));
+            Assert.That(property1.TermID, Is.EqualTo(term.ID));
 
             Property property2 = term["Property-2"];
 
-            Assert.IsNotNull(property2);
-            Assert.IsNotNull(property2.ID);
-            Assert.AreEqual("Property-2", property2.Name);
-            Assert.AreEqual("This is a test property", property2.Description);
-            Assert.AreEqual(term.ID, property2.TermID);
+            Assert.That(property2, Is.Not.Null);
+            Assert.That(property2.Name, Is.EqualTo("Property-2"));
+            Assert.That(property2.Description, Is.EqualTo("This is a test property"));
+            Assert.That(property2.TermID, Is.EqualTo(term.ID));
 
             Property property3 = term["Property-3"];
 
-            Assert.IsNotNull(property3);
-            Assert.IsNotNull(property3.ID);
-            Assert.AreEqual("Property-3", property3.Name);
-            Assert.AreEqual("This is a test property", property3.Description);
-            Assert.AreEqual(term.ID, property3.TermID);
+            Assert.That(property3, Is.Not.Null);
+            Assert.That(property3.Name, Is.EqualTo("Property-3"));
+            Assert.That(property3.Description, Is.EqualTo("This is a test property"));
+            Assert.That(property3.TermID, Is.EqualTo(term.ID));
         }
 
-        [TestMethod]
+        [Test]
         public void TestAddProperty()
         {
             Term term = new TermBuilder().AddProperty(new Property("Property-1", "This is a test property")).CreateTerm("Test");
 
-            Assert.IsNotNull(term);
-            Assert.IsNotNull(term.ID);
-            Assert.AreEqual("Test", term.Name);
-            Assert.AreEqual(string.Empty, term.Description);
+            Assert.That(term, Is.Not.Null);
+            Assert.That(term.Name, Is.EqualTo("Test"));
+            Assert.That(term.Description, Is.EqualTo(string.Empty));
 
-            Assert.IsNotNull(term.Properties);
-            Assert.AreEqual(1, term.Properties.Count);
+            Assert.That(term.Properties, Is.Not.Null);
+            Assert.That(term.Properties.Count, Is.EqualTo(1));
 
             Property property = term["Property-1"];
 
-            Assert.IsNotNull(property);
-            Assert.IsNotNull(property.ID);
-            Assert.AreEqual("Property-1", property.Name);
-            Assert.AreEqual("This is a test property", property.Description);
-            Assert.AreEqual(term.ID, property.TermID);
+            Assert.That(property, Is.Not.Null);
+            Assert.That(property.Name, Is.EqualTo("Property-1"));
+            Assert.That(property.Description, Is.EqualTo("This is a test property"));
+            Assert.That(property.TermID, Is.EqualTo(term.ID));
         }
 
-        [TestMethod]
+        [Test]
         public void TestAddPropertyWithNameAndDescription()
         {
             Term term = new TermBuilder().AddProperty("Property-1", "This is a test property").CreateTerm("Test");
 
-            Assert.IsNotNull(term);
-            Assert.IsNotNull(term.ID);
-            Assert.AreEqual("Test", term.Name);
-            Assert.AreEqual(string.Empty, term.Description);
+            Assert.That(term, Is.Not.Null);
+            Assert.That(term.Name, Is.EqualTo("Test"));
+            Assert.That(term.Description, Is.EqualTo(string.Empty));
 
-            Assert.IsNotNull(term.Properties);
-            Assert.AreEqual(1, term.Properties.Count);
+            Assert.That(term.Properties, Is.Not.Null);
+            Assert.That(term.Properties.Count, Is.EqualTo(1));
 
             Property property = term["Property-1"];
 
-            Assert.IsNotNull(property);
-            Assert.IsNotNull(property.ID);
-            Assert.AreEqual("Property-1", property.Name);
-            Assert.AreEqual("This is a test property", property.Description);
-            Assert.AreEqual(term.ID, property.TermID);
+            Assert.That(property, Is.Not.Null);
+            Assert.That(property.Name, Is.EqualTo("Property-1"));
+            Assert.That(property.Description, Is.EqualTo("This is a test property"));
+            Assert.That(property.TermID, Is.EqualTo(term.ID));
         }
 
-        [TestMethod]
+        [Test]
         public void TestAddPropertyWithNameOnly()
         {
             Term term = new TermBuilder().AddProperty("Property-1").CreateTerm("Test");
 
-            Assert.IsNotNull(term);
-            Assert.IsNotNull(term.ID);
-            Assert.AreEqual("Test", term.Name);
-            Assert.AreEqual(string.Empty, term.Description);
+            Assert.That(term, Is.Not.Null);
+            Assert.That(term.Name, Is.EqualTo("Test"));
+            Assert.That(term.Description, Is.EqualTo(string.Empty));
 
-            Assert.IsNotNull(term.Properties);
-            Assert.AreEqual(1, term.Properties.Count);
+            Assert.That(term.Properties, Is.Not.Null);
+            Assert.That(term.Properties.Count, Is.EqualTo(1));
 
             Property property = term["Property-1"];
 
-            Assert.IsNotNull(property);
-            Assert.IsNotNull(property.ID);
-            Assert.AreEqual("Property-1", property.Name);
-            Assert.AreEqual(string.Empty, property.Description);
-            Assert.AreEqual(term.ID, property.TermID);
+            Assert.That(property, Is.Not.Null);
+            Assert.That(property.Name, Is.EqualTo("Property-1"));
+            Assert.That(property.Description, Is.EqualTo(string.Empty));
+            Assert.That(property.TermID, Is.EqualTo(term.ID));
         }
 
-        [TestMethod]
+        [Test]
         public void TestCreateTermClearsStoredProperties()
         {
             TermBuilder builder = new TermBuilder();
@@ -130,29 +119,27 @@
                                .AddProperty("Property-3")
                                .CreateTerm("Term-1", "This is a test term");
 
-            Assert.IsNotNull(term);
+            Assert.That(term, Is.Not.Null);
 
             term = builder.AddProperty("Property-4")
                           .CreateTerm("Term-2", "This is a test term");
 
-            Assert.IsNotNull(term);
-            Assert.IsNotNull(term.ID);
-            Assert.AreEqual("Term-2", term.Name);
-            Assert.AreEqual("This is a test term", term.Description);
+            Assert.That(term, Is.Not.Null);
+            Assert.That(term.Name, Is.EqualTo("Term-2"));
+            Assert.That(term.Description, Is.EqualTo("This is a test term"));
 
-            Assert.IsNotNull(term.Properties);
-            Assert.AreEqual(1, term.Properties.Count);
+            Assert.That(term.Properties, Is.Not.Null);
+            Assert.That(term.Properties.Count, Is.EqualTo(1));
 
             Property property = term["Property-4"];
 
-            Assert.IsNotNull(property);
-            Assert.IsNotNull(property.ID);
-            Assert.AreEqual("Property-4", property.Name);
-            Assert.AreEqual(string.Empty, property.Description);
-            Assert.AreEqual(term.ID, property.TermID);
+            Assert.That(property, Is.Not.Null);
+            Assert.That(property.Name, Is.EqualTo("Property-4"));
+            Assert.That(property.Description, Is.EqualTo(string.Empty));
+            Assert.That(property.TermID, Is.EqualTo(term.ID));
         }
 
-        [TestMethod]
+        [Test]
         public void TestCreateTermWithMultipleProperties()
         {
             Term term = new TermBuilder()
@@ -161,65 +148,59 @@
                 .AddProperty("Property-3", "This is a test property")
                 .CreateTerm("Test");
 
-            Assert.IsNotNull(term);
-            Assert.IsNotNull(term.ID);
-            Assert.AreEqual("Test", term.Name);
-            Assert.AreEqual(string.Empty, term.Description);
+            Assert.That(term, Is.Not.Null);
+            Assert.That(term.Name, Is.EqualTo("Test"));
+            Assert.That(term.Description, Is.EqualTo(string.Empty));
 
-            Assert.IsNotNull(term.Properties);
-            Assert.AreEqual(3, term.Properties.Count);
+            Assert.That(term.Properties, Is.Not.Null);
+            Assert.That(term.Properties.Count, Is.EqualTo(3));
 
             Property property1 = term["Property-1"];
 
-            Assert.IsNotNull(property1);
-            Assert.IsNotNull(property1.ID);
-            Assert.AreEqual("Property-1", property1.Name);
-            Assert.AreEqual("This is a test property", property1.Description);
-            Assert.AreEqual(term.ID, property1.TermID);
+            Assert.That(property1, Is.Not.Null);
+            Assert.That(property1.Name, Is.EqualTo("Property-1"));
+            Assert.That(property1.Description, Is.EqualTo("This is a test property"));
+            Assert.That(property1.TermID, Is.EqualTo(term.ID));
 
             Property property2 = term["Property-2"];
 
-            Assert.IsNotNull(property2);
-            Assert.IsNotNull(property2.ID);
-            Assert.AreEqual("Property-2", property2.Name);
-            Assert.AreEqual("This is a test property", property2.Description);
-            Assert.AreEqual(term.ID, property2.TermID);
+            Assert.That(property2, Is.Not.Null);
+            Assert.That(property2.Name, Is.EqualTo("Property-2"));
+            Assert.That(property2.Description, Is.EqualTo("This is a test property"));
+            Assert.That(property2.TermID, Is.EqualTo(term.ID));
 
             Property property3 = term["Property-3"];
 
-            Assert.IsNotNull(property3);
-            Assert.IsNotNull(property3.ID);
-            Assert.AreEqual("Property-3", property3.Name);
-            Assert.AreEqual("This is a test property", property3.Description);
-            Assert.AreEqual(term.ID, property3.TermID);
+            Assert.That(property3, Is.Not.Null);
+            Assert.That(property3.Name, Is.EqualTo("Property-3"));
+            Assert.That(property3.Description, Is.EqualTo("This is a test property"));
+            Assert.That(property3.TermID, Is.EqualTo(term.ID));
         }
 
-        [TestMethod]
+        [Test]
         public void TestCreateTermWithNameAndDescription()
         {
             Term term = new TermBuilder().CreateTerm("Test", "This is a test term");
 
-            Assert.IsNotNull(term);
-            Assert.IsNotNull(term.ID);
-            Assert.AreEqual("Test", term.Name);
-            Assert.AreEqual("This is a test term", term.Description);
+            Assert.That(term, Is.Not.Null);
+            Assert.That(term.Name, Is.EqualTo("Test"));
+            Assert.That(term.Description, Is.EqualTo("This is a test term"));
 
-            Assert.IsNotNull(term.Properties);
-            Assert.AreEqual(0, term.Properties.Count);
+            Assert.That(term.Properties, Is.Not.Null);
+            Assert.That(term.Properties.Count, Is.EqualTo(0));
         }
 
-        [TestMethod]
+        [Test]
         public void TestCreateTermWithNameOnly()
         {
             Term term = new TermBuilder().CreateTerm("Test");
 
-            Assert.IsNotNull(term);
-            Assert.IsNotNull(term.ID);
-            Assert.AreEqual("Test", term.Name);
-            Assert.AreEqual(string.Empty, term.Description);
+            Assert.That(term, Is.Not.Null);
+            Assert.That(term.Name, Is.EqualTo("Test"));
+            Assert.That(term.Description, Is.EqualTo(string.Empty));
 
-            Assert.IsNotNull(term.Properties);
-            Assert.AreEqual(0, term.Properties.Count);
+            Assert.That(term.Properties, Is.Not.Null);
+            Assert.That(term.Properties.Count, Is.EqualTo(0));
         }
     }
 }

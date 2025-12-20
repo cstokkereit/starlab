@@ -1,6 +1,6 @@
 ﻿//using StarLab.Domain;
 
-//namespace StarLba.Domain
+//namespace StarLab.Domain
 //{
 //    public class SpectralTypeTests
 //    {

@@ -1,16 +1,17 @@
-﻿namespace Stratosoft.Nomenclature.Tests
+﻿using System.Linq;
+
+namespace Stratosoft.Nomenclature.Tests
 {
-    [TestClass]
     public class NomenclatureBuilderTests
     {
-        [TestMethod]
+        [Test]
         public void TestConstructor()
         {
             NomenclatureBuilder builder = new NomenclatureBuilder();
-            Assert.IsNotNull(builder);
+            Assert.That(builder, Is.Not.Null);
         }
 
-        [TestMethod]
+        [Test]
         public void TestAddTerms()
         {
             List<Term> terms = new List<Term>();
@@ -21,64 +22,58 @@
 
             Nomenclature nomenclature = new NomenclatureBuilder().AddTerms(terms).CreateNomenclature("Test");
 
-            Assert.IsNotNull(nomenclature);
-            Assert.IsNotNull(nomenclature.ID);
-            Assert.AreEqual("Test", nomenclature.Name);
-            Assert.AreEqual(string.Empty, nomenclature.Description);
+            Assert.That(nomenclature, Is.Not.Null);
+            Assert.That(nomenclature.Name, Is.EqualTo("Test"));
+            Assert.That(nomenclature.Description, Is.EqualTo(string.Empty));
 
-            Assert.IsNotNull(nomenclature.Terms);
-            Assert.AreEqual(3, nomenclature.Terms.Count);
+            Assert.That(nomenclature.Terms, Is.Not.Null);
+            Assert.That(nomenclature.Terms.Count, Is.EqualTo(3));
 
             Term term1 = nomenclature.Terms["Term-1"];
 
-            Assert.IsNotNull(term1);
-            Assert.IsNotNull(term1.ID);
-            Assert.AreEqual("Term-1", term1.Name);
-            Assert.AreEqual("This is a test term", term1.Description);
-            Assert.AreEqual(nomenclature.ID, term1.NomenclatureID);
+            Assert.That(term1, Is.Not.Null);
+            Assert.That(term1.Name, Is.EqualTo("Term-1"));
+            Assert.That(term1.Description, Is.EqualTo("This is a test term"));
+            Assert.That(term1.NomenclatureID, Is.EqualTo(nomenclature.ID));
 
             Term term2 = nomenclature.Terms["Term-2"];
 
-            Assert.IsNotNull(term2);
-            Assert.IsNotNull(term2.ID);
-            Assert.AreEqual("Term-2", term2.Name);
-            Assert.AreEqual("This is a test term", term2.Description);
-            Assert.AreEqual(nomenclature.ID, term2.NomenclatureID);
+            Assert.That(term2, Is.Not.Null);
+            Assert.That(term2.Name, Is.EqualTo("Term-2"));
+            Assert.That(term2.Description, Is.EqualTo("This is a test term"));
+            Assert.That(term2.NomenclatureID, Is.EqualTo(nomenclature.ID));
 
             Term term3 = nomenclature.Terms["Term-3"];
 
-            Assert.IsNotNull(term3);
-            Assert.IsNotNull(term3.ID);
-            Assert.AreEqual("Term-3", term3.Name);
-            Assert.AreEqual("This is a test term", term3.Description);
-            Assert.AreEqual(nomenclature.ID, term3.NomenclatureID);
+            Assert.That(term3, Is.Not.Null);
+            Assert.That(term3.Name, Is.EqualTo("Term-3"));
+            Assert.That(term3.Description, Is.EqualTo("This is a test term"));
+            Assert.That(term3.NomenclatureID, Is.EqualTo(nomenclature.ID));
         }
 
-        [TestMethod]
+        [Test]
         public void TestAddTerm()
         {
             Nomenclature nomenclature = new NomenclatureBuilder().AddTerm(new TermBuilder().CreateTerm("Term")).CreateNomenclature("Test");
 
-            Assert.IsNotNull(nomenclature);
-            Assert.IsNotNull(nomenclature.ID);
-            Assert.AreEqual("Test", nomenclature.Name);
-            Assert.AreEqual(string.Empty, nomenclature.Description);
+            Assert.That(nomenclature, Is.Not.Null);
+            Assert.That(nomenclature.Name, Is.EqualTo("Test"));
+            Assert.That(nomenclature.Description, Is.EqualTo(string.Empty));
 
             IReadOnlyDictionary<string, Term> terms = nomenclature.Terms;
 
-            Assert.IsNotNull(terms);
-            Assert.AreEqual(1, terms.Count);
+            Assert.That(terms, Is.Not.Null);
+            Assert.That(terms.Count, Is.EqualTo(1));
 
             Term term = terms["Term"];
 
-            Assert.IsNotNull(term);
-            Assert.IsNotNull(term.ID);
-            Assert.AreEqual("Term", term.Name);
-            Assert.AreEqual(string.Empty, term.Description);
-            Assert.AreEqual(nomenclature.ID, term.NomenclatureID);
+            Assert.That(term, Is.Not.Null);
+            Assert.That(term.Name, Is.EqualTo("Term"));
+            Assert.That(term.Description, Is.EqualTo(string.Empty));
+            Assert.That(term.NomenclatureID, Is.EqualTo(nomenclature.ID));
         }
 
-        [TestMethod]
+        [Test]
         public void TestCreateDictionaryClearsStoredTerms()
         {
             NomenclatureBuilder dictionaryBuilder = new NomenclatureBuilder();
@@ -89,43 +84,40 @@
                                                      .AddTerm(termBuilder.CreateTerm("Term-3"))
                                                      .CreateNomenclature("Nomenclature-1", "This is a test nomenclature");
 
-            Assert.IsNotNull(nomenclature);
+            Assert.That(nomenclature, Is.Not.Null);
 
             nomenclature = dictionaryBuilder.AddTerm(termBuilder.CreateTerm("Term-4"))
                                           .CreateNomenclature("Nomenclature-2", "This is a test nomenclature");
 
-            Assert.IsNotNull(nomenclature);
-            Assert.IsNotNull(nomenclature.ID);
-            Assert.AreEqual("Nomenclature-2", nomenclature.Name);
-            Assert.AreEqual("This is a test nomenclature", nomenclature.Description);
+            Assert.That(nomenclature, Is.Not.Null);
+            Assert.That(nomenclature.Name, Is.EqualTo("Nomenclature-2"));
+            Assert.That(nomenclature.Description, Is.EqualTo("This is a test nomenclature"));
 
-            Assert.IsNotNull(nomenclature.Terms);
-            Assert.AreEqual(1, nomenclature.Terms.Count);
+            Assert.That(nomenclature.Terms, Is.Not.Null);
+            Assert.That(nomenclature.Terms.Count, Is.EqualTo(1));
 
             Term term = nomenclature.Terms["Term-4"];
 
-            Assert.IsNotNull(term);
-            Assert.IsNotNull(term.ID);
-            Assert.AreEqual("Term-4", term.Name);
-            Assert.AreEqual(string.Empty, term.Description);
-            Assert.AreEqual(nomenclature.ID, term.NomenclatureID);
+            Assert.That(term, Is.Not.Null);
+            Assert.That(term.Name, Is.EqualTo("Term-4"));
+            Assert.That(term.Description, Is.EqualTo(string.Empty));
+            Assert.That(term.NomenclatureID, Is.EqualTo(nomenclature.ID));
         }
 
-        [TestMethod]
+        [Test]
         public void TestCreateDictionaryWithNameOnly()
         {
             Nomenclature nomenclature = new NomenclatureBuilder().CreateNomenclature("Test");
 
-            Assert.IsNotNull(nomenclature);
-            Assert.IsNotNull(nomenclature.ID);
-            Assert.AreEqual("Test", nomenclature.Name);
-            Assert.AreEqual(string.Empty, nomenclature.Description);
+            Assert.That(nomenclature, Is.Not.Null);
+            Assert.That(nomenclature.Name, Is.EqualTo("Test"));
+            Assert.That(nomenclature.Description, Is.EqualTo(string.Empty));
 
-            Assert.IsNotNull(nomenclature.Terms);
-            Assert.AreEqual(0, nomenclature.Terms.Count);
+            Assert.That(nomenclature.Terms, Is.Not.Null);
+            Assert.That(nomenclature.Terms.Count, Is.EqualTo(0));
         }
 
-        [TestMethod]
+        [Test]
         public void TestCreateDictionaryWithMultipleTerms()
         {
             TermBuilder builder = new TermBuilder();
@@ -136,51 +128,46 @@
                 .AddTerm(builder.CreateTerm("Term-3", "This is a test term"))
                 .CreateNomenclature("Test");
 
-            Assert.IsNotNull(nomenclature);
-            Assert.IsNotNull(nomenclature.ID);
-            Assert.AreEqual("Test", nomenclature.Name);
-            Assert.AreEqual(string.Empty, nomenclature.Description);
+            Assert.That(nomenclature, Is.Not.Null);
+            Assert.That(nomenclature.Name, Is.EqualTo("Test"));
+            Assert.That(nomenclature.Description, Is.EqualTo(string.Empty));
 
-            Assert.IsNotNull(nomenclature.Terms);
-            Assert.AreEqual(3, nomenclature.Terms.Count);
+            Assert.That(nomenclature.Terms, Is.Not.Null);
+            Assert.That(nomenclature.Terms.Count, Is.EqualTo(3));
 
             Term term1 = nomenclature.Terms["Term-1"];
 
-            Assert.IsNotNull(term1);
-            Assert.IsNotNull(term1.ID);
-            Assert.AreEqual("Term-1", term1.Name);
-            Assert.AreEqual("This is a test term", term1.Description);
-            Assert.AreEqual(nomenclature.ID, term1.NomenclatureID);
+            Assert.That(term1, Is.Not.Null);
+            Assert.That(term1.Name, Is.EqualTo("Term-1"));
+            Assert.That(term1.Description, Is.EqualTo("This is a test term"));
+            Assert.That(term1.NomenclatureID, Is.EqualTo(nomenclature.ID));
 
             Term term2 = nomenclature.Terms["Term-2"];
 
-            Assert.IsNotNull(term2);
-            Assert.IsNotNull(term2.ID);
-            Assert.AreEqual("Term-2", term2.Name);
-            Assert.AreEqual("This is a test term", term2.Description);
-            Assert.AreEqual(nomenclature.ID, term2.NomenclatureID);
+            Assert.That(term2, Is.Not.Null);
+            Assert.That(term2.Name, Is.EqualTo("Term-2"));
+            Assert.That(term2.Description, Is.EqualTo("This is a test term"));
+            Assert.That(term2.NomenclatureID, Is.EqualTo(nomenclature.ID));
 
             Term term3 = nomenclature.Terms["Term-3"];
 
-            Assert.IsNotNull(term3);
-            Assert.IsNotNull(term3.ID);
-            Assert.AreEqual("Term-3", term3.Name);
-            Assert.AreEqual("This is a test term", term3.Description);
-            Assert.AreEqual(nomenclature.ID, term3.NomenclatureID);
+            Assert.That(term3, Is.Not.Null);
+            Assert.That(term3.Name, Is.EqualTo("Term-3"));
+            Assert.That(term3.Description, Is.EqualTo("This is a test term"));
+            Assert.That(term3.NomenclatureID, Is.EqualTo(nomenclature.ID));
         }
 
-        [TestMethod]
+        [Test]
         public void TestCreateDictionaryWithNameAndDescription()
         {
             Nomenclature nomenclature = new NomenclatureBuilder().CreateNomenclature("Test", "This is a test nomenclature");
 
-            Assert.IsNotNull(nomenclature);
-            Assert.IsNotNull(nomenclature.ID);
-            Assert.AreEqual("Test", nomenclature.Name);
-            Assert.AreEqual("This is a test nomenclature", nomenclature.Description);
+            Assert.That(nomenclature, Is.Not.Null);
+            Assert.That(nomenclature.Name, Is.EqualTo("Test"));
+            Assert.That(nomenclature.Description, Is.EqualTo("This is a test nomenclature"));
 
-            Assert.IsNotNull(nomenclature.Terms);
-            Assert.AreEqual(0, nomenclature.Terms.Count);
+            Assert.That(nomenclature.Terms, Is.Not.Null);
+            Assert.That(nomenclature.Terms.Count, Is.EqualTo(0));
         }
     }
 }

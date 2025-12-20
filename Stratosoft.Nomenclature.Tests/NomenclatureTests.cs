@@ -2,28 +2,27 @@
 
 namespace Stratosoft.Nomenclature.Tests
 {
-    [TestClass]
     public class NomenclatureTests
     {
         private Guid id = Guid.Parse("f2ea28f1-4ce5-469f-bfe1-80f4c7c4B6b8");
 
-        [TestMethod]
+        [Test]
         public void TestConstructionFromNameAndDescription()
         {
             Nomenclature nomenclature = new Nomenclature("Nomenclature-1", "This is a nomenclature.");
 
-            Assert.IsNotNull(nomenclature);
+            Assert.That(nomenclature, Is.Not.Null);
         }
 
-        [TestMethod]
+        [Test]
         public void TestConstructionFromName()
         {
             Nomenclature nomenclature = new Nomenclature("Dictionary-1");
 
-            Assert.IsNotNull(nomenclature);
+            Assert.That(nomenclature, Is.Not.Null);
         }
 
-        [TestMethod]
+        [Test]
         public void TestConstructionFromXmlNomenclature()
         {
             XmlNomenclature xmlNomenclature = new ()
@@ -35,38 +34,37 @@ namespace Stratosoft.Nomenclature.Tests
 
             Nomenclature nomenclature = new Nomenclature(xmlNomenclature);
 
-            Assert.IsNotNull(nomenclature);
-            Assert.AreEqual(id, nomenclature.ID);
-            Assert.AreEqual("Nomenclature-1", nomenclature.Name);
-            Assert.AreEqual("This is a nomenclature", nomenclature.Description);
+            Assert.That(nomenclature, Is.Not.Null);
+            Assert.That(nomenclature.ID, Is.EqualTo(id));
+            Assert.That(nomenclature.Name, Is.EqualTo("Nomenclature-1"));
+            Assert.That(nomenclature.Description, Is.EqualTo("This is a nomenclature"));
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetDescription()
         {
             Nomenclature nomenclature = new Nomenclature("Nomenclature-1", "This is a nomenclature.");
 
-            Assert.AreEqual("This is a nomenclature.", nomenclature.Description);
+            Assert.That(nomenclature.Description, Is.EqualTo("This is a nomenclature."));
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetID()
         {
             Nomenclature nomenclature = new Nomenclature("Nomenclature-1");
 
-            Assert.IsNotNull(nomenclature.ID);
-            Assert.AreNotEqual(Guid.Empty, nomenclature.ID);
+            Assert.That(nomenclature.ID, Is.Not.EqualTo(Guid.Empty));
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetName()
         {
             Nomenclature nomenclature = new Nomenclature("Nomenclature-1");
 
-            Assert.AreEqual("Nomenclature-1", nomenclature.Name);
+            Assert.That(nomenclature.Name, Is.EqualTo("Nomenclature-1"));
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetTerms()
         {
             Nomenclature nomenclature = new Nomenclature("Nomenclature-1");
@@ -83,14 +81,14 @@ namespace Stratosoft.Nomenclature.Tests
 
             IReadOnlyDictionary<string, Term> terms = nomenclature.Terms;
 
-            Assert.AreEqual(4, terms.Count);
-            Assert.IsTrue(terms.Values.Contains(term1));
-            Assert.IsTrue(terms.Values.Contains(term2));
-            Assert.IsTrue(terms.Values.Contains(term3));
-            Assert.IsTrue(terms.Values.Contains(term4));
+            Assert.That(terms.Count, Is.EqualTo(4));
+            Assert.That(terms.Values.Contains(term1), Is.True);
+            Assert.That(terms.Values.Contains(term2), Is.True);
+            Assert.That(terms.Values.Contains(term3), Is.True);
+            Assert.That(terms.Values.Contains(term4), Is.True);
         }
 
-        [TestMethod]
+        [Test]
         public void TestAdd()
         {
             Nomenclature nomenclature = new Nomenclature("Nomenclature-1");
@@ -102,16 +100,16 @@ namespace Stratosoft.Nomenclature.Tests
 
             nomenclature.Add(term1);
 
-            Assert.AreEqual(1, terms.Count);
-            Assert.AreEqual(term1, terms["Term-1"]);
+            Assert.That(terms.Count, Is.EqualTo(1));
+            Assert.That(terms["Term-1"], Is.EqualTo(term1));
 
             nomenclature.Add(term2);
 
-            Assert.AreEqual(2, terms.Count);
-            Assert.AreEqual(term2, terms["Term-2"]);
+            Assert.That(terms.Count, Is.EqualTo(2));
+            Assert.That(terms["Term-2"], Is.EqualTo(term2));
         }
 
-        [TestMethod]
+        [Test]
         public void TestRemove()
         {
             Nomenclature nomenclature = new Nomenclature("Nomenclature-1");
@@ -126,16 +124,16 @@ namespace Stratosoft.Nomenclature.Tests
 
             IReadOnlyDictionary<string, Term> terms = nomenclature.Terms;
 
-            Assert.AreEqual(3, terms.Count);
+            Assert.That(terms.Count, Is.EqualTo(3));
 
             nomenclature.Remove(term2);
 
-            Assert.AreEqual(2, terms.Count);
-            Assert.AreEqual(term1, terms["Term-1"]);
-            Assert.AreEqual(term3, terms["Term-3"]);
+            Assert.That(terms.Count, Is.EqualTo(2));
+            Assert.That(terms["Term-1"], Is.EqualTo(term1));
+            Assert.That(terms["Term-3"], Is.EqualTo(term3));
         }
 
-        [TestMethod]
+        [Test]
         public void TestRemoveByName()
         {
             Nomenclature nomenclature = new Nomenclature("Nomenclature-1");
@@ -150,13 +148,13 @@ namespace Stratosoft.Nomenclature.Tests
 
             IReadOnlyDictionary<string, Term> terms = nomenclature.Terms;
 
-            Assert.AreEqual(3, terms.Count);
+            Assert.That(terms.Count, Is.EqualTo(3));
 
             nomenclature.Remove("Term-1");
 
-            Assert.AreEqual(2, terms.Count);
-            Assert.AreEqual(term2, terms["Term-2"]);
-            Assert.AreEqual(term3, terms["Term-3"]);
+            Assert.That(terms.Count, Is.EqualTo(2));
+            Assert.That(terms["Term-2"], Is.EqualTo(term2));
+            Assert.That(terms["Term-3"], Is.EqualTo(term3));
         }
     }
 }

@@ -2,28 +2,33 @@
 
 namespace Stratosoft.Nomenclature.Tests
 {
-    [TestClass]
+    /// <summary>
+    /// TODO
+    /// </summary>
     public class TermTests
     {
         private Guid id = Guid.Parse("0aefa0b8-624a-4a37-926a-ac6a93ee11c4");
 
-        [TestMethod]
+        /// <summary>
+        /// TODO - Test descriptions
+        /// </summary>
+        [Test]
         public void TestConstructionFromNameAndDescription()
         {
             Term term = new Term("Term-1", "This is a term.");
 
-            Assert.IsNotNull(term);
+            Assert.That(term, Is.Not.Null);
         }
 
-        [TestMethod]
+        [Test]
         public void TestConstructionFromName()
         {
             Term term = new Term("Term-1");
 
-            Assert.IsNotNull(term);
+            Assert.That(term, Is.Not.Null);
         }
 
-        [TestMethod]
+        [Test]
         public void TestConstructionFromXmlTerm()
         {
             XmlTerm xmlTerm = new()
@@ -36,39 +41,31 @@ namespace Stratosoft.Nomenclature.Tests
 
             Term term = new Term(xmlTerm);
 
-            Assert.IsNotNull(term);
-            Assert.AreEqual(id, term.ID);
-            Assert.AreEqual("Term-1", term.Name);
-            Assert.AreEqual("This is a term", term.Description);
-            Assert.IsNotNull(term.Properties);
-            Assert.AreEqual(0, term.Properties.Count);
+            Assert.That(term, Is.Not.Null);
+            Assert.That(term.ID, Is.EqualTo(id));
+            Assert.That(term.Name, Is.EqualTo("Term-1"));
+            Assert.That(term.Description, Is.EqualTo("This is a term"));
+            Assert.That(term.Properties, Is.Not.Null);
+            Assert.That(term.Properties.Count, Is.EqualTo(0));
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetDescription()
         {
             Term term = new Term("Term-1", "This is a term.");
 
-            Assert.AreEqual("This is a term.", term.Description);
+            Assert.That(term.Description, Is.EqualTo("This is a term."));
         }
 
-        [TestMethod]
-        public void TestGetId()
-        {
-            Term term = new Term("Term-1");
-
-            Assert.IsNotNull(term.ID);
-        }
-
-        [TestMethod]
+        [Test]
         public void TestGetName()
         {
             Term term = new Term("Term-1");
 
-            Assert.AreEqual("Term-1", term.Name);
+            Assert.That(term.Name, Is.EqualTo("Term-1"));
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetPropertyByName()
         {
             Property property1 = new Property("Property-1");
@@ -81,89 +78,89 @@ namespace Stratosoft.Nomenclature.Tests
                 .AddProperty(property3)
                 .CreateTerm("Term-1");
 
-            Assert.AreEqual(property1, term["Property-1"]);
-            Assert.AreEqual(property2, term["Property-2"]);
-            Assert.AreEqual(property3, term["Property-3"]);
+            Assert.That(term["Property-1"], Is.EqualTo(property1));
+            Assert.That(term["Property-2"], Is.EqualTo(property2));
+            Assert.That(term["Property-3"], Is.EqualTo(property3));
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetProperties()
         {
-            //Property property1 = new Property("Property-1");
-            //Property property2 = new Property("Property-2");
-            //Property property3 = new Property("Property-3");
+            Property property1 = new Property("Property-1");
+            Property property2 = new Property("Property-2");
+            Property property3 = new Property("Property-3");
 
-            //Term term = new TermBuilder("Term-1")
-            //    .AddProperty(property1)
-            //    .AddProperty(property2)
-            //    .AddProperty(property3)
-            //    .CreateTerm();
+            Term term = new TermBuilder()
+                .AddProperty(property1)
+                .AddProperty(property2)
+                .AddProperty(property3)
+                .CreateTerm("Term-1");
 
-            //Assert.IsNotNull(term.Properties);
-            //Assert.AreEqual(3, term.Properties.Count);
-            //Assert.AreEqual(property1, term.Properties[0]);
-            //Assert.AreEqual(property2, term.Properties[1]);
-            //Assert.AreEqual(property3, term.Properties[2]);
+            Assert.That(term.Properties, Is.Not.Null);
+            Assert.That(term.Properties.Count, Is.EqualTo(3));
+            Assert.That(term.Properties[0], Is.EqualTo(property1));
+            Assert.That(term.Properties[1], Is.EqualTo(property2));
+            Assert.That(term.Properties[2], Is.EqualTo(property3));
         }
 
-        [TestMethod]
+        [Test]
         public void TestEqualsWhenArgumentIsDifferentType()
         {
             Term term = new Term("Term-1");
 
-            Assert.IsFalse(term.Equals("Term-1"));
+            Assert.That(term.Equals("Term-1"), Is.False);
         }
 
-        [TestMethod]
+        [Test]
         public void TestEqualsWhenArgumentIsEqual()
         {
             Term term1 = new Term("Term-1");
             Term term2 = term1;
 
-            Assert.IsTrue(term1.Equals(term2));
+            Assert.That(term1.Equals(term2), Is.True);
         }
 
-        [TestMethod]
+        [Test]
         public void TestEqualsWhenArgumentIsNotEqual()
         {
             Term term1 = new Term("Term-1");
             Term term2 = new Term("Term-1");
 
-            Assert.IsFalse(term1.Equals(term2));
+            Assert.That(term1.Equals(term2), Is.False);
         }
 
-        [TestMethod]
+        [Test]
         public void TestEqualsWhenArgumentIsNull()
         {
             Term term = new Term("Term-1");
 
-            Assert.IsFalse(term.Equals(null));
+            Assert.That(term.Equals(null), Is.False);
         }
 
-        [TestMethod]
+        [Test]
         public void TestHashCodesDoNotMatchForDifferentTerms()
         {
             Term term1 = new Term("Term-1");
             Term term2 = new Term("Term-1");
 
-            Assert.AreNotEqual(term1.GetHashCode(), term2.GetHashCode());
+            Assert.That(term1.GetHashCode(), Is.Not.EqualTo(term2.GetHashCode()));
         }
 
-        [TestMethod]
+        [Test]
         public void TestHashCodesMatchForSameTerms()
         {
             Term term1 = new Term("Term-1");
             Term term2 = term1;
 
-            Assert.AreEqual(term1.GetHashCode(), term2.GetHashCode());
+            Assert.That(term1.GetHashCode(), Is.EqualTo(term2.GetHashCode()));
         }
 
-        [TestMethod]
+        [Test]
         public void TestToString()
         {
             Term term = new Term("Term-1");
 
-            Assert.AreEqual("Term-1 " + term.ID.ToString(), term.ToString());
+            Assert.That(term.ToString(), Is.EqualTo("Term-1 " + term.ID.ToString()));
         }
     }
 }

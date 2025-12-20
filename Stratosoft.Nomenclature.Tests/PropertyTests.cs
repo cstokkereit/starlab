@@ -2,27 +2,27 @@
 
 namespace Stratosoft.Nomenclature.Tests
 {
-    [TestClass]
     public class PropertyTests
     {
         private Guid id = Guid.Parse("efa0b0a8-6324-4be7-91b7-8c6a9d4511c4");
 
-        [TestMethod]
+        [Test]
         public void TestConstructionFromNameAndDescription()
         {
             var property = new Property("Property-1", "This is a property.");
 
-            Assert.IsNotNull(property);
+            Assert.That(property, Is.Not.Null);
         }
 
-        [TestMethod]
+        [Test]
         public void TestConstructionFromName()
         {
             var property = new Property("Property-1");
 
-            Assert.IsNotNull(property);
+            Assert.That(property, Is.Not.Null);
         }
 
+        [Test]
         public void TestConstructionFromXmlProperty()
         {
             XmlProperty xmlProperty = new()
@@ -34,95 +34,94 @@ namespace Stratosoft.Nomenclature.Tests
 
             Property property = new Property(xmlProperty);
 
-            Assert.IsNotNull(property);
-            Assert.AreEqual(id, property.ID);
-            Assert.AreEqual("Property-1", property.Name);
-            Assert.AreEqual("This is a property", property.Description);
+            Assert.That(property, Is.Not.Null);
+            Assert.That(property.ID, Is.EqualTo(id));
+            Assert.That(property.Name, Is.EqualTo("Property-1"));
+            Assert.That(property.Description, Is.EqualTo("This is a property"));
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetDescription()
         {
             var property = new Property("Property-1", "This is a property.");
 
-            Assert.AreEqual("This is a property.", property.Description);
+            Assert.That(property.Description, Is.EqualTo("This is a property."));
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetId()
         {
             var property = new Property("Property-1");
 
-            Assert.IsNotNull(property.ID);
-            Assert.AreNotEqual(Guid.Empty, property.ID);
+            Assert.That(property.ID, Is.Not.EqualTo(Guid.Empty));
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetName()
         {
             var property = new Property("Property-1");
 
-            Assert.AreEqual("Property-1", property.Name);
+            Assert.That(property.Name, Is.EqualTo("Property-1"));
         }
 
-        [TestMethod]
+        [Test]
         public void TestEqualsWhenArgumentIsDifferentType()
         {
             var property = new Property("Property-1");
 
-            Assert.IsFalse(property.Equals("Property-1"));
+            Assert.That(property.Equals("Property-1"), Is.False);
         }
 
-        [TestMethod]
+        [Test]
         public void TestEqualsWhenArgumentIsEqual()
         {
             var property1 = new Property("Property-1");
             var property2 = property1;
 
-            Assert.IsTrue(property1.Equals(property2));
+            Assert.That(property1.Equals(property2), Is.True);
         }
 
-        [TestMethod]
+        [Test]
         public void TestEqualsWhenArgumentIsNotEqual()
         {
             var property1 = new Property("Property-1");
             var property2 = new Property("Property-1");
 
-            Assert.IsFalse(property1.Equals(property2));
+            Assert.That(property1.Equals(property2), Is.False);
         }
 
-        [TestMethod]
+        [Test]
         public void TestEqualsWhenArgumentIsNull()
         {
             var property = new Property("Property-1");
 
-            Assert.IsFalse(property.Equals(null));
+            Assert.That(property.Equals(null), Is.False);
         }
 
-        [TestMethod]
+        [Test]
         public void TestHashCodesDoNotMatchForDifferentProperties()
         {
             var property1 = new Property("Property-1");
             var property2 = new Property("Property-1");
 
-            Assert.AreNotEqual(property1.GetHashCode(), property2.GetHashCode());
+            Assert.That(property1.GetHashCode(), Is.Not.EqualTo(property2.GetHashCode()));
         }
 
-        [TestMethod]
+        [Test]
         public void TestHashCodesMatchForSameProperties()
         {
             var property1 = new Property("Property-1");
             var property2 = property1;
 
-            Assert.AreEqual(property1.GetHashCode(), property2.GetHashCode());
+            Assert.That(property2.GetHashCode(), Is.EqualTo(property1.GetHashCode()));
         }
 
-        [TestMethod]
+        [Test]
         public void TestToString()
         {
             var property = new Property("Property-1");
 
-            Assert.AreEqual(property.ID.ToString(), property.ToString());
+            Assert.That(property.ToString(), Is.EqualTo(property.ID.ToString()));
         }
     }
 }

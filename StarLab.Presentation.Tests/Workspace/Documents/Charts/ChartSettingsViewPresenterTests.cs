@@ -29,13 +29,32 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             view.AddNode("Axes", "Chart", Arg.Any<string>()).Returns("Chart/Axes");
             view.AddNode("AxisX1", "Chart/Axes", Arg.Any<string>()).Returns("Chart/Axes/AxisX1");
             view.AddNode("Label", "Chart/Axes/AxisX1", Arg.Any<string>()).Returns("Chart/Axes/AxisX1/Label");
+            view.AddNode("Scale", "Chart/Axes/AxisX1", Arg.Any<string>()).Returns("Chart/Axes/AxisX1/Scale");
+            view.AddNode("MajorTickMarks", "Chart/Axes/AxisX1/Scale", Arg.Any<string>()).Returns("Chart/Axes/AxisX1/Scale/MajorTickMarks");
+            view.AddNode("MinorTickMarks", "Chart/Axes/AxisX1/Scale", Arg.Any<string>()).Returns("Chart/Axes/AxisX1/Scale/MinorTickMarks");
+            view.AddNode("TickLabels", "Chart/Axes/AxisX1/Scale", Arg.Any<string>()).Returns("Chart/Axes/AxisX1/Scale/TickLabels");
             view.AddNode("AxisX2", "Chart/Axes", Arg.Any<string>()).Returns("Chart/Axes/AxisX2");
             view.AddNode("Label", "Chart/Axes/AxisX2", Arg.Any<string>()).Returns("Chart/Axes/AxisX2/Label");
+            view.AddNode("Scale", "Chart/Axes/AxisX2", Arg.Any<string>()).Returns("Chart/Axes/AxisX2/Scale");
+            view.AddNode("MajorTickMarks", "Chart/Axes/AxisX2/Scale", Arg.Any<string>()).Returns("Chart/Axes/AxisX2/Scale/MajorTickMarks");
+            view.AddNode("MinorTickMarks", "Chart/Axes/AxisX2/Scale", Arg.Any<string>()).Returns("Chart/Axes/AxisX2/Scale/MinorTickMarks");
+            view.AddNode("TickLabels", "Chart/Axes/AxisX2/Scale", Arg.Any<string>()).Returns("Chart/Axes/AxisX2/Scale/TickLabels");
             view.AddNode("AxisY1", "Chart/Axes", Arg.Any<string>()).Returns("Chart/Axes/AxisY1");
             view.AddNode("Label", "Chart/Axes/AxisY1", Arg.Any<string>()).Returns("Chart/Axes/AxisY1/Label");
+            view.AddNode("Scale", "Chart/Axes/AxisY1", Arg.Any<string>()).Returns("Chart/Axes/AxisY1/Scale");
+            view.AddNode("MajorTickMarks", "Chart/Axes/AxisY1/Scale", Arg.Any<string>()).Returns("Chart/Axes/AxisY1/Scale/MajorTickMarks");
+            view.AddNode("MinorTickMarks", "Chart/Axes/AxisY1/Scale", Arg.Any<string>()).Returns("Chart/Axes/AxisY1/Scale/MinorTickMarks");
+            view.AddNode("TickLabels", "Chart/Axes/AxisY1/Scale", Arg.Any<string>()).Returns("Chart/Axes/AxisY1/Scale/TickLabels");
             view.AddNode("AxisY2", "Chart/Axes", Arg.Any<string>()).Returns("Chart/Axes/AxisY2");
             view.AddNode("Label", "Chart/Axes/AxisY2", Arg.Any<string>()).Returns("Chart/Axes/Axisy2/Label");
+            view.AddNode("Scale", "Chart/Axes/AxisY2", Arg.Any<string>()).Returns("Chart/Axes/AxisY2/Scale");
+            view.AddNode("MajorTickMarks", "Chart/Axes/AxisY2/Scale", Arg.Any<string>()).Returns("Chart/Axes/AxisY2/Scale/MajorTickMarks");
+            view.AddNode("MinorTickMarks", "Chart/Axes/AxisY2/Scale", Arg.Any<string>()).Returns("Chart/Axes/AxisY2/Scale/MinorTickMarks");
+            view.AddNode("TickLabels", "Chart/Axes/AxisY2/Scale", Arg.Any<string>()).Returns("Chart/Axes/AxisY2/Scale/TickLabels");
             view.AddNode("PlotArea", "Chart", Arg.Any<string>()).Returns("Chart/PlotArea");
+            view.AddNode("Grid", "Chart/PlotArea", Arg.Any<string>()).Returns("Chart/PlotArea/Grid");
+            view.AddNode("MajorGridLines", "Chart/PlotArea/Grid", Arg.Any<string>()).Returns("Chart/PlotArea/Grid/MajorGridLines");
+            view.AddNode("MinorGridLines", "Chart/PlotArea/Grid", Arg.Any<string>()).Returns("Chart/PlotArea/Grid/MinorGridLines");
         }
 
         /// <summary>

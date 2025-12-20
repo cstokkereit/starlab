@@ -37,7 +37,7 @@ namespace StarLab.Data.Import
         {
             var importer = new DataImportManager(new ImportProvider());
 
-            importer.Import("D:\\Documents\\Science\\Astronomy\\Catalogs\\Hipparcos\\hip_main.dat", importDefinition);
+            importer.Import("D:\\Documents\\WIP\\Astronomy\\Catalogs\\Hipparcos\\hip_main.dat", importDefinition);
         }
     }
 }

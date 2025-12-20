@@ -55,13 +55,11 @@ namespace StarLab.Tests
         {
             chart.X1 = new AxisDTO
             {
-                BackColour = chart.BackColour,
-                ForeColour = chart.ForeColour,
+                Colour = chart.ForeColour,
 
                 Label = new LabelDTO
                 {
-                    BackColour = chart.BackColour,
-                    ForeColour = chart.ForeColour,
+                    Colour = chart.ForeColour,
                     Visible = true,
                     Text = label,
                     Font = font
@@ -82,13 +80,11 @@ namespace StarLab.Tests
         {
             chart.X2 = new AxisDTO
             {
-                BackColour = chart.BackColour,
-                ForeColour = chart.ForeColour,
+                Colour = chart.ForeColour,
 
                 Label = new LabelDTO
                 {
-                    BackColour = chart.BackColour,
-                    ForeColour = chart.ForeColour,
+                    Colour = chart.ForeColour,
                     Visible = true,
                     Text = label,
                     Font = font
@@ -109,13 +105,11 @@ namespace StarLab.Tests
         {
             chart.Y1 = new AxisDTO
             {
-                BackColour = chart.BackColour,
-                ForeColour = chart.ForeColour,
+                Colour = chart.ForeColour,
 
                 Label = new LabelDTO
                 {
-                    BackColour = chart.BackColour,
-                    ForeColour = chart.ForeColour,
+                    Colour = chart.ForeColour,
                     Visible = true,
                     Text = label,
                     Font = font
@@ -136,13 +130,11 @@ namespace StarLab.Tests
         {
             chart.Y2 = new AxisDTO
             {
-                BackColour = chart.BackColour,
-                ForeColour = chart.ForeColour,
+                Colour = chart.ForeColour,
                 
                 Label = new LabelDTO
                 {
-                    BackColour = chart.BackColour,
-                    ForeColour = chart.ForeColour,
+                    Colour = chart.ForeColour,
                     Visible = true,
                     Text = label,
                     Font = font
@@ -163,8 +155,7 @@ namespace StarLab.Tests
         {
             chart.Title = new LabelDTO 
             {
-                BackColour = chart.BackColour,
-                ForeColour = chart.ForeColour,
+                Colour = chart.ForeColour,
                 Visible= true,
                 Font = font,
                 Text = text 
