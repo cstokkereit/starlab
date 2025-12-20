@@ -5,44 +5,45 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
     /// <summary>
     /// View model representation of a chart axis scale.
     /// </summary>
-    internal class Scale : IScale
+    internal class Scale : FrameElement, IScale
     {
         /// <summary>
         /// Initialises a new instance of the <see cref="Scale"> class.
         /// </summary>
         /// <param name="dto">A data transfer object that specifies the initial state of the <see cref="Scale"/>.</param>
-        public Scale(ScaleDTO? dto)
+        public Scale(ScaleDTO dto)
+            : base(dto.Colour, dto.Visible)
         {
             ArgumentNullException.ThrowIfNull(dto, nameof(dto));
 
-            MajorTickMarks = new TickMarks(dto.MajorTickMarks);
-            MinorTickMarks = new TickMarks(dto.MinorTickMarks);
-            TickLabels = new TickLabels(dto.TickLabels);
-
-            BackColour = string.IsNullOrEmpty(dto.BackColour) ? Constants.White : dto.BackColour;
-            ForeColour = string.IsNullOrEmpty(dto.ForeColour) ? Constants.Black : dto.ForeColour;
+            MajorTickMarks = dto.MajorTickMarks == null ? new TickMarks(Constants.DefaultMajorTickLength) : new TickMarks(dto.MajorTickMarks);
+            MinorTickMarks = dto.MinorTickMarks == null ? new TickMarks(Constants.DefaultMinorTickLength) : new TickMarks(dto.MinorTickMarks);
+            TickLabels = dto.TickLabels == null ? new TickLabels() : new TickLabels(dto.TickLabels);
 
             Autoscale = dto.Autoscale;
             Reversed = dto.Reversed;
             Maximum = dto.Maximum;
             Minimum = dto.Minimum;
-            Visible = dto.Visible;
+        }
+
+        /// <summary>
+        /// Initialises a new instance of the <see cref="Scale"> class.
+        /// </summary>
+        public Scale()
+            : base(Constants.DefaultForeColour, true)
+        {
+            MajorTickMarks = new TickMarks(Constants.DefaultMajorTickLength);
+            MinorTickMarks = new TickMarks(Constants.DefaultMinorTickLength);
+            TickLabels = new TickLabels();
+
+            Autoscale = true;
+            Reversed = false;
         }
 
         /// <summary>
         /// A flag indicating that the scale is generated automatically to fit the data.
         /// </summary>
         public bool Autoscale { get; }
-
-        /// <summary>
-        /// Gets the background colour.
-        /// </summary>
-        public string BackColour { get; }
-
-        /// <summary>
-        /// Gets the foreground colour.
-        /// </summary>
-        public string ForeColour { get; }
 
         /// <summary>
         /// Gets the major tick marks.
@@ -73,10 +74,5 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// Gets the tick labels.
         /// </summary>
         public ITickLabels TickLabels { get; }
-
-        /// <summary>
-        /// A flag indicating whether the scale is visible.
-        /// </summary>
-        public bool Visible { get; }
     }
 }

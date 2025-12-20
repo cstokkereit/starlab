@@ -3,7 +3,7 @@
     /// <summary>
     /// Represents the current state of the chart axes while the chart is being configured.
     /// </summary>
-    public interface IAxesSettings : IColourSettings, IVisibilitySettings
+    public interface IAxesSettings : ITextElementSettings
     {
         /// <summary>
         /// Gets the settings for the bottom axis.
@@ -24,10 +24,5 @@
         /// Gets the settings for the right axis.
         /// </summary>
         IAxisSettings Y2 { get; }
-
-        /// <summary>
-        /// Gets the font settings.
-        /// </summary>
-        IFontSettings Font { get; }
     }
 }

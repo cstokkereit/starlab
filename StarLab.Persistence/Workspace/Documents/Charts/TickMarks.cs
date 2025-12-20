@@ -5,13 +5,11 @@ namespace StarLab.Serialisation.Workspace.Documents.Charts
     /// <summary>
     /// A POCO representation of the tick marks used for XML serialisation/deserialisation.
     /// </summary>
+    [XmlType]
     public class TickMarks
     {
-        [XmlAttribute("backColour")]
-        public string? BackColour;
-
-        [XmlAttribute("foreColour")]
-        public string? ForeColour;
+        [XmlAttribute("colour")]
+        public string? Colour;
 
         [XmlAttribute("length")]
         public int Length;

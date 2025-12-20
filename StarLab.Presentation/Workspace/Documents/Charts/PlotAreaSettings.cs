@@ -3,18 +3,23 @@
     /// <summary>
     /// Represents the current state of the plot area while the chart is being configured.
     /// </summary>
-    internal class PlotAreaSettings : IPlotAreaSettings
+    internal class PlotAreaSettings : ChartElementSettings, IPlotAreaSettings
     {
+        private string foreColour; // The foreground colour.
+
         /// <summary>
         /// Initialises a new instance of the <see cref="PlotAreaSettings"/> class.
         /// </summary>
         /// <param name="plotArea">An <see cref="IPlotArea"/> that specifies the initial state of the plot area.</param>
-        public PlotAreaSettings(IPlotArea plotArea)
+        /// <param name="visible"></param>
+        public PlotAreaSettings(IPlotArea plotArea, bool visible)
+            : base(visible)
         {
-            BackColour = plotArea.BackColour;
-            ForeColour = plotArea.ForeColour;
-
             Grid = new GridSettings(plotArea.Grid);
+
+            BackColour = plotArea.BackColour;
+            
+            foreColour = plotArea.ForeColour;
         }
 
         /// <summary>
@@ -25,8 +30,17 @@
         /// <summary>
         /// Gets or sets the foreground colour.
         /// </summary>
-        public string ForeColour { get; set; }
+        public string ForeColour
+        {
+            get => foreColour;
 
+            set
+            {
+                Grid.Colour = value;
+
+                foreColour = value;
+            }
+        }
 
         /// <summary>
         /// Gets the grid settings.

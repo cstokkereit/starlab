@@ -3,22 +3,12 @@
     /// <summary>
     /// Represents a chart axis scale.
     /// </summary>
-    public interface IScale
+    public interface IScale : IFrameElement
     {
         /// <summary>
         /// A flag indicating that the scale is generated automatically to fit the data.
         /// </summary>
         bool Autoscale { get; }
-
-        /// <summary>
-        /// Gets the background colour.
-        /// </summary>
-        string BackColour { get; }
-
-        /// <summary>
-        /// Gets the foreground colour.
-        /// </summary>
-        string ForeColour { get; }
 
         /// <summary>
         /// Gets the major tick marks.
@@ -49,10 +39,5 @@
         /// Gets the tick labels.
         /// </summary>
         ITickLabels TickLabels { get; }
-
-        /// <summary>
-        /// A flag indicating whether the scale is visible.
-        /// </summary>
-        bool Visible { get; }
     }
 }

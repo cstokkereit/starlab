@@ -10,8 +10,25 @@ namespace StarLab.Presentation.Workspace.Documents
         /// <summary>
         /// Initialises a new instance of the <see cref="Font"> class.
         /// </summary>
+        /// <param name="family">The name of the font family.</param>
+        /// <param name="size">The font size.</param>
+        /// <param name="bold">A flag indiciating whether the font is bold.</param>
+        /// <param name="italic">A flag indiciating whether the font has the italic style applied.</param>
+        /// <param name="underline">A flag indiciating whether the font is underlined.</param>
+        public Font(string family, int size, bool bold, bool italic, bool underline)
+        {
+            Underline = underline;
+            Family = family;
+            Italic = italic;
+            Bold = bold;
+            Size = size;
+        }
+
+        /// <summary>
+        /// Initialises a new instance of the <see cref="Font"> class.
+        /// </summary>
         /// <param name="dto">A data transfer object that specifies the initial state of the <see cref="Font"/>.</param>
-        public Font(FontDTO? dto)
+        public Font(FontDTO dto)
         {
             ArgumentNullException.ThrowIfNull(dto, nameof(dto));
 
@@ -21,6 +38,27 @@ namespace StarLab.Presentation.Workspace.Documents
             Bold = dto.Bold;
             Size = dto.Size;
         }
+
+        /// <summary>
+        /// Initialises a new instance of the <see cref="Font"> class.
+        /// </summary>
+        /// <param name="font">An <see cref="IFont"/> that specifies the initial state of the <see cref="Font"/>.</param>
+        public Font(IFont font)
+        {
+            ArgumentNullException.ThrowIfNull(font, nameof(font));
+
+            Underline = font.Underline;
+            Family = font.Family;
+            Italic = font.Italic;
+            Bold = font.Bold;
+            Size = font.Size;
+        }
+
+        /// <summary>
+        /// Initialises a new instance of the <see cref="Font"> class.
+        /// </summary>
+        public Font()
+            : this(Constants.DefaultFontFamily, Constants.DefaultFontSize, false, false, false) { }
 
         /// <summary>
         /// A flag indiciating whether the <see cref="Font"> is bold.

@@ -5,7 +5,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
     /// <summary>
     /// View model representation of the chart axis scale tick marks.
     /// </summary>
-    internal class TickMarks : ITickMarks
+    internal class TickMarks : FrameElement, ITickMarks
     {
         private int length;
 
@@ -13,35 +13,27 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// Initialises a new instance of the <see cref="TickMarks"> class.
         /// </summary>
         /// <param name="dto">A data transfer object that specifies the initial state of the <see cref="TickMarks"/>.</param>
-        public TickMarks(TickMarksDTO? dto)
+        public TickMarks(TickMarksDTO dto)
+            : base(dto.Colour, dto.Visible)
         {
             ArgumentNullException.ThrowIfNull(dto, nameof(dto));
 
-            BackColour = string.IsNullOrEmpty(dto.BackColour) ? Constants.White : dto.BackColour;
-            ForeColour = string.IsNullOrEmpty(dto.ForeColour) ? Constants.Black : dto.ForeColour;
-
-            Visible = dto.Visible;
             length = dto.Length;
         }
 
         /// <summary>
-        /// Gets the background colour.
+        /// Initialises a new instance of the <see cref="TickMarks"> class.
         /// </summary>
-        public string BackColour { get; }
-
-        /// <summary>
-        /// Gets the foreground colour.
-        /// </summary>
-        public string ForeColour { get; }
+        /// <param name="length">The default length.</param>
+        public TickMarks(int length)
+            : base(Constants.DefaultForeColour, true)
+        {
+            this.length = length;
+        }
 
         /// <summary>
         /// Gets the length of the tickamrks.
         /// </summary>
         public int Length => Visible ? length : 0;
-
-        /// <summary>
-        /// A flag indicating that the tick marks are visible.
-        /// </summary>
-        public bool Visible { get; }
     }
 }

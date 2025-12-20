@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace StarLab.Application.Workspace.Documents.Charts
+﻿namespace StarLab.Application.Workspace.Documents.Charts
 {
     /// <summary>
     /// Domain model representation of the chart grid.
@@ -15,42 +13,31 @@ namespace StarLab.Application.Workspace.Documents.Charts
         {
             ArgumentNullException.ThrowIfNull(dto, nameof(dto));
 
-            Debug.Assert(dto.MajorGridLines != null);
-            Debug.Assert(dto.MinorGridLines != null);
+            MajorGridLines = dto.MajorGridLines == null ? new GridLines() : new GridLines(dto.MajorGridLines);
+            MinorGridLines = dto.MinorGridLines == null ? new GridLines() : new GridLines(dto.MinorGridLines);
 
-            if (string.IsNullOrEmpty(dto.BackColour))
-            {
-                BackColour = Constants.DefaultBackColour;
-            }
-            else
-            {
-                BackColour = dto.BackColour;
-            }
-
-            if (string.IsNullOrEmpty(dto.ForeColour))
-            {
-                ForeColour = Constants.DefaultForeColour;
-            }
-            else
-            {
-                ForeColour = dto.ForeColour;
-            }
-
-            MajorGridLines = new GridLines(dto.MajorGridLines);
-            MinorGridLines = new GridLines(dto.MinorGridLines);
+            Colour = string.IsNullOrEmpty(dto.Colour) ? Constants.DefaultForeColour : dto.Colour;
 
             Visible = dto.Visible;
         }
 
         /// <summary>
-        /// Gets the background colour.
-        /// </summary>
-        public string BackColour { get; }
+        /// Initialises a new instance of the <see cref="Grid"> class.
+        /// </summary
+        public Grid()
+        {
+            MajorGridLines = new GridLines();
+            MinorGridLines = new GridLines();
+
+            Colour = Constants.DefaultForeColour;
+            
+            Visible = true;
+        }
 
         /// <summary>
-        /// Gets the foreground colour.
+        /// Gets the colour.
         /// </summary>
-        public string ForeColour { get; }
+        public string Colour { get; }
 
         /// <summary>
         /// Gets the major grid lines.

@@ -5,33 +5,30 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
     /// <summary>
     /// View model representation of a chart axis.
     /// </summary>
-    internal class Axis : IAxis
+    internal class Axis : FrameElement, IAxis
     {
         /// <summary>
         /// Initialises a new instance of the <see cref="Axis"> class.
         /// </summary>
         /// <param name="dto">A data transfer object that specifies the initial state of the <see cref="Axis"/>.</param>
-        public Axis(AxisDTO? dto)
+        public Axis(AxisDTO dto)
+            : base(dto.Colour, dto.Visible)
         {
             ArgumentNullException.ThrowIfNull(dto, nameof(dto));
 
-            BackColour = string.IsNullOrEmpty(dto.BackColour) ? Constants.White : dto.BackColour;
-            ForeColour = string.IsNullOrEmpty(dto.ForeColour) ? Constants.Black : dto.ForeColour;
-
-            Label = new Label(dto.Label);
-            Scale = new Scale(dto.Scale);
-            Visible = dto.Visible;
+            Label = dto.Label == null ? new Label() : new Label(dto.Label);
+            Scale = dto.Scale == null ? new Scale() : new Scale(dto.Scale);
         }
 
         /// <summary>
-        /// Gets the background colour.
+        /// Initialises a new instance of the <see cref="Axis"> class.
         /// </summary>
-        public string BackColour { get; }
-
-        /// <summary>
-        /// Gets the foreground colour.
-        /// </summary>
-        public string ForeColour { get; }
+        public Axis()
+            : base(Constants.DefaultForeColour, true)
+        {
+            Label = new Label();
+            Scale = new Scale();
+        }
 
         /// <summary>
         /// Gets the axis <see cref="ILabel"/>.
@@ -42,10 +39,5 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// Gets the axis <see cref="IScale"/>.
         /// </summary>
         public IScale Scale { get; }
-
-        /// <summary>
-        /// A flag indicating that the axis is visible.
-        /// </summary>
-        public bool Visible { get; }
     }
 }

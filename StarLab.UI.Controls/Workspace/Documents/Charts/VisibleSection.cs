@@ -8,7 +8,7 @@ namespace StarLab.UI.Controls.Workspace.Documents.Charts
     /// </summary>
     public partial class VisibleSection : UserControl, ISettingsSection
     {
-        private readonly IDictionary<string, IVisibilitySettings> settingsByGroup = new Dictionary<string, IVisibilitySettings>(); // A dictionary containing the visibility settings indexed by settings group.
+        private readonly IDictionary<string, IChartElementSettings> settingsByGroup = new Dictionary<string, IChartElementSettings>(); // A dictionary containing the visibility settings indexed by settings group.
 
         private readonly IChartSettings settings; // The chart settings that are bound to this control.
 
@@ -34,10 +34,10 @@ namespace StarLab.UI.Controls.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// Gets the <see cref="IVisibilitySettings"/> for the specified settings group within the bound <see cref="IChartSettings"/>.
+        /// Gets the <see cref="IChartElementSettings"/> for the specified settings group within the bound <see cref="IChartSettings"/>.
         /// </summary>
-        /// <returns>The required <see cref="IVisibilitySettings"/>.</returns>
-        private IVisibilitySettings GetSettings()
+        /// <returns>The required <see cref="IChartElementSettings"/>.</returns>
+        private IChartElementSettings GetSettings()
         {
             if (settingsByGroup.Count == 0)
             {

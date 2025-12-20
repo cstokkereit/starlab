@@ -13,27 +13,23 @@
         {
             ArgumentNullException.ThrowIfNull(dto, nameof(dto));
 
-            if (string.IsNullOrEmpty(dto.Family))
-            {
-                Family = Constants.DefaultFontFamily;
-            }
-            else
-            {
-                Family = dto.Family;
-            }
-
-            if (dto.Size == 0)
-            {
-                Size = Constants.DefaultFontSize;
-            }
-            else
-            {
-                Size = dto.Size;
-            }
-
+            Family = string.IsNullOrEmpty(dto.Family) ? Constants.DefaultFontFamily : dto.Family;
+            Size = dto.Size == 0 ? Constants.DefaultFontSize : dto.Size;
             Underline = dto.Underline;
             Italic = dto.Italic;
             Bold = dto.Bold;
+        }
+
+        /// <summary>
+        /// Initialises a new instance of the <see cref="Font"> class.
+        /// </summary>
+        public Font()
+        {
+            Family = Constants.DefaultFontFamily;
+            Size = Constants.DefaultFontSize;
+            Underline = false;
+            Italic = false;
+            Bold = false;
         }
 
         /// <summary>

@@ -3,7 +3,7 @@
     /// <summary>
     /// Represents the current state of an axis scale while the chart is being configured.
     /// </summary>
-    public interface IScaleSettings :  IColourSettings, IVisibilitySettings
+    public interface IScaleSettings :  IFrameElementSettings
     {
         /// <summary>
         /// Gets or sets a flag that determines whether the scale is generated automatically to fit the data.

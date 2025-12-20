@@ -5,9 +5,7 @@
     /// </summary>
     public class GridLinesDTO
     {
-        public string? BackColour;
-
-        public string? ForeColour;
+        public string? Colour;
 
         public bool Visible;
     }

@@ -1,7 +1,7 @@
 ﻿namespace StarLab.Presentation
 {
     /// <summary>
-    /// A static class containing <see cref="string"/> 
+    /// A static class containing constant values.
     /// </summary>
     public static class Constants
     {
@@ -15,8 +15,6 @@
         public const string AxisX2 = "AxisX2";
         public const string AxisY1 = "AxisY1";
         public const string AxisY2 = "AxisY2";
-
-        public const string Black = "Black";
 
         public const string Chart = "Chart";
         public const string ChartAxes = $"{Chart}/{Axes}";
@@ -55,6 +53,12 @@
         public const string Cut = "Cut";
 
         public const string Data = "Data";
+        public const string DefaultBackColour = "White";
+        public const string DefaultFontFamily = "Segoe UI";
+        public const int DefaultFontSize = 10;
+        public const string DefaultForeColour = "Black";
+        public const int DefaultMajorTickLength = 4;
+        public const int DefaultMinorTickLength = 2;
         public const string Delete = "Delete";
         public const string DockBottom = "DockBottom";
         public const string DockLeft = "DockLeft";
@@ -119,7 +123,6 @@
         public const string View = "View";
         public const string ViewWorkspaceExplorer = "ViewWorkspaceExplorer";
 
-        public const string White = "White";
         public const string Window = "Window";
         public const string Workspace = "Workspace";
     }

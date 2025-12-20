@@ -8,14 +8,11 @@ namespace StarLab.Serialisation.Workspace.Documents.Charts
     [XmlType]
     public class TickLabels
     {
-        [XmlAttribute("backColour")]
-        public string? BackColour;
+        [XmlAttribute("colour")]
+        public string? Colour;
 
         [XmlElement]
         public Font? Font;
-
-        [XmlAttribute("foreColour")]
-        public string? ForeColour;
 
         [XmlAttribute("visible")]
         public bool Visible;

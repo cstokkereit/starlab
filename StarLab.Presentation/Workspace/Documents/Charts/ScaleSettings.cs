@@ -3,13 +3,14 @@
     /// <summary>
     /// Represents the current state of an axis scale while the chart is being configured.
     /// </summary>
-    internal class ScaleSettings : IScaleSettings
+    internal class ScaleSettings : FrameElementSettings, IScaleSettings
     {
         /// <summary>
         /// Initialises a new instance of the <see cref="ScaleSettings"/> class.
         /// </summary>
         /// <param name="scale">An <see cref="IScale"/> that specifies the initial state of the scale.</param>
         public ScaleSettings(IScale scale)
+            : base(scale.Colour, scale.Visible)
         {
             MajorTickMarks = new TickMarkSettings(scale.MajorTickMarks);
             MinorTickMarks = new TickMarkSettings(scale.MinorTickMarks);
@@ -28,36 +29,20 @@
         /// <summary>
         /// Gets or sets the background colour.
         /// </summary>
-        public string BackColour
+        public override string Colour
         {
             get
             {
-                return GetColour(x => x.BackColour);
+                return base.Colour;
             }
 
             set
             {
-                MajorTickMarks.BackColour = value;
-                MinorTickMarks.BackColour = value;
-                TickLabels.BackColour = value;
-            }
-        }
+                if (MajorTickMarks != null) MajorTickMarks.Colour = value;
+                if (MinorTickMarks != null) MinorTickMarks.Colour = value;
+                if (TickLabels != null) TickLabels.Colour = value;
 
-        /// <summary>
-        /// Gets or sets the foreground colour.
-        /// </summary>
-        public string ForeColour
-        {
-            get
-            {
-                return GetColour(x => x.ForeColour);
-            }
-
-            set
-            {
-                MajorTickMarks.ForeColour = value;
-                MinorTickMarks.ForeColour = value;
-                TickLabels.ForeColour = value;
+                base.Colour = value;
             }
         }
 
@@ -94,32 +79,18 @@
         /// <summary>
         /// Gets or sets a flag that determines whether the chart element is visible.
         /// </summary>
-        public bool Visible
+        public override bool Visible
         {
-            get => MajorTickMarks.Visible || MinorTickMarks.Visible || TickLabels.Visible;
+            get => base.Visible;
 
             set
             {
-                MajorTickMarks.Visible = value;
-                MinorTickMarks.Visible = value;
-                TickLabels.Visible = value;
+                if (MajorTickMarks != null) MajorTickMarks.Visible = value;
+                if (MinorTickMarks != null) MinorTickMarks.Visible = value;
+                if (TickLabels != null) TickLabels.Visible = value;
+
+                base.Visible = value;
             }
-        }
-
-        /// <summary>
-        /// Gets the colour applied to the greatest number of scale elements.
-        /// </summary>
-        /// <param name="Colour">A function that determines which colour setting is used.</param>
-        /// <returns>A <see cref="string"/> that specifies the colour applicable to the greatest number of scale elements.</returns>
-        private string GetColour(Func<IColourSettings, string> Colour)
-        {
-            var colours = new List<string>();
-
-            if (MajorTickMarks.Visible) colours.Add(Colour(MajorTickMarks));
-            if (MinorTickMarks.Visible) colours.Add(Colour(MinorTickMarks));
-            if (TickLabels.Visible) colours.Add(Colour(TickLabels));
-
-            return colours.Count == 0 ? string.Empty : colours.GroupBy(a => a).OrderByDescending(b => b.Count()).First().Key;
         }
     }
 }

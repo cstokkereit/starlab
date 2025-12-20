@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace StarLab.Application.Workspace.Documents.Charts
+﻿namespace StarLab.Application.Workspace.Documents.Charts
 {
     /// <summary>
     /// Domain model representation of the chart axis scale tick labels.
@@ -15,31 +13,34 @@ namespace StarLab.Application.Workspace.Documents.Charts
         {
             ArgumentNullException.ThrowIfNull(dto, nameof(dto));
 
-            Debug.Assert(dto.BackColour != null);
-            Debug.Assert(dto.ForeColour != null);
-            Debug.Assert(dto.Font != null);
+            Colour = string.IsNullOrEmpty(dto.Colour) ? Constants.DefaultForeColour : dto.Colour;
 
-            BackColour = dto.BackColour;
-            ForeColour = dto.ForeColour;
-            Font = new Font(dto.Font);
+            Font = dto.Font == null ? new Font() : new Font(dto.Font);
+
             Rotation = dto.Rotation;
             Visible = dto.Visible;
         }
 
         /// <summary>
-        /// Gets the background colour.
+        /// Initialises a new instance of the <see cref="TickLabels"> class.
         /// </summary>
-        public string BackColour { get; }
+        public TickLabels()
+        {   
+            Colour = Constants.DefaultForeColour;
+            Font = new Font();
+            Visible = true;
+            Rotation = 0;
+        }
+
+        /// <summary>
+        /// Gets the colour.
+        /// </summary>
+        public string Colour { get; }
 
         /// <summary>
         /// Gets the tick label font.
         /// </summary>
         public Font Font { get; }
-
-        /// <summary>
-        /// Gets the foreground colour.
-        /// </summary>
-        public string ForeColour { get; }
 
         /// <summary>
         /// Gets the angle of rotation for the tick labels.

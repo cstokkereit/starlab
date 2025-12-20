@@ -6,7 +6,7 @@ namespace StarLab.UI.Controls.Workspace.Documents.Charts
     /// <summary>
     /// A <see cref="UserControl"/> that is used to update the settings that control the content and format of text displayed by chart elements.
     /// </summary>
-    public partial class TextSection : UserControl, ISettingsSection
+    public partial class LabelSection : UserControl, ISettingsSection
     {
         private readonly IDictionary<string, ILabelSettings> settingsByGroup = new Dictionary<string, ILabelSettings>(); // A dictionary containing the label settings indexed by settings group.
 
@@ -17,11 +17,11 @@ namespace StarLab.UI.Controls.Workspace.Documents.Charts
         public event EventHandler<IChartSettings>? SectionChanged; // An event that gets fired whenever any of the section settings is changed.
 
         /// <summary>
-        /// Initialises a new instance of the <see cref="TextSection"/> class.
+        /// Initialises a new instance of the <see cref="LabelSection"/> class.
         /// </summary>
         /// <param name="settings">The <see cref="IChartSettings"/> that are bound to this control.</param>
         /// <param name="group">The name of the settings group that this control represents.</param>
-        public TextSection(IChartSettings settings, string group)
+        public LabelSection(IChartSettings settings, string group)
         {
             InitializeComponent();
 

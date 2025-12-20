@@ -3,7 +3,7 @@
     /// <summary>
     /// Represents the current state of the chart while the it is being configured.
     /// </summary>
-    public interface IChartSettings : IColourSettings
+    public interface IChartSettings : IChartAreaSettings
     {
         /// <summary>
         /// Gets the chart axis settings.
@@ -13,7 +13,7 @@
         /// <summary>
         /// Gets or sets the chart font.
         /// </summary>
-        IFontSettings Font { get; set; }
+        IFont Font { get; set; }
 
         /// <summary>
         /// Gets the plot area settings.

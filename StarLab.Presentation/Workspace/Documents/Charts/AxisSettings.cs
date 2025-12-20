@@ -3,61 +3,35 @@
     /// <summary>
     /// Represents the current state of an axis while the chart is being configured.
     /// </summary>
-    internal class AxisSettings : IAxisSettings
+    internal class AxisSettings : FrameElementSettings, IAxisSettings
     {
-        private string backColour; // The background colour.
-
-        private string foreColour; // The foreground colour.
-
-        private bool visible; // A flag that determines whether the axis is visible.
-
         /// <summary>
         /// Initialises a new instance of the <see cref="AxisSettings"/> class.
         /// </summary>
         /// <param name="axis">An <see cref="IAxis"/> that specifies the initial state of the axis.</param>
         public AxisSettings(IAxis axis)
+            : base(axis.Colour, axis.Visible)
         {
             Label = new LabelSettings(axis.Label);
             Scale = new ScaleSettings(axis.Scale);
-
-            backColour = axis.BackColour;
-            foreColour = axis.ForeColour;
-            visible = axis.Visible;
-        }
-
-        /// <summary>
-        /// Gets or sets the background colour.
-        /// </summary>
-        public string BackColour 
-        {
-            get => backColour;
-
-            set
-            {
-                Scale.MajorTickMarks.BackColour = value;
-                Scale.MinorTickMarks.BackColour = value;
-                Scale.TickLabels.BackColour = value;
-                Label.BackColour = value;
-
-                backColour = value;
-            }
         }
 
         /// <summary>
         /// Gets or sets the foreground colour.
         /// </summary>
-        public string ForeColour
+        public override string Colour
         {
-            get => foreColour;
+            get
+            {
+                return base.Colour;
+            }
 
             set
             {
-                Scale.MajorTickMarks.ForeColour = value;
-                Scale.MinorTickMarks.ForeColour = value;
-                Scale.TickLabels.ForeColour = value;
-                Label.ForeColour = value;
+                if (Label != null) Label.Colour = value;
+                if (Scale != null) Scale.Colour = value;
 
-                foreColour = value;
+                base.Colour = value;
             }
         }
 
@@ -65,7 +39,6 @@
         /// Gets the label settings.
         /// </summary>
         public ILabelSettings Label { get; }
-
 
         /// <summary>
         /// Gets the axis scale settings.
@@ -75,19 +48,16 @@
         /// <summary>
         /// Gets or sets a flag that determines whether the axis is visible.
         /// </summary>
-        public bool Visible
+        public override bool Visible
         {
-            get => visible;
+            get => base.Visible;
 
             set
             {
-                Scale.MajorTickMarks.Visible = value;
-                Scale.MinorTickMarks.Visible = value;
-                Scale.TickLabels.Visible = value;
-                Label.Visible = value;
-                Scale.Visible = value;
+                if (Label != null) Label.Visible = value;
+                if (Scale != null) Scale.Visible = value;
 
-                visible = value;
+                base.Visible = value;
             }
         }
     }

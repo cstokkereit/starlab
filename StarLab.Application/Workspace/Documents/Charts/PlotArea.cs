@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace StarLab.Application.Workspace.Documents.Charts
+﻿namespace StarLab.Application.Workspace.Documents.Charts
 {
     /// <summary>
     /// Domain model representation of the chart plot area.
@@ -15,27 +13,21 @@ namespace StarLab.Application.Workspace.Documents.Charts
         {
             ArgumentNullException.ThrowIfNull(dto, nameof(dto));
 
-            Debug.Assert(dto.Grid != null);
+            Grid = dto.Grid == null ? new Grid() : new Grid(dto.Grid);
 
-            if (string.IsNullOrEmpty(dto.BackColour))
-            {
-                BackColour = Constants.DefaultBackColour;
-            }
-            else
-            {
-                BackColour = dto.BackColour;
-            }
+            BackColour = string.IsNullOrEmpty(dto.BackColour) ? Constants.DefaultBackColour : dto.BackColour;
+            ForeColour = string.IsNullOrEmpty(dto.ForeColour) ? Constants.DefaultForeColour : dto.ForeColour;
+        }
 
-            if (string.IsNullOrEmpty(dto.ForeColour))
-            {
-                ForeColour = Constants.DefaultForeColour;
-            }
-            else
-            {
-                ForeColour = dto.ForeColour;
-            }
+        /// <summary>
+        /// Initialises a new instance of the <see cref="PlotArea"> class.
+        /// </summary>
+        public PlotArea()
+        {
+            BackColour = Constants.DefaultBackColour;
+            ForeColour = Constants.DefaultForeColour;
 
-            Grid = new Grid(dto.Grid);
+            Grid = new Grid();
         }
 
         /// <summary>

@@ -7,7 +7,7 @@
     {
         private Dictionary<Type, List<WeakReference>> subsribers = new Dictionary<Type, List<WeakReference>>(); // A dictionary containing a list of subscribers for each event.
 
-        private readonly object lockSubscriberDictionary = new object();
+        private readonly object lockSubscriberDictionary = new object(); // An object used to lock the subscribers dictionary.
 
         /// <summary>
         /// Publishes an event.

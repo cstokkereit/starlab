@@ -13,7 +13,7 @@ namespace StarLab.UI.Workspace.Documents.Charts
     /// </summary>
     public partial class ChartSettingsView : UserControl, IChartSettingsView
     {
-        private const int SECTION_MARGIN = 15; // 
+        private const int SECTION_MARGIN = 15; // The gap to leave between settings sections.
 
         private static readonly ILog log = LogManager.GetLogger(typeof(ChartSettingsView)); // The logger that will be used for writing log messages.
 
@@ -87,7 +87,7 @@ namespace StarLab.UI.Workspace.Documents.Charts
         /// <param name="group">The name of the settings group.</param>
         public void AppendColourSection(IChartSettings settings, string group)
         {
-            var section = new ColourSection(settings, group, group == Constants.Chart);
+            var section = new ColourSection(settings, group);
 
             section.SectionChanged += Section_SettingsChanged;
 
@@ -129,7 +129,7 @@ namespace StarLab.UI.Workspace.Documents.Charts
         /// <param name="group">The name of the settings group.</param>
         public void AppendTextSection(IChartSettings settings, string group)
         {
-            var section = new TextSection(settings, group);
+            var section = new LabelSection(settings, group);
 
             section.SectionChanged += Section_SettingsChanged;
 

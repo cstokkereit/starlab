@@ -295,7 +295,6 @@ namespace StarLab.UI
         /// </summary>
         /// <param name="name">The name of the view.</param>
         /// <param name="text">The view text.</param>
-        /// <exception cref="NotImplementedException"></exception>
         private void CreateView(string name, string text)
         {
             try

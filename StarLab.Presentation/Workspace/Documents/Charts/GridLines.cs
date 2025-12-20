@@ -5,35 +5,22 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
     /// <summary>
     /// View model representation of the chart grid lines.
     /// </summary>
-    internal class GridLines : IGridLines
+    internal class GridLines : FrameElement, IGridLines
     {
         /// <summary>
         /// Initialises a new instance of the <see cref="GridLines"> class.
         /// </summary>
         /// <param name="dto">A data transfer object that specifies the initial state of the <see cref="GridLines"/>.</param>
-        public GridLines(GridLinesDTO? dto)
+        public GridLines(GridLinesDTO dto)
+            : base(dto.Colour, dto.Visible)
         {
             ArgumentNullException.ThrowIfNull(dto, nameof(dto));
-
-            BackColour = string.IsNullOrEmpty(dto.BackColour) ? Constants.White : dto.BackColour;
-            ForeColour = string.IsNullOrEmpty(dto.ForeColour) ? Constants.Black : dto.ForeColour;
-
-            Visible = dto.Visible;
         }
 
         /// <summary>
-        /// Gets the background colour.
+        /// Initialises a new instance of the <see cref="GridLines"> class.
         /// </summary>
-        public string BackColour { get; }
-
-        /// <summary>
-        /// Gets the foreground colour.
-        /// </summary>
-        public string ForeColour { get; }
-
-        /// <summary>
-        /// A flag indicating whether the grid lines are visible.
-        /// </summary>
-        public bool Visible { get; }
+        public GridLines()
+            : base(Constants.DefaultForeColour, true) { }
     }
 }

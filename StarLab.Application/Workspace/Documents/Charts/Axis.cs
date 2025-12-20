@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace StarLab.Application.Workspace.Documents.Charts
+﻿namespace StarLab.Application.Workspace.Documents.Charts
 {
     /// <summary>
     /// Domain model representation of a chart axis.
@@ -11,46 +9,35 @@ namespace StarLab.Application.Workspace.Documents.Charts
         /// Initialises a new instance of the <see cref="Axis"> class.
         /// </summary>
         /// <param name="dto">A data transfer object that specifies the initial state of the <see cref="Axis"/>.</param>
-        public Axis(AxisDTO dto) 
+        public Axis(AxisDTO dto)
         {
             ArgumentNullException.ThrowIfNull(dto, nameof(dto));
 
-            Debug.Assert(dto.Label != null);
-            Debug.Assert(dto.Scale != null);
+            Colour = string.IsNullOrEmpty(dto.Colour) ? Constants.DefaultForeColour : dto.Colour;
 
-            if (string.IsNullOrEmpty(dto.BackColour))
-            {
-                BackColour = Constants.DefaultBackColour;
-            }
-            else
-            {
-                BackColour = dto.BackColour;
-            }
-
-            if (string.IsNullOrEmpty(dto.ForeColour))
-            {
-                ForeColour = Constants.DefaultForeColour;
-            }
-            else
-            {
-                ForeColour = dto.ForeColour;
-            }
-
-            Label = new Label(dto.Label);
-            Scale = new Scale(dto.Scale);
+            Label = dto.Label == null ? new Label() : new Label(dto.Label);
+            Scale = dto.Scale == null ? new Scale() : new Scale(dto.Scale);
 
             Visible = dto.Visible;
         }
 
         /// <summary>
-        /// Gets the background colour.
+        /// Initialises a new instance of the <see cref="Axis"> class.
         /// </summary>
-        public string BackColour { get; }
+        public Axis()
+        {
+            Colour = Constants.DefaultForeColour;
+
+            Label = new Label();
+            Scale = new Scale();
+            
+            Visible = true;
+        }
 
         /// <summary>
-        /// Gets the foreground colour.
+        /// Gets the colour.
         /// </summary>
-        public string ForeColour { get; }
+        public string Colour { get; }
 
         /// <summary>
         /// Gets the axis label.

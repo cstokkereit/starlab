@@ -5,11 +5,9 @@
     /// </summary>
     public class LabelDTO
     {
-        public string? BackColour;
+        public string? Colour;
 
         public FontDTO? Font;
-
-        public string? ForeColour;
 
         public string? Text;
 

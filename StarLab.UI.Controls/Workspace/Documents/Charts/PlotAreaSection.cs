@@ -13,17 +13,20 @@ namespace StarLab.UI.Controls.Workspace.Documents.Charts
 
         public event EventHandler<IChartSettings>? SectionChanged;
 
-        public PlotAreaSection()
+        public PlotAreaSection(IChartSettings settings, string group)
         {
             InitializeComponent();
+
+            this.group = group;
+            this.settings = settings;
         }
 
         /// <summary>
-        /// Gets the <see cref="IVisibilitySettings"/> for the specified settings group within the bound <see cref="IChartSettings"/>.
+        /// Gets the <see cref="IChartElementSettings"/> for the specified settings group within the bound <see cref="IChartSettings"/>.
         /// </summary>
-        /// <returns>The required <see cref="IVisibilitySettings"/>.</returns>
+        /// <returns>The required <see cref="IChartElementSettings"/>.</returns>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
-        private IVisibilitySettings GetSettings()
+        private IChartElementSettings GetSettings()
         {
             throw new NotImplementedException();
         }

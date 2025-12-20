@@ -1,6 +1,7 @@
 ﻿using StarLab.Presentation;
 using StarLab.Shared.Properties;
 using StarLab.Presentation.Workspace.Documents.Charts;
+using System.Diagnostics;
 
 namespace StarLab.UI.Controls.Workspace.Documents.Charts
 {
@@ -9,13 +10,13 @@ namespace StarLab.UI.Controls.Workspace.Documents.Charts
     /// </summary>
     public partial class ColourSection : UserControl, ISettingsSection
     {
-        private const string BUTTON_BACKGROUND = "buttonBackground";
-        private const string BUTTON_FOREGROUND = "buttonForeground";
+        private const string BUTTON_BACKGROUND = "buttonBackground"; // The name of the custom background colour button.
+        private const string BUTTON_FOREGROUND = "buttonForeground"; // The name of the custom foreground colour button.
 
-        private const string COMBO_BACKGROUND = "comboBackground";
-        private const string COMBO_FOREGROUND = "comboForeground";
+        private const string COMBO_BACKGROUND = "comboBackground"; // The name of the background colour combo box.
+        private const string COMBO_FOREGROUND = "comboForeground"; // The name of the foreground colour combo box.
 
-        private readonly IDictionary<string, IColourSettings> settingsByGroup = new Dictionary<string, IColourSettings>(); // A dictionary containing the colour settings indexed by settings group.
+        private readonly IDictionary<string, IFrameElementSettings> settingsByGroup = new Dictionary<string, IFrameElementSettings>(); // A dictionary containing the colour settings indexed by settings group.
 
         private readonly IChartSettings settings; // The chart settings that are bound to this control.
 
@@ -32,21 +33,9 @@ namespace StarLab.UI.Controls.Workspace.Documents.Charts
         /// </summary>
         /// <param name="settings">The <see cref="IChartSettings"/> that are bound to this control.</param>
         /// <param name="group">The name of the settings group that this control represents.</param>
-        public ColourSection(IChartSettings settings, string group, bool dualSelection)
+        public ColourSection(IChartSettings settings, string group)
         {
             InitializeComponent();
-
-            if (dualSelection)
-            {
-                labelBackground.Text = Resources.BackColour;
-                labelForeground.Text = Resources.ForeColour;
-                Height = 100;
-            }
-            else
-            {
-                labelForeground.Text = Resources.Colour;
-                Height = 43;
-            }
 
             customBackColour = settings.BackColour.StartsWith('#') ? settings.BackColour : string.Empty;
             customForeColour = settings.ForeColour.StartsWith('#') ? settings.ForeColour : string.Empty;
@@ -54,25 +43,20 @@ namespace StarLab.UI.Controls.Workspace.Documents.Charts
             this.settings = settings;
             this.group = group;
 
-            InitialiseComboBoxes();
-        }
+            switch (group)
+            {
+                case Constants.Chart:
+                    Initialise(settings);
+                    break;
 
-        /// <summary>
-        /// Populates the <see cref="ComboBox"/> controls and wires up their event handlers.
-        /// </summary>
-        private void InitialiseComboBoxes()
-        {
-            var settings = GetSettings();
+                case Constants.ChartPlotArea:
+                    Initialise(settings.PlotArea);
+                    break;
 
-            // NOTE - The SelectedText property must be set before wiring up the DropDown event handler.
-
-            comboForeground.SelectedText = GetColourName(settings.ForeColour);
-            comboForeground.TextChanged += OnColourChanged;
-            comboForeground.DropDown += OnDropDown;
-
-            comboBackground.SelectedText = GetColourName(settings.BackColour);
-            comboBackground.TextChanged += OnColourChanged;
-            comboBackground.DropDown += OnDropDown;
+                default:
+                    Initialise(GetSettings());
+                    break;
+            }
         }
 
         /// <summary>
@@ -86,14 +70,13 @@ namespace StarLab.UI.Controls.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// Gets the <see cref="IColourSettings"/> for the specified settings group within the bound <see cref="IChartSettings"/>.
+        /// Gets the <see cref="IFrameElementSettings"/> for the specified settings group within the bound <see cref="IChartSettings"/>.
         /// </summary>
-        /// <returns>The required <see cref="IColourSettings"/>.</returns>
-        private IColourSettings GetSettings()
+        /// <returns>The required <see cref="IFrameElementSettings"/>.</returns>
+        private IFrameElementSettings GetSettings()
         {
             if (settingsByGroup.Count == 0)
             {
-                settingsByGroup.Add(Constants.Chart, settings);
                 settingsByGroup.Add(Constants.ChartAxes, settings.Axes);
                 settingsByGroup.Add(Constants.ChartAxisX1, settings.Axes.X1);
                 settingsByGroup.Add(Constants.ChartAxisX1Label, settings.Axes.X1.Label);
@@ -119,7 +102,6 @@ namespace StarLab.UI.Controls.Workspace.Documents.Charts
                 settingsByGroup.Add(Constants.ChartAxisY2MinorTickMarks, settings.Axes.Y2.Scale.MinorTickMarks);
                 settingsByGroup.Add(Constants.ChartAxisY2Scale, settings.Axes.Y2.Scale);
                 settingsByGroup.Add(Constants.ChartAxisY2TickLabels, settings.Axes.Y2.Scale.TickLabels);
-                settingsByGroup.Add(Constants.ChartPlotArea, settings.PlotArea);
                 settingsByGroup.Add(Constants.ChartPlotAreaGrid, settings.PlotArea.Grid);
                 settingsByGroup.Add(Constants.ChartPlotAreaMajorGridLines, settings.PlotArea.Grid.MajorGridLines);
                 settingsByGroup.Add(Constants.ChartPlotAreaMinorGridLines, settings.PlotArea.Grid.MinorGridLines);
@@ -127,6 +109,45 @@ namespace StarLab.UI.Controls.Workspace.Documents.Charts
             }
 
             return settingsByGroup[group];
+        }
+
+        /// <summary>
+        /// Configures the initial state of this control.
+        /// </summary>
+        /// <param name="settings">The <see cref="IChartAreaSettings"/> used to configure the initial state.</param>
+        private void Initialise(IChartAreaSettings settings)
+        {
+            // The SelectedText property must be set before wiring up the DropDown event handler.
+
+            comboForeground.SelectedText = GetColourName(settings.ForeColour);
+            comboForeground.TextChanged += OnColourChanged;
+            comboForeground.DropDown += OnDropDown;
+
+            comboBackground.SelectedText = GetColourName(settings.BackColour);
+            comboBackground.TextChanged += OnColourChanged;
+            comboBackground.DropDown += OnDropDown;
+
+            labelBackground.Text = Resources.BackColour;
+            labelForeground.Text = Resources.ForeColour;
+
+            Height = 100;
+        }
+
+        /// <summary>
+        /// Configures the initial state of this control.
+        /// </summary>
+        /// <param name="settings">The <see cref="IFrameElementSettings"/> used to configure the initial state.</param>
+        private void Initialise(IFrameElementSettings settings)
+        {
+            // The SelectedText property must be set before wiring up the DropDown event handler.
+
+            comboForeground.SelectedText = GetColourName(settings.Colour);
+            comboForeground.TextChanged += OnColourChanged;
+            comboForeground.DropDown += OnDropDown;
+
+            labelForeground.Text = Resources.Colour;
+
+            Height = 43;
         }
 
         /// <summary>
@@ -138,24 +159,20 @@ namespace StarLab.UI.Controls.Workspace.Documents.Charts
         {
             if (dialogCustomColour.ShowDialog() == DialogResult.OK && sender is Button button)
             {
-                var colour = dialogCustomColour.Color.ToArgb();
-
-                var settings = GetSettings();
-
                 // TODO - Will need to maintain a list of custom colours and use them to populate the dialog, save to settings etc.
 
-                switch (button.Name)
+                switch (group)
                 {
-                    case BUTTON_BACKGROUND:
-                        settings.BackColour = $"#{colour}";
-                        comboBackground.SelectAll();
-                        comboBackground.SelectedText = GetColourName(settings.BackColour);
+                    case Constants.Chart:
+                        UpdateSettings(button, settings);
                         break;
 
-                    case BUTTON_FOREGROUND:
-                        settings.ForeColour = $"#{colour}";
-                        comboForeground.SelectAll();
-                        comboForeground.SelectedText = GetColourName(settings.ForeColour);
+                    case Constants.ChartPlotArea:
+                        UpdateSettings(button, settings.PlotArea);
+                        break;
+
+                    default:
+                        UpdateSettings(button, GetSettings());
                         break;
                 }
             }
@@ -170,16 +187,18 @@ namespace StarLab.UI.Controls.Workspace.Documents.Charts
         {
             if (sender is ComboBox combo)
             {
-                var colourSettings = GetSettings();
-
-                switch (combo.Name)
+                switch (group)
                 {
-                    case COMBO_BACKGROUND:
-                        colourSettings.BackColour = (combo.Text == Resources.Custom && !string.IsNullOrEmpty(customBackColour)) ? customBackColour : combo.Text;
+                    case Constants.Chart:
+                        UpdateSettings(combo, settings);
                         break;
 
-                    case COMBO_FOREGROUND:
-                        colourSettings.ForeColour = (combo.Text == Resources.Custom && !string.IsNullOrEmpty(customForeColour)) ? customForeColour : combo.Text;
+                    case Constants.ChartPlotArea:
+                        UpdateSettings(combo, settings.PlotArea);
+                        break;
+
+                    default:
+                        UpdateSettings(combo, GetSettings());
                         break;
                 }
 
@@ -219,6 +238,78 @@ namespace StarLab.UI.Controls.Workspace.Documents.Charts
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Updates the settings in response to a button click event.
+        /// </summary>
+        /// <param name="button">The <see cref="Button"/> that was clicked.</param>
+        /// <param name="settings">The <see cref="IChartAreaSettings"/> being updated.</param>
+        private void UpdateSettings(Button button, IChartAreaSettings settings)
+        {
+            var colour = $"#{dialogCustomColour.Color.ToArgb()}";
+
+            switch (button.Name)
+            {
+                case BUTTON_BACKGROUND:
+                    settings.BackColour = colour;
+                    comboBackground.SelectAll();
+                    comboBackground.SelectedText = GetColourName(settings.BackColour);
+                    break;
+
+                case BUTTON_FOREGROUND:
+                    settings.ForeColour = colour;
+                    comboForeground.SelectAll();
+                    comboForeground.SelectedText = GetColourName(settings.ForeColour);
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Updates the settings in response to a button click event.
+        /// </summary>
+        /// <param name="button">The <see cref="Button"/> that was clicked.</param>
+        /// <param name="settings">The <see cref="IFrameElementSettings"/> being updated.</param>
+        private void UpdateSettings(Button button, IFrameElementSettings settings)
+        {
+            Debug.Assert(button.Name == BUTTON_FOREGROUND);
+
+            settings.Colour = $"#{dialogCustomColour.Color.ToArgb()}";
+
+            comboForeground.SelectAll();
+
+            comboForeground.SelectedText = GetColourName(settings.Colour);
+        }
+
+        /// <summary>
+        /// Updates the settings in response to a combo box text changed event.
+        /// </summary>
+        /// <param name="combo">The <see cref="ComboBox"/> for which the text was changed.</param>
+        /// <param name="settings">The <see cref="IChartAreaSettings"/> being updated.</param>
+        private void UpdateSettings(ComboBox combo, IChartAreaSettings settings)
+        {
+            switch (combo.Name)
+            {
+                case COMBO_BACKGROUND:
+                    settings.BackColour = (combo.Text == Resources.Custom && !string.IsNullOrEmpty(customBackColour)) ? customBackColour : combo.Text;
+                    break;
+
+                case COMBO_FOREGROUND:
+                    settings.ForeColour = (combo.Text == Resources.Custom && !string.IsNullOrEmpty(customForeColour)) ? customForeColour : combo.Text;
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Updates the settings in response to a combo box text changed event.
+        /// </summary>
+        /// <param name="combo">The <see cref="ComboBox"/> for which the text was changed.</param>
+        /// <param name="settings">The <see cref="IFrameElementSettings"/> being updated.</param>
+        private void UpdateSettings(ComboBox combo, IFrameElementSettings settings)
+        {
+            Debug.Assert(combo.Name == COMBO_FOREGROUND);
+
+            settings.Colour = (combo.Text == Resources.Custom && !string.IsNullOrEmpty(customForeColour)) ? customForeColour : combo.Text;
         }
     }
 }

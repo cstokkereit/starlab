@@ -175,7 +175,7 @@ namespace StarLab.UI.Workspace.Documents.Charts
             ConfigureLabel(axis.Label, config.Label);
             ConfigureScale(axis, config.Scale);
 
-            axis.FrameLineStyle.Color = GetColour(config.ForeColour);
+            axis.FrameLineStyle.Color = GetColour(config.Colour);
             axis.IsVisible = config.Visible;
         }
 
@@ -187,10 +187,12 @@ namespace StarLab.UI.Workspace.Documents.Charts
         private void ConfigureChart(Plot chart, IChart config)
         {
             ConfigureLabel(chart.Axes.Title.Label, config.Title);
+
             ConfigureAxis(chart.Axes.Bottom, config.X1);
             ConfigureAxis(chart.Axes.Right, config.Y2);
             ConfigureAxis(chart.Axes.Left, config.Y1);
             ConfigureAxis(chart.Axes.Top, config.X2);
+
             ConfigurePlotArea(chart, config);
 
             chart.FigureBackground.Color = GetColour(config.BackColour);
@@ -203,8 +205,7 @@ namespace StarLab.UI.Workspace.Documents.Charts
         /// <param name="config">The <see cref="ILabel"/> configuration being applied.</param>
         private void ConfigureLabel(LabelStyle label, ILabel config)
         {
-            label.BackgroundColor = GetColour(config.BackColour);
-            label.ForeColor = GetColour(config.ForeColour);
+            label.ForeColor = GetColour(config.Colour);
             label.IsVisible = config.Visible;
             label.Text = config.Text;
 
@@ -237,19 +238,19 @@ namespace StarLab.UI.Workspace.Documents.Charts
 
                 grid.MajorLineWidth = majorGridLines.Visible ? 2 : 0;
 
-                grid.MajorLineColor = GetColour(majorGridLines.ForeColour).WithOpacity(0.3);
-
-
+                grid.MajorLineColor = GetColour(majorGridLines.Colour).WithOpacity(0.3);
 
                 grid.MinorLineWidth = minorGridLines.Visible ? 2 : 0;
 
-                grid.MinorLineColor = GetColour(minorGridLines.ForeColour).WithOpacity(0.1);
+                grid.MinorLineColor = GetColour(minorGridLines.Colour).WithOpacity(0.1);
 
             }
             else
             {
                 chart.HideGrid();
             }
+
+            chart.Layout.Fixed(new PixelPadding(50, 50, 50, 50));
         }
 
         /// <summary>
@@ -284,8 +285,7 @@ namespace StarLab.UI.Workspace.Documents.Charts
         /// <param name="config">The <see cref="ITickLabels"/> configuration being applied.</param>
         private void ConfigureTickLabels(LabelStyle tickLabels, ITickLabels config)
         {
-            tickLabels.BackgroundColor = GetColour(config.BackColour);
-            tickLabels.ForeColor = GetColour(config.ForeColour);
+            tickLabels.ForeColor = GetColour(config.Colour);
             tickLabels.Rotation = config.Rotation;
             tickLabels.IsVisible = config.Visible;
 
@@ -305,7 +305,7 @@ namespace StarLab.UI.Workspace.Documents.Charts
         /// <param name="config">The <see cref="ITickMarks"/> configuration being applied.</param>
         private void ConfigureTickMarks(TickMarkStyle tickMarks, ITickMarks config)
         {
-            tickMarks.Color = GetColour(config.ForeColour);
+            tickMarks.Color = GetColour(config.Colour);
             tickMarks.Length = config.Length;
             tickMarks.Hairline = true;
         }
@@ -448,7 +448,7 @@ namespace StarLab.UI.Workspace.Documents.Charts
             RectanglePlot.IsVisible = false;
 
             // clear old markers
-            formsPlot.Plot.Remove<ScottPlot.Plottables.Marker>();
+            formsPlot.Plot.Remove<Marker>();
 
             // identify selectedPoints
             var selectedPoints = scatter.Data.GetScatterPoints().Where(x => MouseSlectionRect.Contains(x));

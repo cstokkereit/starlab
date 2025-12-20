@@ -1,6 +1,6 @@
 ﻿namespace StarLab.UI.Controls.Workspace.Documents.Charts
 {
-    partial class TextSection
+    partial class LabelSection
     {
         /// <summary> 
         /// Required designer variable.

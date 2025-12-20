@@ -13,36 +13,25 @@
         {
             ArgumentNullException.ThrowIfNull(dto, nameof(dto));
 
-            if (string.IsNullOrEmpty(dto.BackColour))
-            {
-                BackColour = Constants.DefaultBackColour;
-            }
-            else
-            {
-                BackColour = dto.BackColour;
-            }
-
-            if (string.IsNullOrEmpty(dto.ForeColour))
-            {
-                ForeColour = Constants.DefaultForeColour;
-            }
-            else
-            {
-                ForeColour = dto.ForeColour;
-            }
+            Colour = string.IsNullOrEmpty(dto.Colour) ? Constants.DefaultForeColour : dto.Colour;
 
             Visible = dto.Visible;
         }
 
         /// <summary>
-        /// Gets the background colour.
+        /// Initialises a new instance of the <see cref="GridLines"> class.
         /// </summary>
-        public string BackColour { get; }
+        public GridLines()
+        {
+            Colour = Constants.DefaultForeColour;
+
+            Visible = true;
+        }
 
         /// <summary>
-        /// Gets the foreground colour.
+        /// Gets the colour.
         /// </summary>
-        public string ForeColour { get; }
+        public string Colour { get; }
 
         /// <summary>
         /// A flag indicating whether the grid lines are visible.

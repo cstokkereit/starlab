@@ -7,9 +7,7 @@
     {
         public bool Autoscale;
 
-        public string? BackColour;
-
-        public string? ForeColour;
+        public string? Colour;
 
         public TickMarksDTO? MajorTickMarks;
 

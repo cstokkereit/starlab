@@ -3,7 +3,7 @@
     /// <summary>
     /// Represents the current state of the plot area while the chart is being configured.
     /// </summary>
-    public interface IPlotAreaSettings : IColourSettings
+    public interface IPlotAreaSettings : IChartAreaSettings
     {
         /// <summary>
         /// Gets the chart grid settings.

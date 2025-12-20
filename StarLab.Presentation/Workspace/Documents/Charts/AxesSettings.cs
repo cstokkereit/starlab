@@ -3,7 +3,7 @@
     /// <summary>
     /// Represents the current state of the chart axes while the chart is being configured.
     /// </summary>
-    internal class AxesSettings : IAxesSettings
+    internal class AxesSettings : TextElementSettings, IAxesSettings
     {
         /// <summary>
         /// Initialises a new instance of the <see cref="AxesSettings"> class.
@@ -13,13 +13,12 @@
         /// <param name="y1">An <see cref="IAxis"/> that specifies the initial state of the left axis.</param>
         /// <param name="y2">An <see cref="IAxis"/> that specifies the initial state of the right axis.</param>
         public AxesSettings(IAxis x1, IAxis x2, IAxis y1, IAxis y2)
+            : base(GetColour(x1, x2, y1, y2), GetFont(x1, x2, y1, y2), GetVisible(x1, x2, y1, y2))
         {
             X1 = new AxisSettings(x1);
             X2 = new AxisSettings(x2);
             Y1 = new AxisSettings(y1);
             Y2 = new AxisSettings(y2);
-
-            Font = GetFont();
         }
 
         /// <summary>
@@ -43,77 +42,81 @@
         public IAxisSettings Y2 { get; }
 
         /// <summary>
-        /// Gets or sets the background colour.
+        /// Gets or sets the colour.
         /// </summary>
-        public string BackColour
+        public override string Colour
         {
             get
             {
-                return GetColour(x => x.BackColour);
+                return base.Colour;
             }
 
             set
             {
-                X1.BackColour = value;
-                X2.BackColour = value;
-                Y1.BackColour = value;
-                Y2.BackColour = value;
+                if (X1 != null) X1.Colour = value;
+                if (X2 != null) X2.Colour = value;
+                if (Y1 != null) Y1.Colour = value;
+                if (Y2 != null) Y2.Colour = value;
+
+                base.Colour = value;
             }
         }
 
         /// <summary>
-        /// Gets or sets the font settings.
+        /// Gets or sets the font for the axes.
         /// </summary>
-        public IFontSettings Font { get; set; }
-
-        /// <summary>
-        /// Gets the foreground colour.
-        /// </summary>
-        public string ForeColour
-        {
+        public override IFont Font
+        { 
             get
             {
-                return GetColour(x => x.ForeColour);
+                return base.Font;
             }
-
+            
             set
             {
-                X1.ForeColour = value;
-                X2.ForeColour = value;
-                Y1.ForeColour = value;
-                Y2.ForeColour = value;
+                if (X1 != null) X1.Label.Font = value;
+                if (X2 != null) X2.Label.Font = value;
+                if (Y1 != null) Y1.Label.Font = value;
+                if (Y2 != null) Y2.Label.Font = value;
+
+                base.Font = value;
             }
         }
 
         /// <summary>
         /// Gets or sets a flag that determines whether the axes are visible.
         /// </summary>
-        public bool Visible
+        public override bool Visible
         {
-            get => X1.Visible || X2.Visible || Y1.Visible || Y2.Visible;
+            get => base.Visible;
 
             set
             {
-                X1.Visible = value;
-                X2.Visible = value;
-                Y1.Visible = value;
-                Y2.Visible = value;
+                if (X1 != null) X1.Visible = value;
+                if (X2 != null) X2.Visible = value;
+                if (Y1 != null) Y1.Visible = value;
+                if (Y2 != null) Y2.Visible = value;
+
+                base.Visible = value;
             }
         }
 
         /// <summary>
         /// Gets the colour applied to the greatest number of axes.
         /// </summary>
-        /// <param name="Colour">A function that determines which colour setting is used.</param>
-        /// <returns>A <see cref="string"/> that specifies the colour applicable to the greatest number of axes.</returns>
-        private string GetColour(Func<IColourSettings, string> Colour)
+        /// <param name="x1"></param>
+        /// <param name="x2"></param>
+        /// <param name="y1"></param>
+        /// <param name="y2"></param>
+        /// <returns></returns>
+        private static string GetColour(IAxis x1, IAxis x2, IAxis y1, IAxis y2)
         {
             var colours = new List<string>();
 
-            if (X1.Visible) colours.Add(Colour(X1));
-            if (X2.Visible) colours.Add(Colour(X2));
-            if (Y1.Visible) colours.Add(Colour(Y1));
-            if (Y2.Visible) colours.Add(Colour(Y2));
+            if (x1.Visible) colours.Add(x1.Colour);
+            if (x2.Visible) colours.Add(x2.Colour);
+            if (y1.Visible) colours.Add(y1.Colour);
+            if (y2.Visible) colours.Add(y2.Colour);
 
             return colours.Count == 0 ? string.Empty : colours.GroupBy(a => a).OrderByDescending(b => b.Count()).First().Key;
         }
@@ -121,30 +124,34 @@
         /// <summary>
         /// Gets the font applied to the greatest number of axis labels.
         /// </summary>
-        /// <returns>An <see cref="IFontSettings"/> applicable to the greatest number of axis labels.</returns>
-        private IFontSettings GetFont()
+        /// <param name="x1"></param>
+        /// <param name="x2"></param>
+        /// <param name="y1"></param>
+        /// <param name="y2"></param>
+        /// <returns></returns>
+        private static IFont GetFont(IAxis x1, IAxis x2, IAxis y1, IAxis y2)
         {
-            var fonts = new List<IFontSettings>();
+            var fonts = new List<IFont>();
 
-            if (X1.Visible) fonts.Add(X1.Label.Font);
-            if (X2.Visible) fonts.Add(X2.Label.Font);
-            if (Y1.Visible) fonts.Add(Y1.Label.Font);
-            if (Y2.Visible) fonts.Add(Y2.Label.Font);
+            if (x1.Visible) fonts.Add(x1.Label.Font);
+            if (x2.Visible) fonts.Add(x2.Label.Font);
+            if (y1.Visible) fonts.Add(y1.Label.Font);
+            if (y2.Visible) fonts.Add(y2.Label.Font);
 
-            var family = fonts.Count > 0 ? fonts.GroupBy(a => a.Family).OrderByDescending(b => b.Count()).First().Key : string.Empty;
+            return fonts.Count > 0 ? fonts[0] : new Font(); // TODO - Temporary
+        }
 
-            var settings = X1.Label.Font;
-
-            foreach (var font in fonts)
-            {
-                if (font.Family == family)
-                {
-                    settings = font;
-                    break;
-                }
-            }
-
-            return settings;
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="x1"></param>
+        /// <param name="x2"></param>
+        /// <param name="y1"></param>
+        /// <param name="y2"></param>
+        /// <returns></returns>
+        private static bool GetVisible(IAxis x1, IAxis x2, IAxis y1, IAxis y2)
+        {
+            return x1.Visible || x2.Visible || y1.Visible || y2.Visible;
         }
     }
 }

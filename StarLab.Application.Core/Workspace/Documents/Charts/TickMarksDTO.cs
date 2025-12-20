@@ -5,9 +5,7 @@
     /// </summary>
     public class TickMarksDTO
     {
-        public string? BackColour;
-
-        public string? ForeColour;
+        public string? Colour;
 
         public int Length;
 

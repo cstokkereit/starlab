@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace StarLab.Application.Workspace.Documents.Charts
+﻿namespace StarLab.Application.Workspace.Documents.Charts
 {
     /// <summary>
     /// Domain model representation of a chart label.
@@ -15,45 +13,35 @@ namespace StarLab.Application.Workspace.Documents.Charts
         {
             ArgumentNullException.ThrowIfNull(dto, nameof(dto));
 
-            Debug.Assert(dto.Font != null);
+            Font = dto.Font == null ? new Font() : new Font(dto.Font);
 
-            if (string.IsNullOrEmpty(dto.BackColour))
-            {
-                BackColour = Constants.DefaultBackColour;
-            }
-            else
-            {
-                BackColour = dto.BackColour;
-            }
+            Colour = string.IsNullOrEmpty(dto.Colour) ? Constants.DefaultForeColour : dto.Colour;
 
-            if (string.IsNullOrEmpty(dto.ForeColour))
-            {
-                ForeColour = Constants.DefaultForeColour;
-            }
-            else
-            {
-                ForeColour = dto.ForeColour;
-            }
+            Text = dto.Text ?? string.Empty;
 
-            Text = string.Empty + dto.Text;
-            Font = new Font(dto.Font);
             Visible = dto.Visible;
         }
 
         /// <summary>
-        /// Gets the background colour.
+        /// Initialises a new instance of the <see cref="Label"> class.
         /// </summary>
-        public string BackColour { get; }
+        public Label()
+        {
+            Colour = Constants.DefaultForeColour;
+            Text = string.Empty;
+            Font = new Font();
+            Visible = true;
+        }
+
+        /// <summary>
+        /// Gets the colour.
+        /// </summary>
+        public string Colour { get; }
 
         /// <summary>
         /// Gets the label <see cref="Font"/>.
         /// </summary>
         public Font Font { get; }
-
-        /// <summary>
-        /// Gets the foreground colour.
-        /// </summary>
-        public string ForeColour { get; }
 
         /// <summary>
         /// Gets the label text.

@@ -13,27 +13,11 @@
         {
             ArgumentNullException.ThrowIfNull(dto, nameof(dto));
 
-            MajorTickMarks = new TickMarks(dto.MajorTickMarks);
-            MinorTickMarks = new TickMarks(dto.MinorTickMarks);
-            TickLabels = new TickLabels(dto.TickLabels);
+            MajorTickMarks = dto.MajorTickMarks == null ? new TickMarks(Constants.DefaultMajorTickMarkLength) : new TickMarks(dto.MajorTickMarks);
+            MinorTickMarks = dto.MinorTickMarks == null ? new TickMarks(Constants.DefaultMinorTickMarkLength) : new TickMarks(dto.MinorTickMarks);
+            TickLabels = dto.TickLabels == null ? new TickLabels() : new TickLabels(dto.TickLabels);
 
-            if (string.IsNullOrEmpty(dto.BackColour))
-            {
-                BackColour = Constants.DefaultBackColour;
-            }
-            else
-            {
-                BackColour = dto.BackColour;
-            }
-
-            if (string.IsNullOrEmpty(dto.ForeColour))
-            {
-                ForeColour = Constants.DefaultForeColour;
-            }
-            else
-            {
-                ForeColour = dto.ForeColour;
-            }
+            Colour = string.IsNullOrEmpty(dto.Colour) ? Constants.DefaultForeColour : dto.Colour;
 
             Autoscale = dto.Autoscale;
             Reversed = dto.Reversed;
@@ -43,19 +27,30 @@
         }
 
         /// <summary>
+        /// Initialises a new instance of the <see cref="Scale"> class.
+        /// </summary>
+        public Scale()
+        {
+            MajorTickMarks = new TickMarks(Constants.DefaultMajorTickMarkLength);
+            MinorTickMarks = new TickMarks(Constants.DefaultMinorTickMarkLength);
+            TickLabels =  new TickLabels();
+
+            Colour = Constants.DefaultForeColour;
+
+            Autoscale = true;
+            Reversed = false;
+            Visible = true;
+        }
+
+        /// <summary>
         /// A flag indicating that the scale is generated automatically to fit the data.
         /// </summary>
         public bool Autoscale { get; }
 
         /// <summary>
-        /// Gets the background colour.
+        /// Gets the colour.
         /// </summary>
-        public string BackColour { get; }
-
-        /// <summary>
-        /// Gets the foreground colour.
-        /// </summary>
-        public string ForeColour { get; }
+        public string Colour { get; }
 
         /// <summary>
         /// Gets the major tick marks.

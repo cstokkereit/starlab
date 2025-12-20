@@ -3,18 +3,8 @@
     /// <summary>
     /// Represents the chart grid.
     /// </summary>
-    public interface IGrid
+    public interface IGrid : IFrameElement
     {
-        /// <summary>
-        /// Gets the background colour.
-        /// </summary>
-        string BackColour { get; }
-
-        /// <summary>
-        /// Gets the foreground colour.
-        /// </summary>
-        string ForeColour { get; }
-
         /// <summary>
         /// Gets the major grid lines.
         /// </summary>
@@ -24,10 +14,5 @@
         /// Gets the minor grid lines.
         /// </summary>
         IGridLines MinorGridLines { get; }
-
-        /// <summary>
-        /// A flag indicating whether the grid is visible.
-        /// </summary>
-        bool Visible { get; }
     }
 }

@@ -3,32 +3,34 @@
     /// <summary>
     /// Represents the current state of the grid while the chart is being configured.
     /// </summary>
-    internal class GridSettings : IGridSettings
+    internal class GridSettings : FrameElementSettings, IGridSettings
     {
         /// <summary>
         /// Initialises a new instance of the <see cref="GridSettings"/> class.
         /// </summary>
         /// <param name="grid">An <see cref="IGrid"/> that specifies the initial state of the grid.</param>
         public GridSettings(IGrid grid)
+            : base(grid.Colour, grid.Visible)
         {
-            BackColour = grid.BackColour;
-            ForeColour = grid.ForeColour;
-
             MajorGridLines = new GridLineSettings(grid.MajorGridLines);
             MinorGridLines = new GridLineSettings(grid.MinorGridLines);
-
-            Visible = grid.Visible;
         }
-
-        /// <summary>
-        /// Gets or sets the background colour.
-        /// </summary>
-        public string BackColour { get; set; }
 
         /// <summary>
         /// Gets or sets the foreground colour.
         /// </summary>
-        public string ForeColour { get; set; }
+        public override string Colour 
+        {
+            get => base.Colour;
+
+            set
+            {
+                if (MajorGridLines != null) MajorGridLines.Colour = value;
+                if (MinorGridLines != null) MinorGridLines.Colour = value;
+
+                base.Colour = value;
+            }
+        }
 
         /// <summary>
         /// Gets the major grid line settings.
@@ -43,6 +45,17 @@
         /// <summary>
         /// Gets or sets a flag that determines whether the grid is visible.
         /// </summary>
-        public bool Visible { get; set; }
+        public override bool Visible
+        { 
+            get => base.Visible;
+
+            set
+            {
+                if (MajorGridLines != null) MajorGridLines.Visible = value;
+                if (MinorGridLines != null) MinorGridLines.Visible = value;
+
+                base.Visible = value;
+            }
+        }
     }
 }

@@ -21,7 +21,6 @@ namespace StarLab.Presentation.Workspace.Documents
         /// </summary>
         /// <param name="dto">A <see cref="DocumentDTO"/> representation of the document.</param>
         /// <exception cref="ArgumentNullException"></exception>
-        /// <exception cref="ArgumentException"></exception>
         public Document(DocumentDTO dto)
         {
             ArgumentNullException.ThrowIfNull(dto, nameof(dto));

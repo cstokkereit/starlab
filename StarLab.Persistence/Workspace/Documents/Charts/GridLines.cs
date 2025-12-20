@@ -8,11 +8,8 @@ namespace StarLab.Serialisation.Workspace.Documents.Charts
     [XmlType]
     public class GridLines
     {
-        [XmlAttribute("backColour")]
-        public string? BackColour;
-
-        [XmlAttribute("foreColour")]
-        public string? ForeColour;
+        [XmlAttribute("colour")]
+        public string? Colour;
 
         [XmlAttribute("visible")]
         public bool Visible;

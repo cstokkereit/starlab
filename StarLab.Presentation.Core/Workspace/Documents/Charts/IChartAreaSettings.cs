@@ -1,9 +1,9 @@
 ﻿namespace StarLab.Presentation.Workspace.Documents.Charts
 {
     /// <summary>
-    /// Represents the current state of a chart element while the chart is being configured.
+    /// Represents the current state of a coloured area while the chart is being configured.
     /// </summary>
-    public interface IColourSettings
+    public interface IChartAreaSettings : IChartElement
     {
         /// <summary>
         /// Gets or sets the background colour.

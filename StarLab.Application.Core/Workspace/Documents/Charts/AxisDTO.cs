@@ -5,9 +5,7 @@
     /// </summary>
     public class AxisDTO
     {
-        public string? BackColour;
-
-        public string? ForeColour;
+        public string? Colour;
 
         public LabelDTO? Label;
 

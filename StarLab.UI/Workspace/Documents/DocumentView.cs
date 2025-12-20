@@ -98,7 +98,7 @@ namespace StarLab.UI.Workspace.Documents
         {
             foreach (var control in splitContainer.Panel1.Controls)
             {
-                if (control is IChildView content && content.Controller.Name == name)
+                if (control is IChildView content && content.Controller != null && content.Controller.Name == name)
                 {
                     return content.Controller;
                 }
@@ -106,7 +106,7 @@ namespace StarLab.UI.Workspace.Documents
 
             foreach (var control in splitContainer.Panel2.Controls)
             {
-                if (control is IChildView content && content.Controller.Name == name)
+                if (control is IChildView content && content.Controller != null && content.Controller.Name == name)
                 {
                     return content.Controller;
                 }

@@ -1,42 +1,34 @@
 ﻿using StarLab.Application.Workspace.Documents.Charts;
-using System.Diagnostics;
 
 namespace StarLab.Presentation.Workspace.Documents.Charts
 {
     /// <summary>
     /// View model representation of the chart grid.
     /// </summary>
-    internal class Grid : IGrid
+    internal class Grid : FrameElement, IGrid
     {
         /// <summary>
         /// Initialises a new instance of the <see cref="Grid"> class.
         /// </summary>
         /// <param name="dto">A data transfer object that specifies the initial state of the <see cref="Grid"/>.</param>
         public Grid(GridDTO dto)
+            : base(dto.Colour, dto.Visible)
         {
             ArgumentNullException.ThrowIfNull(dto, nameof(dto));
 
-            Debug.Assert(dto.MajorGridLines != null);
-            Debug.Assert(dto.MinorGridLines != null);
-
-            BackColour = string.IsNullOrEmpty(dto.BackColour) ? Constants.White : dto.BackColour;
-            ForeColour = string.IsNullOrEmpty(dto.ForeColour) ? Constants.Black : dto.ForeColour;
-
-            MajorGridLines = new GridLines(dto.MajorGridLines);
-            MinorGridLines = new GridLines(dto.MinorGridLines);
-
-            Visible = dto.Visible;
+            MajorGridLines = dto.MajorGridLines == null ? new GridLines() : new GridLines(dto.MajorGridLines);
+            MinorGridLines = dto.MinorGridLines == null ? new GridLines() : new GridLines(dto.MinorGridLines);
         }
 
         /// <summary>
-        /// Gets the background colour.
+        /// Initialises a new instance of the <see cref="Grid"> class.
         /// </summary>
-        public string BackColour { get; }
-
-        /// <summary>
-        /// Gets the foreground colour.
-        /// </summary>
-        public string ForeColour { get; }
+        public Grid()
+            : base(Constants.DefaultForeColour, true)
+        {
+            MajorGridLines = new GridLines();
+            MinorGridLines = new GridLines();
+        }
 
         /// <summary>
         /// Gets the major grid lines.
@@ -47,10 +39,5 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// Gets the minor grid lines.
         /// </summary>
         public IGridLines MinorGridLines { get; }
-
-        /// <summary>
-        /// A flag indicating whether the grid is visible.
-        /// </summary>
-        public bool Visible { get; }
     }
 }

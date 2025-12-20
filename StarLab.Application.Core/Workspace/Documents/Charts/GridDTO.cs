@@ -5,9 +5,7 @@
     /// </summary>
     public class GridDTO
     {
-        public string? BackColour;
-
-        public string? ForeColour;
+        public string? Colour;
 
         public GridLinesDTO? MajorGridLines;
 

@@ -17,59 +17,59 @@
         <Document id="577cb05b-c02f-499c-bc36-deb47aff9029" name="HR-Diagram 1" path="Workspace/Yale Bright Star Catalog/Charts/HRDiagrams" view="ColourMagnitudeChartView">
           <Chart backColour="Black" foreColour="Green">
             <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
-            <Title backColour="Black" foreColour="Green" text="HR-Diagram 1" visible="true">
+            <Title colour="Green" text="HR-Diagram 1" visible="true">
               <Font bold="true" family="Segoe UI" italic="false" size="20" underline="false" />
             </Title>
             <PlotArea backColour="Black" foreColour="Green">
-              <Grid backColour="Black" foreColour="Green" visible="true">
-                <MajorGridLines backColour="Black" foreColour="Green" visible="true" />
-                <MinorGridLines backColour="Black" foreColour="Green" visible="true" />
+              <Grid colour="Green" visible="true">
+                <MajorGridLines colour="Green" visible="true" />
+                <MinorGridLines colour="Green" visible="true" />
               </Grid>
             </PlotArea>
-            <X1 backColour="Black" foreColour="Green" visible="true">
-              <Label backColour="Black" foreColour="Green" text="Colour Index (B-V)" visible="true">
+            <X1 colour="Green" visible="true">
+              <Label colour="Green" text="Colour Index (B-V)" visible="true">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
-              <Scale autoscale="false" backColour="Black" foreColour="Green" maximum="2" minimum="-0.5" reversed="false" visible="true">
-                <MajorTickMarks backColour="Black" foreColour="Green" length="4" visible="true" />
-                <MinorTickMarks backColour="Black" foreColour="Green" length="2" visible="true" />
-                <TickLabels backColour="Black" foreColour="Green" visible="true">
+              <Scale autoscale="false" colour="Green" maximum="2" minimum="-0.5" reversed="false" visible="true">
+                <MajorTickMarks colour="Green" length="4" visible="true" />
+                <MinorTickMarks colour="Green" length="2" visible="true" />
+                <TickLabels colour="Green" visible="true">
                   <Font bold="false" family="Segoe UI" italic="false" size="12" underline="false" />
                 </TickLabels>
               </Scale>
             </X1>
-            <X2 backColour="Black" foreColour="Green" visible="false">
-              <Label backColour="Black" foreColour="Green" text="" visible="false">
+            <X2 colour="Green" visible="false">
+              <Label colour="Green" text="" visible="false">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
-              <Scale autoscale="false" backColour="Black" foreColour="Green" maximum="10" minimum="0" reversed="false" visible="true">
-                <MajorTickMarks backColour="Black" foreColour="Green" length="4" visible="true" />
-                <MinorTickMarks backColour="Black" foreColour="Green" length="2" visible="true" />
-                <TickLabels backColour="Black" foreColour="Green" visible="false">
+              <Scale autoscale="false" colour="Green" maximum="10" minimum="0" reversed="false" visible="true">
+                <MajorTickMarks colour="Green" length="4" visible="true" />
+                <MinorTickMarks colour="Green" length="2" visible="true" />
+                <TickLabels colour="Green" visible="false">
                   <Font bold="false" family="Segoe UI" italic="false" size="12" underline="false" />
                 </TickLabels>
               </Scale>
             </X2>
-            <Y1 backColour="Black" foreColour="Green" visible="true">
-              <Label backColour="Black" foreColour="Green" text="Absolute Magnitude" visible="true">
+            <Y1 colour="Green" visible="true">
+              <Label colour="Green" text="Absolute Magnitude" visible="true">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
-              <Scale autoscale="false" backColour="Black" foreColour="Green" maximum="15" minimum="-5" reversed="true" visible="true">
-                <MajorTickMarks backColour="Black" foreColour="Green" length="4" visible="true" />
-                <MinorTickMarks backColour="Black" foreColour="Green" length="2" visible="true" />
-                <TickLabels backColour="Black" foreColour="Green" visible="true">
+              <Scale autoscale="false" colour="Green" maximum="15" minimum="-5" reversed="true" visible="true">
+                <MajorTickMarks colour="Green" length="4" visible="true" />
+                <MinorTickMarks colour="Green" length="2" visible="true" />
+                <TickLabels colour="Green" visible="true">
                   <Font bold="false" family="Segoe UI" italic="false" size="12" underline="false" />
                 </TickLabels>
               </Scale>
             </Y1>
-            <Y2 backColour="Black" foreColour="Green" visible="false">
-              <Label backColour="Black" foreColour="Green" text="" visible="false">
+            <Y2 colour="Green" visible="false">
+              <Label colour="Green" text="" visible="false">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
-              <Scale autoscale="false" backColour="Black" foreColour="Green" maximum="10" minimum="0" reversed="false" visible="true">
-                <MajorTickMarks backColour="Black" foreColour="Green" length="4" visible="true" />
-                <MinorTickMarks backColour="Black" foreColour="Green" length="2" visible="true" />
-                <TickLabels backColour="Black" foreColour="Green" visible="false">
+              <Scale autoscale="false" colour="Green" maximum="10" minimum="0" reversed="false" visible="true">
+                <MajorTickMarks colour="Green" length="4" visible="true" />
+                <MinorTickMarks colour="Green" length="2" visible="true" />
+                <TickLabels colour="Green" visible="false">
                   <Font bold="false" family="Segoe UI" italic="false" size="12" underline="false" />
                 </TickLabels>
               </Scale>
@@ -79,59 +79,59 @@
         <Document id="f7f6ec62-39d9-411e-ab6a-af547dca8dc5" name="HR-Diagram 2" path="Workspace/Yale Bright Star Catalog/Charts/HRDiagrams" view="ColourMagnitudeChartView">
           <Chart backColour="Black" foreColour="Green">
             <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
-            <Title backColour="Black" foreColour="Green" text="HR-Diagram 2" visible="true">
+            <Title colour="Green" text="HR-Diagram 2" visible="true">
               <Font bold="true" family="Segoe UI" italic="false" size="20" underline="false" />
             </Title>
             <PlotArea backColour="Black" foreColour="Green">
-              <Grid backColour="Black" foreColour="Green" visible="true">
-                <MajorGridLines backColour="Black" foreColour="Green" visible="true" />
-                <MinorGridLines backColour="Black" foreColour="Green" visible="true" />
+              <Grid colour="Green" visible="true">
+                <MajorGridLines colour="Green" visible="true" />
+                <MinorGridLines colour="Green" visible="true" />
               </Grid>
             </PlotArea>
-            <X1 backColour="Black" foreColour="Green" visible="true">
-              <Label backColour="Black" foreColour="Green" text="Colour Index (B-V)" visible="true">
+            <X1 colour="Green" visible="true">
+              <Label colour="Green" text="Colour Index (B-V)" visible="true">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
-              <Scale autoscale="false" backColour="Black" foreColour="Green" maximum="2" minimum="-0.5" reversed="false" visible="true">
-                <MajorTickMarks backColour="Black" foreColour="Green" length="4" visible="true" />
-                <MinorTickMarks backColour="Black" foreColour="Green" length="2" visible="true" />
-                <TickLabels backColour="Black" foreColour="Green" visible="true">
+              <Scale autoscale="false" colour="Green" maximum="2" minimum="-0.5" reversed="false" visible="true">
+                <MajorTickMarks colour="Green" length="4" visible="true" />
+                <MinorTickMarks colour="Green" length="2" visible="true" />
+                <TickLabels colour="Green" visible="true">
                   <Font bold="false" family="Segoe UI" italic="false" size="12" underline="false" />
                 </TickLabels>
               </Scale>
             </X1>
-            <X2 backColour="Black" foreColour="Green" visible="false">
-              <Label backColour="Black" foreColour="Green" text="" visible="false">
+            <X2 colour="Green" visible="false">
+              <Label colour="Green" text="" visible="false">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
-              <Scale autoscale="false" backColour="Black" foreColour="Green" maximum="10" minimum="0" reversed="false" visible="true">
-                <MajorTickMarks backColour="Black" foreColour="Green" length="4" visible="true" />
-                <MinorTickMarks backColour="Black" foreColour="Green" length="2" visible="true" />
-                <TickLabels backColour="Black" foreColour="Green" visible="false">
+              <Scale autoscale="false" colour="Green" maximum="10" minimum="0" reversed="false" visible="true">
+                <MajorTickMarks colour="Green" length="4" visible="true" />
+                <MinorTickMarks colour="Green" length="2" visible="true" />
+                <TickLabels colour="Green" visible="false">
                   <Font bold="false" family="Segoe UI" italic="false" size="12" underline="false" />
                 </TickLabels>
               </Scale>
             </X2>
-            <Y1 backColour="Black" foreColour="Green" visible="true">
-              <Label backColour="Black" foreColour="Green" text="Absolute Magnitude" visible="true">
+            <Y1 colour="Green" visible="true">
+              <Label colour="Green" text="Absolute Magnitude" visible="true">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
-              <Scale autoscale="false" backColour="Black" foreColour="Green" maximum="15" minimum="-5" reversed="true" visible="true">
-                <MajorTickMarks backColour="Black" foreColour="Green" length="4" visible="true" />
-                <MinorTickMarks backColour="Black" foreColour="Green" length="2" visible="true" />
-                <TickLabels backColour="Black" foreColour="Green" visible="true">
+              <Scale autoscale="false" colour="Green" maximum="15" minimum="-5" reversed="true" visible="true">
+                <MajorTickMarks colour="Green" length="4" visible="true" />
+                <MinorTickMarks colour="Green" length="2" visible="true" />
+                <TickLabels colour="Green" visible="true">
                   <Font bold="false" family="Segoe UI" italic="false" size="12" underline="false" />
                 </TickLabels>
               </Scale>
             </Y1>
-            <Y2 backColour="Black" foreColour="Green" visible="false">
-              <Label backColour="Black" foreColour="Green" text="" visible="false">
+            <Y2 colour="Green" visible="false">
+              <Label colour="Green" text="" visible="false">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
-              <Scale autoscale="false" backColour="Black" foreColour="Green" maximum="10" minimum="0" reversed="false" visible="true">
-                <MajorTickMarks backColour="Black" foreColour="Green" length="4" visible="true" />
-                <MinorTickMarks backColour="Black" foreColour="Green" length="2" visible="true" />
-                <TickLabels backColour="Black" foreColour="Green" visible="false">
+              <Scale autoscale="false" colour="Green" maximum="10" minimum="0" reversed="false" visible="true">
+                <MajorTickMarks colour="Green" length="4" visible="true" />
+                <MinorTickMarks colour="Green" length="2" visible="true" />
+                <TickLabels colour="Green" visible="false">
                   <Font bold="false" family="Segoe UI" italic="false" size="12" underline="false" />
                 </TickLabels>
               </Scale>
@@ -141,59 +141,59 @@
         <Document id="c46d67b8-78b6-4d34-9527-3f479131f5f3" name="HR-Diagram 3" path="Workspace/Yale Bright Star Catalog/Charts/HRDiagrams" view="ColourMagnitudeChartView">
           <Chart backColour="Black" foreColour="Green">
             <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
-            <Title backColour="Black" foreColour="Green" text="HR-Diagram 3" visible="true">
+            <Title colour="Green" text="HR-Diagram 3" visible="true">
               <Font bold="true" family="Segoe UI" italic="false" size="20" underline="false" />
             </Title>
             <PlotArea backColour="Black" foreColour="Green">
-              <Grid backColour="Black" foreColour="Green" visible="true">
-                <MajorGridLines backColour="Black" foreColour="Green" visible="true" />
-                <MinorGridLines backColour="Black" foreColour="Green" visible="true" />
+              <Grid colour="Green" visible="true">
+                <MajorGridLines colour="Green" visible="true" />
+                <MinorGridLines colour="Green" visible="true" />
               </Grid>
             </PlotArea>
-            <X1 backColour="Black" foreColour="Green" visible="true">
-              <Label backColour="Black" foreColour="Green" text="Colour Index (B-V)" visible="true">
+            <X1 colour="Green" visible="true">
+              <Label colour="Green" text="Colour Index (B-V)" visible="true">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
-              <Scale autoscale="false" backColour="Black" foreColour="Green" maximum="2" minimum="-0.5" reversed="false" visible="true">
-                <MajorTickMarks backColour="Black" foreColour="Green" length="4" visible="true" />
-                <MinorTickMarks backColour="Black" foreColour="Green" length="2" visible="true" />
-                <TickLabels backColour="Black" foreColour="Green" visible="true">
+              <Scale autoscale="false" colour="Green" maximum="2" minimum="-0.5" reversed="false" visible="true">
+                <MajorTickMarks colour="Green" length="4" visible="true" />
+                <MinorTickMarks colour="Green" length="2" visible="true" />
+                <TickLabels colour="Green" visible="true">
                   <Font bold="false" family="Segoe UI" italic="false" size="12" underline="false" />
                 </TickLabels>
               </Scale>
             </X1>
-            <X2 backColour="Black" foreColour="Green" visible="false">
-              <Label backColour="Black" foreColour="Green" text="" visible="false">
+            <X2 colour="Green" visible="false">
+              <Label colour="Green" text="" visible="false">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
-              <Scale autoscale="false" backColour="Black" foreColour="Green" maximum="10" minimum="0" reversed="false" visible="true">
-                <MajorTickMarks backColour="Black" foreColour="Green" length="4" visible="true" />
-                <MinorTickMarks backColour="Black" foreColour="Green" length="2" visible="true" />
-                <TickLabels backColour="Black" foreColour="Green" visible="false">
+              <Scale autoscale="false" colour="Green" maximum="10" minimum="0" reversed="false" visible="true">
+                <MajorTickMarks colour="Green" length="4" visible="true" />
+                <MinorTickMarks colour="Green" length="2" visible="true" />
+                <TickLabels colour="Green" visible="false">
                   <Font bold="false" family="Segoe UI" italic="false" size="12" underline="false" />
                 </TickLabels>
               </Scale>
             </X2>
-            <Y1 backColour="Black" foreColour="Green" visible="true">
-              <Label backColour="Black" foreColour="Green" text="Absolute Magnitude" visible="true">
+            <Y1 colour="Green" visible="true">
+              <Label colour="Green" text="Absolute Magnitude" visible="true">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
-              <Scale autoscale="false" backColour="Black" foreColour="Green" maximum="15" minimum="-5" reversed="true" visible="true">
-                <MajorTickMarks backColour="Black" foreColour="Green" length="4" visible="true" />
-                <MinorTickMarks backColour="Black" foreColour="Green" length="2" visible="true" />
-                <TickLabels backColour="Black" foreColour="Green" visible="true">
+              <Scale autoscale="false" colour="Green" maximum="15" minimum="-5" reversed="true" visible="true">
+                <MajorTickMarks colour="Green" length="4" visible="true" />
+                <MinorTickMarks colour="Green" length="2" visible="true" />
+                <TickLabels colour="Green" visible="true">
                   <Font bold="false" family="Segoe UI" italic="false" size="12" underline="false" />
                 </TickLabels>
               </Scale>
             </Y1>
-            <Y2 backColour="Black" foreColour="Green" visible="false">
-              <Label backColour="Black" foreColour="Green" text="" visible="false">
+            <Y2 colour="Green" visible="false">
+              <Label colour="Green" text="" visible="false">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
-              <Scale autoscale="false" backColour="Black" foreColour="Green" maximum="10" minimum="0" reversed="false" visible="true">
-                <MajorTickMarks backColour="Black" foreColour="Green" length="4" visible="true" />
-                <MinorTickMarks backColour="Black" foreColour="Green" length="2" visible="true" />
-                <TickLabels backColour="Black" foreColour="Green" visible="false">
+              <Scale autoscale="false" colour="Green" maximum="10" minimum="0" reversed="false" visible="true">
+                <MajorTickMarks colour="Green" length="4" visible="true" />
+                <MinorTickMarks colour="Green" length="2" visible="true" />
+                <TickLabels colour="Green" visible="false">
                   <Font bold="false" family="Segoe UI" italic="false" size="12" underline="false" />
                 </TickLabels>
               </Scale>

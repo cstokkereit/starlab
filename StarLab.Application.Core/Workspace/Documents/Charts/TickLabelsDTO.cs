@@ -5,11 +5,9 @@
     /// </summary>
     public class TickLabelsDTO
     {
-        public string? BackColour;
+        public string? Colour;
 
         public FontDTO? Font;
-
-        public string? ForeColour;
 
         public int Rotation;
 

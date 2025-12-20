@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace StarLab.Application.Workspace.Documents.Charts
+﻿namespace StarLab.Application.Workspace.Documents.Charts
 {
     /// <summary>
     /// Domain model representation of the chart axis scale tick marks.
@@ -15,24 +13,27 @@ namespace StarLab.Application.Workspace.Documents.Charts
         {
             ArgumentNullException.ThrowIfNull(dto, nameof(dto));
 
-            Debug.Assert(dto.BackColour != null);
-            Debug.Assert(dto.ForeColour != null);
+            Colour = string.IsNullOrEmpty(dto.Colour) ? Constants.DefaultForeColour : dto.Colour;
 
-            BackColour = dto.BackColour;
-            ForeColour = dto.ForeColour;
             Visible = dto.Visible;
             Length = dto.Length;
         }
 
         /// <summary>
-        /// Gets the background colour.
+        /// Initialises a new instance of the <see cref="TickMarks"> class.
         /// </summary>
-        public string BackColour { get; }
+        /// <param name="length">The default length.</param>
+        public TickMarks(int length)
+        {
+            Colour = Constants.DefaultForeColour;
+            Visible = true;
+            Length = length;
+        }
 
         /// <summary>
-        /// Gets the foreground colour.
+        /// Gets the colour.
         /// </summary>
-        public string ForeColour { get; }
+        public string Colour { get; }
 
         /// <summary>
         /// Gets the length of the tickamrks.

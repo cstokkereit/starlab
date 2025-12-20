@@ -3,38 +3,21 @@
     /// <summary>
     /// Represents the current state of the axis tick marks while the chart is being configured.
     /// </summary>
-    internal class TickMarkSettings : ITickMarkSettings
+    internal class TickMarkSettings : FrameElementSettings, ITickMarkSettings
     {
         /// <summary>
         /// Initialises a new instance of the <see cref="TickMarkSettings"/> class.
         /// </summary>
         /// <param name="tickMarks">A <see cref="TickMarks"/> that specifies the initial state of the tick marks.</param>
         public TickMarkSettings(ITickMarks tickMarks)
+            : base(tickMarks.Colour, tickMarks.Visible)
         {
-            BackColour = tickMarks.BackColour;
-            ForeColour = tickMarks.ForeColour;
-            Visible = tickMarks.Visible;
             Length = tickMarks.Length;
         }
-
-        /// <summary>
-        /// Gets or sets the background colour.
-        /// </summary>
-        public string BackColour { get; set; }
-
-        /// <summary>
-        /// Gets or sets the foreground colour.
-        /// </summary>
-        public string ForeColour { get; set; }
 
         /// <summary>
         /// Gets or sets the length of the tickamrks.
         /// </summary>
         public int Length { get; set; }
-
-        /// <summary>
-        /// Gets or sets a flag that determines whether the tick marks are visible.
-        /// </summary>
-        public bool Visible { get; set; }
     }
 }
