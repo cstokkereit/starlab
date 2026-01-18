@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-namespace Stratosoft.Nomenclature.Tests
+﻿namespace Stratosoft.Nomenclature.Tests
 {
     public class NomenclatureBuilderTests
     {
@@ -14,11 +12,12 @@ namespace Stratosoft.Nomenclature.Tests
         [Test]
         public void TestAddTerms()
         {
-            List<Term> terms = new List<Term>();
-
-            terms.Add(new Term("Term-1", "This is a test term"));
-            terms.Add(new Term("Term-2", "This is a test term"));
-            terms.Add(new Term("Term-3", "This is a test term"));
+            List<Term> terms =
+            [
+                new Term("Term-1", "This is a test term"),
+                new Term("Term-2", "This is a test term"),
+                new Term("Term-3", "This is a test term"),
+            ];
 
             Nomenclature nomenclature = new NomenclatureBuilder().AddTerms(terms).CreateNomenclature("Test");
 

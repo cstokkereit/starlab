@@ -11,6 +11,9 @@ namespace StarLab.Serialisation.Workspace.Documents.Charts
         [XmlAttribute("colour")]
         public string? Colour;
 
+        [XmlAttribute("opacity")]
+        public double Opacity;
+
         [XmlAttribute("visible")]
         public bool Visible;
     }

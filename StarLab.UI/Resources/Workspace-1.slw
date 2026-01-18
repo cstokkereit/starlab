@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Workspace xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ActiveDocument="c46d67b8-78b6-4d34-9527-3f479131f5f3">
+<Workspace xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ActiveDocument="">
   <Projects>
     <Project expanded="true" name="Henry Draper Catalog">
       <Documents />
@@ -17,15 +17,15 @@
         <Document id="577cb05b-c02f-499c-bc36-deb47aff9029" name="HR-Diagram 1" path="Workspace/Yale Bright Star Catalog/Charts/HRDiagrams" view="ColourMagnitudeChartView">
           <Chart backColour="Black" foreColour="Green">
             <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
+            <PlotArea backColour="Black" foreColour="Green">
+              <Grid colour="Green" visible="true">
+                <MajorGridLines colour="Green" opacity="0.3" visible="true" />
+                <MinorGridLines colour="Green" opacity="0.1" visible="true" />
+              </Grid>
+            </PlotArea>
             <Title colour="Green" text="HR-Diagram 1" visible="true">
               <Font bold="true" family="Segoe UI" italic="false" size="20" underline="false" />
             </Title>
-            <PlotArea backColour="Black" foreColour="Green">
-              <Grid colour="Green" visible="true">
-                <MajorGridLines colour="Green" visible="true" />
-                <MinorGridLines colour="Green" visible="true" />
-              </Grid>
-            </PlotArea>
             <X1 colour="Green" visible="true">
               <Label colour="Green" text="Colour Index (B-V)" visible="true">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
@@ -33,7 +33,7 @@
               <Scale autoscale="false" colour="Green" maximum="2" minimum="-0.5" reversed="false" visible="true">
                 <MajorTickMarks colour="Green" length="4" visible="true" />
                 <MinorTickMarks colour="Green" length="2" visible="true" />
-                <TickLabels colour="Green" visible="true">
+                <TickLabels colour="Green" rotation="0" visible="true">
                   <Font bold="false" family="Segoe UI" italic="false" size="12" underline="false" />
                 </TickLabels>
               </Scale>
@@ -45,7 +45,7 @@
               <Scale autoscale="false" colour="Green" maximum="10" minimum="0" reversed="false" visible="true">
                 <MajorTickMarks colour="Green" length="4" visible="true" />
                 <MinorTickMarks colour="Green" length="2" visible="true" />
-                <TickLabels colour="Green" visible="false">
+                <TickLabels colour="Green" rotation="0" visible="false">
                   <Font bold="false" family="Segoe UI" italic="false" size="12" underline="false" />
                 </TickLabels>
               </Scale>
@@ -57,7 +57,7 @@
               <Scale autoscale="false" colour="Green" maximum="15" minimum="-5" reversed="true" visible="true">
                 <MajorTickMarks colour="Green" length="4" visible="true" />
                 <MinorTickMarks colour="Green" length="2" visible="true" />
-                <TickLabels colour="Green" visible="true">
+                <TickLabels colour="Green" rotation="0" visible="true">
                   <Font bold="false" family="Segoe UI" italic="false" size="12" underline="false" />
                 </TickLabels>
               </Scale>
@@ -69,7 +69,7 @@
               <Scale autoscale="false" colour="Green" maximum="10" minimum="0" reversed="false" visible="true">
                 <MajorTickMarks colour="Green" length="4" visible="true" />
                 <MinorTickMarks colour="Green" length="2" visible="true" />
-                <TickLabels colour="Green" visible="false">
+                <TickLabels colour="Green" rotation="0" visible="false">
                   <Font bold="false" family="Segoe UI" italic="false" size="12" underline="false" />
                 </TickLabels>
               </Scale>
@@ -79,15 +79,15 @@
         <Document id="f7f6ec62-39d9-411e-ab6a-af547dca8dc5" name="HR-Diagram 2" path="Workspace/Yale Bright Star Catalog/Charts/HRDiagrams" view="ColourMagnitudeChartView">
           <Chart backColour="Black" foreColour="Green">
             <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
+            <PlotArea backColour="Black" foreColour="Green">
+              <Grid colour="Green" visible="true">
+                <MajorGridLines colour="Green" opacity="0.3" visible="true" />
+                <MinorGridLines colour="Green" opacity="0.1" visible="true" />
+              </Grid>
+            </PlotArea>
             <Title colour="Green" text="HR-Diagram 2" visible="true">
               <Font bold="true" family="Segoe UI" italic="false" size="20" underline="false" />
             </Title>
-            <PlotArea backColour="Black" foreColour="Green">
-              <Grid colour="Green" visible="true">
-                <MajorGridLines colour="Green" visible="true" />
-                <MinorGridLines colour="Green" visible="true" />
-              </Grid>
-            </PlotArea>
             <X1 colour="Green" visible="true">
               <Label colour="Green" text="Colour Index (B-V)" visible="true">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
@@ -95,7 +95,7 @@
               <Scale autoscale="false" colour="Green" maximum="2" minimum="-0.5" reversed="false" visible="true">
                 <MajorTickMarks colour="Green" length="4" visible="true" />
                 <MinorTickMarks colour="Green" length="2" visible="true" />
-                <TickLabels colour="Green" visible="true">
+                <TickLabels colour="Green" rotation="0" visible="true">
                   <Font bold="false" family="Segoe UI" italic="false" size="12" underline="false" />
                 </TickLabels>
               </Scale>
@@ -107,7 +107,7 @@
               <Scale autoscale="false" colour="Green" maximum="10" minimum="0" reversed="false" visible="true">
                 <MajorTickMarks colour="Green" length="4" visible="true" />
                 <MinorTickMarks colour="Green" length="2" visible="true" />
-                <TickLabels colour="Green" visible="false">
+                <TickLabels colour="Green" rotation="0" visible="false">
                   <Font bold="false" family="Segoe UI" italic="false" size="12" underline="false" />
                 </TickLabels>
               </Scale>
@@ -119,7 +119,7 @@
               <Scale autoscale="false" colour="Green" maximum="15" minimum="-5" reversed="true" visible="true">
                 <MajorTickMarks colour="Green" length="4" visible="true" />
                 <MinorTickMarks colour="Green" length="2" visible="true" />
-                <TickLabels colour="Green" visible="true">
+                <TickLabels colour="Green" rotation="0" visible="true">
                   <Font bold="false" family="Segoe UI" italic="false" size="12" underline="false" />
                 </TickLabels>
               </Scale>
@@ -131,7 +131,7 @@
               <Scale autoscale="false" colour="Green" maximum="10" minimum="0" reversed="false" visible="true">
                 <MajorTickMarks colour="Green" length="4" visible="true" />
                 <MinorTickMarks colour="Green" length="2" visible="true" />
-                <TickLabels colour="Green" visible="false">
+                <TickLabels colour="Green" rotation="0" visible="false">
                   <Font bold="false" family="Segoe UI" italic="false" size="12" underline="false" />
                 </TickLabels>
               </Scale>
@@ -141,15 +141,15 @@
         <Document id="c46d67b8-78b6-4d34-9527-3f479131f5f3" name="HR-Diagram 3" path="Workspace/Yale Bright Star Catalog/Charts/HRDiagrams" view="ColourMagnitudeChartView">
           <Chart backColour="Black" foreColour="Green">
             <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
+            <PlotArea backColour="Black" foreColour="Green">
+              <Grid colour="Green" visible="false">
+                <MajorGridLines colour="Green" opacity="0.2" visible="false" />
+                <MinorGridLines colour="Green" opacity="0.2" visible="false" />
+              </Grid>
+            </PlotArea>
             <Title colour="Green" text="HR-Diagram 3" visible="true">
               <Font bold="true" family="Segoe UI" italic="false" size="20" underline="false" />
             </Title>
-            <PlotArea backColour="Black" foreColour="Green">
-              <Grid colour="Green" visible="true">
-                <MajorGridLines colour="Green" visible="true" />
-                <MinorGridLines colour="Green" visible="true" />
-              </Grid>
-            </PlotArea>
             <X1 colour="Green" visible="true">
               <Label colour="Green" text="Colour Index (B-V)" visible="true">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
@@ -157,7 +157,7 @@
               <Scale autoscale="false" colour="Green" maximum="2" minimum="-0.5" reversed="false" visible="true">
                 <MajorTickMarks colour="Green" length="4" visible="true" />
                 <MinorTickMarks colour="Green" length="2" visible="true" />
-                <TickLabels colour="Green" visible="true">
+                <TickLabels colour="Green" rotation="0" visible="true">
                   <Font bold="false" family="Segoe UI" italic="false" size="12" underline="false" />
                 </TickLabels>
               </Scale>
@@ -169,7 +169,7 @@
               <Scale autoscale="false" colour="Green" maximum="10" minimum="0" reversed="false" visible="true">
                 <MajorTickMarks colour="Green" length="4" visible="true" />
                 <MinorTickMarks colour="Green" length="2" visible="true" />
-                <TickLabels colour="Green" visible="false">
+                <TickLabels colour="Green" rotation="0" visible="false">
                   <Font bold="false" family="Segoe UI" italic="false" size="12" underline="false" />
                 </TickLabels>
               </Scale>
@@ -181,7 +181,7 @@
               <Scale autoscale="false" colour="Green" maximum="15" minimum="-5" reversed="true" visible="true">
                 <MajorTickMarks colour="Green" length="4" visible="true" />
                 <MinorTickMarks colour="Green" length="2" visible="true" />
-                <TickLabels colour="Green" visible="true">
+                <TickLabels colour="Green" rotation="0" visible="true">
                   <Font bold="false" family="Segoe UI" italic="false" size="12" underline="false" />
                 </TickLabels>
               </Scale>
@@ -193,7 +193,7 @@
               <Scale autoscale="false" colour="Green" maximum="10" minimum="0" reversed="false" visible="true">
                 <MajorTickMarks colour="Green" length="4" visible="true" />
                 <MinorTickMarks colour="Green" length="2" visible="true" />
-                <TickLabels colour="Green" visible="false">
+                <TickLabels colour="Green" rotation="0" visible="false">
                   <Font bold="false" family="Segoe UI" italic="false" size="12" underline="false" />
                 </TickLabels>
               </Scale>

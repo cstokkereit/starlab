@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace StarLab.Domain
+namespace StarLab
 {
     /// <summary>
     /// The spectral type of a star defined in the Morgan-Keenan (MK) classification. See https://en.wikipedia.org/wiki/Stellar_classification for details.

@@ -157,6 +157,26 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
+        /// Updates the chart settings.
+        /// </summary>
+        /// <param name="document">The <see cref="IDocument"/> that contains the chart.</param>
+        public void UpdateSettings(IDocument document)
+        {
+            chart = new ChartSettings(document.Chart);
+
+            id = document.ID;
+        }
+
+        /// <summary>
+        /// Adds the <see cref="SettingsGroupManager{TView}"/> to the dictionary.
+        /// </summary>
+        /// <param name="manager">The <see cref="SettingsGroupManager{TView}"/> to add.</param>
+        private void AddGroupManager(SettingsGroupManager<IChartSettingsView> manager)
+        {
+            groupManagers.Add(manager.Group, manager);
+        }
+
+        /// <summary>
         /// Creates the axis settings group nodes and their respective group managers.
         /// </summary>
         private void CreateAxisSettingsGroups(string name, string parentKey, string text)
@@ -174,17 +194,6 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             AddGroupManager(new TickMarkSettingsGroupManager(View, View.AddNode(Constants.MinorTickMarks, scale, StringResources.MinorTickMarks)));
             AddGroupManager(new TickMarkSettingsGroupManager(View, View.AddNode(Constants.MajorTickMarks, scale, StringResources.MajorTickMarks)));
             AddGroupManager(new TickLabelSettingsGroupManager(View, View.AddNode(Constants.TickLabels, scale, StringResources.TickLabels)));
-        }
-
-        /// <summary>
-        /// Updates the chart settings.
-        /// </summary>
-        /// <param name="document">The <see cref="IDocument"/> that contains the chart.</param>
-        public void UpdateSettings(IDocument document)
-        {
-            chart = new ChartSettings(document.Chart);
-
-            id = document.ID;
         }
 
         /// <summary>
@@ -215,15 +224,6 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
 
             AddGroupManager(new GridLineSettingsGroupManager(View, View.AddNode(Constants.MinorGridLines, grid, StringResources.MinorGridLines)));
             AddGroupManager(new GridLineSettingsGroupManager(View, View.AddNode(Constants.MajorGridLines, grid, StringResources.MajorGridLines)));
-        }
-
-        /// <summary>
-        /// Adds the <see cref="SettingsGroupManager{TView}"/> to the dictionary.
-        /// </summary>
-        /// <param name="manager">The <see cref="SettingsGroupManager{TView}"/> to add.</param>
-        private void AddGroupManager(SettingsGroupManager<IChartSettingsView> manager)
-        {
-            groupManagers.Add(manager.Group, manager);
         }
     }
 }

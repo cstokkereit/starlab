@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StarLab.Domain
+namespace StarLab
 {
     // https://onlinelibrary.wiley.com/doi/10.1002/asna.202113868
     // https://commons.wikimedia.org/wiki/File:Color_temperature_black_body_800-12200K.svg

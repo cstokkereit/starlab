@@ -121,6 +121,56 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
+        /// TODO
+        /// </summary>
+        [Ignore("Needs a real ApplicationViewPresenter")]
+        [Test]
+        public void TestApplySettings()
+        {
+            // Arrange
+            var outputPort = Substitute.For<IApplicationOutputPort, IApplicationViewController>();
+
+            //controller.GetController(Controllers.ApplicationViewController).Returns(outputPort);
+
+            var interactor = Substitute.For<IUseCase<WorkspaceDTO, string, ChartDTO>>();
+
+            factory.CreateUpdateDocumentUseCase(outputPort).Returns(interactor);
+
+            var chartController = Substitute.For<IChildViewController, IChartOutputPort>();
+
+            var presenter = CreatePresenter(chartController);
+
+            var settings = Substitute.For<IChartSettings>();
+
+            presenter.ApplyPreviewSettings(settings);
+
+            // Act
+            ((IChartSettingsController)presenter).ApplySettings();
+
+            // Assert
+            Assert.Fail();
+        }
+
+        /// <summary>
+        /// Test that the <see cref="IChartSettingsController.ApplySettings"/> method does nothing if the preview settings have not been initialised.
+        /// </summary>
+        [Test]
+        public void TestApplySettingsWhenChartIsNull()
+        {
+            // Arrange
+            var outputPort = Substitute.For<IApplicationOutputPort, IController>();
+            var chartController = Substitute.For<IChildViewController, IChartOutputPort>();
+            var presenter = CreatePresenter(chartController);
+
+            // Act
+            ((IChartSettingsController)presenter).ApplySettings();
+
+            // Assert
+            controller.Received(0).GetController(Controllers.ApplicationViewController);
+            factory.Received(0).CreateUpdateDocumentUseCase(outputPort);
+        }
+
+        /// <summary>
         /// Test that the <see cref="IChartSettingsViewPresenter.Name"/> property returns the correct name.
         /// </summary>
         [Test]
@@ -162,13 +212,28 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             view.Received(1).AddNode("Axes", "Chart", Resources.Axes);
             view.Received(1).AddNode("AxisX1", "Chart/Axes", Resources.AxisX1);
             view.Received(1).AddNode("Label", "Chart/Axes/AxisX1", Resources.Label);
+            view.Received(1).AddNode("MajorTickMarks", "Chart/Axes/AxisX1/Scale", Resources.MajorTickMarks);
+            view.Received(1).AddNode("MinorTickMarks", "Chart/Axes/AxisX1/Scale", Resources.MinorTickMarks);
+            view.Received(1).AddNode("TickLabels", "Chart/Axes/AxisX1/Scale", Resources.TickLabels);
             view.Received(1).AddNode("AxisX2", "Chart/Axes", Resources.AxisX2);
             view.Received(1).AddNode("Label", "Chart/Axes/AxisX2", Resources.Label);
+            view.Received(1).AddNode("MajorTickMarks", "Chart/Axes/AxisX2/Scale", Resources.MajorTickMarks);
+            view.Received(1).AddNode("MinorTickMarks", "Chart/Axes/AxisX2/Scale", Resources.MinorTickMarks);
+            view.Received(1).AddNode("TickLabels", "Chart/Axes/AxisX2/Scale", Resources.TickLabels);
             view.Received(1).AddNode("AxisY1", "Chart/Axes", Resources.AxisY1);
             view.Received(1).AddNode("Label", "Chart/Axes/AxisY1", Resources.Label);
+            view.Received(1).AddNode("MajorTickMarks", "Chart/Axes/AxisY1/Scale", Resources.MajorTickMarks);
+            view.Received(1).AddNode("MinorTickMarks", "Chart/Axes/AxisY1/Scale", Resources.MinorTickMarks);
+            view.Received(1).AddNode("TickLabels", "Chart/Axes/AxisY1/Scale", Resources.TickLabels);
             view.Received(1).AddNode("AxisY2", "Chart/Axes", Resources.AxisY2);
             view.Received(1).AddNode("Label", "Chart/Axes/AxisY2", Resources.Label);
+            view.Received(1).AddNode("MajorTickMarks", "Chart/Axes/AxisY2/Scale", Resources.MajorTickMarks);
+            view.Received(1).AddNode("MinorTickMarks", "Chart/Axes/AxisY2/Scale", Resources.MinorTickMarks);
+            view.Received(1).AddNode("TickLabels", "Chart/Axes/AxisY2/Scale", Resources.TickLabels);
             view.Received(1).AddNode("PlotArea", "Chart", Resources.PlotArea);
+            view.Received(1).AddNode("Grid", "Chart/PlotArea", Resources.Grid);
+            view.Received(1).AddNode("MajorGridLines", "Chart/PlotArea/Grid", Resources.MajorGridLines);
+            view.Received(1).AddNode("MinorGridLines", "Chart/PlotArea/Grid", Resources.MinorGridLines);
 
             controller.Received(1).RegisterCommandInvokers(commands);
 
@@ -206,6 +271,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             presenter.RevertSettings();
 
             // Assert
+            chartController.Received(0).UpdateChart(Arg.Any<IChart>());
             chartController.Received(1).UpdateChart();
         }
 
@@ -234,6 +300,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             view.Received(0).AppendTextSection(Arg.Any<IChartSettings>(), Arg.Any<string>());
             view.Received(1).AppendVisibleSection(settings, "Chart/Axes/AxisX1");
             view.Received(1).AppendColourSection(settings, "Chart/Axes/AxisX1");
+            view.Received(0).AppendScaleSection(settings, "Chart/Axes/AxisX1");
         }
 
         /// <summary>
@@ -259,8 +326,37 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
 
             view.Received(1).AppendVisibleSection(settings, "Chart/Axes/AxisX1/Label");
             view.Received(1).AppendColourSection(settings, "Chart/Axes/AxisX1/Label");
+            view.Received(0).AppendScaleSection(settings, "Chart/Axes/AxisX1/Label");
             view.Received(1).AppendFontSection(settings, "Chart/Axes/AxisX1/Label");
             view.Received(1).AppendTextSection(settings, "Chart/Axes/AxisX1/Label");
+        }
+
+        /// <summary>
+        /// Test that the <see cref="IChartSettingsViewPresenter.ShowSettingsGroup(string)"/> method correctly shows the axis scale settings.
+        /// </summary>
+        [Test]
+        public void TestShowScaleSettingsGroup()
+        {
+            // Arrange
+            var presenter = CreatePresenter(Substitute.For<IChildViewController, IChartOutputPort>());
+
+            controller.GetController(Controllers.ApplicationViewController).Returns(presenter);
+
+            var settings = new ChartSettingsBuilder().CreateSettings();
+
+            presenter.ApplyPreviewSettings(settings);
+
+            // Act
+            presenter.ShowSettingsGroup("Chart/Axes/AxisX1/Scale");
+
+            // Assert
+            view.Received(1).Clear();
+
+            view.Received(1).AppendVisibleSection(settings, "Chart/Axes/AxisX1/Scale");
+            view.Received(1).AppendColourSection(settings, "Chart/Axes/AxisX1/Scale");
+            view.Received(1).AppendScaleSection(settings, "Chart/Axes/AxisX1/Scale");
+            view.Received(0).AppendFontSection(settings, "Chart/Axes/AxisX1/Scale");
+            view.Received(0).AppendTextSection(settings, "Chart/Axes/AxisX1/Scale");
         }
 
         /// <summary>
@@ -288,6 +384,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             view.Received(0).AppendFontSection(Arg.Any<IChartSettings>(), Arg.Any<string>());
             view.Received(0).AppendTextSection(Arg.Any<IChartSettings>(), Arg.Any<string>());
             view.Received(1).AppendColourSection(settings, "Chart");
+            view.Received(0).AppendScaleSection(settings, "Chart");
         }
 
         /// <summary>
@@ -315,6 +412,203 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             view.Received(1).AppendColourSection(settings, "Chart/Title");
             view.Received(1).AppendFontSection(settings, "Chart/Title");
             view.Received(1).AppendTextSection(settings, "Chart/Title");
+        }
+
+        /// <summary>
+        /// Test that the <see cref="IChartSettingsViewPresenter.ShowSettingsGroup(string)"/> method correctly shows the grid settings.
+        /// </summary>
+        [Test]
+        public void TestShowGridSettingsGroup()
+        {
+            // Arrange
+            var presenter = CreatePresenter(Substitute.For<IChildViewController, IChartOutputPort>());
+
+            controller.GetController(Controllers.ApplicationViewController).Returns(presenter);
+
+            var settings = new ChartSettingsBuilder().CreateSettings();
+
+            presenter.ApplyPreviewSettings(settings);
+
+            // Act
+            presenter.ShowSettingsGroup("Chart/PlotArea/Grid");
+
+            // Assert
+            view.Received(1).Clear();
+
+            view.Received(1).AppendVisibleSection(Arg.Any<IChartSettings>(), Arg.Any<string>());
+            view.Received(0).AppendFontSection(Arg.Any<IChartSettings>(), Arg.Any<string>());
+            view.Received(0).AppendTextSection(Arg.Any<IChartSettings>(), Arg.Any<string>());
+            view.Received(1).AppendColourSection(settings, "Chart/PlotArea/Grid");
+            view.Received(0).AppendScaleSection(settings, "Chart/PlotArea/Grid");
+        }
+
+        /// <summary>
+        /// Test that the <see cref="IChartSettingsViewPresenter.ShowSettingsGroup(string)"/> method correctly shows the major grid line settings.
+        /// </summary>
+        [Test]
+        public void TestShowMajorGridLinesSettingsGroup()
+        {
+            // Arrange
+            var presenter = CreatePresenter(Substitute.For<IChildViewController, IChartOutputPort>());
+
+            controller.GetController(Controllers.ApplicationViewController).Returns(presenter);
+
+            var settings = new ChartSettingsBuilder().CreateSettings();
+
+            presenter.ApplyPreviewSettings(settings);
+
+            // Act
+            presenter.ShowSettingsGroup("Chart/PlotArea/Grid/MajorGridLines");
+
+            // Assert
+            view.Received(1).Clear();
+
+            view.Received(1).AppendVisibleSection(settings, "Chart/PlotArea/Grid/MajorGridLines");
+            view.Received(1).AppendColourSection(settings, "Chart/PlotArea/Grid/MajorGridLines");
+            view.Received(0).AppendScaleSection(settings, "Chart/PlotArea/Grid/MajorGridLines");
+            view.Received(0).AppendFontSection(Arg.Any<IChartSettings>(), Arg.Any<string>());
+            view.Received(0).AppendTextSection(Arg.Any<IChartSettings>(), Arg.Any<string>());
+        }
+
+        /// <summary>
+        /// Test that the <see cref="IChartSettingsViewPresenter.ShowSettingsGroup(string)"/> method correctly shows the major tick mark settings.
+        /// </summary>
+        [Test]
+        public void TestShowMajorTickMarkSettingsGroup()
+        {
+            // Arrange
+            var presenter = CreatePresenter(Substitute.For<IChildViewController, IChartOutputPort>());
+
+            controller.GetController(Controllers.ApplicationViewController).Returns(presenter);
+
+            var settings = new ChartSettingsBuilder().CreateSettings();
+
+            presenter.ApplyPreviewSettings(settings);
+
+            // Act
+            presenter.ShowSettingsGroup("Chart/Axes/AxisX1/Scale/MajorTickMarks");
+
+            // Assert
+            view.Received(1).Clear();
+
+            view.Received(1).AppendVisibleSection(settings, "Chart/Axes/AxisX1/Scale/MajorTickMarks");
+            view.Received(1).AppendColourSection(settings, "Chart/Axes/AxisX1/Scale/MajorTickMarks");
+            view.Received(0).AppendScaleSection(Arg.Any<IChartSettings>(), Arg.Any<string>());
+            view.Received(0).AppendFontSection(Arg.Any<IChartSettings>(), Arg.Any<string>());
+            view.Received(0).AppendTextSection(Arg.Any<IChartSettings>(), Arg.Any<string>());
+        }
+
+        /// <summary>
+        /// Test that the <see cref="IChartSettingsViewPresenter.ShowSettingsGroup(string)"/> method correctly shows the minor grid line settings.
+        /// </summary>
+        [Test]
+        public void TestShowMinorGridLinesSettingsGroup()
+        {
+            // Arrange
+            var presenter = CreatePresenter(Substitute.For<IChildViewController, IChartOutputPort>());
+
+            controller.GetController(Controllers.ApplicationViewController).Returns(presenter);
+
+            var settings = new ChartSettingsBuilder().CreateSettings();
+
+            presenter.ApplyPreviewSettings(settings);
+
+            // Act
+            presenter.ShowSettingsGroup("Chart/PlotArea/Grid/MinorGridLines");
+
+            // Assert
+            view.Received(1).Clear();
+
+            view.Received(1).AppendVisibleSection(settings, "Chart/PlotArea/Grid/MinorGridLines");
+            view.Received(1).AppendColourSection(settings, "Chart/PlotArea/Grid/MinorGridLines");
+            view.Received(0).AppendScaleSection(settings, "Chart/PlotArea/Grid/MinorGridLines");
+            view.Received(0).AppendFontSection(Arg.Any<IChartSettings>(), Arg.Any<string>());
+            view.Received(0).AppendTextSection(Arg.Any<IChartSettings>(), Arg.Any<string>());
+        }
+
+        /// <summary>
+        /// Test that the <see cref="IChartSettingsViewPresenter.ShowSettingsGroup(string)"/> method correctly shows the minor tick mark settings.
+        /// </summary>
+        [Test]
+        public void TestShowMinorTickMarkSettingsGroup()
+        {
+            // Arrange
+            var presenter = CreatePresenter(Substitute.For<IChildViewController, IChartOutputPort>());
+
+            controller.GetController(Controllers.ApplicationViewController).Returns(presenter);
+
+            var settings = new ChartSettingsBuilder().CreateSettings();
+
+            presenter.ApplyPreviewSettings(settings);
+
+            // Act
+            presenter.ShowSettingsGroup("Chart/Axes/AxisX1/Scale/MinorTickMarks");
+
+            // Assert
+            view.Received(1).Clear();
+
+            view.Received(1).AppendVisibleSection(settings, "Chart/Axes/AxisX1/Scale/MinorTickMarks");
+            view.Received(1).AppendColourSection(settings, "Chart/Axes/AxisX1/Scale/MinorTickMarks");
+            view.Received(0).AppendScaleSection(Arg.Any<IChartSettings>(), Arg.Any<string>());
+            view.Received(0).AppendFontSection(Arg.Any<IChartSettings>(), Arg.Any<string>());
+            view.Received(0).AppendTextSection(Arg.Any<IChartSettings>(), Arg.Any<string>());
+        }
+
+        /// <summary>
+        /// Test that the <see cref="IChartSettingsViewPresenter.ShowSettingsGroup(string)"/> method correctly shows the plot area settings.
+        /// </summary>
+        [Test]
+        public void TestShowPlotAreaSettingsGroup()
+        {
+            // Arrange
+            var presenter = CreatePresenter(Substitute.For<IChildViewController, IChartOutputPort>());
+
+            controller.GetController(Controllers.ApplicationViewController).Returns(presenter);
+
+            var settings = new ChartSettingsBuilder().CreateSettings();
+
+            presenter.ApplyPreviewSettings(settings);
+
+            // Act
+            presenter.ShowSettingsGroup("Chart/PlotArea");
+
+            // Assert
+            view.Received(1).Clear();
+
+            view.Received(0).AppendVisibleSection(Arg.Any<IChartSettings>(), Arg.Any<string>());
+            view.Received(0).AppendFontSection(Arg.Any<IChartSettings>(), Arg.Any<string>());
+            view.Received(0).AppendTextSection(Arg.Any<IChartSettings>(), Arg.Any<string>());
+            view.Received(1).AppendColourSection(settings, "Chart/PlotArea");
+            view.Received(0).AppendScaleSection(settings, "Chart/PlotArea");
+        }
+
+
+        /// <summary>
+        /// Test that the <see cref="IChartSettingsViewPresenter.ShowSettingsGroup(string)"/> method correctly shows the tick label settings.
+        /// </summary>
+        [Test]
+        public void TestShowTickLabelSettingsGroup()
+        {
+            // Arrange
+            var presenter = CreatePresenter(Substitute.For<IChildViewController, IChartOutputPort>());
+
+            controller.GetController(Controllers.ApplicationViewController).Returns(presenter);
+
+            var settings = new ChartSettingsBuilder().CreateSettings();
+
+            presenter.ApplyPreviewSettings(settings);
+
+            // Act
+            presenter.ShowSettingsGroup("Chart/Axes/AxisX1/Scale/TickLabels");
+
+            // Assert
+            view.Received(1).Clear();
+
+            view.Received(1).AppendVisibleSection(settings, "Chart/Axes/AxisX1/Scale/TickLabels");
+            view.Received(1).AppendColourSection(settings, "Chart/Axes/AxisX1/Scale/TickLabels");
+            view.Received(1).AppendFontSection(settings, "Chart/Axes/AxisX1/Scale/TickLabels");
+            view.Received(0).AppendScaleSection(Arg.Any<IChartSettings>(), Arg.Any<string>());
+            view.Received(0).AppendTextSection(Arg.Any<IChartSettings>(), Arg.Any<string>());
         }
 
         /// <summary>
@@ -360,6 +654,29 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
 
             // Assert
             interactor.Received(1).Execute(Arg.Any<WorkspaceDTO>(), Arg.Is("D1"), Arg.Is<ChartDTO>(args => args.Title != null && args.Title.Text == "Modified"));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="IChartSettingsController.UpdateSettings(IDocument)"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestUpdateSettings()
+        {
+            // Arrange
+            var presenter = CreatePresenter(Substitute.For<IChildViewController, IChartOutputPort>());
+
+            var document = Substitute.For<IDocument>();
+            var chart = Substitute.For<IChart>();
+
+            document.ID.Returns("test-document");
+            document.Chart.Returns(chart);
+
+            // Act
+            ((IChartSettingsController)presenter).UpdateSettings(document);
+
+            //Assert
+            _ = document.Received(1).Chart;
+            _ = document.Received(1).ID;
         }
 
         /// <summary>

@@ -1,26 +1,29 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0-windows8.0</TargetFramework>
+    <TargetFramework>net10.0-windows</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
     <RootNamespace>StarLab.Application</RootNamespace>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="File\**" />
+    <EmbeddedResource Remove="File\**" />
+    <None Remove="File\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <None Remove="Constants.cs~RF249c9ebf.TMP" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <PackageReference Include="AutoMapper" Version="16.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\StarLab.Shared.Resources\StarLab.Shared.Resources.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="File\IO\" />
   </ItemGroup>
 
 </Project>

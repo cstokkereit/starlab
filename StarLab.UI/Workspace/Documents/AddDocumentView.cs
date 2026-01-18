@@ -3,6 +3,7 @@ using StarLab.Presentation;
 using StarLab.Presentation.Workspace.Documents;
 using StarLab.Shared.Properties;
 using Stratosoft.Commands;
+using System.ComponentModel;
 
 namespace StarLab.UI.Workspace.Documents
 {
@@ -44,6 +45,7 @@ namespace StarLab.UI.Workspace.Documents
         /// <summary>
         /// Gets or sets the document name.
         /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string DocumentName
         {
             get { return textName.Text; }

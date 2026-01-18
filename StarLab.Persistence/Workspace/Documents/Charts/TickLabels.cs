@@ -14,6 +14,9 @@ namespace StarLab.Serialisation.Workspace.Documents.Charts
         [XmlElement]
         public Font? Font;
 
+        [XmlAttribute("rotation")]
+        public int Rotation;
+
         [XmlAttribute("visible")]
         public bool Visible;
     }

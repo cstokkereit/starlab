@@ -1,4 +1,6 @@
-﻿namespace StarLab.Domain
+﻿using StarLab.Data;
+
+namespace StarLab
 {
     internal struct Designation : IDesignation
     {

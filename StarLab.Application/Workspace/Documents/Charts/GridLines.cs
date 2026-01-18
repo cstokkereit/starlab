@@ -15,6 +15,7 @@
 
             Colour = string.IsNullOrEmpty(dto.Colour) ? Constants.DefaultForeColour : dto.Colour;
 
+            Opacity = dto.Opacity;
             Visible = dto.Visible;
         }
 
@@ -32,6 +33,11 @@
         /// Gets the colour.
         /// </summary>
         public string Colour { get; }
+
+        /// <summary>
+        /// Gets the opacity of the grid lines.
+        /// </summary>
+        public double Opacity { get; }
 
         /// <summary>
         /// A flag indicating whether the grid lines are visible.

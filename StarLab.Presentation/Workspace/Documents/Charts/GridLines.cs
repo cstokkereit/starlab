@@ -15,6 +15,8 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             : base(dto.Colour, dto.Visible)
         {
             ArgumentNullException.ThrowIfNull(dto, nameof(dto));
+
+            Opacity = dto.Opacity;
         }
 
         /// <summary>
@@ -22,5 +24,10 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// </summary>
         public GridLines()
             : base(Constants.DefaultForeColour, true) { }
+
+        /// <summary>
+        /// Gets the opacity of the grid lines.
+        /// </summary>
+        public double Opacity { get; }
     }
 }

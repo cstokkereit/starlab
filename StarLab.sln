@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.2.32526.322
+# Visual Studio Version 18
+VisualStudioVersion = 18.1.11312.151
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarLab.UI", "StarLab.UI\StarLab.UI.csproj", "{BBBF7747-9EEF-4E8A-AAFA-575F44545CB8}"
 EndProject
@@ -64,6 +64,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StarLab.Serialisation.Tests", "StarLab.Serialisation.Tests\StarLab.Serialisation.Tests.csproj", "{CE233FA5-8F0B-4320-A57B-EFD602AAF5E6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StarLab.Tests", "StarLab.Tests\StarLab.Tests.csproj", "{742372E4-85F5-4B0B-BB49-FF31365D53E2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StarLab.Data.MongoDB", "StarLab.Data.MongoDB\StarLab.Data.MongoDB.csproj", "{02DE83F4-3CEA-492F-9731-882A2FD9B605}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StarLab.Data.MongoDB.Tests", "StarLab.Data.MongoDB.Tests\StarLab.Data.MongoDB.Tests.csproj", "{376DF625-252B-46B4-9DA3-93A1091374D8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -167,6 +171,14 @@ Global
 		{742372E4-85F5-4B0B-BB49-FF31365D53E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{742372E4-85F5-4B0B-BB49-FF31365D53E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{742372E4-85F5-4B0B-BB49-FF31365D53E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02DE83F4-3CEA-492F-9731-882A2FD9B605}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02DE83F4-3CEA-492F-9731-882A2FD9B605}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02DE83F4-3CEA-492F-9731-882A2FD9B605}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02DE83F4-3CEA-492F-9731-882A2FD9B605}.Release|Any CPU.Build.0 = Release|Any CPU
+		{376DF625-252B-46B4-9DA3-93A1091374D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{376DF625-252B-46B4-9DA3-93A1091374D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{376DF625-252B-46B4-9DA3-93A1091374D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{376DF625-252B-46B4-9DA3-93A1091374D8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -196,6 +208,8 @@ Global
 		{24B327D3-B180-4270-B8B7-83F9F83B2E38} = {5F474B1E-EC21-4D57-ADD5-41709DDC2627}
 		{CE233FA5-8F0B-4320-A57B-EFD602AAF5E6} = {D8D69DEA-16CB-482B-A942-453FDDD6720B}
 		{742372E4-85F5-4B0B-BB49-FF31365D53E2} = {2690B547-E925-4105-85A3-652A8B5856C6}
+		{02DE83F4-3CEA-492F-9731-882A2FD9B605} = {839E7B8B-C86A-47E0-82F6-9E4F4CCD53EA}
+		{376DF625-252B-46B4-9DA3-93A1091374D8} = {839E7B8B-C86A-47E0-82F6-9E4F4CCD53EA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C901BDDE-CD19-4752-8A90-F4800FC22F0F}

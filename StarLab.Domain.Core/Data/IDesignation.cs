@@ -1,4 +1,4 @@
-﻿namespace StarLab.Domain
+﻿namespace StarLab.Data
 {
     public interface IDesignation
     {

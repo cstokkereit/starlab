@@ -1,4 +1,6 @@
-﻿namespace StarLab.Domain
+﻿using StarLab.Data;
+
+namespace StarLab
 {
 
     //  https://ned.ipac.caltech.edu/level5/Gray/Gray_contents.html

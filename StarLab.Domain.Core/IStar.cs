@@ -1,6 +1,4 @@
-﻿using StarLab.Domain;
-
-namespace StarLab
+﻿namespace StarLab
 {
     public interface IStar
     {

@@ -2,6 +2,7 @@
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
+using Microsoft.Extensions.Logging;
 using StarLab.Serialisation;
 
 namespace StarLab.Application
@@ -63,7 +64,7 @@ namespace StarLab.Application
                 return new MapperConfiguration(configuration =>
                 {
                     kernel.ResolveAll<Profile>().ToList().ForEach(configuration.AddProfile);
-                });
+                }, new LoggerFactory());
 
             }).LifestyleSingleton());
 

@@ -5,6 +5,9 @@
     /// </summary>
     public interface IGridLines : IFrameElement
     {
-        
+        /// <summary>
+        /// Gets the opacity of the grid lines.
+        /// </summary>
+        double Opacity { get; }
     }
 }

@@ -3,6 +3,7 @@ using StarLab.Presentation;
 using StarLab.Presentation.Workspace;
 using StarLab.Shared.Properties;
 using Stratosoft.Commands;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Text;
 using WeifenLuo.WinFormsUI.Docking;
@@ -49,6 +50,7 @@ namespace StarLab.UI.Workspace
         /// <summary>
         /// Gets or sets a flag that determines whether the dialog box will be hidden or unloaded when it is closed.
         /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool HideOnClose { get; set; }
 
         /// <summary>

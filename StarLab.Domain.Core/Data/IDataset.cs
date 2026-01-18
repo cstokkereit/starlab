@@ -1,4 +1,4 @@
-﻿namespace StarLab.Domain
+﻿namespace StarLab.Data
 {
     /// <summary>
     /// Represents a collection of data.

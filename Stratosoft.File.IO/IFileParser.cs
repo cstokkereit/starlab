@@ -1,5 +1,8 @@
 ﻿namespace Stratosoft.File.IO
 {
+    /// <summary>
+    /// Represents a file parser.
+    /// </summary>
     public interface IFileParser : IDisposable
     {
         /// <summary>

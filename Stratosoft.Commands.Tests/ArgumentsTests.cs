@@ -60,7 +60,7 @@
 
             var names = arguments.Names;
 
-            Assert.IsNotNull(names);
+            Assert.That(names, Is.Not.Null);
             Assert.That(names, Has.Count.EqualTo(0));
         }
 

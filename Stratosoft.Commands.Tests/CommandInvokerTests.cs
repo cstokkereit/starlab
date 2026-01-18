@@ -79,7 +79,7 @@ namespace Stratosoft.Commands
 
             var button = new Button();
 
-            Assert.IsTrue(button.Enabled);
+            Assert.That(button.Enabled, Is.True);
 
             invoker.UpdateEnabledState(button, false);
 
@@ -96,7 +96,7 @@ namespace Stratosoft.Commands
 
             var menu = new ToolStripMenuItem();
 
-            Assert.IsFalse(menu.Checked);
+            Assert.That(menu.Checked, Is.False);
 
             invoker.UpdateCheckedState(menu, true);
 

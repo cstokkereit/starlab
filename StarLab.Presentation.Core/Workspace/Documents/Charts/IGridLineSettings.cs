@@ -5,5 +5,10 @@
     /// </summary>
     public interface IGridLineSettings : IFrameElementSettings
     {
+        /// <summary>
+        /// Gets or sets the opacity of the grid lines.
+        /// </summary>
+        double Opacity { get; set; }
+
     }
 }

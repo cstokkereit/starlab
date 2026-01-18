@@ -7,6 +7,8 @@
     {
         public string? Colour;
 
+        public double Opacity;
+
         public bool Visible;
     }
 }

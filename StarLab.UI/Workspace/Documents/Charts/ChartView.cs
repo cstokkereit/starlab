@@ -238,11 +238,11 @@ namespace StarLab.UI.Workspace.Documents.Charts
 
                 grid.MajorLineWidth = majorGridLines.Visible ? 2 : 0;
 
-                grid.MajorLineColor = GetColour(majorGridLines.Colour).WithOpacity(0.3);
+                grid.MajorLineColor = GetColour(majorGridLines.Colour).WithOpacity(majorGridLines.Opacity);
 
                 grid.MinorLineWidth = minorGridLines.Visible ? 2 : 0;
 
-                grid.MinorLineColor = GetColour(minorGridLines.Colour).WithOpacity(0.1);
+                grid.MinorLineColor = GetColour(minorGridLines.Colour).WithOpacity(minorGridLines.Opacity);
 
             }
             else

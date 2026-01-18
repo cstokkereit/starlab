@@ -1,41 +1,49 @@
 ﻿using MongoDB.Bson;
-using MongoDB.Driver;
-using StarLab.Domain;
+using StarLab.Data.Import;
 
-namespace StarLab.Data.Import
+namespace StarLab.Data.MongoDB.Import
 {
     /// <summary>
-    /// TODO
+    /// A MongoDB specific implementation of the <see cref="IImportProvider"/> interface that provides methods for importing data into a MongoDB database.
     /// </summary>
     public class ImportProvider : IImportProvider
     {
         private const int BATCH_SIZE = 1000; // The number of documents that constitutes a batch.
 
+        private readonly Connection connection; // A wrapped connection to the MongoDB server.
+
         /// <summary>
-        /// 
+        /// Initialises a new instance of the <see cref="ImportProvider"/> class.
         /// </summary>
-        /// <param name="dataset"></param>
-        public void Import(IDataset dataset)
+        /// <param name="connection">A <see cref="Connection"/> that can be used to access the MongoDB server.</param>
+        public ImportProvider(Connection connection)
         {
+            this.connection = connection;
+        }
 
+        /// <summary>
+        /// Imports the data contained in an <see cref="IDataset"/> into the specified collection within a MongoDB database.
+        /// </summary>
+        /// <param name="source">An <see cref="IDataset"/> that contains the source data.</param>
+        /// <param name="database">The name of the MongoDB database.</param>
+        /// <param name="destination">The name of the destination collection.</param>
+        public void Import(IDataset source, string database, string destination)
+        {
+            var collection = connection.GetDatabase(database).GetCollection<BsonDocument>(destination);
 
-            var client = new MongoClient("mongodb://localhost:27017");
-            var database = client.GetDatabase("local");
-            var collection = database.GetCollection<BsonDocument>("stars");
-
-            while (!dataset.EOF)
+            while (!source.EOF)
             {
-                var documents = GetBatch(dataset);
+                var documents = GetBatch(source);
 
                 if (documents.Count > 0) collection.InsertMany(documents);
             }
         }
 
         /// <summary>
-        /// 
+        /// Populates a <see cref="List{BsonDocument}"/> with the number of documents specified by the batch size unless the end of the file has been reached.
         /// </summary>
-        /// <param name="dataset"></param>
-        /// <returns></returns>
+        /// <param name="dataset">An <see cref="IDataset"/> that contains the data being imported.</param>
+        /// <returns>A <see cref="List{BsonDocument}"/> that contains at most the number of documents specified by the batch size.</returns>
         private List<BsonDocument> GetBatch(IDataset dataset)
         {
             var documents = new List<BsonDocument>();

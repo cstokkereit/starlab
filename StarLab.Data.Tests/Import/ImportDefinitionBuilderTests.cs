@@ -41,7 +41,7 @@ namespace StarLab.Data.Import
         }
 
         /// <summary>
-        /// TODO
+        /// Test that the <see cref="ImportDefinitionBuilder.AddCompoundField(string, string, int[])"/> method throws an <see cref="ArgumentException"/> when a duplicate field is added.
         /// </summary>
         [Test]
         public void TestAddCompoundFieldThrowsExceptionIfNameNotUnique()
@@ -54,7 +54,7 @@ namespace StarLab.Data.Import
         }
 
         /// <summary>
-        /// TODO
+        /// Test that the <see cref="ImportDefinitionBuilder.AddField(int, string, DataTypes)"/> method throws an <see cref="ArgumentException"/> when a duplicate field is added.
         /// </summary>
         [Test]
         public void TestAddFieldThrowsExceptionIfNameNotUnique()
@@ -115,7 +115,7 @@ namespace StarLab.Data.Import
         }
 
         /// <summary>
-        /// TODO
+        /// Test that the <see cref="ImportDefinitionBuilder.Build()"/> method works correctly for a file import definition that includes compound fields.
         /// </summary>
         [Test]
         public void TestBuildImportDefinitionThatIncludesCompoundFields()
@@ -145,7 +145,7 @@ namespace StarLab.Data.Import
         }
 
         /// <summary>
-        /// TODO
+        /// Test that the <see cref="ImportDefinitionBuilder.Build()"/> method works correctly for a file import definition that includes delimited text fields.
         /// </summary>
         [Test]
         public void TestBuildImportDefinitionThatIncludesDelimitedTextFields()
@@ -179,7 +179,7 @@ namespace StarLab.Data.Import
         }
 
         /// <summary>
-        /// TODO
+        /// Test that the <see cref="ImportDefinitionBuilder.Build()"/> method works correctly for a fixed width file import definition that excludes some fields.
         /// </summary>
         [Test]
         public void TestBuildImportDefinitionThatExcludesFixedWidthTextFields()
@@ -227,7 +227,7 @@ namespace StarLab.Data.Import
         }
 
         /// <summary>
-        /// TODO
+        /// Test that the <see cref="ImportDefinitionBuilder.Build()"/> method works correctly for a fixed width file import definition.
         /// </summary>
         [Test]
         public void TestBuildImportDefinitionThatIncludesFixedWidthTextFields()

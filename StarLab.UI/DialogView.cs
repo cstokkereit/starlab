@@ -2,6 +2,7 @@
 using StarLab.Presentation;
 using StarLab.Shared.Properties;
 using StarLab.UI;
+using System.ComponentModel;
 using System.Diagnostics;
 
 namespace StarLab
@@ -54,6 +55,7 @@ namespace StarLab
         /// <summary>
         /// Gets or sets a flag that determines whether the dialog box will be hidden or unloaded when it is closed.
         /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool HideOnClose { get; set; }
 
         /// <summary>
