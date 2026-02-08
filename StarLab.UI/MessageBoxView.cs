@@ -68,7 +68,7 @@ namespace StarLab.UI
         /// <param name="presenter">The <see cref="IPresenter"/> that controls the view.</param>
         public void Attach(IPresenter presenter)
         {
-            if (this.presenter != null) throw new InvalidOperationException(); // TODO
+            if (this.presenter != null) throw new InvalidOperationException(Resources.PresenterAlreadyAttached);
 
             this.presenter = (IMessageBoxViewPresenter)presenter;
         }
@@ -99,7 +99,7 @@ namespace StarLab.UI
                     break;
 
                 default:
-                    throw new ArgumentException(); // TODO
+                    throw new ArgumentOutOfRangeException(nameof(result));
             }
 
             if (button != null)
@@ -177,7 +177,7 @@ namespace StarLab.UI
                 return result;
             }
 
-            throw new ArgumentException(); // TODO
+            throw new ArgumentException(string.Format(Resources.UnexpectedArgumentType, typeof(IWin32Window), owner.GetType()), nameof(owner));
         }
 
         /// <summary>

@@ -83,8 +83,6 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
             treeView.AfterExpand += TreeView_AfterExpand;
             treeView.NodeMouseClick += TreeView_NodeMouseClick;
             treeView.NodeMouseDoubleClick += TreeView_NodeDoubleClick;
-            treeView.Enter += TreeView_Enter;
-            treeView.Leave += TreeView_Leave;
             // 
             // imageList
             // 

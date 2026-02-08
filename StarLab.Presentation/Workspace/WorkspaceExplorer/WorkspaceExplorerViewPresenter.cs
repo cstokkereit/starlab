@@ -452,22 +452,6 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         }
 
         /// <summary>
-        /// Notifies the presenter that the view has been activated.
-        /// </summary>
-        public void ViewActivated()
-        {
-            // TODO - Remove if no longer needed
-        }
-
-        /// <summary>
-        /// Notifies the presenter that the view has been deactivated.
-        /// </summary>
-        public void ViewDeactivated()
-        {
-            // TODO - Remove if no longer needed
-        }
-
-        /// <summary>
         /// Notifies the presenter that the workspace node has been collapsed.
         /// </summary>
         public void WorkspaceCollapsed()

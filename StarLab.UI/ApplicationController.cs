@@ -248,7 +248,7 @@ namespace StarLab.UI
             var controller = GetController(view);
             controller.Initialise(this);
 
-            controllers[Controllers.ApplicationViewController].Show(view); // TODO - May need to include an overload of this that includes the parent view
+            controllers[Controllers.ApplicationViewController].Show(view);
         }
 
         /// <summary>

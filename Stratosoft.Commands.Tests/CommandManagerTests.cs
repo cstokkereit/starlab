@@ -33,6 +33,36 @@
         }
 
         /// <summary>
+        /// Test that the <see cref="CommandManager.ContainsCommand(string)"/> returns true when the specified command has been added.
+        /// </summary>
+        [Test]
+        public void TestContainsCommandReturnsTrueWhenCommandAdded()
+        {
+            var command = Substitute.For<ICommand>();
+
+            var manager = new CommandManager();
+
+            manager.AddCommand("command", command);
+
+            Assert.That(manager.ContainsCommand("command"), Is.True);
+        }
+
+        /// <summary>
+        /// Test that the <see cref="CommandManager.ContainsCommand(string)"/> returns false when the specified command has not been added.
+        /// </summary>
+        [Test]
+        public void TestContainsCommandReturnsFalseWhenCommandNotAdded()
+        {
+            var command = Substitute.For<ICommand>();
+
+            var manager = new CommandManager();
+
+            manager.AddCommand("command1", command);
+
+            Assert.That(manager.ContainsCommand("command2"), Is.False);
+        }
+
+        /// <summary>
         /// Test that the <see cref="CommandManager.GetCommand(string)"/> method works correctly when the specified command has been added.
         /// </summary>
         [Test]

@@ -65,7 +65,7 @@ namespace StarLab.UI.Workspace.Documents
         /// <param name="presenter">The <see cref="IPresenter"/> that controls the view.</param>
         public void Attach(IPresenter presenter)
         {
-            if (this.presenter != null) throw new InvalidOperationException(); // TODO
+            if (this.presenter != null) throw new InvalidOperationException(Resources.PresenterAlreadyAttached);
 
             this.presenter = (IDockableViewPresenter)presenter;
         }
@@ -112,7 +112,7 @@ namespace StarLab.UI.Workspace.Documents
                 }
             }
 
-            throw new IndexOutOfRangeException(); // TODO
+            throw new ArgumentOutOfRangeException(nameof(name));
         }
 
         /// <summary>
@@ -166,7 +166,7 @@ namespace StarLab.UI.Workspace.Documents
                 //Width = presenter.Width;
             }
 
-            Show(dockPanel, (DockState)Enum.Parse(DockState.GetType(), presenter.Location));
+            Show(dockPanel, (DockState)Enum.Parse(DockState.GetType(), presenter.Location)); // TODO
         }
 
         /// <summary>

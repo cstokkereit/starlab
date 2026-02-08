@@ -129,7 +129,7 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         /// <param name="presenter">The <see cref="IChildViewPresenter"/> that controls the view.</param>
         public void Attach(IChildViewPresenter presenter)
         {
-            if (this.presenter != null) throw new InvalidOperationException(); // TODO
+            if (this.presenter != null) throw new InvalidOperationException(Resources.PresenterAlreadyAttached);
 
             this.presenter = (IWorkspaceExplorerViewPresenter)presenter;
         }
@@ -322,30 +322,6 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
                     e.Node.BeginEdit();
                 }
             }
-        }
-
-        /// <summary>
-        /// Event handler for the <see cref="TreeView.Enter"/> event.
-        /// </summary>
-        /// <param name="sender">The <see cref="object"> that was the originator of the event.</param>
-        /// <param name="e">An <see cref="EventArgs"/> that provides context for the event.</param>
-        private void TreeView_Enter(object sender, EventArgs e)
-        {
-            Debug.Assert(presenter != null);
-
-            presenter.ViewActivated();
-        }
-
-        /// <summary>
-        /// Event handler for the <see cref="TreeView.Leave"/> event.
-        /// </summary>
-        /// <param name="sender">The <see cref="object"> that was the originator of the event.</param>
-        /// <param name="e">An <see cref="EventArgs"/> that provides context for the event.</param>
-        private void TreeView_Leave(object sender, EventArgs e)
-        {
-            Debug.Assert(presenter != null);
-
-            presenter.ViewDeactivated();
         }
 
         /// <summary>

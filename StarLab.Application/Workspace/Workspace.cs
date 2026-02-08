@@ -1,4 +1,5 @@
 ﻿using StarLab.Application.Workspace.Documents;
+using StarLab.Shared.Properties;
 
 namespace StarLab.Application.Workspace
 {
@@ -142,7 +143,7 @@ namespace StarLab.Application.Workspace
         /// <exception cref="ArgumentException"></exception>
         public void AddFolder(IFolder folder)
         {
-            if (folder is Workspace) throw new ArgumentException(); // TODO - Exception message
+            if (folder is Workspace) throw new ArgumentException(string.Format(Resources.UnexpectedArgumentType, typeof(Workspace), folder.GetType()), nameof(folder));
 
             if (folder is Project)
             {
@@ -170,7 +171,7 @@ namespace StarLab.Application.Workspace
         /// Determines if this <see cref="IFolder"> contains a child folder with the specified name.
         /// </summary>
         /// <param name="name">The name of the child folder.</param>
-        /// <returns><see cref="true"/> if this folder contains a child folder with the specified name; <see cref="false"/> otherwise.</returns>
+        /// <returns>true if this folder contains a child folder with the specified name; false otherwise.</returns>
         public bool ContainsFolder(string name)
         {
             return false;
@@ -264,7 +265,7 @@ namespace StarLab.Application.Workspace
         /// <param name="path">The path to the required folder.</param>
         /// <returns>The required <see cref="IFolder"/>.</returns>
         /// <exception cref="KeyNotFoundException"></exception>
-        public IFolder GetFolder(string? path)
+        public IFolder GetFolder(string path)
         {
             ArgumentException.ThrowIfNullOrEmpty(path, nameof(path));
 

@@ -60,7 +60,7 @@ namespace StarLab.UI.Workspace
         /// <param name="presenter">The <see cref="IPresenter"/> that controls the view.</param>
         public void Attach(IPresenter presenter)
         {
-            if (this.presenter != null) throw new InvalidOperationException(); // TODO
+            if (this.presenter != null) throw new InvalidOperationException(Resources.PresenterAlreadyAttached);
 
             this.presenter = (IDockableViewPresenter)presenter;
         }
@@ -125,14 +125,14 @@ namespace StarLab.UI.Workspace
         /// <param name="dockPanel">The <see cref="DockPanel"/> that will contain the tool window.</param>
         public new void Show(DockPanel dockPanel)
         {
+            Debug.Assert(presenter != null);
+
             if (DockState == DockState.Hidden || DockState == DockState.Unknown)
             {
                 // TODO - Finish this or remove it
                 //Height = presenter.Height;
                 //Width = presenter.Width;
             }
-
-            Debug.Assert(presenter != null);
 
             Show(dockPanel, (DockState)Enum.Parse(DockState.GetType(), presenter.Location));
         }

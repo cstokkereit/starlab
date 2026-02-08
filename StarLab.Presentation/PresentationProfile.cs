@@ -5,9 +5,6 @@ using StarLab.Application.Workspace.Documents.Charts;
 using StarLab.Presentation.Workspace;
 using StarLab.Presentation.Workspace.Documents;
 using StarLab.Presentation.Workspace.Documents.Charts;
-using System.Runtime.CompilerServices;
-
-[assembly: InternalsVisibleTo("StarLab.Presentation.Tests")]
 
 namespace StarLab.Presentation
 {

@@ -56,7 +56,7 @@ namespace StarLab.Application.Workspace
                 }
                 else
                 {
-                    throw new Exception(WorkspaceInteractionHelper.CreateCannotRenameItemMessage(Path.GetFileName(filename), Path.GetFileName(dto.FileName), Resources.Workspace)); // TODO - Can these be changed to show messages
+                    throw new Exception(WorkspaceInteractionHelper.CreateCannotRenameItemMessage(Path.GetFileName(filename), Path.GetFileName(dto.FileName), Resources.Workspace));
                 }
             }
             else

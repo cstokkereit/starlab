@@ -68,20 +68,20 @@ namespace Pegasus.Measures
         }
 
         /// <summary>
-        /// Determines whether this instance and a specified object, which must also be a <see cref="Measure"/> object, have the same value.
+        /// Determines whether this instance and a specified <see cref="object"/>, which must also be a <see cref="Measure"/> object, have the same value.
         /// </summary>
         /// <param name="other">The <see cref="Measure"/> to compare to this instance.</param>
-        /// <returns><see cref="true"/> if other has the same value as this instance; <see cref="false"/> otherwise.</returns>
+        /// <returns>true if other has the same value as this instance; false otherwise.</returns>
         public bool Equals(Measure other)
         {
             return other.value == value && other.units == units;
         }
 
         /// <summary>
-        /// Determines whether this instance and a specified object have the same value.
+        /// Determines whether this instance and a specified <see cref="object"/> have the same value.
         /// </summary>
-        /// <param name="other">The object to compare to this instance.</param>
-        /// <returns><see cref="true"/> if obj is a <see cref="Measure"/> and its value is the same as this instance; <see cref="false"/> otherwise.</returns>
+        /// <param name="other">The <see cref="object"/> to compare to this instance.</param>
+        /// <returns>true if obj is a <see cref="Measure"/> and its value is the same as this instance; false otherwise.</returns>
         public override bool Equals(object? other)
         {
             return other is Measure && Equals((Measure)other);
@@ -97,9 +97,9 @@ namespace Pegasus.Measures
         }
 
         /// <summary>
-        /// Converts the value of the current <see cref="Measure"/> object to its equivalent string representation.
+        /// Converts the value of the current <see cref="Measure"/> object to its equivalent <see cref="string"/> representation.
         /// </summary>
-        /// <returns>A string representation of the current <see cref="Measure"/> object.</returns>
+        /// <returns>A <see cref="string"/> representation of the current <see cref="Measure"/> object.</returns>
         public override string ToString()
         {
             return value.ToString() + " " + units.ToString();

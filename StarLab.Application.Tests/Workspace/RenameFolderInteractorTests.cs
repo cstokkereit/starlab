@@ -47,7 +47,7 @@ namespace StarLab.Application.Workspace
 
             var e = Assert.Throws<Exception>(() => interactor.Execute(dto, "Workspace/Project1/Folder1", string.Empty));
 
-            Assert.That(e.Message, Is.EqualTo("The folder name cannot be an empty string."));
+            Assert.That(e.Message, Is.EqualTo("The folder name cannot be null or empty."));
         }
 
         /// <summary>
@@ -351,7 +351,7 @@ namespace StarLab.Application.Workspace
 
             var e = Assert.Throws<Exception>(() => interactor.Execute(dto, "Workspace/Project1", string.Empty));
 
-            Assert.That(e.Message, Is.EqualTo("The project name cannot be an empty string."));
+            Assert.That(e.Message, Is.EqualTo("The project name cannot be null or empty."));
         }
 
         /// <summary>

@@ -53,7 +53,7 @@ namespace StarLab.Application.Workspace.Documents
 
             var e = Assert.Throws<Exception>(() => interactor.Execute(dto, "1", string.Empty));
 
-            Assert.That(e.Message, Is.EqualTo("The document name cannot be an empty string."));
+            Assert.That(e.Message, Is.EqualTo("The document name cannot be null or empty."));
         }
 
         /// <summary>

@@ -31,7 +31,7 @@ namespace StarLab.Application.Workspace
         /// <param name="name">A name that is not valid for the item being named.</param>
         /// <param name="target">The item being named.</param>
         /// <returns>An error message identifying the issue with the name provided.</returns>
-        public static string CreateInvalidNameMessage(string? name, string target)
+        public static string CreateInvalidNameMessage(string name, string target)
         {
             if (!string.IsNullOrEmpty(name))
             {
@@ -98,7 +98,7 @@ namespace StarLab.Application.Workspace
         /// Checks the name provided to make sure that it does not contain any illegal characters.
         /// </summary>
         /// <param name="name">A name that may contain illegal characters.</param>
-        /// <returns><see cref="true"/> if the name does not contain illegal characters; <see cref="false"/> otherwise.</returns>
+        /// <returns>true if the name does not contain illegal characters; false otherwise.</returns>
         public static bool IsValid(string? name)
         {
             if (string.IsNullOrEmpty(name)) return false;

@@ -241,6 +241,15 @@ namespace StarLab.Shared.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The indices of the component fields are required..
+        /// </summary>
+        public static string ComponentFieldIndicesRequired {
+            get {
+                return ResourceManager.GetString("ComponentFieldIndicesRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Copy.
         /// </summary>
         public static string Copy {
@@ -255,6 +264,24 @@ namespace StarLab.Shared.Properties {
         public static string Copyright {
             get {
                 return ResourceManager.GetString("Copyright", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The cursor is already positioned at the beginning of the file..
+        /// </summary>
+        public static string CursorAtBeginningOfFile {
+            get {
+                return ResourceManager.GetString("CursorAtBeginningOfFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The cursor is already positioned at the end of the file..
+        /// </summary>
+        public static string CursorAtEndoOfFile {
+            get {
+                return ResourceManager.GetString("CursorAtEndoOfFile", resourceCulture);
             }
         }
         
@@ -340,6 +367,15 @@ namespace StarLab.Shared.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The document has not been set..
+        /// </summary>
+        public static string DocumentNotSet {
+            get {
+                return ResourceManager.GetString("DocumentNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cannot read past the end of the file..
         /// </summary>
         public static string EndOfFile {
@@ -354,6 +390,15 @@ namespace StarLab.Shared.Properties {
         public static string Exit {
             get {
                 return ResourceManager.GetString("Exit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to field.
+        /// </summary>
+        public static string Field {
+            get {
+                return ResourceManager.GetString("Field", resourceCulture);
             }
         }
         
@@ -537,7 +582,7 @@ namespace StarLab.Shared.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The {0} name cannot be an empty string..
+        ///   Looks up a localized string similar to The {0} name cannot be null or empty..
         /// </summary>
         public static string NameNullOrEmpty {
             get {
@@ -650,6 +695,15 @@ namespace StarLab.Shared.Properties {
         public static string PlotArea {
             get {
                 return ResourceManager.GetString("PlotArea", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The presenter has already been attached to this view..
+        /// </summary>
+        public static string PresenterAlreadyAttached {
+            get {
+                return ResourceManager.GetString("PresenterAlreadyAttached", resourceCulture);
             }
         }
         
@@ -812,6 +866,15 @@ namespace StarLab.Shared.Properties {
         public static string Tools {
             get {
                 return ResourceManager.GetString("Tools", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The argument was not of the correct type. Expected {0} but was {1} .
+        /// </summary>
+        public static string UnexpectedArgumentType {
+            get {
+                return ResourceManager.GetString("UnexpectedArgumentType", resourceCulture);
             }
         }
         

@@ -104,11 +104,11 @@
         /// <summary>
         /// Gets the colour applied to the greatest number of axes.
         /// </summary>
-        /// <param name="x1"></param>
-        /// <param name="x2"></param>
-        /// <param name="y1"></param>
-        /// <param name="y2"></param>
-        /// <returns></returns>
+        /// <param name="x1">The bottom axis.</param>
+        /// <param name="x2">The top axis.</param>
+        /// <param name="y1">The left axis.</param>
+        /// <param name="y2">The right axis.</param>
+        /// <returns>The colour that is applied to the greatest number of axes.</returns>
         private static string GetColour(IAxis x1, IAxis x2, IAxis y1, IAxis y2)
         {
             var colours = new List<string>();
@@ -124,11 +124,11 @@
         /// <summary>
         /// Gets the font applied to the greatest number of axis labels.
         /// </summary>
-        /// <param name="x1"></param>
-        /// <param name="x2"></param>
-        /// <param name="y1"></param>
-        /// <param name="y2"></param>
-        /// <returns></returns>
+        /// <param name="x1">The bottom axis.</param>
+        /// <param name="x2">The top axis.</param>
+        /// <param name="y1">The left axis.</param>
+        /// <param name="y2">The right axis.</param>
+        /// <returns>The <see cref="IFont"/> that is applied to the greatest number of axes.</returns>
         private static IFont GetFont(IAxis x1, IAxis x2, IAxis y1, IAxis y2)
         {
             var fonts = new List<IFont>();
@@ -138,17 +138,17 @@
             if (y1.Visible) fonts.Add(y1.Label.Font);
             if (y2.Visible) fonts.Add(y2.Label.Font);
 
-            return fonts.Count > 0 ? fonts[0] : new Font(); // TODO - Temporary
+            return fonts.Count > 0 ? fonts[0] : new Font();
         }
 
         /// <summary>
-        /// 
+        /// Gets a flag that determines if any of the axes are visible.
         /// </summary>
-        /// <param name="x1"></param>
-        /// <param name="x2"></param>
-        /// <param name="y1"></param>
-        /// <param name="y2"></param>
-        /// <returns></returns>
+        /// <param name="x1">The bottom axis.</param>
+        /// <param name="x2">The top axis.</param>
+        /// <param name="y1">The left axis.</param>
+        /// <param name="y2">The right axis.</param>
+        /// <returns>true if any of the axes are visible; false otherwise.</returns>
         private static bool GetVisible(IAxis x1, IAxis x2, IAxis y1, IAxis y2)
         {
             return x1.Visible || x2.Visible || y1.Visible || y2.Visible;

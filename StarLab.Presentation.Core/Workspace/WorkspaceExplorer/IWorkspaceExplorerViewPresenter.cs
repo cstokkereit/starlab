@@ -100,16 +100,6 @@
         void Synchronise();
 
         /// <summary>
-        /// Notifies the presenter that the view has been activated.
-        /// </summary>
-        void ViewActivated();
-
-        /// <summary>
-        /// Notifies the presenter that the view has been deactivated.
-        /// </summary>
-        void ViewDeactivated();
-
-        /// <summary>
         /// Notifies the presenter that the workspace node has been collapsed.
         /// </summary>
         void WorkspaceCollapsed();

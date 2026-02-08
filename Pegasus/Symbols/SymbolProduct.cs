@@ -25,7 +25,7 @@ namespace Pegasus.Symbols
         /// <summary>
         /// Initialises a new instance of the <see cref="SymbolProduct"/> class.
         /// </summary>
-        /// <param name="symbols">A collection containing the symbols that comprise this symbol product.</param>
+        /// <param name="symbols">An <see cref="IEnumerable{ISymbol}"/> containing the symbols that comprise this symbol product.</param>
         /// <param name="separator">The symbol to be used as a separator in the string representation of this symbol product.</param>
         public SymbolProduct(IEnumerable<ISymbol> symbols, string separator)
             : this(symbols, new Symbol(separator)) { }
@@ -33,7 +33,7 @@ namespace Pegasus.Symbols
         /// <summary>
         /// Initialises a new instance of the <see cref="SymbolProduct"/> class.
         /// </summary>
-        /// <param name="symbols">A collection containing the symbols that comprise this symbol product.</param>
+        /// <param name="symbols">An <see cref="IEnumerable{ISymbol}"/> containing the symbols that comprise this symbol product.</param>
         public SymbolProduct(IEnumerable<ISymbol> symbols)
             : this(symbols, " ") { }
 
@@ -63,10 +63,29 @@ namespace Pegasus.Symbols
         }
 
         /// <summary>
-        /// Converts the value of the current <see cref="SymbolProduct"/> object to its equivalent string representation using the specified formatter.
+        /// Determines whether this instance and a specified object have the same value.
         /// </summary>
-        /// <param name="formatter">An <see cref="IFormatter"/> object that generates the string representation.</param>
-        /// <returns>A string representation of the current <see cref="SymbolProduct"/> object as specified by the formatter.</returns>
+        /// <param name="obj">The object to compare to this instance.</param>
+        /// <returns>true if obj is a <see cref="SymbolProduct"/> and its value is the same as this instance; false otherwise.</returns>
+        public override bool Equals(object? obj)
+        {
+            return obj is SymbolProduct && Equals((SymbolProduct)obj);
+        }
+
+        /// <summary>
+        /// Returns the hash code for this instance.
+        /// </summary>
+        /// <returns>A 32-bit signed integer hash code.</returns>
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(ToString());
+        }
+
+        /// <summary>
+        /// Converts the value of the current <see cref="SymbolProduct"/> object to its equivalent <see cref="string"/> representation using the specified formatter.
+        /// </summary>
+        /// <param name="formatter">An <see cref="IFormatter"/> object that generates the <see cref="string"/> representation.</param>
+        /// <returns>A <see cref="string"/> representation of the current <see cref="SymbolProduct"/> object as specified by the formatter.</returns>
         public string ToString(IFormatter formatter)
         {
             var buffer = new StringBuilder();
@@ -83,38 +102,9 @@ namespace Pegasus.Symbols
         }
 
         /// <summary>
-        /// Determines whether this instance and a specified object have the same value.
+        /// Converts the value of the current <see cref="SymbolProduct"/> object to its equivalent <see cref="string"/> representation.
         /// </summary>
-        /// <param name="obj">The object to compare to this instance.</param>
-        /// <returns>true if obj is a <see cref="SymbolProduct"/> and its value is the same as this instance; false otherwise.</returns>
-        public override bool Equals(object? obj)
-        {
-            return obj is SymbolProduct && Equals((SymbolProduct)obj);
-        }
-
-        /// <summary>
-        /// Returns the hash code for this instance.
-        /// </summary>
-        /// <returns>A 32-bit signed integer hash code.</returns>
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                var hashcode = 23;
-
-                for (int i = 0; i < symbols.Count; i++)
-                {
-                    hashcode = (hashcode * 3) + (symbols[i] != null ? symbols[i].GetHashCode() : 0);
-                }
-
-                return hashcode;
-            }
-        }
-
-        /// <summary>
-        /// Converts the value of the current <see cref="SymbolProduct"/> object to its equivalent string representation.
-        /// </summary>
-        /// <returns>A string representation of the current <see cref="SymbolProduct"/> object.</returns>
+        /// <returns>A <see cref="string"/> representation of the current <see cref="SymbolProduct"/> object.</returns>
         public override string ToString()
         {
             return ToString(new HtmlFormatter());

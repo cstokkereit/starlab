@@ -1,17 +1,22 @@
-﻿using Stratosoft.Nomenclature.Serialisation;
+﻿using Stratosoft.Nomenclature.Properties;
+using Stratosoft.Nomenclature.Serialisation;
 
 namespace Stratosoft.Nomenclature
 {
     /// <summary>
-    /// TODO
+    /// A property of an <see cref="ITerm">.
     /// </summary>
-    public class Property
+    internal class Property : IProperty
     {
-        #region Constructors
-
+        /// <summary>
+        /// Initialises a new instance of the <see cref="Property"/> class.
+        /// </summary>
+        /// <param name="name">The name of the property.</param>
+        /// <param name="description">A description of the property.</param>
+        /// <exception cref="ArgumentException"></exception>
         public Property(string name, string description)
         {
-            if (string.IsNullOrEmpty(name)) throw new ArgumentException(null, nameof(name)); // TODO
+            if (string.IsNullOrEmpty(name)) throw new ArgumentException(Resources.NameNullOrEmpty, nameof(name));
 
             ID = Guid.NewGuid();
 
@@ -19,38 +24,57 @@ namespace Stratosoft.Nomenclature
             Name = name;
         }
 
+        /// <summary>
+        /// Initialises a new instance of the <see cref="Property"/> class.
+        /// </summary>
+        /// <param name="name">The name of the property.</param>
         public Property(string name)
             : this(name, string.Empty) { }
 
+        /// <summary>
+        /// Initialises a new instance of the <see cref="Property"/> class.
+        /// </summary>
+        /// <param name="property">A POCO representation of the property.</param>
+        /// <exception cref="ArgumentException"></exception>
         internal Property(XmlProperty property)
         {
-            if (string.IsNullOrEmpty(property.Name)) throw new ArgumentException(null, nameof(property)); // TODO 
+            if (string.IsNullOrEmpty(property.Name)) throw new ArgumentException(Resources.NameNullOrEmpty, nameof(property));
 
-            if (property.ID == Guid.Empty) throw new ArgumentException(null, nameof(property)); // TODO
+            if (property.ID == Guid.Empty) throw new ArgumentException(Resources.IdRequired, nameof(property));
 
             Description = property.Description ?? string.Empty;
             Name = property.Name;
             ID = property.ID;
         }
 
-        #endregion
-
+        /// <summary>
+        /// Gets the property description.
+        /// </summary>
         public string Description { get; }
 
+        /// <summary>
+        /// Gets the property ID.
+        /// </summary>
         public Guid ID { get; }
 
+        /// <summary>
+        /// Gets the property name.
+        /// </summary>
         public string Name { get; }
 
+        /// <summary>
+        /// Gets the ID of the parent term.
+        /// </summary>
         public Guid TermID { get; private set; }
 
         /// <summary>
-        /// Determines whether this instance and a specified object, which must also be a <see cref="Property"/> object, have the same value.
+        /// Determines whether this instance and a specified <see cref="object"/>, which must also be a <see cref="Property"/> object, have the same value.
         /// </summary>
         /// <param name="other">The <see cref="Property"/> to compare to this instance.</param>
         /// <returns>true if other has the same value as this instance; false otherwise.</returns>
-        public bool Equals(Property? other)
+        public bool Equals(IProperty? other)
         {
-            var result = !ReferenceEquals(other, null);
+            var result = other is not null;
 
             if (result && other is Property property)
             {
@@ -64,16 +88,14 @@ namespace Stratosoft.Nomenclature
             return result;
         }
 
-        #region Object Overrides
-
         /// <summary>
         /// Determines whether this instance and a specified object have the same value.
         /// </summary>
-        /// <param name="obj">The object to compare to this instance.</param>
+        /// <param name="obj">The <see cref="object"/> to compare to this instance.</param>
         /// <returns>true if obj is a <see cref="Property"/> and its value is the same as this instance; false otherwise.</returns>
         public override bool Equals(object? obj)
         {
-            return obj is Property && Equals((Property)obj);
+            return obj is IProperty property && Equals(property);
         }
 
         /// <summary>
@@ -82,23 +104,26 @@ namespace Stratosoft.Nomenclature
         /// <returns>A 32-bit signed integer hash code.</returns>
         public override int GetHashCode()
         {
-            return 37 + ID.GetHashCode();
+            return HashCode.Combine(ID, Name);
         }
 
         /// <summary>
-        /// Converts the value of the current <see cref="Property"/> object to its equivalent string representation.
+        /// Converts the value of the current <see cref="Property"/> object to its equivalent <see cref="string"/> representation.
         /// </summary>
-        /// <returns>A string representation of the current <see cref="Property"/> object.</returns>
+        /// <returns>A <see cref="string"/> representation of the current <see cref="Property"/> object.</returns>
         public override string ToString()
         {
-            return ID.ToString();
+            return $"{Name} ({ID})";
         }
 
-        #endregion
-
+        /// <summary>
+        /// Attaches this property to its parent <see cref="Term"/>.
+        /// </summary>
+        /// <param name="term">The parent <see cref="Term"/>.</param>
+        /// <exception cref="InvalidOperationException"></exception>
         internal void Attach(Term term)
         {
-            if (TermID != Guid.Empty) throw new InvalidOperationException(); // TODO
+            if (TermID != Guid.Empty) throw new InvalidOperationException(Resources.PropertyAlreadyAttachedToParent);
            
             TermID = term.ID;
         }

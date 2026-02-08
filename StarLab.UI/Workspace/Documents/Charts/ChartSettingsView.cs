@@ -156,7 +156,7 @@ namespace StarLab.UI.Workspace.Documents.Charts
         /// <param name="presenter">The <see cref="IChildViewPresenter"/> that controls the view.</param>
         public void Attach(IChildViewPresenter presenter)
         {
-            if (this.presenter != null) throw new InvalidOperationException(); // TODO
+            if (this.presenter != null) throw new InvalidOperationException(Resources.PresenterAlreadyAttached);
 
             this.presenter = (IChartSettingsViewPresenter)presenter;
         }

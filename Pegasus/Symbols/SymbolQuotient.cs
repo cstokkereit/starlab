@@ -26,7 +26,7 @@ namespace Pegasus.Symbols
         /// <summary>
         /// Initialises a new instance of the <see cref="SymbolQuotient"/> class.
         /// </summary>
-        /// <param name="numerator">A collection containing the symbols that comprise the numerator of this symbol quotient.</param>
+        /// <param name="numerator">An <see cref="IEnumerable{ISymbol}"/> containing the symbols that comprise the numerator of this symbol quotient.</param>
         /// <param name="denominator">A collection containing the symbols that comprise the denominator of this symbol quotient.</param>
         /// <param name="separator">The <see cref="ISymbol"/> to be used as a separator in the string representations of the numerator and denominator of this symbol quotient.</param>
         public SymbolQuotient(IEnumerable<ISymbol> numerator, IEnumerable<ISymbol> denominator, ISymbol separator)
@@ -35,13 +35,13 @@ namespace Pegasus.Symbols
         /// <summary>
         /// Initialises a new instance of the <see cref="SymbolQuotient"/> class.
         /// </summary>
-        /// <param name="numerator">A collection containing the symbols that comprise the numerator of this symbol quotient.</param>
-        /// <param name="denominator">A collection containing the symbols that comprise the denominator of this symbol quotient.</param>
+        /// <param name="numerator">An <see cref="IEnumerable{ISymbol}"/> containing the symbols that comprise the numerator of this symbol quotient.</param>
+        /// <param name="denominator">An <see cref="IEnumerable{ISymbol}"/> containing the symbols that comprise the denominator of this symbol quotient.</param>
         public SymbolQuotient(IEnumerable<ISymbol> numerator, IEnumerable<ISymbol> denominator)
             : this(new SymbolProduct(numerator), new SymbolProduct(denominator)) { }
 
         /// <summary>
-        /// Determines whether this instance and a specified object, which must also be an <see cref="ISymbol"/> object, have the same value.
+        /// Determines whether this instance and a specified <see cref="object"/>, which must also be an <see cref="ISymbol"/> object, have the same value.
         /// </summary>
         /// <param name="other">The <see cref="ISymbol"/> to compare to this instance.</param>
         /// <returns>true if other has the same value as this instance; false otherwise.</returns>
@@ -59,25 +59,9 @@ namespace Pegasus.Symbols
         }
 
         /// <summary>
-        /// Converts the value of the current <see cref="SymbolQuotient"/> object to its equivalent string representation using the specified formatter.
+        /// Determines whether this instance and a specified <see cref="object"/> have the same value.
         /// </summary>
-        /// <param name="formatter">An <see cref="IFormatter"/> object that generates the string representation.</param>
-        /// <returns>A string representation of the current <see cref="SymbolQuotient"/> object as specified by the formatter.</returns>
-        public string ToString(IFormatter formatter)
-        {
-            var buffer = new StringBuilder();
-
-            buffer.Append(FormatSymbol(numerator, formatter));
-            buffer.Append("/");
-            buffer.Append(FormatSymbol(denominator, formatter));
-
-            return buffer.ToString();
-        }
-
-        /// <summary>
-        /// Determines whether this instance and a specified object have the same value.
-        /// </summary>
-        /// <param name="obj">The object to compare to this instance.</param>
+        /// <param name="obj">The <see cref="object"/> to compare to this instance.</param>
         /// <returns>true if obj is a <see cref="SymbolQuotient"/> and its value is the same as this instance; false otherwise.</returns>
         public override bool Equals(object? obj)
         {
@@ -90,30 +74,40 @@ namespace Pegasus.Symbols
         /// <returns>A 32-bit signed integer hash code.</returns>
         public override int GetHashCode()
         {
-            unchecked
-            {
-                var hashcode = 31;
-                hashcode = (hashcode * 5) + (denominator != null ? denominator.GetHashCode() : 0);
-                hashcode = (hashcode * 5) + (numerator != null ? numerator.GetHashCode() : 0);
-                return hashcode;
-            }
+            return HashCode.Combine(numerator, denominator);
         }
 
         /// <summary>
-        /// Converts the value of the current <see cref="SymbolQuotient"/> object to its equivalent string representation.
+        /// Converts the value of the current <see cref="SymbolQuotient"/> object to its equivalent <see cref="string"/> representation using the specified formatter.
         /// </summary>
-        /// <returns>A string representation of the current <see cref="SymbolQuotient"/> object.</returns>
+        /// <param name="formatter">An <see cref="IFormatter"/> object that generates the string representation.</param>
+        /// <returns>A <see cref="string"/> representation of the current <see cref="SymbolQuotient"/> object as specified by the formatter.</returns>
+        public string ToString(IFormatter formatter)
+        {
+            var buffer = new StringBuilder();
+
+            buffer.Append(FormatSymbol(numerator, formatter));
+            buffer.Append("/");
+            buffer.Append(FormatSymbol(denominator, formatter));
+
+            return buffer.ToString();
+        }
+
+        /// <summary>
+        /// Converts the value of the current <see cref="SymbolQuotient"/> object to its equivalent <see cref="string"/> representation.
+        /// </summary>
+        /// <returns>A <see cref="string"/> representation of the current <see cref="SymbolQuotient"/> object.</returns>
         public override string ToString()
         {
             return ToString(new HtmlFormatter());
         }
 
         /// <summary>
-        /// Generates a string representation of the specified symbol using the formatter provided.
+        /// Generates a <see cref="string"/> representation of the specified symbol using the formatter provided.
         /// </summary>
         /// <param name="symbol">The <see cref="ISymbol"/> to be formatted.</param>
-        /// <param name="formatter">An <see cref="IFormatter"/> object used to generate the string representation of a symbol.</param>
-        /// <returns>A string representation of the specified <see cref="ISymbol"/> object.</returns>
+        /// <param name="formatter">An <see cref="IFormatter"/> object used to generate the <see cref="string"/> representation of a symbol.</param>
+        /// <returns>A <see cref="string"/> representation of the specified <see cref="ISymbol"/> object.</returns>
         private string FormatSymbol(ISymbol symbol, IFormatter formatter)
         {
             var text = symbol.ToString(formatter);

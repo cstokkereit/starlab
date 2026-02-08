@@ -89,7 +89,7 @@ namespace StarLab.Application.Workspace
             interactor.Execute(workspace, project);
 
             port.Received().ShowMessage(Arg.Is("StarLab"),
-                                        Arg.Is("The project name cannot be an empty string."),
+                                        Arg.Is("The project name cannot be null or empty."),
                                         Arg.Is(InteractionType.Error),
                                         Arg.Is(InteractionResponses.OK));
 

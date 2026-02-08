@@ -2,6 +2,9 @@
 
 namespace Stratosoft.Nomenclature.Serialisation
 {
+    /// <summary>
+    /// A POCO representation of a property used for XML serialisation/deserialisation.
+    /// </summary>
     [XmlType("Property")]
     public class XmlProperty
     {

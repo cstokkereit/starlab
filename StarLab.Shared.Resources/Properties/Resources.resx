@@ -251,9 +251,6 @@ Please provide a unique name for the {0}.</value>
 
 Please enter a valid name.</value>
   </data>
-  <data name="NameNullOrEmpty" xml:space="preserve">
-    <value>The {0} name cannot be an empty string.</value>
-  </data>
   <data name="New" xml:space="preserve">
     <value>New</value>
   </data>
@@ -415,5 +412,29 @@ Please enter a valid name.</value>
   </data>
   <data name="MinorGridLines" xml:space="preserve">
     <value>Minor Grid Lines</value>
+  </data>
+  <data name="UnexpectedArgumentType" xml:space="preserve">
+    <value>The argument was not of the correct type. Expected {0} but was {1} </value>
+  </data>
+  <data name="PresenterAlreadyAttached" xml:space="preserve">
+    <value>The presenter has already been attached to this view.</value>
+  </data>
+  <data name="CursorAtBeginningOfFile" xml:space="preserve">
+    <value>The cursor is already positioned at the beginning of the file.</value>
+  </data>
+  <data name="CursorAtEndoOfFile" xml:space="preserve">
+    <value>The cursor is already positioned at the end of the file.</value>
+  </data>
+  <data name="Field" xml:space="preserve">
+    <value>field</value>
+  </data>
+  <data name="DocumentNotSet" xml:space="preserve">
+    <value>The document has not been set.</value>
+  </data>
+  <data name="NameNullOrEmpty" xml:space="preserve">
+    <value>The {0} name cannot be null or empty.</value>
+  </data>
+  <data name="ComponentFieldIndicesRequired" xml:space="preserve">
+    <value>The indices of the component fields are required.</value>
   </data>
 </root>

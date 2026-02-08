@@ -6,7 +6,7 @@
     internal class EmptySymbol : ISymbol
     {
         /// <summary>
-        /// Determines whether this instance and a specified object, which must also be an <see cref="ISymbol"/> object, have the same value.
+        /// Determines whether this instance and a specified <see cref="object"/>, which must also be an <see cref="ISymbol"/> object, have the same value.
         /// </summary>
         /// <param name="other">The <see cref="ISymbol"/> to compare to this instance.</param>
         /// <returns>true if other has the same value as this instance; false otherwise.</returns>
@@ -16,19 +16,9 @@
         }
 
         /// <summary>
-        /// Converts the value of the current <see cref="ISymbol"/> object to its equivalent string representation using the specified formatter.
+        /// Determines whether this instance and a specified <see cref="object"/> have the same value.
         /// </summary>
-        /// <param name="formatter">An <see cref="IFormatter"/> object that generates the string representation.</param>
-        /// <returns>A string representation of the current <see cref="ISymbol"/> object as specified by the formatter.</returns>
-        public string ToString(IFormatter formatter)
-        {
-            return string.Empty;
-        }
-
-        /// <summary>
-        /// Determines whether this instance and a specified object have the same value.
-        /// </summary>
-        /// <param name="obj">The object to compare to this instance.</param>
+        /// <param name="obj">The <see cref="object"/> to compare to this instance.</param>
         /// <returns>true if obj is an <see cref="ISymbol"/> and its value is the same as this instance; false otherwise.</returns>
         public override bool Equals(object? obj)
         {
@@ -45,10 +35,20 @@
         }
 
         /// <summary>
-        /// Converts the value of the current <see cref="ISymbol"/> object to its equivalent string representation.
+        /// Converts the value of the current <see cref="ISymbol"/> object to its equivalent <see cref="string"/> representation.
         /// </summary>
-        /// <returns>A string representation of the current <see cref="ISymbol"/> object.</returns>
+        /// <returns>A <see cref="string"/> representation of the current <see cref="ISymbol"/> object.</returns>
         public override string ToString()
+        {
+            return string.Empty;
+        }
+
+        /// <summary>
+        /// Converts the value of the current <see cref="ISymbol"/> object to its equivalent <see cref="string"/> representation using the specified formatter.
+        /// </summary>
+        /// <param name="formatter">An <see cref="IFormatter"/> object that generates the <see cref="string"/> representation.</param>
+        /// <returns>A <see cref="string"/> representation of the current <see cref="ISymbol"/> object as specified by the formatter.</returns>
+        public string ToString(IFormatter formatter)
         {
             return string.Empty;
         }

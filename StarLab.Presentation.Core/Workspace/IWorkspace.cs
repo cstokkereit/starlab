@@ -102,7 +102,7 @@ namespace StarLab.Presentation.Workspace
         /// Determines if the workspace contains the specified project.
         /// </summary>
         /// <param name="key">The key of the required project.</param>
-        /// <returns><see cref="true"/> if the workspace contains a project with the specified key; <see cref="false"/> otherwise.</returns>
+        /// <returns>true if the workspace contains a project with the specified key; false otherwise.</returns>
         bool HasProject(string key);
 
         /// <summary>

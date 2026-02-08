@@ -2,6 +2,9 @@
 
 namespace Stratosoft.Nomenclature.Serialisation
 {
+    /// <summary>
+    /// A POCO representation of a nomenclature used for XML serialisation/deserialisation.
+    /// </summary>
     [XmlType("Nomenclature")]
     public class XmlNomenclature
     {

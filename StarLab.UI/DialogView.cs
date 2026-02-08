@@ -69,7 +69,7 @@ namespace StarLab
         /// <param name="presenter">The <see cref="IPresenter"/> that controls the view.</param>
         public void Attach(IPresenter presenter)
         {
-            if (this.presenter != null) throw new InvalidOperationException(); // TODO
+            if (this.presenter != null) throw new InvalidOperationException(Resources.PresenterAlreadyAttached);
 
             this.presenter = (IDialogViewPresenter)presenter;
         }

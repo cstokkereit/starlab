@@ -3,10 +3,16 @@
 namespace Stratosoft.Nomenclature.Serialisation
 {
     /// <summary>
-    /// TODO
+    /// Serialises and deserialises the <see cref="XmlNomenclature"> class.
     /// </summary>
     static class NomenclatureSerialiser
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public static Nomenclature Load(FileStream stream)
         {
             var serialiser = new XmlSerializer(typeof(XmlNomenclature));
@@ -25,6 +31,11 @@ namespace Stratosoft.Nomenclature.Serialisation
             return nomenclature;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <returns></returns>
         public static Nomenclature Load(string filename)
         {
             Nomenclature nomenclature;
@@ -37,6 +48,11 @@ namespace Stratosoft.Nomenclature.Serialisation
             return nomenclature;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="nomenclature"></param>
+        /// <param name="stream"></param>
         public static void Save(Nomenclature nomenclature, FileStream stream)
         {
             var serializer = new XmlSerializer(typeof(XmlNomenclature));
@@ -44,6 +60,11 @@ namespace Stratosoft.Nomenclature.Serialisation
             serializer.Serialize(stream, BuildXmlNomenclature(nomenclature));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="nomenclature"></param>
+        /// <param name="filename"></param>
         public static void SaveDictionary(Nomenclature nomenclature, string filename)
         {
             using (FileStream stream = File.OpenWrite(filename))
@@ -52,6 +73,11 @@ namespace Stratosoft.Nomenclature.Serialisation
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="nomenclature"></param>
+        /// <returns></returns>
         private static XmlNomenclature BuildXmlNomenclature(Nomenclature nomenclature)
         {
             var xmlNomenclature = new XmlNomenclature()

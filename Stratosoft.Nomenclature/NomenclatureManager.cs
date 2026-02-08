@@ -3,11 +3,17 @@ using System.Collections.ObjectModel;
 
 namespace Stratosoft.Nomenclature
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class NomenclatureManager
     {
-        private readonly Dictionary<string, Nomenclature> nomenclatures = new();
+        private readonly Dictionary<string, INomenclature> nomenclatures = new(); // A dictionary containing the available nomenclatures indexed by name.
 
-        public ReadOnlyDictionary<string, Nomenclature> Nomenclatures => new ReadOnlyDictionary<string, Nomenclature>(nomenclatures);
+        /// <summary>
+        /// Gets a <see cref="ReadOnlyDictionary{string, INomencalture}"/> containing the available nomenclatures.
+        /// </summary>
+        public ReadOnlyDictionary<string, INomenclature> Nomenclatures => new ReadOnlyDictionary<string, INomenclature>(nomenclatures);
 
         public void ExportDictionary(FileStream stream)
         {
@@ -19,22 +25,22 @@ namespace Stratosoft.Nomenclature
             throw new NotImplementedException();
         }
 
-        public Nomenclature FindDictionary(Term term)
+        public INomenclature FindDictionary(ITerm term)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Nomenclature> FindDictionaries(string termName)
+        public IEnumerable<INomenclature> FindDictionaries(string termName)
         {
             throw new NotImplementedException();
         }
 
-        public Nomenclature FindTerm(Property property)
+        public INomenclature FindTerm(IProperty property)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Term> FindTerms(string propertyName)
+        public IEnumerable<ITerm> FindTerms(string propertyName)
         {
             throw new NotImplementedException();
         }
@@ -65,7 +71,7 @@ namespace Stratosoft.Nomenclature
             }
         }
 
-        private string GetName(Nomenclature nomenclature)
+        private string GetName(INomenclature nomenclature)
         {
             var name = nomenclature.Name;
             

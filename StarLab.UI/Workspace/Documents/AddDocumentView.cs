@@ -19,7 +19,6 @@ namespace StarLab.UI.Workspace.Documents
         /// <summary>
         /// Initialises a new instance of the <see cref="AddDocumentView"/> class.
         /// </summary>
-        /// <summary>
         public AddDocumentView()
         {
             InitializeComponent();
@@ -40,7 +39,7 @@ namespace StarLab.UI.Workspace.Documents
         /// <summary>
         /// Gets the <see cref="DocumentType"/>.
         /// </summary>
-        public string DocumentType => "ColourMagnitudeChartView"; // TODO - Other document/chart types
+        public string DocumentType => "ColourMagnitudeChartView";
 
         /// <summary>
         /// Gets or sets the document name.
@@ -98,7 +97,7 @@ namespace StarLab.UI.Workspace.Documents
         /// <param name="presenter">The <see cref="IChildViewPresenter"/> that controls the view.</param>
         public void Attach(IChildViewPresenter presenter)
         {
-            if (this.presenter != null) throw new InvalidOperationException(); // TODO
+            if (this.presenter != null) throw new InvalidOperationException(Resources.PresenterAlreadyAttached);
 
             this.presenter = (IAddDocumentViewPresenter)presenter;
         }
@@ -133,7 +132,7 @@ namespace StarLab.UI.Workspace.Documents
         /// <param name="controller">The <see cref="IApplicationController"/>.</param>
         public void Initialise(IApplicationController controller)
         {
-            // TODO - Add implementation if necessary.
+            // Do Nothing
         }
     }
 }

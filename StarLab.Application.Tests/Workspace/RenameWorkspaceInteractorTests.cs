@@ -57,7 +57,7 @@ namespace StarLab.Application.Workspace
 
             var e = Assert.Throws<Exception>(() => interactor.Execute(dto, string.Empty));
 
-            Assert.That(e.Message, Is.EqualTo("The workspace name cannot be an empty string."));
+            Assert.That(e.Message, Is.EqualTo("The workspace name cannot be null or empty."));
         }
 
         /// <summary>

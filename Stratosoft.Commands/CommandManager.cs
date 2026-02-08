@@ -33,7 +33,7 @@ namespace Stratosoft.Commands
         /// <returns>true if the specifed <see cref="ICommand"/> has already been added; false otherwise.</returns>
         public bool ContainsCommand(string name)
         {
-            return commands.ContainsKey(name); // TODO - Add unit tests
+            return commands.ContainsKey(name);
         }
 
         /// <summary>

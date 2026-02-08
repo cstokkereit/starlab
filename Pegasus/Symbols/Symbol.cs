@@ -24,10 +24,10 @@
         /// <summary>
         /// Initialises a new instance of the <see cref="Symbol"/> class.
         /// </summary>
-        /// <param name="prefix">The symbol to use as the prefix for this symbol.</param>
+        /// <param name="prefix">The <see cref="ISymbol"/> to use as the prefix for this symbol.</param>
         /// <param name="symbol">The symbol value.</param>
-        /// <param name="bold">A flag that specifies the use of bold text in the string representation of this symbol.</param>
-        /// <param name="italic">A flag that specifies the use of italic text in the string representation of this symbol.</param>
+        /// <param name="bold">A flag that specifies the use of bold text in the <see cref="string"/> representation of this symbol.</param>
+        /// <param name="italic">A flag that specifies the use of italic text in the <see cref="string"/> representation of this symbol.</param>
         /// <param name="subscript">The symbol to use as the subscript for this symbol.</param>
         /// <param name="superscript">The <see cref="ISymbol"/> to use as the superscript for this symbol.</param>
         /// <exception cref="ArgumentException"></exception>
@@ -49,8 +49,8 @@
         /// </summary>
         /// <param name="prefix">The text to use as the prefix for this symbol.</param>
         /// <param name="symbol">The symbol value.</param>
-        /// <param name="bold">A flag that specifies the use of bold text in the string representation of this symbol.</param>
-        /// <param name="italic">A flag that specifies the use of italic text in the string representation of this symbol.</param>
+        /// <param name="bold">A flag that specifies the use of bold text in the <see cref="string"/> representation of this symbol.</param>
+        /// <param name="italic">A flag that specifies the use of italic text in the <see cref="string"/> representation of this symbol.</param>
         /// <param name="subscript">The text to use as the subscript for this symbol.</param>
         /// <param name="superscript">The text to use as the superscript for this symbol.</param>
         /// <exception cref="ArgumentException"></exception>
@@ -72,8 +72,8 @@
         /// </summary>
         /// <param name="prefix">The text to use as the prefix for this symbol.</param>
         /// <param name="symbol">The symbol value.</param>
-        /// <param name="bold">A flag that specifies the use of bold text in the string representation of this symbol.</param>
-        /// <param name="italic">A flag that specifies the use of italic text in the string representation of this symbol.</param>
+        /// <param name="bold">A flag that specifies the use of bold text in the <see cref="string"/> representation of this symbol.</param>
+        /// <param name="italic">A flag that specifies the use of italic text in the <see cref="string"/> representation of this symbol.</param>
         /// <param name="subscript">The numeric value to use as the subscript for this symbol.</param>
         /// <param name="superscript">The numeric value to use as the superscript for this symbol.</param>
         public Symbol(string prefix, string symbol, bool bold, bool italic, int subscript, int superscript)
@@ -83,8 +83,8 @@
         /// Initialises a new instance of the <see cref="Symbol"/> class.
         /// </summary>
         /// <param name="symbol">The symbol value.</param>
-        /// <param name="bold">A flag that specifies the use of bold text in the string representation of this symbol.</param>
-        /// <param name="italic">A flag that specifies the use of italic text in the string representation of this symbol.</param>
+        /// <param name="bold">A flag that specifies the use of bold text in the <see cref="string"/> representation of this symbol.</param>
+        /// <param name="italic">A flag that specifies the use of italic text in the <see cref="string"/> representation of this symbol.</param>
         /// <param name="subscript">The text to use as the subscript for this symbol.</param>
         /// <param name="superscript">The text to use as the superscript for this symbol.</param>
         public Symbol(string symbol, bool bold, bool italic, string subscript, string superscript)
@@ -94,8 +94,8 @@
         /// Initialises a new instance of the <see cref="Symbol"/> class.
         /// </summary>
         /// <param name="symbol">The symbol value.</param>
-        /// <param name="bold">A flag that specifies the use of bold text in the string representation of this symbol.</param>
-        /// <param name="italic">A flag that specifies the use of italic text in the string representation of this symbol.</param>
+        /// <param name="bold">A flag that specifies the use of bold text in the <see cref="string"/> representation of this symbol.</param>
+        /// <param name="italic">A flag that specifies the use of italic text in the <see cref="string"/> representation of this symbol.</param>
         /// <param name="subscript">The numeric value to use as the subscript for this symbol.</param>
         /// <param name="superscript">The numeric value to use as the superscript for this symbol.</param>
         public Symbol(string symbol, bool bold, bool italic, int subscript, int superscript)
@@ -106,8 +106,8 @@
         /// </summary>
         /// <param name="prefix">The text to use as the prefix for this symbol.</param>
         /// <param name="symbol">The symbol value.</param>
-        /// <param name="bold">A flag that specifies the use of bold text in the string representation of this symbol.</param>
-        /// <param name="italic">A flag that specifies the use of italic text in the string representation of this symbol.</param>
+        /// <param name="bold">A flag that specifies the use of bold text in the <see cref="string"/> representation of this symbol.</param>
+        /// <param name="italic">A flag that specifies the use of italic text in the <see cref="string"/> representation of this symbol.</param>
         public Symbol(string prefix, string symbol, bool bold, bool italic)
             : this(prefix, symbol, bold, italic, string.Empty, string.Empty) { }
 
@@ -115,8 +115,8 @@
         /// Initialises a new instance of the <see cref="Symbol"/> class.
         /// </summary>
         /// <param name="symbol">The symbol value.</param>
-        /// <param name="bold">A flag that specifies the use of bold text in the string representation of this symbol.</param>
-        /// <param name="italic">A flag that specifies the use of italic text in the string representation of this symbol.</param>
+        /// <param name="bold">A flag that specifies the use of bold text in the <see cref="string"/> representation of this symbol.</param>
+        /// <param name="italic">A flag that specifies the use of italic text in the <see cref="string"/> representation of this symbol.</param>
         public Symbol(string symbol, bool bold, bool italic)
             : this(string.Empty, symbol, bold, italic) { }
 
@@ -128,7 +128,7 @@
             : this(symbol, false, false) { }
 
         /// <summary>
-        /// Determines whether this instance and a specified object, which must also be an <see cref="ISymbol"/> object, have the same value.
+        /// Determines whether this instance and a specified <see cref="object"/>, which must also be an <see cref="ISymbol"/> object, have the same value.
         /// </summary>
         /// <param name="other">The <see cref="ISymbol"/> to compare to this instance.</param>
         /// <returns>true if other has the same value as this instance; false otherwise.</returns>
@@ -154,9 +154,9 @@
         }
 
         /// <summary>
-        /// Determines whether this instance and a specified object have the same value.
+        /// Determines whether this instance and a specified <see cref="object"/> have the same value.
         /// </summary>
-        /// <param name="other">The object to compare to this instance.</param>
+        /// <param name="other">The <see cref="object"/> to compare to this instance.</param>
         /// <returns>true if other is an <see cref="ISymbol"/> and its value is the same as this instance; false otherwise.</returns>
         public override bool Equals(object? other)
         {
@@ -169,34 +169,23 @@
         /// <returns>A 32-bit signed integer hash code.</returns>
         public override int GetHashCode()
         {
-            unchecked
-            {
-                var hashcode = 13;
-                hashcode = (hashcode * 7) + (superscript != null ? superscript.GetHashCode() : 0);
-                hashcode = (hashcode * 7) + (subscript != null ? subscript.GetHashCode() : 0);
-                hashcode = (hashcode * 7) + (prefix != null ? prefix.GetHashCode() : 0);
-                hashcode = (hashcode * 7) + (text != null ? text.GetHashCode() : 0);
-                hashcode = (hashcode * 7) + italic.GetHashCode();
-                hashcode = (hashcode * 7) + bold.GetHashCode();
-
-                return hashcode;
-            }
+            return HashCode.Combine(prefix, text, superscript, subscript, bold, italic);
         }
 
         /// <summary>
-        /// Converts the value of the current <see cref="Symbol"/> object to its equivalent string representation using the specified formatter.
+        /// Converts the value of the current <see cref="Symbol"/> object to its equivalent <see cref="string"/> representation using the specified formatter.
         /// </summary>
-        /// <param name="formatter">An <see cref="IFormatter"/> object that generates the string representation.</param>
-        /// <returns>A string representation of the current <see cref="Symbol"/> object as specified by the formatter.</returns>
+        /// <param name="formatter">An <see cref="IFormatter"/> object that generates the <see cref="string"/> representation.</param>
+        /// <returns>A <see cref="string"/> representation of the current <see cref="Symbol"/> object as specified by the formatter.</returns>
         public string ToString(IFormatter formatter)
         {
             return formatter.Format(prefix, text, bold, italic, subscript, superscript);
         }
 
         /// <summary>
-        /// Converts the value of the current <see cref="Symbol"/> object to its equivalent string representation.
+        /// Converts the value of the current <see cref="Symbol"/> object to its equivalent <see cref="string"/> representation.
         /// </summary>
-        /// <returns>A string representation of the current <see cref="Symbol"/> object.</returns>
+        /// <returns>A <see cref="string"/> representation of the current <see cref="Symbol"/> object.</returns>
         public override string ToString()
         {
             return ToString(new HtmlFormatter());
@@ -232,7 +221,7 @@
         /// Gets the specified symbol.
         /// </summary>
         /// <param name="text">The name of the symbol.</param>
-        /// <returns>The specified symbol as a string.</returns>
+        /// <returns>The specified symbol as a <see cref="string"/>.</returns>
         private static string GetText(string? text)
         {
             if (!string.IsNullOrEmpty(text))

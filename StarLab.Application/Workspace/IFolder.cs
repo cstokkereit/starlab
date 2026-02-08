@@ -53,7 +53,7 @@ namespace StarLab.Application.Workspace
         /// Determines if this <see cref="IFolder"> contains a child folder with the specified name.
         /// </summary>
         /// <param name="name">The name of the child folder.</param>
-        /// <returns><see cref="true"/> if this folder contains a child folder with the specified name; <see cref="false"/> otherwise.</returns>
+        /// <returns>true if this folder contains a child folder with the specified name; false otherwise.</returns>
         bool ContainsFolder(string name);
 
         /// <summary>
