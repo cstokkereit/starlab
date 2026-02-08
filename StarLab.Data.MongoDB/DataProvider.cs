@@ -42,7 +42,7 @@ namespace StarLab.Data.MongoDB
 
             foreach (var document in documents)
             {
-                stars.Add(new StarData(document));
+                stars.Add(new Star(document));
             }
 
             return stars;
@@ -52,10 +52,14 @@ namespace StarLab.Data.MongoDB
         /// Retrieves the data specified in the query. This is the preferred method for returning large amounts of data.
         /// </summary>
         /// <param name="query">The <see cref="IQuery"/> that determines which values will be returned.</param>
-        /// <returns>An <see cref="ICursor{IStar}"/> containg the specified values.</returns>
-        public ICursor<IStar> GetStars(IQuery query)
+        /// <returns>An <see cref="IForwardOnlyCursor{IStar}"/> containg the specified values.</returns>
+        public IForwardOnlyCursor<IStar> GetStars(IQuery query)
         {
-            throw new NotImplementedException();
+            if (database == null) throw new InvalidOperationException(); // TODO
+
+            if (query.FromClause.Size == 0) throw new InvalidOperationException(); // TODO
+
+            return new Stars(GetDocuments((Query)query));
         }
 
         /// <summary>
@@ -103,6 +107,35 @@ namespace StarLab.Data.MongoDB
             else
             {
                 documents = collection.Find(query.GetFilter()).Skip(skip).Limit(limit).ToList();
+            }
+
+            return documents;
+        }
+
+        /// <summary>
+        /// Gets the documents specified by the <see cref="Query">.
+        /// </summary>
+        /// <param name="query">The <see cref="Query"/> that determines which values will be returned.</param>
+        /// <returns>An <see cref="IAsyncCursor{BsonDocument}"/> containing the specified records.</returns>
+        private IAsyncCursor<BsonDocument> GetDocuments(Query query)
+        {
+            Debug.Assert(database != null);
+
+            if (query.FromClause.Size > 1) throw new NotImplementedException();
+
+            var table = query.SelectStatement.Tables[0];
+
+            var collection = database.GetCollection<BsonDocument>(table.Name);
+
+            IAsyncCursor<BsonDocument> documents;
+
+            if (!table.SelectAll)
+            {
+                documents = collection.Find(query.GetFilter()).Project(query.GetProjection()).ToCursor();
+            }
+            else
+            {
+                documents = collection.Find(query.GetFilter()).ToCursor();
             }
 
             return documents;

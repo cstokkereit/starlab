@@ -6,7 +6,7 @@ using StarLab.Data.Import;
 namespace StarLab.Data.MongoDB.Import
 {
     /// <summary>
-    /// A class for performing unit tests on the <see cref="ImportProvider"/> class.
+    /// A class for performing unit tests on the <see cref="ImportManager"/> class.
     /// </summary>
     public class ImportProviderTests
     {
@@ -67,24 +67,28 @@ namespace StarLab.Data.MongoDB.Import
         }
 
         /// <summary>
-        /// Test that the <see cref="ImportProvider(Connection)"/> constructor works correctly.
+        /// Test that the <see cref="ImportManager(Connection)"/> constructor works correctly.
         /// </summary>
         [Test]
         public void TestConstructor()
         {
-            var provider = new ImportProvider(connection);
+            // Act
+            var provider = new ImportManager(connection);
 
+            // Assert
             Assert.That(provider, Is.Not.Null);
         }
 
         /// <summary>
-        /// Test that the <see cref="ImportProvider.Import(IDataset, string, string)"/> method works correctly when provided with a <see cref="FileBackedDataset"/> containing data for 1000 stars.
+        /// Test that the <see cref="ImportManager.Import(IDataset, string, string)"/> method works correctly when provided with a <see cref="FileBackedDataset"/> containing data for 1000 stars.
         /// </summary>
         [Test]
         public void TestImport()
         {
-            var provider = new ImportProvider(connection);
+            // Arrange
+            var provider = new ImportManager(connection);
 
+            // Act
             using (var dataset = new FileBackedDataset(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "Stars.dat"), importDefinition))
             {
                 provider.Import(dataset, DATABASE, COLLECTION);
@@ -94,6 +98,7 @@ namespace StarLab.Data.MongoDB.Import
 
             var count = collection.CountDocuments(Builders<BsonDocument>.Filter.Empty);
 
+            // Assert
             Assert.That(count, Is.EqualTo(1000));
         }
     }

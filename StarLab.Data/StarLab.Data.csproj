@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="StarLab.Data.Tests" />
+  </ItemGroup>
+  
+  <ItemGroup>
     <None Remove="Import\DataField.cs~RF32162a3e.TMP" />
     <None Remove="Import\FileBackedDataset.cs~RF37b21100.TMP" />
   </ItemGroup>

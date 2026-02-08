@@ -96,7 +96,7 @@
                     return new NotEqualsFilter<T>(field, value);
 
                 default:
-                    throw new ArgumentException(); // TODO
+                    throw new ArgumentOutOfRangeException(nameof(type));
             }
         }
 

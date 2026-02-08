@@ -157,7 +157,7 @@ namespace Stratosoft.File.IO
         }
 
         /// <summary>
-        /// Test that the <see cref="FileParser.EOF"/> property returns <see cref="false"/> when the end of the file has not been reached.
+        /// Test that the <see cref="FileParser.EOF"/> property returns false when the end of the file has not been reached.
         /// </summary>
         [Test]
         public void TestEOFReturnsFalseWhenEndOfFileNotYetReached()
@@ -172,7 +172,7 @@ namespace Stratosoft.File.IO
         }
 
         /// <summary>
-        /// Test that the <see cref="FileParser.EOF"/> property returns <see cref="true"/> when the end of the file has been reached.
+        /// Test that the <see cref="FileParser.EOF"/> property returns true when the end of the file has been reached.
         /// </summary>
         [Test]
         public void TestEOFReturnsTrueWhenEndOfFileReached()
@@ -188,7 +188,7 @@ namespace Stratosoft.File.IO
         }
 
         /// <summary>
-        /// Test that the <see cref="FileParser.EOF"/> property returns <see cref="true"/> when the file contains no data.
+        /// Test that the <see cref="FileParser.EOF"/> property returns true when the file contains no data.
         /// </summary>
         [Test]
         public void TestEOFReturnsTrueWhenFileEmpty()

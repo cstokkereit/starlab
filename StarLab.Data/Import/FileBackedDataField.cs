@@ -12,7 +12,7 @@ namespace StarLab.Data.Import
 
         private readonly IConverter converter; // Converts the string value read in by the parser to the data type specified in the import definition.
 
-        private readonly int index; //
+        private readonly int index; // The index of the field.
 
         private readonly string name; // The name of the field.
 
@@ -23,7 +23,7 @@ namespace StarLab.Data.Import
         /// <param name="parser">An <see cref="IFileParser"/> that will be used to read data from a file.</param>
         public FileBackedDataField(IFieldDefinition fieldDefinition, IFileParser parser)
         {
-            ArgumentException.ThrowIfNullOrEmpty(fieldDefinition.Name, nameof(fieldDefinition.Name)); // TODO
+            ArgumentNullException.ThrowIfNull(fieldDefinition, nameof(fieldDefinition));
             ArgumentNullException.ThrowIfNull(parser, nameof(parser));
 
             converter = Converters.GetConverter(fieldDefinition.DataType);
@@ -41,7 +41,7 @@ namespace StarLab.Data.Import
         /// <param name="parser">An <see cref="IFileParser"/> that will be used to read data from a file.</param>
         protected FileBackedDataField(string name, IFileParser parser)
         {
-            ArgumentException.ThrowIfNullOrEmpty(name, nameof(name)); // TODO
+            ArgumentException.ThrowIfNullOrEmpty(name, nameof(name));
             ArgumentNullException.ThrowIfNull(parser, nameof(parser));
 
             converter = Converters.GetConverter(DataTypes.Text);
@@ -73,7 +73,7 @@ namespace StarLab.Data.Import
         {
             var value = parser.GetValue(Name);
 
-            if (string.IsNullOrEmpty(value)) return string.Empty; // TODO - If field is required throw an exception
+            if (string.IsNullOrEmpty(value)) return string.Empty;
 
             return converter.Convert(value);
         }

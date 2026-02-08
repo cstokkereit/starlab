@@ -1,4 +1,5 @@
 ﻿using MongoDB.Bson;
+using StarLab.Shared.Properties;
 
 namespace StarLab.Data.MongoDB
 {
@@ -41,7 +42,7 @@ namespace StarLab.Data.MongoDB
         {
             get
             {
-                if (document == null) throw new InvalidOperationException(); // TODO
+                if (document == null) throw new InvalidOperationException(Resources.DocumentNotSet);
 
                 return document.GetElement(Index).Value;
             }

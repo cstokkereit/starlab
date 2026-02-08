@@ -18,7 +18,7 @@ namespace StarLab.Data.MongoDB
         private readonly Connection connection;
 
         /// <summary>
-        /// Initialises a new instance of the <see cref="DataProviderTests"/> class. 
+        /// Initialises a new instance of the <see cref="DataProviderTests"/> class.
         /// </summary>
         public DataProviderTests()
         {
@@ -57,7 +57,7 @@ namespace StarLab.Data.MongoDB
         {
             connection.Open();
 
-            var provider = new ImportProvider(connection);
+            var provider = new ImportManager(connection);
 
             using (var dataset = new FileBackedDataset(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "Stars.dat"), importDefinition))
             {
@@ -66,14 +66,36 @@ namespace StarLab.Data.MongoDB
         }
 
         /// <summary>
-        /// Test that the <see cref="ImportProvider(Connection)"/> constructor works correctly.
+        /// Test that the <see cref="ImportManager(Connection)"/> constructor works correctly.
         /// </summary>
         [Test]
         public void TestConstructor()
         {
-            var provider = new ImportProvider(connection);
+            // Act
+            var provider = new ImportManager(connection);
 
+            // Assert
             Assert.That(provider, Is.Not.Null);
+        }
+
+        /// <summary>
+        /// Test that the <see cref="DataProvider.CloseDatabase()"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestCloseDatabase()
+        {
+            // Arrange
+            var provider = new DataProvider(connection);
+
+            provider.OpenDatabase(DATABASE);
+
+            // Act
+            provider.CloseDatabase();
+
+            // Assert
+            provider.OpenDatabase(DATABASE);
+
+            Assert.Pass();
         }
 
         /// <summary>
@@ -82,6 +104,7 @@ namespace StarLab.Data.MongoDB
         [Test]
         public void TestGetFirstTwentyStars()
         {
+            // Arrange
             var provider = new DataProvider(connection);
 
             provider.OpenDatabase(DATABASE);
@@ -91,12 +114,84 @@ namespace StarLab.Data.MongoDB
             var query = builder.AddTable(COLLECTION)
                                .BuildQuery();
 
+            // Act
             var stars = provider.GetStars(query, 0, 20);
 
+            // Assert
             Assert.That(stars, Is.Not.Null);
             Assert.That(stars, Has.Count.EqualTo(20));
 
             // TODO - Check that these are the first twenty stars
+        }
+
+        /// <summary>
+        /// Test that the <see cref="DataProvider.GetStars(IQuery)"/> method works correctly when all stars are included in the query.
+        /// </summary>
+        [Test]
+        public void TestGetStarsReturnsAllStarsAsCursor()
+        {
+            // Arrange
+            var provider = new DataProvider(connection);
+
+            provider.OpenDatabase(DATABASE);
+
+            var builder = new QueryBuilder();
+
+            var query = builder.AddTable(COLLECTION)
+                               .BuildQuery();
+
+            // Act
+            var stars = provider.GetStars(query);
+
+            // Assert
+            Assert.That(stars, Is.Not.Null);
+
+            Validate(stars, 1000);
+        }
+
+        /// <summary>
+        /// Test that the <see cref="DataProvider.GetStars(IQuery, int, int)"/> method works correctly when all stars are included in the query.
+        /// </summary>
+        [Test]
+        public void TestGetStarsReturnsAllStarsAsList()
+        {
+            // Arrange
+            var provider = new DataProvider(connection);
+
+            provider.OpenDatabase(DATABASE);
+
+            var builder = new QueryBuilder();
+
+            var query = builder.AddTable(COLLECTION)
+                               .BuildQuery();
+
+            // Act
+            var stars = provider.GetStars(query, 0, 2000);
+
+            // Assert
+            Assert.That(stars, Is.Not.Null);
+
+            Validate(stars, 1000, s => {});
+        }
+
+        /// <summary>
+        /// Test that the <see cref="DataProvider.GetStars(IQuery, int, int)"/> method throws an <see cref="InvalidOperationException"/> if the database has not been opened.
+        /// </summary>
+        [Test]
+        public void TestGetStarsThrowsExceptionIfDatabaseNotOpened()
+        {
+            // Arrange
+            var provider = new DataProvider(connection);
+
+            var builder = new QueryBuilder();
+
+            var query = builder.AddTable(COLLECTION)
+                               .BuildQuery();
+
+            // Act
+            var e = Assert.Throws<InvalidOperationException>(() => provider.GetStars(query, 0, 20));
+
+            //Assert.That(e.Message, Is.EqualTo(""));
         }
 
         /// <summary>
@@ -105,6 +200,7 @@ namespace StarLab.Data.MongoDB
         [Test]
         public void TestGetStarsWithEqualsQuery()
         {
+            // Arrange
             var provider = new DataProvider(connection);
 
             provider.OpenDatabase(DATABASE);
@@ -114,17 +210,12 @@ namespace StarLab.Data.MongoDB
             var query = builder.AddTable(COLLECTION)
                                .AddPredicate(builder.CreateField("Apparent Magnitude"), 8.55, ComparisonOperators.Equals)
                                .BuildQuery();
-
+            
+            // Act
             var stars = provider.GetStars(query, 0, 1000);
 
-            Assert.That(stars, Is.Not.Null);
-
-            Assert.That(stars, Has.Count.EqualTo(10));
-
-            for (int n = 0; n < stars.Count; n++)
-            {
-                Assert.That(stars[n].ApparentMagnitude, Is.EqualTo(8.55));
-            }
+            // Assert
+            Validate(stars, 10, s => Assert.That(s.ApparentMagnitude, Is.EqualTo(8.55)));
         }
 
         /// <summary>
@@ -133,6 +224,7 @@ namespace StarLab.Data.MongoDB
         [Test]
         public void TestGetStarsWithGreaterThanQuery()
         {
+            // Arrange
             var provider = new DataProvider(connection);
 
             provider.OpenDatabase(DATABASE);
@@ -143,16 +235,11 @@ namespace StarLab.Data.MongoDB
                                .AddPredicate(builder.CreateField("B-V"), 1.67, ComparisonOperators.GreaterThan)
                                .BuildQuery();
 
+            // Act
             var stars = provider.GetStars(query, 0, 1000);
 
-            Assert.That(stars, Is.Not.Null);
-
-            Assert.That(stars, Has.Count.EqualTo(13));
-
-            for (int n = 0; n < stars.Count; n++)
-            {
-                Assert.That(stars[n].BVColourIndex, Is.GreaterThan(1.67));
-            }
+            // Assert
+            Validate(stars, 13, s => Assert.That(s.BVColourIndex, Is.GreaterThan(1.67)));
         }
 
         /// <summary>
@@ -161,6 +248,7 @@ namespace StarLab.Data.MongoDB
         [Test]
         public void TestGetStarsWithGreaterThanOrEqualsQuery()
         {
+            // Arrange
             var provider = new DataProvider(connection);
 
             provider.OpenDatabase(DATABASE);
@@ -171,16 +259,11 @@ namespace StarLab.Data.MongoDB
                                .AddPredicate(builder.CreateField("B-V"), 1.67, ComparisonOperators.GreaterThanOrEquals)
                                .BuildQuery();
 
+            // Act
             var stars = provider.GetStars(query, 0, 1000);
 
-            Assert.That(stars, Is.Not.Null);
-
-            Assert.That(stars, Has.Count.EqualTo(14));
-
-            for (int n = 0; n < stars.Count; n++)
-            {
-                Assert.That(stars[n].BVColourIndex, Is.GreaterThanOrEqualTo(1.67));
-            }
+            // Assert
+            Validate(stars, 14, s => Assert.That(s.BVColourIndex, Is.GreaterThanOrEqualTo(1.67)));
         }
 
         /// <summary>
@@ -189,6 +272,7 @@ namespace StarLab.Data.MongoDB
         [Test]
         public void TestGetStarsWithLessThanQuery()
         {
+            // Arrange
             var provider = new DataProvider(connection);
 
             provider.OpenDatabase(DATABASE);
@@ -199,16 +283,11 @@ namespace StarLab.Data.MongoDB
                                .AddPredicate(builder.CreateField("B-V"), -0.089, ComparisonOperators.LessThan)
                                .BuildQuery();
 
+            // Act
             var stars = provider.GetStars(query, 0, 1000);
 
-            Assert.That(stars, Is.Not.Null);
-
-            Assert.That(stars, Has.Count.EqualTo(8));
-
-            for (int n = 0; n < stars.Count; n++)
-            {
-                Assert.That(stars[n].BVColourIndex, Is.LessThan(-0.089));
-            }
+            // Assert
+            Validate(stars, 8, s => Assert.That(s.BVColourIndex, Is.LessThan(-0.089)));
         }
 
         /// <summary>
@@ -217,6 +296,7 @@ namespace StarLab.Data.MongoDB
         [Test]
         public void TestGetStarsWithLessThanOrEqualsQuery()
         {
+            // Arrange
             var provider = new DataProvider(connection);
 
             provider.OpenDatabase(DATABASE);
@@ -227,16 +307,11 @@ namespace StarLab.Data.MongoDB
                                .AddPredicate(builder.CreateField("B-V"), -0.089, ComparisonOperators.LessThanOrEquals)
                                .BuildQuery();
 
+            // Act
             var stars = provider.GetStars(query, 0, 1000);
 
-            Assert.That(stars, Is.Not.Null);
-
-            Assert.That(stars, Has.Count.EqualTo(9));
-
-            for (int n = 0; n < stars.Count; n++)
-            {
-                Assert.That(stars[n].BVColourIndex, Is.LessThanOrEqualTo(-0.089));
-            }
+            // Assert
+            Validate(stars, 9, s => Assert.That(s.BVColourIndex, Is.LessThanOrEqualTo(-0.089)));
         }
 
         /// <summary>
@@ -245,6 +320,7 @@ namespace StarLab.Data.MongoDB
         [Test]
         public void TestGetStarsWithNotEqualsQuery()
         {
+            // Arrange
             var provider = new DataProvider(connection);
 
             provider.OpenDatabase(DATABASE);
@@ -255,18 +331,68 @@ namespace StarLab.Data.MongoDB
                                .AddPredicate(builder.CreateField("Apparent Magnitude"), 8.55, ComparisonOperators.NotEquals)
                                .BuildQuery();
 
+            // Act
             var stars = provider.GetStars(query, 0, 1000);
 
-            Assert.That(stars, Is.Not.Null);
+            // Assert
+            Validate(stars, 990, s => Assert.That(s.ApparentMagnitude, Is.Not.EqualTo(8.55)));
+        }
 
-            Assert.That(stars, Has.Count.EqualTo(990));
+        /// <summary>
+        /// Test that the <see cref="DataProvider.OpenDatabase(string)"/> method throws an <see cref="InvalidOperationException"/> if the database has already been opened.
+        /// </summary>
+        [Test]
+        public void TestOpenDatabaseThrowsExceptionIfDatabaseAlreadyOpened()
+        {
+            // Arrange
+            var provider = new DataProvider(connection);
 
-            for (int n = 0; n < stars.Count; n++)
-            {
-                Assert.That(stars[n].ApparentMagnitude, Is.Not.EqualTo(8.55));
-            }
+            provider.OpenDatabase(DATABASE);
+
+            // Act
+            var e = Assert.Throws<InvalidOperationException>(() => provider.OpenDatabase(DATABASE));
+
+            //Assert.That(e.Message, Is.EqualTo(""));
         }
 
         // TODO - And and Or queries
+
+        /// <summary>
+        /// Validates the <see cref="IForwardOnlyCursor{IStar}"/> provided.
+        /// </summary>
+        /// <param name="stars">The <see cref="IForwardOnlyCursor{IStar}"/> being validated.</param>
+        /// <param name="count">The expected number of items returned by the cursor.</param>
+        private void Validate(IForwardOnlyCursor<IStar> stars, int count)
+        {
+            Assert.That(stars, Is.Not.Null);
+
+            var n = 0;
+
+            while (stars.MoveNext())
+            {
+                Assert. That(stars.Current, Is.Not.Null);
+                n++;
+            }
+
+            Assert.That(n, Is.EqualTo(count));
+        }
+
+        /// <summary>
+        /// Validates the <see cref="IList{IStar}"/> provided.
+        /// </summary>
+        /// <param name="stars">The <see cref="IList{IStar}"/> being validated.</param>
+        /// <param name="count">The expected number of items in the list.</param>
+        /// <param name="validate">An <see cref="Action{IStar}"/> that validates the items in the list.</param>
+        private void Validate(IList<IStar> stars, int count, Action<IStar> validate)
+        {
+            Assert.That(stars, Is.Not.Null);
+
+            Assert.That(stars, Has.Count.EqualTo(count));
+
+            for (int n = 0; n < count; n++)
+            {
+                validate(stars[n]);
+            }
+        }
     }
 }

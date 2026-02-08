@@ -122,10 +122,10 @@ namespace Stratosoft.File.IO
         /// <summary>
         /// Either adds the contents of the buffer to the growing list of values and clears the buffer or appends a delimiter at the start of a new text value.
         /// </summary>
-        /// <param name="isText"><see cref="true"/> if the buffer contains a completed text value that can be added to the list.</param>
+        /// <param name="isText">true if the buffer contains a completed text value that can be added to the list.</param>
         /// <param name="buffer">A <see cref="StringBuilder"/> that contains the growing text value.</param>
         /// <param name="data">A <see cref="List{string}"/> that contains the data values.</param>
-        /// <returns><see cref="true"/> if a text value is currently being generated; <see cref="false"/> otherwise.</returns>
+        /// <returns>true if a text value is currently being generated; false otherwise.</returns>
         private bool AddValue(bool isText, StringBuilder buffer, List<string> data)
         {
             if (isText)
@@ -147,7 +147,7 @@ namespace Stratosoft.File.IO
         /// <param name="value">The value being added.</param>
         /// <param name="buffer">A <see cref="StringBuilder"/> that contains the growing text value.</param>
         /// <param name="data">A <see cref="List{string}"/> that contains the data values.</param>
-        /// <returns><see cref="true"/> if a text value is currently being generated; <see cref="false"/> otherwise.</returns>
+        /// <returns>true if a text value is currently being generated; false otherwise.</returns>
         private bool AddValue(string value, StringBuilder buffer, List<string> data)
         {
             bool inText = false;
@@ -177,7 +177,7 @@ namespace Stratosoft.File.IO
         /// <summary>
         /// Either adds the value provided to the growing list of values or appends it to the text value in the buffer.
         /// </summary>
-        /// <param name="isText"><see cref="true"/> to append the value provided to the text value in buffer.</param>
+        /// <param name="isText">true to append the value provided to the text value in buffer.</param>
         /// <param name="value">The value being added.</param>
         /// <param name="buffer">A <see cref="StringBuilder"/> that contains the growing text value.</param>
         /// <param name="data">A <see cref="List{string}"/> that contains the data values.</param>
@@ -197,7 +197,7 @@ namespace Stratosoft.File.IO
         /// Splits a line of text containing delimited data into the individual values. Delimited text values that happen to contain the value delimiter will not be split.
         /// </summary>
         /// <param name="line">A <see cref="string"/> that contains a single line of delimited values from the data file.</param>
-        /// <param name="textDelimited"><see cref="true"/> if the line contains delimited text values.</param>
+        /// <param name="textDelimited">true if the line contains delimited text values.</param>
         /// <returns>A <see cref="string[]"/> containing the individual values.</returns>
         private string[] GetData(string line, bool textDelimited)
         {

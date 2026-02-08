@@ -1,4 +1,6 @@
-﻿namespace Stratosoft.File.IO
+﻿using System.Diagnostics;
+
+namespace Stratosoft.File.IO
 {
     /// <summary>
     /// Represents a file parser that can be used to extract the individual data values from a file.
@@ -62,7 +64,7 @@
         /// <summary>
         /// Releases all resources used by the <see cref="Parser"/> object.
         /// </summary>
-        /// <param name="disposing"><see cref="true"/> if called by my code; <see cref="false"/> otherwise.</param>
+        /// <param name="disposing">true if called by my code; false otherwise.</param>
         protected virtual void Dispose(bool disposing)
         {
             if (disposing && reader != null)
@@ -78,7 +80,7 @@
         /// <returns>A <see cref="string"/> containing the line of data or <see cref="null"/> if all lines have been read.</returns>
         protected string? ReadLine()
         {
-            if (reader == null) throw new InvalidOperationException(); // TODO
+            Debug.Assert(reader != null);
 
             return reader.ReadLine();
         }

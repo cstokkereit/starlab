@@ -18,8 +18,8 @@
         /// Retrieves the data specified in the query. This is the preferred method for returning large amounts of data.
         /// </summary>
         /// <param name="query">The <see cref="IQuery"/> that determines which values will be returned.</param>
-        /// <returns>An <see cref="ICursor{IStar}"/> containg the specified values.</returns>
-        ICursor<IStar> GetStars(IQuery query);
+        /// <returns>An <see cref="IForwardOnlyCursor{IStar}"/> containg the specified values.</returns>
+        IForwardOnlyCursor<IStar> GetStars(IQuery query);
 
         /// <summary>
         /// Closes the database that contains the data.

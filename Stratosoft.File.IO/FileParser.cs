@@ -34,7 +34,7 @@ namespace Stratosoft.File.IO
         }
 
         /// <summary>
-        /// Returns <see cref="true"/> if the end of the file has been reached; <see cref="false"/> otherwise.
+        /// Returns true if the end of the file has been reached; false otherwise.
         /// </summary>
         public bool EOF { get; private set; }
 
@@ -75,7 +75,7 @@ namespace Stratosoft.File.IO
         }
 
         /// <summary>
-        /// Parses the next line of data from the catalogue file. If no data is found the <see cref="EOF"/> property will be set to <see cref="true"/>.
+        /// Parses the next line of data from the catalogue file. If no data is found the <see cref="EOF"/> property will be set to true.
         /// </summary>
         public void Parse()
         {
@@ -90,7 +90,7 @@ namespace Stratosoft.File.IO
         /// <summary>
         /// Releases all resources used by the <see cref="FileParser"/> object.
         /// </summary>
-        /// <param name="disposing"><see cref="true"/> if called by my code; <see cref="false"/> otherwise.</param>
+        /// <param name="disposing">true if called by my code; false otherwise.</param>
         protected virtual void Dispose(bool disposing)
         {
             if (disposing && parser != null) parser.Dispose();

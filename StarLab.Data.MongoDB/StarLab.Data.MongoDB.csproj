@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="StarLab.Data.MongoDB.Tests" />
+  </ItemGroup>
+  
+  <ItemGroup>
     <PackageReference Include="MongoDB.Driver" Version="3.5.2" />
   </ItemGroup>
 

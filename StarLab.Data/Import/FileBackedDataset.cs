@@ -33,12 +33,12 @@ namespace StarLab.Data.Import
         }
 
         /// <summary>
-        /// A flag that indicates that the current row index is before the start of the file.
+        /// A flag that indicates that the current row index is before the start of the dataset.
         /// </summary>
         public bool BOF => throw new NotImplementedException();
 
         /// <summary>
-        /// A flag that indicates that the current row index is beyond the end of the file.
+        /// A flag that indicates that the current row index is beyond the end of the dataset.
         /// </summary>
         public bool EOF => parser.EOF;
 
@@ -97,7 +97,7 @@ namespace StarLab.Data.Import
         }
 
         /// <summary>
-        /// Moves the pointer to the start of the file.
+        /// Moves the pointer to the start of the dataset.
         /// </summary>
         public void MoveFirst()
         {
@@ -105,7 +105,7 @@ namespace StarLab.Data.Import
         }
 
         /// <summary>
-        /// Mpves the pointer to the end of the file.
+        /// Moves the pointer to the end of the dataset.
         /// </summary>
         public void MoveLast()
         {
@@ -113,7 +113,7 @@ namespace StarLab.Data.Import
         }
 
         /// <summary>
-        /// Moves the pointer one step closer to the end of the file.
+        /// Moves the pointer to the next row of data.
         /// </summary>
         public void MoveNext()
         {
@@ -121,7 +121,7 @@ namespace StarLab.Data.Import
         }
 
         /// <summary>
-        /// Moves the pointer one step closer to the start of the file.
+        /// Moves the pointer to the previous row of data.
         /// </summary>
         public void MovePrevious()
         {

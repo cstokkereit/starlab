@@ -11,7 +11,7 @@
         DataTypes DataType { get; }
 
         /// <summary>
-        /// Returns <see cref="true"/> if the field is to be imported; <see cref="false"/> otherwise.
+        /// Returns true if the field is to be imported; false otherwise.
         /// </summary>
         bool Include { get; }
 

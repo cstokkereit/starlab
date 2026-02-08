@@ -2,9 +2,16 @@
 
 namespace StarLab.Data.MongoDB
 {
-    internal class StarData : IStar
+    /// <summary>
+    /// 
+    /// </summary>
+    internal class Star : IStar
     {
-        public StarData(BsonDocument data)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="data"></param>
+        public Star(BsonDocument data)
         {
             if (data.GetElement("Apparent Magnitude").Value.IsDouble)
             {

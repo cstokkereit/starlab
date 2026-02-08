@@ -4,19 +4,19 @@ using StarLab.Data.Import;
 namespace StarLab.Data.MongoDB.Import
 {
     /// <summary>
-    /// A MongoDB specific implementation of the <see cref="IImportProvider"/> interface that provides methods for importing data into a MongoDB database.
+    /// An implementation of the <see cref="IImportManager"/> interface that can be used to import data into a MongoDB database.
     /// </summary>
-    public class ImportProvider : IImportProvider
+    public class ImportManager : IImportManager
     {
         private const int BATCH_SIZE = 1000; // The number of documents that constitutes a batch.
 
         private readonly Connection connection; // A wrapped connection to the MongoDB server.
 
         /// <summary>
-        /// Initialises a new instance of the <see cref="ImportProvider"/> class.
+        /// Initialises a new instance of the <see cref="ImportManager"/> class.
         /// </summary>
         /// <param name="connection">A <see cref="Connection"/> that can be used to access the MongoDB server.</param>
-        public ImportProvider(Connection connection)
+        public ImportManager(Connection connection)
         {
             this.connection = connection;
         }

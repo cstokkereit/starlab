@@ -1025,7 +1025,6 @@
             // Arrange
             var builder = new QueryBuilder();
 
-            // Arrange
             var field1 = Substitute.For<IField>();
             field1.Table.Returns("Table-1");
             field1.Name.Returns("Field-1");

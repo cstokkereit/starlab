@@ -1,7 +1,7 @@
 ﻿namespace StarLab.Application.Data.Import
 {
     /// <summary>
-    /// TODO
+    /// Represents the format 
     /// </summary>
     public interface IImportDefinition
     {

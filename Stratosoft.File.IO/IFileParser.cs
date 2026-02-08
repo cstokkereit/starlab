@@ -6,7 +6,7 @@
     public interface IFileParser : IDisposable
     {
         /// <summary>
-        /// Returns <see cref="true"/> if the end of the file has been reached; <see cref="false"/> otherwise.
+        /// Returns true if the end of the file has been reached; false otherwise.
         /// </summary>
         bool EOF { get; }
 
@@ -27,7 +27,7 @@
         string GetValue(string field);
 
         /// <summary>
-        /// Parses the next line of data from the file. If no data is found the <see cref="EOF"/> property will be set to <see cref="true"/>.
+        /// Parses the next line of data from the file. If no data is found the <see cref="EOF"/> property will be set to true.
         /// </summary>
         void Parse();
     }
