@@ -19,7 +19,7 @@ namespace Stratosoft.Commands.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -61,29 +61,29 @@ namespace Stratosoft.Commands.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A command named {0} has already been added..
+        ///   Looks up a localized string similar to A command named &apos;{0}&apos; has already been added..
         /// </summary>
-        internal static string MessageCommandExists {
+        internal static string CommandExists {
             get {
-                return ResourceManager.GetString("MessageCommandExists", resourceCulture);
+                return ResourceManager.GetString("CommandExists", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A command named {0} could not be found..
+        ///   Looks up a localized string similar to A command named &apos;{0}&apos; could not be found..
         /// </summary>
-        internal static string MessageCommandNotFound {
+        internal static string CommandNotFound {
             get {
-                return ResourceManager.GetString("MessageCommandNotFound", resourceCulture);
+                return ResourceManager.GetString("CommandNotFound", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid component type. Expected a component of type {0} but received a component of type {1}.
+        ///   Looks up a localized string similar to Invalid component type. Expected a component of type &apos;{0}&apos; but received a component of type &apos;{1}&apos;.
         /// </summary>
-        internal static string MessageInvalidComponentType {
+        internal static string InvalidComponentType {
             get {
-                return ResourceManager.GetString("MessageInvalidComponentType", resourceCulture);
+                return ResourceManager.GetString("InvalidComponentType", resourceCulture);
             }
         }
     }

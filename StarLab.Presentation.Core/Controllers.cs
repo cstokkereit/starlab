@@ -1,4 +1,6 @@
-﻿namespace StarLab.Presentation
+﻿using StarLab.Presentation.Workspace.Documents;
+
+namespace StarLab.Presentation
 {
     /// <summary>
     /// Provides names for the various controllers.
@@ -8,44 +10,29 @@
         public const string ApplicationController = "ApplicationController";
         public const string ApplicationViewController = "ApplicationViewController";
 
-        public const string ChartController = "ChartController";
-        public const string ChartSettingsController = "ChartSettingsController";
-
-        public const string FilterController = "FilterController";
-
-        public const string MessageBoxController = "MessageBoxController";
-
-        public const string TableController = "TableController";
-        public const string TableSettingsController = "TableSettingsController";
-
         /// <summary>
-        /// Generates a name for a content controller.
+        /// Generates an ID for a view controller.
         /// </summary>
-        /// <param name="content">The content name.</param>
-        /// <returns>The controller name.</returns>
-        public static string GetContentControllerName(string content)
+        /// <param name="view">The <see cref="IView"/>.</param>
+        /// <returns>The controller ID.</returns>
+        public static string GetControllerID(IView view)
         {
-            return $"ContentController({content})";
-        }
+            string id = string.Empty;
 
-        /// <summary>
-        /// Generates a name for a document controller.
-        /// </summary>
-        /// <param name="id">The document ID.</param>
-        /// <returns>The controller name.</returns>
-        public static string GetDocumentControllerName(string id)
-        {
-            return $"DocumentController({id})";
-        }
+            if (view is IChildView)
+            {
+                id = $"ContentController({view.ID})";
+            }
+            else if (view is IDocumentView)
+            {
+                id = $"DocumentController({view.ID})";
+            }
+            else
+            {
+                id = $"{view.ID}Controller";
+            }
 
-        /// <summary>
-        /// Generates a name for a view controller.
-        /// </summary>
-        /// <param name="view">The view name.</param>
-        /// <returns>The controller name.</returns>
-        public static string GetViewControllerName(string view)
-        {
-            return $"ViewController({view})";
+            return id;
         }
     }
 }

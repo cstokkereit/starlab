@@ -133,11 +133,6 @@ namespace StarLab.UI.Controls
                 {
                     container.Panel2Collapsed = false;
                 }
-
-                if (view is IChildView child && child.Controller != null)
-                {
-                    child.Controller.Activate();
-                }
             }
 
             container.SplitterDistance = container.Panel1MinSize;

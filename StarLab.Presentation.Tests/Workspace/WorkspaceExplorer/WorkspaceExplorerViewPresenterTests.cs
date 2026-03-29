@@ -18,7 +18,7 @@
         }
 
         /// <summary>
-        /// Test that the <see cref="ChartSettingsViewPresenter(IWorkspaceExplorerView, ICommandManager, IUseCaseFactory, IApplicationSettings, IMapper, IEventAggregator)"/> constructor works correctly.
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter(IWorkspaceExplorerView, ICommandManager, IUseCaseFactory, IApplicationSettings, IMapper, IEventAggregator)"/> constructor works correctly.
         /// </summary>
         [Test]
         public void TestConstruction()

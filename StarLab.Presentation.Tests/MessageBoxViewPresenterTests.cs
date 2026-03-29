@@ -1,4 +1,6 @@
-﻿namespace StarLab.Presentation
+﻿using NUnit.Framework.Constraints;
+
+namespace StarLab.Presentation
 {
     /// <summary>
     /// A class for performing unit tests on the <see cref="MessageBoxViewPresenter"/> class.
@@ -36,7 +38,8 @@
         /// <returns>Returns the <see cref="MessageBoxViewPresenter"/>.</returns>
         private IMessageBoxViewPresenter CreatePresenter()
         {
-            return new MessageBoxViewPresenter(view, commands, factory, settings, mapper, events);
+            throw new NotImplementedException();
+            //return new MessageBoxViewPresenter(view, commands, factory, settings, mapper, events);
         }
     }
 }

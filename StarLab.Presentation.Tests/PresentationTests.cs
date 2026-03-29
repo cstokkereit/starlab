@@ -72,6 +72,7 @@ namespace StarLab.Presentation
         [TearDown]
         public virtual void TearDown()
         {
+            controller.Dispose();
             container.Dispose();
         }
 

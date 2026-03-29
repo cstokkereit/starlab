@@ -1,7 +1,9 @@
 using Castle.MicroKernel.Resolvers.SpecializedResolvers;
 using Castle.Windsor;
+using log4net;
 using log4net.Config;
 using StarLab.Presentation;
+using StarLab.Shared.Resources;
 using StarLab.UI;
 
 namespace StarLab
@@ -11,6 +13,8 @@ namespace StarLab
     /// </summary>
     internal static class Program
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(Program)); // The logger that will be used for writing log messages.
+
         /// <summary>
         ///  The entry point for the application.
         /// </summary>
@@ -20,6 +24,8 @@ namespace StarLab
             System.Windows.Forms.Application.EnableVisualStyles();
 
             XmlConfigurator.Configure();
+
+            log.Info(LogEntries.StartingApplication);
 
             var container = new WindsorContainer();
 

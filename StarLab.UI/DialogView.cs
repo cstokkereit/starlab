@@ -1,8 +1,11 @@
 ﻿using log4net;
+using StarLab.Application;
 using StarLab.Presentation;
+using StarLab.Presentation.Workspace;
+using StarLab.Serialisation.Workspace;
 using StarLab.Shared.Properties;
+using StarLab.Shared.Resources;
 using StarLab.UI;
-using System.ComponentModel;
 using System.Diagnostics;
 
 namespace StarLab
@@ -14,9 +17,7 @@ namespace StarLab
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(DialogView)); // The logger that will be used for writing log messages.
 
-        private readonly string id; // The view ID.
-
-        private IChildView? childView; // A view that implements the dialog specific behaviour.
+        private readonly IChildView childView; // A view that implements the dialog specific behaviour.
 
         private IDialogViewPresenter? presenter; // The presenter that controls the view.
 
@@ -25,70 +26,19 @@ namespace StarLab
         /// </summary>
         /// <param name="name">The name of the dialog.</param>
         /// <param name="text">The dialog text.</param>
-        /// <param name="definition">The <see cref="IViewDefinition"/> used to construct this view.</param>
+        /// <param name="childView">The <see cref="IChildView"/> used to construct this view.</param>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="ArgumentException"></exception>
-        public DialogView(string name, string text, IViewDefinition definition)
+        public DialogView(string name, string text, IChildView childView)
         {
-            ArgumentNullException.ThrowIfNull(definition, nameof(definition));
+            ArgumentNullException.ThrowIfNull(childView, nameof(childView));
             ArgumentException.ThrowIfNullOrEmpty(name, nameof(name));
             ArgumentException.ThrowIfNullOrEmpty(text, nameof(text));
 
-            Debug.Assert(definition.ChildViewDefinitions.Count == 1);
+            this.childView = childView;
 
             InitializeComponent();
 
-            StartPosition = FormStartPosition.CenterParent;
-
-            Name = name;
-            Text = text;
-            id = name;
-
-            if (log.IsDebugEnabled) log.Debug(string.Format(Resources.InstanceCreated, nameof(DialogView)));
-        }
-
-        /// <summary>
-        /// Gets the <see cref="IViewController"> that controls this view.
-        /// </summary>
-        public IViewController? Controller => (IViewController?)presenter;
-
-        /// <summary>
-        /// Gets or sets a flag that determines whether the dialog box will be hidden or unloaded when it is closed.
-        /// </summary>
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public bool HideOnClose { get; set; }
-
-        /// <summary>
-        /// Gets the view ID.
-        /// </summary>
-        public string ID => id;
-
-        /// <summary>
-        /// Attaches the <see cref="IPresenter"/> that controls the view.
-        /// </summary>
-        /// <param name="presenter">The <see cref="IPresenter"/> that controls the view.</param>
-        public void Attach(IPresenter presenter)
-        {
-            if (this.presenter != null) throw new InvalidOperationException(Resources.PresenterAlreadyAttached);
-
-            this.presenter = (IDialogViewPresenter)presenter;
-        }
-
-        /// <summary>
-        /// Attaches the <see cref="IChildView"/> to the view.
-        /// </summary>
-        /// <param name="childView">The <see cref="IChildView"/> to attach.</param>
-        public void Attach(IChildView childView)
-        {
-            ArgumentNullException.ThrowIfNull(childView, nameof(childView));
-            
-            Debug.Assert(childView.Controller != null);
-
-            if (presenter is IViewController controller)
-            {
-                childView.Controller.RegisterController(controller);
-            }
-            
             SuspendLayout();
 
             if (childView is Control control)
@@ -99,29 +49,46 @@ namespace StarLab
 
             ResumeLayout();
 
-            this.childView = childView;
+            StartPosition = FormStartPosition.CenterParent;
 
-            if (log.IsDebugEnabled) log.Debug(string.Format(Resources.ViewAttached, childView.Name, nameof(DialogView)));
+            Name = name;
+            Text = text;
+            ID = name;
         }
 
         /// <summary>
-        /// Detaches the <see cref="IPresenter"/> that controls the view.
+        /// Gets the view ID.
+        /// </summary>
+        public string ID { get; }
+
+        /// <summary>
+        /// Attaches the <see cref="IPresenter"/> that controls the view.
+        /// </summary>
+        /// <param name="presenter">The <see cref="IPresenter"/> that controls the view.</param>
+        public void Attach(IPresenter presenter)
+        {
+            if (this.presenter != null) throw new InvalidOperationException(Resources.PresenterAlreadyAttached);
+
+            this.presenter = (IDialogViewPresenter)presenter;
+
+            log.Debug(string.Format(LogEntries.PresenterAttached, $"{presenter.GetType().Name}({Name})"));
+        }
+
+        /// <summary>
+        /// Detaches the presenter that controls the view.
         /// </summary>
         public void Detach()
         {
-            presenter = null;
-        }
+            childView.Detach();
 
-        /// <summary>
-        /// Initialises the view.
-        /// </summary>
-        /// <param name="controller">The <see cref="IApplicationController"/>.</param>
-        public void Initialise(IApplicationController controller)
-        {
-            Debug.Assert(childView != null);
-            Debug.Assert(childView.Controller != null);
+            if (presenter != null)
+            {
+                var entry = $"{presenter.GetType().Name}({Name})";
 
-            childView.Controller.Initialise(controller);
+                presenter = null;
+
+                log.Debug(string.Format(LogEntries.PresenterDetached, entry));
+            }
         }
 
         /// <summary>
@@ -139,10 +106,23 @@ namespace StarLab
         /// <param name="context">An <see cref="IInteractionContext"/> that provides the context required to configure the dialog for a specific user interaction.</param>
         public void Show(IInteractionContext context)
         {
-            Debug.Assert(childView != null);
-            Debug.Assert(childView.Controller != null);
+            //Debug.Assert(childView != null);
+            //Debug.Assert(childView.Controller != null);
 
-            childView.Controller.Run(context);
+            //childView.Controller.Run(context);
+        }
+
+        /// <summary>
+        /// Displays a <see cref="System.Windows.Forms.MessageBox"/> with the specified caption, message, message type and available responses.
+        /// </summary>
+        /// <param name="caption">The message box caption.</param>
+        /// <param name="message">The message text.</param>
+        /// <param name="type">An <see cref="InteractionType"/> that specifies the type of message being displayed.</param>
+        /// <param name="responses">An <see cref="InteractionResponses"/> that specifies the available responses.</param>
+        /// <returns>An <see cref="InteractionResult"/> that identifies the chosen response.</returns>
+        public InteractionResult ShowMessage(string caption, string message, InteractionType type, InteractionResponses responses)
+        {
+            return DialogController.ShowMessage(this, caption, message, type, responses);
         }
 
         /// <summary>
@@ -169,13 +149,26 @@ namespace StarLab
         }
 
         /// <summary>
+        /// Event handler for the <see cref="Form.Activated"/> event.
+        /// </summary>
+        /// <param name="sender">The <see cref="object"> that was the originator of the event.</param>
+        /// <param name="e">An <see cref="EventArgs"/> that provides context for the event.</param>
+        private void Form_Activated(object sender, EventArgs e)
+        {
+            Debug.Assert(presenter != null);
+
+            presenter.ViewActivated();
+        }
+
+        /// <summary>
         /// Event handler for the <see cref="Form.FormClosing"/> event.
         /// </summary>
         /// <param name="sender">The <see cref="object"> that was the originator of the event.</param>
         /// <param name="e">A <see cref="FormClosingEventArgs"/> that provides context for the event.</param>
         private void Form_Closing(object sender, FormClosingEventArgs e)
         {
-            if (HideOnClose && e.CloseReason == CloseReason.UserClosing)
+            // TODO - Isn't this covered by HidOnClose?
+            if (e.CloseReason == CloseReason.UserClosing)
             {
                 e.Cancel = true;
                 Hide();

@@ -1,14 +1,19 @@
 ﻿namespace StarLab.Presentation.Configuration
 {
     /// <summary>
-    /// Represents the configuration for a child view.
+    /// Represents the configuration for an <see cref="IChildView"/>.
     /// </summary>
     public interface IChildViewConfiguration
     {
         /// <summary>
-        /// Gets the ID of the panel that will be used to display the child view.
+        /// Gets the child view name.
         /// </summary>
-        int Panel { get; }
+        string Name { get; }
+
+        /// <summary>
+        /// Gets the <see cref="SplitViewPanels"/> that specifies which panel will be used to display the child view.
+        /// </summary>
+        SplitViewPanels Panel { get; }
 
         /// <summary>
         /// Gets the type name of the presenter that controls the child view.

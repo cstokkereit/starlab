@@ -19,7 +19,7 @@ namespace Stratosoft.Commands
         /// <param name="command">The <see cref="ICommand"/> being added.</param>
         public void AddCommand(string name, ICommand command)
         {
-            if (commands.ContainsKey(name)) throw new ArgumentException(string.Format(Resources.MessageCommandExists, name));
+            if (commands.ContainsKey(name)) throw new ArgumentException(string.Format(Resources.CommandExists, name));
 
             if (command == null) throw new ArgumentNullException(nameof(command));
 
@@ -41,9 +41,10 @@ namespace Stratosoft.Commands
         /// </summary>
         /// <param name="name">The name of the <see cref="ICommand"/>.</param>
         /// <returns>The specified <see cref="ICommand"/>.</returns>
+        /// <exception cref="ArgumentException"></exception>
         public ICommand GetCommand(string name)
         {
-            if (!commands.ContainsKey(name)) throw new ArgumentException(string.Format(Resources.MessageCommandNotFound, name));
+            if (!commands.ContainsKey(name)) throw new ArgumentException(string.Format(Resources.CommandNotFound, name));
 
             return commands[name];
         }
@@ -75,7 +76,7 @@ namespace Stratosoft.Commands
         /// <param name="name">The name of the <see cref="ICommand"/> being removed.</param>
         public void RemoveCommand(string name)
         {
-            if (!commands.ContainsKey(name)) throw new ArgumentException(string.Format(Resources.MessageCommandNotFound, nameof(name)));
+            if (!commands.ContainsKey(name)) throw new ArgumentException(string.Format(Resources.CommandNotFound, nameof(name)));
 
             commands.Remove(name);
         }

@@ -5,8 +5,7 @@ namespace Stratosoft.Commands
     /// <summary>
     /// Abstract base class for commands that are invoked by a user interface component e.g. System.Windows.Forms.Button and act on the specified type of receiver.
     /// </summary>
-    /// <typeparam name="TReceiver">The type of receiver that this command acts on.</typeparam>
-    public abstract class ComponentCommand<TReceiver> : Command<TReceiver>, ICommand, IComponentCommand
+    public class ComponentCommand : ActionCommand, ICommand, IComponentCommand
     {
         private readonly List<Component> instances = new List<Component>(); // A list containing the instances of components that can invoke this command.
 
@@ -20,9 +19,9 @@ namespace Stratosoft.Commands
         /// Initialises a new instance of the <see cref="ComponentCommand{TReceiver}"/> class.
         /// </summary>
         /// <param name="manager">The <see cref="ICommandManager"/> that manages this command and its invokers.</param>
-        /// <param name="receiver">The receiver that this command will act on.</param>
-        public ComponentCommand(ICommandManager manager, TReceiver receiver)
-            : base(receiver)
+        /// <param name="action">The <see cref="Action"/> to perform when the command is executed.</param>
+        public ComponentCommand(ICommandManager manager, Action action)
+            : base(action)
         {
             this.manager = manager ?? throw new ArgumentNullException("manager");
         }

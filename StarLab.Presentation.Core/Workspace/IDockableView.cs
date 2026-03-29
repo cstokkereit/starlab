@@ -3,12 +3,21 @@
     /// <summary>
     /// Defines the properties and methods used by an <see cref="IDockableViewPresenter"/> to control the behaviour of a tool window.
     /// </summary>
-    public interface IDockableView : IView
+    public interface IDockableView : IParentView
     {
         /// <summary>
-        /// Initialises the view.
+        /// Gets or sets a flag that determines whether the view will be hidden or unloaded when it is closed.
         /// </summary>
-        /// <param name="controller">The <see cref="IApplicationController"/>.</param>
-        void Initialise(IApplicationController controller);
+        bool HideOnClose { get; set; }
+
+        /// <summary>
+        /// Gets the view text.
+        /// </summary>
+        string Text { get; }
+
+        /// <summary>
+        /// Closes the view.
+        /// </summary>
+        void Close();
     }
 }

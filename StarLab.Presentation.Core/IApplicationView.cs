@@ -3,8 +3,13 @@
     /// <summary>
     /// Defines the properties and methods used by the <see cref="IApplicationViewPresenter"/> to control the behaviour of the workspace view.
     /// </summary>
-    public interface IApplicationView : IView, IMenuManager, IToolbarManager
+    public interface IApplicationView : IParentView, IMenuManager, IToolbarManager
     {
+        /// <summary>
+        /// Closes the view.
+        /// </summary>
+        void Close();
+
         /// <summary>
         /// Closes the currently selected document.
         /// </summary>

@@ -12,7 +12,7 @@ namespace StarLab.UI
         /// </summary>
         public string Workspace
         {
-            get { return Properties.Settings.Default.Workspace; } 
+            get { return Properties.Settings.Default.Workspace; }
 
             set
             {

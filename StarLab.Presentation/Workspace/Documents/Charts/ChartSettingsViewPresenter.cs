@@ -1,8 +1,5 @@
-﻿using AutoMapper;
-using log4net;
-using StarLab.Application;
-using StarLab.Application.Workspace;
-using StarLab.Application.Workspace.Documents.Charts;
+﻿using log4net;
+using StarLab.Shared.Resources;
 using Stratosoft.Commands;
 using System.Diagnostics;
 
@@ -12,13 +9,15 @@ using StringResources = StarLab.Shared.Properties.Resources;
 namespace StarLab.Presentation.Workspace.Documents.Charts
 {
     /// <summary>
-    /// Controls the behaviour of an <see cref="IChartSettingsView"/>.
+    /// Controls the behaviour of a chart settings panel.
     /// </summary>
     internal class ChartSettingsViewPresenter : ChildViewPresenter<IChartSettingsView, IDocumentController>, IChartSettingsViewPresenter, IChartSettingsController, ISubscriber<WorkspaceChangedEventArgs>
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(ChartSettingsViewPresenter)); // The logger that will be used for writing log messages.
+
         private readonly Dictionary<string, SettingsGroupManager<IChartSettingsView>> groupManagers = new Dictionary<string, SettingsGroupManager<IChartSettingsView>>(); // A dictionary that contains the group managers indexed by group.
 
-        private static readonly ILog log = LogManager.GetLogger(typeof(ChartSettingsViewPresenter)); // The logger that will be used for writing log messages.
+        private readonly IChartSettingsUseCaseService useCaseService; // A service that executes the use cases that implement the chart settings panel functionality.
 
         private SettingsGroupManager<IChartSettingsView>? groupManager; // Displays the currently selected settings group.
 
@@ -33,33 +32,29 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// </summary>
         /// <param name="view">The <see cref="IChartSettingsView"/> controlled by this presenter.</param>
         /// <param name="commands">An <see cref="ICommandManager"/> that is required for the creation of <see cref="ICommand">s.</param>
-        /// <param name="factory">An <see cref="IUseCaseFactory"/> that will be used to create use case interactors.</param>
+        /// <param name="services">An <see cref="IServiceRegistry"/> that provides access to the registered services.</param>
         /// <param name="settings">An <see cref="IApplicationSettings"/> that provides access to the application configuration.</param>
-        /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
         /// <param name="events">The <see cref="IEventAggregator"/> that manages application events.</param>
-        public ChartSettingsViewPresenter(IChartSettingsView view, ICommandManager commands, IUseCaseFactory factory, IApplicationSettings settings, IMapper mapper, IEventAggregator events)
-            : base(view, commands, factory, settings, mapper, events)
+        public ChartSettingsViewPresenter(IChartSettingsView view, ICommandManager commands, IServiceRegistry services, IApplicationSettings settings, IEventAggregator events)
+            : base(view, commands, settings, events)
         {
+            ArgumentNullException.ThrowIfNull(services, nameof(services));
+
+            useCaseService = services.GetService<IChartSettingsUseCaseService>();
+
             View.MinimumSize = new Size(600, 150);
 
             View.Attach(this);
 
             id = string.Empty;
-
-            if (log.IsDebugEnabled) log.Debug(string.Format(StringResources.InstanceCreated, nameof(ChartSettingsViewPresenter)));
         }
 
         /// <summary>
-        /// Gets the name of the controller.
+        /// The finaliser will only called if the <see cref="Dispose"/> method has not been called.
         /// </summary>
-        public override string Name => Controllers.ChartSettingsController;
-
-        /// <summary>
-        /// Activates the view.
-        /// </summary>
-        public void Activate()
+        ~ChartSettingsViewPresenter()
         {
-            View.SelectNode(Constants.Chart);
+            Dispose(false);
         }
 
         /// <summary>
@@ -68,14 +63,9 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// <param name="chart">The <see cref="IChartSettings"/> that specifies the state of the chart.</param>
         public void ApplyPreviewSettings(IChartSettings chart)
         {
-            this.chart = chart;
+            useCaseService.UpdateChart(ParentController.ID, chart);
 
-            if (ParentController.GetController(Controllers.ChartController) is IChartOutputPort outputPort)
-            {
-                var interactor = UseCaseFactory.CreateUpdateChartUseCase(outputPort);
-                var dto = Mapper.Map<ChartDTO>(chart);
-                interactor.Execute(dto);
-            }
+            this.chart = chart;
         }
 
         /// <summary>
@@ -83,13 +73,21 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// </summary>
         public void ApplySettings()
         {
-            if (chart != null && AppController.GetController(Controllers.ApplicationViewController) is IApplicationOutputPort outputPort)
-            {
-                var interactor = UseCaseFactory.CreateUpdateDocumentUseCase(outputPort);
-                var workspaceDTO = Mapper.Map<WorkspaceDTO>(workspace);
-                var chartDto = Mapper.Map<ChartDTO>(chart);
-                interactor.Execute(workspaceDTO, id, chartDto);
-            }
+            if (string.IsNullOrEmpty(id)) throw new InvalidOperationException($"{StringResources.ObjectNotInitialised} {string.Format(StringResources.VariableNotSet, StringResources.DocumentID)}");
+            if (workspace == null) throw new InvalidOperationException($"{StringResources.ObjectNotInitialised} {string.Format(StringResources.VariableNotSet, StringResources.Workspace)}");
+            if (chart == null) throw new InvalidOperationException($"{StringResources.ObjectNotInitialised} {string.Format(StringResources.VariableNotSet, StringResources.Chart)}");
+            
+            useCaseService.UpdateDocument(workspace, id, chart);
+        }
+
+        /// <summary>
+        /// Releases all resources used by the <see cref="ChartSettingsViewPresenter"/> object.
+        /// </summary>
+        public override void Dispose()
+        {
+            Dispose(true);
+
+            GC.SuppressFinalize(this);
         }
 
         /// <summary>
@@ -98,26 +96,27 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// <param name="controller">The <see cref="IApplicationController"/>.</param>
         public override void Initialise(IApplicationController controller)
         {
-            if (!Initialised)
-            {
-                base.Initialise(controller);
+            if (Initialised) throw new InvalidOperationException(string.Format(StringResources.AlreadyInitialised, nameof(ChartSettingsViewPresenter)));
 
-                ParentController.AddToolbarButton(Constants.ShowSettings, StringResources.Settings, ImageResources.Settings, GetCommand(ParentController, Actions.ShowSplitContent, View.Name));
+            base.Initialise(controller);
 
-                var applyCommand = GetCommandChain();
-                applyCommand.Add(GetCommand(this, Actions.ApplySettings));
-                applyCommand.Add(GetCommand(ParentController, Actions.HideSplitContent, View.Name));
-                View.AttachOKButtonCommand(applyCommand);
+            ParentController.AddToolbarButton(Constants.ShowSettings, StringResources.Settings, ImageResources.Settings, CreateCommand(Actions.ShowSplitContent, () => ParentController.ShowSplitContent(View.Name)));
 
-                var revertCommand = GetCommandChain();
-                revertCommand.Add(GetCommand(this, Actions.RevertSettings));
-                revertCommand.Add(GetCommand(ParentController, Actions.HideSplitContent, View.Name));
-                View.AttachCancelButtonCommand(revertCommand);
+            View.AttachOKButtonCommand(CreateCommand(Actions.ApplySettings, () => {
+                ParentController.HideSplitContent(View.Name);
+                ApplySettings();
+            }));
 
-                CreateSettingsGroups();
+            View.AttachCancelButtonCommand(CreateCommand(Actions.RevertSettings, () => {
+                ParentController.HideSplitContent(View.Name);
+                RevertSettings();
+            }));
 
-                View.Initialise(controller);
-            }
+            CreateSettingsGroups();
+
+            View.Initialise();
+
+            log.Debug(string.Format(LogEntries.Initialised, $"{nameof(ChartSettingsViewPresenter)}({View.Name})"));
         }
 
         /// <summary>
@@ -134,10 +133,9 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// </summary>
         public void RevertSettings()
         {
-            if (ParentController.GetController(Controllers.ChartController) is IChartController controller)
-            {
-                controller.UpdateChart();
-            }
+            var controller = ParentController.GetController<IChartController>();
+
+            controller.UpdatePreview();
         }
 
         /// <summary>
@@ -146,8 +144,9 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// <param name="group">The name of the settings group to show.</param>
         public void ShowSettingsGroup(string group)
         {
+            if (chart == null) throw new InvalidOperationException($"{StringResources.ObjectNotInitialised} {string.Format(StringResources.VariableNotSet, StringResources.Chart)}");
+
             Debug.Assert(groupManagers.ContainsKey(group));
-            Debug.Assert(chart != null);
 
             View.Clear();
 
@@ -159,8 +158,8 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// <summary>
         /// Updates the chart settings.
         /// </summary>
-        /// <param name="document">The <see cref="IDocument"/> that contains the chart.</param>
-        public void UpdateSettings(IDocument document)
+        /// <param name="document">The <see cref="IChartDocument"/> that contains the chart.</param>
+        public void UpdateSettings(IChartDocument document)
         {
             chart = new ChartSettings(document.Chart);
 
@@ -174,6 +173,18 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         private void AddGroupManager(SettingsGroupManager<IChartSettingsView> manager)
         {
             groupManagers.Add(manager.Group, manager);
+        }
+
+        /// <summary>
+        /// Releases any resources used by the <see cref="ChartSettingsViewPresenter"/> object.
+        /// </summary>
+        /// <param name="disposing">true if managed resources can be disposed of; false otherwise.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                View.Detach();
+            }
         }
 
         /// <summary>

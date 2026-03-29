@@ -6,7 +6,7 @@
     public interface IOutputPort
     {
         /// <summary>
-        /// Displays a <see cref="MessageBox"/> with the specified caption, message, message type and available responses.
+        /// Displays a message box with the specified caption, message, message type and available responses.
         /// </summary>
         /// <param name="caption">The message box caption.</param>
         /// <param name="message">The message text.</param>
@@ -16,7 +16,7 @@
         InteractionResult ShowMessage(string caption, string message, InteractionType type, InteractionResponses responses);
 
         /// <summary>
-        /// Displays a <see cref="MessageBox"/> with the specified caption, message and available responses.
+        /// Displays a message box with the specified caption, message and available responses.
         /// </summary>
         /// <param name="caption">The message box caption.</param>
         /// <param name="message">The message text.</param>
@@ -25,11 +25,11 @@
         InteractionResult ShowMessage(string caption, string message, InteractionResponses responses);
 
         /// <summary>
-        /// Displays a <see cref="MessageBox"/> with the specified caption and message.
+        /// Displays a message box with the specified caption and message.
         /// </summary>
         /// <param name="caption">The message box caption.</param>
         /// <param name="message">The message text.</param>
         /// <returns>An <see cref="InteractionResult"/> that identifies the chosen response.</returns>
-        InteractionResult ShowMessage(string caption, string message);
+        void ShowMessage(string caption, string message);
     }
 }

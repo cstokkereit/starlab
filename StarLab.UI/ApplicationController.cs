@@ -1,11 +1,14 @@
-﻿using log4net;
+﻿using Castle.Windsor;
+using log4net;
 using StarLab.Application;
 using StarLab.Presentation;
 using StarLab.Presentation.Workspace;
 using StarLab.Presentation.Workspace.Documents;
+using StarLab.Presentation.Workspace.Documents.Charts;
 using StarLab.Shared.Properties;
+using StarLab.Shared.Resources;
 using StarLab.UI.Controls;
-using StarLab.UI.Workspace.Documents;
+using StarLab.UI.Workspace;
 using Stratosoft.Commands;
 using System.Diagnostics;
 
@@ -18,69 +21,44 @@ namespace StarLab.UI
     /// <summary>
     /// A controller that creates, initialises and manages the views that comprise the user interface of the application.
     /// </summary>
-    public class ApplicationController : Controller, IApplicationController, ISubscriber<WorkspaceClosedEventArgs>
+    public class ApplicationController : Controller, IApplicationController, ISubscriber<ActiveViewChangedEventArgs>, ISubscriber<WorkspaceClosedEventArgs>
     {
-        private readonly IDictionary<string, IViewController> controllers = new Dictionary<string, IViewController>(); // A dictionary containing the view controllers indexed by name.
-
         private static readonly ILog log = LogManager.GetLogger(typeof(ApplicationController)); // The logger that will be used for writing log messages.
 
-        private readonly IDictionary<string, IView> views = new Dictionary<string, IView>(); // A dictionary containing the views indexed by ID.
+        private readonly IWindsorContainer container; // Used to resolve dependencies at run time.
+
+        private readonly Dictionary<string, IViewController> controllers = new Dictionary<string, IViewController>(); // A dictionary containing the view controllers indexed by name.
+
+        private readonly Dictionary<string, IView> views = new Dictionary<string, IView>(); // A dictionary containing the views indexed by name.
+
+        private readonly IPresenterFactory presenterFactory; // A factory for creating presenters.
 
         private readonly IViewFactory viewFactory; // A factory for creating views.
+
+        private IView? view; // The ID of the currently active view.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="ApplicationController"/> class.
         /// </summary>
+        /// <param name="container">An <see cref="IWindsorContainer"/> that will be used to resolve dependencies.</param>
         /// <param name="viewFactory">An <see cref="IViewFactory"/> that will be used to create the views.</param>
-        /// <param name="interactorFactory">An <see cref="IUseCaseFactory"> that will be used to create the use case interactors.</param>
+        /// <param name="presenterFactory">An <see cref="IPresenterFactory"/> that will be used to create the presenters.</param>
         /// <param name="events">An <see cref="IEventAggregator"> that can be used for subscribing to and publishing events.</param>
         /// <exception cref="ArgumentNullException"></exception>
-        public ApplicationController(IViewFactory viewFactory, IUseCaseFactory interactorFactory, IEventAggregator events)
-            : base(interactorFactory, events)
+        public ApplicationController(IWindsorContainer container, IViewFactory viewFactory, IPresenterFactory presenterFactory, IServiceRegistry useCaseManager, IEventAggregator events)
+            : base(events)
         {
+            this.presenterFactory = presenterFactory ?? throw new ArgumentNullException(nameof(presenterFactory));
             this.viewFactory = viewFactory ?? throw new ArgumentNullException(nameof(viewFactory));
+            this.container = container ?? throw new ArgumentNullException(nameof(container));
+
+            useCaseManager.Initialise(this);
         }
 
         /// <summary>
         /// Gets the name of the controller.
         /// </summary>
-        public override string Name => Controllers.ApplicationController;
-
-        /// <summary>
-        /// Creates the <see cref="ICommand"> specified by the controller, action and target provided.
-        /// </summary>
-        /// <param name="commands">An instance of <see cref="ICommandManager"/> that is required for the creation of the command.</param>
-        /// <param name="controller">The <see cref="IController"/> that contains the method that will be invoked by the <see cref="ICommand"/> when the <see cref="ICommand.Execute"/> method is called.</param>
-        /// <param name="action">The action to be performed when the <see cref="ICommand.Execute"/> method is called.</param>
-        /// <param name="target">The target for the action.</param>
-        /// <returns>An instance of <see cref="ICommand"> that can be used to invoke the specified action.</returns>
-        public ICommand CreateCommand(ICommandManager commands, IController controller, string action, string target)
-        {
-            return new ActionCommand(commands, controller, action, [target]);
-        }
-
-        /// <summary>
-        /// Creates the <see cref="ICommand"> specified by the controller and action provided.
-        /// </summary>
-        /// <param name="commands">An instance of <see cref="ICommandManager"/> that is required for the creation of the command.</param>
-        /// <param name="controller">The <see cref="IController"/> that contains the method that will be invoked by the <see cref="ICommand"/> when the <see cref="ICommand.Execute"/> method is called.</param>
-        /// <param name="action">The action to be performed when the <see cref="ICommand.Execute"/> method is called.</param>
-        /// <returns>An instance of <see cref="ICommand"> that can be used to invoke the specified action.</returns>
-        public ICommand CreateCommand(ICommandManager commands, IController controller, string action)
-        {
-            return new ActionCommand(commands, controller, action);
-        }
-
-        /// <summary>
-        /// Creates an <see cref="ICommand"/> that will show the specified view.
-        /// </summary>
-        /// <param name="commands">An instance of <see cref="ICommandManager"/> that is required for the creation of the command.</param>
-        /// <param name="view">The name of the <see cref="IView"/> to be shown.</param>
-        /// <returns>An instance of <see cref="ICommand"/> that can be used to show the specified view.</returns>
-        public ICommand CreateCommand(ICommandManager commands, string view)
-        {
-            return CreateCommand(commands, this, Actions.Show, view);
-        }
+        public override string ID => Controllers.ApplicationController;
 
         /// <summary>
         /// Deletes the <see cref="IView"/> with the specified ID.
@@ -88,13 +66,13 @@ namespace StarLab.UI
         /// <param name="id">The ID of the <see cref="IView"/> to delete.</param>
         public void DeleteView(string id)
         {
-            if (views.ContainsKey(id))
+            if (views.TryGetValue(id, out IView? view))
             {
-                var name = Controllers.GetDocumentControllerName(id);
+                var controllerId = Controllers.GetControllerID(view);
 
-                if (controllers[name] is IDocumentController controller)
+                if (controllers[controllerId] is IDocumentController controller)
                 {
-                    controllers.Remove(name);
+                    controllers.Remove(controllerId);
                     controller.Close();
                 }
 
@@ -103,31 +81,97 @@ namespace StarLab.UI
         }
 
         /// <summary>
+        /// Releases all resources used by the presenter object.
+        /// </summary>
+        public override void Dispose()
+        {
+            Dispose(true);
+
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
         /// Exits the application.
         /// </summary>
         public void Exit()
         {
-            if (controllers[Controllers.ApplicationViewController] is IApplicationViewController controller) controller.Exit();
+            if (controllers[Controllers.ApplicationViewController] is IApplicationViewController controller)
+            {
+                controller.Exit();
+            }
+
+            foreach (var viewController in controllers.Values)
+            {
+                viewController.Dispose();
+            }
+
+            controllers.Clear();
+            views.Clear();
         }
 
         /// <summary>
-        /// Gets the <see cref="IDocumentController"/> that controls the view representing the <see cref="IDocument"/> provided.
+        /// Gets the specified <see cref="IDocumentController"/>.
         /// </summary>
-        /// <param name="document">The <see cref="IDocument"/> represented by the view controlled by the <see cref="IDocumentController"/>.</param>
-        /// <returns>The required <see cref="IDocumentController"/>.</returns>
+        /// <param name="document">The <see cref="IDocument"/> that identifies the required controller.</param>
+        /// <returns>The specified <see cref="IDocumentController"/>.</returns>
         public IDocumentController GetController(IDocument document)
         {
-            return (IDocumentController)GetController(GetView(document));
+            if (views.TryGetValue(document.ID, out IView? view))
+            {
+                var id = Controllers.GetControllerID(view);
+
+                if (controllers.TryGetValue(id, out IViewController? controller))
+                {
+                    if (controller is IDocumentController required) return required;
+                }
+
+                throw new KeyNotFoundException(string.Format(Resources.ControllerNotFound, document.ID));
+            }
+
+            throw new KeyNotFoundException(string.Format(Resources.ViewNotFound, document.ID));
         }
 
         /// <summary>
-        /// Gets the specified <see cref="IController"/>.
+        /// Gets the specified output port.
         /// </summary>
-        /// <param name="name">The name of the controller.</param>
-        /// <returns>The required <see cref="IController"/>.</returns>
-        public IController GetController(string name)
+        /// <typeparam name="TOutputPort">The type of output port required.</typeparam>
+        /// <param name="id">The ID of the parent controller.</param>
+        /// <returns>The specified output port.</returns>
+        /// <exception cref="Exception"></exception>
+        public TOutputPort GetOutputPort<TOutputPort>(string id)
         {
-            return controllers[name];
+            if (controllers.TryGetValue(id, out IViewController? parent))
+            {
+                if (parent is TOutputPort parentPort) return parentPort;
+
+                foreach (var child in parent.ChildControllers)
+                {
+                    if (child is TOutputPort childPort) return childPort;
+                }
+            }
+
+            throw new Exception(string.Format(Resources.UnknownType, typeof(TOutputPort)));
+        }
+
+        /// <summary>
+        /// Gets the specified output port.
+        /// </summary>
+        /// <typeparam name="TOutputPort">The type of output port required.</typeparam>
+        /// <returns>The specified output port.</returns>
+        /// <exception cref="Exception"></exception>
+        public TOutputPort GetOutputPort<TOutputPort>()
+        {
+            foreach (var controller in controllers.Values)
+            {
+                if (controller is TOutputPort) return (TOutputPort)controller;
+
+                foreach (var child in controller.ChildControllers)
+                {
+                    if (child is TOutputPort) return (TOutputPort)child;
+                }
+            }
+
+            throw new Exception(string.Format(Resources.UnknownType, typeof(TOutputPort)));
         }
 
         /// <summary>
@@ -137,42 +181,41 @@ namespace StarLab.UI
         /// <returns>The required <see cref="IView">.</returns>
         public IView GetView(IDocument document)
         {
-            IView view;
-
-            if (views.ContainsKey(document.ID))
+            if (!views.ContainsKey(document.ID))
             {
-                view = views[document.ID];
-            }
-            else
-            {
-                view = viewFactory.CreateView(document);
-
-                var controller = ((DocumentView)view).Controller;
-
-                Debug.Assert(controller != null);
-
-                controllers.Add(controller.Name, controller);
-                controller.Initialise(this);
-
-                views.Add(view.ID, view);
+                CreateDocumentView(document);
             }
 
-            return view;
+            return views[document.ID];
         }
 
         /// <summary>
-        /// Gets the <see cref="IView"/> with the specified ID. If the view does not exist <see cref="null"/> will be returned.
+        /// Gets the <see cref="IView"/> with the specified ID.
         /// </summary>
         /// <param name="id">The ID of the required <see cref="IView"/>.</param>
-        /// <returns>The required <see cref="IView"/> or <see cref="null"/>.</returns>
-        public IView? GetView(string id)
+        /// <returns>The specified <see cref="IView"/>.</returns>
+        public IView GetView(string id)
         {
             if (views.TryGetValue(id, out IView? view))
             {
                 return view;
             }
 
-            return null;
+            throw new ArgumentException(string.Format(Resources.ViewNotFound, id), nameof(id));
+        }
+
+        /// <summary>
+        /// Event handler for the ActiveViewChanged event.
+        /// </summary>
+        /// <param name="e">An <see cref="ActiveViewChangedEventArgs"/> that provides context for the event.</param>
+        public void OnEvent(ActiveViewChangedEventArgs e)
+        {
+            if (view != null && e.View != null)
+            {
+                log.Debug(string.Format(LogEntries.ActiveViewChanged, view.ID, e.View.ID));
+            }
+
+            view = e.View;
         }
 
         /// <summary>
@@ -188,20 +231,9 @@ namespace StarLab.UI
 
             foreach (var document in args.Workspace.Documents)
             {
-                controllers.Remove(Controllers.GetDocumentControllerName(document.ID));
+                controllers.Remove(document.ID);
                 views.Remove(document.ID);
             }
-        }
-
-        /// <summary> 
-        /// Registers the available command invokers with the instance of <see cref="ICommandManager"/> provided.
-        /// </summary>
-        /// <param name="commands">An instance of <see cref="ICommandManager"/> that will be used to register the available command invokers.</param>
-        public void RegisterCommandInvokers(ICommandManager commands)
-        {
-            commands.RegisterCommandInvoker(new ToolStripMenuItemCommandInvoker());
-            commands.RegisterCommandInvoker(new ToolStripButtonCommandInvoker());
-            commands.RegisterCommandInvoker(new ButtonCommandInvoker());
         }
 
         /// <summary>
@@ -211,48 +243,46 @@ namespace StarLab.UI
         {
             Events.Subsribe(this);
 
-            InitialiseServices();
-
-            log.Info(Resources.InitialisationComplete);
-
             CreateViews();
 
-            var view = views[Views.Application];
+            try
+            {
+                var application = CreateApplicationView();
 
-            if (views[Views.Application] is Form form) System.Windows.Forms.Application.Run(form);
+                log.Debug(string.Format(LogEntries.ViewCreated, Views.Application));
+
+                System.Windows.Forms.Application.Run(application);
+            }
+            catch (Exception e)
+            {
+                log.Fatal(e.Message, e);
+            }
         }
 
         /// <summary>
-        /// Shows the <see cref="IView"/> provided.
+        /// Shows the About dialog.
         /// </summary>
-        /// <param name="view">The <see cref="IView"/> to be shown.</param>
-        public void Show(IView view)
+        public void ShowAboutDialog()
         {
-            var controller = GetController(view);
-            controller.Initialise(this);
-
-            controllers[Controllers.ApplicationViewController].Show(view);
+            Show(Views.About);
         }
 
         /// <summary>
-        /// Shows the <see cref="IView"/> with the specified ID. A view with the specified ID must already exist or an exception will be thrown.
+        /// Shows a Document window that contains the <see cref="IDocument"/> provided.
         /// </summary>
-        /// <param name="id">The ID of the view to be shown.</param>
-        /// <exception cref="ViewNotFoundException"></exception>
-        public void Show(string id)
+        /// <param name="document">The <see cref="IDocument"/> to show.</param>
+        public void ShowDocument(IDocument document)
         {
-            if (!views.ContainsKey(id)) throw new ViewNotFoundException(id);
+            if (!views.ContainsKey(document.ID))
+            {
+                CreateDocumentView(document);
+            }
 
-            var view = views[id];
-
-            var controller = GetController(view);
-            controller.Initialise(this);
-
-            controllers[Controllers.ApplicationViewController].Show(view);
+            Show(document.ID);
         }
 
         /// <summary>
-        /// Displays a <see cref="MessageBox"/> with the specified caption, message, message type and available responses.
+        /// Displays a message box with the specified caption, message, message type and available responses.
         /// </summary>
         /// <param name="caption">The message box caption.</param>
         /// <param name="message">The message text.</param>
@@ -261,12 +291,11 @@ namespace StarLab.UI
         /// <returns>An <see cref="InteractionResult"/> that identifies the chosen response.</returns>
         public InteractionResult ShowMessage(string caption, string message, InteractionType type, InteractionResponses responses)
         {
-            var controller = (IMessageBoxController)controllers[Controllers.MessageBoxController];
-            return controller.ShowMessage(GetMessageBoxOwner(), caption, message, type, responses);
+           return GetActiveController().ShowMessage(caption, message, type, responses);
         }
 
         /// <summary>
-        /// Displays a <see cref="MessageBox"/> with the specified caption, message and available responses.
+        /// Displays a message box with the specified caption, message and available responses.
         /// </summary>
         /// <param name="caption">The message box caption.</param>
         /// <param name="message">The message text.</param>
@@ -274,45 +303,219 @@ namespace StarLab.UI
         /// <returns>An <see cref="InteractionResult"/> that identifies the chosen response.</returns>
         public InteractionResult ShowMessage(string caption, string message, InteractionResponses responses)
         {
-            var controller = (IMessageBoxController)controllers[Controllers.MessageBoxController];
-            return controller.ShowMessage(GetMessageBoxOwner(), caption, message, responses);
+            return ShowMessage(caption, message, InteractionType.Info, responses);
         }
 
         /// <summary>
-        /// Displays a <see cref="MessageBox"/> with the specified caption and message.
+        /// Displays a message box with the specified caption and message.
         /// </summary>
         /// <param name="caption">The message box caption.</param>
         /// <param name="message">The message text.</param>
-        /// <returns>An <see cref="InteractionResult"/> that identifies the chosen response.</returns>
-        public InteractionResult ShowMessage(string caption, string message)
+        public void ShowMessage(string caption, string message)
         {
-            var controller = (IMessageBoxController)controllers[Controllers.MessageBoxController];
-            return controller.ShowMessage(GetMessageBoxOwner(), caption, message);
+            ShowMessage(caption, message, InteractionResponses.OK);
         }
 
         /// <summary>
-        /// Creates the specified <see cref="IView"/>.
+        /// Displays an <see cref="OpenFileDialog"/> with the specified owner and options.
+        /// </summary>
+        /// <param name="title">The dialog title.</param>
+        /// <param name="filter">The file name filter.</param>
+        /// <returns>The filename selected in the dialog.</returns>
+        public string ShowOpenFileDialog(string title, string filter)
+        {
+            return GetActiveController().ShowOpenFileDialog(title, filter);
+        }
+
+        /// <summary>
+        /// Shows the Options dialog.
+        /// </summary>
+        public void ShowOptionsDialog()
+        {
+            Show(Views.Options);
+        }
+
+        /// <summary>
+        /// Displays a save file dialog with the specified owner and options.
+        /// </summary>
+        /// <param name="title">The dialog title.</param>
+        /// <param name="filter">The file name filter.</param>
+        /// <param name="extension">The default file extension.</param>
+        /// <returns>The filename selected in the dialog.</returns>
+        public string ShowSaveFileDialog(string title, string filter, string extension)
+        {
+            return GetActiveController().ShowSaveFileDialog(title, filter, extension);
+        }
+
+        /// <summary>
+        /// Shows the Workspace Explorer.
+        /// </summary>
+        public void ShowWorkspaceExplorer()
+        {
+            Show(Views.WorkspaceExplorer);
+        }
+
+        /// <summary>
+        /// Releases all resources used by the <see cref="AboutViewPresenter"/> object.
+        /// </summary>
+        /// <param name="disposing">true if managed resources can be disposed of; false otherwise.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                // Nothing to do
+            }
+        }
+
+        /// <summary>
+        /// Creates the main application window. Can only be called after all of the other views have been created.
+        /// </summary>
+        private ApplicationView CreateApplicationView()
+        {
+            var commands = CreateCommands();
+
+            var view = viewFactory.CreateApplicationView(Resources.StarLab);
+
+            var presenter = presenterFactory.CreatePresenter(view, commands);
+
+            if (presenter is IViewController controller)
+            {
+                controllers.Add(controller.ID, controller);
+                controller.Initialise(this);
+            }
+
+            return (ApplicationView)view;
+        }
+
+        /// <summary>
+        /// Creates the command manager and registers the command invokers used to execute commands in response to events raised bu user interface elements.
+        /// </summary>
+        /// <returns>The required <see cref="ICommandManager"/>.</returns>
+        private ICommandManager CreateCommands()
+        {
+            var commands = container.Resolve<ICommandManager>();
+
+            commands.RegisterCommandInvoker(new ToolStripMenuItemCommandInvoker());
+            commands.RegisterCommandInvoker(new ToolStripButtonCommandInvoker());
+            commands.RegisterCommandInvoker(new ButtonCommandInvoker());
+
+            return commands;
+        }
+
+        /// <summary>
+        /// Creates the specified dialog view.
         /// </summary>
         /// <param name="name">The name of the view.</param>
         /// <param name="text">The view text.</param>
-        private void CreateView(string name, string text)
+        private void CreateDialogView(string name, string text)
         {
             try
             {
-                var view = viewFactory.CreateView(name, text);
+                var commands = CreateCommands();
 
-                IViewController? controller = view.Controller;
+                var childView = viewFactory.CreateChildView(name, name);
+                var childPresenter = presenterFactory.CreatePresenter(childView, commands);
 
-                Debug.Assert(controller != null);
+                var view = viewFactory.CreateDialogView(name, text, childView);
+                var presenter = presenterFactory.CreatePresenter(view, childPresenter, commands);
 
-                views.Add(view.ID, view);
-                controllers.Add(controller.Name, controller);
-                controller.Initialise(this);
+                if (presenter is IViewController controller)
+                {
+                    controllers.Add(controller.ID, controller);
+                    controller.Initialise(this);
+                }
+
+                log.Debug(string.Format(LogEntries.ViewCreated, view.Name));
+
+                views.Add(view.Name, view);
             }
             catch (Exception e)
             {
-                if (log.IsErrorEnabled) log.Error(e.Message, e);
+                log.Error(string.Format(LogEntries.ViewNotCreated, name), e);
             }
+        }
+
+        /// <summary>
+        /// Creates all of the dialog views.
+        /// </summary>
+        private void CreateDialogViews()
+        {
+            CreateDialogView(Views.About, Resources.AboutStarLab);
+            //CreateView(Views.AddDocument, Resources.AddDocument);
+            CreateDialogView(Views.Options, Resources.Options);
+        }
+
+        /// <summary>
+        /// Creates the specified document view.
+        /// </summary>
+        /// <param name="document">The <see cref="IDocument"/> that .</param>
+        private void CreateDocumentView(IDocument document)
+        {
+            try
+            {
+                var commands = CreateCommands();
+
+                var childViews = viewFactory.CreateChildViews(document);
+                var childPresenters = presenterFactory.CreatePresenters(document, childViews, commands);
+
+                var view = viewFactory.CreateView(document, childViews);
+                var presenter = presenterFactory.CreatePresenter(document, view, childPresenters, commands);
+
+                if (presenter is IViewController controller)
+                {
+                    controllers.Add(controller.ID, controller);
+                    controller.Initialise(this);
+                }
+
+                log.Debug(CreateLogEntry(LogEntries.ViewCreated, document));
+
+                views.Add(view.ID, view);
+            }
+            catch (Exception e)
+            {
+                log.Error(CreateLogEntry(LogEntries.ViewNotCreated, document), e);
+            }
+        }
+
+        /// <summary>
+        /// Creates the specified tool view.
+        /// </summary>
+        /// <param name="name">The name of the view.</param>
+        /// <param name="text">The view text.</param>
+        private void CreateToolView(string name, string text)
+        {
+            try
+            {
+                var commands = CreateCommands();
+
+                var childView = viewFactory.CreateChildView(name, name);
+                var childPresenter = presenterFactory.CreatePresenter(childView, commands);
+
+                var view = viewFactory.CreateToolView(name, text, childView);
+                var presenter = presenterFactory.CreatePresenter(view, childPresenter, commands);
+
+                if (presenter is IViewController controller)
+                {
+                    controllers.Add(controller.ID, controller);
+                    controller.Initialise(this);
+                }
+
+                log.Debug(string.Format(LogEntries.ViewCreated, view.Name));
+
+                views.Add(view.Name, view);
+            }
+            catch (Exception e)
+            {
+                log.Error(string.Format(LogEntries.ViewNotCreated, name), e);
+            }
+        }
+
+        /// <summary>
+        /// Creates all of the tool views.
+        /// </summary>
+        private void CreateToolViews()
+        {
+            CreateToolView(Views.WorkspaceExplorer, Resources.WorkspaceExplorer);
         }
 
         /// <summary>
@@ -320,66 +523,59 @@ namespace StarLab.UI
         /// </summary>
         private void CreateViews()
         {
-            CreateView(Views.About, Resources.AboutStarLab);
-            CreateView(Views.AddDocument, Resources.AddDocument);
-            CreateView(Views.MessageBox, Resources.StarLab);
-            CreateView(Views.Options, Resources.Options);
-            CreateView(Views.WorkspaceExplorer, Resources.WorkspaceExplorer);
-
-            // NOTE - This must be the last view to be created.
-            CreateView(Views.Application, Resources.StarLab);
+            CreateDialogViews();
+            CreateToolViews();
         }
 
         /// <summary>
-        /// Gets the <see cref="IViewController"/> that controls the <see cref="IView"/> provided.
+        /// Creates the specified log entry from the information in the <see cref="IDocument"/> provided.
         /// </summary>
-        /// <param name="view">The <see cref="IView"/> that is controlled by the <see cref="IViewController"/>.</param>
-        /// <returns>The required <see cref="IViewController"/>.</returns>
-        /// <exception cref="Exception"></exception>
-        private IViewController GetController(IView view)
+        /// <param name="template">The log entry template.</param>
+        /// <param name="document">The <see cref="IDocument"/> that is the subject of the log entry.</param>
+        /// <returns>The specified log entry.</returns>
+        private string CreateLogEntry(string template, IDocument document)
         {
-            string name;
+            string message = string.Empty;
 
-            if (view is IApplicationView)
+            if (document is IChartDocument)
             {
-                name = Controllers.ApplicationViewController;
+                message = string.Format(template, $"chart {document.Name} ({document.ID})");
             }
-            else if (view is IDialogView)
+
+            Debug.Assert(!string.IsNullOrEmpty(message));
+
+            return message;
+        }
+
+        /// <summary>
+        /// Gets the <see cref="IViewController"/> that controls the active view. If there is no currently active view the application view controller will be returned.
+        /// </summary>
+        /// <returns>The <see cref="IViewController"/> that controls the active view.</returns>
+        private IViewController GetActiveController()
+        {
+            if (view != null && controllers.TryGetValue(Controllers.GetControllerID(view), out IViewController? controller))
             {
-                name = Controllers.GetViewControllerName(view.ID);
+                return controller;
             }
-            else if (view is IDockableView)
+            
+            return controllers[Controllers.ApplicationViewController];
+        }
+
+        /// <summary>
+        /// Shows the <see cref="IView"/> with the specified ID. A view with the specified ID must already exist or an exception will be thrown.
+        /// </summary>
+        /// <param name="id">The ID of the view to be shown.</param>
+        /// <exception cref="ViewNotFoundException"></exception>
+        private void Show(string id)
+        {
+            if (views.TryGetValue(id, out IView? view))
             {
-                name = view is IDocumentView ? Controllers.GetDocumentControllerName(view.ID) : Controllers.GetViewControllerName(view.ID);
+                controllers[Controllers.ApplicationViewController].Show(view);
             }
             else
             {
-                throw new Exception(string.Format(Resources.UnexpectedViewType, view.GetType().Name));
+                throw new ArgumentException(string.Format(Resources.ViewNotFound, id), nameof(id));
             }
-
-            return controllers[name];
-        }
-
-        /// <summary>
-        /// Gets the <see cref="IView"/> that owns the message box.
-        /// </summary>
-        /// <returns></returns>
-        private IView GetMessageBoxOwner()
-        {
-            // TODO - Will need to determine the view based on te active view and or information supplied by the calling controller
-            // May need to determine the acitve view
-            // May need to supply the name of the calling controller or its poarent
-            // May need to take into accpunt if the view is docked or floating (centre on workspace or centre on view)
-
-            return views[Views.Application];
-        }
-
-        /// <summary>
-        /// Initialises the services.
-        /// </summary>
-        private void InitialiseServices()
-        {
-            // Do Nothing
         }
     }
 }

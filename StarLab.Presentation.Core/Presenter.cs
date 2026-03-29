@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using StarLab.Application;
-using Stratosoft.Commands;
+﻿using Stratosoft.Commands;
 using System.Diagnostics;
 
 namespace StarLab.Presentation
@@ -14,26 +12,21 @@ namespace StarLab.Presentation
 
         private readonly ICommandManager commands; // Required for the creation and management of commands.
 
-        private readonly IMapper mapper; // Copies data from model objects to data transfer objects and vice versa.
-
         private IApplicationController? controller; // A controller that creates, initialises and manages the views that comprise the user interface of the application.
 
         /// <summary>
-        /// Initialises a new instance of the <see cref="Presenter"/> class.
+        /// Initialises a new instance of the <see cref="Presenter{TView}"/> class.
         /// </summary>
         /// <param name="view">The <see cref="TView"/> controlled by the presenter.</param>
         /// <param name="commands">An instance of <see cref="ICommandManager"/> that is required for the creation of commands.</param>
-        /// <param name="factory">An <see cref="IUseCaseFactory"/> that will be used to create use case interactors.</param>
         /// <param name="settings">An <see cref="IApplicationSettings"/> that provides access to the application configuration.</param>
-        /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
         /// <param name="events">The <see cref="IEventAggregator"/> that manages application events.</param>
         /// <exception cref="ArgumentNullException"></exception>
-        public Presenter(TView view, ICommandManager commands, IUseCaseFactory factory, IApplicationSettings settings, IMapper mapper, IEventAggregator events)
-            : base(factory, events)
+        public Presenter(TView view, ICommandManager commands, IApplicationSettings settings, IEventAggregator events)
+            : base(events)
         {
             this.settings = settings ?? throw new ArgumentNullException(nameof(settings));
             this.commands = commands ?? throw new ArgumentNullException(nameof(commands));
-            this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
 
             View = view;
         }
@@ -47,8 +40,6 @@ namespace StarLab.Presentation
             Debug.Assert(!Initialised);
 
             this.controller = controller ?? throw new ArgumentNullException(nameof(controller));
-
-            AppController.RegisterCommandInvokers(commands);
 
             Events.Subsribe(this);
         }
@@ -76,121 +67,34 @@ namespace StarLab.Presentation
         protected bool Initialised => controller != null;
 
         /// <summary>
-        /// Gets the <see cref="IMapper"/> used to copy data from model objects to data transfer objects and vice versa.
-        /// </summary>
-        protected IMapper Mapper => mapper;
-
-        /// <summary>
         /// Gets the <see cref="TView"/> that is controlled by the presenter.
         /// </summary>
         protected TView View { get; }
 
         /// <summary>
-        /// Gets the specified <see cref="ICommand"/>. 
+        /// Creates the specified <see cref="ICommand"/>.
         /// </summary>
-        /// <param name="controller">The <see cref="IController"/> that acts as the receiver for the command.</param>
-        /// <param name="action">The action to be performed when the <see cref="ICommand.Execute"/> method is called.</param>
-        /// <param name="target">The target for the action.</param>
-        /// <returns>An instance of <see cref="ICommand"> that can be used to invoke the specified action.</returns>
-        protected ICommand GetCommand(IController controller, string action, string target)
+        /// <param name="name"></param>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException"></exception>
+        protected ICommand CreateCommand(string name, Action action)
         {
-            var name = action + target;
-
-            if (!commands.ContainsCommand(name))
+            if (!commands.ContainsCommand(name)) //throw new InvalidOperationException(string.Format(Resources.CommandAlreadyExists, name));
             {
-                commands.AddCommand(name, AppController.CreateCommand(commands, controller, action, target));
+                commands.AddCommand(name, new ComponentCommand(commands, action));
             }
-
+            
             return commands.GetCommand(name);
         }
 
         /// <summary>
-        /// Gets the specified <see cref="ICommand"/>.
+        /// Gets the specified command."/>
         /// </summary>
-        /// <param name="controller">The <see cref="IController"/> that acts as the receiver for the command.</param>
-        /// <param name="action">The action to be performed when the <see cref="ICommand.Execute"/> method is called.</param>
-        /// <returns>An instance of <see cref="ICommand"> that can be used to invoke the specified action.</returns>
-        protected ICommand GetCommand(IController controller, string action)
+        /// <param name="name">The name of the command.</param>
+        /// <returns>The required <see cref="ICommand"/>.</returns>
+        protected ICommand GetCommand(string name)
         {
-            if (!commands.ContainsCommand(action))
-            {
-                commands.AddCommand(action, AppController.CreateCommand(commands, controller, action));
-            }
-
-            return commands.GetCommand(action);
-        }
-
-        /// <summary>
-        /// Gets the specified <see cref="ICommand"/>.
-        /// </summary>
-        /// <param name="action">The action to be performed when the <see cref="ICommand.Execute"/> method is called.</param>
-        /// <param name="target">The target for the action.</param>
-        /// <returns>An instance of <see cref="ICommand"> that can be used to invoke the specified action.</returns>
-        protected ICommand GetCommand(string action, string target)
-        {
-            var name = action + target;
-
-            if (!commands.ContainsCommand(name))
-            {
-                commands.AddCommand(name, AppController.CreateCommand(commands, this, action, target));
-            }
-
-            return commands.GetCommand(name);
-        }
-
-        /// <summary>
-        /// Gets the specified <see cref="ICommand"/>.
-        /// </summary>
-        /// <param name="action">The action to be performed when the <see cref="ICommand.Execute"/> method is called.</param>
-        /// <returns>An instance of <see cref="ICommand"> that can be used to invoke the specified action.</returns>
-        protected ICommand GetCommand(string action)
-        {
-            if (!commands.ContainsCommand(action))
-            {
-                commands.AddCommand(action, AppController.CreateCommand(commands, this, action));
-            }
-
-            return commands.GetCommand(action);
-        }
-
-        /// <summary>
-        /// Gets the specified <see cref="ICommandChain"/> that can be used to execute multiple <see cref="ICommand"/>s in sequence.
-        /// </summary>
-        /// <param name="name">The name of the required <see cref="ICommandChain"/>.</param>
-        /// <returns>The specified instance of <see cref="ICommandChain"/>.</returns>
-        protected ICommandChain GetCommandChain(string name)
-        {
-            if (!commands.ContainsCommand(name))
-            {
-                commands.AddCommand(name, new CommandChain(commands));
-            }
-
-            return (ICommandChain)commands.GetCommand(name);
-        }
-
-        /// <summary>
-        /// Gets an <see cref="ICommandChain"/> that can be used to execute multiple <see cref="ICommand"/>s in sequence.
-        /// </summary>
-        /// <returns>An instance of <see cref="ICommandChain"/>.</returns>
-        protected ICommandChain GetCommandChain()
-        {
-            return new CommandChain(commands);
-        }
-
-        /// <summary>
-        /// Gets the specified <see cref="ICommand"/>.
-        /// </summary>
-        /// <param name="view">The name of the <see cref="IView"/> that will be shown when the <see cref="ICommand.Execute"/> method is called.</param>
-        /// <returns>An instance of <see cref="ICommand"> that can be used to show the specified <see cref="IView"/>.</returns>
-        protected ICommand GetShowViewCommand(string view)
-        {
-            var name = Actions.Show + view;
-
-            if (!commands.ContainsCommand(name))
-            {
-                commands.AddCommand(name, AppController.CreateCommand(commands, view));
-            }
-
             return commands.GetCommand(name);
         }
 

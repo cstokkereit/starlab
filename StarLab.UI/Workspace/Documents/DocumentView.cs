@@ -1,8 +1,11 @@
 ﻿using log4net;
+using StarLab.Application;
 using StarLab.Presentation;
 using StarLab.Presentation.Workspace;
 using StarLab.Presentation.Workspace.Documents;
+using StarLab.Serialisation.Workspace;
 using StarLab.Shared.Properties;
+using StarLab.Shared.Resources;
 using Stratosoft.Commands;
 using System.Diagnostics;
 using WeifenLuo.WinFormsUI.Docking;
@@ -16,7 +19,7 @@ namespace StarLab.UI.Workspace.Documents
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(DocumentView)); // The logger that will be used for writing log messages.
 
-        private readonly string id; // The view ID.
+        private readonly List<IChildView> childViews = new List<IChildView>(); // The child views that provide the view functionality.
 
         private IDockableViewPresenter? presenter; // The presenter that controls the view.
 
@@ -24,28 +27,37 @@ namespace StarLab.UI.Workspace.Documents
         /// Initialises a new instance of the <see cref="DocumentView"/> class.
         /// </summary>
         /// <param name="document">The <see cref="IDocument"/> that this view represents.</param>
-        public DocumentView(IDocument document)
+        /// <param name="childViews">An <see cref="IEnumerable{IChildView}"/> containing the child views that provide the view functionality.</param>
+        /// <exception cref="ArgumentNullException"></exception>
+        public DocumentView(IDocument document, IEnumerable<IChildView> childViews)
         {
             ArgumentNullException.ThrowIfNull(document, nameof(document));
 
+            this.childViews.AddRange(childViews);
+
             InitializeComponent();
 
-            Name = document.Name;
-            Text = document.Name;
-            id = document.ID;
+            SuspendLayout();
 
-            if (log.IsDebugEnabled) log.Debug(string.Format(Resources.InstanceCreated, $"{nameof(DocumentView)}({ID})"));
+            foreach (var childView in childViews)
+            {
+                if (childView is Control control)
+                {
+                    splitContainer.AddControl(control, childView.Panel);
+                }
+            }
+
+            ResumeLayout();
+
+            SetName(document.Name);
+
+            ID = document.ID;
         }
-
-        /// <summary>
-        /// Gets the <see cref="IViewController"/> that controls this view.
-        /// </summary>
-        public IViewController? Controller => (IViewController?)presenter;
 
         /// <summary>
         /// Gets the view ID.
         /// </summary>
-        public string ID => id;
+        public string ID { get; }
 
         /// <summary>
         /// Adds a button to the tool bar.
@@ -67,18 +79,11 @@ namespace StarLab.UI.Workspace.Documents
         {
             if (this.presenter != null) throw new InvalidOperationException(Resources.PresenterAlreadyAttached);
 
+            if (!presenter.ID.Contains(ID)) throw new InvalidOperationException(string.Format(Resources.InvalidPresenterID, Controllers.GetControllerID(this)));
+
             this.presenter = (IDockableViewPresenter)presenter;
-        }
 
-        /// <summary>
-        /// Attaches the <see cref="IChildView"/> to the view.
-        /// </summary>
-        /// <param name="view">The <see cref="IChildView"/> to attach.</param>
-        public void Attach(IChildView view)
-        {
-            splitContainer.AddControl((Control)view, view.Panel);
-
-            if (log.IsDebugEnabled) log.Debug(string.Format(Resources.ViewAttached, view.Name, $"{nameof(DocumentView)}({ID})"));
+            log.Debug(string.Format(LogEntries.PresenterAttached, $"{presenter.GetType().Name}({ID}:{Name})"));
         }
 
         /// <summary>
@@ -86,33 +91,21 @@ namespace StarLab.UI.Workspace.Documents
         /// </summary>
         public void Detach()
         {
-            presenter = null;
-        }
-
-        /// <summary>
-        /// Gets the specified <see cref="IChildViewController"/>.
-        /// </summary>
-        /// <param name="name">The name of the required controller.</param>
-        /// <returns>The required <see cref="IChildViewController"/>.</returns>
-        public IChildViewController GetController(string name)
-        {
-            foreach (var control in splitContainer.Panel1.Controls)
+            foreach (var childView in childViews)
             {
-                if (control is IChildView content && content.Controller != null && content.Controller.Name == name)
-                {
-                    return content.Controller;
-                }
+                childView.Detach();
             }
 
-            foreach (var control in splitContainer.Panel2.Controls)
-            {
-                if (control is IChildView content && content.Controller != null && content.Controller.Name == name)
-                {
-                    return content.Controller;
-                }
-            }
+            childViews.Clear();
 
-            throw new ArgumentOutOfRangeException(nameof(name));
+            if (presenter != null)
+            {
+                var entry = $"{presenter.GetType().Name}({Name})";
+
+                presenter = null;
+
+                log.Debug(string.Format(LogEntries.PresenterDetached, entry));
+            }
         }
 
         /// <summary>
@@ -125,41 +118,23 @@ namespace StarLab.UI.Workspace.Documents
         }
 
         /// <summary>
-        /// Initialises the view.
+        /// Sets the view name.
         /// </summary>
-        /// <param name="controller">The <see cref="IApplicationController"/>.</param>
-        public void Initialise(IApplicationController controller)
+        /// <param name="name">The new view name.</param>
+        public void SetName(string name)
         {
-            if (presenter is IViewController parentController)
-            {
-                foreach (var control in splitContainer.Panel1.Controls)
-                {
-                    if (control is IChildView content)
-                    {
-                        Debug.Assert(content.Controller != null);
-                        content.Controller.RegisterController(parentController);
-                        content.Controller.Initialise(controller);
-                    }
-                }
-
-                foreach (var control in splitContainer.Panel2.Controls)
-                {
-                    if (control is IChildView content)
-                    {
-                        Debug.Assert(content.Controller != null);
-                        content.Controller.RegisterController(parentController);
-                        content.Controller.Initialise(controller);
-                    }
-                }
-            }
+            Name = name;
+            Text = name;
         }
 
         /// <summary>
-        /// Shows the tool window in the specified <see cref="DockPanel"/>.
+        /// Shows the document in the specified <see cref="DockPanel"/>.
         /// </summary>
-        /// <param name="dockPanel">The <see cref="DockPanel"/> that will contain the tool window.</param>
+        /// <param name="dockPanel">The <see cref="DockPanel"/> that will contain the document.</param>
         public new void Show(DockPanel dockPanel)
         {
+            Debug.Assert(presenter != null);
+
             if (DockState == DockState.Hidden || DockState == DockState.Unknown)
             {
                 //Height = presenter.Height;
@@ -176,6 +151,19 @@ namespace StarLab.UI.Workspace.Documents
         public void Show(IView view)
         {
             if (view is Form form) form.ShowDialog(this);
+        }
+
+        /// <summary>
+        /// Displays a <see cref="System.Windows.Forms.MessageBox"/> with the specified caption, message, message type and available responses.
+        /// </summary>
+        /// <param name="caption">The message box caption.</param>
+        /// <param name="message">The message text.</param>
+        /// <param name="type">An <see cref="InteractionType"/> that specifies the type of message being displayed.</param>
+        /// <param name="responses">An <see cref="InteractionResponses"/> that specifies the available responses.</param>
+        /// <returns>An <see cref="InteractionResult"/> that identifies the chosen response.</returns>
+        public InteractionResult ShowMessage(string caption, string message, InteractionType type, InteractionResponses responses)
+        {
+            return DialogController.ShowMessage(this, caption, message, type, responses);
         }
 
         /// <summary>
@@ -216,7 +204,19 @@ namespace StarLab.UI.Workspace.Documents
         /// <returns>The view ID.</returns>
         protected override string GetPersistString()
         {
-            return ID;
+            return Name;
+        }
+
+        /// <summary>
+        /// Event handler for the <see cref="Form.Activated"/> event.
+        /// </summary>
+        /// <param name="sender">The <see cref="object"> that was the originator of the event.</param>
+        /// <param name="e">An <see cref="EventArgs"/> that provides context for the event.</param>
+        private void Form_Activated(object sender, EventArgs e)
+        {
+            Debug.Assert(presenter != null);
+
+            presenter.ViewActivated();
         }
     }
 }

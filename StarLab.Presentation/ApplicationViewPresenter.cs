@@ -1,9 +1,8 @@
-﻿using AutoMapper;
-using log4net;
+﻿using log4net;
 using StarLab.Application;
 using StarLab.Application.Workspace;
 using StarLab.Presentation.Workspace;
-using StarLab.Shared.Properties;
+using StarLab.Shared.Resources;
 using Stratosoft.Commands;
 using System.ComponentModel;
 
@@ -15,9 +14,11 @@ namespace StarLab.Presentation
     /// <summary>
     /// Controls the behaviour of an <see cref="IApplicationView"/>.
     /// </summary>
-    internal class ApplicationViewPresenter : Presenter<IApplicationView>, IApplicationViewPresenter, IApplicationViewController, IApplicationOutputPort, ISubscriber<ActiveDocumentChangedEventArgs>
+    internal sealed class ApplicationViewPresenter : Presenter<IApplicationView>, IApplicationViewPresenter, IApplicationViewController, IApplicationOutputPort, ISubscriber<ActiveDocumentChangedEventArgs>
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(ApplicationViewPresenter)); // The logger that will be used for writing log messages.
+
+        private readonly IApplicationUseCaseService useCaseService; // A service that executes the use cases that implement the application functionality.
 
         private IWorkspace workspace; // The workspace that the view represents.
 
@@ -30,24 +31,39 @@ namespace StarLab.Presentation
         /// </summary>
         /// <param name="view">The <see cref="IApplicationView"/> controlled by this presenter.</param>
         /// <param name="commands">An <see cref="ICommandManager"/> that is required for the creation of <see cref="ICommand">s.</param>
-        /// <param name="factory">An <see cref="IUseCaseFactory"/> that will be used to create use case interactors.</param>
+        /// <param name="services">An <see cref="IServiceRegistry"/> that provides access to the registered services.</param>
         /// <param name="settings">An <see cref="IApplicationSettings"/> that provides access to the application configuration.</param>
-        /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
         /// <param name="events">The <see cref="IEventAggregator"/> that manages application events.</param>
-        public ApplicationViewPresenter(IApplicationView view, ICommandManager commands, IUseCaseFactory factory, IApplicationSettings settings, IMapper mapper, IEventAggregator events)
-            : base(view, commands, factory, settings, mapper, events)
+        /// <exception cref="ArgumentNullException"></exception>
+        public ApplicationViewPresenter(IApplicationView view, ICommandManager commands, IServiceRegistry services, IApplicationSettings settings, IEventAggregator events)
+            : base(view, commands, settings, events)
         {
+            ArgumentNullException.ThrowIfNull(services, nameof(services));
+
+            useCaseService = services.GetService<IApplicationUseCaseService>();
+
             View.Attach(this);
 
             workspace = new EmptyWorkspace();
-
-            if (log.IsDebugEnabled) log.Debug(string.Format(Resources.InstanceCreated, nameof(ApplicationViewPresenter)));
         }
+
+        /// <summary>
+        /// The finaliser will only called if the <see cref="Dispose"/> method has not been called.
+        /// </summary>
+        ~ApplicationViewPresenter()
+        {
+            Dispose(false);
+        }
+
+        /// <summary>
+        /// Gets an <see cref="IEnumerable{IChildViewController}"/> containing the child controllers.
+        /// </summary>
+        public IEnumerable<IChildViewController> ChildControllers => [];
 
         /// <summary>
         /// Gets the name of the controller.
         /// </summary>
-        public override string Name => Controllers.ApplicationViewController;
+        public override string ID => Controllers.ApplicationViewController;
 
         /// <summary>
         /// Clears the active document.
@@ -106,9 +122,9 @@ namespace StarLab.Presentation
         /// </summary>
         /// <param name="id">The ID of the required <see cref="IDockableView"/>.</param>
         /// <returns>The <see cref="IDockableView"/> with the specified ID.</returns>
-        public IDockableView? CreateView(string id)
+        public IDockableView CreateView(string id)
         {
-            IView? view;
+            IView view;
 
             if (workspace.HasDocument(id))
             {
@@ -119,7 +135,17 @@ namespace StarLab.Presentation
                 view = AppController.GetView(id);
             }
 
-            return (IDockableView?)view;
+            return (IDockableView)view;
+        }
+
+        /// <summary>
+        /// Releases all resources used by the <see cref="ApplicationViewPresenter"/> object.
+        /// </summary>
+        public override void Dispose()
+        {
+            Dispose(true);
+
+            GC.SuppressFinalize(this);
         }
 
         /// <summary>
@@ -138,21 +164,22 @@ namespace StarLab.Presentation
         /// <param name="controller">The <see cref="IApplicationController"/>.</param>
         public override void Initialise(IApplicationController controller)
         {
-            if (!Initialised)
-            {
-                base.Initialise(controller);
+            if (Initialised) throw new InvalidOperationException(string.Format(StringResources.AlreadyInitialised, nameof(ApplicationViewPresenter)));
+                
+            base.Initialise(controller);
 
-                CreateFileMenu();
-                CreateViewMenu();
-                CreateWorkspaceMenu();
-                CreateToolsMenu();
-                CreateWindowMenu();
-                CreateHelpMenu();
+            CreateFileMenu();
+            CreateViewMenu();
+            CreateWorkspaceMenu();
+            CreateToolsMenu();
+            CreateWindowMenu();
+            CreateHelpMenu();
 
-                CreateStandardToolbar();
+            CreateStandardToolbar();
 
-                OpenDefaultWorkspace();
-            }
+            OpenDefaultWorkspace();
+
+            log.Debug(string.Format(LogEntries.Initialised, nameof(ApplicationViewPresenter)));
         }
 
         /// <summary>
@@ -186,7 +213,9 @@ namespace StarLab.Presentation
         /// </summary>
         public void OpenWorkspace()
         {
-            OpenWorkspace(string.Empty);
+            var filename = View.ShowOpenFileDialog(StringResources.OpenWorkspace, StringResources.WorkspaceFileFilter);
+
+            OpenWorkspace(filename);
         }
 
         /// <summary>
@@ -195,9 +224,8 @@ namespace StarLab.Presentation
         public void SaveWorkspace()
         {
             workspace.UpdateLayout(View.GetLayout());
-            var interactor = UseCaseFactory.CreateSaveWorkspaceUseCase(this);
-            var dto = Mapper.Map<WorkspaceDTO>(workspace);
-            interactor.Execute(dto);
+
+            useCaseService.SaveWorkspace(workspace);
         }
 
         /// <summary>
@@ -252,15 +280,6 @@ namespace StarLab.Presentation
         }
 
         /// <summary>
-        /// Shows the <see cref="IView"> with the specified ID. A view with the specified ID must already exist or an exception will be thrown.
-        /// </summary>
-        /// <param name="id">The ID of the view to be shown.</param>
-        public void Show(string id)
-        {
-            AppController.Show(id);
-        }
-
-        /// <summary>
         /// Displays a <see cref="MessageBox"/> with the specified caption, message, message type and available responses.
         /// </summary>
         /// <param name="caption">The message box caption.</param>
@@ -270,7 +289,7 @@ namespace StarLab.Presentation
         /// <returns>An <see cref="InteractionResult"/> that identifies the chosen response.</returns>
         public InteractionResult ShowMessage(string caption, string message, InteractionType type, InteractionResponses responses)
         {
-            return AppController.ShowMessage(caption, message, type, responses);
+            return View.ShowMessage(caption, message, type, responses);
         }
 
         /// <summary>
@@ -290,10 +309,9 @@ namespace StarLab.Presentation
         /// </summary>
         /// <param name="caption">The message box caption.</param>
         /// <param name="message">The message text.</param>
-        /// <returns>An <see cref="InteractionResult"/> that identifies the chosen response.</returns>
-        public InteractionResult ShowMessage(string caption, string message)
+        public void ShowMessage(string caption, string message)
         {
-            return AppController.ShowMessage(caption, message);
+            AppController.ShowMessage(caption, message);
         }
 
         /// <summary>
@@ -372,6 +390,14 @@ namespace StarLab.Presentation
         }
 
         /// <summary>
+        /// Notifies the presenter that the view has been activated.
+        /// </summary>
+        public void ViewActivated()
+        {
+            Events.Publish(new ActiveViewChangedEventArgs(View));
+        }
+
+        /// <summary>
         /// Notifies the presenter that the view is being closed.
         /// </summary>
         /// <param name="e">The <see cref="CancelEventArgs"/> that can be used to determine the reasons that the view is closing and, if necessary, cancel it.</param>
@@ -395,17 +421,17 @@ namespace StarLab.Presentation
             View.AddMenuItem(Constants.FileNew, Constants.FileNewWorkspace, StringResources.Workspace + Constants.Ellipsis);
             View.AddMenuSeparator(Constants.File);
             View.AddMenuItem(Constants.File, Constants.FileOpen, StringResources.Open);
-            View.AddMenuItem(Constants.FileOpen, Constants.FileOpenWorkspace, StringResources.Workspace + Constants.Ellipsis, ImageResources.OpenWorkspace, GetCommand(Actions.OpenWorkspace));
+            View.AddMenuItem(Constants.FileOpen, Constants.FileOpenWorkspace, StringResources.Workspace + Constants.Ellipsis, ImageResources.OpenWorkspace, CreateCommand(Actions.OpenWorkspace, OpenWorkspace));
             View.AddMenuSeparator(Constants.File);
-            View.AddMenuItem(Constants.File, Constants.FileClose, StringResources.Close, GetCommand(Actions.CloseDocument));
-            View.AddMenuItem(Constants.File, Constants.FileCloseWorkspace, StringResources.CloseWorkspace, ImageResources.CloseWorkspace, GetCommand(Actions.CloseWorkspace));
+            View.AddMenuItem(Constants.File, Constants.FileClose, StringResources.Close, CreateCommand(Actions.CloseDocument, CloseActiveDocument));
+            View.AddMenuItem(Constants.File, Constants.FileCloseWorkspace, StringResources.CloseWorkspace, ImageResources.CloseWorkspace, CreateCommand(Actions.CloseWorkspace, CloseWorkspace));
             View.AddMenuSeparator(Constants.File);
-            View.AddMenuItem(Constants.File, Constants.FileSaveAll, StringResources.SaveAll, ImageResources.SaveAll, GetCommand(Actions.SaveWorkspace));
+            View.AddMenuItem(Constants.File, Constants.FileSaveAll, StringResources.SaveAll, ImageResources.SaveAll, CreateCommand(Actions.SaveWorkspace, SaveWorkspace));
             View.AddMenuSeparator(Constants.File);
             View.AddMenuItem(Constants.File, Constants.FilePageSetup, StringResources.PageSetup + Constants.Ellipsis, ImageResources.PageSetup); //, AppController.GetCommand(this, Constants.FILE_PAGE_SETUP));
             View.AddMenuItem(Constants.File, Constants.FilePrint, StringResources.Print + Constants.Ellipsis, ImageResources.Print); //, AppController.GetCommand(this, Constants.FILE_PRINT));
             View.AddMenuSeparator(Constants.File);
-            View.AddMenuItem(Constants.File, Constants.FileExit, StringResources.Exit, GetCommand(AppController, Actions.Exit));
+            View.AddMenuItem(Constants.File, Constants.FileExit, StringResources.Exit, CreateCommand(Actions.Exit, AppController.Exit));
         }
 
         /// <summary>
@@ -416,7 +442,7 @@ namespace StarLab.Presentation
             View.AddMenuItem(Constants.Help, StringResources.Help);
             //view.AddMenuItem(Constants.HELP, Constants.HELP_VIEW_HELP, Resources.ViewHelp, AppController.GetCommand(this, Constants.VIEW_HELP));
             View.AddMenuSeparator(Constants.Help);
-            View.AddMenuItem(Constants.Help, Constants.HelpAbout, StringResources.AboutStarLab, GetShowViewCommand(Views.About));
+            View.AddMenuItem(Constants.Help, Constants.HelpAbout, StringResources.AboutStarLab, CreateCommand(Actions.Show + Views.About, AppController.ShowAboutDialog));
         }
 
         /// <summary>
@@ -434,7 +460,7 @@ namespace StarLab.Presentation
         private void CreateToolsMenu()
         {
             View.AddMenuItem(Constants.Tools, StringResources.Tools);
-            View.AddMenuItem(Constants.Tools, Constants.ToolsOptions, StringResources.Options, ImageResources.Settings, GetShowViewCommand(Views.Options));
+            View.AddMenuItem(Constants.Tools, Constants.ToolsOptions, StringResources.Options, ImageResources.Settings, CreateCommand(Actions.Show + Views.Options, AppController.ShowOptionsDialog));
         }
 
         /// <summary>
@@ -443,7 +469,7 @@ namespace StarLab.Presentation
         private void CreateViewMenu()
         {
             View.AddMenuItem(Constants.View, StringResources.View);
-            View.AddMenuItem(Constants.View, Constants.ViewWorkspaceExplorer, StringResources.WorkspaceExplorer, GetShowViewCommand(Views.WorkspaceExplorer));
+            View.AddMenuItem(Constants.View, Constants.ViewWorkspaceExplorer, StringResources.WorkspaceExplorer, CreateCommand(Actions.Show + Views.WorkspaceExplorer, AppController.ShowWorkspaceExplorer));
         }
 
         /// <summary>
@@ -467,6 +493,18 @@ namespace StarLab.Presentation
         }
 
         /// <summary>
+        /// Releases all resources used by the <see cref="ApplicationViewPresenter"/> object.
+        /// </summary>
+        /// <param name="disposing">true if managed resources can be disposed of; false otherwise.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                View.Detach();
+            }
+        }
+
+        /// <summary>
         /// Opens the default workspace.
         /// </summary>
         private void OpenDefaultWorkspace()
@@ -483,14 +521,9 @@ namespace StarLab.Presentation
         /// <param name="filename">The fully qualified path to the workspace file.</param>
         private void OpenWorkspace(string filename)
         {
-            if (string.IsNullOrEmpty(filename))
-            {
-                filename = View.ShowOpenFileDialog(StringResources.OpenWorkspace, StringResources.WorkspaceFileFilter);
-            }
+            ArgumentException.ThrowIfNullOrEmpty(filename, nameof(filename));
 
-            var interactor = UseCaseFactory.CreateOpenWorkspaceUseCase(this);
-
-            interactor.Execute(filename);
+            useCaseService.OpenWorkspace(filename);
 
             UpdateCommandState(Actions.CloseWorkspace, true);
         }

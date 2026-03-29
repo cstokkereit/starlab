@@ -117,13 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="MessageCommandExists" xml:space="preserve">
-    <value>A command named {0} has already been added.</value>
+  <data name="CommandExists" xml:space="preserve">
+    <value>A command named '{0}' has already been added.</value>
   </data>
-  <data name="MessageCommandNotFound" xml:space="preserve">
-    <value>A command named {0} could not be found.</value>
+  <data name="CommandNotFound" xml:space="preserve">
+    <value>A command named '{0}' could not be found.</value>
   </data>
-  <data name="MessageInvalidComponentType" xml:space="preserve">
-    <value>Invalid component type. Expected a component of type {0} but received a component of type {1}</value>
+  <data name="InvalidComponentType" xml:space="preserve">
+    <value>Invalid component type. Expected a component of type '{0}' but received a component of type '{1}'</value>
   </data>
 </root>

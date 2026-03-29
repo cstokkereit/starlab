@@ -90,7 +90,7 @@ namespace Stratosoft.File.IO
         /// <summary>
         /// Releases all resources used by the <see cref="FileParser"/> object.
         /// </summary>
-        /// <param name="disposing">true if called by my code; false otherwise.</param>
+        /// <param name="disposing">true if managed resources can be disposed of; false otherwise.</param>
         protected virtual void Dispose(bool disposing)
         {
             if (disposing && parser != null) parser.Dispose();

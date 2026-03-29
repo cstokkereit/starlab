@@ -15,7 +15,6 @@
         /// </summary>
         /// <param name="index">The index of the required field.</param>
         /// <returns>A string representing the specified field value.</returns>
-        /// <exception cref="InvalidOperationException"></exception>
         string GetValue(int index);
 
         /// <summary>
@@ -23,7 +22,6 @@
         /// </summary>
         /// <param name="field">The name of the required field.</param>
         /// <returns>A string representing the specified field value.</returns>
-        /// <exception cref="InvalidOperationException"></exception>
         string GetValue(string field);
 
         /// <summary>

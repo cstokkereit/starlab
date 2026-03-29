@@ -10,12 +10,12 @@ namespace Stratosoft.Commands
         private readonly ICommandManager manager = new CommandManager(); // The command manager used to register the command invoker used in the tests.
 
         /// <summary>
-        /// Test that the <see cref="ComponentCommand{IReceiver}(ICommandManager, IReceiver)"/> constructor works correctly.
+        /// Test that the <see cref="ComponentCommand(ICommandManager, Action)"/> constructor works correctly.
         /// </summary>
         [Test]
         public void TestConstructor()
         {
-            var command = new TestCommand(manager, Substitute.For<IReceiver>());
+            var command = new ComponentCommand(manager, () => { });
 
             Assert.That(command, Is.Not.Null);
         }
@@ -32,7 +32,7 @@ namespace Stratosoft.Commands
 
             var receiver = Substitute.For<IReceiver>();
 
-            var command = new TestCommand(manager, receiver);
+            var command = new ComponentCommand(manager, receiver.Test);
 
             command.AddInstance(menu);
 
@@ -51,7 +51,9 @@ namespace Stratosoft.Commands
 
             manager.RegisterCommandInvoker(new TestInvoker());
 
-            var command = new TestCommand(manager, Substitute.For<IReceiver>());
+            var receiver = Substitute.For<IReceiver>();
+
+            var command = new ComponentCommand(manager, receiver.Test);
 
             command.AddInstance(menu);
 
@@ -69,7 +71,9 @@ namespace Stratosoft.Commands
 
             manager.RegisterCommandInvoker(new TestInvoker());
 
-            var command = new TestCommand(manager, Substitute.For<IReceiver>());
+            var receiver = Substitute.For<IReceiver>();
+
+            var command = new ComponentCommand(manager, receiver.Test);
 
             command.AddInstance(menu);
 
@@ -89,9 +93,12 @@ namespace Stratosoft.Commands
 
             manager.RegisterCommandInvoker(new TestInvoker());
 
-            var command = new TestCommand(manager, Substitute.For<IReceiver>());
+            var receiver = Substitute.For<IReceiver>();
+
+            var command = new ComponentCommand(manager, receiver.Test);
 
             command.AddInstance(menu);
+
 
             Assert.That(command.Enabled);
             Assert.That(menu.Enabled);
@@ -107,7 +114,9 @@ namespace Stratosoft.Commands
 
             manager.RegisterCommandInvoker(new TestInvoker());
 
-            var command = new TestCommand(manager, Substitute.For<IReceiver>());
+            var receiver = Substitute.For<IReceiver>();
+
+            var command = new ComponentCommand(manager, receiver.Test);
 
             command.AddInstance(menu);
 
@@ -159,17 +168,11 @@ namespace Stratosoft.Commands
         }
 
         /// <summary>
-        /// A test class that implements the abstract <see cref="ComponentCommand{TReceiver}"/> class.
+        /// An interface with a method that has the same signature as <see cref="Action"/>.
         /// </summary>
-        private class TestCommand : ComponentCommand<IReceiver>
+        public interface IReceiver
         {
-            public TestCommand(ICommandManager manager, IReceiver receiver)
-                : base(manager, receiver) { }
-
-            public override void Execute()
-            {
-                receiver.Test();
-            }
+            void Test();
         }
     }
 }

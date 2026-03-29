@@ -71,10 +71,8 @@ namespace StarLab.Data.MongoDB
         [Test]
         public void TestConstructor()
         {
-            // Act
             var provider = new ImportManager(connection);
 
-            // Assert
             Assert.That(provider, Is.Not.Null);
         }
 
@@ -84,15 +82,12 @@ namespace StarLab.Data.MongoDB
         [Test]
         public void TestCloseDatabase()
         {
-            // Arrange
             var provider = new DataProvider(connection);
 
             provider.OpenDatabase(DATABASE);
 
-            // Act
             provider.CloseDatabase();
 
-            // Assert
             provider.OpenDatabase(DATABASE);
 
             Assert.Pass();
@@ -104,7 +99,6 @@ namespace StarLab.Data.MongoDB
         [Test]
         public void TestGetFirstTwentyStars()
         {
-            // Arrange
             var provider = new DataProvider(connection);
 
             provider.OpenDatabase(DATABASE);
@@ -114,10 +108,8 @@ namespace StarLab.Data.MongoDB
             var query = builder.AddTable(COLLECTION)
                                .BuildQuery();
 
-            // Act
             var stars = provider.GetStars(query, 0, 20);
 
-            // Assert
             Assert.That(stars, Is.Not.Null);
             Assert.That(stars, Has.Count.EqualTo(20));
 
@@ -130,7 +122,6 @@ namespace StarLab.Data.MongoDB
         [Test]
         public void TestGetStarsReturnsAllStarsAsCursor()
         {
-            // Arrange
             var provider = new DataProvider(connection);
 
             provider.OpenDatabase(DATABASE);
@@ -140,10 +131,8 @@ namespace StarLab.Data.MongoDB
             var query = builder.AddTable(COLLECTION)
                                .BuildQuery();
 
-            // Act
             var stars = provider.GetStars(query);
 
-            // Assert
             Assert.That(stars, Is.Not.Null);
 
             Validate(stars, 1000);
@@ -155,7 +144,6 @@ namespace StarLab.Data.MongoDB
         [Test]
         public void TestGetStarsReturnsAllStarsAsList()
         {
-            // Arrange
             var provider = new DataProvider(connection);
 
             provider.OpenDatabase(DATABASE);
@@ -165,10 +153,8 @@ namespace StarLab.Data.MongoDB
             var query = builder.AddTable(COLLECTION)
                                .BuildQuery();
 
-            // Act
             var stars = provider.GetStars(query, 0, 2000);
 
-            // Assert
             Assert.That(stars, Is.Not.Null);
 
             Validate(stars, 1000, s => {});
@@ -180,7 +166,6 @@ namespace StarLab.Data.MongoDB
         [Test]
         public void TestGetStarsThrowsExceptionIfDatabaseNotOpened()
         {
-            // Arrange
             var provider = new DataProvider(connection);
 
             var builder = new QueryBuilder();
@@ -188,7 +173,6 @@ namespace StarLab.Data.MongoDB
             var query = builder.AddTable(COLLECTION)
                                .BuildQuery();
 
-            // Act
             var e = Assert.Throws<InvalidOperationException>(() => provider.GetStars(query, 0, 20));
 
             //Assert.That(e.Message, Is.EqualTo(""));
@@ -200,7 +184,6 @@ namespace StarLab.Data.MongoDB
         [Test]
         public void TestGetStarsWithEqualsQuery()
         {
-            // Arrange
             var provider = new DataProvider(connection);
 
             provider.OpenDatabase(DATABASE);
@@ -211,10 +194,8 @@ namespace StarLab.Data.MongoDB
                                .AddPredicate(builder.CreateField("Apparent Magnitude"), 8.55, ComparisonOperators.Equals)
                                .BuildQuery();
             
-            // Act
             var stars = provider.GetStars(query, 0, 1000);
 
-            // Assert
             Validate(stars, 10, s => Assert.That(s.ApparentMagnitude, Is.EqualTo(8.55)));
         }
 
@@ -224,7 +205,6 @@ namespace StarLab.Data.MongoDB
         [Test]
         public void TestGetStarsWithGreaterThanQuery()
         {
-            // Arrange
             var provider = new DataProvider(connection);
 
             provider.OpenDatabase(DATABASE);
@@ -235,10 +215,8 @@ namespace StarLab.Data.MongoDB
                                .AddPredicate(builder.CreateField("B-V"), 1.67, ComparisonOperators.GreaterThan)
                                .BuildQuery();
 
-            // Act
             var stars = provider.GetStars(query, 0, 1000);
 
-            // Assert
             Validate(stars, 13, s => Assert.That(s.BVColourIndex, Is.GreaterThan(1.67)));
         }
 
@@ -248,7 +226,6 @@ namespace StarLab.Data.MongoDB
         [Test]
         public void TestGetStarsWithGreaterThanOrEqualsQuery()
         {
-            // Arrange
             var provider = new DataProvider(connection);
 
             provider.OpenDatabase(DATABASE);
@@ -259,10 +236,8 @@ namespace StarLab.Data.MongoDB
                                .AddPredicate(builder.CreateField("B-V"), 1.67, ComparisonOperators.GreaterThanOrEquals)
                                .BuildQuery();
 
-            // Act
             var stars = provider.GetStars(query, 0, 1000);
 
-            // Assert
             Validate(stars, 14, s => Assert.That(s.BVColourIndex, Is.GreaterThanOrEqualTo(1.67)));
         }
 
@@ -272,7 +247,6 @@ namespace StarLab.Data.MongoDB
         [Test]
         public void TestGetStarsWithLessThanQuery()
         {
-            // Arrange
             var provider = new DataProvider(connection);
 
             provider.OpenDatabase(DATABASE);
@@ -283,10 +257,8 @@ namespace StarLab.Data.MongoDB
                                .AddPredicate(builder.CreateField("B-V"), -0.089, ComparisonOperators.LessThan)
                                .BuildQuery();
 
-            // Act
             var stars = provider.GetStars(query, 0, 1000);
 
-            // Assert
             Validate(stars, 8, s => Assert.That(s.BVColourIndex, Is.LessThan(-0.089)));
         }
 
@@ -296,7 +268,6 @@ namespace StarLab.Data.MongoDB
         [Test]
         public void TestGetStarsWithLessThanOrEqualsQuery()
         {
-            // Arrange
             var provider = new DataProvider(connection);
 
             provider.OpenDatabase(DATABASE);
@@ -307,10 +278,8 @@ namespace StarLab.Data.MongoDB
                                .AddPredicate(builder.CreateField("B-V"), -0.089, ComparisonOperators.LessThanOrEquals)
                                .BuildQuery();
 
-            // Act
             var stars = provider.GetStars(query, 0, 1000);
 
-            // Assert
             Validate(stars, 9, s => Assert.That(s.BVColourIndex, Is.LessThanOrEqualTo(-0.089)));
         }
 
@@ -320,7 +289,6 @@ namespace StarLab.Data.MongoDB
         [Test]
         public void TestGetStarsWithNotEqualsQuery()
         {
-            // Arrange
             var provider = new DataProvider(connection);
 
             provider.OpenDatabase(DATABASE);
@@ -331,10 +299,8 @@ namespace StarLab.Data.MongoDB
                                .AddPredicate(builder.CreateField("Apparent Magnitude"), 8.55, ComparisonOperators.NotEquals)
                                .BuildQuery();
 
-            // Act
             var stars = provider.GetStars(query, 0, 1000);
 
-            // Assert
             Validate(stars, 990, s => Assert.That(s.ApparentMagnitude, Is.Not.EqualTo(8.55)));
         }
 
@@ -344,12 +310,10 @@ namespace StarLab.Data.MongoDB
         [Test]
         public void TestOpenDatabaseThrowsExceptionIfDatabaseAlreadyOpened()
         {
-            // Arrange
             var provider = new DataProvider(connection);
 
             provider.OpenDatabase(DATABASE);
 
-            // Act
             var e = Assert.Throws<InvalidOperationException>(() => provider.OpenDatabase(DATABASE));
 
             //Assert.That(e.Message, Is.EqualTo(""));

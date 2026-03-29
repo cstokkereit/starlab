@@ -33,6 +33,14 @@ namespace StarLab.Data.Import
         }
 
         /// <summary>
+        /// The finaliser will only called if the <see cref="Dispose"/> method has not been called.
+        /// </summary>
+        ~FileBackedDataset()
+        {
+            Dispose(false);
+        }
+
+        /// <summary>
         /// A flag that indicates that the current row index is before the start of the dataset.
         /// </summary>
         public bool BOF => throw new NotImplementedException();
@@ -48,11 +56,11 @@ namespace StarLab.Data.Import
         public IEnumerable<IDataField> Fields => fields;
 
         /// <summary>
-        /// Releases all resources used by the <see cref="Parser"/> object.
+        /// Releases all resources used by the <see cref="FileBackedDataset"/> object.
         /// </summary>
         public void Dispose()
         {
-            if (parser != null) parser.Dispose();
+            Dispose(true);
 
             GC.SuppressFinalize(this);
         }
@@ -128,6 +136,8 @@ namespace StarLab.Data.Import
             throw new NotImplementedException();
         }
 
+        
+
         /// <summary>
         /// Generates a <see cref="Dictionary{string, int}}"/> that contains the indices of the fields that need to be imported indexed by name.
         /// </summary>
@@ -143,6 +153,15 @@ namespace StarLab.Data.Import
             }
 
             return map;
+        }
+
+        /// <summary>
+        /// Releases all resources used by the <see cref="FileBackedDataset"/> object.
+        /// </summary>
+        /// <param name="disposing">true if called by my code; false otherwise</param>
+        private void Dispose(bool disposing)
+        {
+            if (disposing && parser != null) parser.Dispose();
         }
 
         /// <summary>

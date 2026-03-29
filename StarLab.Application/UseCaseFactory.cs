@@ -143,7 +143,7 @@ namespace StarLab.Application
         /// <returns>An instance of <see cref="IUseCase{ChartDTO}"/> that implements the use case.</returns>
         public IUseCase<ChartDTO> CreateUpdateChartUseCase(IChartOutputPort outputPort)
         {
-            return new UpdateChartInteractor(outputPort, mapper);
+            return new ApplyChartSettingsInteractor(outputPort, mapper);
         }
 
         /// <summary>

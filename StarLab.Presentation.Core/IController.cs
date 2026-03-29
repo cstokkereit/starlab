@@ -3,11 +3,11 @@
     /// <summary>
     /// Defines the properties that are common to all controllers.
     /// </summary>
-    public interface IController
+    public interface IController : IDisposable
     {
         /// <summary>
-        /// Gets the name of the controller.
+        /// Gets the controller ID.
         /// </summary>
-        string Name { get; }
+        string ID { get; }
     }
 }

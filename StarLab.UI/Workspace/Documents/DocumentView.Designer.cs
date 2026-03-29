@@ -51,6 +51,7 @@ namespace StarLab.UI.Workspace.Documents
             HideOnClose = true;
             Name = "DocumentView";
             Text = "DocumentView";
+            Activated += Form_Activated;
             ResumeLayout(false);
         }
 

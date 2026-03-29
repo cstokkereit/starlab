@@ -87,7 +87,7 @@ namespace Stratosoft.Commands
         {
             if (component == null) throw new ArgumentNullException(nameof(component));
 
-            if (typeof(TComponent) != component.GetType()) throw new ArgumentException(string.Format(Resources.MessageInvalidComponentType, typeof(TComponent), component.GetType()));
+            if (typeof(TComponent) != component.GetType()) throw new ArgumentException(string.Format(Resources.InvalidComponentType, typeof(TComponent), component.GetType()));
         }
     }
 }

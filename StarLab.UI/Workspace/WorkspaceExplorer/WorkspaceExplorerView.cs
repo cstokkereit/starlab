@@ -2,6 +2,7 @@
 using StarLab.Presentation;
 using StarLab.Presentation.Workspace.WorkspaceExplorer;
 using StarLab.Shared.Properties;
+using StarLab.Shared.Resources;
 using StarLab.UI.Controls;
 using Stratosoft.Commands;
 using System.Diagnostics;
@@ -26,15 +27,15 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         {
             InitializeComponent();
 
-            Name = Views.WorkspaceExplorer;
+            ID = Views.WorkspaceExplorer;
 
-            if (log.IsDebugEnabled) log.Debug(string.Format(Resources.InstanceCreated, nameof(WorkspaceExplorerView)));
+            Name = ID;
         }
 
         /// <summary>
-        /// Gets the <see cref="IChildViewController"> that controls this view.
+        /// Gets the view ID.
         /// </summary>
-        public IChildViewController? Controller => (IChildViewController?)presenter;
+        public string ID { get; }
 
         /// <summary>
         /// Gets the preferred panel, if any, in which to display the view.
@@ -132,6 +133,23 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
             if (this.presenter != null) throw new InvalidOperationException(Resources.PresenterAlreadyAttached);
 
             this.presenter = (IWorkspaceExplorerViewPresenter)presenter;
+
+            log.Debug(string.Format(LogEntries.PresenterAttached, $"{presenter.GetType().Name}({Name})"));
+        }
+
+        /// <summary>
+        /// Detaches the presenter that controls the view.
+        /// </summary>
+        public void Detach()
+        {
+            if (presenter != null)
+            {
+                var entry = $"{presenter.GetType().Name}({Name})";
+
+                presenter = null;
+
+                log.Debug(string.Format(LogEntries.PresenterDetached, entry));
+            }
         }
 
         /// <summary>
@@ -150,7 +168,7 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         /// <param name="key">The key that identifies the node.</param>
         public void CollapseNode(string key)
         {
-            if (nodes.ContainsKey(key)) nodes[key].Collapse();
+            if (nodes.TryGetValue(key, out TreeNode? value)) value.Collapse();
         }
 
         /// <summary>
@@ -159,10 +177,10 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         /// <param name="key">The node key.</param>
         public void EditNodeLabel(string key)
         {
-            if (nodes.ContainsKey(key))
+            if (nodes.TryGetValue(key, out TreeNode? value))
             {
                 treeView.LabelEdit = true;
-                nodes[key].BeginEdit();
+                value.BeginEdit();
             }
         }
 
@@ -172,7 +190,7 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         /// <param name="key">The key that identifies the node.</param>
         public void ExpandNode(string key)
         {
-            if (nodes.ContainsKey(key)) nodes[key].Expand();
+            if (nodes.TryGetValue(key, out TreeNode? value)) value.Expand();
         }
 
         /// <summary>
@@ -195,8 +213,7 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         /// <summary>
         /// Initialises the view.
         /// </summary>
-        /// <param name="controller">The <see cref="IApplicationController"/>.</param>
-        public void Initialise(IApplicationController controller)
+        public void Initialise()
         {
             // Do Nothing
         }
@@ -207,7 +224,7 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         /// <param name="key">The node key.</param>
         public void SelectNode(string key)
         {
-            if (nodes.ContainsKey(key)) treeView.SelectedNode = nodes[key];
+            if (nodes.TryGetValue(key, out TreeNode? value)) treeView.SelectedNode = value;
         }
 
         /// <summary>
@@ -217,7 +234,7 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         /// <param name="text">The label text.</param>
         public void SetNodeText(string key, string text)
         {
-            if (nodes.ContainsKey(key)) nodes[key].Text = text;
+            if (nodes.TryGetValue(key, out TreeNode? value)) value.Text = text;
         }
 
         /// <summary>
@@ -354,23 +371,26 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
 
                 var node = treeView.GetNodeAt(e.X, e.Y);
 
-                switch (GetNodeType(node))
+                if (node != null)
                 {
-                    case Constants.Document:
-                        presenter.CreateDocumentContextMenu(node.Name, menu);
-                        break;
+                    switch (GetNodeType(node))
+                    {
+                        case Constants.Document:
+                            presenter.CreateDocumentContextMenu(node.Name, menu);
+                            break;
 
-                    case Constants.Folder:
-                        presenter.CreateFolderContextMenu(node.Name, menu);
-                        break;
+                        case Constants.Folder:
+                            presenter.CreateFolderContextMenu(node.Name, menu);
+                            break;
 
-                    case Constants.Project:
-                        presenter.CreateProjectContextMenu(node.Name, menu);
-                        break;
+                        case Constants.Project:
+                            presenter.CreateProjectContextMenu(node.Name, menu);
+                            break;
 
-                    case Constants.Workspace:
-                        presenter.CreateWorkspaceContextMenu(menu);
-                        break;
+                        case Constants.Workspace:
+                            presenter.CreateWorkspaceContextMenu(menu);
+                            break;
+                    }
                 }
 
                 treeView.ContextMenuStrip = menu;
@@ -384,7 +404,12 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         /// <returns>The node type of the <see cref="TreeNode"/> provided.</returns>
         private string GetNodeType(TreeNode node)
         {
-            return node == null ? string.Empty : (string)node.Tag;
+            if (node != null && node.Tag is string tag)
+            {
+                return tag;
+            }
+
+            return string.Empty;
         }
     }
 }

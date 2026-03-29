@@ -1,8 +1,7 @@
-﻿using AutoMapper;
-using log4net;
-using StarLab.Application;
+﻿using log4net;
 using StarLab.Application.Workspace.Documents.Charts;
 using StarLab.Shared.Properties;
+using StarLab.Shared.Resources;
 using Stratosoft.Commands;
 using System.Diagnostics;
 
@@ -15,6 +14,8 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(ColourMagnitudeChartViewPresenter)); // The logger that will be used for writing log messages.
 
+        private readonly IChartUseCaseService useCases; // TODO.
+
         private IChart? chart; // The chart that the view represents.
 
         /// <summary>
@@ -22,29 +23,35 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// </summary>
         /// <param name="view">The <see cref="IChartView"/> controlled by this presenter.</param>
         /// <param name="commands">An <see cref="ICommandManager"/> that is required for the creation of <see cref="ICommand">s.</param>
-        /// <param name="factory">An <see cref="IUseCaseFactory"/> that will be used to create use case interactors.</param>
+        /// <param name="services">An <see cref="IServiceRegistry"/> that provides access to the registered services.</param>
         /// <param name="settings">An <see cref="IApplicationSettings"/> that provides access to the application configuration.</param>
-        /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
         /// <param name="events">The <see cref="IEventAggregator"/> that manages application events.</param>
-        public ColourMagnitudeChartViewPresenter(IChartView view, ICommandManager commands, IUseCaseFactory factory, IApplicationSettings settings, IMapper mapper, IEventAggregator events)
-            : base(view, commands, factory, settings, mapper, events) 
+        public ColourMagnitudeChartViewPresenter(IChartView view, ICommandManager commands, IServiceRegistry services, IApplicationSettings settings, IEventAggregator events)
+            : base(view, commands, settings, events) 
         {
+            ArgumentNullException.ThrowIfNull(services, nameof(useCases));
+
+            useCases = services.GetService<IChartUseCaseService>();
+
             View.Attach(this);
-            
-            if (log.IsDebugEnabled) log.Debug(string.Format(Resources.InstanceCreated, nameof(ColourMagnitudeChartViewPresenter)));
         }
 
         /// <summary>
-        /// Gets the name of the controller.
+        /// The finaliser will only called if the <see cref="Dispose"/> method has not been called.
         /// </summary>
-        public override string Name => Controllers.ChartController;
+        ~ColourMagnitudeChartViewPresenter()
+        {
+            Dispose(false);
+        }
 
         /// <summary>
-        /// Activates the view.
+        /// Releases all resources used by the <see cref="ColourMagnitudeChartViewPresenter"/> object.
         /// </summary>
-        public void Activate()
+        public override void Dispose()
         {
-            // Do Nothing
+            Dispose(true);
+
+            GC.SuppressFinalize(this);
         }
 
         /// <summary>
@@ -53,18 +60,19 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// <param name="controller">The <see cref="IApplicationController"/>.</param>
         public override void Initialise(IApplicationController controller)
         {
-            if (!Initialised)
-            {
-                base.Initialise(controller);
+            if (Initialised) throw new InvalidOperationException(string.Format(Resources.AlreadyInitialised, nameof(ColourMagnitudeChartViewPresenter)));
 
-                View.Initialise(controller);
+            base.Initialise(controller);
 
-                //View.MinimumSize = new Size(200, 200);
-            }
+            View.Initialise();
+
+            //View.MinimumSize = new Size(200, 200);
+
+            log.Debug(string.Format(LogEntries.Initialised, $"{nameof(ColourMagnitudeChartViewPresenter)}({View.Name})"));
         }
 
         /// <summary>
-        /// Updates the view with the new <see cref="IChart"/> definition following a change to the document or workspace. This will replace the current chart definition.
+        /// Updates the chart following a change to the document or workspace.
         /// </summary>
         /// <param name="chart">An <see cref="IChart"/> that specifies the state of the chart.</param>
         public void UpdateChart(IChart chart)
@@ -75,22 +83,32 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// Updates the view with the preview chart definition. This does not replace the current chart definition.
+        /// Applies the new chart settings to the preview.
         /// </summary>
         /// <param name="dto">A <see cref="ChartDTO"/> that specifies the state of the chart.</param>
-        public void UpdateChart(ChartDTO dto)
+        public void UpdatePreview(ChartDTO dto)
         {
             View.UpdateChart(new Chart(dto));
         }
 
         /// <summary>
-        /// Updates the view with the current chart definition. This will revert any preview changes.
+        /// Reverts the preview to the old chart settings.
         /// </summary>
-        public void UpdateChart()
+        public void UpdatePreview()
         {
-            Debug.Assert(chart != null);
+            if(chart != null) View.UpdateChart(chart);
+        }
 
-            View.UpdateChart(chart);
+        /// <summary>
+        /// Releases any resources used by the <see cref="ColourMagnitudeChartViewPresenter"/> object.
+        /// </summary>
+        /// <param name="disposing">true if managed resources can be disposed of; false otherwise.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                View.Detach();
+            }
         }
     }
 }

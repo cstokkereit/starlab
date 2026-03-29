@@ -1,9 +1,8 @@
-﻿using AutoMapper;
-using log4net;
+﻿using log4net;
 using StarLab.Application;
 using StarLab.Application.Workspace;
 using StarLab.Presentation.Workspace.Documents;
-using StarLab.Shared.Properties;
+using StarLab.Shared.Resources;
 using Stratosoft.Commands;
 
 using ImageResources = StarLab.Presentation.Properties.Resources;
@@ -12,7 +11,7 @@ using StringResources = StarLab.Shared.Properties.Resources;
 namespace StarLab.Presentation.Workspace.WorkspaceExplorer
 {
     /// <summary>
-    /// Controls the behaviour of an <see cref="IWorkspaceExplorerView"/>.
+    /// Controls the behaviour of the workspace explorer tool.
     /// </summary>
     internal class WorkspaceExplorerViewPresenter : ChildViewPresenter<IWorkspaceExplorerView, IViewController>, IWorkspaceExplorerViewPresenter, IWorkspaceExplorerController, IWorkspaceOutputPort, ISubscriber<ActiveDocumentChangedEventArgs>, ISubscriber<WorkspaceChangedEventArgs>
     {
@@ -31,6 +30,8 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
 
         private readonly Dictionary<NodeImages, int> images = new Dictionary<NodeImages, int>(); // A dictionary that holds the node image indices.
 
+        private readonly IWorkspaceExplorerUseCaseService useCaseService; // A service that executes the use cases that implement the workspace explorer functionality.
+
         private string clipboard = string.Empty; // The key that identifies the current contents of the clipboard.
 
         private IWorkspace workspace; // The workspace that the view represents.
@@ -40,26 +41,27 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// </summary>
         /// <param name="view">The <see cref="IWorkspaceExplorerView"/> controlled by this presenter.</param>
         /// <param name="commands">An <see cref="ICommandManager"/> that is required for the creation of <see cref="ICommand">s.</param>
-        /// <param name="factory">An <see cref="IUseCaseFactory"/> that will be used to create use case interactors.</param>
+        /// <param name="services">An <see cref="IServiceRegistry"/> that provides access to the registered services.</param>
         /// <param name="settings">An <see cref="IApplicationSettings"/> that provides access to the application configuration.</param>
-        /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
         /// <param name="events">The <see cref="IEventAggregator"/> that manages application events.</param>
-        public WorkspaceExplorerViewPresenter(IWorkspaceExplorerView view, ICommandManager commands, IUseCaseFactory factory, IApplicationSettings settings, IMapper mapper, IEventAggregator events)
-            : base(view, commands, factory, settings, mapper, events)
+        public WorkspaceExplorerViewPresenter(IWorkspaceExplorerView view, ICommandManager commands, IServiceRegistry services, IApplicationSettings settings, IEventAggregator events)
+            : base(view, commands, settings, events)
         {
+            ArgumentNullException.ThrowIfNull(services, nameof(services));
+
+            useCaseService = services.GetService<IWorkspaceExplorerUseCaseService>();
+
             view.Attach(this);
 
             workspace = new EmptyWorkspace();
-
-            if (log.IsDebugEnabled) log.Debug(string.Format(Resources.InstanceCreated, nameof(WorkspaceExplorerViewPresenter)));
         }
 
         /// <summary>
-        /// Activates the view.
+        /// The finaliser will only called if the <see cref="Dispose"/> method has not been called.
         /// </summary>
-        public void Activate()
+        ~WorkspaceExplorerViewPresenter()
         {
-            // Do Nothing
+            Dispose(false);
         }
 
         /// <summary>
@@ -80,9 +82,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="key">The key that identifies the parent folder.</param>
         public void AddFolder(string key)
         {
-            var interactor = UseCaseFactory.CreateAddFolderUseCase(this);
-            var dto = Mapper.Map<WorkspaceDTO>(workspace);
-            interactor.Execute(dto, key);
+            useCaseService.AddFolder(workspace, key);
         }
 
         /// <summary>
@@ -129,9 +129,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="key">The key that identifies the document or folder to be copied.</param>
         public void Copy(string key)
         {
-            var interactor = UseCaseFactory.CreateUseCase(this, ClipboardOperations.Copy);
-            var dto = Mapper.Map<WorkspaceDTO>(workspace);
-            interactor.Execute(dto, key);
+            useCaseService.Copy(workspace, key);
         }
 
         /// <summary>
@@ -141,12 +139,12 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="manager">The context menu manager.</param>
         public void CreateDocumentContextMenu(string id, IMenuManager manager)
         {
-            manager.AddMenuItem(Constants.Open, StringResources.Open, ImageResources.Open, GetCommand(Actions.OpenDocument, id));
+            manager.AddMenuItem(Constants.Open, StringResources.Open, ImageResources.Open, CreateCommand(Actions.OpenDocument, () => OpenDocument(id)));
             manager.AddMenuSeparator();
-            manager.AddMenuItem(Constants.Cut, StringResources.Cut, ImageResources.Cut, GetCommand(Actions.Cut, id));
-            manager.AddMenuItem(Constants.Copy, StringResources.Copy, ImageResources.Copy, GetCommand(Actions.Copy, id));
-            manager.AddMenuItem(Constants.Delete, StringResources.Delete, GetCommand(Actions.DeleteDocument, id));
-            manager.AddMenuItem(Constants.Rename, StringResources.Rename, ImageResources.Rename, GetCommand(Actions.Rename, id));
+            manager.AddMenuItem(Constants.Cut, StringResources.Cut, ImageResources.Cut, CreateCommand(Actions.Cut, () => Cut(id)));
+            manager.AddMenuItem(Constants.Copy, StringResources.Copy, ImageResources.Copy, CreateCommand(Actions.Copy, () => Copy(id)));
+            manager.AddMenuItem(Constants.Delete, StringResources.Delete, CreateCommand(Actions.DeleteDocument, () => DeleteDocument(id)));
+            manager.AddMenuItem(Constants.Rename, StringResources.Rename, ImageResources.Rename, CreateCommand(Actions.Rename, () => Rename(id)));
         }
 
         /// <summary>
@@ -157,17 +155,17 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         public void CreateFolderContextMenu(string folder, IMenuManager manager)
         {
             manager.AddMenuItem(Constants.Add, StringResources.Add);
-            manager.AddMenuItem(Constants.Add, Constants.AddChart, StringResources.Chart + Constants.Ellipsis, GetCommand(Actions.AddChart, folder));
-            manager.AddMenuItem(Constants.Add, Constants.AddTable, StringResources.Table + Constants.Ellipsis, GetCommand(Actions.AddTable, folder));
-            manager.AddMenuItem(Constants.Add, Constants.AddFolder, StringResources.NewFolder, ImageResources.NewFolder, GetCommand(Actions.AddFolder, folder));
+            manager.AddMenuItem(Constants.Add, Constants.AddChart, StringResources.Chart + Constants.Ellipsis, CreateCommand(Actions.AddChart, () => AddChart(folder)));
+            //manager.AddMenuItem(Constants.Add, Constants.AddTable, StringResources.Table + Constants.Ellipsis, CreateCommand(Actions.AddTable, () => AddTable(folder)));
+            manager.AddMenuItem(Constants.Add, Constants.AddFolder, StringResources.NewFolder, ImageResources.NewFolder, CreateCommand(Actions.AddFolder, () => AddFolder(folder)));
             manager.AddMenuSeparator();
-            manager.AddMenuItem(Constants.CollapseAll, StringResources.CollapseAllDescendants, ImageResources.Collapse, GetCommand(Actions.Collapse, folder));
+            manager.AddMenuItem(Constants.CollapseAll, StringResources.CollapseAllDescendants, ImageResources.Collapse, CreateCommand(Actions.CollapseFolder, () => Collapse(folder)));
             manager.AddMenuSeparator();
-            manager.AddMenuItem(Constants.Cut, StringResources.Cut, ImageResources.Cut, GetCommand(Actions.Cut, folder));
-            manager.AddMenuItem(Constants.Copy, StringResources.Copy, ImageResources.Copy, GetCommand(Actions.Copy, folder));
-            manager.AddMenuItem(Constants.Paste, StringResources.Paste, ImageResources.Paste, GetCommand(Actions.Paste, folder));
-            manager.AddMenuItem(Constants.Delete, StringResources.Delete, GetCommand(Actions.DeleteFolder, folder));
-            manager.AddMenuItem(Constants.Rename, StringResources.Rename, ImageResources.Rename, GetCommand(Actions.Rename, folder));
+            manager.AddMenuItem(Constants.Cut, StringResources.Cut, ImageResources.Cut, CreateCommand(Actions.Cut, () => Cut(folder)));
+            manager.AddMenuItem(Constants.Copy, StringResources.Copy, ImageResources.Copy, CreateCommand(Actions.Copy, () => Copy(folder)));
+            manager.AddMenuItem(Constants.Paste, StringResources.Paste, ImageResources.Paste, CreateCommand(Actions.Paste, () => Paste(folder)));
+            manager.AddMenuItem(Constants.Delete, StringResources.Delete, CreateCommand(Actions.DeleteFolder, () => DeleteFolder(folder)));
+            manager.AddMenuItem(Constants.Rename, StringResources.Rename, ImageResources.Rename, CreateCommand(Actions.Rename, () => RenameFolder(folder)));
 
             UpdateCommandState(Actions.Paste, folder, !string.IsNullOrEmpty(clipboard));
         }
@@ -180,16 +178,16 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         public void CreateProjectContextMenu(string project, IMenuManager manager)
         {
             manager.AddMenuItem(Constants.Add, StringResources.Add);
-            manager.AddMenuItem(Constants.Add, Constants.AddChart, StringResources.Chart + Constants.Ellipsis, GetCommand(Actions.AddChart, project));
-            manager.AddMenuItem(Constants.Add, Constants.AddTable, StringResources.Table + Constants.Ellipsis, GetCommand(Actions.AddTable, project));
-            manager.AddMenuItem(Constants.Add, Constants.AddFolder, StringResources.NewFolder, ImageResources.NewFolder, GetCommand(Actions.AddFolder, project));
+            manager.AddMenuItem(Constants.Add, Constants.AddChart, StringResources.Chart + Constants.Ellipsis, CreateCommand(Actions.AddChart, () => AddChart(project)));
+            //manager.AddMenuItem(Constants.Add, Constants.AddTable, StringResources.Table + Constants.Ellipsis, CreateCommand(Actions.AddTable, () => AddTable(project)));
+            manager.AddMenuItem(Constants.Add, Constants.AddFolder, StringResources.NewFolder, ImageResources.NewFolder, CreateCommand(Actions.AddFolder, () => AddFolder(project)));
             manager.AddMenuSeparator();
-            manager.AddMenuItem(Constants.CollapseAll, StringResources.CollapseAllDescendants, ImageResources.Collapse, GetCommand(Actions.Collapse, project));
+            manager.AddMenuItem(Constants.CollapseAll, StringResources.CollapseAllDescendants, ImageResources.Collapse, CreateCommand(Actions.CollapseProject, () => Collapse(project)));
             manager.AddMenuSeparator();
             manager.AddMenuItem(Constants.Cut, StringResources.Cut, ImageResources.Cut);
-            manager.AddMenuItem(Constants.Paste, StringResources.Paste, ImageResources.Paste, GetCommand(Actions.Paste, project));
-            manager.AddMenuItem(Constants.Delete, StringResources.Delete, GetCommand(Actions.DeleteFolder, project));
-            manager.AddMenuItem(Constants.Rename, StringResources.Rename, ImageResources.Rename, GetCommand(Actions.Rename, project));
+            manager.AddMenuItem(Constants.Paste, StringResources.Paste, ImageResources.Paste, CreateCommand(Actions.Paste, () => Paste(project)));
+            manager.AddMenuItem(Constants.Delete, StringResources.Delete, CreateCommand(Actions.DeleteFolder, () => DeleteFolder(project)));
+            manager.AddMenuItem(Constants.Rename, StringResources.Rename, ImageResources.Rename, CreateCommand(Actions.Rename, () => RenameFolder(project)));
 
             UpdateCommandState(Actions.Paste, project, !string.IsNullOrEmpty(clipboard));
         }
@@ -200,12 +198,12 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="manager">The context menu manager.</param>
         public void CreateWorkspaceContextMenu(IMenuManager manager)
         {
-            manager.AddMenuItem(Constants.CollapseAll, StringResources.CollapseAllDescendants, ImageResources.Collapse, GetCommand(Actions.Collapse, Constants.Workspace));
+            manager.AddMenuItem(Constants.CollapseAll, StringResources.CollapseAllDescendants, ImageResources.Collapse, CreateCommand(Actions.CollapseWorkspace, () => Collapse(Constants.Workspace)));
             manager.AddMenuSeparator();
             manager.AddMenuItem(Constants.Add, StringResources.Add);
-            manager.AddMenuItem(Constants.Add, Constants.AddProject, StringResources.Project + Constants.Ellipsis, GetCommand(Actions.AddProject));
+            //manager.AddMenuItem(Constants.Add, Constants.AddProject, StringResources.Project + Constants.Ellipsis, CreateCommand(Actions.AddProject, AppController.ShowAddProject));
             manager.AddMenuSeparator();
-            manager.AddMenuItem(Constants.Rename, StringResources.Rename, ImageResources.Rename, GetCommand(Actions.Rename, Constants.Workspace));
+            manager.AddMenuItem(Constants.Rename, StringResources.Rename, ImageResources.Rename, CreateCommand(Actions.Rename, () => Rename(Constants.Workspace)));
         }
 
         /// <summary>
@@ -214,9 +212,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="key">The key that identifies the document or folder to be cut.</param>
         public void Cut(string key)
         {
-            var interactor = UseCaseFactory.CreateUseCase(this, ClipboardOperations.Cut);
-            var dto = Mapper.Map<WorkspaceDTO>(workspace);
-            interactor.Execute(dto, key);
+            useCaseService.Cut(workspace, key);
         }
 
         /// <summary>
@@ -225,9 +221,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="id">The ID of the document to be deleted.</param>
         public void DeleteDocument(string id)
         {
-            var interactor = UseCaseFactory.CreateDeleteDocumentUseCase(this);
-            var dto = Mapper.Map<WorkspaceDTO>(workspace);
-            interactor.Execute(dto, id);
+            useCaseService.DeleteDocument(workspace, id);
         }
 
         /// <summary>
@@ -236,9 +230,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="key">The key that identifies the folder to be deleted.</param>
         public void DeleteFolder(string key)
         {
-            var interactor = UseCaseFactory.CreateDeleteFolderUseCase(this);
-            var dto = Mapper.Map<WorkspaceDTO>(workspace);
-            interactor.Execute(dto, key);
+            useCaseService.DeleteFolder(workspace, key);
         }
 
         /// <summary>
@@ -247,9 +239,17 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="key">The key that identifies the project to be deleted.</param>
         public void DeleteProject(string key)
         {
-            var interactor = UseCaseFactory.CreateDeleteFolderUseCase(this);
-            var dto = Mapper.Map<WorkspaceDTO>(workspace);
-            interactor.Execute(dto, key);
+            useCaseService.DeleteFolder(workspace, key);
+        }
+
+        /// <summary>
+        /// Releases all resources used by the <see cref="WorkspaceExplorerViewPresenter"/> object.
+        /// </summary>
+        public override void Dispose()
+        {
+            Dispose(true);
+
+            GC.SuppressFinalize(this);
         }
 
         /// <summary>
@@ -276,13 +276,14 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="controller">The <see cref="IApplicationController"/>.</param>
         public override void Initialise(IApplicationController controller)
         {
-            if (!Initialised)
-            {
-                base.Initialise(controller);
+            if (Initialised) throw new InvalidOperationException(string.Format(StringResources.AlreadyInitialised, nameof(WorkspaceExplorerViewPresenter)));
+            
+            base.Initialise(controller);
 
-                AddImages();
-                CreateToolbar();
-            }
+            AddImages();
+            CreateToolbar();
+            
+            log.Debug(string.Format(LogEntries.Initialised, nameof(WorkspaceExplorerViewPresenter)));
         }
 
         /// <summary>
@@ -309,9 +310,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="key">The node key.</param>
         public void OpenDocument(string key)
         {
-            var document = workspace.GetDocument(key);
-            var view = AppController.GetView(document);
-            AppController.Show(view);
+            AppController.ShowDocument(workspace.GetDocument(key));
         }
 
         /// <summary>
@@ -320,9 +319,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="key">The key that identifies the destination for the document or folder.</param>
         public void Paste(string key)
         {
-            var interactor = UseCaseFactory.CreateUseCase(this, ClipboardOperations.Paste);
-            var dto = Mapper.Map<WorkspaceDTO>(workspace);
-            interactor.Execute(dto, key);
+            useCaseService.Paste(workspace, key);
         }
 
         /// <summary>
@@ -367,9 +364,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="name">The new name.</param>
         public void RenameDocument(string key, string name)
         {
-            var interactor = UseCaseFactory.CreateRenameDocumentUseCase(this);
-            var dto = Mapper.Map<WorkspaceDTO>(workspace);
-            interactor.Execute(dto, key, name);
+            useCaseService.RenameDocument(workspace, key, name);
         }
 
         /// <summary>
@@ -379,9 +374,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="name">The new name.</param>
         public void RenameFolder(string key, string name)
         {
-            var interactor = UseCaseFactory.CreateRenameFolderUseCase(this);
-            var dto = Mapper.Map<WorkspaceDTO>(workspace);
-            interactor.Execute(dto, key, name);
+            useCaseService.RenameFolder(workspace, key, name);
         }
 
         /// <summary>
@@ -401,9 +394,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="name">The new name.</param>
         public void RenameWorkspace(string name)
         {
-            var interactor = UseCaseFactory.CreateRenameWorkspaceUseCase(this);
-            var dto = Mapper.Map<WorkspaceDTO>(workspace);
-            interactor.Execute(dto, name);
+            useCaseService.RenameWorkspace(workspace, name);
         }
 
         /// <summary>
@@ -439,7 +430,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="id">The ID of the document that was modified.</param>
         public void UpdateDocument(WorkspaceDTO dto, string id)
         {
-            if (AppController.GetController(Controllers.ApplicationViewController) is IApplicationOutputPort port) port.UpdateDocument(dto, id);
+            AppController.GetOutputPort<IApplicationOutputPort>().UpdateDocument(dto, id);
         }
 
         /// <summary>
@@ -448,7 +439,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="dto">The <see cref="WorkspaceDTO"/> that contains the updated workspace state.</param>
         public void UpdateWorkspace(WorkspaceDTO dto)
         {
-            if (AppController.GetController(Controllers.ApplicationViewController) is IApplicationOutputPort port) port.UpdateWorkspace(dto);
+            AppController.GetOutputPort<IApplicationOutputPort>().UpdateWorkspace(dto);
         }
 
         /// <summary>
@@ -465,6 +456,18 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         public void WorkspaceExpanded()
         {
             workspace.Expand();
+        }
+
+        /// <summary>
+        /// Releases any resources used by the <see cref="WorkspaceExplorerViewPresenter"/> object.
+        /// </summary>
+        /// <param name="disposing">true if managed resources can be disposed of; false otherwise.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                View.Detach();
+            }
         }
 
         /// <summary>
@@ -516,8 +519,8 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// </summary>
         private void CreateToolbar()
         {
-            View.AddToolbarButton(Constants.Synchronise, StringResources.SyncWithActiveDocument, ImageResources.Synchronise, GetCommand(Actions.Synchronise));
-            View.AddToolbarButton(Constants.CollapseAll, StringResources.CollapseAll, ImageResources.CollapseAll, GetCommand(Actions.Collapse, Constants.Workspace));
+            View.AddToolbarButton(Constants.Synchronise, StringResources.SyncWithActiveDocument, ImageResources.Synchronise, CreateCommand(Actions.Synchronise, Synchronise));
+            View.AddToolbarButton(Constants.CollapseAll, StringResources.CollapseAll, ImageResources.CollapseAll, CreateCommand(Actions.CollapseWorkspace, () => Collapse(Constants.Workspace)));
         }
 
         /// <summary>
@@ -630,7 +633,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
                 enabled = true;
             }
 
-            UpdateCommandState(Actions.Collapse, Constants.Workspace, enabled);
+            UpdateCommandState(Actions.CollapseWorkspace, enabled);
         }
     }
 }

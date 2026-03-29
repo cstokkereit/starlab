@@ -2,6 +2,7 @@
 using StarLab.Presentation;
 using StarLab.Presentation.Workspace.Documents;
 using StarLab.Shared.Properties;
+using StarLab.Shared.Resources;
 using Stratosoft.Commands;
 using System.ComponentModel;
 
@@ -27,9 +28,9 @@ namespace StarLab.UI.Workspace.Documents
         }
 
         /// <summary>
-        /// Gets the <see cref="IChildViewController"> that controls this view.
+        /// Gets the view ID.
         /// </summary>
-        public IChildViewController? Controller => (IChildViewController?)presenter;
+        public string ID => Name;
 
         /// <summary>
         /// Gets the preferred panel, if any, in which to display the view.
@@ -77,8 +78,6 @@ namespace StarLab.UI.Workspace.Documents
             listDocumentTypes.Columns[0].Width = listDocumentTypes.Width;
 
             listDocumentTypes.View = View.Details;
-
-            if (log.IsDebugEnabled) log.Debug(string.Format(Resources.InstanceCreated, nameof(AddDocumentView)));
         }
 
         /// <summary>
@@ -100,6 +99,21 @@ namespace StarLab.UI.Workspace.Documents
             if (this.presenter != null) throw new InvalidOperationException(Resources.PresenterAlreadyAttached);
 
             this.presenter = (IAddDocumentViewPresenter)presenter;
+        }
+
+        /// <summary>
+        /// Detaches the presenter that controls the view.
+        /// </summary>
+        public void Detach()
+        {
+            if (presenter != null)
+            {
+                var entry = $"{presenter.GetType().Name}({Name})";
+
+                presenter = null;
+
+                log.Debug(string.Format(LogEntries.PresenterDetached, entry));
+            }
         }
 
         /// <summary>
@@ -129,8 +143,7 @@ namespace StarLab.UI.Workspace.Documents
         /// <summary>
         /// Initialises the view.
         /// </summary>
-        /// <param name="controller">The <see cref="IApplicationController"/>.</param>
-        public void Initialise(IApplicationController controller)
+        public void Initialise()
         {
             // Do Nothing
         }

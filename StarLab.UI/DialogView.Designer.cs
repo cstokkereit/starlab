@@ -17,6 +17,7 @@
             {
                 components.Dispose();
             }
+
             base.Dispose(disposing);
         }
 
@@ -30,14 +31,15 @@
         {
             SuspendLayout();
             // 
-            // View
+            // DialogView
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
-            Name = "View";
+            Name = "DialogView";
             StartPosition = FormStartPosition.CenterParent;
             Text = "View";
+            Activated += Form_Activated;
             FormClosing += Form_Closing;
             ResumeLayout(false);
         }

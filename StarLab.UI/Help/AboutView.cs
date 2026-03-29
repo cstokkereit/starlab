@@ -2,6 +2,7 @@
 using StarLab.Presentation;
 using StarLab.Presentation.Help;
 using StarLab.Shared.Properties;
+using StarLab.Shared.Resources;
 
 namespace StarLab.UI.Help
 {
@@ -21,15 +22,13 @@ namespace StarLab.UI.Help
         {
             InitializeComponent();
 
-            Name = Views.About;
-
-            if (log.IsDebugEnabled) log.Debug(string.Format(Resources.InstanceCreated, nameof(AboutView)));
+            Name = ID;
         }
 
         /// <summary>
-        /// Gets the <see cref="IChildViewController"> that controls this view.
+        /// Gets the view ID.
         /// </summary>
-        public IChildViewController? Controller => (IChildViewController?)presenter;
+        public string ID => Views.About;
 
         /// <summary>
         /// Gets the panel that will contain the view.
@@ -37,21 +36,37 @@ namespace StarLab.UI.Help
         public SplitViewPanels Panel => SplitViewPanels.Any;
 
         /// <summary>
-        /// Attaches the <see cref="IPresenter"/> that controls the view.
+        /// Attaches the <see cref="IChildViewPresenter"/> that controls the view.
         /// </summary>
-        /// <param name="presenter">The <see cref="IPresenter"/> that controls the view.</param>
+        /// <param name="presenter">The <see cref="IChildViewPresenter"/> that controls the view.</param>
         public void Attach(IChildViewPresenter presenter)
         {
             if (this.presenter != null) throw new InvalidOperationException(Resources.PresenterAlreadyAttached);
 
             this.presenter = (IAboutViewPresenter)presenter;
+
+            log.Debug(string.Format(LogEntries.PresenterAttached, $"{presenter.GetType().Name}({Name})"));
+        }
+
+        /// <summary>
+        /// Detaches the presenter that controls the view.
+        /// </summary>
+        public void Detach()
+        {
+            if (presenter != null)
+            {
+                var entry = $"{presenter.GetType().Name}({Name})";
+
+                presenter = null;
+
+                log.Debug(string.Format(LogEntries.PresenterDetached, entry));
+            }
         }
 
         /// <summary>
         /// Initialises the view.
         /// </summary>
-        /// <param name="controller">The <see cref="IApplicationController"/>.</param>
-        public void Initialise(IApplicationController controller)
+        public void Initialise()
         {
             throw new NotImplementedException(); 
         }

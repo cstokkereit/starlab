@@ -4,6 +4,7 @@ using ScottPlot.Plottables;
 using StarLab.Presentation;
 using StarLab.Presentation.Workspace.Documents.Charts;
 using StarLab.Shared.Properties;
+using StarLab.Shared.Resources;
 
 namespace StarLab.UI.Workspace.Documents.Charts
 {
@@ -40,8 +41,6 @@ namespace StarLab.UI.Workspace.Documents.Charts
 
             Name = Views.Chart;
 
-            if (log.IsDebugEnabled) log.Debug(string.Format(Resources.InstanceCreated, nameof(ChartView)));
-
 
 
             // TODO - This is all temporary - calculations etc need to happen in a worker thread
@@ -57,9 +56,9 @@ namespace StarLab.UI.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// Gets the <see cref="IChildViewController"> that controls this view.
+        /// Gets the view ID.
         /// </summary>
-        public IChildViewController? Controller => (IChildViewController?)presenter;
+        public string ID => Name;
 
         /// <summary>
         /// Gets the preferred panel, if any, in which to display the view.
@@ -75,13 +74,29 @@ namespace StarLab.UI.Workspace.Documents.Charts
             if (this.presenter != null) throw new InvalidOperationException(Resources.PresenterAlreadyAttached);
 
             this.presenter = (IChartViewPresenter)presenter;
+
+            log.Debug(string.Format(LogEntries.PresenterAttached, $"{presenter.GetType().Name}({Name})"));
+        }
+
+        /// <summary>
+        /// Detaches the presenter that controls the view.
+        /// </summary>
+        public void Detach()
+        {
+            if (presenter != null)
+            {
+                var entry = $"{presenter.GetType().Name}({Name})";
+
+                presenter = null;
+
+                log.Debug(string.Format(LogEntries.PresenterDetached, entry));
+            }
         }
 
         /// <summary>
         /// Initialises the view.
         /// </summary>
-        /// <param name="controller">The <see cref="IApplicationController"/>.</param>
-        public void Initialise(IApplicationController controller)
+        public void Initialise()
         {
             // This is all temporary
 

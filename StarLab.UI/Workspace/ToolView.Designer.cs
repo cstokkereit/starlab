@@ -38,6 +38,7 @@
             HideOnClose = true;
             Name = "ToolView";
             Text = "ToolView1";
+            Activated += Form_Activated;
             ResumeLayout(false);
         }
 

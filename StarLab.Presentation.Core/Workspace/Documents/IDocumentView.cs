@@ -6,17 +6,16 @@
     public interface IDocumentView : IDockableView, IToolbarManager
     {
         /// <summary>
-        /// Gets the specified <see cref="IChildViewController"/>.
-        /// </summary>
-        /// <param name="name">The name of the required controller.</param>
-        /// <returns>The required <see cref="IChildViewController"/>.</returns>
-        IChildViewController GetController(string name);
-
-        /// <summary>
         /// Hides the specified split content.
         /// </summary>
         /// <param name="name">The name of the content to be hidden.</param>
         void HideSplitContent(string name);
+
+        /// <summary>
+        /// Sets the view name.
+        /// </summary>
+        /// <param name="name">The new view name.</param>
+        void SetName(string name);
 
         /// <summary>
         /// Shows the specified split content.

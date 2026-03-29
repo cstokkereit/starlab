@@ -8,11 +8,6 @@ namespace StarLab.Presentation.Workspace.Documents
     public interface IDocument
     {
         /// <summary>
-        /// Gets the chart.
-        /// </summary>
-        IChart Chart { get; }
-
-        /// <summary>
         /// Gets the document name including the path.
         /// </summary>
         string FullName { get; }

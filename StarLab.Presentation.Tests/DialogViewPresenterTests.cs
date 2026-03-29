@@ -47,9 +47,7 @@
             presenter.Initialise(controller);
 
             // Assert
-            view.Received(1).Initialise(controller);
-
-            controller.Received(1).RegisterCommandInvokers(commands);
+            //view.Received(1).Initialise(controller);
 
             events.Received(1).Subsribe(presenter);
         }

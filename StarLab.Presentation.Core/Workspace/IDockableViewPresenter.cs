@@ -9,5 +9,10 @@
         /// Gets or sets the current location of the view.
         /// </summary>
         string Location { get; set; }
+
+        /// <summary>
+        /// Notifies the presenter that the view has been activated.
+        /// </summary>
+        void ViewActivated();
     }
 }

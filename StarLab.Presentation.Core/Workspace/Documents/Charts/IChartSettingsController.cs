@@ -18,7 +18,7 @@
         /// <summary>
         /// Updates the chart settings.
         /// </summary>
-        /// <param name="document">The <see cref="IDocument"/> that contains the chart.</param>
-        void UpdateSettings(IDocument document);
+        /// <param name="document">The <see cref="IChartDocument"/> that contains the chart.</param>
+        void UpdateSettings(IChartDocument document);
     }
 }

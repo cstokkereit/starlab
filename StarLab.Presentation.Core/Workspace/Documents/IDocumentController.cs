@@ -11,11 +11,11 @@
         void Close();
 
         /// <summary>
-        /// Gets the specified <see cref="IChildViewController"/> 
+        /// Gets the specified controller.
         /// </summary>
-        /// <param name="name">The name of the required controller.</param>
-        /// <returns>The required <see cref="IChildViewController"/>.</returns>
-        IChildViewController GetController(string name);
+        /// <typeparam name="TController">The type of the required controller.</typeparam>
+        /// <returns>The specified controller.</returns>
+        TController GetController<TController>();
 
         /// <summary>
         /// Hides the specified split content.

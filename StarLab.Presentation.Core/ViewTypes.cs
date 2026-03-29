@@ -6,10 +6,8 @@
     public enum ViewTypes
     {
         Application,
-        Content,
         Dialog, 
         Document,
-        MessageBox,
         Tool
     }
 }

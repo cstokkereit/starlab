@@ -1,6 +1,7 @@
 ﻿using StarLab.Application.Workspace;
 using StarLab.Application.Workspace.Documents;
 using StarLab.Presentation.Workspace.Documents;
+using StarLab.Presentation.Workspace.Documents.Charts;
 
 namespace StarLab.Presentation.Workspace
 {
@@ -132,7 +133,10 @@ namespace StarLab.Presentation.Workspace
         {
             foreach (var dto in dtos)
             {
-                documents.Add(new Document(dto));
+                if (dto.Chart != null)
+                {
+                    documents.Add(new ChartDocument(dto));
+                }
             }
         }
     }

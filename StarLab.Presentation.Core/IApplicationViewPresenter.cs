@@ -1,11 +1,12 @@
 ﻿using StarLab.Presentation.Workspace;
+using System.ComponentModel;
 
 namespace StarLab.Presentation
 {
     /// <summary>
     /// Defines the methods used by the <see cref="IApplicationView"/> to communicate with its presenter.
     /// </summary>
-    public interface IApplicationViewPresenter : IDialogViewPresenter
+    public interface IApplicationViewPresenter : IPresenter
     {
         /// <summary>
         /// Clears the active document.
@@ -24,5 +25,16 @@ namespace StarLab.Presentation
         /// </summary>
         /// <param name="id">The ID of the document.</param>
         void SetActiveDocument(string id);
+
+        /// <summary>
+        /// Notifies the presenter that the view has been activated.
+        /// </summary>
+        void ViewActivated();
+
+        /// <summary>
+        /// Notifies the presenter that the view is being closed.
+        /// </summary>
+        /// <param name="e">The <see cref="CancelEventArgs"/> that can be used to determine the reasons that the view is closing and, if necessary, cancel it.</param>
+        void ViewClosing(CancelEventArgs e);
     }
 }

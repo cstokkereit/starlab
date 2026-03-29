@@ -1,45 +1,43 @@
-﻿using AutoMapper;
-using log4net;
-using StarLab.Application;
+﻿using log4net;
 using StarLab.Application.Workspace;
 using StarLab.Application.Workspace.Documents;
 using Stratosoft.Commands;
 
 using ImageResources = StarLab.Presentation.Properties.Resources;
-using StringResources = StarLab.Shared.Properties.Resources;
 
 namespace StarLab.Presentation.Workspace.Documents
 {
     /// <summary>
     /// Controls the behaviour of an <see cref="IAddDocumentView"/>.
     /// </summary>
-    public class AddDocumentViewPresenter : ChildViewPresenter<IAddDocumentView, IDialogController>, IAddDocumentViewPresenter, IChildViewController, IAddDocumentOutputPort
+    public class AddDocumentViewPresenter : ChildViewPresenter<IAddDocumentView, IViewController>, IAddDocumentViewPresenter, IChildViewController, IAddDocumentOutputPort
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(AddDocumentViewPresenter)); // The logger that will be used for writing log messages.
+
+        private readonly IAddDocumentUseCaseService useCases; // A facade that aggregates the available use cases.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="AddDocumentViewPresenter"/> class.
         /// </summary>
         /// <param name="view">The <see cref="IAddDocumentView"/> controlled by this presenter.</param>
         /// <param name="commands">An <see cref="ICommandManager"/> that is required for the creation of <see cref="ICommand">s.</param>
-        /// <param name="factory">An <see cref="IUseCaseFactory"/> that will be used to create use case interactors.</param>
+        /// <param name="useCases">An <see cref="IAddDocumentUseCaseService"/> that will be used to execute the use cases.</param>
         /// <param name="settings">An <see cref="IApplicationSettings"/> that provides access to the application configuration.</param>
-        /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
         /// <param name="events">The <see cref="IEventAggregator"/> that manages application events.</param>
-        public AddDocumentViewPresenter(IAddDocumentView view, ICommandManager commands, IUseCaseFactory factory, IApplicationSettings settings, IMapper mapper, IEventAggregator events)
-            : base(view, commands, factory, settings, mapper, events) 
+        public AddDocumentViewPresenter(IAddDocumentView view, ICommandManager commands, IAddDocumentUseCaseService useCases, IApplicationSettings settings, IEventAggregator events)
+            : base(view, commands, settings, events) 
         {
-            View.Attach(this);
+            this.useCases = useCases ?? throw new ArgumentNullException(nameof(useCases));
 
-            if (log.IsDebugEnabled) log.Debug(string.Format(StringResources.InstanceCreated, nameof(AddDocumentViewPresenter)));
+            view.Attach(this);
         }
 
         /// <summary>
-        /// Activates the view.
+        /// The finaliser will only called if the <see cref="Dispose"/> method has not been called.
         /// </summary>
-        public void Activate()
+        ~AddDocumentViewPresenter()
         {
-            // Do Nothing
+            Dispose(false);
         }
 
         /// <summary>
@@ -47,19 +45,19 @@ namespace StarLab.Presentation.Workspace.Documents
         /// </summary>
         public void AddDocument()
         {
-            if (InteractionContext is AddDocumentInteractionContext context)
-            {
-                var document = new DocumentDTO
-                {
-                    Name = View.DocumentName,
-                    Path = context.Path,
-                    View = View.DocumentType
-                };
+            //if (InteractionContext is AddDocumentInteractionContext context)
+            //{
+            //    var document = new DocumentDTO
+            //    {
+            //        Name = View.DocumentName,
+            //        Path = context.Path,
+            //        View = View.DocumentType
+            //    };
 
-                var interactor = UseCaseFactory.CreateAddDocumentUseCase(this);
+            //    var interactor = UseCaseFactory.CreateAddDocumentUseCase(this);
 
-                interactor.Execute(Mapper.Map<WorkspaceDTO>(context.Workspace), document);
-            }
+            //    interactor.Execute(Mapper.Map<WorkspaceDTO>(context.Workspace), document);
+            //}
         }
 
         /// <summary>
@@ -67,7 +65,17 @@ namespace StarLab.Presentation.Workspace.Documents
         /// </summary>
         public void Cancel()
         {
-            ParentController.Close();
+            //ParentController.Close();
+        }
+
+        /// <summary>
+        /// Releases all resources used by the <see cref="AddDocumentViewPresenter"/> object.
+        /// </summary>
+        public override void Dispose()
+        {
+            Dispose(true);
+
+            GC.SuppressFinalize(this);
         }
 
         /// <summary>
@@ -94,20 +102,7 @@ namespace StarLab.Presentation.Workspace.Documents
         /// <param name="id">The document ID.</param>
         public void OpenDocument(string id)
         {
-            if (AppController.GetController(Controllers.ApplicationViewController) is IApplicationOutputPort port) port.OpenDocument(id);
-        }
-
-        /// <summary>
-        /// Runs the controller as part of a use case.
-        /// </summary>
-        /// <param name="context"></param> TODO - This may not be necessary
-        public override void Run(IInteractionContext context)
-        {
-            base.Run(context);
-
-            View.DocumentName = string.Empty;
-
-            ParentController.Show();
+            //if (AppController.GetController(Controllers.ApplicationViewController) is IApplicationOutputPort port) port.OpenDocument(id);
         }
 
         /// <summary>
@@ -116,9 +111,21 @@ namespace StarLab.Presentation.Workspace.Documents
         /// <param name="dto">The <see cref="WorkspaceDTO"/> that contains the updated workspace state.</param>
         public void UpdateWorkspace(WorkspaceDTO dto)
         {
-            if (AppController.GetController(Controllers.ApplicationViewController) is IApplicationOutputPort port) port.UpdateWorkspace(dto);
+            //if (AppController.GetController(Controllers.ApplicationViewController) is IApplicationOutputPort port) port.UpdateWorkspace(dto);
 
-            ParentController.Close();
+            //ParentController.Close();
+        }
+
+        /// <summary>
+        /// Releases any resources used by the <see cref="AddDocumentViewPresenter"/> object.
+        /// </summary>
+        /// <param name="disposing">true if managed resources can be disposed of; false otherwise.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                View.Detach();
+            }
         }
 
         /// <summary>

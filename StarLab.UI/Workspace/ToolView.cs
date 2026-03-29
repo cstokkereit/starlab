@@ -1,7 +1,9 @@
 ﻿using log4net;
+using StarLab.Application;
 using StarLab.Presentation;
 using StarLab.Presentation.Workspace;
 using StarLab.Shared.Properties;
+using StarLab.Shared.Resources;
 using System.Diagnostics;
 using WeifenLuo.WinFormsUI.Docking;
 
@@ -14,9 +16,7 @@ namespace StarLab.UI.Workspace
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(ToolView)); // The logger that will be used for writing log messages.
 
-        private readonly string id; // The view ID.
-
-        private IChildView? childView; // A view that implements the tool specific behaviour.
+        private IChildView childView; // A view that implements the tool specific behaviour.
 
         private IDockableViewPresenter? presenter; // The presenter that controls the view.
 
@@ -25,34 +25,38 @@ namespace StarLab.UI.Workspace
         /// </summary>
         /// <param name="name">The name of the tool window.</param>
         /// <param name="text">The tool window text.</param>
-        /// <param name="definition">The <see cref="ViewDefinition"/> used to construct this view.</param>
+        /// <param name="childView">The <see cref="IChildView"/> used to construct this view.</param>
+        /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="ArgumentException"></exception>
-        public ToolView(string name, string text, ViewDefinition definition)
+        public ToolView(string name, string text, IChildView childView)
         {
-            ArgumentNullException.ThrowIfNull(definition, nameof(definition));
+            ArgumentNullException.ThrowIfNull(childView, nameof(childView));
             ArgumentException.ThrowIfNullOrEmpty(name, nameof(name));
             ArgumentException.ThrowIfNullOrEmpty(text, nameof(text));
 
-            Debug.Assert(definition.ChildViewDefinitions.Count == 1);
-
             InitializeComponent();
+
+            SuspendLayout();
+
+            if (childView is Control control)
+            {
+                control.Dock = DockStyle.Fill;
+                Controls.Add(control);
+            }
+
+            ResumeLayout();
+
+            this.childView = childView;
 
             Name = name;
             Text = text;
-            id = name;
-
-            if (log.IsDebugEnabled) log.Debug(string.Format(Resources.InstanceCreated, nameof(ToolView)));
+            ID = name;
         }
-
-        /// <summary>
-        /// Gets the <see cref="IViewController"/> that controls this view.
-        /// </summary>
-        public IViewController? Controller => (IViewController?)presenter;
 
         /// <summary>
         /// Gets the view ID.
         /// </summary>
-        public string ID => id;
+        public string ID { get; }
 
         /// <summary>
         /// Attaches the <see cref="IPresenter"/> that controls the view.
@@ -63,40 +67,8 @@ namespace StarLab.UI.Workspace
             if (this.presenter != null) throw new InvalidOperationException(Resources.PresenterAlreadyAttached);
 
             this.presenter = (IDockableViewPresenter)presenter;
-        }
 
-        /// <summary>
-        /// Attaches the <see cref="IChildView"/> to the view.
-        /// </summary>
-        /// <param name="childView">The <see cref="IChildView"/> to attach.</param>
-        public void Attach(IChildView childView)
-        {
-            ArgumentNullException.ThrowIfNull(childView, nameof(childView));
-
-            Debug.Assert(childView.Controller != null);
-
-            if (presenter is IViewController controller)
-            {
-                childView.Controller.RegisterController(controller);
-            }
-            
-            SuspendLayout();
-
-            if (childView is Control control)
-            {
-                control.Dock = DockStyle.Fill;
-                Controls.Add(control);
-            }
-            else
-            {
-                throw new ArgumentException(string.Format(Resources.ChildViewNotAControl, childView.GetType()));
-            }
-
-            ResumeLayout();
-
-            this.childView = childView;
-
-            if (log.IsDebugEnabled) log.Debug(string.Format(Resources.ViewAttached, childView.Name, nameof(ToolView)));
+            log.Debug(string.Format(LogEntries.PresenterAttached, $"{presenter.GetType().Name}({Name})"));
         }
 
         /// <summary>
@@ -104,19 +76,16 @@ namespace StarLab.UI.Workspace
         /// </summary>
         public void Detach()
         {
-            presenter = null;
-        }
+            childView.Detach();
 
-        /// <summary>
-        /// Initialises the view.
-        /// </summary>
-        /// <param name="controller">The <see cref="IApplicationController"/>.</param>
-        public void Initialise(IApplicationController controller)
-        {
-            Debug.Assert(childView != null);
-            Debug.Assert(childView.Controller != null);
+            if (presenter != null)
+            {
+                var entry = $"{presenter.GetType().Name}({Name})";
 
-            childView.Controller.Initialise(controller);
+                presenter = null;
+
+                log.Debug(string.Format(LogEntries.PresenterDetached, entry));
+            }
         }
 
         /// <summary>
@@ -144,6 +113,19 @@ namespace StarLab.UI.Workspace
         public void Show(IView view)
         {
             if (view is Form form) form.ShowDialog(this);
+        }
+
+        /// <summary>
+        /// Displays a message box with the specified caption, message, message type and available responses.
+        /// </summary>
+        /// <param name="caption">The message box caption.</param>
+        /// <param name="message">The message text.</param>
+        /// <param name="type">An <see cref="InteractionType"/> that specifies the type of message being displayed.</param>
+        /// <param name="responses">An <see cref="InteractionResponses"/> that specifies the available responses.</param>
+        /// <returns>An <see cref="InteractionResult"/> that identifies the chosen response.</returns>
+        public InteractionResult ShowMessage(string caption, string message, InteractionType type, InteractionResponses responses)
+        {
+            return DialogController.ShowMessage(this, caption, message, type, responses);
         }
 
         /// <summary>
@@ -175,7 +157,19 @@ namespace StarLab.UI.Workspace
         /// <returns>The view ID.</returns>
         protected override string GetPersistString()
         {
-            return ID;
+            return Name;
+        }
+
+        /// <summary>
+        /// Event handler for the <see cref="Form.Activated"/> event.
+        /// </summary>
+        /// <param name="sender">The <see cref="object"> that was the originator of the event.</param>
+        /// <param name="e">An <see cref="EventArgs"/> that provides context for the event.</param>
+        private void Form_Activated(object sender, EventArgs e)
+        {
+            Debug.Assert(presenter != null);
+
+            presenter.ViewActivated();
         }
     }
 }

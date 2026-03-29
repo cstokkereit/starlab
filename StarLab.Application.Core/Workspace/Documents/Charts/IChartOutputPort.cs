@@ -6,9 +6,9 @@
     public interface IChartOutputPort : IOutputPort
     {
         /// <summary>
-        /// Updates the view with the preview chart definition. This does not replace the current chart definition.
+        /// Applies the new chart settings to the preview.
         /// </summary>
         /// <param name="dto">A <see cref="ChartDTO"/> that specifies the state of the chart.</param>
-        void UpdateChart(ChartDTO dto);
+        void UpdatePreview(ChartDTO dto);
     }
 }

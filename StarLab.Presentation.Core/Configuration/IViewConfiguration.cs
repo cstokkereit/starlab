@@ -1,15 +1,10 @@
 ﻿namespace StarLab.Presentation.Configuration
 {
     /// <summary>
-    /// Represents the configuration for a view.
+    /// Represents the configuration for an <see cref="IView"/>.
     /// </summary>
     public interface IViewConfiguration
     {
-        /// <summary>
-        /// Gets an <see cref="IList{IChildViewConfiguration}"/> containing the configuration for the child views.
-        /// </summary>
-        IList<IChildViewConfiguration> ChildViews { get; }
-
         /// <summary>
         /// Gets the view name.
         /// </summary>
@@ -21,10 +16,15 @@
         ViewTypes Type { get; }
 
         /// <summary>
-        /// Gets the <see cref="IChildViewConfiguration"/> containing the configuration for the specified child view.
+        /// Gets an <see cref="IEnumerable{IChildViewConfiguration}"/> containing the available child view configurations.
         /// </summary>
-        /// <param name="name">The name of the child view.</param>
-        /// <returns>The <see cref="IChildViewConfiguration"/> for the specified child view.</returns>
+        IEnumerable<IChildViewConfiguration> ChildConfigurations { get; }
+
+        /// <summary>
+        /// Gets the specified <see cref="IChildViewConfiguration"/> instance.
+        /// </summary>
+        /// <param name="name">The name of the required <see cref="IChildViewConfiguration"/> instance.</param>
+        /// <returns>The specified <see cref="IChildViewConfiguration"/> instance.</returns>
         IChildViewConfiguration GetChildViewConfiguration(string name);
     }
 }

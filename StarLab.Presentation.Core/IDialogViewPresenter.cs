@@ -8,6 +8,11 @@ namespace StarLab.Presentation
     public interface IDialogViewPresenter : IPresenter
     {
         /// <summary>
+        /// Notifies the presenter that the view has been activated.
+        /// </summary>
+        void ViewActivated();
+
+        /// <summary>
         /// Notifies the presenter that the view is being closed.
         /// </summary>
         /// <param name="e">The <see cref="CancelEventArgs"/> that can be used to determine the reasons that the view is closing and, if necessary, cancel it.</param>

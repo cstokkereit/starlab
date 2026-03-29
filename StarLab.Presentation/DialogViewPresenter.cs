@@ -1,8 +1,7 @@
-﻿using AutoMapper;
-using log4net;
+﻿using log4net;
 using StarLab.Application;
-using StarLab.Presentation.Workspace.Documents;
 using StarLab.Shared.Properties;
+using StarLab.Shared.Resources;
 using Stratosoft.Commands;
 using System.ComponentModel;
 
@@ -11,31 +10,47 @@ namespace StarLab.Presentation
     /// <summary>
     /// Controls the behaviour of an <see cref="IDialogView"/>.
     /// </summary>
-    public class DialogViewPresenter : Presenter<IDialogView>, IDialogViewPresenter, IDialogController
+    public class DialogViewPresenter : Presenter<IDialogView>, IDialogViewPresenter, IViewController
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(DialogViewPresenter)); // The logger that will be used for writing log messages.
+
+        private readonly IChildViewController childController;
 
         /// <summary>
         /// Initialises a new instance of the <see cref="DialogViewPresenter"> class.
         /// </summary>
         /// <param name="view">The <see cref="IDialogView"/> controlled by this presenter.</param>
+        /// <param name="childController">The <see cref="IChildViewController"/> that controls the child view.</param>
         /// <param name="commands">An <see cref="ICommandManager"/> that is required for the creation of <see cref="ICommand">s.</param>
-        /// <param name="factory">An <see cref="IUseCaseFactory"/> that will be used to create use case interactors.</param>
         /// <param name="settings">An <see cref="IApplicationSettings"/> that provides access to the application configuration.</param>
-        /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
         /// <param name="events">The <see cref="IEventAggregator"/> that manages application events.</param>
-        public DialogViewPresenter(IDialogView view, ICommandManager commands, IUseCaseFactory factory, IApplicationSettings settings, IMapper mapper, IEventAggregator events)
-            : base(view, commands, factory, settings, mapper, events)
+        public DialogViewPresenter(IDialogView view, IChildViewController childController, ICommandManager commands, IApplicationSettings settings, IEventAggregator events)
+            : base(view, commands, settings, events)
         {
-            View.Attach(this);
+            this.childController = childController;
 
-            if (log.IsDebugEnabled) log.Debug(string.Format(Resources.InstanceCreated, nameof(DialogViewPresenter)));
+            ID = Controllers.GetControllerID(view);
+
+            View.Attach(this);
         }
+
+		/// <summary>
+		/// The finaliser will only called if the <see cref="Dispose"/> method has not been called.
+		/// </summary>
+		~DialogViewPresenter()
+        {
+            Dispose(false);
+        }
+
+        /// <summary>
+        /// Gets an <see cref="IEnumerable{IChildViewController}"/> containing the child controllers.
+        /// </summary>
+        public IEnumerable<IChildViewController> ChildControllers => [childController];
 
         /// <summary>
         /// Gets the name of the controller.
         /// </summary>
-        public override string Name => Controllers.GetViewControllerName(View.Name);
+        public override string ID { get; }
 
         /// <summary>
         /// Closes the dialog box.
@@ -46,19 +61,28 @@ namespace StarLab.Presentation
         }
 
         /// <summary>
+        /// Releases all resources used by the <see cref="DialogViewPresenter"/> object.
+        /// </summary>
+        public override void Dispose()
+        {
+            Dispose(true);
+
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
         /// Initialises the view.
         /// </summary>
         /// <param name="controller">The <see cref="IApplicationController"/>.</param>
         public override void Initialise(IApplicationController controller)
         {
-            if (!Initialised)
-            {
-                base.Initialise(controller);
+            if (Initialised) throw new InvalidOperationException(string.Format(Resources.AlreadyInitialised, nameof(DialogViewPresenter)));
 
-                View.Initialise(controller);
+            base.Initialise(controller);
 
-                View.HideOnClose = true;
-            }
+            childController.Initialise(controller);
+
+            log.Debug(string.Format(LogEntries.Initialised, $"{nameof(DialogViewPresenter)}({View.Name})"));
         }
 
         /// <summary>
@@ -71,11 +95,47 @@ namespace StarLab.Presentation
         }
 
         /// <summary>
-        /// Shows the dialog box.
+        /// Displays a <see cref="MessageBox"/> with the specified caption, message, message type and available responses.
         /// </summary>
-        public void Show()
+        /// <param name="caption">The message box caption.</param>
+        /// <param name="message">The message text.</param>
+        /// <param name="type">An <see cref="InteractionType"/> that specifies the type of message being displayed.</param>
+        /// <param name="responses">An <see cref="InteractionResponses"/> that specifies the available responses.</param>
+        /// <returns>An <see cref="InteractionResult"/> that identifies the chosen response.</returns>
+        public InteractionResult ShowMessage(string caption, string message, InteractionType type, InteractionResponses responses)
         {
-            AppController.Show(View);
+            return View.ShowMessage(caption, message, type, responses);
+        }
+
+        /// <summary>
+        /// Displays an <see cref="OpenFileDialog"/> with the specified owner and options.
+        /// </summary>
+        /// <param name="title">The dialog title.</param>
+        /// <param name="filter">The file name filter.</param>
+        /// <returns>The filename selected in the dialog.</returns>
+        public string ShowOpenFileDialog(string title, string filter)
+        {
+            return View.ShowOpenFileDialog(title, filter);
+        }
+
+        /// <summary>
+        /// Displays a save file dialog with the specified owner and options.
+        /// </summary>
+        /// <param name="title">The dialog title.</param>
+        /// <param name="filter">The file name filter.</param>
+        /// <param name="extension">The default file extension.</param>
+        /// <returns>The filename selected in the dialog.</returns>
+        public string ShowSaveFileDialog(string title, string filter, string extension)
+        {
+            return View.ShowSaveFileDialog(title, filter, extension);
+        }
+
+        /// <summary>
+        /// Notifies the presenter that the view has been activated.
+        /// </summary>
+        public void ViewActivated()
+        {
+            Events.Publish(new ActiveViewChangedEventArgs(View));
         }
 
         /// <summary>
@@ -85,6 +145,18 @@ namespace StarLab.Presentation
         public void ViewClosing(CancelEventArgs e)
         {
             throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Releases all resources used by the <see cref="DialogViewPresenter"/> object.
+        /// </summary>
+        /// <param name="disposing">true if managed resources can be disposed of; false otherwise.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                View.Detach();
+            }
         }
     }
 }

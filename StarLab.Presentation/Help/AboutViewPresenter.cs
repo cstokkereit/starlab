@@ -1,7 +1,6 @@
-﻿using AutoMapper;
-using log4net;
-using StarLab.Application;
+﻿using log4net;
 using StarLab.Shared.Properties;
+using StarLab.Shared.Resources;
 using Stratosoft.Commands;
 using System.Reflection;
 
@@ -10,9 +9,11 @@ namespace StarLab.Presentation.Help
     /// <summary>
     /// Controls the behaviour of an <see cref="IAboutView"/>.
     /// </summary>
-    internal class AboutViewPresenter : ChildViewPresenter<IAboutView, IDialogController>, IAboutViewPresenter, IChildViewController
+    internal class AboutViewPresenter : ChildViewPresenter<IAboutView, IViewController>, IAboutViewPresenter, IChildViewController
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(AboutViewPresenter)); // The logger that will be used for writing log messages.
+
+        //private readonly IAboutUseCaseService useCases; // 
 
         //private IDialogController parentController; // The controller that can be used to control the parent dialog box. TODO - probably not needed
 
@@ -21,24 +22,33 @@ namespace StarLab.Presentation.Help
         /// </summary>
         /// <param name="view">The <see cref="IAboutView"/> controlled by this presenter.</param>
         /// <param name="commands">An <see cref="ICommandManager"/> that is required for the creation of <see cref="ICommand">s.</param>
-        /// <param name="factory">An <see cref="IUseCaseFactory"/> that will be used to create use case interactors.</param>
+        /// <param name="services">An <see cref="IServiceRegistry"/> that provides access to the registered services.</param>
         /// <param name="settings">An <see cref="IApplicationSettings"/> that provides access to the application configuration.</param>
-        /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
         /// <param name="events">The <see cref="IEventAggregator"/> that manages application events.</param>
-        public AboutViewPresenter(IAboutView view, ICommandManager commands, IUseCaseFactory factory, IApplicationSettings settings, IMapper mapper, IEventAggregator events)
-            : base(view, commands, factory, settings, mapper, events)
+        public AboutViewPresenter(IAboutView view, ICommandManager commands, IServiceRegistry services, IApplicationSettings settings, IEventAggregator events)
+            : base(view, commands, settings, events)
         {
-            View.Attach(this);
+            ArgumentNullException.ThrowIfNull(services, nameof(services));
 
-            if (log.IsDebugEnabled) log.Debug(string.Format(Resources.InstanceCreated, nameof(AboutViewPresenter)));
+            View.Attach(this);
         }
 
         /// <summary>
-        /// Activates the view.
+        /// The finaliser will only called if the <see cref="Dispose"/> method has not been called.
         /// </summary>
-        public void Activate()
+        ~AboutViewPresenter()
         {
-            // Do Nothing
+            Dispose(false);
+        }
+
+        /// <summary>
+        /// Releases all resources used by the <see cref="AboutViewPresenter"/> object.
+        /// </summary>
+        public override void Dispose()
+        {
+            Dispose(true);
+
+            GC.SuppressFinalize(this);
         }
 
         /// <summary>
@@ -47,17 +57,18 @@ namespace StarLab.Presentation.Help
         /// <param name="controller">The <see cref="IApplicationController"/>.</param>
         public override void Initialise(IApplicationController controller)
         {
-            if (!Initialised)
-            {
-                base.Initialise(controller);
+            if (Initialised) throw new InvalidOperationException(string.Format(Resources.AlreadyInitialised, nameof(AboutViewPresenter)));
 
-                //View.SetCompanyName(Resources.CompanyName);
-                //View.SetCopyright(Resources.Copyright);
-                //View.SetDescription(Resources.ProductDescription);
-                //View.SetLogo("");
-                //View.SetProductName(Resources.StarLab);
-                //View.SetVersion(string.Format(Resources.Version, GetVersion()));
-            }
+            base.Initialise(controller);
+
+            //View.SetCompanyName(Resources.CompanyName);
+            //View.SetCopyright(Resources.Copyright);
+            //View.SetDescription(Resources.ProductDescription);
+            //View.SetLogo("");
+            //View.SetProductName(Resources.StarLab);
+            //View.SetVersion(string.Format(Resources.Version, GetVersion()));
+
+            log.Debug(string.Format(LogEntries.Initialised, nameof(AboutViewPresenter)));
         }
 
         //public override void Run(IDialogConfiguration config)
@@ -66,6 +77,18 @@ namespace StarLab.Presentation.Help
 
         //    ParentController.Show();
         //}
+
+        /// <summary>
+        /// Releases all resources used by the <see cref="AboutViewPresenter"/> object.
+        /// </summary>
+        /// <param name="disposing">true if managed resources can be disposed of; false otherwise.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                View.Detach();
+            }
+        }
 
         /// <summary>
         /// Gets the version information.

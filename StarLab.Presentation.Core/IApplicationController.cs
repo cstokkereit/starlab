@@ -1,6 +1,5 @@
 ﻿using StarLab.Application;
 using StarLab.Presentation.Workspace.Documents;
-using Stratosoft.Commands;
 
 namespace StarLab.Presentation
 {
@@ -10,83 +9,51 @@ namespace StarLab.Presentation
     public interface IApplicationController : IController
     {
         /// <summary>
-        /// Exits the application.
-        /// </summary>
-        void Exit();
-
-        /// <summary>
-        /// Creates the <see cref="ICommand"> specified by the controller, action and target provided.
-        /// </summary>
-        /// <param name="commands">An instance of <see cref="ICommandManager"/> that is required for the creation of the command.</param>
-        /// <param name="controller">The <see cref="IController"/> that contains the method that will be invoked by the <see cref="ICommand"/> when the <see cref="ICommand.Execute"/> method is called.</param>
-        /// <param name="action">The action to be performed when the <see cref="ICommand.Execute"/> method is called.</param>
-        /// <param name="target">The target for the action.</param>
-        /// <returns>An instance of <see cref="ICommand"> that can be used to invoke the specified action.</returns>
-        ICommand CreateCommand(ICommandManager commands, IController controller, string action, string target);
-
-        /// <summary>
-        /// Creates the <see cref="ICommand"/> specified by the controller and action provided.
-        /// </summary>
-        /// <param name="commands">An instance of <see cref="ICommandManager"/> that is required for the creation of the command.</param>
-        /// <param name="controller">The <see cref="IController"/> that contains the method that will be invoked by the <see cref="ICommand"/> when the <see cref="ICommand.Execute"/> method is called.</param>
-        /// <param name="action">The action to be performed when the <see cref="ICommand.Execute"/> method is called.</param>
-        /// <returns>An instance of <see cref="ICommand"/> that can be used to invoke the specified action.</returns>
-        ICommand CreateCommand(ICommandManager commands, IController controller, string action);
-
-        /// <summary>
-        /// Creates an <see cref="ICommand"> that will show the specified view.
-        /// </summary>
-        /// <param name="commands">An instance of <see cref="ICommandManager"/> that is required for the creation of the command.</param>
-        /// <param name="view">The name of the <see cref="IView"/> to be shown.</param>
-        /// <returns>An instance of <see cref="ICommand"/> that can be used to show the specified view.</returns>
-        ICommand CreateCommand(ICommandManager commands, string view);
-
-        /// <summary>
         /// Deletes the <see cref="IView"/> with the specified ID.
         /// </summary>
         /// <param name="id">The ID of the <see cref="IView"/> to delete.</param>
         void DeleteView(string id);
 
         /// <summary>
-        /// Gets the <see cref="IChildViewController"/> that controls the content of the specified view.
+        /// Exits the application.
         /// </summary>
-        /// <param name="name">The name of the view.</param>
-        /// <returns>The required <see cref="IChildViewController"/>.</returns>
-        //IChildViewController GetContentController(string name);
+        void Exit();
 
         /// <summary>
-        /// Gets the <see cref="IDocumentController"/> that controls the view representing the <see cref="IDocument"/> provided.
+        /// Gets the specified <see cref="IDocumentController"/>.
         /// </summary>
-        /// <param name="document">The <see cref="IDocument"/> represented by the view controlled by the <see cref="IDocumentController"/>.</param>
-        /// <returns>The required <see cref="IDocumentController"/></returns>
+        /// <param name="document">The <see cref="IDocument"/> that identifies the required controller.</param>
+        /// <returns>The specified <see cref="IDocumentController"/>.</returns>
         IDocumentController GetController(IDocument document);
 
         /// <summary>
-        /// Gets the specified <see cref="IController"/>.
+        /// Gets the specified output port.
         /// </summary>
-        /// <param name="name">The name of the controller.</param>
-        /// <returns>The required <see cref="IController">.</returns>
-        IController? GetController(string id);
+        /// <typeparam name="TOutputPort">The type of output port required.</typeparam>
+        /// <param name="id">The ID of the parent controller.</param>
+        /// <returns>The specified output port.</returns>
+        TOutputPort GetOutputPort<TOutputPort>(string id);
+
+        /// <summary>
+        /// Gets the specified output port.
+        /// </summary>
+        /// <typeparam name="TOutputPort">The type of output port required.</typeparam>
+        /// <returns>The specified output port.</returns>
+        TOutputPort GetOutputPort<TOutputPort>();
 
         /// <summary>
         /// Gets the <see cref="IView"/> specified by the <see cref="IDocument"/> provided. If the view does not already exist it will be created.
         /// </summary>
         /// <param name="document">An instance of <see cref="IDocument"/> that specifies which instance of <see cref="IView"/> is required.</param>
-        /// <returns>The required <see cref="IView"/>.</returns>
+        /// <returns>The required <see cref="IView">.</returns>
         IView GetView(IDocument document);
 
         /// <summary>
-        /// Gets the <see cref="IView"/> with the specified ID. If the view does not exist <see cref="null"/> will be returned.
+        /// Gets the <see cref="IView"/> with the specified ID.
         /// </summary>
         /// <param name="id">The ID of the required <see cref="IView"/>.</param>
-        /// <returns>The required <see cref="IView"/> or <see cref="null"/>.</returns>
-        IView? GetView(string id);
-
-        /// <summary> 
-        /// Registers the available command invokers with the instance of <see cref="ICommandManager"/> provided.
-        /// </summary>
-        /// <param name="commands">An instance of <see cref="ICommandManager"/> that will be used to register the available command invokers.</param>
-        void RegisterCommandInvokers(ICommandManager commands);
+        /// <returns>The specified <see cref="IView"/>.</returns>
+        IView GetView(string id);
 
         /// <summary>
         /// Starts the application.
@@ -94,20 +61,18 @@ namespace StarLab.Presentation
         void Run();
 
         /// <summary>
-        /// Shows the <see cref="IView"/> provided.
+        /// Shows the About dialog.
         /// </summary>
-        /// <param name="view">The <see cref="IView"> to be shown.</param>
-        void Show(IView view);
+        void ShowAboutDialog();
 
         /// <summary>
-        /// Shows the <see cref="IView"/> with the specified ID. A view with the specified ID must already exist or an exception will be thrown.
+        /// Shows a Document window that contains the <see cref="IDocument"/> provided.
         /// </summary>
-        /// <param name="id">The ID of the view to be shown.</param>
-        /// <exception cref="ViewNotFoundException"></exception>
-        void Show(string id);
+        /// <param name="document">The <see cref="IDocument"/> to show.</param>
+        void ShowDocument(IDocument document);
 
         /// <summary>
-        /// Displays a <see cref="MessageBox"/> with the specified caption, message, message type and available responses.
+        /// Displays a message box with the specified caption, message, message type and available responses.
         /// </summary>
         /// <param name="caption">The message box caption.</param>
         /// <param name="message">The message text.</param>
@@ -130,7 +95,33 @@ namespace StarLab.Presentation
         /// </summary>
         /// <param name="caption">The message box caption.</param>
         /// <param name="message">The message text.</param>
-        /// <returns>An <see cref="InteractionResult"/> that identifies the chosen response.</returns>
-        InteractionResult ShowMessage(string caption, string message);
+        void ShowMessage(string caption, string message);
+
+        /// <summary>
+        /// Displays an <see cref="OpenFileDialog"/> with the specified owner and options.
+        /// </summary>
+        /// <param name="title">The dialog title.</param>
+        /// <param name="filter">The file name filter.</param>
+        /// <returns>The filename selected in the dialog.</returns>
+        string ShowOpenFileDialog(string title, string filter);
+
+        /// <summary>
+        /// Shows the Options dialog.
+        /// </summary>
+        void ShowOptionsDialog();
+
+        /// <summary>
+        /// Displays a save file dialog with the specified owner and options.
+        /// </summary>
+        /// <param name="title">The dialog title.</param>
+        /// <param name="filter">The file name filter.</param>
+        /// <param name="extension">The default file extension.</param>
+        /// <returns>The filename selected in the dialog.</returns>
+        string ShowSaveFileDialog(string title, string filter, string extension);
+
+        /// <summary>
+        /// Shows the Workspace Explorer.
+        /// </summary>
+        void ShowWorkspaceExplorer();
     }
 }

@@ -1,5 +1,4 @@
 ﻿using StarLab.Application.Workspace.Documents;
-using StarLab.Presentation.Workspace.Documents.Charts;
 
 namespace StarLab.Presentation.Workspace.Documents
 {
@@ -14,7 +13,7 @@ namespace StarLab.Presentation.Workspace.Documents
 
         private readonly string id; // The document ID.
 
-        private string name; // The document name.
+        private readonly string name; // The document name.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="Document"/> class.
@@ -25,23 +24,16 @@ namespace StarLab.Presentation.Workspace.Documents
         {
             ArgumentNullException.ThrowIfNull(dto, nameof(dto));
 
-            if (string.IsNullOrEmpty(dto.Name)) throw new ArgumentException(nameof(dto.Name));
-            if (string.IsNullOrEmpty(dto.Path)) throw new ArgumentException(nameof(dto.Path));
-            if (string.IsNullOrEmpty(dto.View)) throw new ArgumentException(nameof(dto.View));
-            if (string.IsNullOrEmpty(dto.ID)) throw new ArgumentException(nameof(dto.ID));
-
-            Chart = new Chart(dto.Chart);
+            ArgumentException.ThrowIfNullOrEmpty(dto.Name, nameof(dto.Name));
+            ArgumentException.ThrowIfNullOrEmpty(dto.Path, nameof(dto.Path));
+            ArgumentException.ThrowIfNullOrEmpty(dto.View, nameof(dto.View));
+            ArgumentException.ThrowIfNullOrEmpty(dto.ID, nameof(dto.ID));
 
             name = dto.Name;
             path = dto.Path;
             view = dto.View;
             id = dto.ID;
         }
-
-        /// <summary>
-        /// Gets the chart.
-        /// </summary>
-        public IChart Chart { get; }
 
         /// <summary>
         /// Gets the document name including the path.

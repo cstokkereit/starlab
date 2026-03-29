@@ -2,6 +2,7 @@
 using StarLab.Presentation;
 using StarLab.Presentation.Workspace.Documents.Charts;
 using StarLab.Shared.Properties;
+using StarLab.Shared.Resources;
 using StarLab.UI.Controls.Workspace.Documents.Charts;
 using Stratosoft.Commands;
 using System.Diagnostics;
@@ -31,14 +32,12 @@ namespace StarLab.UI.Workspace.Documents.Charts
             InitializeComponent();
 
             Name = Views.ChartSettings;
-
-            if (log.IsDebugEnabled) log.Debug(string.Format(Resources.InstanceCreated, nameof(ChartSettingsView)));
         }
 
         /// <summary>
-        /// Gets the <see cref="IChildViewController"> that controls this view.
+        /// Gets the view ID.
         /// </summary>
-        public IChildViewController? Controller => (IChildViewController?)presenter;
+        public string ID => Name;
 
         /// <summary>
         /// Gets the panel that will contain the view.
@@ -159,6 +158,8 @@ namespace StarLab.UI.Workspace.Documents.Charts
             if (this.presenter != null) throw new InvalidOperationException(Resources.PresenterAlreadyAttached);
 
             this.presenter = (IChartSettingsViewPresenter)presenter;
+
+            log.Debug(string.Format(LogEntries.PresenterAttached, $"{presenter.GetType().Name}({Name})"));
         }
 
         /// <summary>
@@ -186,6 +187,21 @@ namespace StarLab.UI.Workspace.Documents.Charts
         }
 
         /// <summary>
+        /// Detaches the presenter that controls the view.
+        /// </summary>
+        public void Detach()
+        {
+            if (presenter != null)
+            {
+                var entry = $"{presenter.GetType().Name}({Name})";
+
+                presenter = null;
+
+                log.Debug(string.Format(LogEntries.PresenterDetached, entry));
+            }
+        }
+
+        /// <summary>
         /// Clears the settings panel.
         /// </summary>
         public void Clear()
@@ -203,8 +219,7 @@ namespace StarLab.UI.Workspace.Documents.Charts
         /// <summary>
         /// Initialises the view.
         /// </summary>
-        /// <param name="controller">The <see cref="IApplicationController"/>.</param>
-        public void Initialise(IApplicationController controller)
+        public void Initialise()
         {
             foreach (TreeNode node in treeView.Nodes)
             {

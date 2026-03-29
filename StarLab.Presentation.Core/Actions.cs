@@ -1,7 +1,7 @@
 ﻿namespace StarLab.Presentation
 {
     /// <summary>
-    /// A static class containing the <see cref="string"/> constants used to specify the method that will be called when executing an <see cref="ActionCommand"/>.
+    /// A static class containing the <see cref="string"/> constants used to specify the method that will be called when executing an <see cref="ActionCommand"/>. TODO
     /// </summary>
     public static class Actions
     {
@@ -15,7 +15,9 @@
         public const string Cancel = "Cancel";
         public const string CloseDocument = "CloseDocument";
         public const string CloseWorkspace = "CloseWorkspace";
-        public const string Collapse = "Collapse";
+        public const string CollapseFolder = "CollapseFolder";
+        public const string CollapseProject = "CollapseProject";
+        public const string CollapseWorkspace = "CollapseWorkspace";
         public const string Copy = "Copy";
         public const string Cut = "Cut";
 

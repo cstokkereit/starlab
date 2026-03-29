@@ -3,12 +3,11 @@
     /// <summary>
     /// Defines the properties and methods used by an <see cref="IDialogViewPresenter"/> to control the behaviour of a dialog box.
     /// </summary>
-    public interface IDialogView : IView
+    public interface IDialogView : IParentView
     {
         /// <summary>
-        /// Initialises the view.
+        /// Closes the dialog box.
         /// </summary>
-        /// <param name="controller">The <see cref="IApplicationController"/>.</param>
-        void Initialise(IApplicationController controller);
+        void Close();
     }
 }

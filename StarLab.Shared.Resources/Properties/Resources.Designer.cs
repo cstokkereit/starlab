@@ -88,6 +88,15 @@ namespace StarLab.Shared.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The {0} has already been initialised..
+        /// </summary>
+        public static string AlreadyInitialised {
+            get {
+                return ResourceManager.GetString("AlreadyInitialised", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Axes.
         /// </summary>
         public static string Axes {
@@ -232,6 +241,15 @@ namespace StarLab.Shared.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A command with the name &apos;{1}&apos; already exists..
+        /// </summary>
+        public static string CommandAlreadyExists {
+            get {
+                return ResourceManager.GetString("CommandAlreadyExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Stratosoft.
         /// </summary>
         public static string CompanyName {
@@ -246,6 +264,24 @@ namespace StarLab.Shared.Properties {
         public static string ComponentFieldIndicesRequired {
             get {
                 return ResourceManager.GetString("ComponentFieldIndicesRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The {0} configuration could not be found..
+        /// </summary>
+        public static string ConfigurationNotFound {
+            get {
+                return ResourceManager.GetString("ConfigurationNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A controller with ID {0} could not be found..
+        /// </summary>
+        public static string ControllerNotFound {
+            get {
+                return ResourceManager.GetString("ControllerNotFound", resourceCulture);
             }
         }
         
@@ -363,6 +399,15 @@ namespace StarLab.Shared.Properties {
         public static string DocumentAlreadyExists {
             get {
                 return ResourceManager.GetString("DocumentAlreadyExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Document ID.
+        /// </summary>
+        public static string DocumentID {
+            get {
+                return ResourceManager.GetString("DocumentID", resourceCulture);
             }
         }
         
@@ -487,29 +532,20 @@ namespace StarLab.Shared.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Initialisation complete. Starting the application..
+        ///   Looks up a localized string similar to {0} does not implement the {1} interface..
         /// </summary>
-        public static string InitialisationComplete {
+        public static string InterfaceNotImplemented {
             get {
-                return ResourceManager.GetString("InitialisationComplete", resourceCulture);
+                return ResourceManager.GetString("InterfaceNotImplemented", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Initialisation failed. The application configuration could not be loaded..
+        ///   Looks up a localized string similar to The presenter ID does not match the view ID. Expected: {0}.
         /// </summary>
-        public static string InitialisationFailed {
+        public static string InvalidPresenterID {
             get {
-                return ResourceManager.GetString("InitialisationFailed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to {0} created..
-        /// </summary>
-        public static string InstanceCreated {
-            get {
-                return ResourceManager.GetString("InstanceCreated", resourceCulture);
+                return ResourceManager.GetString("InvalidPresenterID", resourceCulture);
             }
         }
         
@@ -870,6 +906,15 @@ namespace StarLab.Shared.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An instance of the type &apos;{0}&apos; could not be created..
+        /// </summary>
+        public static string UnableToCreateInstance {
+            get {
+                return ResourceManager.GetString("UnableToCreateInstance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The argument was not of the correct type. Expected {0} but was {1} .
         /// </summary>
         public static string UnexpectedArgumentType {
@@ -906,6 +951,15 @@ namespace StarLab.Shared.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The {0} has not been set..
+        /// </summary>
+        public static string VariableNotSet {
+            get {
+                return ResourceManager.GetString("VariableNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Version {0}.
         /// </summary>
         public static string Version {
@@ -924,20 +978,20 @@ namespace StarLab.Shared.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} attached to {1}..
-        /// </summary>
-        public static string ViewAttached {
-            get {
-                return ResourceManager.GetString("ViewAttached", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to View Help.
         /// </summary>
         public static string ViewHelp {
             get {
                 return ResourceManager.GetString("ViewHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A view with ID {0} could not be found. .
+        /// </summary>
+        public static string ViewNotFound {
+            get {
+                return ResourceManager.GetString("ViewNotFound", resourceCulture);
             }
         }
         
