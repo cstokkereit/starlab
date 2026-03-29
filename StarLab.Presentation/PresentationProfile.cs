@@ -28,7 +28,7 @@ namespace StarLab.Presentation
                 .ForMember(dest => dest.Y1, opt => opt.MapFrom(src => src.Axes.Y1))
                 .ForMember(dest => dest.Y2, opt => opt.MapFrom(src => src.Axes.Y2));
 
-            CreateMap<IDocument, DocumentDTO>();
+            CreateMap<IChartDocument, DocumentDTO>();
             CreateMap<IFolder, FolderDTO>().ForMember(dest => dest.Path, opt => opt.MapFrom(src => src.Key));
             CreateMap<IFont, FontDTO>();
             CreateMap<IFont, FontDTO>();

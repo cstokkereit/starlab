@@ -167,7 +167,7 @@ namespace StarLab
         /// <param name="e">A <see cref="FormClosingEventArgs"/> that provides context for the event.</param>
         private void Form_Closing(object sender, FormClosingEventArgs e)
         {
-            // TODO - Isn't this covered by HidOnClose?
+            // TODO - Isn't this covered by HideOnClose?
             if (e.CloseReason == CloseReason.UserClosing)
             {
                 e.Cancel = true;

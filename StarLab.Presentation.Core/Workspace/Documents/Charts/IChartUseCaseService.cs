@@ -1,7 +1,7 @@
 ﻿namespace StarLab.Presentation.Workspace.Documents.Charts
 {
     /// <summary>
-    /// A facade that aggregates the use cases used by the <see cref="IChartViewPresenter"/>.
+    /// Defines the methods required to execute the use cases that implement the chart functionality.
     /// </summary>
     public interface IChartUseCaseService : IUseCaseService
     {
