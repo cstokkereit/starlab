@@ -58,7 +58,8 @@
         /// <returns></returns>
         private IOptionsViewPresenter CreatePresenter()
         {
-            return new OptionsViewPresenter(view, commands, factory, settings, mapper, events);
+            throw new NotImplementedException();
+            //return new OptionsViewPresenter(view, commands, factory, settings, mapper, events);
         }
     }
 }

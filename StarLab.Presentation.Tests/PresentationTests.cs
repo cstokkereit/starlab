@@ -4,6 +4,7 @@ using Castle.MicroKernel.Resolvers;
 using Castle.Windsor;
 using Microsoft.Extensions.Logging;
 using StarLab.Application;
+using StarLab.Presentation.Configuration;
 using Stratosoft.Commands;
 
 namespace StarLab.Presentation
@@ -15,6 +16,8 @@ namespace StarLab.Presentation
     {
         protected WindsorContainer container; // The Inversion of Control (IoC) container.
 
+        protected IFactoryConfiguration configuration; // 
+
         protected IApplicationController controller; // The application controller.
 
         protected IApplicationSettings settings; // The application settings.
@@ -22,6 +25,8 @@ namespace StarLab.Presentation
         protected ICommandManager commands; // The command manager.
 
         protected IEventAggregator events; // The event aggregator.
+
+        protected IServiceRegistry services; // The service registry.
 
         protected IUseCaseFactory factory; // The use case factory.
 
@@ -51,6 +56,10 @@ namespace StarLab.Presentation
             container.Register(Classes.FromAssemblyNamed("StarLab.Presentation").BasedOn<Profile>().WithServiceBase());
 
             controller = Substitute.For<IApplicationController>();
+
+            services = Substitute.For<IServiceRegistry>();
+
+            configuration = Substitute.For<IFactoryConfiguration>();
 
             settings = Substitute.For<IApplicationSettings>();
 

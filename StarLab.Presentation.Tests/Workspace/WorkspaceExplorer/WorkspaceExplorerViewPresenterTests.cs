@@ -36,7 +36,8 @@
         /// <returns>Returns the <see cref="WorkspaceExplorerViewPresenter"/>.</returns>
         private IWorkspaceExplorerViewPresenter CreatePresenter()
         {
-            return new WorkspaceExplorerViewPresenter(view, commands, factory, settings, mapper, events);
+            throw new NotImplementedException();
+            //return new WorkspaceExplorerViewPresenter(view, commands, factory, settings, mapper, events);
         }
     }
 }

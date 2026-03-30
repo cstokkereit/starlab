@@ -5,11 +5,11 @@
     /// </summary>
     internal class ChartSettings : ChartElementSettings, IChartSettings
     {
-        private string backColour; // TODO
+        private string backColour; // The chart background colour.
 
-        private string foreColour; // TODO
+        private string foreColour; // The chart foreground colour.
 
-        private IFont font; // TODO
+        private IFont font; // The chart font.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="ChartSettings"> class.

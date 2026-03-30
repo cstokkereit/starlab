@@ -36,7 +36,8 @@
         /// <returns>Returns the <see cref="ApplicationViewPresenter"/>.</returns>
         private IApplicationViewPresenter CreatePresenter()
         {
-            return new ApplicationViewPresenter(view, commands, factory, settings, mapper, events);
+            throw new NotImplementedException();
+            //return new ApplicationViewPresenter(view, commands, factory, settings, mapper, events);
         }
     }
 }

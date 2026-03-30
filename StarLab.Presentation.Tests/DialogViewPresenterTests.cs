@@ -58,7 +58,8 @@
         /// <returns></returns>
         private IDialogViewPresenter CreatePresenter()
         {
-            return new DialogViewPresenter(view, commands, factory, settings, mapper, events);
+            throw new NotImplementedException();
+            //return new DialogViewPresenter(view, commands, factory, settings, mapper, events);
         }
     }
 }

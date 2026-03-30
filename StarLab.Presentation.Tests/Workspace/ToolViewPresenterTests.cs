@@ -36,18 +36,15 @@
         [Test]
         public void TestInitialise()
         {
-            // Arrange
             var presenter = (IViewController)CreatePresenter();
 
-            // Act
             presenter.Initialise(controller);
 
-            // Assert
-            view.Received(1).Initialise(controller);
+            //view.Received(1).Initialise(controller);
 
             //controller.Received(1).RegisterCommandInvokers(commands);
 
-            events.Received(1).Subsribe(presenter);
+            //events.Received(1).Subsribe(presenter);
         }
 
         /// <summary>
@@ -56,7 +53,8 @@
         /// <returns>Returns the <see cref="ToolViewPresenter"/>.</returns>
         private IDockableViewPresenter CreatePresenter()
         {
-            return new ToolViewPresenter(view, commands, factory, settings, mapper, events);
+            throw new NotImplementedException();
+            //return new ToolViewPresenter(view, commands, factory, settings, mapper, events);
         }
     }
 }

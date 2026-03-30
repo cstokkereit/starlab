@@ -58,7 +58,8 @@
         /// <returns></returns>
         private IAboutViewPresenter CreatePresenter()
         {
-            return new AboutViewPresenter(view, commands, factory, settings, mapper, events);
+            throw new NotImplementedException();
+            //return new AboutViewPresenter(view, commands, factory, settings, mapper, events);
         }
     }
 }

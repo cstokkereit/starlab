@@ -37,7 +37,8 @@
         /// <returns>Returns the <see cref="DocumentViewPresenter"/>.</returns>
         private IDockableViewPresenter CreatePresenter(IDocument document)
         {
-            return new DocumentViewPresenter(view, document, commands, factory, settings, mapper, events);
+            throw new NotImplementedException();
+            //return new DocumentViewPresenter(view, document, commands, factory, settings, mapper, events);
         }
     }
 }

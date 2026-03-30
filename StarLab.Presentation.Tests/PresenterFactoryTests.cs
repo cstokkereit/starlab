@@ -1,7 +1,9 @@
-﻿using StarLab.Presentation.Help;
+﻿using StarLab.Presentation.Configuration;
+using StarLab.Presentation.Help;
+using StarLab.Presentation.Workspace;
 using StarLab.Presentation.Workspace.Documents;
 using StarLab.Presentation.Workspace.Documents.Charts;
-using StarLab.UI;
+using Stratosoft.Commands;
 
 namespace StarLab.Presentation
 {
@@ -11,127 +13,310 @@ namespace StarLab.Presentation
     public class PresenterFactoryTests : PresentationTests
     {
         /// <summary>
-        /// Test that the <see cref="PresenterFactory.PresenterFactory(Castle.Windsor.IWindsorContainer, IUseCaseFactory, IApplicationSettings, IMapper, IEventAggregator)"/> constructor works correctly.
+        /// Test that the <see cref="PresenterFactory(IServiceRegistry, IFactoryConfiguration, IApplicationSettings, IEventAggregator)"/> constructor works correctly.
         /// </summary>
         [Test]
         public void TestConstruction()
         {
-            //// Arrange
-            //var sut = new PresenterFactory(factory, settings, mapper, events);
+            var factory = new PresenterFactory(services, configuration, settings, events);
 
-            //// Assert
-            //Assert.That(sut, Is.Not.Null);
+            Assert.That(factory, Is.Not.Null);
         }
 
         /// <summary>
-        /// Test that the <see cref="PresenterFactory.CreatePresenter(IChildView)"/> method works correctly.
+        /// Test that the <see cref="PresenterFactory.CreatePresenter(IChildView, ICommandManger)"/> method works correctly.
         /// </summary>
         [Test]
-        public void TestCreatePresenterFromChildView()
+        public void TestCreateChildViewPresenter()
         {
-            //// Arrange
-            //var sut = new PresenterFactory(factory, settings, mapper, events);
+            var childConfiguration = Substitute.For<IChildViewConfiguration>();
+            childConfiguration.Presenter.Returns("StarLab.Presentation.Help.AboutViewPresenter, StarLab.Presentation");
 
-            //var view = Substitute.For<IChartSettingsView>();
-            //view.Name.Returns($"ColourMagnitudeChartView::{Views.ChartSettings}");
+            var viewConfiguration = Substitute.For<IViewConfiguration>();
+            viewConfiguration.GetChildViewConfiguration(Views.About).Returns(childConfiguration);
 
-            //// Act
-            //var presenter = sut.CreatePresenter(view, commands);
+            configuration.GetConfiguration(Views.About).Returns(viewConfiguration);
 
-            //// Assert
-            //Assert.That(presenter, Is.Not.Null);
-            //Assert.That(presenter.Name, Is.EqualTo(Controllers.ChartSettingsController));
-            //view.Received().Attach(Arg.Is(presenter));
-        }
-
-        /// <summary>
-        /// Test that the <see cref="PresenterFactory.CreatePresenter(IDocument, IDocumentView)"/> method works correctly.
-        /// </summary>
-        [Test]
-        public void TestCreatePresenterFromDocumentAndView()
-        {
-            // Arrange
-            //var sut = new PresenterFactory(factory, settings, mapper, events);
-
-            //var document = Substitute.For<IDocument>();
-            //document.Name.Returns("Test Document");
-            //document.ID.Returns("Test");
-
-            //var view = Substitute.For<IDocumentView>();
+            var factory = new PresenterFactory(services, configuration, settings, events);
             
-            //// Act
-            //var presenter = sut.CreatePresenter(document, view, commands);
+            var view = Substitute.For<IAboutView>();
+            view.Name.Returns(Views.About);
+            view.ID.Returns(Views.About);
 
-            //// Assert
-            //Assert.That(presenter, Is.Not.Null);
-            //Assert.That(presenter.Name, Is.EqualTo(Controllers.GetDocumentControllerName("Test")));
-            //view.Received().Attach(Arg.Is(presenter));
+            var presenter = factory.CreatePresenter(view, commands);
+
+            Assert.That(presenter, Is.Not.Null);
+            Assert.That(presenter.ID, Is.EqualTo($"ContentController({Views.About})"));
+            view.Received().Attach(Arg.Is(presenter));
         }
 
         /// <summary>
-        /// Test that the <see cref="PresenterFactory.CreatePresenter(string, string)"/> method works correctly.
+        /// Test that the <see cref="PresenterFactory.CreatePresenter(IChildView, ICommandManger)"/> method throws an exception if the view is of an unknown type.
         /// </summary>
         [Test]
-        public void TestCreatePresenterFromView()
+        public void TestCreateChildViewPresenterThrowsAnExceptionForUnknownType()
         {
-            //// Arrange
-            //var sut = new PresenterFactory(container, factory, settings, mapper, events);
+            var childConfiguration = Substitute.For<IChildViewConfiguration>();
+            childConfiguration.Presenter.Returns("StarLab.Presentation.Presenter, StarLab.Presentation");
 
-            //var viewFactory = new ViewFactory(sut);
+            var viewConfiguration = Substitute.For<IViewConfiguration>();
+            viewConfiguration.GetChildViewConfiguration(Views.About).Returns(childConfiguration);
 
-            //var view = viewFactory.CreateView(Views.Application, "Test");
+            configuration.GetConfiguration(Views.About).Returns(viewConfiguration);
 
-            //view.Detach();
+            var factory = new PresenterFactory(services, configuration, settings, events);
 
-            //// Act
-            //var presenter = sut.CreatePresenter(view);
+            var view = Substitute.For<IAboutView>();
+            view.Name.Returns(Views.About);
+            view.ID.Returns(Views.About);
 
-            //// Assert
-            //Assert.That(presenter, Is.Not.Null);
-            //Assert.That(presenter.Name, Is.EqualTo(Controllers.ApplicationViewController));
-            //Assert.That(view.Text, Is.EqualTo("Test"));
+            var e = Assert.Throws<Exception>(() => factory.CreatePresenter(view, commands));
+
+            Assert.That(e.Message, Does.StartWith("Unknown type: "));
         }
 
         /// <summary>
-        /// Test that the <see cref="PresenterFactory.CreatePresenter(string, string)"/> method works correctly.
+        /// Test that the <see cref="PresenterFactory.CreatePresenter(IView, IChildViewPresenter, ICommandManager)"/> method works correctly when view is <see cref="IDialogView"/>.
         /// </summary>
         [Test]
-        public void TestCreatePresenterFromViewDefinitionAndChildView()
+        public void TestCreateDialogViewPresenter()
         {
-            //// Arrange
-            //var sut = new PresenterFactory(factory, settings, mapper, events);
+            var factory = new PresenterFactory(services, configuration, settings, events);
 
-            //var view = Substitute.For<IAboutView>();
-            //view.Name.Returns(Views.About);
+            var view = Substitute.For<IDialogView>();
+            view.ID.Returns(Views.About);
 
-            //var definition = Substitute.For<IViewDefinition>();
-            //definition.Name.Returns(Views.About);
+            var child = Substitute.For<IChildViewPresenter, IChildViewController>();
 
-            //// Act
-            //var presenter = sut.CreatePresenter(definition, view, commands);
+            var presenter = factory.CreatePresenter(view, child, commands);
 
-            //// Assert
-            //Assert.That(presenter, Is.Not.Null);
-            //Assert.That(presenter.Name, Is.EqualTo(Controllers.GetContentControllerName(Views.About)));
-            //view.Received().Attach(Arg.Is(presenter));
+            Assert.That(presenter, Is.Not.Null);
+            Assert.That(presenter.ID, Is.EqualTo($"{Views.About}Controller"));
+            view.Received().Attach(Arg.Is(presenter));
         }
 
         /// <summary>
-        /// Test that the <see cref="PresenterFactory.CreatePresenter(IView)"/> method throws an exception if the view is of an unexpected type.
+        /// Test that the <see cref="PresenterFactory.CreatePresenter(IView, IChildViewPresenter, ICommandManager)"/> method throws an exception if the child view presenter does not implement the <see cref="IChildViewController"/> interface.
         /// </summary>
         [Test]
-        public void TestCreatePresenterThrowsAnExceptionForUnexpectedViewType()
+        public void TestCreateDialogViewPresenterThrowsAnExceptionWhenInterfaceNotImplemented()
         {
-            //// Arrange
-            //var sut = new PresenterFactory(factory, settings, mapper, events);
+            var factory = new PresenterFactory(services, configuration, settings, events);
 
-            //var view = Substitute.For<IView>();
+            var view = Substitute.For<IDialogView>();
 
-            //// Act
-            //var e = Assert.Throws<ArgumentException>(() => sut.CreatePresenter(view, commands));
+            var child = Substitute.For<IChildViewPresenter>();
 
-            //// Assert
-            //Assert.That(e.Message, Does.StartWith("Unexpected view type: "));
+            var e = Assert.Throws<ArgumentException>(() => factory.CreatePresenter(view, child, commands));
+
+            Assert.That(e.Message, Is.EqualTo("childPresenter does not implement the IChildViewController interface."));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="PresenterFactory.CreatePresenter(IView, IChildViewPresenter, ICommandManager)"/> method throws an exception if the view is of an unexpected view type.
+        /// </summary>
+        [Test]
+        public void TestCreateDialogOrToolViewPresenterThrowsAnExceptionForUnexpectedViewType()
+        {
+            var factory = new PresenterFactory(services, configuration, settings, events);
+
+            var view = Substitute.For<IView>();
+
+            var child = Substitute.For<IChildViewPresenter, IChildViewController>();
+
+            var e = Assert.Throws<ArgumentException>(() => factory.CreatePresenter(view, child, commands));
+
+            Assert.That(e.Message, Does.StartWith("Unexpected view type: "));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="PresenterFactory.CreatePresenter(IDocument, IDocumentView, IEnumerable{IChildViewPresenter}, ICommandManger)"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestCreateDocumentViewPresenter()
+        {
+            var factory = new PresenterFactory(services, configuration, settings, events);
+
+            var document = Substitute.For<IDocument>();
+            document.ID.Returns("Test");
+
+            var view = Substitute.For<IDocumentView>();
+            view.ID.Returns("Test");
+
+            var presenter = factory.CreatePresenter(document, view, [], commands);
+
+            Assert.That(presenter, Is.Not.Null);
+            Assert.That(presenter.ID, Is.EqualTo("DocumentController(Test)"));
+            view.Received().Attach(Arg.Is(presenter));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="PresenterFactory.CreatePresenter(IDocument, IDocumentView, IEnumerable{IChildViewPresenter}, ICommandManger)"/> method throws an exception if any of the child view presenters does not implement the <see cref="IChildViewController"/> interface.
+        /// </summary>
+        [Test]
+        public void TestCreateDocumentViewPresenterThrowsAnExceptionWhenInterfaceNotImplemented()
+        {
+            var factory = new PresenterFactory(services, configuration, settings, events);
+
+            var document = Substitute.For<IDocument>();
+            document.ID.Returns("Test");
+
+            var view = Substitute.For<IDocumentView>();
+            view.ID.Returns("Test");
+
+            var child = Substitute.For<IChildViewPresenter>();
+
+            var e = Assert.Throws<Exception>(() => factory.CreatePresenter(document, view, [child], commands));
+
+            Assert.That(e.Message, Is.EqualTo("childPresenter does not implement the IChildViewController interface."));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="PresenterFactory.CreatePresenter(IView, IChildViewPresenter, ICommandManager)"/> method works correctly when view is <see cref="IDockableView"/>.
+        /// </summary>
+        [Test]
+        public void TestCreateToolViewPresenter()
+        {
+            var factory = new PresenterFactory(services, configuration, settings, events);
+
+            var view = Substitute.For<IDockableView>();
+            view.ID.Returns(Views.WorkspaceExplorer);
+
+            var child = Substitute.For<IChildViewPresenter, IChildViewController>();
+
+            var presenter = factory.CreatePresenter(view, child, commands);
+
+            Assert.That(presenter, Is.Not.Null);
+            Assert.That(presenter.ID, Is.EqualTo($"{Views.WorkspaceExplorer}Controller"));
+            view.Received().Attach(Arg.Is(presenter));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="PresenterFactory.CreatePresenter(IView, IChildViewPresenter, ICommandManager)"/> method throws an exception if the child view presenter does not implement the <see cref="IChildViewController"/> interface.
+        /// </summary>
+        [Test]
+        public void TestCreateToolViewPresenterThrowsAnExceptionWhenInterfaceNotImplemented()
+        {
+            var factory = new PresenterFactory(services, configuration, settings, events);
+
+            var view = Substitute.For<IDockableView>();
+
+            var child = Substitute.For<IChildViewPresenter>();
+
+            var e = Assert.Throws<ArgumentException>(() => factory.CreatePresenter(view, child, commands));
+
+            Assert.That(e.Message, Is.EqualTo("childPresenter does not implement the IChildViewController interface."));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="PresenterFactory.CreatePresenter(IView, ICommandManger)"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestCreateViewPresenter()
+        {
+            var factory = new PresenterFactory(services, configuration, settings, events);
+
+            var view = Substitute.For<IApplicationView>();
+            view.ID.Returns(Views.Application);
+
+            var presenter = factory.CreatePresenter(view, commands);
+
+            Assert.That(presenter, Is.Not.Null);
+            Assert.That(presenter.ID, Is.EqualTo(Controllers.ApplicationViewController));
+            view.Received().Attach(Arg.Is(presenter));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="PresenterFactory.CreatePresenter(IView)"/> method throws an exception if the view is of an unexpected view type.
+        /// </summary>
+        [Test]
+        public void TestCreateViewPresenterThrowsAnExceptionForUnexpectedViewType()
+        {
+            var factory = new PresenterFactory(services, configuration, settings, events);
+
+            var view = Substitute.For<IView>();
+
+            var e = Assert.Throws<ArgumentException>(() => factory.CreatePresenter(view, commands));
+
+            Assert.That(e.Message, Does.StartWith("Unexpected view type: "));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="PresenterFactory.CreatePresenters(IDocument, IEnumerable{IChildView}, ICommandManager)"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestCreatePresenters()
+        {
+            var childConfiguration1 = Substitute.For<IChildViewConfiguration>();
+            childConfiguration1.Presenter.Returns("StarLab.Presentation.Workspace.Documents.Charts.ChartSettingsViewPresenter, StarLab.Presentation");
+
+            var childConfiguration2 = Substitute.For<IChildViewConfiguration>();
+            childConfiguration2.Presenter.Returns("StarLab.Presentation.Workspace.Documents.Charts.ColourMagnitudeChartViewPresenter, StarLab.Presentation");
+
+            var viewConfiguration = Substitute.For<IViewConfiguration>();
+            viewConfiguration.GetChildViewConfiguration(Views.ChartSettings).Returns(childConfiguration1);
+            viewConfiguration.GetChildViewConfiguration(Views.Chart).Returns(childConfiguration2);
+
+            configuration.GetConfiguration(Views.ColourMagnitudeChart).Returns(viewConfiguration);
+
+            var factory = new PresenterFactory(services, configuration, settings, events);
+
+            var document = Substitute.For<IDocument>();
+            document.View.Returns(Views.ColourMagnitudeChart);
+
+            var child1 = Substitute.For<IChartSettingsView>();
+            child1.Name.Returns(Views.ChartSettings);
+            child1.ID.Returns(Views.ChartSettings);
+
+            var child2 = Substitute.For<IChartView>();
+            child2.Name.Returns(Views.Chart);
+            child2.ID.Returns(Views.Chart);
+
+            var presenters = new List<IChildViewPresenter>(factory.CreatePresenters(document, [child1, child2], commands));
+
+            Assert.That(presenters, Has.Count.EqualTo(2));
+
+            Assert.That(presenters[0], Is.Not.Null);
+            Assert.That(presenters[0].ID, Is.EqualTo($"ContentController({Views.ChartSettings})"));
+
+            Assert.That(presenters[1], Is.Not.Null);
+            Assert.That(presenters[1].ID, Is.EqualTo($"ContentController({Views.Chart})"));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="PresenterFactory.CreatePresenters(IDocument, IEnumerable{IChildView}, ICommandManager)"/> method throws an exception if any of the child views is of an unknown type.
+        /// </summary>
+        [Test]
+        public void TestCreatePresentersThrowsAnExceptionForUnknownType()
+        {
+            var childConfiguration1 = Substitute.For<IChildViewConfiguration>();
+            childConfiguration1.Presenter.Returns("StarLab.Presentation.Workspace.Documents.Charts.ChartSettingsViewPresenter, StarLab.Presentation");
+
+            var childConfiguration2 = Substitute.For<IChildViewConfiguration>();
+            childConfiguration2.Presenter.Returns("StarLab.Presentation.Presenter, StarLab.Presentation");
+
+            var viewConfiguration = Substitute.For<IViewConfiguration>();
+            viewConfiguration.GetChildViewConfiguration(Views.ChartSettings).Returns(childConfiguration1);
+            viewConfiguration.GetChildViewConfiguration(Views.Chart).Returns(childConfiguration2);
+
+            configuration.GetConfiguration(Views.ColourMagnitudeChart).Returns(viewConfiguration);
+
+            var factory = new PresenterFactory(services, configuration, settings, events);
+
+            var document = Substitute.For<IDocument>();
+            document.View.Returns(Views.ColourMagnitudeChart);
+
+            var child1 = Substitute.For<IChartSettingsView>();
+            child1.Name.Returns(Views.ChartSettings);
+            child1.ID.Returns(Views.ChartSettings);
+
+            var child2 = Substitute.For<IChartView>();
+            child2.Name.Returns(Views.Chart);
+            child2.ID.Returns(Views.Chart);
+
+            var e = Assert.Throws<Exception>(() => factory.CreatePresenters(document, [child1, child2], commands));
+
+            Assert.That(e.Message, Does.StartWith("Unknown type: "));
         }
     }
 }

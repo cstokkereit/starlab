@@ -36,7 +36,8 @@
         /// <returns>Returns the <see cref="AddDocumentViewPresenter"/>.</returns>
         private IAddDocumentViewPresenter CreatePresenter()
         {
-            return new AddDocumentViewPresenter(view, commands, factory, settings, mapper, events);
+            throw new NotImplementedException();
+            //return new AddDocumentViewPresenter(view, commands, factory, settings, mapper, events);
         }
     }
 }
