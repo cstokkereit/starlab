@@ -14,7 +14,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(ColourMagnitudeChartViewPresenter)); // The logger that will be used for writing log messages.
 
-        private readonly IChartUseCaseService useCases; // A service that executes the use cases that implement the chart functionality.
+        private readonly IChartUseCaseService useCases; // A service that executes the use cases that implement the functionality.
 
         private IChart? chart; // The chart that the view represents.
 

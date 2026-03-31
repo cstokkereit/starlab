@@ -13,10 +13,6 @@ namespace StarLab.Presentation.Help
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(AboutViewPresenter)); // The logger that will be used for writing log messages.
 
-        //private readonly IAboutUseCaseService useCases; // 
-
-        //private IDialogController parentController; // The controller that can be used to control the parent dialog box. TODO - probably not needed
-
         /// <summary>
         /// Initialises a new instance of the <see cref="AboutViewPresenter"> class.
         /// </summary>
@@ -70,13 +66,6 @@ namespace StarLab.Presentation.Help
 
             log.Debug(string.Format(LogEntries.Initialised, nameof(AboutViewPresenter)));
         }
-
-        //public override void Run(IDialogConfiguration config)
-        //{
-        //    base.Run(config);
-
-        //    ParentController.Show();
-        //}
 
         /// <summary>
         /// Releases all resources used by the <see cref="AboutViewPresenter"/> object.

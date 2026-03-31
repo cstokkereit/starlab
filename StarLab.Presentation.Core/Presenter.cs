@@ -37,7 +37,7 @@ namespace StarLab.Presentation
         /// <param name="controller">The <see cref="IApplicationController"/>.</param>
         public virtual void Initialise(IApplicationController controller)
         {
-            Debug.Assert(!Initialised);
+            Debug.Assert(!Initialised); // TODO throw an error?
 
             this.controller = controller ?? throw new ArgumentNullException(nameof(controller));
 

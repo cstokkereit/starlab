@@ -17,7 +17,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
 
         private readonly Dictionary<string, SettingsGroupManager<IChartSettingsView>> groupManagers = new Dictionary<string, SettingsGroupManager<IChartSettingsView>>(); // A dictionary that contains the group managers indexed by group.
 
-        private readonly IChartSettingsUseCaseService useCaseService; // A service that executes the use cases that implement the chart settings panel functionality.
+        private readonly IChartSettingsUseCaseService useCaseService; // A service that executes the use cases that implement the functionality.
 
         private SettingsGroupManager<IChartSettingsView>? groupManager; // Displays the currently selected settings group.
 
@@ -25,7 +25,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
 
         private IWorkspace? workspace; // The workspace that contains the chart.
 
-        private string id; // The ID of the document that contains the chart.
+        private string documentId; // The ID of the document that contains the chart.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="ChartSettingsViewPresenter"> class.
@@ -46,7 +46,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
 
             View.Attach(this);
 
-            id = string.Empty;
+            documentId = string.Empty;
         }
 
         /// <summary>
@@ -73,11 +73,11 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// </summary>
         public void ApplySettings()
         {
-            if (string.IsNullOrEmpty(id)) throw new InvalidOperationException($"{StringResources.ObjectNotInitialised} {string.Format(StringResources.VariableNotSet, StringResources.DocumentID)}");
+            if (string.IsNullOrEmpty(documentId)) throw new InvalidOperationException($"{StringResources.ObjectNotInitialised} {string.Format(StringResources.VariableNotSet, StringResources.DocumentID)}");
             if (workspace == null) throw new InvalidOperationException($"{StringResources.ObjectNotInitialised} {string.Format(StringResources.VariableNotSet, StringResources.Workspace)}");
             if (chart == null) throw new InvalidOperationException($"{StringResources.ObjectNotInitialised} {string.Format(StringResources.VariableNotSet, StringResources.Chart)}");
             
-            useCaseService.UpdateDocument(workspace, id, chart);
+            useCaseService.UpdateDocument(workspace, documentId, chart);
         }
 
         /// <summary>
@@ -126,6 +126,8 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         public void OnEvent(WorkspaceChangedEventArgs args)
         {
             workspace = args.Workspace;
+
+            View.SelectNode(Constants.Chart);
         }
 
         /// <summary>
@@ -163,7 +165,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         {
             chart = new ChartSettings(document.Chart);
 
-            id = document.ID;
+            documentId = document.ID;
         }
 
         /// <summary>

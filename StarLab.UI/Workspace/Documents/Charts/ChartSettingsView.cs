@@ -18,9 +18,9 @@ namespace StarLab.UI.Workspace.Documents.Charts
 
         private static readonly ILog log = LogManager.GetLogger(typeof(ChartSettingsView)); // The logger that will be used for writing log messages.
 
-        private readonly Dictionary<string, TreeNode> nodes = new Dictionary<string, TreeNode>(); // A dictionary containing the tree nodes indexed by node key.
+        private readonly Dictionary<string, TreeNode> nodes = []; // A dictionary containing the tree nodes indexed by node key.
 
-        private readonly List<ISettingsSection> sections = new List<ISettingsSection>(); // A list containing the settings sections applicable to the current settings group.
+        private readonly List<ISettingsSection> sections = []; // A list containing the settings sections applicable to the current settings group.
 
         private IChartSettingsViewPresenter? presenter; // The presenter that controls the view.
 

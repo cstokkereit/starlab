@@ -18,7 +18,7 @@ namespace StarLab.Presentation
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(ApplicationViewPresenter)); // The logger that will be used for writing log messages.
 
-        private readonly IApplicationUseCaseService useCaseService; // A service that executes the use cases that implement the application functionality.
+        private readonly IApplicationUseCaseService useCaseService; // A service that executes the use cases that implement the functionality.
 
         private IWorkspace workspace; // The workspace that the view represents.
 

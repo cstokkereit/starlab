@@ -1,7 +1,7 @@
 ﻿namespace Stratosoft.Commands
 {
     /// <summary>
-    /// A collection of name/value pairs that can be used as the arguments for the Execute(Arguments) method of a <see cref="Command&lt;Arguments&gt;"/>.
+    /// A collection of name/value pairs that can be used as the arguments for the Execute(Arguments) method of a <see cref="Command{Arguments}"/>.
     /// </summary>
     public sealed class Arguments
     {

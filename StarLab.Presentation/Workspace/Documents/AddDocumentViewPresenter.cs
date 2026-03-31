@@ -14,20 +14,22 @@ namespace StarLab.Presentation.Workspace.Documents
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(AddDocumentViewPresenter)); // The logger that will be used for writing log messages.
 
-        private readonly IAddDocumentUseCaseService useCases; // A facade that aggregates the available use cases.
+        private readonly IAddDocumentUseCaseService useCaseService; // A service that executes the use cases that implement the functionality.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="AddDocumentViewPresenter"/> class.
         /// </summary>
         /// <param name="view">The <see cref="IAddDocumentView"/> controlled by this presenter.</param>
         /// <param name="commands">An <see cref="ICommandManager"/> that is required for the creation of <see cref="ICommand">s.</param>
-        /// <param name="useCases">An <see cref="IAddDocumentUseCaseService"/> that will be used to execute the use cases.</param>
+        /// <param name="services">An <see cref="IServiceRegistry"/> that provides access to the registered services.</param>
         /// <param name="settings">An <see cref="IApplicationSettings"/> that provides access to the application configuration.</param>
         /// <param name="events">The <see cref="IEventAggregator"/> that manages application events.</param>
-        public AddDocumentViewPresenter(IAddDocumentView view, ICommandManager commands, IAddDocumentUseCaseService useCases, IApplicationSettings settings, IEventAggregator events)
+        public AddDocumentViewPresenter(IAddDocumentView view, ICommandManager commands, IServiceRegistry services, IApplicationSettings settings, IEventAggregator events)
             : base(view, commands, settings, events) 
         {
-            this.useCases = useCases ?? throw new ArgumentNullException(nameof(useCases));
+            ArgumentNullException.ThrowIfNull(services, nameof(services));
+
+            useCaseService = services.GetService<IAddDocumentUseCaseService>();
 
             view.Attach(this);
         }

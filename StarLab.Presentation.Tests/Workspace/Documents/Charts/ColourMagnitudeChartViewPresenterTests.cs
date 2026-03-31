@@ -5,7 +5,7 @@
     /// </summary>
     public class ColourMagnitudeChartViewPresenterTests : PresentationTests
     {
-        private IChartView view; // The mock IChartView used in the tests.
+        private IChartView view; // A mock of the IChartView interface that can be used in the unit tests.
 
         /// <summary>
         /// Registers the dependencies with the IoC container and initialises the class level variables before each test.
@@ -15,44 +15,43 @@
             base.SetUp();
 
             view = Substitute.For<IChartView>();
+            view.ID.Returns(Views.ColourMagnitudeChart);
         }
 
         /// <summary>
-        /// Test that the <see cref="ColourMagnitudeChartViewPresenter(IChartView, ICommandManager, IUseCaseFactory, IApplicationSettings, IMapper, IEventAggregator)"/> constructor works correctly.
+        /// Test that the <see cref="ColourMagnitudeChartViewPresenter(IApplicationView, ICommandManager, IServiceRegistry, IApplicationSettings, IEventAggregator)"/> constructor works correctly.
         /// </summary>
         [Test]
         public void TestConstruction()
         {
-            // Arrange
             var presenter = CreatePresenter();
 
-            // Assert
             Assert.That(presenter, Is.Not.Null);
+
+            Assert.That(presenter.ID, Is.EqualTo($"ContentController({Views.ColourMagnitudeChart})"));
+            view.Received().Attach(Arg.Is(presenter));
         }
 
         /// <summary>
-        /// Test that the <see cref="IChildViewController.Initialise(IApplicationController)"/> method works correctly.
+        /// Test that the <see cref="Initialise(IApplicationController)"/> method works correctly.
         /// </summary>
         [Test]
         public void TestInitialise()
         {
-            //var presenter = (IChildViewController)CreatePresenter();
+            var presenter = CreatePresenter();
 
-            //presenter.Initialise(controller);
+            presenter.Initialise(controller);
 
-            //view.Received(1).Initialise(controller);
-
-            //events.Received(1).Subsribe(presenter);
+            events.Received(1).Subsribe(presenter);
         }
 
         /// <summary>
-        /// Creates an instance of <see cref="ColourMagnitudeChartViewPresenter"/>.
+        /// A factory method that creates a new instance of the <see cref="ColourMagnitudeChartViewPresenter"/> class.
         /// </summary>
-        /// <returns>Returns the <see cref="ColourMagnitudeChartViewPresenter"/>.</returns>
-        private IChartViewPresenter CreatePresenter()
+        /// <returns>Returns the newly created <see cref="ColourMagnitudeChartViewPresenter"/>.</returns>
+        private ColourMagnitudeChartViewPresenter CreatePresenter()
         {
-            throw new NotImplementedException();
-            //return new ColourMagnitudeChartViewPresenter(view, commands, factory, settings, mapper, events);
+            return new ColourMagnitudeChartViewPresenter(view, commands, services, settings, events);
         }
     }
 }

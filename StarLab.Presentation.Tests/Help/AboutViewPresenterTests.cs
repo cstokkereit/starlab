@@ -1,11 +1,11 @@
 ﻿namespace StarLab.Presentation.Help
 {
     /// <summary>
-    /// 
+    /// A class for performing unit tests on the <see cref="AboutViewPresenter"/> class.
     /// </summary>
     public class AboutViewPresenterTests : PresentationTests
     {
-        private IAboutView view; //
+        private IAboutView view; // A mock of the IAboutView interface that can be used in the unit tests.
 
         /// <summary>
         /// Registers the dependencies with the IoC container and initialises the class level variables before each test.
@@ -15,51 +15,43 @@
             base.SetUp();
 
             view = Substitute.For<IAboutView>();
+            view.ID.Returns(Views.About);
         }
 
         /// <summary>
-        /// 
+        /// Test that the <see cref="AboutViewPresenter(IApplicationView, ICommandManager, IServiceRegistry, IApplicationSettings, IEventAggregator)"/> constructor works correctly.
         /// </summary>
         [Test]
         public void TestConstruction()
         {
-            // Arrange
             var presenter = CreatePresenter();
 
-            // Assert
             Assert.That(presenter, Is.Not.Null);
+
+            Assert.That(presenter.ID, Is.EqualTo($"ContentController({Views.About})"));
+            view.Received().Attach(Arg.Is(presenter));
         }
 
         /// <summary>
-        /// 
+        /// Test that the <see cref="Initialise(IApplicationController)"/> method works correctly.
         /// </summary>
         [Test]
         public void TestInitialise()
         {
-            // Arrange
-            var presenter = (IChildViewController)CreatePresenter();
+            var presenter = CreatePresenter();
 
-            //var parent = Substitute.For<IDialogController>();
-
-            //presenter.RegisterController(parent);
-
-            // Act
             presenter.Initialise(controller);
-
-            // Assert
-            //controller.Received(1).RegisterCommandInvokers(commands);
 
             events.Received(1).Subsribe(presenter);
         }
 
         /// <summary>
-        /// 
+        /// A factory method that creates a new instance of the <see cref="AboutViewPresenter"/> class.
         /// </summary>
-        /// <returns></returns>
-        private IAboutViewPresenter CreatePresenter()
+        /// <returns>Returns the newly created <see cref="AboutViewPresenter"/>.</returns>
+        private AboutViewPresenter CreatePresenter()
         {
-            throw new NotImplementedException();
-            //return new AboutViewPresenter(view, commands, factory, settings, mapper, events);
+            return new AboutViewPresenter(view, commands, services, settings, events);
         }
     }
 }

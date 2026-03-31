@@ -1,7 +1,4 @@
-﻿using AutoMapper;
-using StarLab.Application;
-using StarLab.Application.Workspace;
-using StarLab.Application.Workspace.Documents.Charts;
+﻿using StarLab.Application;
 using StarLab.Shared.Properties;
 using StarLab.Tests;
 using Stratosoft.Commands;
@@ -13,7 +10,15 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
     /// </summary>  
     public class ChartSettingsViewPresenterTests : PresentationTests
     {
-        private IChartSettingsView view; // The mock IChartSettingsView used in the tests.
+        private IChart chart; // A mock of the IChart interface that can be used in the unit tests.
+
+        private IChartDocument document; // A mock of the IChartDocument interface that can be used in the unit tests.
+
+        private IChartSettingsUseCaseService interactor; // A mock of the IChartSettingsUseCaseService interface that can be used in the unit tests.
+
+        private IChartSettingsView view; // A mock of the IChartSettingsView interface that can be used in the unit tests.
+
+        private IWorkspace workspace; // A mock of the IWorkspace interface that can be used in the unit tests.
 
         /// <summary>
         /// Registers the dependencies with the IoC container and initialises the class level variables before each test.
@@ -22,7 +27,20 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         {
             base.SetUp();
 
+            interactor = Substitute.For<IChartSettingsUseCaseService>();
+
+            services.GetService<IChartSettingsUseCaseService>().Returns(interactor);
+
+            chart = Substitute.For<IChart>();
+
+            workspace = Substitute.For<IWorkspace>();
+
+            document = Substitute.For<IChartDocument>();
+            document.Chart.Returns(chart);
+            document.ID.Returns("Test");
+
             view = Substitute.For<IChartSettingsView>();
+            view.ID.Returns("Test");
 
             view.AddNode("Chart", Arg.Any<string>()).Returns("Chart");
             view.AddNode("Title", "Chart", Arg.Any<string>()).Returns("Chart/Title");
@@ -68,141 +86,63 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// Test that the <see cref="ChartSettingsViewPresenter(IChartSettingsView, ICommandManager, IUseCaseFactory, IApplicationSettings, IMapper, IEventAggregator)"/> constructor works correctly.
+        /// Test that the <see cref="ChartSettingsViewPresenter(IChartSettingsView, ICommandManager, IServiceRegistry, IApplicationSettings, IEventAggregator)"/> constructor works correctly.
         /// </summary>
         [Test]
         public void TestConstruction()
         {
-            // Arrange
-            var presenter = CreatePresenter();
+            var presenter = CreatePresenter(false);
 
-            // Assert
             Assert.That(presenter, Is.Not.Null);
+
+            Assert.That(presenter.ID, Is.EqualTo($"ContentController(Test)"));
+            view.Received().Attach(Arg.Is(presenter));
         }
 
         /// <summary>
-        /// Test that the <see cref="IChartSettingsViewPresenter.Activate()"/> method selects the chart settings node.
-        /// </summary>
-        [Test]
-        public void TestActivate()
-        {
-            //var presenter = (IChildViewController)CreatePresenter();
-
-            //presenter.Activate();
-
-            //view.Received(1).SelectNode("Chart");
-        }
-
-        /// <summary>
-        /// Test that the <see cref="IChartSettingsViewPresenter.ApplyPreviewSettings(IChartSettings)"/> method uses the <see cref="UpdateChartInteractor"/> to update the chart with the preview settings.
+        /// Test that the <see cref="IChartSettingsViewPresenter.ApplyPreviewSettings(IChartSettings)"/> method works correctly.
         /// </summary>
         [Test]
         public void TestApplyPreviewSettings()
         {
-            // Arrange
-            var chartController = Substitute.For<IChildViewController, IChartOutputPort>();
+            var settings = Substitute.For<IChartSettings>();
 
-            var presenter = CreatePresenter(chartController);
+            var presenter = CreatePresenter(true);
 
-            var interactor = Substitute.For<IUseCase<ChartDTO>>();
-
-            factory.CreateUpdateChartUseCase((IChartOutputPort)chartController).Returns(interactor);
-
-            // Act
-            var settings = new ChartSettingsBuilder().AddTitle("Preview Settings").CreateSettings();
-            
             presenter.ApplyPreviewSettings(settings);
 
-            // Assert
-            interactor.Received(1).Execute(Arg.Is<ChartDTO>(chart => chart.Title != null && chart.Title.Text == "Preview Settings"));
+            interactor.Received(1).UpdateChart("DocumentController(Test)", settings);
         }
 
         /// <summary>
-        /// TODO
+        /// Test that the <see cref="IChartSettingsController.ApplySettings()"/> method works correctly.
         /// </summary>
-        [Ignore("Needs a real ApplicationViewPresenter")]
         [Test]
         public void TestApplySettings()
         {
-            // Arrange
-            var outputPort = Substitute.For<IApplicationOutputPort, IApplicationViewController>();
-
-            //controller.GetController(Controllers.ApplicationViewController).Returns(outputPort);
-
-            var interactor = Substitute.For<IUseCase<WorkspaceDTO, string, ChartDTO>>();
-
-            factory.CreateUpdateDocumentUseCase(outputPort).Returns(interactor);
-
-            var chartController = Substitute.For<IChildViewController, IChartOutputPort>();
-
-            var presenter = CreatePresenter(chartController);
-
             var settings = Substitute.For<IChartSettings>();
+
+            var presenter = CreatePresenter(true);
+            presenter.OnEvent(new WorkspaceChangedEventArgs(workspace));
+            presenter.UpdateSettings(document);
 
             presenter.ApplyPreviewSettings(settings);
 
-            // Act
-            ((IChartSettingsController)presenter).ApplySettings();
+            presenter.ApplySettings();
 
-            // Assert
-            Assert.Fail();
+            interactor.Received(1).UpdateDocument(workspace, "Test", settings);
         }
 
         /// <summary>
-        /// Test that the <see cref="IChartSettingsController.ApplySettings"/> method does nothing if the preview settings have not been initialised.
-        /// </summary>
-        [Test]
-        public void TestApplySettingsWhenChartIsNull()
-        {
-            // Arrange
-            var outputPort = Substitute.For<IApplicationOutputPort, IController>();
-            var chartController = Substitute.For<IChildViewController, IChartOutputPort>();
-            var presenter = CreatePresenter(chartController);
-
-            // Act
-            ((IChartSettingsController)presenter).ApplySettings();
-
-            // Assert
-            //controller.Received(0).GetController(Controllers.ApplicationViewController);
-            factory.Received(0).CreateUpdateDocumentUseCase(outputPort);
-        }
-
-        /// <summary>
-        /// Test that the <see cref="IChartSettingsViewPresenter.Name"/> property returns the correct name.
-        /// </summary>
-        [Test]
-        public void TestGetName()
-        {
-            // Arrange
-            var presenter = CreatePresenter();
-
-            // Act
-            var name = presenter.ID;
-
-            // Assert
-            Assert.That(name, Is.EqualTo("ChartSettingsController"));
-        }
-
-        /// <summary>
-        /// Test that the <see cref="IChildViewController.Initialise(IApplicationController)"/> method works correctly.
+        /// Test that the <see cref="IChartSettingsController.Initialise(IApplicationController)"/> method works correctly.
         /// </summary>
         [Test]
         public void TestInitialise()
         {
-            // Arrange
-            var presenter = (IChildViewController)CreatePresenter();
+            var presenter = CreatePresenter(true);
 
-            var parent = Substitute.For<IDocumentController>();
-
-            presenter.RegisterController(parent);
-
-            // Act
-            presenter.Initialise(controller);
-
-            // Assert
-            //view.Received(1).Initialise(controller);
-            view.Received(1).AttachOKButtonCommand(Arg.Any<ICommandChain>());
-            view.Received(1).AttachCancelButtonCommand(Arg.Any<ICommandChain>());
+            view.Received(1).AttachOKButtonCommand(Arg.Any<ICommand>());
+            view.Received(1).AttachCancelButtonCommand(Arg.Any<ICommand>());
 
             view.Received(1).AddNode("Chart", Resources.Chart);
             view.Received(1).AddNode("Title", "Chart", Resources.Title);
@@ -232,65 +172,53 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             view.Received(1).AddNode("MajorGridLines", "Chart/PlotArea/Grid", Resources.MajorGridLines);
             view.Received(1).AddNode("MinorGridLines", "Chart/PlotArea/Grid", Resources.MinorGridLines);
 
-            //controller.Received(1).RegisterCommandInvokers(commands);
+            view.Received(1).Initialise();
 
             events.Received(1).Subsribe(presenter);
         }
 
         /// <summary>
-        /// Test that the <see cref="IChildViewController.Initialise(IApplicationController)"/> method throws an exception when the parent controller has not been registered.
+        /// Test that the <see cref="IChartSettingsController.Initialise(IApplicationController)"/> method throws an exception when the parent controller has not been registered.
         /// </summary>
         [Test]
         public void TestInitialiseThrowsAnExceptionWhenParentNotRegistered()
         {
-            // Arrange
-            var presenter = (IChildViewController)CreatePresenter();
+            var presenter = new ChartSettingsViewPresenter(view, commands, services, settings, events);
 
-            // Act
             var e = Assert.Throws<InvalidOperationException>(() => presenter.Initialise(controller));
 
-            // Assert
             Assert.That(e.Message, Is.EqualTo("This instance has not been properly initialised."));
         }
 
         /// <summary>
-        /// Test that the <see cref="IChartSettingsController.RevertSettings()"/> method uses the <see cref="IChartController"/> to restore the previous chart settings.
+        /// Test that the <see cref="IChartSettingsController.RevertSettings()"/> method works correctly.
         /// </summary>
         [Test]
         public void TestRevertsSettings()
         {
-            // Arrange
             var chartController = Substitute.For<IChartController, IApplicationOutputPort>();
 
-            var presenter = (IChartSettingsController)CreatePresenter(chartController);
+            var presenter = CreatePresenter(chartController);
 
-            // Act
             presenter.RevertSettings();
 
-            // Assert
             chartController.Received(0).UpdateChart(Arg.Any<IChart>());
             chartController.Received(1).UpdatePreview();
         }
 
         /// <summary>
-        /// Test that the <see cref="IChartSettingsViewPresenter.ShowSettingsGroup(string)"/> method correctly shows the axis settings.
+        /// Test that the <see cref="IChartSettingsController.ShowSettingsGroup(string)"/> method correctly shows the axis settings.
         /// </summary>
         [Test]
         public void TestShowAxisSettingsGroup()
         {
-            // Arrange
-            var presenter = CreatePresenter(Substitute.For<IChildViewController, IChartOutputPort>());
-
-            //controller.GetController(Controllers.ApplicationViewController).Returns(presenter);
-
             var settings = new ChartSettingsBuilder().CreateSettings();
 
+            var presenter = CreatePresenter(true);
             presenter.ApplyPreviewSettings(settings);
 
-            // Act
             presenter.ShowSettingsGroup("Chart/Axes/AxisX1");
 
-            // Assert
             view.Received(1).Clear();
 
             view.Received(0).AppendFontSection(Arg.Any<IChartSettings>(), Arg.Any<string>());
@@ -301,24 +229,18 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// Test that the <see cref="IChartSettingsViewPresenter.ShowSettingsGroup(string)"/> method correctly shows the axis label settings.
+        /// Test that the <see cref="IChartSettingsController.ShowSettingsGroup(string)"/> method correctly shows the axis label settings.
         /// </summary>
         [Test]
         public void TestShowAxisLabelSettingsGroup()
         {
-            // Arrange
-            var presenter = CreatePresenter(Substitute.For<IChildViewController, IChartOutputPort>());
-
-            //controller.GetController(Controllers.ApplicationViewController).Returns(presenter);
-
             var settings = new ChartSettingsBuilder().CreateSettings();
 
+            var presenter = CreatePresenter(true);
             presenter.ApplyPreviewSettings(settings);
 
-            // Act
             presenter.ShowSettingsGroup("Chart/Axes/AxisX1/Label");
 
-            // Assert
             view.Received(1).Clear();
 
             view.Received(1).AppendVisibleSection(settings, "Chart/Axes/AxisX1/Label");
@@ -329,24 +251,18 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// Test that the <see cref="IChartSettingsViewPresenter.ShowSettingsGroup(string)"/> method correctly shows the axis scale settings.
+        /// Test that the <see cref="IChartSettingsController.ShowSettingsGroup(string)"/> method correctly shows the axis scale settings.
         /// </summary>
         [Test]
-        public void TestShowScaleSettingsGroup()
+        public void TestShowAxisScaleSettingsGroup()
         {
-            // Arrange
-            var presenter = CreatePresenter(Substitute.For<IChildViewController, IChartOutputPort>());
-
-            //controller.GetController(Controllers.ApplicationViewController).Returns(presenter);
-
             var settings = new ChartSettingsBuilder().CreateSettings();
 
+            var presenter = CreatePresenter(true);
             presenter.ApplyPreviewSettings(settings);
 
-            // Act
             presenter.ShowSettingsGroup("Chart/Axes/AxisX1/Scale");
 
-            // Assert
             view.Received(1).Clear();
 
             view.Received(1).AppendVisibleSection(settings, "Chart/Axes/AxisX1/Scale");
@@ -357,24 +273,18 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// Test that the <see cref="IChartSettingsViewPresenter.ShowSettingsGroup(string)"/> method correctly shows the chart settings.
+        /// Test that the <see cref="IChartSettingsController.ShowSettingsGroup(string)"/> method correctly shows the chart settings.
         /// </summary>
         [Test]
         public void TestShowChartSettingsGroup()
         {
-            // Arrange
-            var presenter = CreatePresenter(Substitute.For<IChildViewController, IChartOutputPort>());
-
-            //controller.GetController(Controllers.ApplicationViewController).Returns(presenter);
-
             var settings = new ChartSettingsBuilder().CreateSettings();
 
+            var presenter = CreatePresenter(true);
             presenter.ApplyPreviewSettings(settings);
 
-            // Act
             presenter.ShowSettingsGroup("Chart");
 
-            // Assert
             view.Received(1).Clear();
 
             view.Received(0).AppendVisibleSection(Arg.Any<IChartSettings>(), Arg.Any<string>());
@@ -385,24 +295,18 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// Test that the <see cref="IChartSettingsViewPresenter.ShowSettingsGroup(string)"/> method correctly shows the chart title settings.
+        /// Test that the <see cref="IChartSettingsController.ShowSettingsGroup(string)"/> method correctly shows the chart title settings.
         /// </summary>
         [Test]
         public void TestShowChartTitleSettingsGroup()
         {
-            // Arrange
-            var presenter = CreatePresenter(Substitute.For<IChildViewController, IChartOutputPort>());
-
-            //controller.GetController(Controllers.ApplicationViewController).Returns(presenter);
-
             var settings = new ChartSettingsBuilder().CreateSettings();
 
+            var presenter = CreatePresenter(true);
             presenter.ApplyPreviewSettings(settings);
 
-            // Act
             presenter.ShowSettingsGroup("Chart/Title");
 
-            // Assert
             view.Received(1).Clear();
 
             view.Received(1).AppendVisibleSection(settings, "Chart/Title");
@@ -412,24 +316,18 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// Test that the <see cref="IChartSettingsViewPresenter.ShowSettingsGroup(string)"/> method correctly shows the grid settings.
+        /// Test that the <see cref="IChartSettingsController.ShowSettingsGroup(string)"/> method correctly shows the grid settings.
         /// </summary>
         [Test]
         public void TestShowGridSettingsGroup()
         {
-            // Arrange
-            var presenter = CreatePresenter(Substitute.For<IChildViewController, IChartOutputPort>());
-
-            //controller.GetController(Controllers.ApplicationViewController).Returns(presenter);
-
             var settings = new ChartSettingsBuilder().CreateSettings();
 
+            var presenter = CreatePresenter(true);
             presenter.ApplyPreviewSettings(settings);
 
-            // Act
             presenter.ShowSettingsGroup("Chart/PlotArea/Grid");
 
-            // Assert
             view.Received(1).Clear();
 
             view.Received(1).AppendVisibleSection(Arg.Any<IChartSettings>(), Arg.Any<string>());
@@ -440,24 +338,18 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// Test that the <see cref="IChartSettingsViewPresenter.ShowSettingsGroup(string)"/> method correctly shows the major grid line settings.
+        /// Test that the <see cref="IChartSettingsController.ShowSettingsGroup(string)"/> method correctly shows the major grid line settings.
         /// </summary>
         [Test]
         public void TestShowMajorGridLinesSettingsGroup()
         {
-            // Arrange
-            var presenter = CreatePresenter(Substitute.For<IChildViewController, IChartOutputPort>());
-
-            //controller.GetController(Controllers.ApplicationViewController).Returns(presenter);
-
             var settings = new ChartSettingsBuilder().CreateSettings();
 
+            var presenter = CreatePresenter(true);
             presenter.ApplyPreviewSettings(settings);
 
-            // Act
             presenter.ShowSettingsGroup("Chart/PlotArea/Grid/MajorGridLines");
 
-            // Assert
             view.Received(1).Clear();
 
             view.Received(1).AppendVisibleSection(settings, "Chart/PlotArea/Grid/MajorGridLines");
@@ -468,24 +360,18 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// Test that the <see cref="IChartSettingsViewPresenter.ShowSettingsGroup(string)"/> method correctly shows the major tick mark settings.
+        /// Test that the <see cref="IChartSettingsController.ShowSettingsGroup(string)"/> method correctly shows the major tick mark settings.
         /// </summary>
         [Test]
         public void TestShowMajorTickMarkSettingsGroup()
         {
-            // Arrange
-            var presenter = CreatePresenter(Substitute.For<IChildViewController, IChartOutputPort>());
-
-            //controller.GetController(Controllers.ApplicationViewController).Returns(presenter);
-
             var settings = new ChartSettingsBuilder().CreateSettings();
 
+            var presenter = CreatePresenter(true);
             presenter.ApplyPreviewSettings(settings);
 
-            // Act
             presenter.ShowSettingsGroup("Chart/Axes/AxisX1/Scale/MajorTickMarks");
 
-            // Assert
             view.Received(1).Clear();
 
             view.Received(1).AppendVisibleSection(settings, "Chart/Axes/AxisX1/Scale/MajorTickMarks");
@@ -496,24 +382,18 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// Test that the <see cref="IChartSettingsViewPresenter.ShowSettingsGroup(string)"/> method correctly shows the minor grid line settings.
+        /// Test that the <see cref="IChartSettingsController.ShowSettingsGroup(string)"/> method correctly shows the minor grid line settings.
         /// </summary>
         [Test]
         public void TestShowMinorGridLinesSettingsGroup()
         {
-            // Arrange
-            var presenter = CreatePresenter(Substitute.For<IChildViewController, IChartOutputPort>());
-
-            //controller.GetController(Controllers.ApplicationViewController).Returns(presenter);
-
             var settings = new ChartSettingsBuilder().CreateSettings();
 
+            var presenter = CreatePresenter(true);
             presenter.ApplyPreviewSettings(settings);
 
-            // Act
             presenter.ShowSettingsGroup("Chart/PlotArea/Grid/MinorGridLines");
 
-            // Assert
             view.Received(1).Clear();
 
             view.Received(1).AppendVisibleSection(settings, "Chart/PlotArea/Grid/MinorGridLines");
@@ -524,24 +404,18 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// Test that the <see cref="IChartSettingsViewPresenter.ShowSettingsGroup(string)"/> method correctly shows the minor tick mark settings.
+        /// Test that the <see cref="IChartSettingsController.ShowSettingsGroup(string)"/> method correctly shows the minor tick mark settings.
         /// </summary>
         [Test]
         public void TestShowMinorTickMarkSettingsGroup()
         {
-            // Arrange
-            var presenter = CreatePresenter(Substitute.For<IChildViewController, IChartOutputPort>());
-
-            //controller.GetController(Controllers.ApplicationViewController).Returns(presenter);
-
             var settings = new ChartSettingsBuilder().CreateSettings();
 
+            var presenter = CreatePresenter(true);
             presenter.ApplyPreviewSettings(settings);
 
-            // Act
             presenter.ShowSettingsGroup("Chart/Axes/AxisX1/Scale/MinorTickMarks");
 
-            // Assert
             view.Received(1).Clear();
 
             view.Received(1).AppendVisibleSection(settings, "Chart/Axes/AxisX1/Scale/MinorTickMarks");
@@ -552,24 +426,18 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// Test that the <see cref="IChartSettingsViewPresenter.ShowSettingsGroup(string)"/> method correctly shows the plot area settings.
+        /// Test that the <see cref="IChartSettingsController.ShowSettingsGroup(string)"/> method correctly shows the plot area settings.
         /// </summary>
         [Test]
         public void TestShowPlotAreaSettingsGroup()
         {
-            // Arrange
-            var presenter = CreatePresenter(Substitute.For<IChildViewController, IChartOutputPort>());
-
-            //controller.GetController(Controllers.ApplicationViewController).Returns(presenter);
-
             var settings = new ChartSettingsBuilder().CreateSettings();
 
+            var presenter = CreatePresenter(true);
             presenter.ApplyPreviewSettings(settings);
 
-            // Act
             presenter.ShowSettingsGroup("Chart/PlotArea");
 
-            // Assert
             view.Received(1).Clear();
 
             view.Received(0).AppendVisibleSection(Arg.Any<IChartSettings>(), Arg.Any<string>());
@@ -579,26 +447,19 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             view.Received(0).AppendScaleSection(settings, "Chart/PlotArea");
         }
 
-
         /// <summary>
-        /// Test that the <see cref="IChartSettingsViewPresenter.ShowSettingsGroup(string)"/> method correctly shows the tick label settings.
+        /// Test that the <see cref="IChartSettingsController.ShowSettingsGroup(string)"/> method correctly shows the tick label settings.
         /// </summary>
         [Test]
         public void TestShowTickLabelSettingsGroup()
         {
-            // Arrange
-            var presenter = CreatePresenter(Substitute.For<IChildViewController, IChartOutputPort>());
-
-            //controller.GetController(Controllers.ApplicationViewController).Returns(presenter);
-
             var settings = new ChartSettingsBuilder().CreateSettings();
 
+            var presenter = CreatePresenter(true);
             presenter.ApplyPreviewSettings(settings);
 
-            // Act
             presenter.ShowSettingsGroup("Chart/Axes/AxisX1/Scale/TickLabels");
 
-            // Assert
             view.Received(1).Clear();
 
             view.Received(1).AppendVisibleSection(settings, "Chart/Axes/AxisX1/Scale/TickLabels");
@@ -609,102 +470,62 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// Test that the <see cref="IChartSettingsController.ApplySettings()"/> method uses the <see cref="UpdateDocumentInteractor"/> to update the document with the new chart settings.
-        /// </summary>
-        [Test]
-        public void TestUpdateDocument()
-        {
-            // Arrange
-            var chartController = Substitute.For<IChildViewController, IChartOutputPort>();
-
-            var presenter = CreatePresenter(chartController);
-
-            var interactor = Substitute.For<IUseCase<WorkspaceDTO, string, ChartDTO>>();
-
-            var outputPort = Substitute.For<IApplicationViewController, IApplicationOutputPort>();
-
-            //controller.GetController(Controllers.ApplicationViewController).Returns(outputPort);
-
-            factory.CreateUpdateDocumentUseCase((IApplicationOutputPort)outputPort).Returns(interactor);
-
-            var dtoChart = new ChartDtoBuilder().AddTitle("Original").CreateChart();
-
-            var dtoWorkspace = new WorkspaceDtoBuilder("Workspace")
-                .AddProject("Charts")
-                .AddDocument("D1", "ColourMagnitudeView", "Chart", "Workspace/Charts")
-                .AddChart("D1", dtoChart)
-                .CreateWorkspace();
-
-            ((ISubscriber<WorkspaceChangedEventArgs>)presenter).OnEvent(new WorkspaceChangedEventArgs(new Workspace(dtoWorkspace)));
-
-            var document = Substitute.For<IDocument>();
-            document.ID.Returns("D1");
-
-            //((IChartSettingsController)presenter).UpdateSettings(document);
-
-            var settings = new ChartSettingsBuilder().AddTitle("Modified").CreateSettings();
-
-            presenter.ApplyPreviewSettings(settings);
-
-            // Act
-            ((IChartSettingsController)presenter).ApplySettings();
-
-            // Assert
-            interactor.Received(1).Execute(Arg.Any<WorkspaceDTO>(), Arg.Is("D1"), Arg.Is<ChartDTO>(args => args.Title != null && args.Title.Text == "Modified"));
-        }
-
-        /// <summary>
         /// Test that the <see cref="IChartSettingsController.UpdateSettings(IDocument)"/> method works correctly.
         /// </summary>
         [Test]
         public void TestUpdateSettings()
         {
-            // Arrange
-            var presenter = CreatePresenter(Substitute.For<IChildViewController, IChartOutputPort>());
+            var document = Substitute.For<IChartDocument>();
+            document.Chart.Returns(Substitute.For<IChart>());
+            document.ID.Returns("UpdatedTest");
+            
+            var presenter = CreatePresenter(true);
+            presenter.OnEvent(new WorkspaceChangedEventArgs(workspace));
 
-            var document = Substitute.For<IDocument>();
-            var chart = Substitute.For<IChart>();
+            presenter.UpdateSettings(document);
 
-            //document.ID.Returns("test-document");
-            //document.Chart.Returns(chart);
+            presenter.ApplySettings();
 
-            // Act
-            //((IChartSettingsController)presenter).UpdateSettings(document);
-
-            //Assert
-            //_ = document.Received(1).Chart;
-            //_ = document.Received(1).ID;
+            interactor.Received(1).UpdateDocument(workspace, "UpdatedTest", Arg.Any<IChartSettings>());
         }
 
         /// <summary>
-        /// Creates an instance of <see cref="ChartSettingsViewPresenter"/>.
+        /// A factory method that creates a new instance of the <see cref="ChartSettingsViewPresenter"/> class.
         /// </summary>
-        /// <param name="chartController">The <see cref="IChildViewController"/> that controls the chart.</param>
-        /// <returns>Returns the <see cref="ChartSettingsViewPresenter"/>.</returns>
-        private IChartSettingsViewPresenter CreatePresenter(IChildViewController chartController)
+        /// <param name="chart">The chart controller.</param>
+        /// <returns>Returns the newly created <see cref="ChartSettingsViewPresenter"/>.</returns>
+        private ChartSettingsViewPresenter CreatePresenter(IChartController chartController)
         {
-            var presenter = (IChildViewController)CreatePresenter();
-
-            //controller.GetController(Controllers.ApplicationViewController).Returns(presenter);
+            var presenter = new ChartSettingsViewPresenter(view, commands, services, settings, events);
 
             var parent = Substitute.For<IDocumentController>();
-            //parent.GetController(Controllers.ChartController).Returns(chartController);
-
+            parent.GetController<IChartController>().Returns(chartController);
+            parent.ID.Returns("DocumentController(Test)");
+            
             presenter.RegisterController(parent);
 
             presenter.Initialise(controller);
 
-            return (IChartSettingsViewPresenter)presenter;
+            return presenter;
         }
 
         /// <summary>
-        /// Creates an instance of <see cref="ChartSettingsViewPresenter"/>.
+        /// A factory method that creates a new instance of the <see cref="ChartSettingsViewPresenter"/> class.
         /// </summary>
-        /// <returns>Returns the <see cref="ChartSettingsViewPresenter"/>.</returns>
-        protected IChartSettingsViewPresenter CreatePresenter()
+        /// <param name="initialise">true to initialise the presenter; false otherwise.</param>
+        /// <returns>Returns the newly created <see cref="ChartSettingsViewPresenter"/>.</returns>
+        private ChartSettingsViewPresenter CreatePresenter(bool initialise)
         {
-            throw new NotImplementedException();
-            //return new ChartSettingsViewPresenter(view, commands, factory, settings, mapper, events);
+            var presenter = new ChartSettingsViewPresenter(view, commands, services, settings, events);
+
+            var parent = Substitute.For<IDocumentController>();
+            parent.ID.Returns("DocumentController(Test)");
+
+            presenter.RegisterController(parent);
+
+            if (initialise) presenter.Initialise(controller);
+
+            return presenter;
         }
     }
 } 

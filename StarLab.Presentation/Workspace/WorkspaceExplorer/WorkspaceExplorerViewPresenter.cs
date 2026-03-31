@@ -30,7 +30,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
 
         private readonly Dictionary<NodeImages, int> images = new Dictionary<NodeImages, int>(); // A dictionary that holds the node image indices.
 
-        private readonly IWorkspaceExplorerUseCaseService useCaseService; // A service that executes the use cases that implement the workspace explorer functionality.
+        private readonly IWorkspaceExplorerUseCaseService useCaseService; // A service that executes the use cases that implement the functionality.
 
         private string clipboard = string.Empty; // The key that identifies the current contents of the clipboard.
 
