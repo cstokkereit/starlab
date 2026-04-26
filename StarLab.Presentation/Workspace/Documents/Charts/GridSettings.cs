@@ -25,8 +25,8 @@
 
             set
             {
-                if (MajorGridLines != null) MajorGridLines.Colour = value;
-                if (MinorGridLines != null) MinorGridLines.Colour = value;
+                MajorGridLines?.Colour = value;
+                MinorGridLines?.Colour = value;
 
                 base.Colour = value;
             }
@@ -51,8 +51,8 @@
 
             set
             {
-                if (MajorGridLines != null) MajorGridLines.Visible = value;
-                if (MinorGridLines != null) MinorGridLines.Visible = value;
+                MajorGridLines?.Visible = value;
+                MinorGridLines?.Visible = value;
 
                 base.Visible = value;
             }

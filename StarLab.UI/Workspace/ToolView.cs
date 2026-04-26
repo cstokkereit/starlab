@@ -2,8 +2,8 @@
 using StarLab.Application;
 using StarLab.Presentation;
 using StarLab.Presentation.Workspace;
+using StarLab.Shared;
 using StarLab.Shared.Properties;
-using StarLab.Shared.Resources;
 using System.Diagnostics;
 using WeifenLuo.WinFormsUI.Docking;
 

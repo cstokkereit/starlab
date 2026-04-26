@@ -8,22 +8,12 @@ namespace StarLab.Presentation.Workspace.Documents
     public interface IAddDocumentView : IChildView
     {
         /// <summary>
-        /// Gets or sets the name of the currently selected document type.
-        /// </summary>
-        string DocumentName { get; set; }
-
-        /// <summary>
-        /// Gets the type name of the currently selected document type.
-        /// </summary>
-        string DocumentType { get; }
-
-        /// <summary>
         /// Adds a row to the list of available document types.
         /// </summary>
         /// <param name="key">The document type key.</param>
         /// <param name="text">The text describing the document type.</param>
         /// <param name="imageKey">The image key of the image representing the document type.</param>
-        void AddDocument(string key, string text, string imageKey);
+        void AddDocumentType(string key, string text, string imageKey);
 
         /// <summary>
         /// Adds an <see cref="Image"/> to the list of available images.
@@ -43,5 +33,15 @@ namespace StarLab.Presentation.Workspace.Documents
         /// </summary>
         /// <param name="command">The <see cref="ICommand"/> that will be executed when the Cancel button is clicked.</param>
         void AttachCancelButtonCommand(ICommand command);
+
+        /// <summary>
+        /// Clears the list containing the available document types.
+        /// </summary>
+        void ClearDocumentTypes();
+
+        /// <summary>
+        /// Clears the list containing the images that represent the different document types.
+        /// </summary>
+        void ClearImages();
     }
 }

@@ -12,7 +12,7 @@
         public GridLineSettings(IGridLines gridLines)
             : base(gridLines.Colour, gridLines.Visible)
         {
-            Opacity = 0.2;
+            Opacity = gridLines.Opacity;
         }
 
         /// <summary>

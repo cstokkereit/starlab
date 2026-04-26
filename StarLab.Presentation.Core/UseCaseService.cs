@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using log4net;
 using StarLab.Application;
+using StarLab.Shared;
 using StarLab.Shared.Properties;
-using StarLab.Shared.Resources;
 
 namespace StarLab.Presentation
 {

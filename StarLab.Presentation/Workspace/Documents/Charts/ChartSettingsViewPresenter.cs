@@ -1,5 +1,6 @@
 ﻿using log4net;
-using StarLab.Shared.Resources;
+using StarLab.Presentation.Configuration;
+using StarLab.Shared;
 using Stratosoft.Commands;
 using System.Diagnostics;
 
@@ -31,12 +32,12 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// Initialises a new instance of the <see cref="ChartSettingsViewPresenter"> class.
         /// </summary>
         /// <param name="view">The <see cref="IChartSettingsView"/> controlled by this presenter.</param>
+        /// <param name="context">An <see cref="ISessionContext"/> that provides access to the session context.</param>
         /// <param name="commands">An <see cref="ICommandManager"/> that is required for the creation of <see cref="ICommand">s.</param>
         /// <param name="services">An <see cref="IServiceRegistry"/> that provides access to the registered services.</param>
-        /// <param name="settings">An <see cref="IApplicationSettings"/> that provides access to the application configuration.</param>
         /// <param name="events">The <see cref="IEventAggregator"/> that manages application events.</param>
-        public ChartSettingsViewPresenter(IChartSettingsView view, ICommandManager commands, IServiceRegistry services, IApplicationSettings settings, IEventAggregator events)
-            : base(view, commands, settings, events)
+        public ChartSettingsViewPresenter(IChartSettingsView view, ISessionContext context, ICommandManager commands, IServiceRegistry services, IEventAggregator events)
+            : base(view, context, commands, events)
         {
             ArgumentNullException.ThrowIfNull(services, nameof(services));
 
@@ -73,9 +74,9 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// </summary>
         public void ApplySettings()
         {
-            if (string.IsNullOrEmpty(documentId)) throw new InvalidOperationException($"{StringResources.ObjectNotInitialised} {string.Format(StringResources.VariableNotSet, StringResources.DocumentID)}");
-            if (workspace == null) throw new InvalidOperationException($"{StringResources.ObjectNotInitialised} {string.Format(StringResources.VariableNotSet, StringResources.Workspace)}");
-            if (chart == null) throw new InvalidOperationException($"{StringResources.ObjectNotInitialised} {string.Format(StringResources.VariableNotSet, StringResources.Chart)}");
+            if (string.IsNullOrEmpty(documentId)) throw new InvalidOperationException(string.Format(StringResources.VariableNotSet, StringResources.DocumentID.ToLower()));
+            if (workspace == null) throw new InvalidOperationException(string.Format(StringResources.VariableNotSet, StringResources.Workspace.ToLower()));
+            if (chart == null) throw new InvalidOperationException(string.Format(StringResources.VariableNotSet, StringResources.Chart.ToLower()));
             
             useCaseService.UpdateDocument(workspace, documentId, chart);
         }
@@ -146,7 +147,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// <param name="group">The name of the settings group to show.</param>
         public void ShowSettingsGroup(string group)
         {
-            if (chart == null) throw new InvalidOperationException($"{StringResources.ObjectNotInitialised} {string.Format(StringResources.VariableNotSet, StringResources.Chart)}");
+            if (chart == null) throw new InvalidOperationException(string.Format(StringResources.VariableNotSet, StringResources.Chart.ToLower()));
 
             Debug.Assert(groupManagers.ContainsKey(group));
 
@@ -183,6 +184,8 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// <param name="disposing">true if managed resources can be disposed of; false otherwise.</param>
         protected override void Dispose(bool disposing)
         {
+            base.Dispose(disposing);
+
             if (disposing)
             {
                 View.Detach();

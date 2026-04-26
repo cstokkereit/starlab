@@ -23,6 +23,12 @@
         void RenameFolder(string path);
 
         /// <summary>
+        /// Renames the specified project.
+        /// </summary>
+        /// <param name="path">The project path.</param>
+        void RenameProject(string path);
+
+        /// <summary>
         /// Updates the contents of the clipboard.
         /// </summary>
         /// <param name="key">The key that identifies the target of the current clipboard operation.</param>

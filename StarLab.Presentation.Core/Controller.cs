@@ -13,9 +13,7 @@
         /// <param name="events">An <see cref="IEventAggregator"> that can be used for subscribing to and publishing events.</param>
         public Controller(IEventAggregator events)
         {
-            ArgumentNullException.ThrowIfNull(events, nameof(events));
-
-            this.events = events;
+            this.events = events ?? throw new ArgumentNullException(nameof(events));
         }
 
         /// <summary>

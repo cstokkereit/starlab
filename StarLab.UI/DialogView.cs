@@ -1,10 +1,8 @@
 ﻿using log4net;
 using StarLab.Application;
 using StarLab.Presentation;
-using StarLab.Presentation.Workspace;
-using StarLab.Serialisation.Workspace;
+using StarLab.Shared;
 using StarLab.Shared.Properties;
-using StarLab.Shared.Resources;
 using StarLab.UI;
 using System.Diagnostics;
 
@@ -13,7 +11,7 @@ namespace StarLab
     /// <summary>
     /// A <see cref="Form"/> that implements the behaviour that is common to all dialogs.
     /// </summary>
-    public partial class DialogView : Form, IDialog, IDialogView
+    public partial class DialogView : Form, IDialogView
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(DialogView)); // The logger that will be used for writing log messages.
 
@@ -98,18 +96,6 @@ namespace StarLab
         public void Show(IView view)
         {
             if (view is Form form) form.ShowDialog(this);
-        }
-
-        /// <summary>
-        /// Shows the dialog with the specified <see cref="IInteractionContext"/>.
-        /// </summary>
-        /// <param name="context">An <see cref="IInteractionContext"/> that provides the context required to configure the dialog for a specific user interaction.</param>
-        public void Show(IInteractionContext context)
-        {
-            //Debug.Assert(childView != null);
-            //Debug.Assert(childView.Controller != null);
-
-            //childView.Controller.Run(context);
         }
 
         /// <summary>

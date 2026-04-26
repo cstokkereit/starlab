@@ -1,4 +1,4 @@
-﻿namespace StarLab.Shared.Resources
+﻿namespace StarLab.Shared
 {
     /// <summary>
     /// A static class containing the string constants used to create log entries.
@@ -15,7 +15,11 @@
 
         public const string StartingApplication = "Starting the application.";
 
+        public const string ViewClosed = "The {0} has been closed.";
+
         public const string ViewCreated = "The {0} has been created.";
+
+        public const string ViewNotClosed = "The {0} could not be closed.";
 
         public const string ViewNotCreated = "The {0} could not be created.";
     }

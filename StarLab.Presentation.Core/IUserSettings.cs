@@ -1,9 +1,9 @@
 ﻿namespace StarLab.Presentation
 {
     /// <summary>
-    /// Provides access to the application settings defined in the App.Config file.
+    /// Represents the user settings defined in the app.Config file.
     /// </summary>
-    public interface IApplicationSettings
+    public interface IUserSettings
     {
         /// <summary>
         /// Gets or sets the path to the default workspace file.

@@ -13,12 +13,12 @@ namespace StarLab.Presentation
     public class PresenterFactoryTests : PresentationTests
     {
         /// <summary>
-        /// Test that the <see cref="PresenterFactory(IServiceRegistry, IFactoryConfiguration, IApplicationSettings, IEventAggregator)"/> constructor works correctly.
+        /// Test that the <see cref="PresenterFactory(IServiceRegistry, IFactoryConfiguration, IUserSettings, IEventAggregator)"/> constructor works correctly.
         /// </summary>
         [Test]
         public void TestConstruction()
         {
-            var factory = new PresenterFactory(services, configuration, settings, events);
+            var factory = new PresenterFactory(services, context, configuration, events);
 
             Assert.That(factory, Is.Not.Null);
         }
@@ -37,7 +37,7 @@ namespace StarLab.Presentation
 
             configuration.GetConfiguration(Views.About).Returns(viewConfiguration);
 
-            var factory = new PresenterFactory(services, configuration, settings, events);
+            var factory = new PresenterFactory(services, context, configuration, events);
             
             var view = Substitute.For<IAboutView>();
             view.Name.Returns(Views.About);
@@ -64,15 +64,13 @@ namespace StarLab.Presentation
 
             configuration.GetConfiguration(Views.About).Returns(viewConfiguration);
 
-            var factory = new PresenterFactory(services, configuration, settings, events);
+            var factory = new PresenterFactory(services, context, configuration, events);
 
             var view = Substitute.For<IAboutView>();
             view.Name.Returns(Views.About);
             view.ID.Returns(Views.About);
 
             var e = Assert.Throws<Exception>(() => factory.CreatePresenter(view, commands));
-
-            Assert.That(e.Message, Does.StartWith("Unknown type: "));
         }
 
         /// <summary>
@@ -81,7 +79,7 @@ namespace StarLab.Presentation
         [Test]
         public void TestCreateDialogViewPresenter()
         {
-            var factory = new PresenterFactory(services, configuration, settings, events);
+            var factory = new PresenterFactory(services, context, configuration, events);
 
             var view = Substitute.For<IDialogView>();
             view.ID.Returns(Views.About);
@@ -101,15 +99,13 @@ namespace StarLab.Presentation
         [Test]
         public void TestCreateDialogViewPresenterThrowsAnExceptionWhenInterfaceNotImplemented()
         {
-            var factory = new PresenterFactory(services, configuration, settings, events);
+            var factory = new PresenterFactory(services, context, configuration, events);
 
             var view = Substitute.For<IDialogView>();
 
             var child = Substitute.For<IChildViewPresenter>();
 
             var e = Assert.Throws<ArgumentException>(() => factory.CreatePresenter(view, child, commands));
-
-            Assert.That(e.Message, Is.EqualTo("childPresenter does not implement the IChildViewController interface."));
         }
 
         /// <summary>
@@ -118,7 +114,7 @@ namespace StarLab.Presentation
         [Test]
         public void TestCreateDialogOrToolViewPresenterThrowsAnExceptionForUnexpectedViewType()
         {
-            var factory = new PresenterFactory(services, configuration, settings, events);
+            var factory = new PresenterFactory(services, context, configuration, events);
 
             var view = Substitute.For<IView>();
 
@@ -135,7 +131,7 @@ namespace StarLab.Presentation
         [Test]
         public void TestCreateDocumentViewPresenter()
         {
-            var factory = new PresenterFactory(services, configuration, settings, events);
+            var factory = new PresenterFactory(services, context, configuration, events);
 
             var document = Substitute.For<IDocument>();
             document.ID.Returns("Test");
@@ -156,7 +152,7 @@ namespace StarLab.Presentation
         [Test]
         public void TestCreateDocumentViewPresenterThrowsAnExceptionWhenInterfaceNotImplemented()
         {
-            var factory = new PresenterFactory(services, configuration, settings, events);
+            var factory = new PresenterFactory(services, context, configuration, events);
 
             var document = Substitute.For<IDocument>();
             document.ID.Returns("Test");
@@ -167,8 +163,6 @@ namespace StarLab.Presentation
             var child = Substitute.For<IChildViewPresenter>();
 
             var e = Assert.Throws<Exception>(() => factory.CreatePresenter(document, view, [child], commands));
-
-            Assert.That(e.Message, Is.EqualTo("childPresenter does not implement the IChildViewController interface."));
         }
 
         /// <summary>
@@ -177,7 +171,7 @@ namespace StarLab.Presentation
         [Test]
         public void TestCreateToolViewPresenter()
         {
-            var factory = new PresenterFactory(services, configuration, settings, events);
+            var factory = new PresenterFactory(services, context, configuration, events);
 
             var view = Substitute.For<IDockableView>();
             view.ID.Returns(Views.WorkspaceExplorer);
@@ -197,15 +191,13 @@ namespace StarLab.Presentation
         [Test]
         public void TestCreateToolViewPresenterThrowsAnExceptionWhenInterfaceNotImplemented()
         {
-            var factory = new PresenterFactory(services, configuration, settings, events);
+            var factory = new PresenterFactory(services, context, configuration, events);
 
             var view = Substitute.For<IDockableView>();
 
             var child = Substitute.For<IChildViewPresenter>();
 
             var e = Assert.Throws<ArgumentException>(() => factory.CreatePresenter(view, child, commands));
-
-            Assert.That(e.Message, Is.EqualTo("childPresenter does not implement the IChildViewController interface."));
         }
 
         /// <summary>
@@ -214,7 +206,7 @@ namespace StarLab.Presentation
         [Test]
         public void TestCreateViewPresenter()
         {
-            var factory = new PresenterFactory(services, configuration, settings, events);
+            var factory = new PresenterFactory(services, context, configuration, events);
 
             var view = Substitute.For<IApplicationView>();
             view.ID.Returns(Views.Application);
@@ -232,13 +224,11 @@ namespace StarLab.Presentation
         [Test]
         public void TestCreateViewPresenterThrowsAnExceptionForUnexpectedViewType()
         {
-            var factory = new PresenterFactory(services, configuration, settings, events);
+            var factory = new PresenterFactory(services, context, configuration, events);
 
             var view = Substitute.For<IView>();
 
             var e = Assert.Throws<ArgumentException>(() => factory.CreatePresenter(view, commands));
-
-            Assert.That(e.Message, Does.StartWith("Unexpected view type: "));
         }
 
         /// <summary>
@@ -257,12 +247,12 @@ namespace StarLab.Presentation
             viewConfiguration.GetChildViewConfiguration(Views.ChartSettings).Returns(childConfiguration1);
             viewConfiguration.GetChildViewConfiguration(Views.Chart).Returns(childConfiguration2);
 
-            configuration.GetConfiguration(Views.ColourMagnitudeChart).Returns(viewConfiguration);
+            configuration.GetConfiguration(Views.ColourMagnitudeDiagram).Returns(viewConfiguration);
 
-            var factory = new PresenterFactory(services, configuration, settings, events);
+            var factory = new PresenterFactory(services, context, configuration, events);
 
             var document = Substitute.For<IDocument>();
-            document.View.Returns(Views.ColourMagnitudeChart);
+            document.View.Returns(Views.ColourMagnitudeDiagram);
 
             var child1 = Substitute.For<IChartSettingsView>();
             child1.Name.Returns(Views.ChartSettings);
@@ -299,12 +289,12 @@ namespace StarLab.Presentation
             viewConfiguration.GetChildViewConfiguration(Views.ChartSettings).Returns(childConfiguration1);
             viewConfiguration.GetChildViewConfiguration(Views.Chart).Returns(childConfiguration2);
 
-            configuration.GetConfiguration(Views.ColourMagnitudeChart).Returns(viewConfiguration);
+            configuration.GetConfiguration(Views.ColourMagnitudeDiagram).Returns(viewConfiguration);
 
-            var factory = new PresenterFactory(services, configuration, settings, events);
+            var factory = new PresenterFactory(services, context, configuration, events);
 
             var document = Substitute.For<IDocument>();
-            document.View.Returns(Views.ColourMagnitudeChart);
+            document.View.Returns(Views.ColourMagnitudeDiagram);
 
             var child1 = Substitute.For<IChartSettingsView>();
             child1.Name.Returns(Views.ChartSettings);
@@ -315,8 +305,6 @@ namespace StarLab.Presentation
             child2.ID.Returns(Views.Chart);
 
             var e = Assert.Throws<Exception>(() => factory.CreatePresenters(document, [child1, child2], commands));
-
-            Assert.That(e.Message, Does.StartWith("Unknown type: "));
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using StarLab.Application;
+using StarLab.Presentation.Workspace;
 using StarLab.Presentation.Workspace.Documents;
 
 namespace StarLab.Presentation
@@ -8,6 +9,12 @@ namespace StarLab.Presentation
     /// </summary>
     public interface IApplicationController : IController
     {
+        /// <summary>
+        /// Closes the view that represents the specified <see cref="IDocument"/>.
+        /// </summary>
+        /// <param name="document">The <see cref="IDocument"/> to close.</param>
+        void CloseDocument(IDocument document);
+
         /// <summary>
         /// Deletes the <see cref="IView"/> with the specified ID.
         /// </summary>
@@ -61,12 +68,19 @@ namespace StarLab.Presentation
         void Run();
 
         /// <summary>
-        /// Shows the About dialog.
+        /// Displays the About dialog.
         /// </summary>
         void ShowAboutDialog();
 
         /// <summary>
-        /// Shows a Document window that contains the <see cref="IDocument"/> provided.
+        /// Displays the Add Chart dialog.
+        /// </summary>
+        /// <param name="workspace">The <see cref="IWorkspace"/> to which the new chart document will be added.</param>
+        /// <param name="path">The path to the folder.</param>
+        void ShowAddChartDialog(IWorkspace workspace, string path);
+
+        /// <summary>
+        /// Displays a Document window that contains the <see cref="IDocument"/> provided.
         /// </summary>
         /// <param name="document">The <see cref="IDocument"/> to show.</param>
         void ShowDocument(IDocument document);
@@ -106,7 +120,7 @@ namespace StarLab.Presentation
         string ShowOpenFileDialog(string title, string filter);
 
         /// <summary>
-        /// Shows the Options dialog.
+        /// Displays the Options dialog.
         /// </summary>
         void ShowOptionsDialog();
 
@@ -120,7 +134,7 @@ namespace StarLab.Presentation
         string ShowSaveFileDialog(string title, string filter, string extension);
 
         /// <summary>
-        /// Shows the Workspace Explorer.
+        /// Displays the Workspace Explorer.
         /// </summary>
         void ShowWorkspaceExplorer();
     }

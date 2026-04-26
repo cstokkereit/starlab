@@ -1,6 +1,7 @@
 ﻿using log4net;
+using StarLab.Presentation.Configuration;
+using StarLab.Shared;
 using StarLab.Shared.Properties;
-using StarLab.Shared.Resources;
 using Stratosoft.Commands;
 
 namespace StarLab.Presentation.Options
@@ -20,12 +21,12 @@ namespace StarLab.Presentation.Options
         /// Initialises a new instance of the <see cref="OptionsViewPresenter"> class.
         /// </summary>
         /// <param name="view">The <see cref="IOptionsView"/> controlled by this presenter.</param>
+        /// <param name="context">An <see cref="ISessionContext"/> that provides access to the session context.</param>
         /// <param name="commands">An <see cref="ICommandManager"/> that is required for the creation of <see cref="ICommand">s.</param>
         /// <param name="services">An <see cref="IServiceRegistry"/> that provides access to the registered services.</param>
-        /// <param name="settings">An <see cref="IApplicationSettings"/> that provides access to the application configuration.</param>
         /// <param name="events">The <see cref="IEventAggregator"/> that manages application events.</param>
-        public OptionsViewPresenter(IOptionsView view, ICommandManager commands, IServiceRegistry services, IApplicationSettings settings, IEventAggregator events)
-            : base(view, commands, settings, events) 
+        public OptionsViewPresenter(IOptionsView view, ISessionContext context, ICommandManager commands, IServiceRegistry services, IEventAggregator events)
+            : base(view, context, commands, events) 
         {
             ArgumentNullException.ThrowIfNull(services, nameof(services));
 

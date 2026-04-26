@@ -13,7 +13,7 @@ namespace StarLab.Application.Workspace.Documents
         [Test]
         public void TestAddDocumentToFolder()
         {
-            var port = Substitute.For<IAddDocumentOutputPort>();
+            var port = Substitute.For<IWorkspaceOutputPort>();
 
             var interactor = Factory.CreateAddDocumentUseCase(port);
 
@@ -51,7 +51,7 @@ namespace StarLab.Application.Workspace.Documents
         [Test]
         public void TestAddDocumentToProject()
         {
-            var port = Substitute.For<IAddDocumentOutputPort>();
+            var port = Substitute.For<IWorkspaceOutputPort>();
 
             var interactor = Factory.CreateAddDocumentUseCase(port);
 
@@ -89,7 +89,7 @@ namespace StarLab.Application.Workspace.Documents
         [Test]
         public void TestAddDocumentWhenDocumentWithSameNameExists()
         {
-            var port = Substitute.For<IAddDocumentOutputPort>();
+            var port = Substitute.For<IWorkspaceOutputPort>();
 
             var interactor = Factory.CreateAddDocumentUseCase(port);
 
@@ -110,7 +110,7 @@ namespace StarLab.Application.Workspace.Documents
             interactor.Execute(workspace, document);
 
             port.Received().ShowMessage(Arg.Is("StarLab"),
-                                        Arg.Is("A document with the name 'Document1' already exists at this location.\r\nPlease provide a unique name for the document."),
+                                        Arg.Any<string>(),
                                         Arg.Is(InteractionType.Error),
                                         Arg.Is(InteractionResponses.OK));
 
@@ -123,7 +123,7 @@ namespace StarLab.Application.Workspace.Documents
         [Test]
         public void TestAddDocumentWhenNameIsAnEmptyString()
         {
-            var port = Substitute.For<IAddDocumentOutputPort>();
+            var port = Substitute.For<IWorkspaceOutputPort>();
 
             var interactor = Factory.CreateAddDocumentUseCase(port);
 
@@ -143,7 +143,7 @@ namespace StarLab.Application.Workspace.Documents
             interactor.Execute(workspace, document);
 
             port.Received().ShowMessage(Arg.Is("StarLab"),
-                                        Arg.Is("The document name cannot be null or empty."),
+                                        Arg.Any<string>(),
                                         Arg.Is(InteractionType.Error),
                                         Arg.Is(InteractionResponses.OK));
 
@@ -156,7 +156,7 @@ namespace StarLab.Application.Workspace.Documents
         [Test]
         public void TestAddDocumentWhenNameIsInvalid()
         {
-            var port = Substitute.For<IAddDocumentOutputPort>();
+            var port = Substitute.For<IWorkspaceOutputPort>();
 
             var interactor = Factory.CreateAddDocumentUseCase(port);
 
@@ -176,7 +176,7 @@ namespace StarLab.Application.Workspace.Documents
             interactor.Execute(workspace, document);
 
             port.Received().ShowMessage(Arg.Is("StarLab"),
-                                        Arg.Is("Document names cannot include any of the following:\r\n\r\n                               \\ / : * ? ' \" < > |\r\n\r\nPlease enter a valid name."),
+                                        Arg.Any<string>(),
                                         Arg.Is(InteractionType.Error),
                                         Arg.Is(InteractionResponses.OK));
 

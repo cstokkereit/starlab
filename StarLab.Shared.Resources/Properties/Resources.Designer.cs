@@ -663,15 +663,6 @@ namespace StarLab.Shared.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This object has not been properly initialised..
-        /// </summary>
-        public static string ObjectNotInitialised {
-            get {
-                return ResourceManager.GetString("ObjectNotInitialised", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to OK.
         /// </summary>
         public static string OK {

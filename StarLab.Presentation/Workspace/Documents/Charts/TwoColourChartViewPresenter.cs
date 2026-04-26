@@ -10,23 +10,23 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
     /// <summary>
     /// Controls the behaviour of an <see cref="IChartView"/>.
     /// </summary>
-    public class ColourMagnitudeChartViewPresenter : ChildViewPresenter<IChartView, IDocumentController>, IChartViewPresenter, IChartController, IChartOutputPort
+    public class TwoColourChartViewPresenter : ChildViewPresenter<IChartView, IDocumentController>, IChartViewPresenter, IChartController, IChartOutputPort
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(ColourMagnitudeChartViewPresenter)); // The logger that will be used for writing log messages.
+        private static readonly ILog log = LogManager.GetLogger(typeof(TwoColourChartViewPresenter)); // The logger that will be used for writing log messages.
 
         private readonly IChartUseCaseService useCases; // A service that executes the use cases that implement the functionality.
 
         private IChart? chart; // The chart that the view represents.
 
         /// <summary>
-        /// Initialises a new instance of the <see cref="ColourMagnitudeChartViewPresenter"> class.
+        /// Initialises a new instance of the <see cref="TwoColourChartViewPresenter"> class.
         /// </summary>
         /// <param name="view">The <see cref="IChartView"/> controlled by this presenter.</param>
         /// <param name="context">An <see cref="ISessionContext"/> that provides access to the session context.</param>
         /// <param name="commands">An <see cref="ICommandManager"/> that is required for the creation of <see cref="ICommand">s.</param>
         /// <param name="services">An <see cref="IServiceRegistry"/> that provides access to the registered services.</param>
         /// <param name="events">The <see cref="IEventAggregator"/> that manages application events.</param>
-        public ColourMagnitudeChartViewPresenter(IChartView view, ISessionContext context, ICommandManager commands, IServiceRegistry services, IEventAggregator events)
+        public TwoColourChartViewPresenter(IChartView view, ISessionContext context, ICommandManager commands, IServiceRegistry services, IEventAggregator events)
             : base(view, context, commands, events) 
         {
             ArgumentNullException.ThrowIfNull(services, nameof(useCases));
@@ -39,13 +39,13 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// <summary>
         /// The finaliser will only called if the <see cref="Dispose"/> method has not been called.
         /// </summary>
-        ~ColourMagnitudeChartViewPresenter()
+        ~TwoColourChartViewPresenter()
         {
             Dispose(false);
         }
 
         /// <summary>
-        /// Releases all resources used by the <see cref="ColourMagnitudeChartViewPresenter"/> object.
+        /// Releases all resources used by the <see cref="TwoColourChartViewPresenter"/> object.
         /// </summary>
         public override void Dispose()
         {
@@ -60,7 +60,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// <param name="controller">The <see cref="IApplicationController"/>.</param>
         public override void Initialise(IApplicationController controller)
         {
-            if (Initialised) throw new InvalidOperationException(string.Format(Resources.AlreadyInitialised, nameof(ColourMagnitudeChartViewPresenter)));
+            if (Initialised) throw new InvalidOperationException(string.Format(Resources.AlreadyInitialised, nameof(TwoColourChartViewPresenter)));
 
             base.Initialise(controller);
 
@@ -68,7 +68,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
 
             //View.MinimumSize = new Size(200, 200);
 
-            log.Debug(string.Format(LogEntries.Initialised, $"{nameof(ColourMagnitudeChartViewPresenter)}({View.Name})"));
+            log.Debug(string.Format(LogEntries.Initialised, $"{nameof(TwoColourChartViewPresenter)}({View.Name})"));
         }
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// Releases any resources used by the <see cref="ColourMagnitudeChartViewPresenter"/> object.
+        /// Releases any resources used by the <see cref="TwoColourChartViewPresenter"/> object.
         /// </summary>
         /// <param name="disposing">true if managed resources can be disposed of; false otherwise.</param>
         protected override void Dispose(bool disposing)

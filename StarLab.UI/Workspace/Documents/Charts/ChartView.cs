@@ -3,8 +3,8 @@ using ScottPlot;
 using ScottPlot.Plottables;
 using StarLab.Presentation;
 using StarLab.Presentation.Workspace.Documents.Charts;
+using StarLab.Shared;
 using StarLab.Shared.Properties;
-using StarLab.Shared.Resources;
 
 namespace StarLab.UI.Workspace.Documents.Charts
 {

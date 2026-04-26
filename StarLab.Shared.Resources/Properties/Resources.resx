@@ -257,9 +257,6 @@ Please enter a valid name.</value>
   <data name="NotInitialised" xml:space="preserve">
     <value>This instance has not been properly initialised.</value>
   </data>
-  <data name="ObjectNotInitialised" xml:space="preserve">
-    <value>This object has not been properly initialised.</value>
-  </data>
   <data name="OK" xml:space="preserve">
     <value>OK</value>
   </data>

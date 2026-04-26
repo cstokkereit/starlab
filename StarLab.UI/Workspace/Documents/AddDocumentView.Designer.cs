@@ -41,17 +41,18 @@
             // buttonAdd
             // 
             buttonAdd.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            buttonAdd.Location = new Point(550, 496);
+            buttonAdd.Location = new Point(554, 496);
             buttonAdd.Name = "buttonAdd";
             buttonAdd.Size = new Size(85, 25);
             buttonAdd.TabIndex = 5;
             buttonAdd.Text = "Add";
             buttonAdd.UseVisualStyleBackColor = true;
+            buttonAdd.Click += AddButton_Click;
             // 
             // buttonCancel
             // 
             buttonCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            buttonCancel.Location = new Point(645, 496);
+            buttonCancel.Location = new Point(649, 496);
             buttonCancel.Name = "buttonCancel";
             buttonCancel.Size = new Size(85, 25);
             buttonCancel.TabIndex = 4;
@@ -62,7 +63,7 @@
             // 
             label1.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             label1.AutoSize = true;
-            label1.Location = new Point(10, 473);
+            label1.Location = new Point(10, 470);
             label1.Name = "label1";
             label1.Size = new Size(42, 15);
             label1.TabIndex = 6;
@@ -70,29 +71,32 @@
             // 
             // textDescription
             // 
-            textDescription.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
-            textDescription.BackColor = SystemColors.ControlLight;
+            textDescription.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            textDescription.BackColor = SystemColors.Control;
             textDescription.BorderStyle = BorderStyle.None;
-            textDescription.Location = new Point(430, 31);
+            textDescription.Location = new Point(372, 10);
+            textDescription.Margin = new Padding(0, 3, 3, 3);
             textDescription.Name = "textDescription";
-            textDescription.Size = new Size(300, 426);
+            textDescription.Size = new Size(362, 443);
             textDescription.TabIndex = 7;
             textDescription.Text = "";
             // 
             // listDocumentTypes
             // 
-            listDocumentTypes.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            listDocumentTypes.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             listDocumentTypes.BorderStyle = BorderStyle.None;
             listDocumentTypes.FullRowSelect = true;
             listDocumentTypes.HeaderStyle = ColumnHeaderStyle.None;
-            listDocumentTypes.Location = new Point(68, 31);
+            listDocumentTypes.Location = new Point(10, 10);
+            listDocumentTypes.Margin = new Padding(3, 3, 0, 3);
             listDocumentTypes.MultiSelect = false;
             listDocumentTypes.Name = "listDocumentTypes";
-            listDocumentTypes.Size = new Size(362, 426);
+            listDocumentTypes.ShowItemToolTips = true;
+            listDocumentTypes.Size = new Size(362, 443);
             listDocumentTypes.SmallImageList = imageList;
             listDocumentTypes.TabIndex = 8;
             listDocumentTypes.UseCompatibleStateImageBehavior = false;
-            listDocumentTypes.View = View.Details;
+            listDocumentTypes.View = View.SmallIcon;
             // 
             // imageList
             // 
@@ -102,10 +106,12 @@
             // 
             // textName
             // 
-            textName.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            textName.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            textName.BackColor = SystemColors.Window;
+            textName.BorderStyle = BorderStyle.FixedSingle;
             textName.Location = new Point(68, 470);
             textName.Name = "textName";
-            textName.Size = new Size(362, 23);
+            textName.Size = new Size(304, 23);
             textName.TabIndex = 9;
             // 
             // AddDocumentView
@@ -119,7 +125,7 @@
             Controls.Add(buttonAdd);
             Controls.Add(buttonCancel);
             Name = "AddDocumentView";
-            Size = new Size(742, 533);
+            Size = new Size(746, 533);
             ResumeLayout(false);
             PerformLayout();
         }

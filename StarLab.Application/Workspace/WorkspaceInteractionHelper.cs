@@ -31,7 +31,7 @@ namespace StarLab.Application.Workspace
         /// <param name="name">A name that is not valid for the item being named.</param>
         /// <param name="target">The item being named.</param>
         /// <returns>An error message identifying the issue with the name provided.</returns>
-        public static string CreateInvalidNameMessage(string name, string target)
+        public static string CreateInvalidNameMessage(string? name, string target)
         {
             if (!string.IsNullOrEmpty(name))
             {

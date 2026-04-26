@@ -1,7 +1,8 @@
 ﻿using log4net;
 using StarLab.Application;
+using StarLab.Presentation.Configuration;
+using StarLab.Shared;
 using StarLab.Shared.Properties;
-using StarLab.Shared.Resources;
 using Stratosoft.Commands;
 
 namespace StarLab.Presentation.Workspace
@@ -20,13 +21,14 @@ namespace StarLab.Presentation.Workspace
         /// </summary>
         /// <param name="view">The <see cref="IDockableView"/> controlled by this presenter.</param>
         /// <param name="childController">The <see cref="IChildViewController"/> that controls the child view.</param>
+        /// <param name="context">An <see cref="ISessionContext"/> that provides access to the session context.</param>
         /// <param name="commands">An <see cref="ICommandManager"/> that is required for the creation of <see cref="ICommand">s.</param>
-        /// <param name="settings">An <see cref="IApplicationSettings"/> that provides access to the application configuration.</param>
+        /// <param name="settings">An <see cref="IUserSettings"/> that provides access to the application configuration.</param>
         /// <param name="events">The <see cref="IEventAggregator"/> that manages application events.</param>
-        public ToolViewPresenter(IDockableView view, IChildViewController childController, ICommandManager commands, IApplicationSettings settings, IEventAggregator events)
-            : base(view, commands, settings, events)
+        public ToolViewPresenter(IDockableView view, IChildViewController childController, ISessionContext context, ICommandManager commands, IEventAggregator events)
+            : base(view, context, commands, events)
         {
-            this.childController = childController;
+            this.childController = childController ?? throw new ArgumentNullException(nameof(childController));
 
             ID = Controllers.GetControllerID(view);
 
@@ -74,7 +76,7 @@ namespace StarLab.Presentation.Workspace
         /// <param name="controller">The <see cref="IApplicationController"/>.</param>
         public override void Initialise(IApplicationController controller)
         {
-            if (Initialised) throw new InvalidOperationException(string.Format(Resources.AlreadyInitialised, nameof(DialogViewPresenter)));
+            if (Initialised) throw new InvalidOperationException(string.Format(Resources.AlreadyInitialised, nameof(ToolViewPresenter)));
 
             base.Initialise(controller);
 
@@ -142,6 +144,8 @@ namespace StarLab.Presentation.Workspace
         /// <param name="disposing">true if managed resources can be disposed of; false otherwise.</param>
         protected override void Dispose(bool disposing)
         {
+            base.Dispose(disposing);
+
             if (disposing)
             {
                 View.Detach();

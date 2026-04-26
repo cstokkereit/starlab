@@ -1,4 +1,5 @@
-﻿using Stratosoft.Commands;
+﻿using StarLab.Presentation.Configuration;
+using Stratosoft.Commands;
 using System.Diagnostics;
 
 namespace StarLab.Presentation
@@ -8,7 +9,7 @@ namespace StarLab.Presentation
     /// </summary>
     public abstract class Presenter<TView> : Controller, IPresenter
     {
-        private readonly IApplicationSettings settings; // Provides access to the application configuration.
+        private readonly ISessionContext context; // Provides access to the session context.
 
         private readonly ICommandManager commands; // Required for the creation and management of commands.
 
@@ -18,17 +19,17 @@ namespace StarLab.Presentation
         /// Initialises a new instance of the <see cref="Presenter{TView}"/> class.
         /// </summary>
         /// <param name="view">The <see cref="TView"/> controlled by the presenter.</param>
+        /// <param name="context">An <see cref="ISessionContext"/> that provides access to the session context.</param>
         /// <param name="commands">An instance of <see cref="ICommandManager"/> that is required for the creation of commands.</param>
-        /// <param name="settings">An <see cref="IApplicationSettings"/> that provides access to the application configuration.</param>
         /// <param name="events">The <see cref="IEventAggregator"/> that manages application events.</param>
         /// <exception cref="ArgumentNullException"></exception>
-        public Presenter(TView view, ICommandManager commands, IApplicationSettings settings, IEventAggregator events)
+        public Presenter(TView view, ISessionContext context, ICommandManager commands, IEventAggregator events)
             : base(events)
         {
-            this.settings = settings ?? throw new ArgumentNullException(nameof(settings));
             this.commands = commands ?? throw new ArgumentNullException(nameof(commands));
+            this.context = context ?? throw new ArgumentNullException(nameof(context));
 
-            View = view;
+            View = view ?? throw new ArgumentNullException(nameof(view));
         }
 
         /// <summary>
@@ -57,9 +58,9 @@ namespace StarLab.Presentation
         }
 
         /// <summary>
-        /// Gets the <see cref="IApplicationSettings"/> that provides the configuration information.
+        /// Gets the <see cref="ISessionContext"/> that provides access to the context for the current session.
         /// </summary>
-        protected IApplicationSettings Settings => settings;
+        protected ISessionContext SessionContext => context;
 
         /// <summary>
         /// Returns true if the presenter has been initialised; false otherwise.
@@ -72,7 +73,7 @@ namespace StarLab.Presentation
         protected TView View { get; }
 
         /// <summary>
-        /// Creates the specified <see cref="ICommand"/>.
+        /// Creates the specified command.
         /// </summary>
         /// <param name="name"></param>
         /// <param name="action"></param>
@@ -89,7 +90,19 @@ namespace StarLab.Presentation
         }
 
         /// <summary>
-        /// Gets the specified command."/>
+        /// Releases all resources used by the <see cref="DocumentViewPresenter"/> object.
+        /// </summary>
+        /// <param name="disposing">true if managed resources can be disposed of; false otherwise.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                Events.Unsubscribe(this);
+            }
+        }
+
+        /// <summary>
+        /// Gets the specified command.
         /// </summary>
         /// <param name="name">The name of the command.</param>
         /// <returns>The required <see cref="ICommand"/>.</returns>
@@ -99,20 +112,20 @@ namespace StarLab.Presentation
         }
 
         /// <summary>
-        /// Sets the enabled state of the specified <see cref="ICommand"/>.
+        /// Generates a command name by combining the specified name and target into a single string.
         /// </summary>
-        /// <param name="action">The action to be performed when the <see cref="ICommand.Execute"/> method is called.</param>
-        /// <param name="target">The target for the action.</param>
-        /// <param name="enabled">The new enabled state.</param>
-        protected void UpdateCommandState(string action, string target, bool enabled)
+        /// <param name="name">The name of the command.</param>
+        /// <param name="target">The target associated with the command.</param>
+        /// <returns>A command name in the form "name(target)".</returns>
+        protected string GetCommandName(string name, string target)
         {
-            if (GetCommand(action + target) is IComponentCommand command) command.Enabled = enabled;
+            return $"{name}({target})";
         }
 
         /// <summary>
-        /// Sets the enabled state of the specified <see cref="ICommand"/>.
+        /// Sets the enabled state of the specified command.
         /// </summary>
-        /// <param name="action">The action to be performed when the <see cref="ICommand.Execute"/> method is called.</param>
+        /// <param name="action"></param>
         /// <param name="enabled">The new enabled state.</param>
         protected void UpdateCommandState(string action, bool enabled)
         {

@@ -1,8 +1,8 @@
 ﻿using log4net;
 using StarLab.Presentation;
 using StarLab.Presentation.Help;
+using StarLab.Shared;
 using StarLab.Shared.Properties;
-using StarLab.Shared.Resources;
 
 namespace StarLab.UI.Help
 {

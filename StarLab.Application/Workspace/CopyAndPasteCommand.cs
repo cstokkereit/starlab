@@ -9,9 +9,9 @@ namespace StarLab.Application.Workspace
     /// </summary>
     internal class CopyAndPasteCommand : ParameterisedCommand<Workspace, string>
     {
-        private readonly IWorkspaceOutputPort outputPort;
+        private readonly IWorkspaceOutputPort outputPort; // TODO
 
-        private readonly IMapper mapper;
+        private readonly IMapper mapper; // TODO
 
         private readonly string key; // The key that identifies the document or folder being copied.
 

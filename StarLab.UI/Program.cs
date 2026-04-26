@@ -1,9 +1,8 @@
-using Castle.MicroKernel.Resolvers.SpecializedResolvers;
 using Castle.Windsor;
 using log4net;
 using log4net.Config;
 using StarLab.Presentation;
-using StarLab.Shared.Resources;
+using StarLab.Shared;
 using StarLab.UI;
 
 namespace StarLab
@@ -28,8 +27,6 @@ namespace StarLab
             log.Info(LogEntries.StartingApplication);
 
             var container = new WindsorContainer();
-
-            container.Kernel.Resolver.AddSubResolver(new CollectionResolver(container.Kernel));
 
             container.Install(new ApplicationInstaller());
 

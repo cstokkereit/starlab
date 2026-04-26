@@ -14,7 +14,7 @@ namespace StarLab.Presentation
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(PresenterFactory)); // The logger that will be used for writing log messages.
 
-        private readonly IApplicationSettings settings; // Provides access to the application configuration.
+        private readonly ISessionContext context; // Provides access to the session context.
 
         private readonly IEventAggregator events; // This can be used for subscribing to and publishing events.
 
@@ -24,15 +24,15 @@ namespace StarLab.Presentation
         /// Initialises a new instance of the <see cref="PresenterFactory"> class.
         /// </summary>
         /// <param name="services">An <see cref="IServiceRegistry"/> that provides access to the available services.</param>
+        /// <param name="context">An <see cref="ISessionContext"/> that provides access to the session context.</param>
         /// <param name="configuration">The type configuration information.</param>
-        /// <param name="settings">An <see cref="IApplicationSettings"/> that provides access to the application settings.</param>
         /// <param name="events">The <see cref="IEventAggregator"/> that manages application events.</param>
         /// <exception cref="ArgumentNullException"></exception>
-        public PresenterFactory(IServiceRegistry services, IFactoryConfiguration configuration, IApplicationSettings settings, IEventAggregator events)
+        public PresenterFactory(IServiceRegistry services, ISessionContext context, IFactoryConfiguration configuration, IEventAggregator events)
             : base(configuration)
         {
             this.services = services ?? throw new ArgumentNullException(nameof(services));
-            this.settings = settings ?? throw new ArgumentNullException(nameof(settings));
+            this.context = context ?? throw new ArgumentNullException(nameof(context));
             this.events = events ?? throw new ArgumentNullException(nameof(events));
         }
 
@@ -47,7 +47,7 @@ namespace StarLab.Presentation
         {
             if (view is IApplicationView application)
             {
-                return new ApplicationViewPresenter(application, commands, services, settings, events);
+                return new ApplicationViewPresenter(application, context, commands, services, events);
             }
 
             throw new ArgumentException(string.Format(Resources.UnexpectedViewType, view.GetType().Name), nameof(view));
@@ -67,11 +67,11 @@ namespace StarLab.Presentation
             {
                 if (view is IDialogView dialog)
                 {
-                    return new DialogViewPresenter(dialog, childController, commands, settings, events);
+                    return new DialogViewPresenter(dialog, childController, context, commands, events);
                 }
                 else if (view is IDockableView docakable)
                 {
-                    return new ToolViewPresenter(docakable, childController, commands, settings, events);
+                    return new ToolViewPresenter(docakable, childController, context, commands, events);
                 }
             }
             else
@@ -107,7 +107,7 @@ namespace StarLab.Presentation
                 }
             }
 
-            return new DocumentViewPresenter(view, document, controllers, commands, settings, events);
+            return new DocumentViewPresenter(view, document, controllers, context, commands, events);
         }
 
         /// <summary>
@@ -120,7 +120,7 @@ namespace StarLab.Presentation
         {
             var configuration = GetViewConfiguration(view.Name);
 
-            return (IChildViewPresenter)CreateInstance(configuration.GetChildViewConfiguration(view.Name).Presenter, [view, commands, services, settings, events]);
+            return (IChildViewPresenter)CreateInstance(configuration.GetChildViewConfiguration(view.Name).Presenter, [view, context, commands, services, events]);
         }
 
         /// <summary>
@@ -138,7 +138,7 @@ namespace StarLab.Presentation
 
             foreach (var view in views)
             {
-                presenters.Add((IChildViewPresenter)CreateInstance(configuration.GetChildViewConfiguration(view.Name).Presenter, [view, commands, services, settings, events]));
+                presenters.Add((IChildViewPresenter)CreateInstance(configuration.GetChildViewConfiguration(view.Name).Presenter, [view, context, commands, services, events]));
             }
 
             return presenters;

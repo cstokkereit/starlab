@@ -16,5 +16,11 @@
         /// </summary>
         /// <param name="controller">The <see cref="IViewController"/> that controls the parent view.</param>
         void RegisterController(IViewController controller);
+
+        /// <summary>
+        /// Initiates the workflow managed by the controller.
+        /// </summary>
+        /// <param name="context">An <see cref="IWorkflowContext"/> that contains the information required to execute the workflow.</param>
+        void Run(IWorkflowContext context);
     }
 }

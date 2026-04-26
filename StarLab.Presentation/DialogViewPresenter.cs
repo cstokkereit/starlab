@@ -1,7 +1,8 @@
 ﻿using log4net;
 using StarLab.Application;
+using StarLab.Presentation.Configuration;
+using StarLab.Shared;
 using StarLab.Shared.Properties;
-using StarLab.Shared.Resources;
 using Stratosoft.Commands;
 using System.ComponentModel;
 
@@ -10,7 +11,7 @@ namespace StarLab.Presentation
     /// <summary>
     /// Controls the behaviour of an <see cref="IDialogView"/>.
     /// </summary>
-    public class DialogViewPresenter : Presenter<IDialogView>, IDialogViewPresenter, IViewController
+    public class DialogViewPresenter : Presenter<IDialogView>, IDialogViewPresenter, IDialogController
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(DialogViewPresenter)); // The logger that will be used for writing log messages.
 
@@ -21,23 +22,25 @@ namespace StarLab.Presentation
         /// </summary>
         /// <param name="view">The <see cref="IDialogView"/> controlled by this presenter.</param>
         /// <param name="childController">The <see cref="IChildViewController"/> that controls the child view.</param>
+        /// <param name="context">An <see cref="ISessionContext"/> that provides access to the session context.</param>
         /// <param name="commands">An <see cref="ICommandManager"/> that is required for the creation of <see cref="ICommand">s.</param>
-        /// <param name="settings">An <see cref="IApplicationSettings"/> that provides access to the application configuration.</param>
         /// <param name="events">The <see cref="IEventAggregator"/> that manages application events.</param>
-        public DialogViewPresenter(IDialogView view, IChildViewController childController, ICommandManager commands, IApplicationSettings settings, IEventAggregator events)
-            : base(view, commands, settings, events)
+        public DialogViewPresenter(IDialogView view, IChildViewController childController, ISessionContext context, ICommandManager commands, IEventAggregator events)
+            : base(view, context, commands, events)
         {
-            this.childController = childController;
+            this.childController = childController ?? throw new ArgumentNullException(nameof(childController));
 
             ID = Controllers.GetControllerID(view);
 
             View.Attach(this);
+
+            childController.RegisterController(this);
         }
 
-		/// <summary>
-		/// The finaliser will only called if the <see cref="Dispose"/> method has not been called.
-		/// </summary>
-		~DialogViewPresenter()
+        /// <summary>
+        /// The finaliser will only called if the <see cref="Dispose"/> method has not been called.
+        /// </summary>
+        ~DialogViewPresenter()
         {
             Dispose(false);
         }
@@ -83,6 +86,15 @@ namespace StarLab.Presentation
             childController.Initialise(controller);
 
             log.Debug(string.Format(LogEntries.Initialised, $"{nameof(DialogViewPresenter)}({View.Name})"));
+        }
+
+        /// <summary>
+        /// Initiates the workflow managed by the dialog box.
+        /// </summary>
+        /// <param name="context">An <see cref="IWorkflowContext"/> that contains the information required to execute the workflow.</param>
+        public void Run(IWorkflowContext context)
+        {
+            childController.Run(context);
         }
 
         /// <summary>
@@ -153,6 +165,8 @@ namespace StarLab.Presentation
         /// <param name="disposing">true if managed resources can be disposed of; false otherwise.</param>
         protected override void Dispose(bool disposing)
         {
+            base.Dispose(disposing);
+
             if (disposing)
             {
                 View.Detach();

@@ -5,8 +5,8 @@ using StarLab.Presentation;
 using StarLab.Presentation.Workspace;
 using StarLab.Presentation.Workspace.Documents;
 using StarLab.Presentation.Workspace.Documents.Charts;
+using StarLab.Shared;
 using StarLab.Shared.Properties;
-using StarLab.Shared.Resources;
 using StarLab.UI.Controls;
 using StarLab.UI.Workspace;
 using Stratosoft.Commands;
@@ -27,9 +27,9 @@ namespace StarLab.UI
 
         private readonly IWindsorContainer container; // Used to resolve dependencies at run time.
 
-        private readonly Dictionary<string, IViewController> controllers = new Dictionary<string, IViewController>(); // A dictionary containing the view controllers indexed by name.
+        private readonly Dictionary<string, IViewController> controllers = new Dictionary<string, IViewController>(); // A dictionary containing the view controllers indexed by ID.
 
-        private readonly Dictionary<string, IView> views = new Dictionary<string, IView>(); // A dictionary containing the views indexed by name.
+        private readonly Dictionary<string, IView> views = new Dictionary<string, IView>(); // A dictionary containing the views indexed by ID.
 
         private readonly IPresenterFactory presenterFactory; // A factory for creating presenters.
 
@@ -59,6 +59,26 @@ namespace StarLab.UI
         /// Gets the name of the controller.
         /// </summary>
         public override string ID => Controllers.ApplicationController;
+
+        /// <summary>
+        /// Closes the view that represents the specified <see cref="IDocument"/>.
+        /// </summary>
+        /// <param name="document">The <see cref="IDocument"/> to close.</param>
+        public void CloseDocument(IDocument document)
+        {
+            try
+            {
+                var controller = GetController(document);
+
+                controller.Close();
+
+                log.Debug(CreateLogEntry(LogEntries.ViewClosed, document));
+            }
+            catch (Exception e)
+            {
+                log.Error(CreateLogEntry(LogEntries.ViewNotClosed, document), e);
+            }
+        }
 
         /// <summary>
         /// Deletes the <see cref="IView"/> with the specified ID.
@@ -194,7 +214,7 @@ namespace StarLab.UI
         /// </summary>
         /// <param name="id">The ID of the required <see cref="IView"/>.</param>
         /// <returns>The specified <see cref="IView"/>.</returns>
-        public IView GetView(string id)
+        public IView GetView(string id) 
         {
             if (views.TryGetValue(id, out IView? view))
             {
@@ -207,15 +227,15 @@ namespace StarLab.UI
         /// <summary>
         /// Event handler for the ActiveViewChanged event.
         /// </summary>
-        /// <param name="e">An <see cref="ActiveViewChangedEventArgs"/> that provides context for the event.</param>
-        public void OnEvent(ActiveViewChangedEventArgs e)
+        /// <param name="args">An <see cref="ActiveViewChangedEventArgs"/> that provides context for the event.</param>
+        public void OnEvent(ActiveViewChangedEventArgs args)
         {
-            if (view != null && e.View != null)
+            if (view != null && args.View != null)
             {
-                log.Debug(string.Format(LogEntries.ActiveViewChanged, view.ID, e.View.ID));
+                log.Debug(string.Format(LogEntries.ActiveViewChanged, view.ID, args.View.ID));
             }
 
-            view = e.View;
+            view = args.View;
         }
 
         /// <summary>
@@ -224,14 +244,15 @@ namespace StarLab.UI
         /// <param name="args">A <see cref="WorkspaceClosedEventArgs"/> that provides context for the event.</param>
         public void OnEvent(WorkspaceClosedEventArgs args)
         {
-            // TODO - Close workspace properly
-            // Change to a custom dialog that will centre on the application
-            // Perform any cleanup here prior to closing the workspace
-            // Teardown parent child relationships
-
             foreach (var document in args.Workspace.Documents)
             {
-                controllers.Remove(document.ID);
+                var id = Controllers.GetControllerID(views[document.ID]);
+
+                var controller = controllers[id];
+
+                controller.Dispose();
+
+                controllers.Remove(id);
                 views.Remove(document.ID);
             }
         }
@@ -260,7 +281,7 @@ namespace StarLab.UI
         }
 
         /// <summary>
-        /// Shows the About dialog.
+        /// Displays the About dialog.
         /// </summary>
         public void ShowAboutDialog()
         {
@@ -268,7 +289,23 @@ namespace StarLab.UI
         }
 
         /// <summary>
-        /// Shows a Document window that contains the <see cref="IDocument"/> provided.
+        /// Displays the Add Chart dialog.
+        /// </summary>
+        /// <param name="workspace">The <see cref="IWorkspace"/> to which the new chart document will be added.</param>
+        /// <param name="path">The path to the folder.</param>
+        public void ShowAddChartDialog(IWorkspace workspace, string path)
+        {
+            var view = GetView(Views.AddDocument);
+
+            var controller = GetController(view);
+
+            controller.Run(new AddDocumentWorkflowContext(path, DocumentTypes.Chart));
+
+            controllers[Controllers.ApplicationViewController].Show(view);
+        }
+
+        /// <summary>
+        /// Displays a Document window that contains the <see cref="IDocument"/> provided.
         /// </summary>
         /// <param name="document">The <see cref="IDocument"/> to show.</param>
         public void ShowDocument(IDocument document)
@@ -328,7 +365,7 @@ namespace StarLab.UI
         }
 
         /// <summary>
-        /// Shows the Options dialog.
+        /// Displays the Options dialog.
         /// </summary>
         public void ShowOptionsDialog()
         {
@@ -348,7 +385,7 @@ namespace StarLab.UI
         }
 
         /// <summary>
-        /// Shows the Workspace Explorer.
+        /// Displays the Workspace Explorer.
         /// </summary>
         public void ShowWorkspaceExplorer()
         {
@@ -441,7 +478,7 @@ namespace StarLab.UI
         private void CreateDialogViews()
         {
             CreateDialogView(Views.About, Resources.AboutStarLab);
-            //CreateView(Views.AddDocument, Resources.AddDocument);
+            CreateDialogView(Views.AddDocument, Resources.AddDocument);
             CreateDialogView(Views.Options, Resources.Options);
         }
 
@@ -562,10 +599,28 @@ namespace StarLab.UI
         }
 
         /// <summary>
-        /// Shows the <see cref="IView"/> with the specified ID. A view with the specified ID must already exist or an exception will be thrown.
+        /// Gets the specified <see cref="IDialogController"/>.
+        /// </summary>
+        /// <param name="id">The ID of the required <see cref="IDialogController"/>.</param>
+        /// <returns>The specified <see cref="IDialogController"/>.</returns>
+        /// <exception cref="KeyNotFoundException"></exception>
+        private IDialogController GetController(IView view)
+        {
+            var id = Controllers.GetControllerID(view);
+
+            if (controllers.TryGetValue(id, out IViewController? controller))
+            {
+                if (controller is IDialogController required) return required;
+            }
+
+            throw new KeyNotFoundException(string.Format(Resources.ControllerNotFound, id));
+        }
+
+        /// <summary>
+        /// Displays the <see cref="IView"/> with the specified ID. A view with the specified ID must already exist or an exception will be thrown.
         /// </summary>
         /// <param name="id">The ID of the view to be shown.</param>
-        /// <exception cref="ViewNotFoundException"></exception>
+        /// <exception cref="ArgumentException"></exception>
         private void Show(string id)
         {
             if (views.TryGetValue(id, out IView? view))

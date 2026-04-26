@@ -1,8 +1,9 @@
 ﻿using log4net;
 using StarLab.Application;
+using StarLab.Presentation.Configuration;
 using StarLab.Presentation.Workspace.Documents.Charts;
+using StarLab.Shared;
 using StarLab.Shared.Properties;
-using StarLab.Shared.Resources;
 using Stratosoft.Commands;
 
 namespace StarLab.Presentation.Workspace.Documents
@@ -24,13 +25,16 @@ namespace StarLab.Presentation.Workspace.Documents
         /// <param name="view">The <see cref="IDocumentView"/> controlled by this presenter.</param>
         /// <param name="document">The <see cref="IDocument"/> that the view represents.</param>
         /// <param name="controllers">An <see cref="IEnumerable{IChildViewController}"/> that contains the child controllers.</param>
+        /// <param name="context">An <see cref="ISessionContext"/> that provides access to the session context.</param>
         /// <param name="commands">An <see cref="ICommandManager"/> that is required for the creation of <see cref="ICommand">s.</param>
-        /// <param name="settings">An <see cref="IApplicationSettings"/> that provides access to the application configuration.</param>
+        /// <param name="settings">An <see cref="IUserSettings"/> that provides access to the application configuration.</param>
         /// <param name="events">The <see cref="IEventAggregator"/> that manages application events.</param>
-        public DocumentViewPresenter(IDocumentView view, IDocument document, IEnumerable<IChildViewController> controllers, ICommandManager commands, IApplicationSettings settings, IEventAggregator events)
-            : base(view, commands, settings, events)
+        public DocumentViewPresenter(IDocumentView view, IDocument document, IEnumerable<IChildViewController> controllers, ISessionContext context, ICommandManager commands, IEventAggregator events)
+            : base(view, context, commands, events)
         {
-            this.document = document;
+            this.document = document ?? throw new ArgumentNullException(nameof(document));
+
+            ArgumentNullException.ThrowIfNull(controllers, nameof(controllers));
 
             ID = Controllers.GetControllerID(view);
 
@@ -212,11 +216,11 @@ namespace StarLab.Presentation.Workspace.Documents
         /// <param name="document">The new <see cref="IDocument"/>.</param>
         public void UpdateDocument(IDocument document)
         {
+            this.document = document;
+
             UpdateChildControllers();
 
             View.SetName(document.Name);
-
-            this.document = document;
         }
 
         /// <summary>
@@ -233,6 +237,8 @@ namespace StarLab.Presentation.Workspace.Documents
         /// <param name="disposing">true if managed resources can be disposed of; false otherwise.</param>
         protected override void Dispose(bool disposing)
         {
+            base.Dispose(disposing);
+
             if (disposing)
             {
                 View.Detach();

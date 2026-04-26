@@ -3,9 +3,9 @@
 namespace StarLab.UI
 {
     /// <summary>
-    /// A wrapper around the application settings defined in the App.config file.
+    /// Provides read/write access to the user settings defined in the app.config file.
     /// </summary>
-    public class ApplicationSettings : IApplicationSettings
+    public class UserSettings : IUserSettings
     {
         /// <summary>
         /// Gets or sets the path to the default workspace file.

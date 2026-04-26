@@ -1,10 +1,13 @@
 ﻿using AutoMapper;
 using Castle.MicroKernel.Registration;
-using Castle.MicroKernel.Resolvers;
+using Castle.MicroKernel.Resolvers.SpecializedResolvers;
 using Castle.Windsor;
 using Microsoft.Extensions.Logging;
 using StarLab.Application;
 using StarLab.Presentation.Configuration;
+using StarLab.Presentation.Workspace.Documents;
+using StarLab.Presentation.Workspace.Documents.Charts;
+using StarLab.Presentation.Workspace.WorkspaceExplorer;
 using Stratosoft.Commands;
 
 namespace StarLab.Presentation
@@ -14,23 +17,21 @@ namespace StarLab.Presentation
     /// </summary>
     public abstract class PresentationTests
     {
-        protected WindsorContainer container; // The Inversion of Control (IoC) container.
+        protected ICommandManager commands; // The command manager.
 
-        protected IFactoryConfiguration configuration; // 
+        protected IFactoryConfiguration configuration; // Configuration for the view and presenter factories.
+
+        protected ISessionContext context; // The session context.
 
         protected IApplicationController controller; // The application controller.
 
-        protected IApplicationSettings settings; // The application settings.
-
-        protected ICommandManager commands; // The command manager.
-
         protected IEventAggregator events; // The event aggregator.
-
-        protected IServiceRegistry services; // The service registry.
 
         protected IUseCaseFactory factory; // The use case factory.
 
-        protected IMapper mapper; // The object mapper.
+        protected IServiceRegistry services; // The service registry.
+
+        private WindsorContainer container; // The Inversion of Control (IoC) container.
 
         /// <summary>
         /// Registers the dependencies with the IoC container and initialises the class level variables before each test.
@@ -38,9 +39,17 @@ namespace StarLab.Presentation
         [SetUp]
         public virtual void SetUp()
         {
+            configuration = Substitute.For<IFactoryConfiguration>();
+            controller = Substitute.For<IApplicationController>();
+            commands = Substitute.For<ICommandManager>();
+            context = Substitute.For<ISessionContext>();
+            events = Substitute.For<IEventAggregator>();
+            factory = Substitute.For<IUseCaseFactory>();
+
             container = new WindsorContainer();
 
-            // Register IConfigurationProvider with all registered profiles
+            container.Kernel.Resolver.AddSubResolver(new CollectionResolver(container.Kernel, true));
+
             container.Register(Component.For<IConfigurationProvider>().UsingFactoryMethod(kernel =>
             {
                 return new MapperConfiguration(configuration =>
@@ -50,29 +59,22 @@ namespace StarLab.Presentation
 
             }).LifestyleSingleton());
 
-            // Register IMapper with registered IConfigurationProvider
             container.Register(Component.For<IMapper>().UsingFactoryMethod(kernel => new Mapper(kernel.Resolve<IConfigurationProvider>(), kernel.Resolve)));
+            
+            container.Register(
+                Component.For<IUseCaseFactory>().Instance(factory),
+                Component.For<IUseCaseService>().ImplementedBy<AddDocumentUseCaseService>(),
+                Component.For<IUseCaseService>().ImplementedBy<ApplicationUseCaseService>(),
+                Component.For<IUseCaseService>().ImplementedBy<ChartUseCaseService>(),
+                Component.For<IUseCaseService>().ImplementedBy<ChartSettingsUseCaseService>(),
+                Component.For<IUseCaseService>().ImplementedBy<WorkspaceExplorerUseCaseService>(),
+                Component.For<IServiceRegistry>().ImplementedBy<ServiceRegistry>(),
+                Classes.FromAssemblyNamed("StarLab.Application").BasedOn<Profile>().WithServiceBase(),
+                Classes.FromAssemblyNamed("StarLab.Presentation").BasedOn<Profile>().WithServiceBase());
 
-            container.Register(Classes.FromAssemblyNamed("StarLab.Presentation").BasedOn<Profile>().WithServiceBase());
+            services = container.Resolve<IServiceRegistry>();
 
-            controller = Substitute.For<IApplicationController>();
-
-            services = Substitute.For<IServiceRegistry>();
-
-            configuration = Substitute.For<IFactoryConfiguration>();
-
-            settings = Substitute.For<IApplicationSettings>();
-
-            commands = Substitute.For<ICommandManager>();
-
-            factory = Substitute.For<IUseCaseFactory>();
-
-            events = Substitute.For<IEventAggregator>();
-
-            mapper = container.Resolve<IMapper>();
-
-            // Register ILazyComponentLoader last
-            container.Register(Component.For<ILazyComponentLoader>().ImplementedBy<LazyComponentAutoMocker>());
+            services.Initialise(controller);
         }
 
         /// <summary>
@@ -83,17 +85,6 @@ namespace StarLab.Presentation
         {
             controller.Dispose();
             container.Dispose();
-        }
-
-        /// <summary>
-        /// Uses <see cref="NSubstitute"/> to create mocked dependencies on demand.
-        /// </summary>
-        private class LazyComponentAutoMocker : ILazyComponentLoader
-        {
-            public IRegistration Load(string name, Type service, Castle.MicroKernel.Arguments arguments)
-            {
-                return Component.For(service).Instance(Substitute.For([service], null));
-            }
         }
     }
 }

@@ -70,10 +70,11 @@ namespace StarLab.Presentation.Configuration
             Add(new ViewConfiguration(Views.About, ViewTypes.Dialog)
                 .AddChild(Views.About, "StarLab.UI.Help.AboutView, StarLab.UI", "StarLab.Presentation.Help.AboutViewPresenter, StarLab.Presentation"));
 
+            Add(new ViewConfiguration(Views.AddDocument, ViewTypes.Dialog)
+                .AddChild(Views.AddDocument, "StarLab.UI.Workspace.Documents.AddDocumentView, StarLab.UI", "StarLab.Presentation.Workspace.Documents.AddDocumentViewPresenter, StarLab.Presentation"));
+
             Add(new ViewConfiguration(Views.Options, ViewTypes.Dialog)
                 .AddChild(Views.Options, "StarLab.UI.Options.OptionsView, StarLab.UI", "StarLab.Presentation.Options.OptionsViewPresenter, StarLab.Presentation"));
-
-            //AddConfiguration(new ViewDefinition(Views.AddDocument, ViewTypes.Dialog).AddChildViewConfiguration(Views.AddDocument, "StarLab.UI.Workspace.Documents.AddDocumentView, StarLab.UI", "StarLab.Presentation.Workspace.Documents.AddDocumentViewPresenter, StarLab.Presentation"));
         }
 
         /// <summary>
@@ -81,9 +82,13 @@ namespace StarLab.Presentation.Configuration
         /// </summary>
         private void CreateDocumentViewConfigurations()
         {
-            Add(new ViewConfiguration(Views.ColourMagnitudeChart, ViewTypes.Document)
+            Add(new ViewConfiguration(Views.ColourMagnitudeDiagram, ViewTypes.Document)
                 .AddChild(Views.ChartSettings, SplitViewPanels.Panel1, "StarLab.UI.Workspace.Documents.Charts.ChartSettingsView, StarLab.UI", "StarLab.Presentation.Workspace.Documents.Charts.ChartSettingsViewPresenter, StarLab.Presentation")
                 .AddChild(Views.Chart, SplitViewPanels.Panel2, "StarLab.UI.Workspace.Documents.Charts.ChartView, StarLab.UI", "StarLab.Presentation.Workspace.Documents.Charts.ColourMagnitudeChartViewPresenter, StarLab.Presentation"));
+
+            Add(new ViewConfiguration(Views.TwoColourDiagram, ViewTypes.Document)
+                .AddChild(Views.ChartSettings, SplitViewPanels.Panel1, "StarLab.UI.Workspace.Documents.Charts.ChartSettingsView, StarLab.UI", "StarLab.Presentation.Workspace.Documents.Charts.ChartSettingsViewPresenter, StarLab.Presentation")
+                .AddChild(Views.Chart, SplitViewPanels.Panel2, "StarLab.UI.Workspace.Documents.Charts.ChartView, StarLab.UI", "StarLab.Presentation.Workspace.Documents.Charts.TwoColourChartViewPresenter, StarLab.Presentation"));
         }
 
         /// <summary>

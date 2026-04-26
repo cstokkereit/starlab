@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using StarLab.Application;
 using StarLab.Presentation;
 using StarLab.Presentation.Configuration;
+using StarLab.Presentation.Workspace.Documents;
 using StarLab.Presentation.Workspace.Documents.Charts;
 using StarLab.Presentation.Workspace.WorkspaceExplorer;
 using StarLab.Serialisation;
@@ -26,7 +27,7 @@ namespace StarLab.UI
         /// <param name="store">An <see cref="IConfigurationStore"/> that provides configuration information.</param>
         public void Install(IWindsorContainer container, IConfigurationStore store)
         {
-            container.Kernel.Resolver.AddSubResolver(new CollectionResolver(container.Kernel, true));
+            container.Kernel.Resolver.AddSubResolver(new CollectionResolver(container.Kernel));
 
             InstallMapperClasses(container);
             InstallInfrastructureClasses(container);
@@ -87,12 +88,15 @@ namespace StarLab.UI
         private void InstallPresentationClasses(IWindsorContainer container)
         {
             container.Register(
+                Component.For<IApplicationConfiguration>().ImplementedBy<ApplicationConfiguration>(),
                 Component.For<IFactoryConfiguration>().ImplementedBy<FactoryConfiguration>(),
+                Component.For<IUseCaseService>().ImplementedBy<AddDocumentUseCaseService>(),
                 Component.For<IUseCaseService>().ImplementedBy<ApplicationUseCaseService>(),
                 Component.For<IUseCaseService>().ImplementedBy<ChartUseCaseService>(),
                 Component.For<IUseCaseService>().ImplementedBy<ChartSettingsUseCaseService>(),
                 Component.For<IUseCaseService>().ImplementedBy<WorkspaceExplorerUseCaseService>(),
                 Component.For<IServiceRegistry>().ImplementedBy<ServiceRegistry>(),
+                Component.For<ISessionContext>().ImplementedBy<SessionContext>(),
                 Classes.FromAssemblyNamed("StarLab.Presentation").Where(t => t.Name.EndsWith("Factory")).WithServiceDefaultInterfaces(),
                 Classes.FromAssemblyNamed("StarLab.Presentation").BasedOn<Profile>().WithServiceBase()
             );
@@ -106,7 +110,7 @@ namespace StarLab.UI
         {
             container.Register(
                 Component.For<IWindsorContainer>().Instance(container),
-                Component.For<IApplicationSettings>().ImplementedBy<ApplicationSettings>(),
+                Component.For<IUserSettings>().ImplementedBy<UserSettings>(),
                 Component.For<IApplicationController>().ImplementedBy<ApplicationController>(),
                 Component.For<ICommandManager>().ImplementedBy<CommandManager>().LifestyleTransient(),
                 Classes.FromAssemblyNamed("StarLab.UI").Where(t => t.Name.EndsWith("Factory")).WithServiceDefaultInterfaces()

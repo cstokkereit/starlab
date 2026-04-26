@@ -93,9 +93,9 @@ namespace StarLab.Presentation.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap ColourMagnitudeDiagram {
+        public static System.Drawing.Bitmap ColourColourDiagram32X32 {
             get {
-                object obj = ResourceManager.GetObject("ColourMagnitudeDiagram", resourceCulture);
+                object obj = ResourceManager.GetObject("ColourColourDiagram32X32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -103,9 +103,19 @@ namespace StarLab.Presentation.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap ColourMagnitudeDiagramSelected {
+        public static System.Drawing.Bitmap ColourMagnitudeDiagram16X16 {
             get {
-                object obj = ResourceManager.GetObject("ColourMagnitudeDiagramSelected", resourceCulture);
+                object obj = ResourceManager.GetObject("ColourMagnitudeDiagram16X16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap ColourMagnitudeDiagram32X32 {
+            get {
+                object obj = ResourceManager.GetObject("ColourMagnitudeDiagram32X32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -156,16 +166,6 @@ namespace StarLab.Presentation.Properties {
         public static System.Drawing.Bitmap FolderSelected {
             get {
                 object obj = ResourceManager.GetObject("FolderSelected", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap HRDiagram {
-            get {
-                object obj = ResourceManager.GetObject("HRDiagram", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

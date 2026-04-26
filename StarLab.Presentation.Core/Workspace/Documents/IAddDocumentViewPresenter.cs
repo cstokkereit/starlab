@@ -6,13 +6,10 @@
     public interface IAddDocumentViewPresenter : IChildViewPresenter
     {
         /// <summary>
-        /// Adds the document to the workspace and closes the dialog controlled by the parent controller.
+        /// 
         /// </summary>
-        void AddDocument();
-
-        /// <summary>
-        /// Closes the dialog controlled by the parent controller.
-        /// </summary>
-        void Cancel();
+        /// <param name="name"></param>
+        /// <param name="definitionName"></param>
+        void AddDocument(string name, string definitionName);
     }
 }

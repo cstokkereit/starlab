@@ -1,4 +1,5 @@
 ﻿using StarLab.Application;
+using StarLab.Presentation.Configuration;
 using StarLab.Shared.Properties;
 using Stratosoft.Commands;
 
@@ -19,11 +20,11 @@ namespace StarLab.Presentation
         /// Initialises a new instance of the <see cref="ChildViewPresenter{TView, TParent}"/> class.
         /// </summary>
         /// <param name="view">The <see cref="TView"/> controlled by the presenter.</param>
+        /// <param name="context">An <see cref="ISessionContext"/> that provides access to the session context.</param>
         /// <param name="commands">An instance of <see cref="ICommandManager"/> that is required for the creation of commands.</param>
-        /// <param name="settings">An <see cref="IApplicationSettings"/> that provides access to the application configuration.</param>
         /// <param name="events">The <see cref="IEventAggregator"/> that manages application events.</param>
-        public ChildViewPresenter(TView view, ICommandManager commands, IApplicationSettings settings, IEventAggregator events)
-            : base(view, commands, settings, events) 
+        public ChildViewPresenter(TView view, ISessionContext context, ICommandManager commands, IEventAggregator events)
+            : base(view, context, commands, events) 
         {
             ID = Controllers.GetControllerID(view);
         }
@@ -40,6 +41,15 @@ namespace StarLab.Presentation
         public virtual void RegisterController(IViewController parentController)
         {
             this.parentController = (TParent)parentController;
+        }
+
+        /// <summary>
+        /// Initiates the workflow managed by the presenter.
+        /// </summary>
+        /// <param name="context">An <see cref="IWorkflowContext"/> that contains the information required to execute the workflow.</param>
+        public virtual void Run(IWorkflowContext context)
+        {
+            // Do Nothing
         }
 
         /// <summary>

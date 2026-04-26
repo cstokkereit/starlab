@@ -3,7 +3,7 @@
     /// <summary>
     /// Specifies a document type.
     /// </summary>
-    public enum DocumentType
+    public enum DocumentTypes
     {
         Any,
         Chart,

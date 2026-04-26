@@ -18,5 +18,11 @@
         /// </summary>
         /// <param name="subscriber">An object that implements the <see cref="ISubscriber{TEventType}"/> interface.</param>
         void Subsribe(object subscriber);
+
+        /// <summary>
+        /// Unsubscribe from the event determined by the value of the type parameter specified in the implementation.
+        /// </summary>
+        /// <param name="subscriber">An object that implements the <see cref="ISubscriber{TEventType}"/> interface.</param>
+        void Unsubscribe(object subscriber);
     }
 }

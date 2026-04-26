@@ -1,8 +1,8 @@
 ﻿using log4net;
 using StarLab.Application;
 using StarLab.Application.Workspace;
-using StarLab.Presentation.Workspace.Documents;
-using StarLab.Shared.Resources;
+using StarLab.Presentation.Configuration;
+using StarLab.Shared;
 using Stratosoft.Commands;
 
 using ImageResources = StarLab.Presentation.Properties.Resources;
@@ -40,12 +40,12 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// Initialises a new instance of the <see cref="WorkspaceExplorerViewPresenter"> class.
         /// </summary>
         /// <param name="view">The <see cref="IWorkspaceExplorerView"/> controlled by this presenter.</param>
+        /// <param name="context">An <see cref="ISessionContext"/> that provides access to the session context.</param>
         /// <param name="commands">An <see cref="ICommandManager"/> that is required for the creation of <see cref="ICommand">s.</param>
         /// <param name="services">An <see cref="IServiceRegistry"/> that provides access to the registered services.</param>
-        /// <param name="settings">An <see cref="IApplicationSettings"/> that provides access to the application configuration.</param>
         /// <param name="events">The <see cref="IEventAggregator"/> that manages application events.</param>
-        public WorkspaceExplorerViewPresenter(IWorkspaceExplorerView view, ICommandManager commands, IServiceRegistry services, IApplicationSettings settings, IEventAggregator events)
-            : base(view, commands, settings, events)
+        public WorkspaceExplorerViewPresenter(IWorkspaceExplorerView view, ISessionContext context, ICommandManager commands, IServiceRegistry services, IEventAggregator events)
+            : base(view, context, commands, events)
         {
             ArgumentNullException.ThrowIfNull(services, nameof(services));
 
@@ -70,10 +70,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="path">The path to the folder.</param>
         public void AddChart(string path)
         {
-            if (AppController.GetView(Views.AddDocument) is IDialog dialog)
-            {
-                dialog.Show(new AddDocumentInteractionContext(workspace, path, DocumentType.Chart));
-            }
+            AppController.ShowAddChartDialog(workspace, path);
         }
 
         /// <summary>
@@ -89,6 +86,15 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// Displays the Add Project dialog.
         /// </summary>
         public void AddProject()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Adds a table to the specified workspace folder.
+        /// </summary>
+        /// <param name="path">The path to the folder.</param>
+        public void AddTable(string path)
         {
             throw new NotImplementedException();
         }
@@ -139,12 +145,12 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="manager">The context menu manager.</param>
         public void CreateDocumentContextMenu(string id, IMenuManager manager)
         {
-            manager.AddMenuItem(Constants.Open, StringResources.Open, ImageResources.Open, CreateCommand(Actions.OpenDocument, () => OpenDocument(id)));
+            manager.AddMenuItem(Constants.Open, StringResources.Open, ImageResources.Open, CreateCommand(GetCommandName(Actions.Open, id), () => OpenDocument(id)));
             manager.AddMenuSeparator();
-            manager.AddMenuItem(Constants.Cut, StringResources.Cut, ImageResources.Cut, CreateCommand(Actions.Cut, () => Cut(id)));
-            manager.AddMenuItem(Constants.Copy, StringResources.Copy, ImageResources.Copy, CreateCommand(Actions.Copy, () => Copy(id)));
-            manager.AddMenuItem(Constants.Delete, StringResources.Delete, CreateCommand(Actions.DeleteDocument, () => DeleteDocument(id)));
-            manager.AddMenuItem(Constants.Rename, StringResources.Rename, ImageResources.Rename, CreateCommand(Actions.Rename, () => Rename(id)));
+            manager.AddMenuItem(Constants.Cut, StringResources.Cut, ImageResources.Cut, CreateCommand(GetCommandName(Actions.Cut, id), () => Cut(id)));
+            manager.AddMenuItem(Constants.Copy, StringResources.Copy, ImageResources.Copy, CreateCommand(GetCommandName(Actions.Copy, id), () => Copy(id)));
+            manager.AddMenuItem(Constants.Delete, StringResources.Delete, CreateCommand(GetCommandName(Actions.Delete, id), () => DeleteDocument(id)));
+            manager.AddMenuItem(Constants.Rename, StringResources.Rename, ImageResources.Rename, CreateCommand(GetCommandName(Actions.Rename, id), () => Rename(id)));
         }
 
         /// <summary>
@@ -155,19 +161,19 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         public void CreateFolderContextMenu(string folder, IMenuManager manager)
         {
             manager.AddMenuItem(Constants.Add, StringResources.Add);
-            manager.AddMenuItem(Constants.Add, Constants.AddChart, StringResources.Chart + Constants.Ellipsis, CreateCommand(Actions.AddChart, () => AddChart(folder)));
-            //manager.AddMenuItem(Constants.Add, Constants.AddTable, StringResources.Table + Constants.Ellipsis, CreateCommand(Actions.AddTable, () => AddTable(folder)));
-            manager.AddMenuItem(Constants.Add, Constants.AddFolder, StringResources.NewFolder, ImageResources.NewFolder, CreateCommand(Actions.AddFolder, () => AddFolder(folder)));
+            manager.AddMenuItem(Constants.Add, Constants.AddChart, StringResources.Chart + Constants.Ellipsis, CreateCommand(GetCommandName(Actions.AddChart, folder), () => AddChart(folder)));
+            //manager.AddMenuItem(Constants.Add, Constants.AddTable, StringResources.Table + Constants.Ellipsis, CreateCommand(GetCommandName(Actions.AddTable, folder), () => AddTable(folder)));
+            manager.AddMenuItem(Constants.Add, Constants.AddFolder, StringResources.NewFolder, ImageResources.NewFolder, CreateCommand(GetCommandName(Actions.AddFolder, folder), () => AddFolder(folder)));
             manager.AddMenuSeparator();
-            manager.AddMenuItem(Constants.CollapseAll, StringResources.CollapseAllDescendants, ImageResources.Collapse, CreateCommand(Actions.CollapseFolder, () => Collapse(folder)));
+            manager.AddMenuItem(Constants.CollapseAll, StringResources.CollapseAllDescendants, ImageResources.Collapse, CreateCommand(GetCommandName(Actions.Collapse, folder), () => Collapse(folder)));
             manager.AddMenuSeparator();
-            manager.AddMenuItem(Constants.Cut, StringResources.Cut, ImageResources.Cut, CreateCommand(Actions.Cut, () => Cut(folder)));
-            manager.AddMenuItem(Constants.Copy, StringResources.Copy, ImageResources.Copy, CreateCommand(Actions.Copy, () => Copy(folder)));
-            manager.AddMenuItem(Constants.Paste, StringResources.Paste, ImageResources.Paste, CreateCommand(Actions.Paste, () => Paste(folder)));
-            manager.AddMenuItem(Constants.Delete, StringResources.Delete, CreateCommand(Actions.DeleteFolder, () => DeleteFolder(folder)));
-            manager.AddMenuItem(Constants.Rename, StringResources.Rename, ImageResources.Rename, CreateCommand(Actions.Rename, () => RenameFolder(folder)));
+            manager.AddMenuItem(Constants.Cut, StringResources.Cut, ImageResources.Cut, CreateCommand(GetCommandName(Actions.Cut, folder), () => Cut(folder)));
+            manager.AddMenuItem(Constants.Copy, StringResources.Copy, ImageResources.Copy, CreateCommand(GetCommandName(Actions.Copy, folder), () => Copy(folder)));
+            manager.AddMenuItem(Constants.Paste, StringResources.Paste, ImageResources.Paste, CreateCommand(GetCommandName(Actions.Paste, folder), () => Paste(folder)));
+            manager.AddMenuItem(Constants.Delete, StringResources.Delete, CreateCommand(GetCommandName(Actions.Delete, folder), () => DeleteFolder(folder)));
+            manager.AddMenuItem(Constants.Rename, StringResources.Rename, ImageResources.Rename, CreateCommand(GetCommandName(Actions.Rename, folder), () => RenameFolder(folder)));
 
-            UpdateCommandState(Actions.Paste, folder, !string.IsNullOrEmpty(clipboard));
+            UpdateCommandState(GetCommandName(Actions.Paste, folder), !string.IsNullOrEmpty(clipboard));
         }
 
         /// <summary>
@@ -179,17 +185,17 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         {
             manager.AddMenuItem(Constants.Add, StringResources.Add);
             manager.AddMenuItem(Constants.Add, Constants.AddChart, StringResources.Chart + Constants.Ellipsis, CreateCommand(Actions.AddChart, () => AddChart(project)));
-            //manager.AddMenuItem(Constants.Add, Constants.AddTable, StringResources.Table + Constants.Ellipsis, CreateCommand(Actions.AddTable, () => AddTable(project)));
-            manager.AddMenuItem(Constants.Add, Constants.AddFolder, StringResources.NewFolder, ImageResources.NewFolder, CreateCommand(Actions.AddFolder, () => AddFolder(project)));
+            manager.AddMenuItem(Constants.Add, Constants.AddTable, StringResources.Table + Constants.Ellipsis, CreateCommand(Actions.AddTable, () => AddTable(project)));
+            manager.AddMenuItem(Constants.Add, Constants.AddFolder, StringResources.NewFolder, ImageResources.NewFolder, CreateCommand(GetCommandName(Actions.AddFolder, project), () => AddFolder(project)));
             manager.AddMenuSeparator();
-            manager.AddMenuItem(Constants.CollapseAll, StringResources.CollapseAllDescendants, ImageResources.Collapse, CreateCommand(Actions.CollapseProject, () => Collapse(project)));
+            manager.AddMenuItem(Constants.CollapseAll, StringResources.CollapseAllDescendants, ImageResources.Collapse, CreateCommand(GetCommandName(Actions.Collapse, project), () => Collapse(project)));
             manager.AddMenuSeparator();
             manager.AddMenuItem(Constants.Cut, StringResources.Cut, ImageResources.Cut);
-            manager.AddMenuItem(Constants.Paste, StringResources.Paste, ImageResources.Paste, CreateCommand(Actions.Paste, () => Paste(project)));
-            manager.AddMenuItem(Constants.Delete, StringResources.Delete, CreateCommand(Actions.DeleteFolder, () => DeleteFolder(project)));
-            manager.AddMenuItem(Constants.Rename, StringResources.Rename, ImageResources.Rename, CreateCommand(Actions.Rename, () => RenameFolder(project)));
+            manager.AddMenuItem(Constants.Paste, StringResources.Paste, ImageResources.Paste, CreateCommand(GetCommandName(Actions.Paste, project), () => Paste(project)));
+            manager.AddMenuItem(Constants.Delete, StringResources.Delete, CreateCommand(GetCommandName(Actions.Delete, project), () => DeleteProject(project)));
+            manager.AddMenuItem(Constants.Rename, StringResources.Rename, ImageResources.Rename, CreateCommand(GetCommandName(Actions.Rename, project), () => RenameProject(project)));
 
-            UpdateCommandState(Actions.Paste, project, !string.IsNullOrEmpty(clipboard));
+            UpdateCommandState(GetCommandName(Actions.Paste, project), !string.IsNullOrEmpty(clipboard));
         }
 
         /// <summary>
@@ -201,9 +207,9 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
             manager.AddMenuItem(Constants.CollapseAll, StringResources.CollapseAllDescendants, ImageResources.Collapse, CreateCommand(Actions.CollapseWorkspace, () => Collapse(Constants.Workspace)));
             manager.AddMenuSeparator();
             manager.AddMenuItem(Constants.Add, StringResources.Add);
-            //manager.AddMenuItem(Constants.Add, Constants.AddProject, StringResources.Project + Constants.Ellipsis, CreateCommand(Actions.AddProject, AppController.ShowAddProject));
+            manager.AddMenuItem(Constants.Add, Constants.AddProject, StringResources.Project + Constants.Ellipsis, CreateCommand(Actions.AddProject, () => AddProject()));
             manager.AddMenuSeparator();
-            manager.AddMenuItem(Constants.Rename, StringResources.Rename, ImageResources.Rename, CreateCommand(Actions.Rename, () => Rename(Constants.Workspace)));
+            manager.AddMenuItem(Constants.Rename, StringResources.Rename, ImageResources.Rename, CreateCommand(Actions.RenameWorkspace, () => Rename(Constants.Workspace)));
         }
 
         /// <summary>
@@ -389,6 +395,17 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         }
 
         /// <summary>
+        /// Renames the specified project node.
+        /// </summary>
+        /// <param name="key">The node key.</param>
+        public void RenameProject(string key)
+        {
+            var folder = workspace.GetProject(key);
+            Expand(folder.ParentKey);
+            Rename(key);
+        }
+
+        /// <summary>
         /// Renames the workspace.
         /// </summary>
         /// <param name="name">The new name.</param>
@@ -464,6 +481,8 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="disposing">true if managed resources can be disposed of; false otherwise.</param>
         protected override void Dispose(bool disposing)
         {
+            base.Dispose(disposing);
+
             if (disposing)
             {
                 View.Detach();
@@ -475,7 +494,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// </summary>
         private void AddImages()
         {
-            images.Add(NodeImages.ColourMagnitudeDiagram, View.AddImage(ImageResources.ColourMagnitudeDiagram));
+            images.Add(NodeImages.ColourMagnitudeDiagram, View.AddImage(ImageResources.ColourMagnitudeDiagram16X16));
             images.Add(NodeImages.Folder, View.AddImage(ImageResources.Folder));
             images.Add(NodeImages.Project, View.AddImage(ImageResources.Project));
             images.Add(NodeImages.Workspace, View.AddImage(ImageResources.Workspace));

@@ -5,7 +5,7 @@
     /// </summary>
     public class EventAggregator : IEventAggregator
     {
-        private Dictionary<Type, List<WeakReference>> subsribers = new Dictionary<Type, List<WeakReference>>(); // A dictionary containing a list of subscribers for each event.
+        private readonly Dictionary<Type, List<WeakReference>> subsribers = new Dictionary<Type, List<WeakReference>>(); // A dictionary containing a list of subscribers for each event.
 
         private readonly object lockSubscriberDictionary = new object(); // An object used to lock the subscribers dictionary.
 
@@ -39,19 +39,16 @@
                         }
                     }
 
-                    if (subsribersToBeRemoved.Any())
+                    foreach (var remove in subsribersToBeRemoved)
                     {
-                        foreach (var remove in subsribersToBeRemoved)
-                        {
-                            subscribers.Remove(remove);
-                        }
+                        subscribers.Remove(remove);
                     }
                 }
             }
         }
 
         /// <summary>
-        /// Subscribe to the event determined by the value of the type parameter specified in the implementation.
+        /// Subscribe to the event(s) determined by the value of the type parameter specified in the implementation.
         /// </summary>
         /// <param name="subscriber">An object that implements the <see cref="ISubscriber{TEventType}"/> interface.</param>
         public void Subsribe(object subscriber)
@@ -65,6 +62,28 @@
                 foreach (var type in types)
                 {
                     GetSubscriberList(type)?.Add(reference);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Unsubscribe from the event(s) determined by the value of the type parameter specified in the implementation.
+        /// </summary>
+        /// <param name="unsubscriber">An object that implements the <see cref="ISubscriber{TEventType}"/> interface.</param>
+        public void Unsubscribe(object unsubscriber)
+        {
+            lock (lockSubscriberDictionary)
+            {
+                var types = unsubscriber.GetType().GetInterfaces().Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(ISubscriber<>));
+
+                foreach (var type in types)
+                {
+                    var subscribers = GetSubscriberList(type);
+
+                    if (subscribers != null)
+                    {
+                        Unsubscribe(subscribers, unsubscriber);
+                    }
                 }
             }
         }
@@ -99,7 +118,7 @@
         /// <param name="payload">The event being invoked.</param>
         /// <param name="subscriber">The <see cref="ISubscriber{TEventType}"/> receiving the event.</param>
         /// <param name="synchronous">If true the event will be published synchronously.</param>
-        private void InvokeSubscribedEvent<TEventType>(TEventType payload, ISubscriber<TEventType> subscriber, bool synchronous)
+        private static void InvokeSubscribedEvent<TEventType>(TEventType payload, ISubscriber<TEventType> subscriber, bool synchronous)
         {
             var context = SynchronizationContext.Current ?? new SynchronizationContext();
 
@@ -110,6 +129,29 @@
             else
             {
                 context.Post(s => subscriber.OnEvent(payload), null);
+            }
+        }
+
+        /// <summary>
+        /// Unsubscribe from a specific event type.
+        /// </summary>
+        /// <param name="subscribers">A <see cref="List{WeakReference}"/> containing the subscribers for a specific event type.</param>
+        /// <param name="unsubscriber">An object that implements the <see cref="ISubscriber{TEventType}"/> interface.</param>
+        private static void Unsubscribe(List<WeakReference> subscribers, object unsubscriber)
+        {
+            var subsribersToBeRemoved = new List<WeakReference>();
+
+            foreach (var subscriber in subscribers)
+            {
+                if (subscriber.Target == unsubscriber)
+                {
+                    subsribersToBeRemoved.Add(subscriber);
+                }
+            }
+
+            foreach (var remove in subsribersToBeRemoved)
+            {
+                subscribers.Remove(remove);
             }
         }
     }

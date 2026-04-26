@@ -30,7 +30,9 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
 
             var interactor = Factory.CreateUpdateChartUseCase(ApplicationController.GetOutputPort<IChartOutputPort>(id));
 
-            interactor.Execute(Mapper.Map<ChartDTO>(chart));
+            var dto = Mapper.Map<ChartDTO>(chart);
+
+            interactor.Execute(dto);
         }
 
         /// <summary>

@@ -1,10 +1,9 @@
 ﻿using log4net;
 using StarLab.Presentation;
 using StarLab.Presentation.Workspace.Documents;
+using StarLab.Shared;
 using StarLab.Shared.Properties;
-using StarLab.Shared.Resources;
 using Stratosoft.Commands;
-using System.ComponentModel;
 
 namespace StarLab.UI.Workspace.Documents
 {
@@ -38,46 +37,15 @@ namespace StarLab.UI.Workspace.Documents
         public SplitViewPanels Panel => SplitViewPanels.Any;
 
         /// <summary>
-        /// Gets the <see cref="DocumentType"/>.
+        /// Adds a document type to the list of available document types.
         /// </summary>
-        public string DocumentType => "ColourMagnitudeChartView";
-
-        /// <summary>
-        /// Gets or sets the document name.
-        /// </summary>
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public string DocumentName
+        /// <param name="key">The key that specifies the document type.</param>
+        /// <param name="text">The display text for the document type.</param>
+        /// <param name="imageKey">The key that specifies the image use to represent the document type.</param>
+        public void AddDocumentType(string key, string text, string imageKey)
         {
-            get { return textName.Text; }
-            set { textName.Text = value; }
-        }
-
-        /// <summary>
-        /// TODO - Implement this properly and provide a summary.
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="text"></param>
-        /// <param name="imageKey"></param>
-        public void AddDocument(string key, string text, string imageKey)
-        {
-            //listDocumentTypes.Items.Add(key, text, imageKey);
-
-            var header = new ColumnHeader();
-            //header.Text = "Column 1";
-
-            listDocumentTypes.Columns.Add(header);
-            
-            listDocumentTypes.Items.Add(key, text, 0);
-
-            listDocumentTypes.Items.Add("HR Diagram - 1");
-            listDocumentTypes.Items.Add("HR Diagram - 2");
-            listDocumentTypes.Items.Add("HR Diagram - 3");
-            listDocumentTypes.Items.Add("HR Diagram - 4");
-            listDocumentTypes.Items.Add("HR Diagram - 5");
-
-            listDocumentTypes.Columns[0].Width = listDocumentTypes.Width;
-
-            listDocumentTypes.View = View.Details;
+            listDocumentTypes.Items.Add(key, text, imageKey);
+            listDocumentTypes.Items[0].Selected = true;
         }
 
         /// <summary>
@@ -87,7 +55,7 @@ namespace StarLab.UI.Workspace.Documents
         /// <param name="image">The <see cref="Image"/> being added.</param>
         public void AddImage(string key, Image image)
         {
-            imageList.Images.Add(image);
+            imageList.Images.Add(key, image);
         }
 
         /// <summary>
@@ -99,21 +67,6 @@ namespace StarLab.UI.Workspace.Documents
             if (this.presenter != null) throw new InvalidOperationException(Resources.PresenterAlreadyAttached);
 
             this.presenter = (IAddDocumentViewPresenter)presenter;
-        }
-
-        /// <summary>
-        /// Detaches the presenter that controls the view.
-        /// </summary>
-        public void Detach()
-        {
-            if (presenter != null)
-            {
-                var entry = $"{presenter.GetType().Name}({Name})";
-
-                presenter = null;
-
-                log.Debug(string.Format(LogEntries.PresenterDetached, entry));
-            }
         }
 
         /// <summary>
@@ -141,11 +94,54 @@ namespace StarLab.UI.Workspace.Documents
         }
 
         /// <summary>
+        /// Clears the list containing the available document types.
+        /// </summary>
+        public void ClearDocumentTypes()
+        {
+            listDocumentTypes.Items.Clear();
+        }
+
+        /// <summary>
+        /// Clears the list containing the images that represent the different document types.
+        /// </summary>
+        public void ClearImages()
+        {
+            imageList.Images.Clear();
+        }
+
+        /// <summary>
+        /// Detaches the presenter that controls the view.
+        /// </summary>
+        public void Detach()
+        {
+            if (presenter != null)
+            {
+                var entry = $"{presenter.GetType().Name}({Name})";
+
+                presenter = null;
+
+                log.Debug(string.Format(LogEntries.PresenterDetached, entry));
+            }
+        }
+
+        /// <summary>
         /// Initialises the view.
         /// </summary>
         public void Initialise()
         {
-            // Do Nothing
+            listDocumentTypes.Columns.Add(string.Empty);
+            listDocumentTypes.Columns[0].Width = listDocumentTypes.Width;
+            listDocumentTypes.View = View.Details;
+        }
+
+        /// <summary>
+        /// Event handler for the <see cref="Button.Click"/> event.
+        /// </summary>
+        /// <param name="sender">The <see cref="object"> that was the originator of the event.</param>
+        /// <param name="e">A <see cref="EventArgs"/> that provides context for the event.</param>
+        private void AddButton_Click(object sender, EventArgs e)
+        {
+            presenter?.AddDocument(textName.Text, listDocumentTypes.SelectedItems[0].Name);
         }
     }
 }

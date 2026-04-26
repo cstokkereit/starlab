@@ -265,7 +265,7 @@ namespace StarLab.Application.Workspace
         /// <param name="path">The path to the required folder.</param>
         /// <returns>The required <see cref="IFolder"/>.</returns>
         /// <exception cref="KeyNotFoundException"></exception>
-        public IFolder GetFolder(string path)
+        public IFolder GetFolder(string? path)
         {
             ArgumentException.ThrowIfNullOrEmpty(path, nameof(path));
 

@@ -1,8 +1,8 @@
 ﻿using log4net;
 using StarLab.Presentation;
 using StarLab.Presentation.Workspace.WorkspaceExplorer;
+using StarLab.Shared;
 using StarLab.Shared.Properties;
-using StarLab.Shared.Resources;
 using StarLab.UI.Controls;
 using Stratosoft.Commands;
 using System.Diagnostics;

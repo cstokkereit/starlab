@@ -2,8 +2,8 @@
 using StarLab.Application;
 using StarLab.Presentation;
 using StarLab.Presentation.Workspace;
+using StarLab.Shared;
 using StarLab.Shared.Properties;
-using StarLab.Shared.Resources;
 using Stratosoft.Commands;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -256,6 +256,8 @@ namespace StarLab.UI.Workspace
         {
             Debug.Assert(presenter != null);
 
+            RemoveDockContent(); // TODO
+
             using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(layout)))
             {
                 dockPanel.LoadFromXml(stream, new DeserializeDockContent(config =>
@@ -264,6 +266,20 @@ namespace StarLab.UI.Workspace
                 }));
             }
         }
+
+
+        private void RemoveDockContent()
+        {
+            for (int i = dockPanel.Contents.Count - 1; i >= 0; i--)
+            {
+                if (dockPanel.Contents[i] is IDockContent content)
+                {
+                    content.DockHandler.Close();
+                }
+            }
+        }
+
+
 
         /// <summary>
         /// Shows the specified view.

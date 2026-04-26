@@ -21,15 +21,13 @@ namespace StarLab.Presentation
             CreateMap<IAxis, AxisDTO>();
             CreateMap<IAxisSettings, AxisDTO>();
             CreateMap<IChart, ChartDTO>();
-
+            
             CreateMap<IChartSettings, ChartDTO>()
                 .ForMember(dest => dest.X1, opt => opt.MapFrom(src => src.Axes.X1))
                 .ForMember(dest => dest.X2, opt => opt.MapFrom(src => src.Axes.X2))
                 .ForMember(dest => dest.Y1, opt => opt.MapFrom(src => src.Axes.Y1))
                 .ForMember(dest => dest.Y2, opt => opt.MapFrom(src => src.Axes.Y2));
 
-            CreateMap<IChartDocument, DocumentDTO>();
-            CreateMap<IFolder, FolderDTO>().ForMember(dest => dest.Path, opt => opt.MapFrom(src => src.Key));
             CreateMap<IFont, FontDTO>();
             CreateMap<IFont, FontDTO>();
             CreateMap<IGrid, GridDTO>();
@@ -40,13 +38,16 @@ namespace StarLab.Presentation
             CreateMap<ILabelSettings, LabelDTO>();
             CreateMap<IPlotArea, PlotAreaDTO>();
             CreateMap<IPlotAreaSettings, PlotAreaDTO>();
-            CreateMap<IProject, ProjectDTO>();
             CreateMap<IScale, ScaleDTO>();
             CreateMap<IScaleSettings, ScaleDTO>();
             CreateMap<ITickLabels, TickLabelsDTO>();
             CreateMap<ITickLabelSettings, TickLabelsDTO>();
             CreateMap<ITickMarks, TickMarksDTO>();
             CreateMap<ITickMarkSettings, TickMarksDTO>();
+
+            CreateMap<IChartDocument, DocumentDTO>();
+            CreateMap<IFolder, FolderDTO>().ForMember(dest => dest.Path, opt => opt.MapFrom(src => src.Key));
+            CreateMap<IProject, ProjectDTO>();
 
             CreateMap<IWorkspace, WorkspaceDTO>().ForMember(dest => dest.ActiveDocument, opt => opt.MapFrom(src => src.ActiveDocument == null ? string.Empty : src.ActiveDocument.ID));
         }

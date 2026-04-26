@@ -1,37 +1,50 @@
 ﻿using log4net;
-using StarLab.Application.Workspace;
 using StarLab.Application.Workspace.Documents;
+using StarLab.Presentation.Configuration;
+using StarLab.Shared;
 using Stratosoft.Commands;
+using System.Diagnostics;
 
 using ImageResources = StarLab.Presentation.Properties.Resources;
+using StringResources = StarLab.Shared.Properties.Resources;
 
 namespace StarLab.Presentation.Workspace.Documents
 {
     /// <summary>
     /// Controls the behaviour of an <see cref="IAddDocumentView"/>.
     /// </summary>
-    public class AddDocumentViewPresenter : ChildViewPresenter<IAddDocumentView, IViewController>, IAddDocumentViewPresenter, IChildViewController, IAddDocumentOutputPort
+    public class AddDocumentViewPresenter : ChildViewPresenter<IAddDocumentView, IDialogController>, IAddDocumentViewPresenter, IChildViewController, ISubscriber<WorkspaceChangedEventArgs>
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(AddDocumentViewPresenter)); // The logger that will be used for writing log messages.
 
+        private readonly Dictionary<string, IDocumentDefinition> definitions = []; // A dictionary containing the available document definitions indexed by name.
+
         private readonly IAddDocumentUseCaseService useCaseService; // A service that executes the use cases that implement the functionality.
+
+        private IWorkspace? workspace; // The current workspace.
+
+        private string? path; // The path to the folder within the workspace hierarchy that will contain the new document.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="AddDocumentViewPresenter"/> class.
         /// </summary>
         /// <param name="view">The <see cref="IAddDocumentView"/> controlled by this presenter.</param>
+        /// <param name="context">An <see cref="ISessionContext"/> that provides access to the session context.</param>
         /// <param name="commands">An <see cref="ICommandManager"/> that is required for the creation of <see cref="ICommand">s.</param>
         /// <param name="services">An <see cref="IServiceRegistry"/> that provides access to the registered services.</param>
-        /// <param name="settings">An <see cref="IApplicationSettings"/> that provides access to the application configuration.</param>
         /// <param name="events">The <see cref="IEventAggregator"/> that manages application events.</param>
-        public AddDocumentViewPresenter(IAddDocumentView view, ICommandManager commands, IServiceRegistry services, IApplicationSettings settings, IEventAggregator events)
-            : base(view, commands, settings, events) 
+        public AddDocumentViewPresenter(IAddDocumentView view, ISessionContext context, ICommandManager commands, IServiceRegistry services, IEventAggregator events)
+            : base(view, context, commands, events)
         {
             ArgumentNullException.ThrowIfNull(services, nameof(services));
 
             useCaseService = services.GetService<IAddDocumentUseCaseService>();
 
             view.Attach(this);
+
+            workspace = new EmptyWorkspace();
+
+            AddImages();
         }
 
         /// <summary>
@@ -41,33 +54,28 @@ namespace StarLab.Presentation.Workspace.Documents
         {
             Dispose(false);
         }
-
+        
         /// <summary>
-        /// Initiates the add document use case.
+        /// 
         /// </summary>
-        public void AddDocument()
+        /// <param name="name"></param>
+        /// <param name="definitionName"></param>
+        public void AddDocument(string name, string definitionName)
         {
-            //if (InteractionContext is AddDocumentInteractionContext context)
-            //{
-            //    var document = new DocumentDTO
-            //    {
-            //        Name = View.DocumentName,
-            //        Path = context.Path,
-            //        View = View.DocumentType
-            //    };
+            var view = definitions[definitionName].View;
 
-            //    var interactor = UseCaseFactory.CreateAddDocumentUseCase(this);
+            Debug.Assert(!string.IsNullOrEmpty(path));
+            Debug.Assert(!string.IsNullOrEmpty(view));
+            Debug.Assert(workspace != null);
 
-            //    interactor.Execute(Mapper.Map<WorkspaceDTO>(context.Workspace), document);
-            //}
-        }
+            var document = new DocumentDTO
+            {
+                Name = name,
+                Path = path,
+                View = view
+            };
 
-        /// <summary>
-        /// Closes the parent dialog without initiating the add document use case.
-        /// </summary>
-        public void Cancel()
-        {
-            //ParentController.Close();
+            useCaseService.AddDocument(workspace, document);
         }
 
         /// <summary>
@@ -86,36 +94,47 @@ namespace StarLab.Presentation.Workspace.Documents
         /// <param name="controller">The <see cref="IApplicationController"/>.</param>
         public override void Initialise(IApplicationController controller)
         {
-            if (!Initialised)
+            if (Initialised) throw new InvalidOperationException(string.Format(StringResources.AlreadyInitialised, nameof(AddDocumentViewPresenter)));
+
+            base.Initialise(controller);
+
+            View.AttachAddButtonCommand(CreateCommand(Actions.Close, () => ParentController.Close()));
+
+            View.AttachCancelButtonCommand(GetCommand(Actions.Close));
+
+            View.Initialise();
+
+            log.Debug(string.Format(LogEntries.Initialised, nameof(AddDocumentViewPresenter)));
+        }
+
+        /// <summary>
+        /// Event handler for the WorkspaceChangedEvent event.
+        /// </summary>
+        /// <param name="args">A <see cref="WorkspaceChangedEventArgs"/> that provides context for the event.</param>
+        public void OnEvent(WorkspaceChangedEventArgs args)
+        {
+            workspace = args.Workspace;
+        }
+
+        /// <summary>
+        /// Initiates the workflow managed by the presenter.
+        /// </summary>
+        /// <param name="context">An <see cref="IWorkflowContext"/> that contains the information required to execute the workflow.</param>
+        /// <exception cref="ArgumentException"></exception>
+        public override void Run(IWorkflowContext context)
+        {
+            if (context is AddDocumentWorkflowContext config)
             {
-                base.Initialise(controller);
+                definitions.Clear();
 
-                View.AttachAddButtonCommand(GetCommand(Actions.AddDocument));
-                View.AttachCancelButtonCommand(GetCommand(Actions.Cancel));
+                AddDocumentTypes(config.Type);
 
-                AddImages();
-                AddDocumentTypes();
+                path = config.Path;
             }
-        }
-
-        /// <summary>
-        /// Opens the specified document.
-        /// </summary>
-        /// <param name="id">The document ID.</param>
-        public void OpenDocument(string id)
-        {
-            //if (AppController.GetController(Controllers.ApplicationViewController) is IApplicationOutputPort port) port.OpenDocument(id);
-        }
-
-        /// <summary>
-        /// Updates the state of the workspace represented by the <see cref="WorkspaceDTO"/> provided.
-        /// </summary>
-        /// <param name="dto">The <see cref="WorkspaceDTO"/> that contains the updated workspace state.</param>
-        public void UpdateWorkspace(WorkspaceDTO dto)
-        {
-            //if (AppController.GetController(Controllers.ApplicationViewController) is IApplicationOutputPort port) port.UpdateWorkspace(dto);
-
-            //ParentController.Close();
+            else
+            {
+                throw new ArgumentException(string.Format(StringResources.UnexpectedArgumentType, typeof(AddDocumentWorkflowContext), context.GetType()), nameof(context));
+            }
         }
 
         /// <summary>
@@ -124,6 +143,8 @@ namespace StarLab.Presentation.Workspace.Documents
         /// <param name="disposing">true if managed resources can be disposed of; false otherwise.</param>
         protected override void Dispose(bool disposing)
         {
+            base.Dispose(disposing);
+
             if (disposing)
             {
                 View.Detach();
@@ -133,16 +154,21 @@ namespace StarLab.Presentation.Workspace.Documents
         /// <summary>
         /// Populates the list of available document types.
         /// </summary>
-        private void AddDocumentTypes()
+        private void AddDocumentTypes(DocumentTypes type)
         {
-            //view.ClearChartTypes();
+            var definitions = GetDocumentDefinitions(type);
 
-            View.AddDocument("HRDiagram", "Colour-Magnitude Diagram", "HRDiagram");
-            //view.AddChart("TwoColourDiagram", "Two-Colour Diagram", "HRDiagram");
+            View.ClearDocumentTypes();
+
+            foreach(var definition in definitions)
+            {
+                View.AddDocumentType(definition.Name, $"  {definition.Text}", definition.Image);
+                this.definitions.Add(definition.Name, definition);
+            }
+
+           
             //view.AddChart("ScatterPlot", "Scatter Plot", "HRDiagram");
             //view.AddChart("BarChart", "Bar Chart", "HRDiagram");
-
-            //view.SelectDefaultItem();
         }
 
         /// <summary>
@@ -150,11 +176,30 @@ namespace StarLab.Presentation.Workspace.Documents
         /// </summary>
         private void AddImages()
         {
-            //view.ClearImages();
+            View.ClearImages();
 
-            //TODO - Image should be contained within the plug-in
+            View.AddImage("ColourColourDiagram32X32", ImageResources.ColourColourDiagram32X32);
+            View.AddImage("ColourMagnitudeDiagram32X32", ImageResources.ColourMagnitudeDiagram32X32);
+        }
 
-            View.AddImage("HRDiagram", ImageResources.HRDiagram);
+        /// <summary>
+        /// Gets the document definitions that match the specified type.
+        /// </summary>
+        /// <param name="type">The type of document definitions to retrieve.</param>
+        /// <returns>An <see cref="IEnumerable{IDocumentDefinition}"/> containing the matching document definitions.</returns>
+        private IEnumerable<IDocumentDefinition> GetDocumentDefinitions(DocumentTypes type)
+        {
+            var definitions = new List<IDocumentDefinition>();
+
+            foreach (var definition in SessionContext.Configuration.DocumentDefinitions)
+            {
+                if (definition.Type == type || type == DocumentTypes.Any)
+                {
+                    definitions.Add(definition);
+                }
+            }
+
+            return definitions;
         }
     }
 }

@@ -1,8 +1,9 @@
 ﻿using log4net;
 using StarLab.Application;
 using StarLab.Application.Workspace;
+using StarLab.Presentation.Configuration;
 using StarLab.Presentation.Workspace;
-using StarLab.Shared.Resources;
+using StarLab.Shared;
 using Stratosoft.Commands;
 using System.ComponentModel;
 
@@ -30,13 +31,13 @@ namespace StarLab.Presentation
         /// Initialises a new instance of the <see cref="ApplicationViewPresenter"> class.
         /// </summary>
         /// <param name="view">The <see cref="IApplicationView"/> controlled by this presenter.</param>
+        /// <param name="context">An <see cref="ISessionContext"/> that provides access to the session context.</param>
         /// <param name="commands">An <see cref="ICommandManager"/> that is required for the creation of <see cref="ICommand">s.</param>
         /// <param name="services">An <see cref="IServiceRegistry"/> that provides access to the registered services.</param>
-        /// <param name="settings">An <see cref="IApplicationSettings"/> that provides access to the application configuration.</param>
         /// <param name="events">The <see cref="IEventAggregator"/> that manages application events.</param>
         /// <exception cref="ArgumentNullException"></exception>
-        public ApplicationViewPresenter(IApplicationView view, ICommandManager commands, IServiceRegistry services, IApplicationSettings settings, IEventAggregator events)
-            : base(view, commands, settings, events)
+        public ApplicationViewPresenter(IApplicationView view, ISessionContext context, ICommandManager commands, IServiceRegistry services, IEventAggregator events)
+            : base(view, context, commands, events)
         {
             ArgumentNullException.ThrowIfNull(services, nameof(services));
 
@@ -103,17 +104,24 @@ namespace StarLab.Presentation
             {
                 UpdateCommandState(Actions.CloseWorkspace, false);
 
-                var layout = workspace.Layout;
+                CloseDocuments();
 
-                View.CloseAll();
+                Events.Publish(new WorkspaceClosedEventArgs(workspace), true);
 
-                Events.Publish(new WorkspaceClosedEventArgs(workspace));
-
-                workspace = new EmptyWorkspace();
-
-                View.SetLayout(layout); // This will restore any open tool windows
+                workspace = new EmptyWorkspace(); // TODO - Can we just use new Workspace?
 
                 Events.Publish(new WorkspaceChangedEventArgs(workspace));
+            }
+        }
+
+        /// <summary>
+        /// Closes all open documents.
+        /// </summary>
+        private void CloseDocuments()
+        {
+            foreach (var document in workspace.Documents)
+            {
+                AppController.CloseDocument(document);
             }
         }
 
@@ -196,7 +204,7 @@ namespace StarLab.Presentation
         /// <param name="args">An <see cref="ActiveDocumentChangedEventArgs"/> that provides context for the event.</param>
         public void OnEvent(ActiveDocumentChangedEventArgs args)
         {
-            UpdateCommandState(Actions.CloseDocument, args.Workspace.ActiveDocument != null);
+            UpdateCommandState(Actions.Close, args.Workspace.ActiveDocument != null);
         }
 
         /// <summary>
@@ -253,12 +261,12 @@ namespace StarLab.Presentation
 
             Events.Publish(new WorkspaceChangedEventArgs(workspace));
 
-            if (!string.IsNullOrEmpty(dto.FileName) && !Settings.Workspace.Equals(dto.FileName))
+            if (!string.IsNullOrEmpty(dto.FileName) && !SessionContext.Settings.Workspace.Equals(dto.FileName))
             {
-                Settings.Workspace = dto.FileName;
+                SessionContext.Settings.Workspace = dto.FileName;
             }
 
-            UpdateCommandState(Actions.CloseDocument, workspace.ActiveDocument != null);
+            UpdateCommandState(Actions.Close, workspace.ActiveDocument != null);
         }
 
         /// <summary>
@@ -379,12 +387,12 @@ namespace StarLab.Presentation
 
             Events.Publish(new WorkspaceChangedEventArgs(workspace), true); // Event published synchronously to allow renaming of folder in WorkspaceExplorer. Could make this a more specific event type if necessary.
 
-            if (!string.IsNullOrEmpty(dto.FileName) && !Settings.Workspace.Equals(dto.FileName))
+            if (!string.IsNullOrEmpty(dto.FileName) && !SessionContext.Settings.Workspace.Equals(dto.FileName))
             {
-                Settings.Workspace = dto.FileName;
+                SessionContext.Settings.Workspace = dto.FileName;
             }
 
-            UpdateCommandState(Actions.CloseDocument, workspace.ActiveDocument != null);
+            UpdateCommandState(Actions.Close, workspace.ActiveDocument != null);
 
             dirty = true;
         }
@@ -423,7 +431,7 @@ namespace StarLab.Presentation
             View.AddMenuItem(Constants.File, Constants.FileOpen, StringResources.Open);
             View.AddMenuItem(Constants.FileOpen, Constants.FileOpenWorkspace, StringResources.Workspace + Constants.Ellipsis, ImageResources.OpenWorkspace, CreateCommand(Actions.OpenWorkspace, OpenWorkspace));
             View.AddMenuSeparator(Constants.File);
-            View.AddMenuItem(Constants.File, Constants.FileClose, StringResources.Close, CreateCommand(Actions.CloseDocument, CloseActiveDocument));
+            View.AddMenuItem(Constants.File, Constants.FileClose, StringResources.Close, CreateCommand(Actions.Close, CloseActiveDocument));
             View.AddMenuItem(Constants.File, Constants.FileCloseWorkspace, StringResources.CloseWorkspace, ImageResources.CloseWorkspace, CreateCommand(Actions.CloseWorkspace, CloseWorkspace));
             View.AddMenuSeparator(Constants.File);
             View.AddMenuItem(Constants.File, Constants.FileSaveAll, StringResources.SaveAll, ImageResources.SaveAll, CreateCommand(Actions.SaveWorkspace, SaveWorkspace));
@@ -498,6 +506,8 @@ namespace StarLab.Presentation
         /// <param name="disposing">true if managed resources can be disposed of; false otherwise.</param>
         protected override void Dispose(bool disposing)
         {
+            base.Dispose(disposing);
+
             if (disposing)
             {
                 View.Detach();
@@ -509,9 +519,9 @@ namespace StarLab.Presentation
         /// </summary>
         private void OpenDefaultWorkspace()
         {
-            if (!string.IsNullOrEmpty(Settings.Workspace))
+            if (!string.IsNullOrEmpty(SessionContext.Settings.Workspace))
             {
-                OpenWorkspace(Settings.Workspace);
+                OpenWorkspace(SessionContext.Settings.Workspace);
             }
         }
 

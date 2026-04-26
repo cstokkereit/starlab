@@ -11,7 +11,7 @@
 
         public const string ChartSettings = "ChartSettingsView";
         public const string Chart = "ChartView";
-        public const string ColourMagnitudeChart = "ColourMagnitudeChartView";
+        public const string ColourMagnitudeDiagram = "ColourMagnitudeDiagramView";
 
         public const string Dialog = "DialogView";
         public const string Document = "DocumentView";
@@ -23,6 +23,7 @@
         public const string Split = "SplitView";
 
         public const string Tool = "ToolView";
+        public const string TwoColourDiagram = "TwoColourDiagramView";
 
         public const string WorkspaceExplorer = "WorkspaceExplorerView";
     }
