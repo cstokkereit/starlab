@@ -203,7 +203,7 @@ namespace StarLab.UI.Workspace.Documents
         /// <returns>The view ID.</returns>
         protected override string GetPersistString()
         {
-            return Name;
+            return ID;
         }
 
         /// <summary>

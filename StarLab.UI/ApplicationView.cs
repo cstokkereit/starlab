@@ -7,6 +7,7 @@ using StarLab.Shared.Properties;
 using Stratosoft.Commands;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Reflection.Metadata;
 using System.Text;
 using WeifenLuo.WinFormsUI.Docking;
 
@@ -202,11 +203,11 @@ namespace StarLab.UI.Workspace
         /// </summary>
         public void CloseAll()
         {
-            List<IDockContent> documents = new List<IDockContent>(dockPanel.Contents);
+            List<IDockContent> contents = [.. dockPanel.Contents];
 
-            foreach (var document in documents)
+            foreach (var content in contents)
             {
-                document.DockHandler.DockPanel = null;
+                content.DockHandler.DockPanel = null;
             }
         }
 
@@ -256,7 +257,12 @@ namespace StarLab.UI.Workspace
         {
             Debug.Assert(presenter != null);
 
-            RemoveDockContent(); // TODO
+            List<IDockContent> contents = [.. dockPanel.Contents];
+
+            foreach (var content in contents)
+            {
+                content.DockHandler.Close();
+            }
 
             using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(layout)))
             {
@@ -266,20 +272,6 @@ namespace StarLab.UI.Workspace
                 }));
             }
         }
-
-
-        private void RemoveDockContent()
-        {
-            for (int i = dockPanel.Contents.Count - 1; i >= 0; i--)
-            {
-                if (dockPanel.Contents[i] is IDockContent content)
-                {
-                    content.DockHandler.Close();
-                }
-            }
-        }
-
-
 
         /// <summary>
         /// Shows the specified view.

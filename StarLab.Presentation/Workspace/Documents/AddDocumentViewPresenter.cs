@@ -56,10 +56,10 @@ namespace StarLab.Presentation.Workspace.Documents
         }
         
         /// <summary>
-        /// 
+        /// Adds the selected document to the workspace.
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="definitionName"></param>
+        /// <param name="name">The name of the document.</param>
+        /// <param name="definitionName">The name of the document definition.</param>
         public void AddDocument(string name, string definitionName)
         {
             var view = definitions[definitionName].View;
@@ -162,7 +162,7 @@ namespace StarLab.Presentation.Workspace.Documents
 
             foreach(var definition in definitions)
             {
-                View.AddDocumentType(definition.Name, $"  {definition.Text}", definition.Image);
+                View.AddDocumentType(definition.Name, $"  {definition.DisplayName}", definition.Image);
                 this.definitions.Add(definition.Name, definition);
             }
 

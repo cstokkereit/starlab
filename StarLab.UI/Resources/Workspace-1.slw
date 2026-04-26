@@ -2,10 +2,198 @@
 <Workspace xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ActiveDocument="">
   <Projects>
     <Project expanded="true" name="Henry Draper Catalog">
-      <Documents />
+      <Documents>
+        <Document id="fb97ba9c-7b51-43f9-9025-ed54a90db990" name="HR-Diagram 1" path="Workspace/Henry Draper Catalog/Charts/HRDiagrams/HRDiagrams" view="ColourMagnitudeDiagramView">
+          <Chart backColour="Black" foreColour="Green">
+            <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
+            <PlotArea backColour="Black" foreColour="Green">
+              <Grid colour="Green" visible="true">
+                <MajorGridLines colour="Green" opacity="0.3" visible="true" />
+                <MinorGridLines colour="Green" opacity="0.1" visible="true" />
+              </Grid>
+            </PlotArea>
+            <Title colour="Green" text="HR-Diagram 1" visible="true">
+              <Font bold="true" family="Segoe UI" italic="false" size="20" underline="false" />
+            </Title>
+            <X1 colour="Green" visible="true">
+              <Label colour="Green" text="Colour Index (B-V)" visible="true">
+                <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
+              </Label>
+              <Scale autoscale="false" colour="Green" maximum="2" minimum="-0.5" reversed="false" visible="true">
+                <MajorTickMarks colour="Green" length="4" visible="true" />
+                <MinorTickMarks colour="Green" length="2" visible="true" />
+                <TickLabels colour="Green" rotation="0" visible="true">
+                  <Font bold="false" family="Segoe UI" italic="false" size="12" underline="false" />
+                </TickLabels>
+              </Scale>
+            </X1>
+            <X2 colour="Green" visible="false">
+              <Label colour="Green" text="" visible="false">
+                <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
+              </Label>
+              <Scale autoscale="false" colour="Green" maximum="10" minimum="0" reversed="false" visible="true">
+                <MajorTickMarks colour="Green" length="4" visible="true" />
+                <MinorTickMarks colour="Green" length="2" visible="true" />
+                <TickLabels colour="Green" rotation="0" visible="false">
+                  <Font bold="false" family="Segoe UI" italic="false" size="12" underline="false" />
+                </TickLabels>
+              </Scale>
+            </X2>
+            <Y1 colour="Green" visible="true">
+              <Label colour="Green" text="Absolute Magnitude" visible="true">
+                <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
+              </Label>
+              <Scale autoscale="false" colour="Green" maximum="15" minimum="-5" reversed="true" visible="true">
+                <MajorTickMarks colour="Green" length="4" visible="true" />
+                <MinorTickMarks colour="Green" length="2" visible="true" />
+                <TickLabels colour="Green" rotation="0" visible="true">
+                  <Font bold="false" family="Segoe UI" italic="false" size="12" underline="false" />
+                </TickLabels>
+              </Scale>
+            </Y1>
+            <Y2 colour="Green" visible="false">
+              <Label colour="Green" text="" visible="false">
+                <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
+              </Label>
+              <Scale autoscale="false" colour="Green" maximum="10" minimum="0" reversed="false" visible="true">
+                <MajorTickMarks colour="Green" length="4" visible="true" />
+                <MinorTickMarks colour="Green" length="2" visible="true" />
+                <TickLabels colour="Green" rotation="0" visible="false">
+                  <Font bold="false" family="Segoe UI" italic="false" size="12" underline="false" />
+                </TickLabels>
+              </Scale>
+            </Y2>
+          </Chart>
+        </Document>
+        <Document id="e24fa5bd-fb27-41c9-aed1-25b837a6c152" name="HR-Diagram 2" path="Workspace/Henry Draper Catalog/Charts/HRDiagrams/HRDiagrams" view="ColourMagnitudeDiagramView">
+          <Chart backColour="Black" foreColour="Green">
+            <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
+            <PlotArea backColour="Black" foreColour="Green">
+              <Grid colour="Green" visible="true">
+                <MajorGridLines colour="Green" opacity="0.3" visible="true" />
+                <MinorGridLines colour="Green" opacity="0.1" visible="true" />
+              </Grid>
+            </PlotArea>
+            <Title colour="Green" text="HR-Diagram 2" visible="true">
+              <Font bold="true" family="Segoe UI" italic="false" size="20" underline="false" />
+            </Title>
+            <X1 colour="Green" visible="true">
+              <Label colour="Green" text="Colour Index (B-V)" visible="true">
+                <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
+              </Label>
+              <Scale autoscale="false" colour="Green" maximum="2" minimum="-0.5" reversed="false" visible="true">
+                <MajorTickMarks colour="Green" length="4" visible="true" />
+                <MinorTickMarks colour="Green" length="2" visible="true" />
+                <TickLabels colour="Green" rotation="0" visible="true">
+                  <Font bold="false" family="Segoe UI" italic="false" size="12" underline="false" />
+                </TickLabels>
+              </Scale>
+            </X1>
+            <X2 colour="Green" visible="false">
+              <Label colour="Green" text="" visible="false">
+                <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
+              </Label>
+              <Scale autoscale="false" colour="Green" maximum="10" minimum="0" reversed="false" visible="true">
+                <MajorTickMarks colour="Green" length="4" visible="true" />
+                <MinorTickMarks colour="Green" length="2" visible="true" />
+                <TickLabels colour="Green" rotation="0" visible="false">
+                  <Font bold="false" family="Segoe UI" italic="false" size="12" underline="false" />
+                </TickLabels>
+              </Scale>
+            </X2>
+            <Y1 colour="Green" visible="true">
+              <Label colour="Green" text="Absolute Magnitude" visible="true">
+                <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
+              </Label>
+              <Scale autoscale="false" colour="Green" maximum="15" minimum="-5" reversed="true" visible="true">
+                <MajorTickMarks colour="Green" length="4" visible="true" />
+                <MinorTickMarks colour="Green" length="2" visible="true" />
+                <TickLabels colour="Green" rotation="0" visible="true">
+                  <Font bold="false" family="Segoe UI" italic="false" size="12" underline="false" />
+                </TickLabels>
+              </Scale>
+            </Y1>
+            <Y2 colour="Green" visible="false">
+              <Label colour="Green" text="" visible="false">
+                <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
+              </Label>
+              <Scale autoscale="false" colour="Green" maximum="10" minimum="0" reversed="false" visible="true">
+                <MajorTickMarks colour="Green" length="4" visible="true" />
+                <MinorTickMarks colour="Green" length="2" visible="true" />
+                <TickLabels colour="Green" rotation="0" visible="false">
+                  <Font bold="false" family="Segoe UI" italic="false" size="12" underline="false" />
+                </TickLabels>
+              </Scale>
+            </Y2>
+          </Chart>
+        </Document>
+        <Document id="6e82ff05-3c75-4a59-95d3-af176ef2571e" name="HR-Diagram 3" path="Workspace/Henry Draper Catalog/Charts/HRDiagrams/HRDiagrams" view="ColourMagnitudeDiagramView">
+          <Chart backColour="Black" foreColour="Green">
+            <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
+            <PlotArea backColour="Black" foreColour="Green">
+              <Grid colour="Green" visible="false">
+                <MajorGridLines colour="Green" opacity="0.2" visible="false" />
+                <MinorGridLines colour="Green" opacity="0.2" visible="false" />
+              </Grid>
+            </PlotArea>
+            <Title colour="Green" text="HR-Diagram 3" visible="true">
+              <Font bold="true" family="Segoe UI" italic="false" size="20" underline="false" />
+            </Title>
+            <X1 colour="Green" visible="true">
+              <Label colour="Green" text="Colour Index (B-V)" visible="true">
+                <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
+              </Label>
+              <Scale autoscale="false" colour="Green" maximum="2" minimum="-0.5" reversed="false" visible="true">
+                <MajorTickMarks colour="Green" length="4" visible="true" />
+                <MinorTickMarks colour="Green" length="2" visible="true" />
+                <TickLabels colour="Green" rotation="0" visible="true">
+                  <Font bold="false" family="Segoe UI" italic="false" size="12" underline="false" />
+                </TickLabels>
+              </Scale>
+            </X1>
+            <X2 colour="Green" visible="false">
+              <Label colour="Green" text="" visible="false">
+                <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
+              </Label>
+              <Scale autoscale="false" colour="Green" maximum="10" minimum="0" reversed="false" visible="true">
+                <MajorTickMarks colour="Green" length="4" visible="true" />
+                <MinorTickMarks colour="Green" length="2" visible="true" />
+                <TickLabels colour="Green" rotation="0" visible="false">
+                  <Font bold="false" family="Segoe UI" italic="false" size="12" underline="false" />
+                </TickLabels>
+              </Scale>
+            </X2>
+            <Y1 colour="Green" visible="true">
+              <Label colour="Green" text="Absolute Magnitude" visible="true">
+                <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
+              </Label>
+              <Scale autoscale="false" colour="Green" maximum="15" minimum="-5" reversed="true" visible="true">
+                <MajorTickMarks colour="Green" length="4" visible="true" />
+                <MinorTickMarks colour="Green" length="2" visible="true" />
+                <TickLabels colour="Green" rotation="0" visible="true">
+                  <Font bold="false" family="Segoe UI" italic="false" size="12" underline="false" />
+                </TickLabels>
+              </Scale>
+            </Y1>
+            <Y2 colour="Green" visible="false">
+              <Label colour="Green" text="" visible="false">
+                <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
+              </Label>
+              <Scale autoscale="false" colour="Green" maximum="10" minimum="0" reversed="false" visible="true">
+                <MajorTickMarks colour="Green" length="4" visible="true" />
+                <MinorTickMarks colour="Green" length="2" visible="true" />
+                <TickLabels colour="Green" rotation="0" visible="false">
+                  <Font bold="false" family="Segoe UI" italic="false" size="12" underline="false" />
+                </TickLabels>
+              </Scale>
+            </Y2>
+          </Chart>
+        </Document>
+      </Documents>
       <Folders>
-        <Folder expanded="false" path="Workspace/Henry Draper Catalog/Charts" />
-        <Folder expanded="false" path="Workspace/Henry Draper Catalog/Charts/HRDiagrams" />
+        <Folder expanded="true" path="Workspace/Henry Draper Catalog/Charts" />
+        <Folder expanded="true" path="Workspace/Henry Draper Catalog/Charts/HRDiagrams" />
+        <Folder expanded="true" path="Workspace/Henry Draper Catalog/Charts/HRDiagrams/HRDiagrams" />
         <Folder expanded="false" path="Workspace/Henry Draper Catalog/Charts/Spectra" />
         <Folder expanded="false" path="Workspace/Henry Draper Catalog/Tables" />
         <Folder expanded="false" path="Workspace/Henry Draper Catalog/Tables/Brightest" />
@@ -211,15 +399,19 @@
       </Folders>
     </Project>
   </Projects>
-  <Layout><![CDATA[<?xml version="1.0" encoding="utf-8"?>
+  <Layout>
+      <![CDATA[<?xml version="1.0" encoding="utf-8"?>
 <!--DockPanel configuration file. Author: Weifen Luo, all rights reserved.-->
 <!--!!! AUTOMATICALLY GENERATED FILE. DO NOT MODIFY !!!-->
 <DockPanel FormatVersion="1.0" DockLeftPortion="0.25" DockRightPortion="0.25" DockTopPortion="0.25" DockBottomPortion="0.25" ActiveDocumentPane="1" ActivePane="1">
-  <Contents Count="4">
+  <Contents Count="7">
     <Content ID="0" PersistString="WorkspaceExplorerView" AutoHidePortion="0.25" IsHidden="False" IsFloat="False" />
-    <Content ID="1" PersistString="577cb05b-c02f-499c-bc36-deb47aff9029" AutoHidePortion="0.25" IsHidden="False" IsFloat="False" />
-    <Content ID="2" PersistString="f7f6ec62-39d9-411e-ab6a-af547dca8dc5" AutoHidePortion="0.25" IsHidden="False" IsFloat="False" />
-    <Content ID="3" PersistString="c46d67b8-78b6-4d34-9527-3f479131f5f3" AutoHidePortion="0.25" IsHidden="False" IsFloat="False" />
+    <Content ID="1" PersistString="fb97ba9c-7b51-43f9-9025-ed54a90db990" AutoHidePortion="0.25" IsHidden="False" IsFloat="False" />
+    <Content ID="2" PersistString="e24fa5bd-fb27-41c9-aed1-25b837a6c152" AutoHidePortion="0.25" IsHidden="False" IsFloat="False" />
+    <Content ID="3" PersistString="6e82ff05-3c75-4a59-95d3-af176ef2571e" AutoHidePortion="0.25" IsHidden="False" IsFloat="False" />
+    <Content ID="4" PersistString="577cb05b-c02f-499c-bc36-deb47aff9029" AutoHidePortion="0.25" IsHidden="True" IsFloat="False" />
+    <Content ID="5" PersistString="f7f6ec62-39d9-411e-ab6a-af547dca8dc5" AutoHidePortion="0.25" IsHidden="False" IsFloat="False" />
+    <Content ID="6" PersistString="c46d67b8-78b6-4d34-9527-3f479131f5f3" AutoHidePortion="0.25" IsHidden="True" IsFloat="False" />
   </Contents>
   <Panes Count="2">
     <Pane ID="0" DockState="DockRight" ActiveContent="0">
@@ -228,10 +420,13 @@
       </Contents>
     </Pane>
     <Pane ID="1" DockState="Document" ActiveContent="3">
-      <Contents Count="3">
+      <Contents Count="6">
         <Content ID="0" RefID="1" />
         <Content ID="1" RefID="2" />
         <Content ID="2" RefID="3" />
+        <Content ID="3" RefID="4" />
+        <Content ID="4" RefID="5" />
+        <Content ID="5" RefID="6" />
       </Contents>
     </Pane>
   </Panes>

@@ -94,6 +94,7 @@ namespace StarLab.UI
                 {
                     controllers.Remove(controllerId);
                     controller.Close();
+                    controller.Dispose();
                 }
 
                 views.Remove(id);

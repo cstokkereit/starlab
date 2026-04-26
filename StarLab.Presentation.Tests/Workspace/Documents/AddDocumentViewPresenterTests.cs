@@ -26,14 +26,14 @@ namespace StarLab.Presentation.Workspace.Documents
 
             var definition1 = Substitute.For<IDocumentDefinition>();
             definition1.Name.Returns("Chart1");
-            definition1.Text.Returns("Chart-1");
+            definition1.DisplayName.Returns("Chart-1");
             definition1.Type.Returns(DocumentTypes.Chart);
             definition1.View.Returns("ChartView");
             definition1.Image.Returns("ChartImage1");
 
             var definition2 = Substitute.For<IDocumentDefinition>();
             definition2.Name.Returns("Chart2");
-            definition2.Text.Returns("Chart-2");
+            definition2.DisplayName.Returns("Chart-2");
             definition2.Type.Returns(DocumentTypes.Chart);
             definition2.View.Returns("ChartView");
             definition2.Image.Returns("ChartImage2");

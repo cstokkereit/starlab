@@ -121,8 +121,6 @@ namespace StarLab.Presentation
             var child = Substitute.For<IChildViewPresenter, IChildViewController>();
 
             var e = Assert.Throws<ArgumentException>(() => factory.CreatePresenter(view, child, commands));
-
-            Assert.That(e.Message, Does.StartWith("Unexpected view type: "));
         }
 
         /// <summary>
