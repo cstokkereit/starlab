@@ -234,6 +234,8 @@ namespace StarLab.Presentation
             workspace.UpdateLayout(View.GetLayout());
 
             useCaseService.SaveWorkspace(workspace);
+
+            dirty = false; // TODO - either throw the exception or return a failure response in which case do not set dirty to false.
         }
 
         /// <summary>

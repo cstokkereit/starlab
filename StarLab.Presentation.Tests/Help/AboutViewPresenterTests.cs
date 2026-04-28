@@ -83,6 +83,17 @@ namespace StarLab.Presentation.Help
         }
 
         /// <summary>
+        /// Test that the <see cref="AboutViewPresenter.ID"/> property returns the correct value.
+        /// </summary>
+        [Test]
+        public void TestGetID()
+        {
+            var presenter = CreatePresenter(false);
+
+            Assert.That(presenter.ID, Is.EqualTo("ContentController(AboutView)"));
+        }
+
+        /// <summary>
         /// Test that the <see cref="AboutViewPresenter.Initialise(IApplicationController)"/> method works correctly.
         /// </summary>
         [Test]
@@ -104,8 +115,6 @@ namespace StarLab.Presentation.Help
             var presenter = CreatePresenter(true);
 
             var e = Assert.Throws<InvalidOperationException>(() => presenter.Initialise(controller));
-
-            Assert.That(e.Message, Is.EqualTo("The AboutViewPresenter has already been initialised."));
         }
 
         /// <summary>

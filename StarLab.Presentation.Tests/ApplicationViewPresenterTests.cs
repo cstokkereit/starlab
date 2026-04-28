@@ -1,6 +1,12 @@
 ﻿#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
 
+using StarLab.Application;
+using StarLab.Application.Workspace;
 using StarLab.Presentation.Configuration;
+using StarLab.Presentation.Workspace;
+using StarLab.Presentation.Workspace.Documents;
+using StarLab.Shared.Properties;
+using StarLab.Tests;
 using Stratosoft.Commands;
 
 namespace StarLab.Presentation
@@ -12,6 +18,8 @@ namespace StarLab.Presentation
     {
         private IApplicationView view; // A mock of the IApplicationView interface that can be used in the unit tests.
 
+        private WorkspaceDTO workspace; // A workspace DTO that can be used in the unit tests.
+
         /// <summary>
         /// Registers the dependencies with the IoC container and initialises the class level variables before each test.
         /// </summary>
@@ -20,6 +28,125 @@ namespace StarLab.Presentation
             base.SetUp();
 
             view = Substitute.For<IApplicationView>();
+
+            var chart = new ChartDtoBuilder().CreateChart();
+
+            workspace = new WorkspaceDtoBuilder(@"C:\Workspace-1")
+                .AddProject("Project-1")
+                .AddFolder("Workspace-1/Project-1/Folder-1")
+                .AddDocument("Chart-1", "ChartView", "Document-1", "Workspace-1/Project-1/Folder-1")
+                .AddChart("Chart-1", chart)
+                .CreateWorkspace();
+        }
+
+        /// <summary>
+        /// Test that the <see cref="ApplicationViewPresenter.CloseWorkspace()"/> method works correctly when the workspace has not been modified.
+        /// </summary>
+        [Test]
+        public void TestCloseWorkspace()
+        {
+            var interactor = Substitute.For<IUseCase<WorkspaceDTO>>();
+
+            factory.CreateSaveWorkspaceUseCase(Arg.Any<IApplicationOutputPort>()).Returns(interactor);
+
+            var presenter = CreatePresenter(true);
+
+            presenter.UpdateWorkspace(workspace);
+
+            presenter.SaveWorkspace();
+
+            interactor.ClearReceivedCalls();
+            commands.ClearReceivedCalls();
+
+            presenter.CloseWorkspace();
+
+            controller.Received(0).ShowMessage(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<InteractionResponses>());
+            interactor.Received(0).Execute(Arg.Any<WorkspaceDTO>());
+            commands.Received(1).GetCommand("CloseWorkspace");
+            controller.Received(1).CloseDocument(Arg.Is<IDocument>(d => d.Name == "Document-1"));
+            events.Received(1).Publish(Arg.Is<WorkspaceClosedEventArgs>(e => e.Workspace.FileName == @"C:\Workspace-1"), true);
+            events.Received(1).Publish(Arg.Is<WorkspaceChangedEventArgs>(e => e.Workspace.FileName == ""));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="ApplicationViewPresenter.CloseWorkspace()"/> method works correctly when the workspace has been modified and the user selects No (discard changes).
+        /// </summary>
+        [Test]
+        public void TestCloseWorkspaceAndDiscardChanges()
+        {
+            var interactor = Substitute.For<IUseCase<WorkspaceDTO>>();
+
+            factory.CreateSaveWorkspaceUseCase(Arg.Any<IApplicationOutputPort>()).Returns(interactor);
+
+            controller.ShowMessage(Resources.StarLab, Resources.WorkspaceClosing, InteractionResponses.YesNoCancel).Returns(InteractionResult.No);
+
+            var presenter = CreatePresenter(true);
+
+            presenter.UpdateWorkspace(workspace);
+
+            commands.ClearReceivedCalls();
+
+            presenter.CloseWorkspace();
+
+            interactor.Received(0).Execute(Arg.Any<WorkspaceDTO>());
+            commands.Received(1).GetCommand("CloseWorkspace");
+            controller.Received(1).CloseDocument(Arg.Is<IDocument>(d => d.Name == "Document-1"));
+            events.Received(1).Publish(Arg.Is<WorkspaceClosedEventArgs>(e => e.Workspace.FileName == @"C:\Workspace-1"), true);
+            events.Received(1).Publish(Arg.Is<WorkspaceChangedEventArgs>(e => e.Workspace.FileName == ""));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="ApplicationViewPresenter.CloseWorkspace()"/> method works correctly when the workspace has been modified and the user selects Yes (save changes).
+        /// </summary>
+        [Test]
+        public void TestCloseWorkspaceAndSaveChanges()
+        {
+            var interactor = Substitute.For<IUseCase<WorkspaceDTO>>();
+
+            factory.CreateSaveWorkspaceUseCase(Arg.Any<IApplicationOutputPort>()).Returns(interactor);
+
+            controller.ShowMessage(Resources.StarLab, Resources.WorkspaceClosing, InteractionResponses.YesNoCancel).Returns(InteractionResult.Yes);
+
+            var presenter = CreatePresenter(true);
+
+            presenter.UpdateWorkspace(workspace);
+    
+            commands.ClearReceivedCalls();
+
+            presenter.CloseWorkspace();
+
+            interactor.Received(1).Execute(Arg.Is<WorkspaceDTO>(e => e.FileName == @"C:\Workspace-1"));
+            commands.Received(1).GetCommand("CloseWorkspace");
+            controller.Received(1).CloseDocument(Arg.Is<IDocument>(d => d.Name == "Document-1"));
+            events.Received(1).Publish(Arg.Is<WorkspaceClosedEventArgs>(e => e.Workspace.FileName == @"C:\Workspace-1"), true);
+            events.Received(1).Publish(Arg.Is<WorkspaceChangedEventArgs>(e => e.Workspace.FileName == ""));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="ApplicationViewPresenter.CloseWorkspace()"/> method works correctly when the workspace has been modified and the user selects Cancel.
+        /// </summary>
+        [Test]
+        public void TestCloseWorkspaceWhenCancelled()
+        {
+            var interactor = Substitute.For<IUseCase<WorkspaceDTO>>();
+
+            factory.CreateSaveWorkspaceUseCase(Arg.Any<IApplicationOutputPort>()).Returns(interactor);
+
+            controller.ShowMessage(Resources.StarLab, Resources.WorkspaceClosing, InteractionResponses.YesNoCancel).Returns(InteractionResult.Cancel);
+
+            var presenter = CreatePresenter(true);
+
+            presenter.UpdateWorkspace(workspace);
+
+            commands.ClearReceivedCalls();
+
+            presenter.CloseWorkspace();
+
+            interactor.Received(0).Execute(Arg.Any<WorkspaceDTO>());
+            commands.Received(0).GetCommand("CloseWorkspace");
+            controller.Received(0).CloseDocument(Arg.Is<IDocument>(d => d.Name == "Document-1"));
+            events.Received(0).Publish(Arg.Is<WorkspaceClosedEventArgs>(e => e.Workspace.FileName == @"C:\Workspace-1"), true);
+            events.Received(0).Publish(Arg.Is<WorkspaceChangedEventArgs>(e => e.Workspace.FileName == ""));
         }
 
         /// <summary>
@@ -82,6 +209,31 @@ namespace StarLab.Presentation
         }
 
         /// <summary>
+        /// Test that the <see cref="ApplicationViewPresenter.Exit()"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestExit()
+        {
+            var presenter = CreatePresenter(true);
+
+            presenter.Exit();
+
+            view.Received(1).CloseAll();
+            view.Received(1).Close();
+        }
+
+        /// <summary>
+        /// Test that the <see cref="ApplicationViewPresenter.ID"/> property returns the correct value.
+        /// </summary>
+        [Test]
+        public void TestGetID()
+        {
+            var presenter = CreatePresenter(false);
+
+            Assert.That(presenter.ID, Is.EqualTo("ApplicationViewController"));
+        }
+
+        /// <summary>
         /// Test that the <see cref="ApplicationViewPresenter.Initialise(IApplicationController)"/> method works correctly.
         /// </summary>
         [Test]
@@ -104,6 +256,29 @@ namespace StarLab.Presentation
 
             var e = Assert.Throws<InvalidOperationException>(() => presenter.Initialise(controller));
         }
+
+        //void ClearActiveDocument();
+        //IDockableView? CreateView(string id);
+        //void SetActiveDocument(string id);
+        //void ViewActivated();
+        //void ViewClosing(CancelEventArgs e);
+        //void CloseActiveDocument();
+        //void NewWorkspace();
+        //void OpenWorkspace();
+        //void SaveWorkspace();
+        //IEnumerable<IChildViewController> ChildControllers { get; }
+        //void Initialise(IApplicationController controller);
+        //void Show(IView view
+        //InteractionResult ShowMessage(string caption, string message, InteractionType type, InteractionResponses responses);
+        //string ShowOpenFileDialog(string title, string filter);
+        //string ShowSaveFileDialog(string title, string filter, string extension);
+        //void OpenDocument(string id);
+        //void SetWorkspace(WorkspaceDTO dto);
+        //void UpdateDocument(WorkspaceDTO dto, string documentId);
+        //InteractionResult ShowMessage(string caption, string message, InteractionType type, InteractionResponses responses);
+        //InteractionResult ShowMessage(string caption, string message, InteractionResponses responses);
+        //void ShowMessage(string caption, string message);
+        //void OnEvent(TEventType e);
 
         /// <summary>
         /// A factory method that creates a new instance of the <see cref="ApplicationViewPresenter"/> class.
