@@ -8,6 +8,7 @@ using StarLab.Presentation.Workspace.Documents;
 using StarLab.Shared.Properties;
 using StarLab.Tests;
 using Stratosoft.Commands;
+using System.Drawing;
 
 namespace StarLab.Presentation
 {
@@ -28,15 +29,52 @@ namespace StarLab.Presentation
             base.SetUp();
 
             view = Substitute.For<IApplicationView>();
+            view.ID.Returns("View1");
 
             var chart = new ChartDtoBuilder().CreateChart();
 
             workspace = new WorkspaceDtoBuilder(@"C:\Workspace-1")
                 .AddProject("Project-1")
                 .AddFolder("Workspace-1/Project-1/Folder-1")
-                .AddDocument("Chart-1", "ChartView", "Document-1", "Workspace-1/Project-1/Folder-1")
-                .AddChart("Chart-1", chart)
+                .AddDocument("Document1", "ChartView", "Document-1", "Workspace-1/Project-1/Folder-1")
+                .AddChart("Document1", chart)
                 .CreateWorkspace();
+        }
+
+        /// <summary>
+        /// Test that the <see cref="ApplicationViewPresenter.ClearActiveDocument()"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestClearActiveDocument()
+        {
+            IDocument? document = null;
+
+            events.Publish(Arg.Do<ActiveDocumentChangedEventArgs>(e => document = e.Workspace.ActiveDocument));
+
+            var presenter = CreatePresenter(true);
+
+            presenter.UpdateWorkspace(workspace);
+
+            presenter.ClearActiveDocument();
+
+            events.Received(1).Publish(Arg.Any<ActiveDocumentChangedEventArgs>());
+
+            Assert.That(document, Is.Null);
+        }
+
+        /// <summary>
+        /// Test that the <see cref="ApplicationViewPresenter.CloseActiveDocument()"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestCloseActiveDocument()
+        {
+            var presenter = CreatePresenter(true);
+
+            presenter.UpdateWorkspace(workspace);
+
+            presenter.CloseActiveDocument();
+
+            view.Received(1).CloseActiveDocument();
         }
 
         /// <summary>
@@ -58,14 +96,28 @@ namespace StarLab.Presentation
             interactor.ClearReceivedCalls();
             commands.ClearReceivedCalls();
 
+            IWorkspace? workspace1 = null;
+            IWorkspace? workspace2 = null;
+
+            events.Publish(Arg.Do<WorkspaceClosedEventArgs>(e => workspace1 = e.Workspace), true);
+            events.Publish(Arg.Do<WorkspaceChangedEventArgs>(e => workspace2 = e.Workspace));
+
             presenter.CloseWorkspace();
 
             controller.Received(0).ShowMessage(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<InteractionResponses>());
             interactor.Received(0).Execute(Arg.Any<WorkspaceDTO>());
             commands.Received(1).GetCommand("CloseWorkspace");
             controller.Received(1).CloseDocument(Arg.Is<IDocument>(d => d.Name == "Document-1"));
-            events.Received(1).Publish(Arg.Is<WorkspaceClosedEventArgs>(e => e.Workspace.FileName == @"C:\Workspace-1"), true);
-            events.Received(1).Publish(Arg.Is<WorkspaceChangedEventArgs>(e => e.Workspace.FileName == ""));
+
+            events.Received(1).Publish(Arg.Any<WorkspaceClosedEventArgs>(), true);
+
+            Assert.That(workspace1, Is.Not.Null);
+            Assert.That(workspace1.FileName, Is.EqualTo(@"C:\Workspace-1"));
+
+            events.Received(1).Publish(Arg.Any<WorkspaceChangedEventArgs>());
+
+            Assert.That(workspace2, Is.Not.Null);
+            Assert.That(workspace2.FileName, Is.EqualTo(string.Empty));
         }
 
         /// <summary>
@@ -86,13 +138,27 @@ namespace StarLab.Presentation
 
             commands.ClearReceivedCalls();
 
+            IWorkspace? workspace1 = null;
+            IWorkspace? workspace2 = null;
+
+            events.Publish(Arg.Do<WorkspaceClosedEventArgs>(e => workspace1 = e.Workspace), true);
+            events.Publish(Arg.Do<WorkspaceChangedEventArgs>(e => workspace2 = e.Workspace));
+
             presenter.CloseWorkspace();
 
             interactor.Received(0).Execute(Arg.Any<WorkspaceDTO>());
             commands.Received(1).GetCommand("CloseWorkspace");
             controller.Received(1).CloseDocument(Arg.Is<IDocument>(d => d.Name == "Document-1"));
-            events.Received(1).Publish(Arg.Is<WorkspaceClosedEventArgs>(e => e.Workspace.FileName == @"C:\Workspace-1"), true);
-            events.Received(1).Publish(Arg.Is<WorkspaceChangedEventArgs>(e => e.Workspace.FileName == ""));
+
+            events.Received(1).Publish(Arg.Any<WorkspaceClosedEventArgs>(), true);
+
+            Assert.That(workspace1, Is.Not.Null);
+            Assert.That(workspace1.FileName, Is.EqualTo(@"C:\Workspace-1"));
+
+            events.Received(1).Publish(Arg.Any<WorkspaceChangedEventArgs>());
+
+            Assert.That(workspace2, Is.Not.Null);
+            Assert.That(workspace2.FileName, Is.EqualTo(string.Empty));
         }
 
         /// <summary>
@@ -113,13 +179,27 @@ namespace StarLab.Presentation
     
             commands.ClearReceivedCalls();
 
+            IWorkspace? workspace1 = null;
+            IWorkspace? workspace2 = null;
+
+            events.Publish(Arg.Do<WorkspaceClosedEventArgs>(e => workspace1 = e.Workspace), true);
+            events.Publish(Arg.Do<WorkspaceChangedEventArgs>(e => workspace2 = e.Workspace));
+
             presenter.CloseWorkspace();
 
             interactor.Received(1).Execute(Arg.Is<WorkspaceDTO>(e => e.FileName == @"C:\Workspace-1"));
             commands.Received(1).GetCommand("CloseWorkspace");
             controller.Received(1).CloseDocument(Arg.Is<IDocument>(d => d.Name == "Document-1"));
-            events.Received(1).Publish(Arg.Is<WorkspaceClosedEventArgs>(e => e.Workspace.FileName == @"C:\Workspace-1"), true);
-            events.Received(1).Publish(Arg.Is<WorkspaceChangedEventArgs>(e => e.Workspace.FileName == ""));
+
+            events.Received(1).Publish(Arg.Any<WorkspaceClosedEventArgs>(), true);
+
+            Assert.That(workspace1, Is.Not.Null);
+            Assert.That(workspace1.FileName, Is.EqualTo(@"C:\Workspace-1"));
+
+            events.Received(1).Publish(Arg.Any<WorkspaceChangedEventArgs>());
+
+            Assert.That(workspace2, Is.Not.Null);
+            Assert.That(workspace2.FileName, Is.EqualTo(string.Empty));
         }
 
         /// <summary>
@@ -144,9 +224,9 @@ namespace StarLab.Presentation
 
             interactor.Received(0).Execute(Arg.Any<WorkspaceDTO>());
             commands.Received(0).GetCommand("CloseWorkspace");
-            controller.Received(0).CloseDocument(Arg.Is<IDocument>(d => d.Name == "Document-1"));
-            events.Received(0).Publish(Arg.Is<WorkspaceClosedEventArgs>(e => e.Workspace.FileName == @"C:\Workspace-1"), true);
-            events.Received(0).Publish(Arg.Is<WorkspaceChangedEventArgs>(e => e.Workspace.FileName == ""));
+            controller.Received(0).CloseDocument(Arg.Any<IDocument>());
+            events.Received(0).Publish(Arg.Any<WorkspaceClosedEventArgs>(), true);
+            events.Received(0).Publish(Arg.Any<WorkspaceChangedEventArgs>());
         }
 
         /// <summary>
@@ -239,11 +319,31 @@ namespace StarLab.Presentation
         [Test]
         public void TestInitialise()
         {
+            var interactor = Substitute.For<IUseCase<string>>();
+
+            factory.CreateOpenWorkspaceUseCase(Arg.Any<IApplicationOutputPort>()).Returns(interactor);
+
+            context.Settings.Workspace.Returns(@"C:\Workspace-1");
+
             var presenter = CreatePresenter(false);
 
             presenter.Initialise(controller);
 
             events.Received(1).Subsribe(presenter);
+
+            view.Received(0).AddMenuSeparator();
+            view.Received(7).AddMenuSeparator(Arg.Any<string>());
+            view.Received(6).AddMenuItem(Arg.Any<string>(), Arg.Any<string>());
+            view.Received(0).AddMenuItem(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<Image>());
+            view.Received(0).AddMenuItem(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<ICommand>());
+            view.Received(0).AddMenuItem(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<Image>(), Arg.Any<ICommand>());
+            view.Received(2).AddMenuItem(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<Image>());
+            view.Received(4).AddMenuItem(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<ICommand>());
+            view.Received(4).AddMenuItem(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<Image>(), Arg.Any<ICommand>());
+
+            view.Received(2).AddToolbarButton(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<Image>(), Arg.Any<ICommand>());
+
+            interactor.Received(1).Execute(@"C:\Workspace-1");
         }
 
         /// <summary>
@@ -254,20 +354,126 @@ namespace StarLab.Presentation
         {
             var presenter = CreatePresenter(true);
 
-            var e = Assert.Throws<InvalidOperationException>(() => presenter.Initialise(controller));
+            Assert.Throws<InvalidOperationException>(() => presenter.Initialise(controller));
         }
 
-        //void ClearActiveDocument();
+        /// <summary>
+        /// Test that the <see cref="ApplicationViewPresenter.OpenDocument(string)"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestOpenDocument()
+        {
+            var dockable = Substitute.For<IDockableView>();
+
+            controller.GetView(Arg.Is<IDocument>(d => d.ID == "Document1")).Returns(dockable);
+
+            var presenter = CreatePresenter(true);
+
+            presenter.UpdateWorkspace(workspace);
+
+            presenter.OpenDocument("Document1");
+
+            view.Received(1).Show(Arg.Is(dockable));
+            events.Received(1).Publish(Arg.Any<WorkspaceChangedEventArgs>());
+        }
+
+        /// <summary>
+        /// Test that the <see cref="ApplicationViewPresenter.OpenWorkspace()"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestOpenWorkspace()
+        {
+            var interactor = Substitute.For<IUseCase<string>>();
+
+            factory.CreateOpenWorkspaceUseCase(Arg.Any<IApplicationOutputPort>()).Returns(interactor);
+
+            view.ShowOpenFileDialog(Arg.Any<string>(), Arg.Any<string>()).Returns(@"C:\Workspace-1");
+
+            var presenter = CreatePresenter(true);
+
+            presenter.OpenWorkspace();
+
+            interactor.Received(1).Execute(@"C:\Workspace-1");
+        }
+
+        /// <summary>
+        /// Test that the <see cref="ApplicationViewPresenter.OpenWorkspace()"/> method throws an exception when the file name is an empty string.
+        /// </summary>
+        [Test]
+        public void TestOpenWorkspaceThrowsExceptionWhenFilenameIsEmptyString()
+        {
+            view.ShowOpenFileDialog(Arg.Any<string>(), Arg.Any<string>()).Returns(string.Empty);
+
+            var presenter = CreatePresenter(true);
+
+            Assert.Throws<ArgumentException>(() => presenter.OpenWorkspace());
+        }
+
+        /// <summary>
+        /// Test that the <see cref="ApplicationViewPresenter.SaveWorkspace()"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestSaveWorkspace()
+        {
+            var interactor = Substitute.For<IUseCase<WorkspaceDTO>>();
+
+            factory.CreateSaveWorkspaceUseCase(Arg.Any<IApplicationOutputPort>()).Returns(interactor);
+
+            WorkspaceDTO? dto = null;
+
+            interactor.Execute(Arg.Do<WorkspaceDTO>(e => dto = e));
+
+            var presenter = CreatePresenter(true);
+
+            presenter.UpdateWorkspace(workspace);
+
+            presenter.SaveWorkspace();
+
+            interactor.Received(1).Execute(Arg.Any<WorkspaceDTO>());
+
+            Assert.That(dto, Is.Not.Null);
+            Assert.That(dto.FileName, Is.EqualTo(@"C:\Workspace-1"));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="ApplicationViewPresenter.SetActiveDocument(string)"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestSetActiveDocument()
+        {
+            var presenter = CreatePresenter(true);
+
+            presenter.UpdateWorkspace(workspace);
+
+            IDocument? document = null;
+
+            events.Publish(Arg.Do<ActiveDocumentChangedEventArgs>(e => document = e.Workspace.ActiveDocument));
+
+            presenter.SetActiveDocument("Document1");
+
+            events.Received(1).Publish(Arg.Any<ActiveDocumentChangedEventArgs>());
+
+            Assert.That(document, Is.Not.Null);
+            Assert.That(document.ID, Is.EqualTo("Document1"));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="ApplicationViewPresenter.ViewActivated()"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestViewActivated()
+        {
+            var presenter = CreatePresenter(true);
+
+            presenter.ViewActivated();
+
+            events.Received(1).Publish(Arg.Is<ActiveViewChangedEventArgs>(e => e.View != null && e.View.ID == "View1"));
+        }
+
         //IDockableView? CreateView(string id);
-        //void SetActiveDocument(string id);
-        //void ViewActivated();
         //void ViewClosing(CancelEventArgs e);
-        //void CloseActiveDocument();
         //void NewWorkspace();
-        //void OpenWorkspace();
-        //void SaveWorkspace();
         //IEnumerable<IChildViewController> ChildControllers { get; }
-        //void Initialise(IApplicationController controller);
         //void Show(IView view
         //InteractionResult ShowMessage(string caption, string message, InteractionType type, InteractionResponses responses);
         //string ShowOpenFileDialog(string title, string filter);
