@@ -125,7 +125,7 @@ namespace StarLab.Presentation
         /// <summary>
         /// Sets the enabled state of the specified command.
         /// </summary>
-        /// <param name="action"></param>
+        /// <param name="action">The name of the command.</param>
         /// <param name="enabled">The new enabled state.</param>
         protected void UpdateCommandState(string action, bool enabled)
         {

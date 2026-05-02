@@ -7,7 +7,6 @@ using StarLab.Shared.Properties;
 using Stratosoft.Commands;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Reflection.Metadata;
 using System.Text;
 using WeifenLuo.WinFormsUI.Docking;
 
@@ -378,7 +377,7 @@ namespace StarLab.UI.Workspace
 
             if (dockPanel.ActiveDocument is IDockableView view)
             {
-                presenter.SetActiveDocument(view.Name);
+                presenter.SetActiveDocument(view.ID);
             }
             else
             {

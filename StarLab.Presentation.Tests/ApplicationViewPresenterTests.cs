@@ -37,6 +37,7 @@ namespace StarLab.Presentation
                 .AddProject("Project-1")
                 .AddFolder("Workspace-1/Project-1/Folder-1")
                 .AddDocument("Document1", "ChartView", "Document-1", "Workspace-1/Project-1/Folder-1")
+                .AddDocument("Document2", "ChartView", "Document-2", "Workspace-1/Project-1/Folder-1")
                 .AddChart("Document1", chart)
                 .CreateWorkspace();
         }
@@ -83,6 +84,10 @@ namespace StarLab.Presentation
         [Test]
         public void TestCloseWorkspace()
         {
+            var command = Substitute.For<IComponentCommand, ICommand>();
+
+            commands.GetCommand("CloseWorkspace").Returns((ICommand)command);
+
             var interactor = Substitute.For<IUseCase<WorkspaceDTO>>();
 
             factory.CreateSaveWorkspaceUseCase(Arg.Any<IApplicationOutputPort>()).Returns(interactor);
@@ -106,7 +111,7 @@ namespace StarLab.Presentation
 
             controller.Received(0).ShowMessage(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<InteractionResponses>());
             interactor.Received(0).Execute(Arg.Any<WorkspaceDTO>());
-            commands.Received(1).GetCommand("CloseWorkspace");
+            command.Received(1).Enabled = false;
             controller.Received(1).CloseDocument(Arg.Is<IDocument>(d => d.Name == "Document-1"));
 
             events.Received(1).Publish(Arg.Any<WorkspaceClosedEventArgs>(), true);
@@ -126,6 +131,10 @@ namespace StarLab.Presentation
         [Test]
         public void TestCloseWorkspaceAndDiscardChanges()
         {
+            var command = Substitute.For<IComponentCommand, ICommand>();
+
+            commands.GetCommand("CloseWorkspace").Returns((ICommand)command);
+
             var interactor = Substitute.For<IUseCase<WorkspaceDTO>>();
 
             factory.CreateSaveWorkspaceUseCase(Arg.Any<IApplicationOutputPort>()).Returns(interactor);
@@ -136,8 +145,6 @@ namespace StarLab.Presentation
 
             presenter.UpdateWorkspace(workspace);
 
-            commands.ClearReceivedCalls();
-
             IWorkspace? workspace1 = null;
             IWorkspace? workspace2 = null;
 
@@ -147,7 +154,7 @@ namespace StarLab.Presentation
             presenter.CloseWorkspace();
 
             interactor.Received(0).Execute(Arg.Any<WorkspaceDTO>());
-            commands.Received(1).GetCommand("CloseWorkspace");
+            command.Received(1).Enabled = false;
             controller.Received(1).CloseDocument(Arg.Is<IDocument>(d => d.Name == "Document-1"));
 
             events.Received(1).Publish(Arg.Any<WorkspaceClosedEventArgs>(), true);
@@ -167,6 +174,10 @@ namespace StarLab.Presentation
         [Test]
         public void TestCloseWorkspaceAndSaveChanges()
         {
+            var command = Substitute.For<IComponentCommand, ICommand>();
+
+            commands.GetCommand("CloseWorkspace").Returns((ICommand)command);
+
             var interactor = Substitute.For<IUseCase<WorkspaceDTO>>();
 
             factory.CreateSaveWorkspaceUseCase(Arg.Any<IApplicationOutputPort>()).Returns(interactor);
@@ -177,8 +188,6 @@ namespace StarLab.Presentation
 
             presenter.UpdateWorkspace(workspace);
     
-            commands.ClearReceivedCalls();
-
             IWorkspace? workspace1 = null;
             IWorkspace? workspace2 = null;
 
@@ -188,7 +197,7 @@ namespace StarLab.Presentation
             presenter.CloseWorkspace();
 
             interactor.Received(1).Execute(Arg.Is<WorkspaceDTO>(e => e.FileName == @"C:\Workspace-1"));
-            commands.Received(1).GetCommand("CloseWorkspace");
+            command.Received(1).Enabled = false;
             controller.Received(1).CloseDocument(Arg.Is<IDocument>(d => d.Name == "Document-1"));
 
             events.Received(1).Publish(Arg.Any<WorkspaceClosedEventArgs>(), true);
@@ -289,6 +298,44 @@ namespace StarLab.Presentation
         }
 
         /// <summary>
+        /// Test that the <see cref="ApplicationViewPresenter.CreateView(string)"/> method returns a new view when it does not already exist within the workspace hierarchy.
+        /// </summary>
+        [Test]
+        public void TestCreateView()
+        {
+            var dockable = Substitute.For<IDockableView>();
+
+            controller.GetView(Arg.Is("Document2")).Returns(dockable);
+
+            var presenter = CreatePresenter(true);
+
+            presenter.UpdateWorkspace(workspace);
+
+            var view = presenter.CreateView("Document2");
+
+            Assert.That(view, Is.SameAs(dockable));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="ApplicationViewPresenter.CreateView(string)"/> method returns the existing view when it already exists within the workspace hierarchy.
+        /// </summary>
+        [Test]
+        public void TestCreateViewWhenViewAlreadyExists()
+        {
+            var dockable = Substitute.For<IDockableView>();
+
+            controller.GetView(Arg.Is<IDocument>(d => d.ID == "Document1")).Returns(dockable);
+
+            var presenter = CreatePresenter(true);
+
+            presenter.UpdateWorkspace(workspace);
+
+            var view = presenter.CreateView("Document1");
+
+            Assert.That(view, Is.SameAs(dockable));
+        }
+
+        /// <summary>
         /// Test that the <see cref="ApplicationViewPresenter.Exit()"/> method works correctly.
         /// </summary>
         [Test]
@@ -300,6 +347,17 @@ namespace StarLab.Presentation
 
             view.Received(1).CloseAll();
             view.Received(1).Close();
+        }
+
+        /// <summary>
+        /// Test that the <see cref="ApplicationViewPresenter.ChildControllers"/> property returns the correct value.
+        /// </summary>
+        [Test]
+        public void TestGetChildControllers()
+        {
+            var presenter = CreatePresenter(true);
+
+            Assert.That(presenter.ChildControllers, Is.Empty);
         }
 
         /// <summary>
@@ -347,6 +405,16 @@ namespace StarLab.Presentation
         }
 
         /// <summary>
+        /// Test that the <see cref="ApplicationViewPresenter.NewWorkspace()"/> method works correctly.
+        /// </summary>
+        [Test]
+        [Ignore("Not implemented")]
+        public void TestNewWorkspace()
+        {
+            Assert.Fail();
+        }
+
+        /// <summary>
         /// Test that the <see cref="ApplicationViewPresenter.Initialise(IApplicationController)"/> method throws an exception when already initialised.
         /// </summary>
         [Test]
@@ -355,6 +423,26 @@ namespace StarLab.Presentation
             var presenter = CreatePresenter(true);
 
             Assert.Throws<InvalidOperationException>(() => presenter.Initialise(controller));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="ApplicationViewPresenter.OnEvent(ActiveDocumentChangedEventArgs)"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestOnEvent()
+        {
+            var command = Substitute.For<IComponentCommand, ICommand>();
+
+            commands.GetCommand("Close").Returns((ICommand)command);
+
+            var ws = Substitute.For<IWorkspace>();
+            ws.ActiveDocument.Returns(Substitute.For<IDocument>());
+
+            var presenter = CreatePresenter(true);
+
+            presenter.OnEvent(new ActiveDocumentChangedEventArgs(ws));
+
+            command.Received(1).Enabled = true;
         }
 
         /// <summary>
@@ -383,6 +471,10 @@ namespace StarLab.Presentation
         [Test]
         public void TestOpenWorkspace()
         {
+            var command = Substitute.For<IComponentCommand, ICommand>();
+
+            commands.GetCommand("CloseWorkspace").Returns((ICommand)command);
+
             var interactor = Substitute.For<IUseCase<string>>();
 
             factory.CreateOpenWorkspaceUseCase(Arg.Any<IApplicationOutputPort>()).Returns(interactor);
@@ -394,6 +486,7 @@ namespace StarLab.Presentation
             presenter.OpenWorkspace();
 
             interactor.Received(1).Execute(@"C:\Workspace-1");
+            command.Received(1).Enabled = true;
         }
 
         /// <summary>
@@ -458,6 +551,264 @@ namespace StarLab.Presentation
         }
 
         /// <summary>
+        /// Tests that the <see cref="ApplicationViewPresenter.SetWorkspace(WorkspaceDTO)"/> method does not update the default file name when the workspace file name is an empty string.
+        /// </summary>
+        [Test]
+        public void TestSetWorkspaceWhenFileNameIsEmptyString()
+        {
+            var command = Substitute.For<IComponentCommand, ICommand>();
+
+            commands.GetCommand("CloseWorkspace").Returns((ICommand)command);
+
+            IWorkspace? ws = null;
+
+            events.Publish(Arg.Do<WorkspaceChangedEventArgs>(e => ws = e.Workspace));
+
+            context.Settings.Workspace.Returns(@"C:\Workspace-1");
+
+            workspace.FileName = string.Empty;
+
+            var presenter = CreatePresenter(true);
+
+            presenter.SetWorkspace(workspace);
+
+            view.Received(1).CloseAll();
+            events.Received(1).Publish(Arg.Any<WorkspaceChangedEventArgs>());
+            context.Settings.Received(0).Workspace = string.Empty;
+            command.Received(1).Enabled = true;
+        }
+
+        /// <summary>
+        /// Tests that the <see cref="ApplicationViewPresenter.SetWorkspace(WorkspaceDTO)"/> method updates the default file name when the workspace file name is not an empty string and differs from the default.
+        /// </summary>
+        [Test]
+        public void TestSetWorkspaceWhenFileNameIsNotEmptyString()
+        {
+            var command = Substitute.For<IComponentCommand, ICommand>();
+
+            commands.GetCommand("CloseWorkspace").Returns((ICommand)command);
+
+            IWorkspace? ws = null;
+
+            events.Publish(Arg.Do<WorkspaceChangedEventArgs>(e => ws = e.Workspace));
+
+            context.Settings.Workspace.Returns(@"C:\Workspace-0");
+
+            var presenter = CreatePresenter(true);
+
+            presenter.SetWorkspace(workspace);
+
+            view.Received(1).CloseAll();
+            events.Received(1).Publish(Arg.Any<WorkspaceChangedEventArgs>());
+            context.Settings.Received(1).Workspace = @"C:\Workspace-1";
+            command.Received(1).Enabled = true;
+        }
+
+        /// <summary>
+        /// Tests that the <see cref="ApplicationViewPresenter.SetWorkspace(WorkspaceDTO)"/> method works correctly when the workspace layout is an empty string.
+        /// </summary>
+        [Test]
+        public void TestSetWorkspaceWhenLayoutIsEmptyString()
+        {
+            var command = Substitute.For<IComponentCommand, ICommand>();
+
+            commands.GetCommand("CloseWorkspace").Returns((ICommand)command);
+
+            IWorkspace? ws = null;
+
+            events.Publish(Arg.Do<WorkspaceChangedEventArgs>(e => ws = e.Workspace));
+
+            context.Settings.Workspace.Returns(@"C:\Workspace-1");
+
+            var presenter = CreatePresenter(true);
+
+            presenter.SetWorkspace(workspace);
+
+            view.Received(1).CloseAll();
+            view.Received(0).SetLayout(Arg.Any<string>());
+            events.Received(1).Publish(Arg.Any<WorkspaceChangedEventArgs>());
+            command.Received(1).Enabled = true;
+
+            Assert.That(ws, Is.Not.Null);
+            Assert.That(ws.FileName, Is.EqualTo(@"C:\Workspace-1"));
+            Assert.That(ws.Layout, Is.EqualTo(string.Empty));
+        }
+
+        /// <summary>
+        /// Tests that the <see cref="ApplicationViewPresenter.SetWorkspace(WorkspaceDTO)"/> method works correctly when the workspace layout is not an empty string.
+        /// </summary>
+        [Test]
+        public void TestSetWorkspaceWhenLayoutIsNotEmptyString()
+        {
+            var command = Substitute.For<IComponentCommand, ICommand>();
+
+            commands.GetCommand("CloseWorkspace").Returns((ICommand)command);
+
+            IWorkspace? ws = null;
+
+            events.Publish(Arg.Do<WorkspaceChangedEventArgs>(e => ws = e.Workspace));
+
+            context.Settings.Workspace.Returns(@"C:\Workspace-1");
+
+            workspace.Layout = "<Layout></Layout>";
+
+            var presenter = CreatePresenter(true);
+
+            presenter.SetWorkspace(workspace);
+
+            view.Received(1).CloseAll();
+            view.Received(1).SetLayout(Arg.Any<string>());
+            events.Received(1).Publish(Arg.Any<WorkspaceChangedEventArgs>());
+            command.Received(1).Enabled = true;
+
+            Assert.That(ws, Is.Not.Null);
+            Assert.That(ws.FileName, Is.EqualTo(@"C:\Workspace-1"));
+            Assert.That(ws.Layout, Is.EqualTo("<Layout></Layout>"));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="ApplicationViewPresenter.Show(IView)"/> method works correctly for a dialog view.
+        /// </summary>
+        [Test]
+        public void TestShowDialogView()
+        {
+            var dialog = Substitute.For<IDialogView>();
+
+            var presenter = CreatePresenter(true);
+
+            presenter.Show(dialog);
+
+            view.Received(1).Show(dialog);
+            events.Received(0).Publish(Arg.Any<WorkspaceChangedEventArgs>());
+        }
+
+        /// <summary>
+        /// Test that the <see cref="ApplicationViewPresenter.Show(IView)"/> method works correctly for a dockable view.
+        /// </summary>
+        [Test]
+        public void TestShowDockableView()
+        {
+            var dockable = Substitute.For<IDockableView>();
+
+            var presenter = CreatePresenter(true);
+
+            presenter.Show(dockable);
+
+            view.Received(1).Show(dockable);
+            events.Received(1).Publish(Arg.Any<WorkspaceChangedEventArgs>());
+        }
+
+        /// <summary>
+        /// Test that the <see cref="ApplicationViewPresenter.ShowMessage(string, string)"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestShowMessageWithTwoParameters()
+        {
+            var presenter = CreatePresenter(true);
+
+            presenter.ShowMessage("Caption", "Message");
+
+            controller.Received(1).ShowMessage("Caption", "Message");
+        }
+
+        /// <summary>
+        /// Test that the <see cref="ApplicationViewPresenter.ShowMessage(string, string, Message)"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestShowMessageWithThreeParameters()
+        {
+            var presenter = CreatePresenter(true);
+
+            presenter.ShowMessage("Caption", "Message", InteractionResponses.OK);
+
+            controller.Received(1).ShowMessage("Caption", "Message", InteractionResponses.OK);
+        }
+
+        /// <summary>
+        /// Test that the <see cref="ApplicationViewPresenter.ShowMessage(string, string, InteractionType, InteractionResponses)"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestShowMessageWithFourParameters()
+        {
+            var presenter = CreatePresenter(true);
+
+            presenter.ShowMessage("Caption", "Message", InteractionType.Question, InteractionResponses.YesNoCancel);
+
+            view.Received(1).ShowMessage("Caption", "Message", InteractionType.Question, InteractionResponses.YesNoCancel);
+        }
+
+        /// <summary>
+        /// Test that the <see cref="ApplicationViewPresenter.ShowOpenFileDialog(string, string)"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestShowOpenFileDialog()
+        {
+            var presenter = CreatePresenter(true);
+
+            presenter.ShowOpenFileDialog("Title", "Filter");
+
+            view.Received(1).ShowOpenFileDialog("Title", "Filter");
+        }
+
+        /// <summary>
+        /// Test that the <see cref="ApplicationViewPresenter.ShowSaveFileDialog(string, string, string)"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestShowSaveFileDialog()
+        {
+            var presenter = CreatePresenter(true);
+
+            presenter.ShowSaveFileDialog("Title", "Filter", "Extension");
+
+            view.Received(1).ShowSaveFileDialog("Title", "Filter", "Extension");
+        }
+
+        /// <summary>
+        /// Test that the <see cref="ApplicationViewPresenter.UpdateDocument(WorkspaceDTO, string)"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestUpdateDocument()
+        {
+            var dc = Substitute.For<IDocumentController>();
+
+            IDocument? doc = null;
+
+            dc.UpdateDocument(Arg.Do<IDocument>(arg => doc = arg));
+
+            controller.GetController(Arg.Any<IDocument>()).Returns(dc);
+
+            IWorkspace? ws = null;
+
+            events.Publish(Arg.Do<WorkspaceChangedEventArgs>(e => ws = e.Workspace));
+
+            var presenter = CreatePresenter(true);
+
+            presenter.UpdateWorkspace(workspace);
+
+            presenter.UpdateDocument(new WorkspaceDtoBuilder(@"C:\Workspace-1")
+                .AddProject("Project-1")
+                .AddFolder("Workspace-1/Project-1/Folder-1")
+                .AddDocument("Document1", "ChartView", "Document-1.1", "Workspace-1/Project-1/Folder-1")
+                .AddChart("Document1", new ChartDtoBuilder().CreateChart())
+                .CreateWorkspace(), "Document1");
+
+            dc.Received(1).UpdateDocument(Arg.Any<IDocument>());
+            events.Received(1).Publish(Arg.Any<WorkspaceChangedEventArgs>());
+
+            Assert.That(ws, Is.Not.Null);
+
+            var document = ws.GetDocument("Document1");
+
+            Assert.That(document, Is.Not.Null);
+            Assert.That(document.ID, Is.EqualTo("Document1"));
+            Assert.That(document.Name, Is.EqualTo("Document-1.1"));
+
+            Assert.That(doc, Is.Not.Null);
+            Assert.That(doc.ID, Is.EqualTo("Document1"));
+            Assert.That(doc.Name, Is.EqualTo("Document-1.1"));
+        }
+
+        /// <summary>
         /// Test that the <see cref="ApplicationViewPresenter.ViewActivated()"/> method works correctly.
         /// </summary>
         [Test]
@@ -469,22 +820,6 @@ namespace StarLab.Presentation
 
             events.Received(1).Publish(Arg.Is<ActiveViewChangedEventArgs>(e => e.View != null && e.View.ID == "View1"));
         }
-
-        //IDockableView? CreateView(string id);
-        //void ViewClosing(CancelEventArgs e);
-        //void NewWorkspace();
-        //IEnumerable<IChildViewController> ChildControllers { get; }
-        //void Show(IView view
-        //InteractionResult ShowMessage(string caption, string message, InteractionType type, InteractionResponses responses);
-        //string ShowOpenFileDialog(string title, string filter);
-        //string ShowSaveFileDialog(string title, string filter, string extension);
-        //void OpenDocument(string id);
-        //void SetWorkspace(WorkspaceDTO dto);
-        //void UpdateDocument(WorkspaceDTO dto, string documentId);
-        //InteractionResult ShowMessage(string caption, string message, InteractionType type, InteractionResponses responses);
-        //InteractionResult ShowMessage(string caption, string message, InteractionResponses responses);
-        //void ShowMessage(string caption, string message);
-        //void OnEvent(TEventType e);
 
         /// <summary>
         /// A factory method that creates a new instance of the <see cref="ApplicationViewPresenter"/> class.
