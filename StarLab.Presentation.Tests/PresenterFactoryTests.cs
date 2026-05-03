@@ -70,7 +70,7 @@ namespace StarLab.Presentation
             view.Name.Returns(Views.About);
             view.ID.Returns(Views.About);
 
-            var e = Assert.Throws<Exception>(() => factory.CreatePresenter(view, commands));
+            Assert.Throws<Exception>(() => factory.CreatePresenter(view, commands));
         }
 
         /// <summary>
@@ -105,7 +105,7 @@ namespace StarLab.Presentation
 
             var child = Substitute.For<IChildViewPresenter>();
 
-            var e = Assert.Throws<ArgumentException>(() => factory.CreatePresenter(view, child, commands));
+            Assert.Throws<ArgumentException>(() => factory.CreatePresenter(view, child, commands));
         }
 
         /// <summary>
@@ -120,7 +120,7 @@ namespace StarLab.Presentation
 
             var child = Substitute.For<IChildViewPresenter, IChildViewController>();
 
-            var e = Assert.Throws<ArgumentException>(() => factory.CreatePresenter(view, child, commands));
+            Assert.Throws<ArgumentException>(() => factory.CreatePresenter(view, child, commands));
         }
 
         /// <summary>
@@ -160,7 +160,7 @@ namespace StarLab.Presentation
 
             var child = Substitute.For<IChildViewPresenter>();
 
-            var e = Assert.Throws<Exception>(() => factory.CreatePresenter(document, view, [child], commands));
+            Assert.Throws<Exception>(() => factory.CreatePresenter(document, view, [child], commands));
         }
 
         /// <summary>
@@ -195,7 +195,7 @@ namespace StarLab.Presentation
 
             var child = Substitute.For<IChildViewPresenter>();
 
-            var e = Assert.Throws<ArgumentException>(() => factory.CreatePresenter(view, child, commands));
+            Assert.Throws<ArgumentException>(() => factory.CreatePresenter(view, child, commands));
         }
 
         /// <summary>
@@ -226,7 +226,7 @@ namespace StarLab.Presentation
 
             var view = Substitute.For<IView>();
 
-            var e = Assert.Throws<ArgumentException>(() => factory.CreatePresenter(view, commands));
+            Assert.Throws<ArgumentException>(() => factory.CreatePresenter(view, commands));
         }
 
         /// <summary>
@@ -302,7 +302,7 @@ namespace StarLab.Presentation
             child2.Name.Returns(Views.Chart);
             child2.ID.Returns(Views.Chart);
 
-            var e = Assert.Throws<Exception>(() => factory.CreatePresenters(document, [child1, child2], commands));
+            Assert.Throws<Exception>(() => factory.CreatePresenters(document, [child1, child2], commands));
         }
     }
 }

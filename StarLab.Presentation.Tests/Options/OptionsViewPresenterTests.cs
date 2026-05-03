@@ -84,6 +84,17 @@ namespace StarLab.Presentation.Options
         }
 
         /// <summary>
+        /// Test that the <see cref="OptionsViewPresenter.ID"/> property returns the correct value.
+        /// </summary>
+        [Test]
+        public void TestGetID()
+        {
+            var presenter = CreatePresenter(false);
+
+            Assert.That(presenter.ID, Is.EqualTo("ContentController(OptionsView)"));
+        }
+
+        /// <summary>
         /// Test that the <see cref="OptionsViewPresenter.Initialise(IApplicationController)"/> method works correctly.
         /// </summary>
         [Test]
@@ -105,6 +116,21 @@ namespace StarLab.Presentation.Options
             var presenter = CreatePresenter(true);
 
             var e = Assert.Throws<InvalidOperationException>(() => presenter.Initialise(controller));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="OptionsViewPresenter.Run(IWorkflowContext)"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestRun()
+        {
+            var wf = Substitute.For<IWorkflowContext>();
+
+            var presenter = CreatePresenter(true);
+
+            presenter.Run(wf);
+
+            // TODO - Modify for implementation
         }
 
         /// <summary>

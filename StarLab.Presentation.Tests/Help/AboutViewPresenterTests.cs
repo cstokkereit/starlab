@@ -118,6 +118,21 @@ namespace StarLab.Presentation.Help
         }
 
         /// <summary>
+        /// Test that the <see cref="AboutViewPresenter.Run(IWorkflowContext)"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestRun()
+        {
+            var wf = Substitute.For<IWorkflowContext>();
+
+            var presenter = CreatePresenter(true);
+
+            presenter.Run(wf);
+
+            // TODO - Modify for implementation
+        }
+
+        /// <summary>
         /// A factory method that creates a new instance of the <see cref="AboutViewPresenter"/> class.
         /// </summary>
         /// <param name="initialise">true to initialise the presenter; false otherwise.</param>
