@@ -8,6 +8,7 @@ using StarLab.Presentation.Workspace.Documents;
 using StarLab.Shared.Properties;
 using StarLab.Tests;
 using Stratosoft.Commands;
+using System.ComponentModel;
 using System.Drawing;
 
 namespace StarLab.Presentation
@@ -248,7 +249,6 @@ namespace StarLab.Presentation
 
             Assert.That(presenter, Is.Not.Null);
 
-            Assert.That(presenter.ID, Is.EqualTo($"{Views.Application}Controller"));
             view.Received(1).Attach(Arg.Is(presenter));
         }
 
@@ -744,7 +744,7 @@ namespace StarLab.Presentation
         public void TestShowOpenFileDialog()
         {
             var presenter = CreatePresenter(true);
-
+            
             presenter.ShowOpenFileDialog("Title", "Filter");
 
             view.Received(1).ShowOpenFileDialog("Title", "Filter");
@@ -819,6 +819,50 @@ namespace StarLab.Presentation
             presenter.ViewActivated();
 
             events.Received(1).Publish(Arg.Is<ActiveViewChangedEventArgs>(e => e.View != null && e.View.ID == "View1"));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="ApplicationViewPresenter.ViewClosing(CancelEventArgs)"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestViewClosing()
+        {
+            var command = Substitute.For<ICommand>();
+
+            commands.GetCommand("Exit").Returns(command);
+
+            var presenter = CreatePresenter(true);
+
+            var e = new CancelEventArgs();
+
+            presenter.ViewClosing(e);
+
+            command.Received(1).Execute();
+
+            Assert.That(e.Cancel, Is.True);
+        }
+
+        /// <summary>
+        /// Test that the <see cref="ApplicationViewPresenter.ViewClosing(CancelEventArgs)"/> method works correctly when the dialog is closing because the <see cref="ApplicationViewPresenter.Exit()"/> method was called.
+        /// </summary>
+        [Test]
+        public void TestViewClosingAfterExitCalled()
+        {
+            var command = Substitute.For<ICommand>();
+
+            commands.GetCommand("Exit").Returns(command);
+
+            var presenter = CreatePresenter(true);
+
+            presenter.Exit();
+
+            var e = new CancelEventArgs();
+
+            presenter.ViewClosing(e);
+
+            command.Received(0).Execute();
+
+            Assert.That(e.Cancel, Is.False);
         }
 
         /// <summary>

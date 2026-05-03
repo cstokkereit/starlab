@@ -115,7 +115,7 @@ namespace StarLab.Presentation.Workspace.Documents
                 if (controller is TController required) return required;
             }
 
-            throw new Exception(string.Format(Resources.UnknownType, typeof(TController)));
+            throw new InvalidOperationException(string.Format(Resources.UnknownType, typeof(TController)));
         }
 
         /// <summary>
@@ -263,6 +263,7 @@ namespace StarLab.Presentation.Workspace.Documents
         /// </summary>
         private void UpdateChildControllers()
         {
+            // Consider using strategy pattern if more document types are added in the future.
             if (document is IChartDocument chartDocument)
             {
                 UpdateChartControllers(chartDocument);

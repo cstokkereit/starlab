@@ -156,7 +156,8 @@ namespace StarLab.Presentation
         /// <param name="e">The <see cref="CancelEventArgs"/> that can be used to determine the reasons that the view is closing and, if necessary, cancel it.</param>
         public void ViewClosing(CancelEventArgs e)
         {
-            throw new NotImplementedException();
+            e.Cancel = true;
+            View.Hide();
         }
 
         /// <summary>

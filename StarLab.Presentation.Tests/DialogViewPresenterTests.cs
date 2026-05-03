@@ -1,8 +1,9 @@
 ﻿#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
 
+using StarLab.Application;
 using StarLab.Presentation.Configuration;
-using StarLab.Presentation.Workspace.WorkspaceExplorer;
 using Stratosoft.Commands;
+using System.ComponentModel;
 
 namespace StarLab.Presentation
 {
@@ -39,6 +40,19 @@ namespace StarLab.Presentation
         }
 
         /// <summary>
+        /// Test that the <see cref="DialogViewPresenter.Close()"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestClose()
+        {
+            var presenter = CreatePresenter(true);
+
+            presenter.Close();
+
+            view.Received(1).Close();
+        }
+
+        /// <summary>
         /// Test that the <see cref="DialogViewPresenter(IDialogView, IChildViewController, ISessionContext, ICommandManager, IEventAggregator)"/> constructor works correctly.
         /// </summary>
         [Test]
@@ -48,17 +62,8 @@ namespace StarLab.Presentation
 
             Assert.That(presenter, Is.Not.Null);
 
-            Assert.That(presenter.ID, Is.EqualTo($"{Views.About}Controller"));
             view.Received().Attach(Arg.Is(presenter));
-        }
-
-        /// <summary>
-        /// Test that the <see cref="DialogViewPresenter(IDialogView, IChildViewController, ISessionContext, ICommandManager, IEventAggregator)"/> constructor throws an exception when the childController argument is null.
-        /// </summary>
-        [Test]
-        public void TestConstructionThrowsExceptionWhenChildControllerIsNull()
-        {
-            Assert.Throws<ArgumentNullException>(() => new DialogViewPresenter(view, null, context, commands, events));
+            child.Received(1).RegisterController(presenter);
         }
 
         /// <summary>
@@ -94,7 +99,41 @@ namespace StarLab.Presentation
         [Test]
         public void TestConstructionThrowsExceptionWhenViewIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new WorkspaceExplorerViewPresenter(null, context, commands, services, events));
+            Assert.Throws<ArgumentNullException>(() => new DialogViewPresenter(null, child, context, commands, events));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="DialogViewPresenter(IDialogView, IChildViewController, ISessionContext, ICommandManager, IEventAggregator)"/> constructor throws an exception when the childController argument is null.
+        /// </summary>
+        [Test]
+        public void TestConstructionThrowsExceptionWhenChildControllerIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => new DialogViewPresenter(view, null, context, commands, events));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="DialogViewPresenter.ChildControllers"/> property returns the correct value.
+        /// </summary>
+        [Test]
+        public void TestGetChildControllers()
+        {
+            var presenter = CreatePresenter(true);
+
+            var controllers = new List<IChildViewController>(presenter.ChildControllers);
+
+            Assert.That(controllers.Count, Is.EqualTo(1));
+            Assert.That(controllers[0], Is.SameAs(child));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="ApplicationViewPresenter.ID"/> property returns the correct value.
+        /// </summary>
+        [Test]
+        public void TestGetID()
+        {
+            var presenter = CreatePresenter(false);
+
+            Assert.That(presenter.ID, Is.EqualTo("AboutViewController"));
         }
 
         /// <summary>
@@ -122,6 +161,105 @@ namespace StarLab.Presentation
             var e = Assert.Throws<InvalidOperationException>(() => presenter.Initialise(controller));
 
             Assert.That(e.Message, Is.EqualTo("The DialogViewPresenter has already been initialised."));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="DialogViewPresenter.Run(IWorkflowContext)"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestRun()
+        {
+            var wf = Substitute.For<IWorkflowContext>();
+
+            var presenter = CreatePresenter(true);
+
+            presenter.Run(wf);
+            
+            child.Received(1).Run(wf);
+        }
+
+        /// <summary>
+        /// Test that the <see cref="DialogViewPresenter.Show(IView)"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestShow()
+        {
+            var v = Substitute.For<IView>();
+
+            var presenter = CreatePresenter(true);
+
+            presenter.Show(v);
+
+            view.Received(1).Show(v);
+        }
+
+        /// <summary>
+        /// Test that the <see cref="DialogViewPresenter.ShowMessage(string, string, InteractionType, InteractionResponses)"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestShowMessage()
+        {
+            var presenter = CreatePresenter(true);
+
+            presenter.ShowMessage("Caption", "Message", InteractionType.Question, InteractionResponses.YesNoCancel);
+
+            view.Received(1).ShowMessage("Caption", "Message", InteractionType.Question, InteractionResponses.YesNoCancel);
+        }
+
+        /// <summary>
+        /// Test that the <see cref="DialogViewPresenter.ShowOpenFileDialog(string, string)"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestShowOpenFileDialog()
+        {
+            var presenter = CreatePresenter(true);
+
+            presenter.ShowOpenFileDialog("Title", "Filter");
+
+            view.Received(1).ShowOpenFileDialog("Title", "Filter");
+        }
+
+        /// <summary>
+        /// Test that the <see cref="DialogViewPresenter.ShowSaveFileDialog(string, string, string)"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestShowSaveFileDialog()
+        {
+            var presenter = CreatePresenter(true);
+
+            presenter.ShowSaveFileDialog("Title", "Filter", "Extension");
+
+            view.Received(1).ShowSaveFileDialog("Title", "Filter", "Extension");
+        }
+
+        /// <summary>
+        /// Test that the <see cref="DialogViewPresenter.ViewActivated()"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestViewActivated()
+        {
+            var presenter = CreatePresenter(true);
+
+            presenter.ViewActivated();
+
+            events.Received(1).Publish(Arg.Is<ActiveViewChangedEventArgs>(e => e.View != null && e.View.ID == "AboutView"));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="DialogViewPresenter.ViewClosing(CancelEventArgs)"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestViewClosing()
+        {
+            var presenter = CreatePresenter(true);
+
+            var e = new CancelEventArgs();
+
+            presenter.ViewClosing(e);
+
+            view.Received(1).Hide();
+
+            Assert.That(e.Cancel, Is.True);
         }
 
         /// <summary>

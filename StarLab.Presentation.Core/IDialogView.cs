@@ -9,5 +9,10 @@
         /// Closes the dialog box.
         /// </summary>
         void Close();
+
+        /// <summary>
+        /// Hides the dialog box.
+        /// </summary>
+        void Hide();
     }
 }

@@ -4,7 +4,9 @@ using Castle.MicroKernel.Resolvers.SpecializedResolvers;
 using Castle.Windsor;
 using Microsoft.Extensions.Logging;
 using StarLab.Application;
+using StarLab.Application.Workspace;
 using StarLab.Presentation.Configuration;
+using StarLab.Presentation.Workspace;
 using StarLab.Presentation.Workspace.Documents;
 using StarLab.Presentation.Workspace.Documents.Charts;
 using StarLab.Presentation.Workspace.WorkspaceExplorer;
@@ -85,6 +87,16 @@ namespace StarLab.Presentation
         {
             controller.Dispose();
             container.Dispose();
+        }
+
+        /// <summary>
+        /// Creates a workspace from the <see cref="WorkspaceDTO"/> provided.
+        /// </summary>
+        /// <param name="dto">The <see cref="WorkspaceDTO"/> used to construct the workspace.</param>
+        /// <returns>The required workspace.</returns>
+        protected static IWorkspace CreateWorkspace(WorkspaceDTO dto)
+        {
+            return new Workspace.Workspace(dto);
         }
     }
 }
