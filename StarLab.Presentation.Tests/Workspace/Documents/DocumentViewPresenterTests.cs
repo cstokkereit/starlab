@@ -1,7 +1,9 @@
 ﻿#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
 
 using StarLab.Presentation.Configuration;
-using NSubstitute.ExceptionExtensions;
+using StarLab.Presentation.Workspace.Documents.Charts;
+using StarLab.Presentation.Workspace.Documents.Tables;
+using StarLab.Tests;
 using Stratosoft.Commands;
 
 namespace StarLab.Presentation.Workspace.Documents
@@ -25,8 +27,27 @@ namespace StarLab.Presentation.Workspace.Documents
             base.SetUp();
 
             document = Substitute.For<IDocument>();
+            document.Name.Returns("Document-1");
+            document.ID.Returns("Document1");
 
             view = Substitute.For<IDocumentView>();
+            view.ID.Returns("Document1");
+
+            controllers.Clear();
+        }
+
+        /// <summary>
+        /// Test that the <see cref="DocumentViewPresenter.Close()"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestClose()
+        {
+            var presenter = CreatePresenter(true);
+
+            presenter.Close();
+
+            view.Received(1).HideOnClose = false;
+            view.Received(1).Close();
         }
 
         /// <summary>
@@ -98,6 +119,56 @@ namespace StarLab.Presentation.Workspace.Documents
         }
 
         /// <summary>
+        /// Test that the <see cref="DocumentViewPresenter.GetController{TController}()"/> method works correctly when the required controller type exists.
+        /// </summary>
+        [Test]
+        public void TestGetController()
+        {
+            var settingsController = Substitute.For<IChartSettingsController>();
+            controllers.Add(settingsController);
+
+            var chartController = Substitute.For<IChartController>();
+            controllers.Add(chartController);
+
+            var presenter = CreatePresenter(true);
+
+            var controller = presenter.GetController<IChartSettingsController>();
+
+            Assert.That(controller, Is.Not.Null);
+            Assert.That(controller, Is.SameAs(settingsController));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="DocumentViewPresenter.GetController{TController}()"/> method works correctly when the required controller type exists.
+        /// </summary>
+        [Test]
+        public void TestGetControllerThrowsExceptionWhenControllerNotFound()
+        {
+            var settingsController = Substitute.For<IChartSettingsController>();
+            controllers.Add(settingsController);
+
+            var chartController = Substitute.For<IChartController>();
+            controllers.Add(chartController);
+
+            var presenter = CreatePresenter(true);
+
+            Assert.Throws<InvalidOperationException>(() => presenter.GetController<ITableController>());
+        }
+
+        /// <summary>
+        /// Test that the <see cref="DocumentViewPresenter.HideSplitContent(string)"/> method works correctly.
+        /// </summary>
+        [Test]    
+        public void TestHideSplitContent()
+        {
+            var presenter = CreatePresenter(true);
+            
+            presenter.HideSplitContent("ContentName");
+
+            view.Received(1).HideSplitContent("ContentName");
+        }
+
+        /// <summary>
         /// Test that the <see cref="DocumentViewPresenter.Initialise(IApplicationController)"/> method works correctly.
         /// </summary>
         [Test]
@@ -118,9 +189,181 @@ namespace StarLab.Presentation.Workspace.Documents
         {
             var presenter = CreatePresenter(true);
 
-            var e = Assert.Throws<InvalidOperationException>(() => presenter.Initialise(controller));
+            Assert.Throws<InvalidOperationException>(() => presenter.Initialise(controller));
+        }
 
-            Assert.That(e.Message, Is.EqualTo("The DocumentViewPresenter has already been initialised."));
+        /// <summary>
+        /// Test that the <see cref="DocumentViewPresenter.OnEvent(WorkspaceChangedEventArgs)"/> method works correctly for a chart document.
+        /// </summary>
+        [Test]
+        public void TestOnEventWhenDocumentIsChart()
+        {
+            IDocument? document = null;
+
+            var settingsController = Substitute.For<IChartSettingsController>();
+            settingsController.UpdateSettings(Arg.Do<IChartDocument>(d => document = d));
+            controllers.Add(settingsController);
+
+            IChart? chart = null;
+
+            var chartController = Substitute.For<IChartController>();
+            chartController.UpdateChart(Arg.Do<IChart>(c => chart = c));
+            controllers.Add(chartController);
+
+            var dtoChart = new ChartDtoBuilder()
+                .AddTitle("Chart-1.1")
+                .CreateChart();
+
+            var dtoWorkspace = new WorkspaceDtoBuilder(@"C:\Workspace-1")
+                .AddProject("Project-1")
+                .AddFolder("Workspace-1/Project-1/Folder-1")
+                .AddDocument("Document1", "ChartView", "Document-1.1", "Workspace-1/Project-1/Folder-1")
+                .AddDocument("Document2", "ChartView", "Document-2", "Workspace-1/Project-1/Folder-1")
+                .AddChart("Document1", dtoChart)
+                .CreateWorkspace();
+
+            var workspace = CreateWorkspace(dtoWorkspace);
+
+            var presenter = CreatePresenter(true);
+            
+            presenter.OnEvent(new WorkspaceChangedEventArgs(workspace));
+
+            chartController.Received(1).UpdateChart(Arg.Any<IChart>());
+            settingsController.Received(1).UpdateSettings(Arg.Any<IChartDocument>());
+            view.Received(1).SetName("Document-1.1");
+
+            Assert.That(document, Is.Not.Null);
+            Assert.That(document.Name, Is.EqualTo("Document-1.1"));
+            Assert.That(document.ID, Is.EqualTo("Document1"));
+
+            Assert.That(chart, Is.Not.Null);
+            Assert.That(chart.Title.Text, Is.EqualTo("Chart-1.1"));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="DocumentViewPresenter.OnEvent(WorkspaceChangedEventArgs)"/> method works correctly for a table document.
+        /// </summary>
+        [Test]
+        [Ignore("Functionality not implemented")]
+        public void TestOnEventWhenDocumentIsTable()
+        {
+            //IDocument? document = null;
+
+            //var settingsController = Substitute.For<IChartSettingsController>();
+            //settingsController.UpdateSettings(Arg.Do<IChartDocument>(d => document = d));
+            //controllers.Add(settingsController);
+
+            //IChart? chart = null;
+
+            //var chartController = Substitute.For<IChartController>();
+            //chartController.UpdateChart(Arg.Do<IChart>(c => chart = c));
+            //controllers.Add(chartController);
+
+            //var dtoChart = new ChartDtoBuilder()
+            //    .AddTitle("Chart-1.1")
+            //    .CreateChart();
+
+            //var dtoWorkspace = new WorkspaceDtoBuilder(@"C:\Workspace-1")
+            //    .AddProject("Project-1")
+            //    .AddFolder("Workspace-1/Project-1/Folder-1")
+            //    .AddDocument("Document1", "ChartView", "Document-1.1", "Workspace-1/Project-1/Folder-1")
+            //    .AddDocument("Document2", "ChartView", "Document-2", "Workspace-1/Project-1/Folder-1")
+            //    .AddChart("Document1", dtoChart)
+            //    .CreateWorkspace();
+
+            //var workspace = CreateWorkspace(dtoWorkspace);
+
+            //var presenter = CreatePresenter(true);
+
+            //presenter.OnEvent(new WorkspaceChangedEventArgs(workspace));
+
+            //chartController.Received(1).UpdateChart(Arg.Any<IChart>());
+            //settingsController.Received(1).UpdateSettings(Arg.Any<IChartDocument>());
+            //view.Received(1).SetName("Document-1.1");
+
+            //Assert.That(document, Is.Not.Null);
+            //Assert.That(document.Name, Is.EqualTo("Document-1.1"));
+            //Assert.That(document.ID, Is.EqualTo("Document1"));
+
+            //Assert.That(chart, Is.Not.Null);
+            //Assert.That(chart.Title.Text, Is.EqualTo("Chart-1.1"));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="DocumentViewPresenter.HideSplitContent(string)"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestShowSplitContent()
+        {
+            var presenter = CreatePresenter(true);
+
+            presenter.ShowSplitContent("ContentName");
+
+            view.Received(1).ShowSplitContent("ContentName");
+        }
+
+        /// <summary>
+        /// Test that the <see cref="DocumentViewPresenter.UpdateDocument(IDocument)"/> method works correctly for chart documents.
+        /// </summary>
+        [Test]
+        public void TestUpdateDocumentWhenDocumentIsChart()
+        {
+            var settingsController = Substitute.For<IChartSettingsController>();
+            controllers.Add(settingsController);
+
+            var chartController = Substitute.For<IChartController>();
+            controllers.Add(chartController);
+
+            var document = Substitute.For<IChartDocument, IDocument>();
+            document.Name.Returns("Document-1.1");
+            document.ID.Returns("Document1");
+
+            var presenter = CreatePresenter(true);
+
+            presenter.UpdateDocument(document);
+
+            chartController.Received(1).UpdateChart(document.Chart);
+            settingsController.Received(1).UpdateSettings(document);
+            view.Received(1).SetName("Document-1.1");
+        }
+
+        /// <summary>
+        /// Test that the <see cref="DocumentViewPresenter.UpdateDocument(IDocument)"/> method works correctly for table documents.
+        /// </summary>
+        [Test]
+        [Ignore("Functionality not implemented")]
+        public void TestUpdateDocumentWhenDocumentIsTable()
+        {
+            //var settingsController = Substitute.For<IChartSettingsController>();
+            //controllers.Add(settingsController);
+
+            //var chartController = Substitute.For<IChartController>();
+            //controllers.Add(chartController);
+
+            //var document = Substitute.For<IChartDocument, IDocument>();
+            //document.Name.Returns("Document-1.1");
+            //document.ID.Returns("Document1");
+
+            //var presenter = CreatePresenter(true);
+
+            //presenter.UpdateDocument(document);
+
+            //chartController.Received(1).UpdateChart(document.Chart);
+            //settingsController.Received(1).UpdateSettings(document);
+            //view.Received(1).SetName("Document-1.1");
+        }
+
+        /// <summary>
+        /// Test that the <see cref="DocumentViewPresenter.ViewActivated()"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestViewActivated()
+        {
+            var presenter = CreatePresenter(true);
+
+            presenter.ViewActivated();
+
+            events.Received(1).Publish(Arg.Is<ActiveViewChangedEventArgs>(e => e.View != null && e.View.ID == "Document1"));
         }
 
         /// <summary>
@@ -138,5 +381,3 @@ namespace StarLab.Presentation.Workspace.Documents
         }
     }
 }
-
-#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.

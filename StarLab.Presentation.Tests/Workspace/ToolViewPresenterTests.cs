@@ -1,9 +1,7 @@
 ﻿#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
 
-using Castle.MicroKernel.Registration;
-using NSubstitute.ExceptionExtensions;
+using StarLab.Application;
 using StarLab.Presentation.Configuration;
-using StarLab.Presentation.Workspace.WorkspaceExplorer;
 using Stratosoft.Commands;
 
 namespace StarLab.Presentation.Workspace
@@ -100,6 +98,20 @@ namespace StarLab.Presentation.Workspace
         }
 
         /// <summary>
+        /// Test that the <see cref="ToolViewPresenter.ChildControllers"/> property returns the correct value.
+        /// </summary>
+        [Test]
+        public void TestGetChildControllers()
+        {
+            var presenter = CreatePresenter(true);
+
+            var controllers = new List<IChildViewController>(presenter.ChildControllers);
+
+            Assert.That(controllers.Count, Is.EqualTo(1));
+            Assert.That(controllers[0], Is.SameAs(childController));
+        }
+
+        /// <summary>
         /// Test that the <see cref="ToolViewPresenter.Initialise(IApplicationController)"/> method works correctly.
         /// </summary>
         [Test]
@@ -122,6 +134,73 @@ namespace StarLab.Presentation.Workspace
             var presenter = CreatePresenter(true);
 
             var e = Assert.Throws<InvalidOperationException>(() => presenter.Initialise(controller));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="ToolViewPresenter.Show(IView)"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestShow()
+        {
+            var v = Substitute.For<IView>();
+
+            var presenter = CreatePresenter(true);
+
+            presenter.Show(v);
+
+            view.Received(1).Show(v);
+        }
+
+        /// <summary>
+        /// Test that the <see cref="ToolViewPresenter.ShowMessage(string, string, InteractionType, InteractionResponses)"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestShowMessage()
+        {
+            var presenter = CreatePresenter(true);
+
+            presenter.ShowMessage("Caption", "Message", InteractionType.Question, InteractionResponses.YesNoCancel);
+
+            view.Received(1).ShowMessage("Caption", "Message", InteractionType.Question, InteractionResponses.YesNoCancel);
+        }
+
+        /// <summary>
+        /// Test that the <see cref="ToolViewPresenter.ShowOpenFileDialog(string, string)"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestShowOpenFileDialog()
+        {
+            var presenter = CreatePresenter(true);
+
+            presenter.ShowOpenFileDialog("Title", "Filter");
+
+            view.Received(1).ShowOpenFileDialog("Title", "Filter");
+        }
+
+        /// <summary>
+        /// Test that the <see cref="ToolViewPresenter.ShowSaveFileDialog(string, string, string)"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestShowSaveFileDialog()
+        {
+            var presenter = CreatePresenter(true);
+
+            presenter.ShowSaveFileDialog("Title", "Filter", "Extension");
+
+            view.Received(1).ShowSaveFileDialog("Title", "Filter", "Extension");
+        }
+
+        /// <summary>
+        /// Test that the <see cref="ToolViewPresenter.ViewActivated()"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestViewActivated()
+        {
+            var presenter = CreatePresenter(true);
+
+            presenter.ViewActivated();
+
+            events.Received(1).Publish(Arg.Is<ActiveViewChangedEventArgs>(e => e.View != null && e.View.ID == "WorkspaceExplorerView"));
         }
 
         /// <summary>

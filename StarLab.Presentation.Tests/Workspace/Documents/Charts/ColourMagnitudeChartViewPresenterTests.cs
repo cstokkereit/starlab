@@ -1,6 +1,8 @@
 ﻿#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
 
+using StarLab.Application.Workspace.Documents.Charts;
 using StarLab.Presentation.Configuration;
+using StarLab.Tests;
 using Stratosoft.Commands;
 
 namespace StarLab.Presentation.Workspace.Documents.Charts
@@ -83,6 +85,17 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
+        /// Test that the <see cref="ColourMagnitudeChartViewPresenter.ID"/> property returns the correct value.
+        /// </summary>
+        [Test]
+        public void TestGetID()
+        {
+            var presenter = CreatePresenter(false);
+
+            Assert.That(presenter.ID, Is.EqualTo("ContentController(ColourMagnitudeDiagramView)"));
+        }
+
+        /// <summary>
         /// Test that the <see cref="ColourMagnitudeChartViewPresenter.Initialise(IApplicationController)"/> method works correctly.
         /// </summary>
         [Test]
@@ -103,7 +116,61 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         {
             var presenter = CreatePresenter(true);
 
-            var e = Assert.Throws<InvalidOperationException>(() => presenter.Initialise(controller));
+            Assert.Throws<InvalidOperationException>(() => presenter.Initialise(controller));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="ColourMagnitudeChartViewPresenter.UpdateChart(IChart)"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestUpdateChart()
+        {
+            var chart = Substitute.For<IChart>();
+
+            var presenter = CreatePresenter(true);
+
+            presenter.UpdateChart(chart);
+
+            view.Received(1).UpdateChart(chart);
+        }
+
+        /// <summary>
+        /// Test that the <see cref="ColourMagnitudeChartViewPresenter.UpdatePreview()"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestUpdatePreview()
+        {
+            var chart = Substitute.For<IChart>();
+
+            var presenter = CreatePresenter(true);
+
+            presenter.UpdateChart(chart);
+
+            view.ClearReceivedCalls();
+
+            presenter.UpdatePreview();
+
+            view.Received(1).UpdateChart(chart);
+        }
+
+        /// <summary>
+        /// Test that the <see cref="ColourMagnitudeChartViewPresenter.UpdatePreview(ChartDTO)"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestUpdatePreviewWithChartDto()
+        {
+            var chart = Substitute.For<IChart>();
+            chart.Title.Text.Returns("Chart-1");
+
+            var presenter = CreatePresenter(true);
+
+            presenter.UpdateChart(chart);
+
+            view.ClearReceivedCalls();
+
+            presenter.UpdatePreview(new ChartDtoBuilder().AddTitle("Chart-1.1").CreateChart());
+
+            view.Received(1).UpdateChart(Arg.Is<IChart>(c => c.Title.Text == "Chart-1.1"));
         }
 
         /// <summary>

@@ -128,6 +128,17 @@ namespace StarLab.Presentation.Workspace.Documents
         }
 
         /// <summary>
+        /// Test that the <see cref="AddDocumentViewPresenter.ID"/> property returns the correct value.
+        /// </summary>
+        [Test]
+        public void TestGetID()
+        {
+            var presenter = CreatePresenter(false);
+
+            Assert.That(presenter.ID, Is.EqualTo("ContentController(AddDocumentView)"));
+        }
+
+        /// <summary>
         /// Test that the <see cref="AddDocumentViewPresenter.Initialise(IApplicationController)"/> method works correctly.
         /// </summary>
         [Test]
@@ -172,6 +183,16 @@ namespace StarLab.Presentation.Workspace.Documents
             view.Received(1).AddDocumentType("Chart2", "  Chart-2", "ChartImage2");
         }
 
+        /// <summary>
+        /// Test that the <see cref="AddDocumentViewPresenter.Run(IWorkflowContext)"/> method throws an exception for an invalid context type.
+        /// </summary>
+        [Test]
+        public void TestRunThrowsExceptionForInvalidContextType()
+        {
+            var presenter = CreatePresenter(true);
+
+            Assert.Throws<ArgumentException>(() => presenter.Run(Substitute.For<IWorkflowContext>()));
+        }
 
         /// <summary>
         /// A factory method that creates a new instance of the <see cref="AddDocumentViewPresenter"/> class.
@@ -188,5 +209,3 @@ namespace StarLab.Presentation.Workspace.Documents
         }
     }
 }
-
-#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
