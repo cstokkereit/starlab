@@ -2,6 +2,7 @@
 using StarLab.Application;
 using StarLab.Application.Workspace;
 using StarLab.Presentation.Configuration;
+using StarLab.Presentation.Workspace.Documents;
 using StarLab.Shared;
 using Stratosoft.Commands;
 
@@ -224,10 +225,11 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <summary>
         /// Deletes the document with the specified ID.
         /// </summary>
-        /// <param name="id">The ID of the document to be deleted.</param>
-        public void DeleteDocument(string id)
+        /// <param name="key">The key that identifies the Document to be deleted.</param>
+        public void DeleteDocument(string key)
         {
-            useCaseService.DeleteDocument(workspace, id);
+            throw new NotImplementedException();
+            //useCaseService.DeleteDocument(workspace, key);
         }
 
         /// <summary>
@@ -316,7 +318,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="key">The node key.</param>
         public void OpenDocument(string key)
         {
-            AppController.ShowDocument(workspace.GetDocument(key));
+            AppController.ShowDocument(workspace.GetDocument(new DocumentID(key)));
         }
 
         /// <summary>
@@ -507,7 +509,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         {
             foreach (var document in workspace.Documents)
             {
-                View.AddDocumentNode(document.ID, document.Path, document.Name, images[NodeImages.ColourMagnitudeDiagram]);
+                View.AddDocumentNode(document.ID.ToString(), document.Path, document.Name, images[NodeImages.ColourMagnitudeDiagram]);
             }
         }
 
@@ -623,7 +625,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
                     View.FocusOnSelectedNode();
                 }
 
-                View.SelectNode(workspace.ActiveDocument.ID);
+                View.SelectNode(workspace.ActiveDocument.ID.ToString());
             }
         }
 

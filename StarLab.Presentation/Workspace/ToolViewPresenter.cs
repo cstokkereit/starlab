@@ -30,7 +30,7 @@ namespace StarLab.Presentation.Workspace
         {
             this.childController = childController ?? throw new ArgumentNullException(nameof(childController));
 
-            ID = Controllers.GetControllerID(view);
+            ID = new ControllerID(view);
 
             View.Attach(this);
 
@@ -53,7 +53,7 @@ namespace StarLab.Presentation.Workspace
         /// <summary>
         /// Gets the name of the controller.
         /// </summary>
-        public override string ID { get; }
+        public override ControllerID ID { get; }
 
         /// <summary>
         /// Gets or sets the current location of the view.

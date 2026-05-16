@@ -1,4 +1,5 @@
-﻿using StarLab.Presentation.Workspace.Documents;
+﻿using StarLab.Application;
+using StarLab.Presentation.Workspace.Documents;
 
 namespace StarLab.Presentation.Workspace
 {
@@ -71,18 +72,18 @@ namespace StarLab.Presentation.Workspace
         /// </summary>
         /// <param name="id">The ID of the required <see cref="IDocument"/>.</param>
         /// <returns>The <see cref="IDocument"/> with the specified ID.</returns>
-        public IDocument GetDocument(string id)
+        public IDocument GetDocument(DocumentID id)
         {
             throw new InvalidOperationException();
         }
 
         /// <summary>
-        /// Gets a <see cref="List{String}"/> containing the IDs of all documents in the workspace hierarchy.
+        /// Gets a <see cref="List{ID{IDocument}}"/> containing the IDs of all documents in the workspace hierarchy.
         /// </summary>
-        /// <returns>A <see cref="List{String}"/> of document IDs.</returns>
-        public List<string> GetDocumentIDs()
+        /// <returns>A <see cref="List{ID{IDocument}}"/> of document IDs.</returns>
+        public List<DocumentID> GetDocumentIDs()
         {
-            return new List<string>();
+            return new List<DocumentID>();
         }
 
         /// <summary>
@@ -110,7 +111,7 @@ namespace StarLab.Presentation.Workspace
         /// </summary>
         /// <param name="id">The ID of the required document.</param>
         /// <returns>true if the workspace contains a document with the specified ID; false otherwise.</returns>
-        public bool HasDocument(string id)
+        public bool HasDocument(DocumentID id)
         {
             return false;
         }
@@ -139,7 +140,7 @@ namespace StarLab.Presentation.Workspace
         /// Sets the active document to be the <see cref="IDocument"/> with the specified ID.
         /// </summary>
         /// <param name="id">The ID of the active <see cref="IDocument"/>.</param>
-        public void SetActiveDocument(string id)
+        public void SetActiveDocument(DocumentID id)
         {
             // Do Nothing
         }

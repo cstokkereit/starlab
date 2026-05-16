@@ -19,7 +19,7 @@ namespace StarLab.Presentation
         /// Deletes the <see cref="IView"/> with the specified ID.
         /// </summary>
         /// <param name="id">The ID of the <see cref="IView"/> to delete.</param>
-        void DeleteView(string id);
+        void DeleteView(ViewID id);
 
         /// <summary>
         /// Exits the application.
@@ -39,7 +39,7 @@ namespace StarLab.Presentation
         /// <typeparam name="TOutputPort">The type of output port required.</typeparam>
         /// <param name="id">The ID of the parent controller.</param>
         /// <returns>The specified output port.</returns>
-        TOutputPort GetOutputPort<TOutputPort>(string id);
+        TOutputPort GetOutputPort<TOutputPort>(ControllerID id);
 
         /// <summary>
         /// Gets the specified output port.
@@ -60,7 +60,7 @@ namespace StarLab.Presentation
         /// </summary>
         /// <param name="id">The ID of the required <see cref="IView"/>.</param>
         /// <returns>The specified <see cref="IView"/>.</returns>
-        IView GetView(string id);
+        IView GetView(ViewID id);
 
         /// <summary>
         /// Starts the application.

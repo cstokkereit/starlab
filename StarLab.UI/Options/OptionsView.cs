@@ -22,13 +22,14 @@ namespace StarLab.UI.Options
         {
             InitializeComponent();
 
-            Name = Views.Options;
+            ID = ViewIDs.Options;
+            Name = ViewNames.Options;
         }
 
         /// <summary>
         /// Gets the view ID.
         /// </summary>
-        public string ID => Name;
+        public ViewID ID { get; }
 
         /// <summary>
         /// Gets the panel that will contain the view.

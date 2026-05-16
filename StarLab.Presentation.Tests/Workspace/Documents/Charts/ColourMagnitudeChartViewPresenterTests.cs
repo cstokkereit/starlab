@@ -22,7 +22,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             base.SetUp();
 
             view = Substitute.For<IChartView>();
-            view.ID.Returns(Views.ColourMagnitudeDiagram);
+            view.ID.Returns(ViewIDs.ColourMagnitudeDiagram);
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
 
             Assert.That(presenter, Is.Not.Null);
 
-            Assert.That(presenter.ID, Is.EqualTo($"ContentController({Views.ColourMagnitudeDiagram})"));
+            Assert.That(presenter.ID.ToString(), Is.EqualTo("ColourMagnitudeDiagram"));
             view.Received().Attach(Arg.Is(presenter));
         }
 
@@ -92,7 +92,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         {
             var presenter = CreatePresenter(false);
 
-            Assert.That(presenter.ID, Is.EqualTo("ContentController(ColourMagnitudeDiagramView)"));
+            Assert.That(presenter.ID.ToString(), Is.EqualTo("ColourMagnitudeDiagram"));
         }
 
         /// <summary>
@@ -181,9 +181,9 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         private ColourMagnitudeChartViewPresenter CreatePresenter(bool initialise)
         {
             var presenter = new ColourMagnitudeChartViewPresenter(view, context, commands, services, events);
-
+            
             var parent = Substitute.For<IDocumentController>();
-            parent.ID.Returns("DocumentController(Test)");
+            //parent.ID.Returns("DocumentController(Test)");
 
             presenter.RegisterController(parent);
 

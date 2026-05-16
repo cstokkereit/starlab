@@ -22,6 +22,8 @@ namespace StarLab.Presentation
 
         private WorkspaceDTO workspace; // A workspace DTO that can be used in the unit tests.
 
+        private DocumentID documentID; // A document ID that can be used in the unit tests.
+
         /// <summary>
         /// Registers the dependencies with the IoC container and initialises the class level variables before each test.
         /// </summary>
@@ -29,17 +31,19 @@ namespace StarLab.Presentation
         {
             base.SetUp();
 
+            documentID = new DocumentID("19542B1A-36A5-494F-B6B0-CB562FA36CAB");
+
             view = Substitute.For<IApplicationView>();
-            view.ID.Returns("View1");
+            view.ID.Returns(ViewIDs.Application);
 
             var chart = new ChartDtoBuilder().CreateChart();
 
             workspace = new WorkspaceDtoBuilder(@"C:\Workspace-1")
                 .AddProject("Project-1")
                 .AddFolder("Workspace-1/Project-1/Folder-1")
-                .AddDocument("Document1", "ChartView", "Document-1", "Workspace-1/Project-1/Folder-1")
-                .AddDocument("Document2", "ChartView", "Document-2", "Workspace-1/Project-1/Folder-1")
-                .AddChart("Document1", chart)
+                .AddDocument("19542B1A-36A5-494F-B6B0-CB562FA36CAB", "ChartView", "Document-1", "Workspace-1/Project-1/Folder-1")
+                .AddDocument("19542B1A-36A5-494F-B6B0-CB562FA36CAC", "ChartView", "Document-2", "Workspace-1/Project-1/Folder-1")
+                .AddChart("19542B1A-36A5-494F-B6B0-CB562FA36CAB", chart)
                 .CreateWorkspace();
         }
 
@@ -305,32 +309,51 @@ namespace StarLab.Presentation
         {
             var dockable = Substitute.For<IDockableView>();
 
-            controller.GetView(Arg.Is("Document2")).Returns(dockable);
+            controller.GetView(Arg.Is(new ViewID("19542B1A-36A5-494F-B6B0-CB562FA36CAA"))).Returns(dockable);
 
             var presenter = CreatePresenter(true);
 
             presenter.UpdateWorkspace(workspace);
 
-            var view = presenter.CreateView("Document2");
+            var view = presenter.CreateView("19542B1A-36A5-494F-B6B0-CB562FA36CAA");
 
             Assert.That(view, Is.SameAs(dockable));
         }
 
         /// <summary>
-        /// Test that the <see cref="ApplicationViewPresenter.CreateView(string)"/> method returns the existing view when it already exists within the workspace hierarchy.
+        /// Test that the <see cref="ApplicationViewPresenter.CreateView(string)"/> method returns the existing dockable view when it already exists within the workspace hierarchy.
         /// </summary>
         [Test]
-        public void TestCreateViewWhenViewAlreadyExists()
+        public void TestCreateDockableViewWhenViewAlreadyExists()
         {
             var dockable = Substitute.For<IDockableView>();
 
-            controller.GetView(Arg.Is<IDocument>(d => d.ID == "Document1")).Returns(dockable);
+            controller.GetView(Arg.Any<ViewID>()).Returns(dockable);
 
             var presenter = CreatePresenter(true);
 
             presenter.UpdateWorkspace(workspace);
 
-            var view = presenter.CreateView("Document1");
+            var view = presenter.CreateView(ViewNames.WorkspaceExplorer);
+
+            Assert.That(view, Is.SameAs(dockable));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="ApplicationViewPresenter.CreateView(string)"/> method returns the existing document view when it already exists within the workspace hierarchy.
+        /// </summary>
+        [Test]
+        public void TestCreateDocumentViewWhenViewAlreadyExists()
+        {
+            var dockable = Substitute.For<IDockableView>();
+
+            controller.GetView(Arg.Is<IDocument>(d => d.ID == documentID)).Returns(dockable);
+
+            var presenter = CreatePresenter(true);
+
+            presenter.UpdateWorkspace(workspace);
+
+            var view = presenter.CreateView("19542B1A-36A5-494F-B6B0-CB562FA36CAB");
 
             Assert.That(view, Is.SameAs(dockable));
         }
@@ -368,7 +391,7 @@ namespace StarLab.Presentation
         {
             var presenter = CreatePresenter(false);
 
-            Assert.That(presenter.ID, Is.EqualTo("ApplicationViewController"));
+            Assert.That(presenter.ID.ToString(), Is.EqualTo("ApplicationWindow"));
         }
 
         /// <summary>
@@ -453,13 +476,13 @@ namespace StarLab.Presentation
         {
             var dockable = Substitute.For<IDockableView>();
 
-            controller.GetView(Arg.Is<IDocument>(d => d.ID == "Document1")).Returns(dockable);
+            controller.GetView(Arg.Is<IDocument>(d => d.ID == documentID)).Returns(dockable);
 
             var presenter = CreatePresenter(true);
 
             presenter.UpdateWorkspace(workspace);
 
-            presenter.OpenDocument("Document1");
+            presenter.OpenDocument("19542B1A-36A5-494F-B6B0-CB562FA36CAB");
 
             view.Received(1).Show(Arg.Is(dockable));
             events.Received(1).Publish(Arg.Any<WorkspaceChangedEventArgs>());
@@ -542,12 +565,19 @@ namespace StarLab.Presentation
 
             events.Publish(Arg.Do<ActiveDocumentChangedEventArgs>(e => document = e.Workspace.ActiveDocument));
 
-            presenter.SetActiveDocument("Document1");
+            var viewID = new ViewID(documentID);
+
+            var view = Substitute.For<IDocumentView>();
+            view.DocumentID.Returns(documentID);
+
+            controller.GetView(Arg.Is<ViewID>(id => id == viewID)).Returns(view);
+
+            presenter.SetActiveDocument(viewID);
 
             events.Received(1).Publish(Arg.Any<ActiveDocumentChangedEventArgs>());
 
             Assert.That(document, Is.Not.Null);
-            Assert.That(document.ID, Is.EqualTo("Document1"));
+            Assert.That(document.ID, Is.EqualTo(documentID));
         }
 
         /// <summary>
@@ -769,7 +799,12 @@ namespace StarLab.Presentation
         [Test]
         public void TestUpdateDocument()
         {
+            var documentID = new DocumentID("19542B1A-36A5-494F-B6B0-CB562FA36CAC");
+            var controllerID = new ControllerID(documentID);
+
             var dc = Substitute.For<IDocumentController>();
+            dc.DocumentID.Returns(documentID);
+            dc.ID.Returns(controllerID);
 
             IDocument? doc = null;
 
@@ -788,23 +823,23 @@ namespace StarLab.Presentation
             presenter.UpdateDocument(new WorkspaceDtoBuilder(@"C:\Workspace-1")
                 .AddProject("Project-1")
                 .AddFolder("Workspace-1/Project-1/Folder-1")
-                .AddDocument("Document1", "ChartView", "Document-1.1", "Workspace-1/Project-1/Folder-1")
-                .AddChart("Document1", new ChartDtoBuilder().CreateChart())
-                .CreateWorkspace(), "Document1");
+                .AddDocument("19542B1A-36A5-494F-B6B0-CB562FA36CAC", "ChartView", "Document-1.1", "Workspace-1/Project-1/Folder-1")
+                .AddChart("19542B1A-36A5-494F-B6B0-CB562FA36CAC", new ChartDtoBuilder().CreateChart())
+                .CreateWorkspace(), "19542B1A-36A5-494F-B6B0-CB562FA36CAC");
 
             dc.Received(1).UpdateDocument(Arg.Any<IDocument>());
             events.Received(1).Publish(Arg.Any<WorkspaceChangedEventArgs>());
 
             Assert.That(ws, Is.Not.Null);
 
-            var document = ws.GetDocument("Document1");
+            var document = ws.GetDocument(documentID);
 
             Assert.That(document, Is.Not.Null);
-            Assert.That(document.ID, Is.EqualTo("Document1"));
+            Assert.That(document.ID, Is.EqualTo(documentID));
             Assert.That(document.Name, Is.EqualTo("Document-1.1"));
 
             Assert.That(doc, Is.Not.Null);
-            Assert.That(doc.ID, Is.EqualTo("Document1"));
+            Assert.That(doc.ID, Is.EqualTo(documentID));
             Assert.That(doc.Name, Is.EqualTo("Document-1.1"));
         }
 
@@ -818,7 +853,7 @@ namespace StarLab.Presentation
 
             presenter.ViewActivated();
 
-            events.Received(1).Publish(Arg.Is<ActiveViewChangedEventArgs>(e => e.View != null && e.View.ID == "View1"));
+            events.Received(1).Publish(Arg.Is<ActiveViewChangedEventArgs>(e => e.View != null && e.View.ID == ViewIDs.Application));
         }
 
         /// <summary>

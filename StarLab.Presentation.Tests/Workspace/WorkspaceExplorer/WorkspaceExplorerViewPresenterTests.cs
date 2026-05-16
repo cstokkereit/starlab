@@ -27,7 +27,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
             workspace.FileName.Returns(@"C:\Test\Workspace");
 
             view = Substitute.For<IWorkspaceExplorerView>();
-            view.ID.Returns(Views.WorkspaceExplorer);
+            view.ID.Returns(ViewIDs.WorkspaceExplorer);
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
 
             Assert.That(presenter, Is.Not.Null);
 
-            Assert.That(presenter.ID, Is.EqualTo($"ContentController({Views.WorkspaceExplorer})"));
+            Assert.That(presenter.ID, Is.EqualTo(new ControllerID("WorkspaceExplorer")));
             view.Received().Attach(Arg.Is(presenter));
         }
 
@@ -264,6 +264,17 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
 
 
 
+        }
+
+        /// <summary>
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.ID"/> property returns the correct value.
+        /// </summary>
+        [Test]
+        public void TestGetID()
+        {
+            var presenter = CreatePresenter(false);
+
+            Assert.That(presenter.ID.ToString(), Is.EqualTo("WorkspaceExplorer"));
         }
 
         /// <summary>

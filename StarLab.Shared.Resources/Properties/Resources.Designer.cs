@@ -541,6 +541,15 @@ namespace StarLab.Shared.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The path cannot be an empty string..
+        /// </summary>
+        public static string InvalidPath {
+            get {
+                return ResourceManager.GetString("InvalidPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The presenter ID does not match the view ID. Expected: {0}.
         /// </summary>
         public static string InvalidPresenterID {

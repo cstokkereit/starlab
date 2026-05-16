@@ -11,7 +11,7 @@ namespace StarLab.Presentation.Workspace.Documents
 
         private readonly string view; // The name of the view config section.
 
-        private readonly string id; // The document ID.
+        private readonly DocumentID id; // The document ID.
 
         private readonly string name; // The document name.
 
@@ -29,10 +29,11 @@ namespace StarLab.Presentation.Workspace.Documents
             ArgumentException.ThrowIfNullOrEmpty(dto.View, nameof(dto.View));
             ArgumentException.ThrowIfNullOrEmpty(dto.ID, nameof(dto.ID));
 
+            id = new DocumentID(dto.ID);
+
             name = dto.Name;
             path = dto.Path;
             view = dto.View;
-            id = dto.ID;
         }
 
         /// <summary>
@@ -43,7 +44,7 @@ namespace StarLab.Presentation.Workspace.Documents
         /// <summary>
         /// Gets the document ID.
         /// </summary>
-        public string ID => id;
+        public DocumentID ID => id;
 
         /// <summary>
         /// Gets the document name.

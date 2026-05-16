@@ -12,6 +12,8 @@ using StarLab.UI.Workspace;
 using Stratosoft.Commands;
 using System.Diagnostics;
 
+using Constants = StarLab.Presentation.Constants;
+
 namespace StarLab.UI
 {
     // https://github.com/ScottPlot/ScottPlot/blob/main/src/ScottPlot5/ScottPlot5%20Demos/ScottPlot5%20WinForms%20Demo/Demos/DraggableAxisLines.cs
@@ -27,15 +29,17 @@ namespace StarLab.UI
 
         private readonly IWindsorContainer container; // Used to resolve dependencies at run time.
 
-        private readonly Dictionary<string, IViewController> controllers = new Dictionary<string, IViewController>(); // A dictionary containing the view controllers indexed by ID.
+        private readonly Dictionary<ControllerID, IViewController> controllers = new Dictionary<ControllerID, IViewController>(); // A dictionary containing the view controllers indexed by ID.
 
-        private readonly Dictionary<string, IView> views = new Dictionary<string, IView>(); // A dictionary containing the views indexed by ID.
+        private readonly Dictionary<ViewID, IView> views = new Dictionary<ViewID, IView>(); // A dictionary containing the views indexed by ID.
 
         private readonly IPresenterFactory presenterFactory; // A factory for creating presenters.
 
         private readonly IViewFactory viewFactory; // A factory for creating views.
 
-        private IView? view; // The ID of the currently active view.
+        private ControllerID application; // The ID of the application view controller.
+
+        private IView? view; // The currently active view.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="ApplicationController"/> class.
@@ -52,13 +56,15 @@ namespace StarLab.UI
             this.viewFactory = viewFactory ?? throw new ArgumentNullException(nameof(viewFactory));
             this.container = container ?? throw new ArgumentNullException(nameof(container));
 
+            ID = new ControllerID(Constants.ApplicationController);
+
             useCaseManager.Initialise(this);
         }
 
         /// <summary>
-        /// Gets the name of the controller.
+        /// Gets the controller ID.
         /// </summary>
-        public override string ID => Controllers.ApplicationController;
+        public override ControllerID ID { get; }
 
         /// <summary>
         /// Closes the view that represents the specified <see cref="IDocument"/>.
@@ -84,11 +90,11 @@ namespace StarLab.UI
         /// Deletes the <see cref="IView"/> with the specified ID.
         /// </summary>
         /// <param name="id">The ID of the <see cref="IView"/> to delete.</param>
-        public void DeleteView(string id)
+        public void DeleteView(ViewID id)
         {
             if (views.TryGetValue(id, out IView? view))
             {
-                var controllerId = Controllers.GetControllerID(view);
+                var controllerId = new ControllerID(view);
 
                 if (controllers[controllerId] is IDocumentController controller)
                 {
@@ -116,7 +122,7 @@ namespace StarLab.UI
         /// </summary>
         public void Exit()
         {
-            if (controllers[Controllers.ApplicationViewController] is IApplicationViewController controller)
+            if (controllers[new ControllerID(ViewIDs.Application)] is IApplicationViewController controller)
             {
                 controller.Exit();
             }
@@ -137,11 +143,9 @@ namespace StarLab.UI
         /// <returns>The specified <see cref="IDocumentController"/>.</returns>
         public IDocumentController GetController(IDocument document)
         {
-            if (views.TryGetValue(document.ID, out IView? view))
+            if (views.TryGetValue(new ViewID(document), out IView? view))
             {
-                var id = Controllers.GetControllerID(view);
-
-                if (controllers.TryGetValue(id, out IViewController? controller))
+                if (controllers.TryGetValue(new ControllerID(view), out IViewController? controller))
                 {
                     if (controller is IDocumentController required) return required;
                 }
@@ -149,8 +153,10 @@ namespace StarLab.UI
                 throw new KeyNotFoundException(string.Format(Resources.ControllerNotFound, document.ID));
             }
 
-            throw new KeyNotFoundException(string.Format(Resources.ViewNotFound, document.ID));
+            throw new KeyNotFoundException(string.Format(Resources.ViewNotFound, document.ID)); 
         }
+
+
 
         /// <summary>
         /// Gets the specified output port.
@@ -159,7 +165,7 @@ namespace StarLab.UI
         /// <param name="id">The ID of the parent controller.</param>
         /// <returns>The specified output port.</returns>
         /// <exception cref="Exception"></exception>
-        public TOutputPort GetOutputPort<TOutputPort>(string id)
+        public TOutputPort GetOutputPort<TOutputPort>(ControllerID id)
         {
             if (controllers.TryGetValue(id, out IViewController? parent))
             {
@@ -202,12 +208,14 @@ namespace StarLab.UI
         /// <returns>The required <see cref="IView">.</returns>
         public IView GetView(IDocument document)
         {
-            if (!views.ContainsKey(document.ID))
+            var id = new ViewID(document);
+
+            if (!views.ContainsKey(id))
             {
                 CreateDocumentView(document);
             }
 
-            return views[document.ID];
+            return views[id];
         }
 
         /// <summary>
@@ -215,7 +223,7 @@ namespace StarLab.UI
         /// </summary>
         /// <param name="id">The ID of the required <see cref="IView"/>.</param>
         /// <returns>The specified <see cref="IView"/>.</returns>
-        public IView GetView(string id) 
+        public IView GetView(ViewID id) 
         {
             if (views.TryGetValue(id, out IView? view))
             {
@@ -247,14 +255,16 @@ namespace StarLab.UI
         {
             foreach (var document in args.Workspace.Documents)
             {
-                var id = Controllers.GetControllerID(views[document.ID]);
+                var viewID = new ViewID(document);
+                var controllerId = new ControllerID(views[viewID]);
 
-                var controller = controllers[id];
-
+                var controller = controllers[controllerId];
+                
                 controller.Dispose();
 
-                controllers.Remove(id);
-                views.Remove(document.ID);
+                controllers.Remove(controllerId);
+
+                views.Remove(viewID);
             }
         }
 
@@ -271,7 +281,7 @@ namespace StarLab.UI
             {
                 var application = CreateApplicationView();
 
-                log.Debug(string.Format(LogEntries.ViewCreated, Views.Application));
+                log.Debug(string.Format(LogEntries.ViewCreated, ViewIDs.Application));
 
                 System.Windows.Forms.Application.Run(application);
             }
@@ -286,7 +296,7 @@ namespace StarLab.UI
         /// </summary>
         public void ShowAboutDialog()
         {
-            Show(Views.About);
+            Show(ViewIDs.About);
         }
 
         /// <summary>
@@ -296,13 +306,13 @@ namespace StarLab.UI
         /// <param name="path">The path to the folder.</param>
         public void ShowAddChartDialog(IWorkspace workspace, string path)
         {
-            var view = GetView(Views.AddDocument);
+            var view = GetView(ViewIDs.AddDocument);
 
             var controller = GetController(view);
 
             controller.Run(new AddDocumentWorkflowContext(path, DocumentTypes.Chart));
 
-            controllers[Controllers.ApplicationViewController].Show(view);
+            controllers[application].Show(view);
         }
 
         /// <summary>
@@ -311,12 +321,14 @@ namespace StarLab.UI
         /// <param name="document">The <see cref="IDocument"/> to show.</param>
         public void ShowDocument(IDocument document)
         {
-            if (!views.ContainsKey(document.ID))
+            var id = new ViewID(document);
+
+            if (!views.ContainsKey(id))
             {
                 CreateDocumentView(document);
             }
 
-            Show(document.ID);
+            Show(id);
         }
 
         /// <summary>
@@ -370,7 +382,7 @@ namespace StarLab.UI
         /// </summary>
         public void ShowOptionsDialog()
         {
-            Show(Views.Options);
+            Show(ViewIDs.Options);
         }
 
         /// <summary>
@@ -390,7 +402,7 @@ namespace StarLab.UI
         /// </summary>
         public void ShowWorkspaceExplorer()
         {
-            Show(Views.WorkspaceExplorer);
+            Show(ViewIDs.WorkspaceExplorer);
         }
 
         /// <summary>
@@ -418,7 +430,8 @@ namespace StarLab.UI
 
             if (presenter is IViewController controller)
             {
-                controllers.Add(controller.ID, controller);
+                application = controller.ID;
+                controllers.Add(application, controller);
                 controller.Initialise(this);
             }
 
@@ -465,7 +478,7 @@ namespace StarLab.UI
 
                 log.Debug(string.Format(LogEntries.ViewCreated, view.Name));
 
-                views.Add(view.Name, view);
+                views.Add(view.ID, view);
             }
             catch (Exception e)
             {
@@ -478,9 +491,9 @@ namespace StarLab.UI
         /// </summary>
         private void CreateDialogViews()
         {
-            CreateDialogView(Views.About, Resources.AboutStarLab);
-            CreateDialogView(Views.AddDocument, Resources.AddDocument);
-            CreateDialogView(Views.Options, Resources.Options);
+            CreateDialogView(ViewNames.About, Resources.AboutStarLab);
+            CreateDialogView(ViewNames.AddDocument, Resources.AddDocument);
+            CreateDialogView(ViewNames.Options, Resources.Options);
         }
 
         /// <summary>
@@ -540,7 +553,7 @@ namespace StarLab.UI
 
                 log.Debug(string.Format(LogEntries.ViewCreated, view.Name));
 
-                views.Add(view.Name, view);
+                views.Add(view.ID, view);
             }
             catch (Exception e)
             {
@@ -553,7 +566,7 @@ namespace StarLab.UI
         /// </summary>
         private void CreateToolViews()
         {
-            CreateToolView(Views.WorkspaceExplorer, Resources.WorkspaceExplorer);
+            CreateToolView(ViewNames.WorkspaceExplorer, Resources.WorkspaceExplorer);
         }
 
         /// <summary>
@@ -591,12 +604,12 @@ namespace StarLab.UI
         /// <returns>The <see cref="IViewController"/> that controls the active view.</returns>
         private IViewController GetActiveController()
         {
-            if (view != null && controllers.TryGetValue(Controllers.GetControllerID(view), out IViewController? controller))
+            if (view != null && controllers.TryGetValue(new ControllerID(view), out IViewController? controller))
             {
                 return controller;
             }
             
-            return controllers[Controllers.ApplicationViewController];
+            return controllers[new ControllerID(ViewIDs.Application)];
         }
 
         /// <summary>
@@ -607,7 +620,7 @@ namespace StarLab.UI
         /// <exception cref="KeyNotFoundException"></exception>
         private IDialogController GetController(IView view)
         {
-            var id = Controllers.GetControllerID(view);
+            var id = new ControllerID(view);
 
             if (controllers.TryGetValue(id, out IViewController? controller))
             {
@@ -622,11 +635,11 @@ namespace StarLab.UI
         /// </summary>
         /// <param name="id">The ID of the view to be shown.</param>
         /// <exception cref="ArgumentException"></exception>
-        private void Show(string id)
+        private void Show(ViewID id)
         {
             if (views.TryGetValue(id, out IView? view))
             {
-                controllers[Controllers.ApplicationViewController].Show(view);
+                controllers[application].Show(view);
             }
             else
             {

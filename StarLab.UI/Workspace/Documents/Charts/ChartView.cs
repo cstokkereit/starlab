@@ -39,7 +39,8 @@ namespace StarLab.UI.Workspace.Documents.Charts
 
             InitializeComponent();
 
-            Name = Views.Chart;
+            ID = ViewIDs.Chart;
+            Name = ViewNames.Chart;
 
 
 
@@ -58,7 +59,7 @@ namespace StarLab.UI.Workspace.Documents.Charts
         /// <summary>
         /// Gets the view ID.
         /// </summary>
-        public string ID => Name;
+        public ViewID ID { get; }
 
         /// <summary>
         /// Gets the preferred panel, if any, in which to display the view.

@@ -19,7 +19,7 @@
         /// <summary>
         /// Gets the controller ID.
         /// </summary>
-        public abstract string ID { get; }
+        public abstract ControllerID ID { get; }
 
         /// <summary>
         /// Releases all resources used by the presenter object.

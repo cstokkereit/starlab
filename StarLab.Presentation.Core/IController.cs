@@ -8,6 +8,6 @@
         /// <summary>
         /// Gets the controller ID.
         /// </summary>
-        string ID { get; }
+        ControllerID ID { get; }
     }
 }

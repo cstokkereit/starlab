@@ -13,11 +13,15 @@ namespace StarLab.Presentation.Workspace.Documents
     /// </summary>  
     public class DocumentViewPresenterTests : PresentationTests
     {
-        private List<IChildViewController> controllers = new List<IChildViewController>(); // TODO - Need to test init etc
+        private List<IChildViewController> controllers = new List<IChildViewController>(); // A list containing mocked child view controllers that can be used in the unit tests.
 
         private IDocumentView view; // A mock of the IDocumentView interface that can be used in the unit tests.
 
         private IDocument document; // A mock of the IDocument interface that can be used in the unit tests.
+
+        private DocumentID documentID; // A document ID that can be used in the unit tests.
+
+        private ViewID viewID; // A view ID that can be used in the unit tests.
 
         /// <summary>
         /// Registers the dependencies with the IoC container and initialises the class level variables before each test.
@@ -26,12 +30,17 @@ namespace StarLab.Presentation.Workspace.Documents
         {
             base.SetUp();
 
+            documentID = new DocumentID("19542B1A-36A5-494F-B6B0-CB562FA36CAB");
+
             document = Substitute.For<IDocument>();
             document.Name.Returns("Document-1");
-            document.ID.Returns("Document1");
+            document.ID.Returns(documentID);
+
+            viewID = new ViewID(document);
 
             view = Substitute.For<IDocumentView>();
-            view.ID.Returns("Document1");
+            view.DocumentID.Returns(documentID);
+            view.ID.Returns(viewID);
 
             controllers.Clear();
         }
@@ -60,7 +69,7 @@ namespace StarLab.Presentation.Workspace.Documents
 
             Assert.That(presenter, Is.Not.Null);
 
-            Assert.That(presenter.ID, Is.EqualTo($"DocumentController({view.ID})"));
+            Assert.That(presenter.ID.ToString(), Is.EqualTo("19542B1A-36A5-494F-B6B0-CB562FA36CAB"));
             view.Received().Attach(Arg.Is(presenter));
         }
 
@@ -156,6 +165,17 @@ namespace StarLab.Presentation.Workspace.Documents
         }
 
         /// <summary>
+        /// Test that the <see cref="DocumentViewPresenter.ID"/> property returns the correct value.
+        /// </summary>
+        [Test]
+        public void TestGetID()
+        {
+            var presenter = CreatePresenter(false);
+
+            Assert.That(presenter.ID.ToString(), Is.EqualTo("19542B1A-36A5-494F-B6B0-CB562FA36CAB"));
+        }
+
+        /// <summary>
         /// Test that the <see cref="DocumentViewPresenter.HideSplitContent(string)"/> method works correctly.
         /// </summary>
         [Test]    
@@ -217,9 +237,9 @@ namespace StarLab.Presentation.Workspace.Documents
             var dtoWorkspace = new WorkspaceDtoBuilder(@"C:\Workspace-1")
                 .AddProject("Project-1")
                 .AddFolder("Workspace-1/Project-1/Folder-1")
-                .AddDocument("Document1", "ChartView", "Document-1.1", "Workspace-1/Project-1/Folder-1")
-                .AddDocument("Document2", "ChartView", "Document-2", "Workspace-1/Project-1/Folder-1")
-                .AddChart("Document1", dtoChart)
+                .AddDocument("19542B1A-36A5-494F-B6B0-CB562FA36CAB", "ChartView", "Document-1.1", "Workspace-1/Project-1/Folder-1")
+                .AddDocument("19542B1A-36A5-494F-B6B0-CB562FA36CAC", "ChartView", "Document-2", "Workspace-1/Project-1/Folder-1")
+                .AddChart("19542B1A-36A5-494F-B6B0-CB562FA36CAB", dtoChart)
                 .CreateWorkspace();
 
             var workspace = CreateWorkspace(dtoWorkspace);
@@ -234,7 +254,7 @@ namespace StarLab.Presentation.Workspace.Documents
 
             Assert.That(document, Is.Not.Null);
             Assert.That(document.Name, Is.EqualTo("Document-1.1"));
-            Assert.That(document.ID, Is.EqualTo("Document1"));
+            Assert.That(document.ID.ToString, Is.EqualTo("19542B1A-36A5-494F-B6B0-CB562FA36CAB"));
 
             Assert.That(chart, Is.Not.Null);
             Assert.That(chart.Title.Text, Is.EqualTo("Chart-1.1"));
@@ -316,7 +336,7 @@ namespace StarLab.Presentation.Workspace.Documents
 
             var document = Substitute.For<IChartDocument, IDocument>();
             document.Name.Returns("Document-1.1");
-            document.ID.Returns("Document1");
+            document.ID.Returns(documentID);
 
             var presenter = CreatePresenter(true);
 
@@ -363,7 +383,7 @@ namespace StarLab.Presentation.Workspace.Documents
 
             presenter.ViewActivated();
 
-            events.Received(1).Publish(Arg.Is<ActiveViewChangedEventArgs>(e => e.View != null && e.View.ID == "Document1"));
+            events.Received(1).Publish(Arg.Is<ActiveViewChangedEventArgs>(e => e.View != null && e.View.ID == viewID));
         }
 
         /// <summary>

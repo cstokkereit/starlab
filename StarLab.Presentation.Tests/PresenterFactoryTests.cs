@@ -12,6 +12,18 @@ namespace StarLab.Presentation
     /// </summary>
     public class PresenterFactoryTests : PresentationTests
     {
+        private DocumentID documentID;
+
+        /// <summary>
+        /// Registers the dependencies with the IoC container and initialises the class level variables before each test.
+        /// </summary>
+        public override void SetUp()
+        {
+            base.SetUp();
+
+            documentID = new DocumentID("19542B1A-36A5-494F-B6B0-CB562FA36CAB");
+        }
+
         /// <summary>
         /// Test that the <see cref="PresenterFactory(IServiceRegistry, IFactoryConfiguration, IUserSettings, IEventAggregator)"/> constructor works correctly.
         /// </summary>
@@ -33,20 +45,20 @@ namespace StarLab.Presentation
             childConfiguration.Presenter.Returns("StarLab.Presentation.Help.AboutViewPresenter, StarLab.Presentation");
 
             var viewConfiguration = Substitute.For<IViewConfiguration>();
-            viewConfiguration.GetChildViewConfiguration(Views.About).Returns(childConfiguration);
+            viewConfiguration.GetChildViewConfiguration(ViewNames.About).Returns(childConfiguration);
 
-            configuration.GetConfiguration(Views.About).Returns(viewConfiguration);
+            configuration.GetConfiguration(ViewNames.About).Returns(viewConfiguration);
 
             var factory = new PresenterFactory(services, context, configuration, events);
             
             var view = Substitute.For<IAboutView>();
-            view.Name.Returns(Views.About);
-            view.ID.Returns(Views.About);
+            view.ID.Returns(ViewIDs.About);
+            view.Name.Returns(ViewNames.About);
 
             var presenter = factory.CreatePresenter(view, commands);
 
             Assert.That(presenter, Is.Not.Null);
-            Assert.That(presenter.ID, Is.EqualTo($"ContentController({Views.About})"));
+            Assert.That(presenter.ID.ToString(), Is.EqualTo("About"));
             view.Received().Attach(Arg.Is(presenter));
         }
 
@@ -60,16 +72,16 @@ namespace StarLab.Presentation
             childConfiguration.Presenter.Returns("StarLab.Presentation.Presenter, StarLab.Presentation");
 
             var viewConfiguration = Substitute.For<IViewConfiguration>();
-            viewConfiguration.GetChildViewConfiguration(Views.About).Returns(childConfiguration);
+            viewConfiguration.GetChildViewConfiguration(ViewNames.About).Returns(childConfiguration);
 
-            configuration.GetConfiguration(Views.About).Returns(viewConfiguration);
+            configuration.GetConfiguration(ViewNames.About).Returns(viewConfiguration);
 
             var factory = new PresenterFactory(services, context, configuration, events);
 
             var view = Substitute.For<IAboutView>();
-            view.Name.Returns(Views.About);
-            view.ID.Returns(Views.About);
-
+            view.ID.Returns(ViewIDs.About);
+            view.Name.Returns(ViewNames.About);
+            
             Assert.Throws<Exception>(() => factory.CreatePresenter(view, commands));
         }
 
@@ -82,14 +94,14 @@ namespace StarLab.Presentation
             var factory = new PresenterFactory(services, context, configuration, events);
 
             var view = Substitute.For<IDialogView>();
-            view.ID.Returns(Views.About);
+            view.ID.Returns(ViewIDs.About);
 
             var child = Substitute.For<IChildViewPresenter, IChildViewController>();
 
             var presenter = factory.CreatePresenter(view, child, commands);
 
             Assert.That(presenter, Is.Not.Null);
-            Assert.That(presenter.ID, Is.EqualTo($"{Views.About}Controller"));
+            Assert.That(presenter.ID.ToString(), Is.EqualTo("AboutDialog"));
             view.Received().Attach(Arg.Is(presenter));
         }
 
@@ -132,15 +144,16 @@ namespace StarLab.Presentation
             var factory = new PresenterFactory(services, context, configuration, events);
 
             var document = Substitute.For<IDocument>();
-            document.ID.Returns("Test");
+            document.ID.Returns(documentID);
 
             var view = Substitute.For<IDocumentView>();
-            view.ID.Returns("Test");
-
+            view.ID.Returns(new ViewID(documentID));
+            view.DocumentID.Returns(documentID);
+            
             var presenter = factory.CreatePresenter(document, view, [], commands);
 
             Assert.That(presenter, Is.Not.Null);
-            Assert.That(presenter.ID, Is.EqualTo("DocumentController(Test)"));
+            Assert.That(presenter.ID.ToString(), Is.EqualTo("19542B1A-36A5-494F-B6B0-CB562FA36CAB"));
             view.Received().Attach(Arg.Is(presenter));
         }
 
@@ -153,10 +166,11 @@ namespace StarLab.Presentation
             var factory = new PresenterFactory(services, context, configuration, events);
 
             var document = Substitute.For<IDocument>();
-            document.ID.Returns("Test");
+            document.ID.Returns(documentID);
 
             var view = Substitute.For<IDocumentView>();
-            view.ID.Returns("Test");
+            view.ID.Returns(ViewIDs.About);
+            view.DocumentID.Returns(documentID);
 
             var child = Substitute.For<IChildViewPresenter>();
 
@@ -172,14 +186,14 @@ namespace StarLab.Presentation
             var factory = new PresenterFactory(services, context, configuration, events);
 
             var view = Substitute.For<IDockableView>();
-            view.ID.Returns(Views.WorkspaceExplorer);
+            view.ID.Returns(ViewIDs.WorkspaceExplorer);
 
             var child = Substitute.For<IChildViewPresenter, IChildViewController>();
 
             var presenter = factory.CreatePresenter(view, child, commands);
 
             Assert.That(presenter, Is.Not.Null);
-            Assert.That(presenter.ID, Is.EqualTo($"{Views.WorkspaceExplorer}Controller"));
+            Assert.That(presenter.ID.ToString(), Is.EqualTo("WorkspaceExplorerTool"));
             view.Received().Attach(Arg.Is(presenter));
         }
 
@@ -207,12 +221,12 @@ namespace StarLab.Presentation
             var factory = new PresenterFactory(services, context, configuration, events);
 
             var view = Substitute.For<IApplicationView>();
-            view.ID.Returns(Views.Application);
+            view.ID.Returns(ViewIDs.Application);
 
             var presenter = factory.CreatePresenter(view, commands);
 
             Assert.That(presenter, Is.Not.Null);
-            Assert.That(presenter.ID, Is.EqualTo(Controllers.ApplicationViewController));
+            Assert.That(presenter.ID.ToString(), Is.EqualTo("ApplicationWindow"));
             view.Received().Attach(Arg.Is(presenter));
         }
 
@@ -242,33 +256,33 @@ namespace StarLab.Presentation
             childConfiguration2.Presenter.Returns("StarLab.Presentation.Workspace.Documents.Charts.ColourMagnitudeChartViewPresenter, StarLab.Presentation");
 
             var viewConfiguration = Substitute.For<IViewConfiguration>();
-            viewConfiguration.GetChildViewConfiguration(Views.ChartSettings).Returns(childConfiguration1);
-            viewConfiguration.GetChildViewConfiguration(Views.Chart).Returns(childConfiguration2);
+            viewConfiguration.GetChildViewConfiguration(ViewNames.ChartSettings).Returns(childConfiguration1);
+            viewConfiguration.GetChildViewConfiguration(ViewNames.Chart).Returns(childConfiguration2);
 
-            configuration.GetConfiguration(Views.ColourMagnitudeDiagram).Returns(viewConfiguration);
+            configuration.GetConfiguration(ViewNames.ColourMagnitudeDiagram).Returns(viewConfiguration);
 
             var factory = new PresenterFactory(services, context, configuration, events);
 
             var document = Substitute.For<IDocument>();
-            document.View.Returns(Views.ColourMagnitudeDiagram);
+            document.View.Returns(ViewNames.ColourMagnitudeDiagram);
 
             var child1 = Substitute.For<IChartSettingsView>();
-            child1.Name.Returns(Views.ChartSettings);
-            child1.ID.Returns(Views.ChartSettings);
-
+            child1.ID.Returns(new ViewID(ViewNames.ChartSettings));
+            child1.Name.Returns(ViewNames.ChartSettings);
+            
             var child2 = Substitute.For<IChartView>();
-            child2.Name.Returns(Views.Chart);
-            child2.ID.Returns(Views.Chart);
-
+            child2.ID.Returns(new ViewID(ViewNames.Chart));
+            child2.Name.Returns(ViewNames.Chart);
+            
             var presenters = new List<IChildViewPresenter>(factory.CreatePresenters(document, [child1, child2], commands));
 
             Assert.That(presenters, Has.Count.EqualTo(2));
 
             Assert.That(presenters[0], Is.Not.Null);
-            Assert.That(presenters[0].ID, Is.EqualTo($"ContentController({Views.ChartSettings})"));
+            Assert.That(presenters[0].ID.ToString(), Is.EqualTo("ChartSettings"));
 
             Assert.That(presenters[1], Is.Not.Null);
-            Assert.That(presenters[1].ID, Is.EqualTo($"ContentController({Views.Chart})"));
+            Assert.That(presenters[1].ID.ToString(), Is.EqualTo("Chart"));
         }
 
         /// <summary>
@@ -284,24 +298,22 @@ namespace StarLab.Presentation
             childConfiguration2.Presenter.Returns("StarLab.Presentation.Presenter, StarLab.Presentation");
 
             var viewConfiguration = Substitute.For<IViewConfiguration>();
-            viewConfiguration.GetChildViewConfiguration(Views.ChartSettings).Returns(childConfiguration1);
-            viewConfiguration.GetChildViewConfiguration(Views.Chart).Returns(childConfiguration2);
+            viewConfiguration.GetChildViewConfiguration(ViewNames.ChartSettings).Returns(childConfiguration1);
+            viewConfiguration.GetChildViewConfiguration(ViewNames.Chart).Returns(childConfiguration2);
 
-            configuration.GetConfiguration(Views.ColourMagnitudeDiagram).Returns(viewConfiguration);
+            configuration.GetConfiguration(ViewNames.ColourMagnitudeDiagram).Returns(viewConfiguration);
 
             var factory = new PresenterFactory(services, context, configuration, events);
 
             var document = Substitute.For<IDocument>();
-            document.View.Returns(Views.ColourMagnitudeDiagram);
+            document.View.Returns(ViewNames.ColourMagnitudeDiagram);
 
             var child1 = Substitute.For<IChartSettingsView>();
-            child1.Name.Returns(Views.ChartSettings);
-            child1.ID.Returns(Views.ChartSettings);
-
+            child1.ID.Returns(new ViewID(ViewNames.ChartSettings));
+            child1.Name.Returns(ViewNames.ChartSettings);
             var child2 = Substitute.For<IChartView>();
-            child2.Name.Returns(Views.Chart);
-            child2.ID.Returns(Views.Chart);
-
+            child2.ID.Returns(new ViewID(ViewNames.Chart));
+            child2.Name.Returns(ViewNames.Chart);
             Assert.Throws<Exception>(() => factory.CreatePresenters(document, [child1, child2], commands));
         }
     }

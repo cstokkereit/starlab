@@ -7,6 +7,8 @@ using StarLab.UI.Controls;
 using Stratosoft.Commands;
 using System.Diagnostics;
 
+using Constants = StarLab.Presentation.Constants;
+
 namespace StarLab.UI.Workspace.WorkspaceExplorer
 {
     /// <summary>
@@ -27,15 +29,14 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         {
             InitializeComponent();
 
-            ID = Views.WorkspaceExplorer;
-
-            Name = ID;
+            ID = ViewIDs.WorkspaceExplorer;
+            Name = ViewNames.WorkspaceExplorer;
         }
 
         /// <summary>
         /// Gets the view ID.
         /// </summary>
-        public string ID { get; }
+        public ViewID ID { get; }
 
         /// <summary>
         /// Gets the preferred panel, if any, in which to display the view.

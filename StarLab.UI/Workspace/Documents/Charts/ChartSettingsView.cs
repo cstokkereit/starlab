@@ -31,13 +31,14 @@ namespace StarLab.UI.Workspace.Documents.Charts
         {
             InitializeComponent();
 
-            Name = Views.ChartSettings;
+            ID = ViewIDs.ChartSettings;
+            Name = ViewNames.ChartSettings;
         }
 
         /// <summary>
         /// Gets the view ID.
         /// </summary>
-        public string ID => Name;
+        public ViewID ID { get; }
 
         /// <summary>
         /// Gets the panel that will contain the view.

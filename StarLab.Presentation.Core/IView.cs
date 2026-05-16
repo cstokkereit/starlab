@@ -1,4 +1,6 @@
-﻿namespace StarLab.Presentation
+﻿using StarLab.Application;
+
+namespace StarLab.Presentation
 {
     /// <summary>
     /// Defines the properties and methods that are common to all views.
@@ -8,7 +10,7 @@
         /// <summary>
         /// Gets the view ID.
         /// </summary>
-        string ID { get; }
+        ViewID ID { get; }
 
         /// <summary>
         /// Gets the view name.

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using StarLab.Application;
 using StarLab.Application.Workspace;
+using StarLab.Presentation.Workspace.Documents;
 
 namespace StarLab.Presentation.Workspace.WorkspaceExplorer
 {
@@ -75,14 +76,14 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="id">The ID of the document to be deleted.</param>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="ArgumentException"></exception>
-        public void DeleteDocument(IWorkspace workspace, string id)
+        public void DeleteDocument(IWorkspace workspace, DocumentID id)
         {
             ArgumentNullException.ThrowIfNull(workspace, nameof(workspace));
-            ArgumentException.ThrowIfNullOrEmpty(id, nameof(id));
+            ArgumentNullException.ThrowIfNull(id, nameof(id));
 
             var interactor = Factory.CreateDeleteDocumentUseCase(ApplicationController.GetOutputPort<IWorkspaceOutputPort>());
 
-            interactor.Execute(Mapper.Map<WorkspaceDTO>(workspace), id);
+            interactor.Execute(Mapper.Map<WorkspaceDTO>(workspace), id.ToString());
         }
 
         /// <summary>

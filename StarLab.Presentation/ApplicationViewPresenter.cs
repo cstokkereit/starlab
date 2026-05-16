@@ -3,6 +3,7 @@ using StarLab.Application;
 using StarLab.Application.Workspace;
 using StarLab.Presentation.Configuration;
 using StarLab.Presentation.Workspace;
+using StarLab.Presentation.Workspace.Documents;
 using StarLab.Shared;
 using Stratosoft.Commands;
 using System.ComponentModel;
@@ -43,6 +44,8 @@ namespace StarLab.Presentation
 
             useCaseService = services.GetService<IApplicationUseCaseService>();
 
+            ID = new ControllerID(view);
+
             View.Attach(this);
 
             workspace = new EmptyWorkspace();
@@ -62,9 +65,9 @@ namespace StarLab.Presentation
         public IEnumerable<IChildViewController> ChildControllers => [];
 
         /// <summary>
-        /// Gets the name of the controller.
+        /// Gets the controller ID.
         /// </summary>
-        public override string ID => Controllers.ApplicationViewController;
+        public override ControllerID ID { get; }
 
         /// <summary>
         /// Clears the active document.
@@ -134,13 +137,22 @@ namespace StarLab.Presentation
         {
             IView view;
 
-            if (workspace.HasDocument(id))
+            if (Guid.TryParse(id, out var _))
             {
-                view = AppController.GetView(workspace.GetDocument(id));
+                var documentId = new DocumentID(id);
+
+                if (workspace.HasDocument(documentId))
+                {
+                    view = AppController.GetView(workspace.GetDocument(documentId));
+                }
+                else
+                {
+                    view = AppController.GetView(new ViewID(documentId));
+                }
             }
             else
             {
-                view = AppController.GetView(id);
+                view = AppController.GetView(new ViewID(id));
             }
 
             return (IDockableView)view;
@@ -213,7 +225,7 @@ namespace StarLab.Presentation
         /// <param name="id">The ID of the document to be opened.</param>
         public void OpenDocument(string id)
         {
-            Show(AppController.GetView(workspace.GetDocument(id)));
+            Show(AppController.GetView(workspace.GetDocument(new DocumentID(id)))); // Required?
         }
 
         /// <summary>
@@ -239,14 +251,17 @@ namespace StarLab.Presentation
         }
 
         /// <summary>
-        /// Makes the document with the specified ID the active document.
+        /// Makes the document view with the specified ID the active view.
         /// </summary>
-        /// <param name="id">The ID of the document.</param>
-        public void SetActiveDocument(string id)
+        /// <param name="id">The ID of the document view.</param>
+        public void SetActiveDocument(ViewID id)
         {
-            workspace.SetActiveDocument(id);
+            if (AppController.GetView(id) is IDocumentView view)
+            {
+                workspace.SetActiveDocument(view.DocumentID);
 
-            Events.Publish(new ActiveDocumentChangedEventArgs(workspace));
+                Events.Publish(new ActiveDocumentChangedEventArgs(workspace));
+            }
         }
 
         /// <summary>
@@ -354,11 +369,13 @@ namespace StarLab.Presentation
         /// <param name="id">The ID of the document that was modified.</param>
         public void UpdateDocument(WorkspaceDTO dto, string id)
         {
-            workspace = new Workspace.Workspace(dto);
+            workspace = new Workspace.Workspace(dto); // TODO - Can this be split into two separate calls - one to update the workspace and one to update the document?
 
-            var document = workspace.GetDocument(id);
+            var documentId = new DocumentID(id);
 
-            var controller = AppController.GetController(workspace.GetDocument(id));
+            var document = workspace.GetDocument(documentId);
+
+            var controller = AppController.GetController(workspace.GetDocument(documentId));
 
             controller.UpdateDocument(document);
 
@@ -383,11 +400,11 @@ namespace StarLab.Presentation
             {
                 if (!idsNew.Contains(id))
                 {
-                    AppController.DeleteView(id);
+                    AppController.DeleteView(new ViewID(id));
                 }
             }
 
-            Events.Publish(new WorkspaceChangedEventArgs(workspace), true); // Event published synchronously to allow renaming of folder in WorkspaceExplorer. Could make this a more specific event type if necessary.
+            Events.Publish(new WorkspaceChangedEventArgs(workspace), true); // The event is published synchronously to allow renaming of the folder in WorkspaceExplorerView.
 
             if (!string.IsNullOrEmpty(dto.FileName) && !SessionContext.Settings.Workspace.Equals(dto.FileName))
             {
@@ -452,7 +469,7 @@ namespace StarLab.Presentation
             View.AddMenuItem(Constants.Help, StringResources.Help);
             //view.AddMenuItem(Constants.HELP, Constants.HELP_VIEW_HELP, Resources.ViewHelp, AppController.GetCommand(this, Constants.VIEW_HELP));
             View.AddMenuSeparator(Constants.Help);
-            View.AddMenuItem(Constants.Help, Constants.HelpAbout, StringResources.AboutStarLab, CreateCommand(Actions.Show + Views.About, AppController.ShowAboutDialog));
+            View.AddMenuItem(Constants.Help, Constants.HelpAbout, StringResources.AboutStarLab, CreateCommand(Actions.Show + ViewIDs.About, AppController.ShowAboutDialog));
         }
 
         /// <summary>
@@ -470,7 +487,7 @@ namespace StarLab.Presentation
         private void CreateToolsMenu()
         {
             View.AddMenuItem(Constants.Tools, StringResources.Tools);
-            View.AddMenuItem(Constants.Tools, Constants.ToolsOptions, StringResources.Options, ImageResources.Settings, CreateCommand(Actions.Show + Views.Options, AppController.ShowOptionsDialog));
+            View.AddMenuItem(Constants.Tools, Constants.ToolsOptions, StringResources.Options, ImageResources.Settings, CreateCommand(Actions.Show + ViewIDs.Options, AppController.ShowOptionsDialog));
         }
 
         /// <summary>
@@ -479,7 +496,7 @@ namespace StarLab.Presentation
         private void CreateViewMenu()
         {
             View.AddMenuItem(Constants.View, StringResources.View);
-            View.AddMenuItem(Constants.View, Constants.ViewWorkspaceExplorer, StringResources.WorkspaceExplorer, CreateCommand(Actions.Show + Views.WorkspaceExplorer, AppController.ShowWorkspaceExplorer));
+            View.AddMenuItem(Constants.View, Constants.ViewWorkspaceExplorer, StringResources.WorkspaceExplorer, CreateCommand(Actions.Show + ViewIDs.WorkspaceExplorer, AppController.ShowWorkspaceExplorer));
         }
 
         /// <summary>

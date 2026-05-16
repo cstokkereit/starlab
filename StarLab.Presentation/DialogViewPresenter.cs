@@ -15,7 +15,7 @@ namespace StarLab.Presentation
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(DialogViewPresenter)); // The logger that will be used for writing log messages.
 
-        private readonly IChildViewController childController;
+        private readonly IChildViewController childController; // The child controller.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="DialogViewPresenter"> class.
@@ -30,7 +30,7 @@ namespace StarLab.Presentation
         {
             this.childController = childController ?? throw new ArgumentNullException(nameof(childController));
 
-            ID = Controllers.GetControllerID(view);
+            ID = new ControllerID(view);
 
             View.Attach(this);
 
@@ -53,7 +53,7 @@ namespace StarLab.Presentation
         /// <summary>
         /// Gets the name of the controller.
         /// </summary>
-        public override string ID { get; }
+        public override ControllerID ID { get; }
 
         /// <summary>
         /// Closes the dialog box.

@@ -452,4 +452,7 @@ Please enter a valid name.</value>
   <data name="InvalidPresenterID" xml:space="preserve">
     <value>The presenter ID does not match the view ID. Expected: {0}</value>
   </data>
+  <data name="InvalidPath" xml:space="preserve">
+    <value>The path cannot be an empty string.</value>
+  </data>
 </root>

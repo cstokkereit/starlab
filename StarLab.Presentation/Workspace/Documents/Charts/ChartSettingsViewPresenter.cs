@@ -26,7 +26,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
 
         private IWorkspace? workspace; // The workspace that contains the chart.
 
-        private string documentId; // The ID of the document that contains the chart.
+        private DocumentID? documentId; // The ID of the document that contains the chart.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="ChartSettingsViewPresenter"> class.
@@ -46,8 +46,6 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             View.MinimumSize = new Size(600, 150);
 
             View.Attach(this);
-
-            documentId = string.Empty;
         }
 
         /// <summary>
@@ -64,7 +62,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// <param name="chart">The <see cref="IChartSettings"/> that specifies the state of the chart.</param>
         public void ApplyPreviewSettings(IChartSettings chart)
         {
-            useCaseService.UpdateChart(ParentController.ID, chart);
+            useCaseService.UpdateChart(ParentController.DocumentID, chart);
 
             this.chart = chart;
         }
@@ -74,7 +72,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// </summary>
         public void ApplySettings()
         {
-            if (string.IsNullOrEmpty(documentId)) throw new InvalidOperationException(string.Format(StringResources.VariableNotSet, StringResources.DocumentID.ToLower()));
+            if (documentId == null) throw new InvalidOperationException(string.Format(StringResources.VariableNotSet, StringResources.DocumentID.ToLower()));
             if (workspace == null) throw new InvalidOperationException(string.Format(StringResources.VariableNotSet, StringResources.Workspace.ToLower()));
             if (chart == null) throw new InvalidOperationException(string.Format(StringResources.VariableNotSet, StringResources.Chart.ToLower()));
             

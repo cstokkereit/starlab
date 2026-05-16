@@ -50,13 +50,20 @@ namespace StarLab.UI.Workspace.Documents
 
             SetName(document.Name);
 
-            ID = document.ID;
+            ID = new ViewID(document);
+
+            DocumentID = document.ID;
         }
+
+        /// <summary>
+        /// Gets the ID of the document that the view represents.
+        /// </summary>
+        public DocumentID DocumentID { get; }
 
         /// <summary>
         /// Gets the view ID.
         /// </summary>
-        public string ID { get; }
+        public ViewID ID { get; }
 
         /// <summary>
         /// Adds a button to the tool bar.
@@ -78,8 +85,11 @@ namespace StarLab.UI.Workspace.Documents
         {
             if (this.presenter != null) throw new InvalidOperationException(Resources.PresenterAlreadyAttached);
 
-            if (!presenter.ID.Contains(ID)) throw new InvalidOperationException(string.Format(Resources.InvalidPresenterID, Controllers.GetControllerID(this)));
-
+            if (presenter is IDocumentController controller)
+            { 
+                if (controller.DocumentID != DocumentID) throw new InvalidOperationException(string.Format(Resources.InvalidPresenterID, new ControllerID(this)));
+            }
+            
             this.presenter = (IDockableViewPresenter)presenter;
 
             log.Debug(string.Format(LogEntries.PresenterAttached, $"{presenter.GetType().Name}({ID}:{Name})"));
@@ -203,7 +213,7 @@ namespace StarLab.UI.Workspace.Documents
         /// <returns>The view ID.</returns>
         protected override string GetPersistString()
         {
-            return ID;
+            return ID.ToString();
         }
 
         /// <summary>

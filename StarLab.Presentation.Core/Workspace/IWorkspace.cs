@@ -1,4 +1,5 @@
-﻿using StarLab.Presentation.Workspace.Documents;
+﻿using StarLab.Application;
+using StarLab.Presentation.Workspace.Documents;
 
 namespace StarLab.Presentation.Workspace
 {
@@ -62,13 +63,13 @@ namespace StarLab.Presentation.Workspace
         /// </summary>
         /// <param name="id">The ID of the required <see cref="IDocument"/>.</param>
         /// <returns>The <see cref="IDocument"/> with the specified ID.</returns>
-        IDocument GetDocument(string id);
+        IDocument GetDocument(DocumentID id);
 
         /// <summary>
-        /// Gets a <see cref="List{String}"/> containing the IDs of all documents in the workspace hierarchy.
+        /// Gets a <see cref="List{ID{IDocument}}"/> containing the IDs of all documents in the workspace hierarchy.
         /// </summary>
-        /// <returns>A <see cref="List{String}"/> of document IDs.</returns>
-        List<string> GetDocumentIDs();
+        /// <returns>A <see cref="List{ID{IDocument}}"/> of document IDs.</returns>
+        List<DocumentID> GetDocumentIDs();
 
         /// <summary>
         /// Gets the <see cref="IFolder"/> with the specified key.
@@ -89,7 +90,7 @@ namespace StarLab.Presentation.Workspace
         /// </summary>
         /// <param name="id">The ID of the required document.</param>
         /// <returns>true if the workspace contains a document with the specified ID; false otherwise.</returns>
-        bool HasDocument(string id);
+        bool HasDocument(DocumentID id);
 
         /// <summary>
         /// Determines if the workspace contains the specified folder.
@@ -109,7 +110,7 @@ namespace StarLab.Presentation.Workspace
         /// Sets the active document to be the <see cref="IDocument"/> with the specified ID.
         /// </summary>
         /// <param name="id">The ID of the active <see cref="IDocument"/>.</param>
-        void SetActiveDocument(string id);
+        void SetActiveDocument(DocumentID id);
 
         /// <summary>
         /// Updates the workspace layout.

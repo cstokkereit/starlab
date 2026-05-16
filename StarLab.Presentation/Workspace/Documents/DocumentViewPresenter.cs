@@ -36,7 +36,7 @@ namespace StarLab.Presentation.Workspace.Documents
 
             ArgumentNullException.ThrowIfNull(controllers, nameof(controllers));
 
-            ID = Controllers.GetControllerID(view);
+            ID = new ControllerID(view);
 
             View.Attach(this);
 
@@ -63,9 +63,14 @@ namespace StarLab.Presentation.Workspace.Documents
         public IEnumerable<IChildViewController> ChildControllers => controllers;
 
         /// <summary>
+        /// Gets the document ID of the document that the view represents.
+        /// </summary>
+        public DocumentID DocumentID => document.ID;
+
+        /// <summary>
         /// Gets the controller ID.
         /// </summary>
-        public override string ID { get; }
+        public override ControllerID ID { get; }
 
         /// <summary>
         /// Gets or sets the current location of the view.

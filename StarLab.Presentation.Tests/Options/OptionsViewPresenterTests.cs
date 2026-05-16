@@ -1,7 +1,6 @@
 ﻿#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
 
 using StarLab.Presentation.Configuration;
-using StarLab.Presentation.Workspace.WorkspaceExplorer;
 using Stratosoft.Commands;
 
 namespace StarLab.Presentation.Options
@@ -21,7 +20,7 @@ namespace StarLab.Presentation.Options
             base.SetUp();
 
             view = Substitute.For<IOptionsView>();
-            view.ID.Returns(Views.Options);
+            view.ID.Returns(ViewIDs.Options);
         }
 
         /// <summary>
@@ -34,7 +33,7 @@ namespace StarLab.Presentation.Options
 
             Assert.That(presenter, Is.Not.Null);
 
-            Assert.That(presenter.ID, Is.EqualTo($"ContentController({Views.Options})"));
+            Assert.That(presenter.ID.ToString(), Is.EqualTo("Options"));
             view.Received().Attach(Arg.Is(presenter));
         }
 
@@ -91,7 +90,7 @@ namespace StarLab.Presentation.Options
         {
             var presenter = CreatePresenter(false);
 
-            Assert.That(presenter.ID, Is.EqualTo("ContentController(OptionsView)"));
+            Assert.That(presenter.ID.ToString(), Is.EqualTo("Options"));
         }
 
         /// <summary>
@@ -115,7 +114,7 @@ namespace StarLab.Presentation.Options
         {
             var presenter = CreatePresenter(true);
 
-            var e = Assert.Throws<InvalidOperationException>(() => presenter.Initialise(controller));
+            Assert.Throws<InvalidOperationException>(() => presenter.Initialise(controller));
         }
 
         /// <summary>

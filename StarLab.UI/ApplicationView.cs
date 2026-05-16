@@ -31,9 +31,10 @@ namespace StarLab.UI.Workspace
 
             InitializeComponent();
 
+            ID = ViewIDs.Application;
+            Name = ViewNames.Application;
             Text = text;
-            Name = ID;
-
+            
             dockPanel.Theme = new VS2015LightTheme();
 
             dockPanel.Theme.Extender.FloatWindowFactory = new FloatWindowFactory();
@@ -53,7 +54,7 @@ namespace StarLab.UI.Workspace
         /// <summary>
         /// Gets the view ID.
         /// </summary>
-        public string ID => Views.Application;
+        public ViewID ID { get; }
 
         /// <summary>
         /// Adds a menu item to the menu.

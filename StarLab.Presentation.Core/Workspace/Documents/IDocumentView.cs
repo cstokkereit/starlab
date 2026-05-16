@@ -1,10 +1,17 @@
-﻿namespace StarLab.Presentation.Workspace.Documents
+﻿using StarLab.Application;
+
+namespace StarLab.Presentation.Workspace.Documents
 {
     /// <summary>
     /// Defines the properties and methods used by an <see cref="IDockableViewPresenter"/> to control the behaviour of a document window.
     /// </summary>
     public interface IDocumentView : IDockableView, IToolbarManager
     {
+        /// <summary>
+        /// Gets the ID of the document that the view represents.
+        /// </summary>
+        DocumentID DocumentID { get; }
+
         /// <summary>
         /// Hides the specified split content.
         /// </summary>

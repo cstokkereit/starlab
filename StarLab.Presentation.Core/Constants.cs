@@ -10,6 +10,7 @@
         public const string AddFolder = "AddFolder";
         public const string AddProject = "AddProject";
         public const string AddTable = "AddTable";
+        public const string ApplicationController = "ApplicationController"; // TODO - Might need a ControllerIDs class
         public const string Axes = "Axes";
         public const string AxisX1 = "AxisX1";
         public const string AxisX2 = "AxisX2";
@@ -60,6 +61,7 @@
         public const int DefaultMajorTickLength = 4;
         public const int DefaultMinorTickLength = 2;
         public const string Delete = "Delete";
+        public const string Dialog = "Dialog";
         public const string DockBottom = "DockBottom";
         public const string DockLeft = "DockLeft";
         public const string DockRight = "DockRight";
@@ -89,8 +91,6 @@
         public const string HelpView = "HelpView";
         public const string HelpViewHelp = "HelpViewHelp";
 
-        public const string InvalidPathMessage = "The path cannot be an empty string.";
-
         public const string Label = "Label";
         public const string LabelX1 = $"{AxisX1}.{Label}";
         public const string LabelX2 = $"{AxisX2}.{Label}";
@@ -117,9 +117,10 @@
 
         public const string TickLabels = "TickLabels";
         public const string Title = "Title";
+        public const string Tool = "Tool";
         public const string Tools = "Tools";
         public const string ToolsOptions = "ToolsOptions";
-
+        
         public const string View = "View";
         public const string ViewWorkspaceExplorer = "ViewWorkspaceExplorer";
 

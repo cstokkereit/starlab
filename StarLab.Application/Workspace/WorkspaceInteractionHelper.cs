@@ -77,6 +77,27 @@ namespace StarLab.Application.Workspace
             return folders;
         }
 
+
+        /// <summary>
+        /// Executes the use case.
+        /// </summary>
+        /// <param name="folder">The <see cref="IFolder"/> that will contain the new document.</param>
+        /// <param name="dtoDocument">A <see cref="DocumentDTO"/> that defines the document being added.</param>
+        public static string GetDefaultName(IFolder folder, DocumentDTO dtoDocument)
+        {
+            var seed = "Chart"; // TODO
+
+            string name = seed;
+            int index = 2;
+
+            while (folder.ContainsDocument(name))
+            {
+                name = $"{seed} ({index++})";
+            };
+
+            return name;
+        }
+
         /// <summary>
         /// Gets all of the documents contained within the specified folders.
         /// </summary>

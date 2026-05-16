@@ -24,12 +24,16 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
 
         private IWorkspace workspace; // A mock of the IWorkspace interface that can be used in the unit tests.
 
+        private DocumentID documentID; // A DocumentID that can be used in the unit tests.
+
         /// <summary>
         /// Registers the dependencies with the IoC container and initialises the class level variables before each test.
         /// </summary>
         public override void SetUp()
         {
             base.SetUp();
+
+            documentID = new DocumentID("19542B1A-36A5-494F-B6B0-CB562FA36CAB");
 
             var title = Substitute.For<ILabel>();
             title.Text.Returns("Test Title");
@@ -42,10 +46,10 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
 
             document = Substitute.For<IChartDocument>();
             document.Chart.Returns(chart);
-            document.ID.Returns("Test Chart");
+            document.ID.Returns(documentID);
 
             view = Substitute.For<IChartSettingsView>();
-            view.ID.Returns("Test View");
+            view.ID.Returns(ViewIDs.ChartSettings);
 
             view.AddNode("Chart", Arg.Any<string>()).Returns("Chart");
             view.AddNode("Title", "Chart", Arg.Any<string>()).Returns("Chart/Title");
@@ -100,7 +104,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
 
             Assert.That(presenter, Is.Not.Null);
 
-            Assert.That(presenter.ID, Is.EqualTo($"ContentController(Test View)"));
+            Assert.That(presenter.ID.ToString(), Is.EqualTo("ChartSettings"));
             view.Received().Attach(Arg.Is(presenter));
         }
 
@@ -157,7 +161,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         {
             var interactor = Substitute.For<IUseCase<ChartDTO>>();
 
-            factory.CreateUpdateChartUseCase(Arg.Any<IChartOutputPort>()).Returns(interactor);
+            factory.ApplyChartSettingsUseCase(Arg.Any<IChartOutputPort>()).Returns(interactor);
 
             var presenter = CreatePresenter(true);
 
@@ -188,7 +192,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
 
             presenter.ApplySettings();
 
-            interactor.Received(1).Execute(Arg.Is<WorkspaceDTO>(ws => ws.FileName == @"C:\Test\Workspace"), "Test Chart", Arg.Is<ChartDTO>(chart => chart.Title.Text == "New Title"));
+            interactor.Received(1).Execute(Arg.Is<WorkspaceDTO>(ws => ws.FileName == @"C:\Test\Workspace"), documentID.ToString(), Arg.Is<ChartDTO>(chart => chart.Title.Text == "New Title"));
         }
 
         /// <summary>
@@ -201,9 +205,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
 
             var presenter = CreatePresenter(true);
 
-            var e = Assert.Throws<InvalidOperationException>(() => presenter.ApplySettings());
-
-            Assert.That(e.Message, Is.EqualTo("The document id has not been set."));
+            Assert.Throws<InvalidOperationException>(() => presenter.ApplySettings());
         }
 
         /// <summary>
@@ -217,9 +219,18 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             var presenter = CreatePresenter(true);
             presenter.UpdateSettings(document);
 
-            var e = Assert.Throws<InvalidOperationException>(() => presenter.ApplySettings());
+            Assert.Throws<InvalidOperationException>(() => presenter.ApplySettings());
+        }
 
-            Assert.That(e.Message, Is.EqualTo("The workspace has not been set."));
+        /// <summary>
+        /// Test that the <see cref="ChartSettingsViewPresenter.ID"/> property returns the correct value.
+        /// </summary>
+        [Test]
+        public void TestGetID()
+        {
+            var presenter = CreatePresenter(false);
+
+            Assert.That(presenter.ID.ToString(), Is.EqualTo("ChartSettings"));
         }
 
         /// <summary>
@@ -298,7 +309,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// Test that the <see cref="ChartSettingsViewPresenter.RevertSettings()"/> method works correctly.
         /// </summary>
         [Test]
-        public void TestRevertsSettings()
+        public void TestRevertSettings()
         {
             var chartController = Substitute.For<IChartController, IApplicationOutputPort>();
 
@@ -582,9 +593,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         {
             var presenter = CreatePresenter(true);
 
-            var e = Assert.Throws<InvalidOperationException>(() => presenter.ShowSettingsGroup("Chart"));
-
-            Assert.That(e.Message, Is.EqualTo("The chart has not been set."));
+            Assert.Throws<InvalidOperationException>(() => presenter.ShowSettingsGroup("Chart"));
         }
 
         /// <summary>
@@ -605,7 +614,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
 
             var document = Substitute.For<IChartDocument>();
             document.Chart.Returns(chart);
-            document.ID.Returns("Updated Test Chart");
+            document.ID.Returns(documentID);
             
             var presenter = CreatePresenter(true);
             presenter.OnEvent(new WorkspaceChangedEventArgs(workspace));
@@ -614,7 +623,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
 
             presenter.ApplySettings();
 
-            interactor.Received(1).Execute(Arg.Is<WorkspaceDTO>(workspace => workspace.FileName == @"C:\Test\Workspace"), "Updated Test Chart", Arg.Is<ChartDTO>(chart => chart.Title.Text == "Updated Test Title"));
+            interactor.Received(1).Execute(Arg.Is<WorkspaceDTO>(workspace => workspace.FileName == @"C:\Test\Workspace"), documentID.ToString(), Arg.Is<ChartDTO>(chart => chart.Title.Text == "Updated Test Title"));
         }
 
         /// <summary>
@@ -628,7 +637,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
 
             var parent = Substitute.For<IDocumentController>();
             parent.GetController<IChartController>().Returns(chartController);
-            parent.ID.Returns("DocumentController(Test)");
+            parent.ID.Returns(new ControllerID(ViewIDs.ChartSettings));
             
             presenter.RegisterController(parent);
 
@@ -647,7 +656,8 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             var presenter = new ChartSettingsViewPresenter(view, context, commands, services, events);
 
             var parent = Substitute.For<IDocumentController>();
-            parent.ID.Returns("DocumentController(Test)");
+            parent.ID.Returns(new ControllerID(documentID));
+            parent.DocumentID.Returns(documentID);
 
             presenter.RegisterController(parent);
 

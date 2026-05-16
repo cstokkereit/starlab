@@ -6,6 +6,11 @@
     public interface IDocumentController : IViewController, IToolbarManager
     {
         /// <summary>
+        /// Gets the document ID of the document that the view represents.
+        /// </summary>
+        DocumentID DocumentID { get; }
+
+        /// <summary>
         /// Closes the document window.
         /// </summary>
         void Close();

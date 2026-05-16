@@ -8,7 +8,7 @@ namespace StarLab.Presentation.Workspace
     /// </summary>
     internal class Workspace : IWorkspace
     {
-        private readonly Dictionary<string, IDocument> documents = new Dictionary<string, IDocument>(); // A dictionary containing the documents indexed by ID.
+        private readonly Dictionary<DocumentID, IDocument> documents = new Dictionary<DocumentID, IDocument>(); // A dictionary containing the documents indexed by ID.
 
         private readonly Dictionary<string, IProject> projects = new Dictionary<string, IProject>(); // A dictionary containing the projects indexed by key.
 
@@ -38,7 +38,13 @@ namespace StarLab.Presentation.Workspace
 
             CreateProjects(dto.Projects);
 
-            if (!string.IsNullOrEmpty(dto.ActiveDocument) && documents.ContainsKey(dto.ActiveDocument)) ActiveDocument = documents[dto.ActiveDocument];
+            if (!string.IsNullOrEmpty(dto.ActiveDocument))
+            {
+                if (documents.TryGetValue(new DocumentID(dto.ActiveDocument), out IDocument? document))
+                {
+                    ActiveDocument = document;
+                }
+            }
         }
 
         /// <summary>
@@ -111,7 +117,7 @@ namespace StarLab.Presentation.Workspace
         /// </summary>
         /// <param name="id">The ID of the required <see cref="IDocument"/>.</param>
         /// <returns>The <see cref="IDocument"/> with the specified ID.</returns>
-        public IDocument GetDocument(string id)
+        public IDocument GetDocument(DocumentID id)
         {
             return documents[id];
         }
@@ -120,9 +126,9 @@ namespace StarLab.Presentation.Workspace
         /// Gets a <see cref="List{String}"/> containing the IDs of all documents in the workspace hierarchy.
         /// </summary>
         /// <returns>A <see cref="List{String}"/> of document IDs.</returns>
-        public List<string> GetDocumentIDs()
+        public List<DocumentID> GetDocumentIDs()
         {
-            var ids = new List<string>();
+            var ids = new List<DocumentID>();
 
             foreach (var id in documents.Keys)
             {
@@ -157,7 +163,7 @@ namespace StarLab.Presentation.Workspace
         /// </summary>
         /// <param name="id">The ID of the required document.</param>
         /// <returns>true if the workspace contains a document with the specified ID; false otherwise.</returns>
-        public bool HasDocument(string id)
+        public bool HasDocument(DocumentID id)
         {
             return documents.ContainsKey(id);
         }
@@ -186,7 +192,7 @@ namespace StarLab.Presentation.Workspace
         /// Sets the active document to be the <see cref="IDocument"/> with the specified ID.
         /// </summary>
         /// <param name="id">The ID of the active <see cref="IDocument"/>.</param>
-        public void SetActiveDocument(string id)
+        public void SetActiveDocument(DocumentID id)
         {
             if (documents.ContainsKey(id)) ActiveDocument = documents[id];
         }

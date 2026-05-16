@@ -23,13 +23,14 @@ namespace StarLab.UI.Workspace.Documents
         {
             InitializeComponent();
 
-            Name = Views.AddDocument;
+            ID = ViewIDs.AddDocument;
+            Name = ViewNames.AddDocument;
         }
 
         /// <summary>
         /// Gets the view ID.
         /// </summary>
-        public string ID => Name;
+        public ViewID ID { get; }
 
         /// <summary>
         /// Gets the preferred panel, if any, in which to display the view.

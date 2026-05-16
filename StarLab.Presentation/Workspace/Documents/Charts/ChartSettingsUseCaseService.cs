@@ -21,14 +21,14 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// <summary>
         /// Executes the UpdateChart use case.
         /// </summary>
-        /// <param name="id">The ID of the document that contains the chart.</param>
+        /// <param name="id">The ID of the chart view controller.</param>
         /// <param name="chart">A <see cref="IChartSettings"/> that specifies the current state of the chart.</param>
         /// <exception cref="ArgumentNullException"></exception>
-        public void UpdateChart(string id, IChartSettings chart)
+        public void UpdateChart(DocumentID id, IChartSettings chart)
         {
             ArgumentNullException.ThrowIfNull(chart, nameof(chart));
 
-            var interactor = Factory.CreateUpdateChartUseCase(ApplicationController.GetOutputPort<IChartOutputPort>(id));
+            var interactor = Factory.ApplyChartSettingsUseCase(ApplicationController.GetOutputPort<IChartOutputPort>(new ControllerID(id)));
 
             var dto = Mapper.Map<ChartDTO>(chart);
 
@@ -39,19 +39,18 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// Executes the UpdateDocument use case.
         /// </summary>
         /// <param name="workspace">A <see cref="IWorkspace"/> that specifies the current state of the workspace.</param>
-        /// <param name="id">The ID of the document that contains the chart.</param>
+        /// <param name="id">The ID of the chart view controller.</param>
         /// <param name="chart">A <see cref="IChartSettings"/> that specifies the current state of the chart.</param>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="ArgumentException"></exception>
-        public void UpdateDocument(IWorkspace workspace, string id, IChartSettings chart)
+        public void UpdateDocument(IWorkspace workspace, DocumentID id, IChartSettings chart)
         {
             ArgumentNullException.ThrowIfNull(workspace, nameof(workspace));
             ArgumentNullException.ThrowIfNull(chart, nameof(chart));
-            ArgumentException.ThrowIfNullOrEmpty(id, nameof(id));
 
             var interactor = Factory.CreateUpdateDocumentUseCase(ApplicationController.GetOutputPort<IApplicationOutputPort>());
 
-            interactor.Execute(Mapper.Map<WorkspaceDTO>(workspace), id, Mapper.Map<ChartDTO>(chart));
+            interactor.Execute(Mapper.Map<WorkspaceDTO>(workspace), id.ToString(), Mapper.Map<ChartDTO>(chart));
         }
     }
 }

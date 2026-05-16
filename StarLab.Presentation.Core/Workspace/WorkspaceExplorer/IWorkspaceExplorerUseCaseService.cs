@@ -1,10 +1,15 @@
-﻿namespace StarLab.Presentation.Workspace.WorkspaceExplorer
+﻿using StarLab.Presentation.Workspace.Documents;
+
+namespace StarLab.Presentation.Workspace.WorkspaceExplorer
 {
     /// <summary>
     ///  Defines the methods required to execute the use cases that implement the workspace explorer functionality.
     /// </summary>
     public interface IWorkspaceExplorerUseCaseService
     {
+        // TODO - Change key to path for folder and DocumentID for documents. May need to overload some methods to support both.
+
+
         /// <summary>
         /// Executes the AddFolder use case.
         /// </summary>
@@ -31,7 +36,7 @@
         /// </summary>
         /// <param name="workspace">The <see cref="IWorkspace"/> being modified.</param>
         /// <param name="id">The ID of the document to be deleted.</param>
-        void DeleteDocument(IWorkspace workspace, string id);
+        void DeleteDocument(IWorkspace workspace, DocumentID id);
 
         /// <summary>
         /// Executes the DeleteFolder use case.

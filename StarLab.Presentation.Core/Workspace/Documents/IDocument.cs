@@ -1,4 +1,5 @@
-﻿using StarLab.Presentation.Workspace.Documents.Charts;
+﻿using StarLab.Application;
+using StarLab.Presentation.Workspace.Documents.Charts;
 
 namespace StarLab.Presentation.Workspace.Documents
 {
@@ -15,7 +16,7 @@ namespace StarLab.Presentation.Workspace.Documents
         /// <summary>
         /// Gets the document ID.
         /// </summary>
-        string ID { get; }
+        DocumentID ID { get; }
 
         /// <summary>
         /// Gets the document name.

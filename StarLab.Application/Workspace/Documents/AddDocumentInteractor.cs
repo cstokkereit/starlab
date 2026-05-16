@@ -31,7 +31,7 @@ namespace StarLab.Application.Workspace.Documents
 
             if (string.IsNullOrEmpty(dtoDocument.Name))
             {
-                dtoDocument.Name = ""; // WorkspaceInteractionHelper.GetDefaultName(dtoDocument.View);
+                dtoDocument.Name = WorkspaceInteractionHelper.GetDefaultName(workspace.GetFolder(dtoDocument.Path), dtoDocument);
             }
 
             if (WorkspaceInteractionHelper.IsValid(dtoDocument.Name))
@@ -55,7 +55,6 @@ namespace StarLab.Application.Workspace.Documents
             }
             else
             {
-                // TODO if the name is an empty string just create Chart-X or something rather than throw an exception.
                 OutputPort.ShowMessage(Resources.StarLab, WorkspaceInteractionHelper.CreateInvalidNameMessage(dtoDocument.Name, Resources.Document), InteractionType.Error, InteractionResponses.OK);
             }
         }

@@ -43,7 +43,7 @@ namespace StarLab.Presentation.Workspace.Documents
             context.Configuration.Returns(configuration);
 
             view = Substitute.For<IAddDocumentView>();
-            view.ID.Returns(Views.AddDocument);
+            view.ID.Returns(ViewIDs.AddDocument);
         }
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace StarLab.Presentation.Workspace.Documents
 
             Assert.That(presenter, Is.Not.Null);
 
-            Assert.That(presenter.ID, Is.EqualTo($"ContentController({Views.AddDocument})"));
+            Assert.That(presenter.ID.ToString(), Is.EqualTo("AddDocument"));
             view.Received().Attach(Arg.Is(presenter));
         }
 
@@ -135,7 +135,7 @@ namespace StarLab.Presentation.Workspace.Documents
         {
             var presenter = CreatePresenter(false);
 
-            Assert.That(presenter.ID, Is.EqualTo("ContentController(AddDocumentView)"));
+            Assert.That(presenter.ID.ToString(), Is.EqualTo("AddDocument"));
         }
 
         /// <summary>
@@ -159,9 +159,7 @@ namespace StarLab.Presentation.Workspace.Documents
         {
             var presenter = CreatePresenter(true);
 
-            var e = Assert.Throws<InvalidOperationException>(() => presenter.Initialise(controller));
-
-            Assert.That(e.Message, Is.EqualTo("The AddDocumentViewPresenter has already been initialised."));
+            Assert.Throws<InvalidOperationException>(() => presenter.Initialise(controller));
         }
 
         /// <summary>

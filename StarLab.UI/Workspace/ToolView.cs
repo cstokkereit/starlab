@@ -48,15 +48,16 @@ namespace StarLab.UI.Workspace
 
             this.childView = childView;
 
+            ID = new ViewID(name);
+
             Name = name;
             Text = text;
-            ID = name;
         }
 
         /// <summary>
         /// Gets the view ID.
         /// </summary>
-        public string ID { get; }
+        public ViewID ID { get; }
 
         /// <summary>
         /// Attaches the <see cref="IPresenter"/> that controls the view.

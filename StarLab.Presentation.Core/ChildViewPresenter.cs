@@ -26,13 +26,13 @@ namespace StarLab.Presentation
         public ChildViewPresenter(TView view, ISessionContext context, ICommandManager commands, IEventAggregator events)
             : base(view, context, commands, events) 
         {
-            ID = Controllers.GetControllerID(view);
+            ID = new ControllerID(view);
         }
 
         /// <summary>
         /// Gets the controller ID.
         /// </summary>
-        public override string ID { get; }
+        public override ControllerID ID { get; }
 
         /// <summary>
         /// Registers the parent <see cref="IViewController"/> with the <see cref="ChildViewPresenter{TView, TParent}"/>.

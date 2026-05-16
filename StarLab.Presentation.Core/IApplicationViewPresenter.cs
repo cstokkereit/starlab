@@ -21,10 +21,10 @@ namespace StarLab.Presentation
         IDockableView? CreateView(string id);
 
         /// <summary>
-        /// Makes the document with the specified ID the active document.
+        /// Makes the document view with the specified ID the active view.
         /// </summary>
-        /// <param name="id">The ID of the document.</param>
-        void SetActiveDocument(string id);
+        /// <param name="id">The ID of the document view.</param>
+        void SetActiveDocument(ViewID id);
 
         /// <summary>
         /// Notifies the presenter that the view has been activated.

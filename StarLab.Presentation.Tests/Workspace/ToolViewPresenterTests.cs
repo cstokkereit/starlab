@@ -25,7 +25,7 @@ namespace StarLab.Presentation.Workspace
             childController = Substitute.For<IChildViewController>();
 
             view = Substitute.For<IDockableView>();
-            view.ID.Returns(Views.WorkspaceExplorer);
+            view.ID.Returns(ViewIDs.WorkspaceExplorer);
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace StarLab.Presentation.Workspace
 
             Assert.That(presenter, Is.Not.Null);
 
-            Assert.That(presenter.ID, Is.EqualTo($"{Views.WorkspaceExplorer}Controller"));
+            Assert.That(presenter.ID.ToString(), Is.EqualTo("WorkspaceExplorerTool"));
             view.Received().Attach(Arg.Is(presenter));
         }
 
@@ -109,6 +109,17 @@ namespace StarLab.Presentation.Workspace
 
             Assert.That(controllers.Count, Is.EqualTo(1));
             Assert.That(controllers[0], Is.SameAs(childController));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="ToolViewPresenter.ID"/> property returns the correct value.
+        /// </summary>
+        [Test]
+        public void TestGetID()
+        {
+            var presenter = CreatePresenter(false);
+
+            Assert.That(presenter.ID.ToString(), Is.EqualTo("WorkspaceExplorerTool"));
         }
 
         /// <summary>
@@ -200,7 +211,7 @@ namespace StarLab.Presentation.Workspace
 
             presenter.ViewActivated();
 
-            events.Received(1).Publish(Arg.Is<ActiveViewChangedEventArgs>(e => e.View != null && e.View.ID == "WorkspaceExplorerView"));
+            events.Received(1).Publish(Arg.Is<ActiveViewChangedEventArgs>(e => e.View != null && e.View.ID == ViewIDs.WorkspaceExplorer));
         }
 
         /// <summary>

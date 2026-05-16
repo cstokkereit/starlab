@@ -20,7 +20,7 @@
         /// <summary>
         /// Deletes the document with the specified ID.
         /// </summary>
-        /// <param name="id">The ID of the document to be deleted.</param>
+        /// <param name="id">The key that identifies the document to be deleted.</param>
         void DeleteDocument(string id);
 
         /// <summary>
@@ -44,8 +44,8 @@
         /// <summary>
         /// Opens the specified document.
         /// </summary>
-        /// <param name="id">The ID of the document to open.</param>
-        void OpenDocument(string id);
+        /// <param name="id">The key that identifies the document to open.</param>
+        void OpenDocument(string key);
 
         /// <summary>
         /// Selects node in the workspace hierarchy that corresponds to the active document.

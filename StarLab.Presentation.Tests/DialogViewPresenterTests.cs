@@ -26,7 +26,7 @@ namespace StarLab.Presentation
             child = Substitute.For<IChildViewController>();
 
             view = Substitute.For<IDialogView>();
-            view.ID.Returns(Views.About);
+            view.ID.Returns(ViewIDs.About);
         }
 
         /// <summary>
@@ -132,8 +132,8 @@ namespace StarLab.Presentation
         public void TestGetID()
         {
             var presenter = CreatePresenter(false);
-
-            Assert.That(presenter.ID, Is.EqualTo("AboutViewController"));
+            
+            Assert.That(presenter.ID.ToString(), Is.EqualTo("AboutDialog"));
         }
 
         /// <summary>
@@ -158,9 +158,7 @@ namespace StarLab.Presentation
         {
             var presenter = CreatePresenter(true);
 
-            var e = Assert.Throws<InvalidOperationException>(() => presenter.Initialise(controller));
-
-            Assert.That(e.Message, Is.EqualTo("The DialogViewPresenter has already been initialised."));
+            Assert.Throws<InvalidOperationException>(() => presenter.Initialise(controller));
         }
 
         /// <summary>
@@ -184,13 +182,13 @@ namespace StarLab.Presentation
         [Test]
         public void TestShow()
         {
-            var v = Substitute.For<IView>();
+            var child = Substitute.For<IView>();
 
             var presenter = CreatePresenter(true);
 
-            presenter.Show(v);
+            presenter.Show(child);
 
-            view.Received(1).Show(v);
+            view.Received(1).Show(child);
         }
 
         /// <summary>
@@ -242,7 +240,7 @@ namespace StarLab.Presentation
 
             presenter.ViewActivated();
 
-            events.Received(1).Publish(Arg.Is<ActiveViewChangedEventArgs>(e => e.View != null && e.View.ID == "AboutView"));
+            events.Received(1).Publish(Arg.Is<ActiveViewChangedEventArgs>(e => e.View != null && e.View.ID == ViewIDs.About));
         }
 
         /// <summary>

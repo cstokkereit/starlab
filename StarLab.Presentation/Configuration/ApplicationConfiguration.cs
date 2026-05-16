@@ -27,8 +27,8 @@ namespace StarLab.Presentation.Configuration
         /// </summary>
         private void LoadDocumentTypes()
         {
-            documentDefinitions.Add(new DocumentDefinition("ColourMagnitudeDiagram", "Colour-Magnitude Diagram", "", DocumentTypes.Chart, "ColourMagnitudeDiagram32X32", "ColourMagnitudeDiagramView"));
-            documentDefinitions.Add(new DocumentDefinition("ColourColourDiagram", "Colour-Colour Diagram", "", DocumentTypes.Chart, "ColourColourDiagram32X32", "ColourColourDiagramView"));
+            documentDefinitions.Add(new DocumentDefinition("ColourMagnitudeDiagram", "Colour-Magnitude Diagram", "", DocumentTypes.Chart, "ColourMagnitudeDiagram32X32", "ColourMagnitudeDiagram"));
+            documentDefinitions.Add(new DocumentDefinition("ColourColourDiagram", "Colour-Colour Diagram", "", DocumentTypes.Chart, "ColourColourDiagram32X32", "ColourColourDiagram"));
         }
     }
 }

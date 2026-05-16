@@ -23,8 +23,8 @@ namespace StarLab.Application
         /// Updates the state of the workspace represented by the <see cref="WorkspaceDTO"/> provided.
         /// </summary>
         /// <param name="dto">The <see cref="WorkspaceDTO"/> that contains the updated workspace state.</param>
-        /// <param name="documentId">The ID of the document that was modified.</param>
-        void UpdateDocument(WorkspaceDTO dto, string documentId);
+        /// <param name="id">The ID of the document that was modified.</param>
+        void UpdateDocument(WorkspaceDTO dto, string id);
 
         /// <summary>
         /// Updates the state of the workspace represented by the <see cref="WorkspaceDTO"/> provided.

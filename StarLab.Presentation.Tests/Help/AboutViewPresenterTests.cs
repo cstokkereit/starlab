@@ -20,7 +20,7 @@ namespace StarLab.Presentation.Help
             base.SetUp();
 
             view = Substitute.For<IAboutView>();
-            view.ID.Returns(Views.About);
+            view.ID.Returns(ViewIDs.About);
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace StarLab.Presentation.Help
 
             Assert.That(presenter, Is.Not.Null);
 
-            Assert.That(presenter.ID, Is.EqualTo($"ContentController({Views.About})"));
+            Assert.That(presenter.ID.ToString(), Is.EqualTo("About"));
             view.Received().Attach(Arg.Is(presenter));
         }
 
@@ -90,7 +90,7 @@ namespace StarLab.Presentation.Help
         {
             var presenter = CreatePresenter(false);
 
-            Assert.That(presenter.ID, Is.EqualTo("ContentController(AboutView)"));
+            Assert.That(presenter.ID.ToString(), Is.EqualTo("About"));
         }
 
         /// <summary>
