@@ -33,10 +33,10 @@
     <PackageReference Include="Castle.Windsor" Version="6.0.0" />
     <PackageReference Include="DockPanelSuite" Version="3.1.1" />
     <PackageReference Include="DockPanelSuite.ThemeVS2015" Version="3.1.1" />
-    <PackageReference Include="log4net" Version="3.3.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="10.0.5" />
-    <PackageReference Include="ScottPlot" Version="5.1.57" />
-    <PackageReference Include="ScottPlot.WinForms" Version="5.1.57" />
+    <PackageReference Include="log4net" Version="3.3.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="10.0.8" />
+    <PackageReference Include="ScottPlot" Version="5.1.58" />
+    <PackageReference Include="ScottPlot.WinForms" Version="5.1.58" />
   </ItemGroup>
 
   <ItemGroup>

@@ -37,7 +37,7 @@ namespace StarLab.UI
 
         private readonly IViewFactory viewFactory; // A factory for creating views.
 
-        private ControllerID application; // The ID of the application view controller.
+        private IApplicationViewController? controller; // The application view controller.
 
         private IView? view; // The currently active view.
 
@@ -122,10 +122,9 @@ namespace StarLab.UI
         /// </summary>
         public void Exit()
         {
-            if (controllers[new ControllerID(ViewIDs.Application)] is IApplicationViewController controller)
-            {
-                controller.Exit();
-            }
+            Debug.Assert(controller != null);
+
+            controller.Exit();
 
             foreach (var viewController in controllers.Values)
             {
@@ -312,7 +311,7 @@ namespace StarLab.UI
 
             controller.Run(new AddDocumentWorkflowContext(path, DocumentTypes.Chart));
 
-            controllers[application].Show(view);
+            this.controller.Show(view);
         }
 
         /// <summary>
@@ -428,12 +427,9 @@ namespace StarLab.UI
 
             var presenter = presenterFactory.CreatePresenter(view, commands);
 
-            if (presenter is IViewController controller)
-            {
-                application = controller.ID;
-                controllers.Add(application, controller);
-                controller.Initialise(this);
-            }
+            controller = (IApplicationViewController)presenter;
+            controllers.Add(controller.ID, controller);
+            controller.Initialise(this);
 
             return (ApplicationView)view;
         }
@@ -608,8 +604,13 @@ namespace StarLab.UI
             {
                 return controller;
             }
+
+            if (this.controller == null)
+            {
+                throw new InvalidOperationException(Resources.NotInitialised);
+            }
             
-            return controllers[new ControllerID(ViewIDs.Application)];
+            return this.controller;
         }
 
         /// <summary>
@@ -637,9 +638,11 @@ namespace StarLab.UI
         /// <exception cref="ArgumentException"></exception>
         private void Show(ViewID id)
         {
+            Debug.Assert(controller != null);
+
             if (views.TryGetValue(id, out IView? view))
             {
-                controllers[application].Show(view);
+                controller.Show(view);
             }
             else
             {

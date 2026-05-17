@@ -135,7 +135,7 @@ namespace StarLab.Presentation.Workspace
             {
                 if (dto.Chart != null)
                 {
-                    documents.Add(new ChartDocument(dto));
+                    documents.Add(new ChartDocument(dto)); // TODO - Handle diffferent types of document
                 }
             }
         }

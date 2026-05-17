@@ -80,7 +80,7 @@ namespace StarLab.Application.Workspace.Documents
 
             switch (dto.View)
             {
-                case "ColourMagnitudeDiagramView":
+                case "ColourMagnitudeDiagram":
                     dto.Chart = CreateChart();
                     break;
 

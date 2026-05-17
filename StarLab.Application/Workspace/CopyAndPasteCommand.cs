@@ -118,19 +118,22 @@ namespace StarLab.Application.Workspace
         /// <returns>A document name that is guaranteed to be unique within the destination folder.</returns>
         private string GetDocumentName(string name, IFolder destination)
         {
-            bool found = false;
-
             foreach (var doc in destination.Documents)
             {
                 if (doc.Name == name)
                 {
                     name = $"{name} - Copy";
-                    found = true;
                     break;
                 }
             }
 
-            if (found) name = GetDocumentName(name, destination);
+            var seed = name;
+            int index = 2;
+
+            while (destination.ContainsDocument(name))
+            {
+                name = $"{seed} ({index++})";
+            };
 
             return name;
         }
@@ -143,19 +146,22 @@ namespace StarLab.Application.Workspace
         /// <returns>A document name that is guaranteed to be unique within the destination folder.</returns>
         private string GetFolderName(string name, IFolder destination)
         {
-            bool found = false;
-
             foreach (var folder in destination.Folders)
             {
                 if (folder.Name == name)
                 {
                     name =  $"{name} - Copy";
-                    found = true;
                     break;
                 }
             }
 
-            if (found) name = GetFolderName(name, destination);
+            var seed = name;
+            int index = 2;
+
+            while (destination.ContainsFolder(name))
+            {
+                name = $"{seed} ({index++})";
+            };
 
             return name;
         }
