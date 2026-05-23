@@ -228,8 +228,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="key">The key that identifies the Document to be deleted.</param>
         public void DeleteDocument(string key)
         {
-            throw new NotImplementedException();
-            //useCaseService.DeleteDocument(workspace, key);
+            useCaseService.DeleteDocument(workspace, new DocumentID(key));
         }
 
         /// <summary>

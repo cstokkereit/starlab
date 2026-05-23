@@ -3,7 +3,10 @@
 using StarLab.Application;
 using StarLab.Application.Workspace;
 using StarLab.Presentation.Configuration;
+using StarLab.Presentation.Workspace.Documents;
+using StarLab.Tests;
 using Stratosoft.Commands;
+using System.Drawing;
 
 namespace StarLab.Presentation.Workspace.WorkspaceExplorer
 {
@@ -25,7 +28,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
 
             workspace = Substitute.For<IWorkspace>();
             workspace.FileName.Returns(@"C:\Test\Workspace");
-
+            
             view = Substitute.For<IWorkspaceExplorerView>();
             view.ID.Returns(ViewIDs.WorkspaceExplorer);
         }
@@ -98,7 +101,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
             var presenter = CreatePresenter(true);
 
             presenter.AddChart("Workspace/Project-1/Charts");
-            
+
             controller.Received(1).ShowAddChartDialog(workspace, "Workspace/Project-1/Charts");
         }
 
@@ -120,15 +123,16 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         }
 
         /// <summary>
-        /// Test that the <see cref="WorkspaceExplorerViewPresenter.AddProject(string)"/> method works correctly.
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.AddProject()"/> method works correctly.
         /// </summary>
         [Test]
-        [Ignore("Not implemented yet.")]
         public void TestAddProject()
         {
             var presenter = CreatePresenter(true);
 
             presenter.OnEvent(new WorkspaceChangedEventArgs(workspace));
+
+            presenter.AddProject();
         }
 
         /// <summary>
@@ -137,14 +141,18 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         [Test]
         public void TestClearClipboard()
         {
+            var presenter = CreatePresenter(true);
 
+            presenter.ClearClipboard();
+
+            Assert.Fail();
         }
 
         /// <summary>
         /// Test that the <see cref="WorkspaceExplorerViewPresenter.Collapse(string)"/> method works correctly for a folder.
         /// </summary>
         [Test]
-        public void TestCollapseFolder ()
+        public void TestCollapseFolder()
         {
             var folderKey = "Workspace/Project-1/Documents/Charts";
 
@@ -173,7 +181,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
             workspace.Received(0).Collapse();
             project.Received(0).CollapseAll();
             folder.Received(1).CollapseAll();
-            
+
             view.Received(1).ExpandNode(Constants.Workspace);
             view.Received(0).CollapseNode(projectKey);
             view.Received(1).ExpandNode(projectKey);
@@ -261,9 +269,226 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         [Test]
         public void TestCopy()
         {
+            var presenter = CreatePresenter(true);
 
+            //presenter.Copy("Workspace/Project-1/Documents/Document-1"); // test at each level of the hierarchy
 
+            Assert.Fail();
+        }
 
+        /// <summary>
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.CreateDocumentContextMenu(string, IMenuManager)"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestCreateDocumentContextMenu()
+        {
+            var menu = Substitute.For<IMenuManager>();
+
+            var presenter = CreatePresenter(true);
+
+            presenter.CreateDocumentContextMenu("Workspace/Project-1/Documents/Document-1", menu);
+
+            menu.Received(1).AddMenuSeparator();
+            menu.Received(1).AddMenuItem(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<ICommand>());
+            menu.Received(4).AddMenuItem(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<Image>(), Arg.Any<ICommand>());
+        }
+
+        /// <summary>
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.CreateFolderContextMenu(string, IMenuManager)"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestCreateFolderContextMenu()
+        {
+            var paste = Substitute.For<IComponentCommand, ICommand>();
+
+            commands.GetCommand("Paste(Workspace/Project-1/Documents)").Returns((ICommand)paste);
+
+            var menu = Substitute.For<IMenuManager>();
+
+            var presenter = CreatePresenter(true);
+
+            presenter.CreateFolderContextMenu("Workspace/Project-1/Documents", menu);
+
+            menu.Received(2).AddMenuSeparator();
+            menu.Received(1).AddMenuItem(Arg.Any<string>(), Arg.Any<string>());
+            menu.Received(1).AddMenuItem(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<ICommand>());
+            menu.Received(5).AddMenuItem(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<Image>(), Arg.Any<ICommand>());
+            menu.Received(1).AddMenuItem(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<Image>(), Arg.Any<ICommand>());
+
+            //manager.AddMenuItem(Constants.Add, Constants.AddTable, StringResources.Table + Constants.Ellipsis, CreateCommand(GetCommandName(Actions.AddTable, folder), () => AddTable(folder)));
+
+            commands.Received(12).GetCommand(Arg.Any<string>());
+
+            paste.Received(1).Enabled = false;
+        }
+
+        /// <summary>
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.CreateProjectContextMenu(string, IMenuManager)"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestCreateProjectContextMenu()
+        {
+            var paste = Substitute.For<IComponentCommand, ICommand>();
+
+            commands.GetCommand("Paste(Workspace/Project-1)").Returns((ICommand)paste);
+
+            var menu = Substitute.For<IMenuManager>();
+
+            var presenter = CreatePresenter(true);
+
+            presenter.CreateProjectContextMenu("Workspace/Project-1", menu);
+
+            menu.Received(2).AddMenuSeparator();
+            menu.Received(1).AddMenuItem(Arg.Any<string>(), Arg.Any<string>());
+            menu.Received(1).AddMenuItem(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<Image>());
+            menu.Received(1).AddMenuItem(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<ICommand>());
+            menu.Received(3).AddMenuItem(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<Image>(), Arg.Any<ICommand>());
+            menu.Received(2).AddMenuItem(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<ICommand>());
+            menu.Received(1).AddMenuItem(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<Image>(), Arg.Any<ICommand>());
+
+            commands.Received(11).GetCommand(Arg.Any<string>());
+
+            paste.Received(1).Enabled = false;
+        }
+
+        /// <summary>
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.CreateWorkspaceContextMenu(string, IMenuManager)"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestCreateWorkspaceContextMenu()
+        {
+            var menu = Substitute.For<IMenuManager>();
+
+            var presenter = CreatePresenter(true);
+
+            presenter.CreateWorkspaceContextMenu(menu);
+
+            menu.Received(2).AddMenuSeparator();
+            menu.Received(1).AddMenuItem(Arg.Any<string>(), Arg.Any<string>());
+            menu.Received(2).AddMenuItem(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<Image>(), Arg.Any<ICommand>());
+            menu.Received(1).AddMenuItem(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<ICommand>());
+            
+            commands.Received(6).GetCommand(Arg.Any<string>());
+        }
+
+        /// <summary>
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.Cut(string)"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestCut()
+        {
+            var presenter = CreatePresenter(true);
+
+            //presenter.Cut("Workspace/Project-1/Documents/Document-1"); // test at each level of the hierarchy
+
+            Assert.Fail();
+        }
+
+        /// <summary>
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.DeleteDocument(string)"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestDeleteDocument()
+        {
+            var interactor = Substitute.For<IUseCase<WorkspaceDTO, string>>();
+
+            factory.CreateDeleteDocumentUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
+
+            var presenter = CreatePresenter(true);
+
+            presenter.DeleteDocument("EBD0CED6-A2D0-4A77-A65D-69EB1A0585A8");
+
+            interactor.Received(1).Execute(Arg.Any<WorkspaceDTO>(), "EBD0CED6-A2D0-4A77-A65D-69EB1A0585A8");
+        }
+
+        /// <summary>
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.DeleteFolder(string)"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestDeleteFolder()
+        {
+            var interactor = Substitute.For<IUseCase<WorkspaceDTO, string>>();
+
+            factory.CreateDeleteFolderUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
+
+            var presenter = CreatePresenter(true);
+
+            presenter.DeleteFolder("Workspace/Project-1/Documents");
+
+            interactor.Received(1).Execute(Arg.Any<WorkspaceDTO>(), "Workspace/Project-1/Documents");
+        }
+
+        /// <summary>
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.DeleteFolder(string)"/> method throws an exception when the folder name is an empty string.
+        /// </summary>
+        [Test]
+        public void TestDeleteFolderThrowsExceptionWhenFolderNameIsEmptyString()
+        {
+            var presenter = CreatePresenter(true);
+
+            Assert.Throws<ArgumentException>(() => presenter.DeleteFolder(string.Empty));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.DeleteProject(string)"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestDeleteProject()
+        {
+            var interactor = Substitute.For<IUseCase<WorkspaceDTO, string>>();
+
+            factory.CreateDeleteFolderUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
+
+            var presenter = CreatePresenter(true);
+
+            presenter.DeleteProject("Workspace/Project-1/Documents");
+
+            interactor.Received(1).Execute(Arg.Any<WorkspaceDTO>(), "Workspace/Project-1/Documents");
+        }
+
+        /// <summary>
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.DeleteProject(string)"/> method throws an exception when the project name is an empty string.
+        /// </summary>
+        [Test]
+        public void TestDeleteProjectThrowsExceptionWhenProjectNameIsEmptyString()
+        {
+            var presenter = CreatePresenter(true);
+
+            Assert.Throws<ArgumentException>(() => presenter.DeleteProject(string.Empty));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.FolderCollapsed(string)"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestFolderCollapsed()
+        {
+            var folder = Substitute.For<IFolder>();
+
+            workspace.GetFolder("Workspace/Project-1/Documents").Returns(folder);
+
+            var presenter = CreatePresenter(true);
+
+            presenter.FolderCollapsed("Workspace/Project-1/Documents");
+
+            folder.Received(1).Collapse();
+        }
+
+        /// <summary>
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.FolderExpanded(string)"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestFolderExpanded()
+        {
+            var folder = Substitute.For<IFolder>();
+
+            workspace.GetFolder("Workspace/Project-1/Documents").Returns(folder);
+
+            var presenter = CreatePresenter(true);
+
+            presenter.FolderExpanded("Workspace/Project-1/Documents");
+
+            folder.Received(1).Expand();
         }
 
         /// <summary>
@@ -303,35 +528,278 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
             Assert.That(e.Message, Is.EqualTo("The WorkspaceExplorerViewPresenter has already been initialised."));
         }
 
-        //public void CreateDocumentContextMenu(string id, IMenuManager manager)
-        //public void CreateFolderContextMenu(string folder, IMenuManager manager)
-        //public void CreateProjectContextMenu(string project, IMenuManager manager)
-        //public void CreateWorkspaceContextMenu(IMenuManager manager)
-        //public void Cut(string key)
-        //public void DeleteDocument(string id)
-        //public void DeleteFolder(string key)
-        //public void DeleteProject(string key)
-        //public void FolderCollapsed(string key)
-        //public void FolderExpanded(string key)
-        //public override void Initialise(IApplicationController controller)
-        //public void OnEvent(ActiveDocumentChangedEventArgs args)
-        //public void OnEvent(WorkspaceChangedEventArgs args)
-        //public void OpenDocument(string key)
-        //public void Paste(string key)
-        //public void ProjectCollapsed(string key)
-        //public void ProjectExpanded(string key)
-        //public void Rename(string key)
-        //public void RenameDocument(string key, string name)
-        //public void RenameFolder(string key, string name)
-        //public void RenameFolder(string key)
-        //public void RenameWorkspace(string name)
-        //public void ShowMessage(string message)
-        //public void Synchronise()
-        //public void UpdateClipboard(string key)
-        //public void UpdateDocument(WorkspaceDTO dto, string id)
-        //public void UpdateWorkspace(WorkspaceDTO dto)
-        //public void WorkspaceCollapsed()
-        //public void WorkspaceExpanded()
+        /// <summary>
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.OnEvent(ActiveDocumentChangedEventArgs)"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestOnActiveDocumentChangedEvent()
+        {
+            var modified = new Workspace(new WorkspaceDtoBuilder(@"C:\Workspace-1")
+                .AddProject("Project-1")
+                .AddFolder("Workspace-1/Project-1/Folder-1")
+                .AddDocument("19542B1A-36A5-494F-B6B0-CB562FA36CAC", "ChartView", "Document-1.1", "Workspace-1/Project-1/Folder-1")
+                .AddChart("19542B1A-36A5-494F-B6B0-CB562FA36CAC", new ChartDtoBuilder().CreateChart())
+                .CreateWorkspace());
+
+            var presenter = CreatePresenter(true);
+
+            commands.ClearReceivedCalls();
+
+            presenter.OnEvent(new ActiveDocumentChangedEventArgs(modified));
+
+            commands.Received(1).GetCommand("Synchronise");
+        }
+
+        /// <summary>
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.OnEvent(WorkspaceChangedEventArgs)"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestOnWorkspaceChangedEvent()
+        {
+            var modified = new Workspace(new WorkspaceDtoBuilder(@"C:\Workspace-1")
+                .AddProject("Project-1")
+                .AddFolder("Workspace-1/Project-1/Folder-1")
+                .AddDocument("19542B1A-36A5-494F-B6B0-CB562FA36CAC", "ChartView", "Document-1.1", "Workspace-1/Project-1/Folder-1")
+                .AddChart("19542B1A-36A5-494F-B6B0-CB562FA36CAC", new ChartDtoBuilder().CreateChart())
+                .CreateWorkspace());
+
+            var presenter = CreatePresenter(true);
+
+            view.ClearReceivedCalls();
+
+            presenter.OnEvent(new WorkspaceChangedEventArgs(modified));
+
+            view.Received(1).Clear();
+            view.Received(1).AddWorkspaceNode(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<int>());
+            view.Received(1).AddProjectNode(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<int>());
+            view.Received(1).AddProjectNode(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<int>());
+
+            commands.Received(3).GetCommand("CollapseWorkspace");
+            commands.Received(1).GetCommand("Synchronise");
+        }
+
+        /// <summary>
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.OpenDocument(string)"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestOpenDocument()
+        {
+            var presenter = CreatePresenter(true);
+
+            //presenter.OpenDocument("Workspace/Project-1/Documents/Document-1");
+
+            Assert.Fail();
+        }
+
+        /// <summary>
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.Paste(string)"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestPaste()
+        {
+            var presenter = CreatePresenter(true);
+
+            //presenter.Paste("Workspace/Project-1/Documents/Document-1"); // test at each level of the hierarchy
+
+            Assert.Fail();
+        }
+
+        /// <summary>
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.ProjectCollapsed(string)"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestProjectCollapsed()
+        {
+            var project = Substitute.For<IProject>();
+
+            workspace.GetProject("Workspace/Project-1").Returns(project);
+
+            var presenter = CreatePresenter(true);
+
+            presenter.ProjectCollapsed("Workspace/Project-1");
+
+            project.Received(1).Collapse();
+        }
+
+        /// <summary>
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.ProjectExpanded(string)"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestProjectExpanded()
+        {
+            var project = Substitute.For<IProject>();
+
+            workspace.GetProject("Workspace/Project-1").Returns(project);
+
+            var presenter = CreatePresenter(true);
+
+            presenter.ProjectExpanded("Workspace/Project-1");
+
+            project.Received(1).Expand();
+        }
+
+        /// <summary>
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.Rename(string)"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestRename()
+        {
+            var presenter = CreatePresenter(true);
+
+            //presenter.Rename("Workspace/Project-1");
+
+            Assert.Fail();
+        }
+
+        /// <summary>
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.RenameDocument(string, string)"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestRenameDocument()
+        {
+            var presenter = CreatePresenter(true);
+
+            //presenter.RenameDocument("Workspace/Project-1", "New Document Name");
+
+            Assert.Fail();
+        }
+
+        /// <summary>
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.RenameFolder(string, string)"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestRenameFolder()
+        {
+            var presenter = CreatePresenter(true);
+
+            //presenter.RenameFolder("Workspace/Project-1", "New Folder Name");
+
+            Assert.Fail();
+        }
+
+        /// <summary>
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.RenameFolder(string)"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestRenameFolder2()
+        {
+            var presenter = CreatePresenter(true);
+
+            //presenter.RenameFolder("Workspace/Project-1"); // Rename curerent folder?
+
+            Assert.Fail();
+        }
+
+        /// <summary>
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.RenameWorkspace(string)"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestRenameWorkspace()
+        {
+            var presenter = CreatePresenter(true);
+
+            //presenter.RenameWorkspace("Workspace/Project-1");
+
+            Assert.Fail();
+        }
+
+        /// <summary>
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.ShowMessage(string)"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestShowMessage()
+        {
+            var presenter = CreatePresenter(true);
+
+            presenter.ShowMessage("Test message.");
+
+            controller.Received(1).ShowMessage("StarLab", "Test message.", InteractionType.Error, InteractionResponses.OK);
+        }
+
+        /// <summary>
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.Synchronise()"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestSynchronise()
+        {
+            var document = Substitute.For<IDocument>();
+            document.ID.Returns(new DocumentID("19542B1A-36A5-494F-B6B0-CB562FA36CAC"));
+
+            workspace.ActiveDocument.Returns(document);
+
+            var presenter = CreatePresenter(true);
+
+            presenter.Synchronise();
+
+            view.Received(1).FocusOnSelectedNode();
+
+            view.Received(1).SelectNode("19542B1A-36A5-494F-B6B0-CB562FA36CAC");
+        }
+
+        /// <summary>
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.UpdateClipboard(string)"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestUpdateClipboard()
+        {
+            var presenter = CreatePresenter(true);
+
+            //presenter.UpdateClipboard("Workspace/Project-1");
+
+            Assert.Fail();
+        }
+
+        /// <summary>
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.UpdateDocument(WorkspaceDTO, string)"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestUpdateDocument()
+        {
+            var presenter = CreatePresenter(true);
+
+            //presenter.UpdateDocument(dto, "Workspace/Project-1");
+
+            Assert.Fail();
+        }
+
+        /// <summary>
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.UpdateWorkspace(WorkspaceDTO)"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestUpdateWorkspace()
+        {
+            var presenter = CreatePresenter(true);
+
+            //presenter.UpdateWorkspace(dto);
+
+            Assert.Fail();
+        }
+
+        /// <summary>
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.WorkspaceCollapsed()"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestWorkspaceCollapsed()
+        {
+            var presenter = CreatePresenter(true);
+
+            presenter.WorkspaceCollapsed();
+
+            workspace.Received(1).Collapse();
+        }
+
+        /// <summary>
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.WorkspaceExpanded()"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestWorkspaceExpanded()
+        {
+            var presenter = CreatePresenter(true);
+
+            presenter.WorkspaceExpanded();
+
+            workspace.Received(1).Expand();
+        }
 
         /// <summary>
         /// A factory method that creates a new instance of the <see cref="WorkspaceExplorerViewPresenter"/> class.
