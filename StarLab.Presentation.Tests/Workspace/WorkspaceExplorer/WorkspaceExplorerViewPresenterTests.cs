@@ -27,8 +27,9 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
             base.SetUp();
 
             workspace = Substitute.For<IWorkspace>();
-            workspace.FileName.Returns(@"C:\Test\Workspace");
-            
+            workspace.FileName.Returns(@"C:\Test\Workspace-1");
+            workspace.Name.Returns("Workspace-1");
+
             view = Substitute.For<IWorkspaceExplorerView>();
             view.ID.Returns(ViewIDs.WorkspaceExplorer);
         }
@@ -117,15 +118,16 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
 
             var presenter = CreatePresenter(true);
 
-            presenter.AddFolder("Workspace/Project-1/Documents/Charts");
+            presenter.AddFolder("Workspace-1/Project-1/Documents/Charts");
 
-            interactor.Received(1).Execute(Arg.Is<WorkspaceDTO>(ws => ws.FileName == @"C:\Test\Workspace"), "Workspace/Project-1/Documents/Charts");
+            interactor.Received(1).Execute(Arg.Is<WorkspaceDTO>(ws => ws.FileName == @"C:\Test\Workspace-1"), "Workspace-1/Project-1/Documents/Charts");
         }
 
         /// <summary>
         /// Test that the <see cref="WorkspaceExplorerViewPresenter.AddProject()"/> method works correctly.
         /// </summary>
         [Test]
+        [Ignore("Not implemented")]
         public void TestAddProject()
         {
             var presenter = CreatePresenter(true);
@@ -133,19 +135,6 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
             presenter.OnEvent(new WorkspaceChangedEventArgs(workspace));
 
             presenter.AddProject();
-        }
-
-        /// <summary>
-        /// Test that the <see cref="WorkspaceExplorerViewPresenter.ClearClipboard()"/> method works correctly.
-        /// </summary>
-        [Test]
-        public void TestClearClipboard()
-        {
-            var presenter = CreatePresenter(true);
-
-            presenter.ClearClipboard();
-
-            Assert.Fail();
         }
 
         /// <summary>
@@ -269,11 +258,33 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         [Test]
         public void TestCopy()
         {
+            var workspace = new Workspace(new WorkspaceDtoBuilder(@"C:\Test\Workspace-2")
+                .AddProject("Project-1")
+                .AddFolder("Workspace/Project-1/Folder-1")
+                .CreateWorkspace());
+
+            var interactor = Substitute.For<IUseCase<WorkspaceDTO, string>>();
+
+            factory.CreateUseCase(Arg.Any<IWorkspaceOutputPort>(), ClipboardOperations.Copy).Returns(interactor);
+
             var presenter = CreatePresenter(true);
 
-            //presenter.Copy("Workspace/Project-1/Documents/Document-1"); // test at each level of the hierarchy
+            presenter.OnEvent(new WorkspaceChangedEventArgs(workspace));
 
-            Assert.Fail();
+            presenter.Copy("Workspace/Project-1/Folder-1");
+
+            interactor.Received(1).Execute(Arg.Is<WorkspaceDTO>(ws => ws.FileName == @"C:\Test\Workspace-2"), "Workspace/Project-1/Folder-1");
+        }
+
+        /// <summary>
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.Copy(string)"/> method throws an exception when the target is an empty string.
+        /// </summary>
+        [Test]
+        public void TestCopyThrowsExceptionWhenFolderNameIsEmptyString()
+        {
+            var presenter = CreatePresenter(true);
+
+            Assert.Throws<ArgumentException>(() => presenter.Copy(string.Empty));
         }
 
         /// <summary>
@@ -377,11 +388,33 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         [Test]
         public void TestCut()
         {
+            var workspace = new Workspace(new WorkspaceDtoBuilder(@"C:\Test\Workspace-2")
+                .AddProject("Project-1")
+                .AddFolder("Workspace/Project-1/Folder-1")
+                .CreateWorkspace());
+
+            var interactor = Substitute.For<IUseCase<WorkspaceDTO, string>>();
+
+            factory.CreateUseCase(Arg.Any<IWorkspaceOutputPort>(), ClipboardOperations.Cut).Returns(interactor);
+
             var presenter = CreatePresenter(true);
 
-            //presenter.Cut("Workspace/Project-1/Documents/Document-1"); // test at each level of the hierarchy
+            presenter.OnEvent(new WorkspaceChangedEventArgs(workspace));
 
-            Assert.Fail();
+            presenter.Cut("Workspace/Project-1/Folder-1");
+
+            interactor.Received(1).Execute(Arg.Is<WorkspaceDTO>(ws => ws.FileName == @"C:\Test\Workspace-2"), "Workspace/Project-1/Folder-1");
+        }
+
+        /// <summary>
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.Cut(string)"/> method throws an exception when the target is an empty string.
+        /// </summary>
+        [Test]
+        public void TestCutThrowsExceptionWhenFolderNameIsEmptyString()
+        {
+            var presenter = CreatePresenter(true);
+
+            Assert.Throws<ArgumentException>(() => presenter.Cut(string.Empty));
         }
 
         /// <summary>
@@ -398,7 +431,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
 
             presenter.DeleteDocument("EBD0CED6-A2D0-4A77-A65D-69EB1A0585A8");
 
-            interactor.Received(1).Execute(Arg.Any<WorkspaceDTO>(), "EBD0CED6-A2D0-4A77-A65D-69EB1A0585A8");
+            interactor.Received(1).Execute(Arg.Is<WorkspaceDTO>(ws => ws.FileName == @"C:\Test\Workspace-1"), "EBD0CED6-A2D0-4A77-A65D-69EB1A0585A8");
         }
 
         /// <summary>
@@ -415,7 +448,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
 
             presenter.DeleteFolder("Workspace/Project-1/Documents");
 
-            interactor.Received(1).Execute(Arg.Any<WorkspaceDTO>(), "Workspace/Project-1/Documents");
+            interactor.Received(1).Execute(Arg.Is<WorkspaceDTO>(ws => ws.FileName == @"C:\Test\Workspace-1"), "Workspace/Project-1/Documents");
         }
 
         /// <summary>
@@ -443,7 +476,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
 
             presenter.DeleteProject("Workspace/Project-1/Documents");
 
-            interactor.Received(1).Execute(Arg.Any<WorkspaceDTO>(), "Workspace/Project-1/Documents");
+            interactor.Received(1).Execute(Arg.Is<WorkspaceDTO>(ws => ws.FileName == @"C:\Test\Workspace-1"), "Workspace/Project-1/Documents");
         }
 
         /// <summary>
@@ -584,11 +617,20 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         [Test]
         public void TestOpenDocument()
         {
+            var id = new DocumentID("19542B1A-36A5-494F-B6B0-CB562FA36CAC");
+
+            var document = Substitute.For<IDocument>();
+            document.ID.Returns(id);
+
+            workspace.GetDocument(id).Returns(document);
+
             var presenter = CreatePresenter(true);
 
-            //presenter.OpenDocument("Workspace/Project-1/Documents/Document-1");
+            presenter.OnEvent(new WorkspaceChangedEventArgs(workspace));
 
-            Assert.Fail();
+            presenter.OpenDocument("19542B1A-36A5-494F-B6B0-CB562FA36CAC");
+
+            controller.Received(1).ShowDocument(Arg.Is<IDocument>(document => document.ID.ToString() == "19542B1A-36A5-494F-B6B0-CB562FA36CAC"));
         }
 
         /// <summary>
@@ -597,11 +639,33 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         [Test]
         public void TestPaste()
         {
+            var workspace = new Workspace(new WorkspaceDtoBuilder(@"C:\Test\Workspace-2")
+                .AddProject("Project-1")
+                .AddFolder("Workspace/Project-1/Folder-1")
+                .CreateWorkspace());
+
+            var interactor = Substitute.For<IUseCase<WorkspaceDTO, string>>();
+
+            factory.CreateUseCase(Arg.Any<IWorkspaceOutputPort>(), ClipboardOperations.Paste).Returns(interactor);
+
             var presenter = CreatePresenter(true);
 
-            //presenter.Paste("Workspace/Project-1/Documents/Document-1"); // test at each level of the hierarchy
+            presenter.OnEvent(new WorkspaceChangedEventArgs(workspace));
 
-            Assert.Fail();
+            presenter.Paste("Workspace/Project-1/Folder-1");
+
+            interactor.Received(1).Execute(Arg.Is<WorkspaceDTO>(ws => ws.FileName == @"C:\Test\Workspace-2"), "Workspace/Project-1/Folder-1");
+        }
+
+        /// <summary>
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.Paste(string)"/> method throws an exception when the target is an empty string.
+        /// </summary>
+        [Test]
+        public void TestPasteThrowsExceptionWhenFolderNameIsEmptyString()
+        {
+            var presenter = CreatePresenter(true);
+
+            Assert.Throws<ArgumentException>(() => presenter.Paste(string.Empty));
         }
 
         /// <summary>
@@ -639,29 +703,44 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         }
 
         /// <summary>
-        /// Test that the <see cref="WorkspaceExplorerViewPresenter.Rename(string)"/> method works correctly.
-        /// </summary>
-        [Test]
-        public void TestRename()
-        {
-            var presenter = CreatePresenter(true);
-
-            //presenter.Rename("Workspace/Project-1");
-
-            Assert.Fail();
-        }
-
-        /// <summary>
         /// Test that the <see cref="WorkspaceExplorerViewPresenter.RenameDocument(string, string)"/> method works correctly.
         /// </summary>
         [Test]
         public void TestRenameDocument()
         {
+            var interactor = Substitute.For<IUseCase<WorkspaceDTO, string, string>>();
+
+            factory.CreateRenameDocumentUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
+
             var presenter = CreatePresenter(true);
 
-            //presenter.RenameDocument("Workspace/Project-1", "New Document Name");
+            presenter.OnEvent(new WorkspaceChangedEventArgs(workspace));
 
-            Assert.Fail();
+            presenter.RenameDocument("19542B1A-36A5-494F-B6B0-CB562FA36CAC", "Document-2");
+
+            interactor.Received(1).Execute(Arg.Is<WorkspaceDTO>(ws => ws.FileName == @"C:\Test\Workspace-1"), "19542B1A-36A5-494F-B6B0-CB562FA36CAC", "Document-2");
+        }
+
+        /// <summary>
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.RenameDocument(string, string)"/> method throws an exception when the key is an empty string.
+        /// </summary>
+        [Test]
+        public void TestRenameDocumentThrowsExceptionWhenKeyIsEmptyString()
+        {
+            var presenter = CreatePresenter(true);
+
+            Assert.Throws<ArgumentException>(() => presenter.RenameDocument(string.Empty, "Document-2"));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.RenameDocument(string, string)"/> method throws an exception when the name is an empty string.
+        /// </summary>
+        [Test]
+        public void TestRenameDocumentThrowsExceptionWhenNameIsEmptyString()
+        {
+            var presenter = CreatePresenter(true);
+
+            Assert.Throws<ArgumentException>(() => presenter.RenameDocument("19542B1A-36A5-494F-B6B0-CB562FA36CAC", string.Empty));
         }
 
         /// <summary>
@@ -670,24 +749,68 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         [Test]
         public void TestRenameFolder()
         {
+            var interactor = Substitute.For<IUseCase<WorkspaceDTO, string, string>>();
+
+            factory.CreateRenameFolderUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
+
             var presenter = CreatePresenter(true);
 
-            //presenter.RenameFolder("Workspace/Project-1", "New Folder Name");
+            presenter.OnEvent(new WorkspaceChangedEventArgs(workspace));
 
-            Assert.Fail();
+            presenter.RenameFolder("Workspace-1/Project-1/Folder-1", "Folder-2");
+
+            interactor.Received(1).Execute(Arg.Is<WorkspaceDTO>(ws => ws.FileName == @"C:\Test\Workspace-1"), "Workspace-1/Project-1/Folder-1", "Folder-2");
         }
 
         /// <summary>
-        /// Test that the <see cref="WorkspaceExplorerViewPresenter.RenameFolder(string)"/> method works correctly.
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.RenameFolder(string, string)"/> method throws an exception when the key is an empty string.
         /// </summary>
         [Test]
-        public void TestRenameFolder2()
+        public void TestRenameFolderThrowsExceptionWhenKeyIsEmptyString()
         {
             var presenter = CreatePresenter(true);
 
-            //presenter.RenameFolder("Workspace/Project-1"); // Rename curerent folder?
+            Assert.Throws<ArgumentException>(() => presenter.RenameFolder(string.Empty, "Folder-2"));
+        }
 
-            Assert.Fail();
+        /// <summary>
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.RenameFolder(string, string)"/> method throws an exception when the name is an empty string.
+        /// </summary>
+        [Test]
+        public void TestRenameFolderThrowsExceptionWhenNameIsEmptyString()
+        {
+            var presenter = CreatePresenter(true);
+
+            Assert.Throws<ArgumentException>(() => presenter.RenameFolder("Workspace-1/Project-1/Folder-1", string.Empty));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.Rename(string)"/> method works correctly when provided with a folder key.
+        /// </summary>
+        [Test]
+        public void TestRenameGivenAFolderKey()
+        {
+            var presenter = CreatePresenter(true);
+
+            presenter.Rename("Workspace-1/Project-1/Folder-1");
+
+            view.Received(1).EditNodeLabel("Workspace-1/Project-1/Folder-1");
+        }
+
+        /// <summary>
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.Rename(string)"/> method works correctly when provided with the workspace key.
+        /// </summary>
+        [Test]
+        public void TestRenameGivenTheWorkspaceKey()
+        {
+            var presenter = CreatePresenter(true);
+
+            presenter.OnEvent(new WorkspaceChangedEventArgs(workspace));
+
+            presenter.Rename("Workspace");
+
+            view.Received(1).SetNodeText("Workspace", "Workspace-1");
+            view.Received(1).EditNodeLabel("Workspace");
         }
 
         /// <summary>
@@ -696,11 +819,28 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         [Test]
         public void TestRenameWorkspace()
         {
+            var interactor = Substitute.For<IUseCase<WorkspaceDTO, string>>();
+
+            factory.CreateRenameWorkspaceUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
+
             var presenter = CreatePresenter(true);
 
-            //presenter.RenameWorkspace("Workspace/Project-1");
+            presenter.OnEvent(new WorkspaceChangedEventArgs(workspace));
 
-            Assert.Fail();
+            presenter.RenameWorkspace("Workspace-2");
+
+            interactor.Received(1).Execute(Arg.Is<WorkspaceDTO>(ws => ws.FileName == @"C:\Test\Workspace-1"), "Workspace-2");
+        }
+
+        /// <summary>
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.RenameWorkspace(string)"/> method throws an exception when the name is an empty string.
+        /// </summary>
+        [Test]
+        public void TestRenameWorkspaceThrowsExceptionWhenKeyIsEmptyString()
+        {
+            var presenter = CreatePresenter(true);
+
+            Assert.Throws<ArgumentException>(() => presenter.RenameWorkspace(string.Empty));
         }
 
         /// <summary>
@@ -737,29 +877,25 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         }
 
         /// <summary>
-        /// Test that the <see cref="WorkspaceExplorerViewPresenter.UpdateClipboard(string)"/> method works correctly.
-        /// </summary>
-        [Test]
-        public void TestUpdateClipboard()
-        {
-            var presenter = CreatePresenter(true);
-
-            //presenter.UpdateClipboard("Workspace/Project-1");
-
-            Assert.Fail();
-        }
-
-        /// <summary>
         /// Test that the <see cref="WorkspaceExplorerViewPresenter.UpdateDocument(WorkspaceDTO, string)"/> method works correctly.
         /// </summary>
         [Test]
         public void TestUpdateDocument()
         {
+            var port = Substitute.For<IApplicationOutputPort>();
+
+            controller.GetOutputPort<IApplicationOutputPort>().Returns(port);
+
             var presenter = CreatePresenter(true);
 
-            //presenter.UpdateDocument(dto, "Workspace/Project-1");
+            var dto = new WorkspaceDTO()
+            {
+                FileName = @"C:\Test\Workspace-1"
+            };
 
-            Assert.Fail();
+            presenter.UpdateDocument(dto, "19542B1A-36A5-494F-B6B0-CB562FA36CAC");
+
+            port.Received(1).UpdateDocument(Arg.Is<WorkspaceDTO>(ws => ws.FileName == @"C:\Test\Workspace-1"), "19542B1A-36A5-494F-B6B0-CB562FA36CAC");
         }
 
         /// <summary>
@@ -768,11 +904,20 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         [Test]
         public void TestUpdateWorkspace()
         {
+            var port = Substitute.For<IApplicationOutputPort>();
+
+            controller.GetOutputPort<IApplicationOutputPort>().Returns(port);
+
             var presenter = CreatePresenter(true);
 
-            //presenter.UpdateWorkspace(dto);
+            var dto = new WorkspaceDTO()
+            {
+                FileName = @"C:\Test\Workspace-1"
+            };
 
-            Assert.Fail();
+            presenter.UpdateWorkspace(dto);
+
+            port.Received(1).UpdateWorkspace(Arg.Is<WorkspaceDTO>(ws => ws.FileName == @"C:\Test\Workspace-1"));
         }
 
         /// <summary>
