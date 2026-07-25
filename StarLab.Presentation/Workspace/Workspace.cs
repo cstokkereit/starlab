@@ -45,6 +45,14 @@ namespace StarLab.Presentation.Workspace
                     ActiveDocument = document;
                 }
             }
+
+            if (!string.IsNullOrEmpty(dto.SelectedFolder))
+            {
+                if (folders.TryGetValue(dto.SelectedFolder, out IFolder? folder))
+                {
+                    SelectedFolder = folder;
+                }
+            }
         }
 
         /// <summary>
@@ -81,6 +89,11 @@ namespace StarLab.Presentation.Workspace
         /// Gets the projects within the workspace.
         /// </summary>
         public IEnumerable<IProject> Projects => projects.Values.OrderBy(project => project.Name);
+
+        /// <summary>
+        /// Gets the selected <see cref="IFolder"/>.
+        /// </summary>
+        public IFolder? SelectedFolder { get; private set; }
 
         /// <summary>
         /// Clears the active document.
@@ -194,7 +207,29 @@ namespace StarLab.Presentation.Workspace
         /// <param name="id">The ID of the active <see cref="IDocument"/>.</param>
         public void SetActiveDocument(DocumentID id)
         {
-            if (documents.ContainsKey(id)) ActiveDocument = documents[id];
+            if (documents.TryGetValue(id, out IDocument? document))
+            {
+                SetSelectedFolder(document.Path);
+                ActiveDocument = document;
+            }
+        }
+
+        /// <summary>
+        /// Sets the selected folder to be the <see cref="IFolder"/> with the specified path.
+        /// </summary>
+        /// <param name="path">The path of the selected folder.</param>
+        public void SetSelectedFolder(string path)
+        {
+            // TODO need to handle workspace and project paths as well as folder paths
+
+            if (folders.TryGetValue(path, out IFolder? folder))
+            {
+                SelectedFolder = folder;
+            }
+            else if (documents.TryGetValue(new DocumentID(path), out IDocument? document))
+            {
+                SetSelectedFolder(document.Path);
+            }
         }
 
         /// <summary>

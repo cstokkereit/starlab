@@ -19,6 +19,21 @@ namespace StarLab.Presentation
             : base(factory, mapper) { }
 
         /// <summary>
+        /// Executes the AddFolder use case.
+        /// </summary>
+        /// <param name="workspace">The <see cref="IWorkspace"/> being modified.</param>
+        /// <param name="key">The key that identifies the parent folder.</param>
+        public void AddFolder(IWorkspace workspace, string key)
+        {
+            ArgumentNullException.ThrowIfNull(workspace, nameof(workspace));
+            ArgumentException.ThrowIfNullOrEmpty(key, nameof(key));
+
+            var interactor = Factory.CreateAddFolderUseCase(ApplicationController.GetOutputPort<IWorkspaceOutputPort>());
+
+            interactor.Execute(Mapper.Map<WorkspaceDTO>(workspace), key);
+        }
+
+        /// <summary>
         /// Executes the OpenWorkspace use case.
         /// </summary>
         /// <param name="filename">The fully qualified path to the workspace file.</param>

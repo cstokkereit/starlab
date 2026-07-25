@@ -190,7 +190,7 @@ namespace StarLab.Presentation
 
             CreateFileMenu();
             CreateViewMenu();
-            CreateWorkspaceMenu();
+            CreateProjectMenu();
             CreateToolsMenu();
             CreateWindowMenu();
             CreateHelpMenu();
@@ -438,6 +438,35 @@ namespace StarLab.Presentation
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="type"></param>
+        private void AddDocument(DocumentTypes type)
+        {
+            if (workspace.SelectedFolder != null)
+            {
+                var path = workspace.SelectedFolder.Key;
+
+                useCaseService.AddFolder(workspace, path);
+
+                AppController.ShowAddDocumentDialog(workspace, path, type);
+            }
+        }
+
+        /// <summary>
+        /// Adds a new folder to the currently active project.
+        /// </summary>
+        private void AddFolder()
+        {
+            // TODO Need to handle project and workspace
+
+            if (workspace.SelectedFolder != null)
+            {
+                useCaseService.AddFolder(workspace, workspace.SelectedFolder.Key);
+            }
+        }
+
+        /// <summary>
         /// Creates the File menu.
         /// </summary>
         private void CreateFileMenu()
@@ -473,6 +502,21 @@ namespace StarLab.Presentation
         }
 
         /// <summary>
+        /// Creates the Project menu.
+        /// </summary>
+        private void CreateProjectMenu()
+        {
+            //CreateCommand(GetCommandName(Actions.AddChart, folder), () => AddChart(folder))
+
+            View.AddMenuItem(Constants.Project, StringResources.Project);
+            //View.AddMenuItem(Constants.Project, Constants.ProjectAddChart, StringResources.AddChart + Constants.Ellipsis, CreateCommand(Actions.Show + ViewIDs.AddChart, AddDocument(DocumentTypes.Chart)));
+            //View.AddMenuItem(Constants.Project, Constants.ProjectAddTable, StringResources.AddTable + Constants.Ellipsis, ImageResources.NewTable, CreateCommand(Actions.Show + ViewIDs.AddTable, AddDocument(DocumentTypes.Table)));
+            View.AddMenuSeparator(Constants.Project);
+            View.AddMenuItem(Constants.Project, Constants.ProjectNewFolder, StringResources.NewFolder + Constants.Ellipsis, ImageResources.NewFolder, CreateCommand(Actions.NewFolder, AddFolder));
+            View.AddMenuSeparator(Constants.Project);
+        }
+
+        /// <summary>
         /// Creates the standard toolbar.
         /// </summary>
         private void CreateStandardToolbar()
@@ -505,18 +549,6 @@ namespace StarLab.Presentation
         private void CreateWindowMenu()
         {
             View.AddMenuItem(Constants.Window, StringResources.Window);
-        }
-
-        /// <summary>
-        /// Creates the Workspace menu.
-        /// </summary>
-        private void CreateWorkspaceMenu()
-        {
-            View.AddMenuItem(Constants.Workspace, StringResources.Workspace);
-            //view.AddMenuItem(Constants.WORKSPACE, Constants.WORKSPACE_ADD_CHART, StringResources.AddChart + Constants.ELLIPSIS, commands.GetCommand(Constants.WORKSPACE_ADD_CHART));
-            //view.AddMenuItem(Constants.WORKSPACE, Constants.WORKSPACE_ADD_TABLE, StringResources.AddTable + Constants.ELLIPSIS, ImageResources.NewTable, commands.GetCommand(Constants.WORKSPACE_ADD_TABLE));
-            View.AddMenuSeparator(Constants.Workspace);
-            //view.AddMenuItem(Constants.WORKSPACE, Constants.WORKSPACE_NEW_FOLDER, StringResources.NewFolder + Constants.ELLIPSIS, ImageResources.NewFolder, commands.GetCommand(Constants.WORKSPACE_NEW_FOLDER));
         }
 
         /// <summary>

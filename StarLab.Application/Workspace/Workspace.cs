@@ -16,7 +16,11 @@ namespace StarLab.Application.Workspace
 
         private readonly string? layout; // Holds the position, size and state of the dockable views.
 
+        private readonly string? document; // Holds the ID of the active document.
+
         private readonly string filename;
+
+        private readonly string folder; // Holds the path of the selected folder.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="Workspace"/> class.
@@ -30,6 +34,8 @@ namespace StarLab.Application.Workspace
 
             CreateProjects(dto.Projects);
 
+            document = string.IsNullOrEmpty(dto.ActiveDocument) ? string.Empty : dto.ActiveDocument;
+            folder = string.IsNullOrEmpty(dto.SelectedFolder) ? string.Empty : dto.SelectedFolder;
             layout = dto.Layout;
         }
 
@@ -38,8 +44,15 @@ namespace StarLab.Application.Workspace
         /// </summary>
         public Workspace() 
         {
+            document = string.Empty;
             filename = string.Empty;
+            folder = string.Empty;
         }
+
+        /// <summary>
+        /// Gets the ID of the active document.
+        /// </summary>
+        public string? ActiveDocument => document;
 
         /// <summary>
         /// Gets an <see cref="IEnumerable{Document}"/> containing the documents in the workspace hierarchy.
@@ -86,6 +99,11 @@ namespace StarLab.Application.Workspace
         /// Gets an <see cref="IEnumerable{IFolder}"/> containing the projects in the workspace hierarchy. 
         /// </summary>
         public IEnumerable<IFolder> Projects => projects.Values;
+
+        /// <summary>
+        /// Gets the path of the selected folder.
+        /// </summary>
+        public string? SelectedFolder => folder;
 
         /// <summary>
         /// Adds the <see cref="Document"/> provided to the workspace hierarchy.

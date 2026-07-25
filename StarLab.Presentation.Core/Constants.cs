@@ -107,6 +107,9 @@
         public const string Paste = "Paste";
         public const string PlotArea = "PlotArea";
         public const string Project = "Project";
+        public const string ProjectAddChart = "ProjectAddChart";
+        public const string ProjectAddTable = "ProjectAddTable";
+        public const string ProjectNewFolder = "ProjectNewFolder";
 
         public const string Rename = "Rename";
 

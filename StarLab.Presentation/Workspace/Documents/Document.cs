@@ -57,6 +57,18 @@ namespace StarLab.Presentation.Workspace.Documents
         public string Path => path;
 
         /// <summary>
+        /// Gets the name of the project that contains the document.
+        /// </summary>
+        public string Project
+        {
+            get
+            { 
+                var folders = Path.Split('/');
+                return $"{folders[0]}/{folders[1]}";
+            }
+        }
+        
+        /// <summary>
         /// Gets the name of the view config section.
         /// </summary>
         public string View => view;

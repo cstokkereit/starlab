@@ -49,7 +49,9 @@ namespace StarLab.Presentation
             CreateMap<IFolder, FolderDTO>().ForMember(dest => dest.Path, opt => opt.MapFrom(src => src.Key));
             CreateMap<IProject, ProjectDTO>();
 
-            CreateMap<IWorkspace, WorkspaceDTO>().ForMember(dest => dest.ActiveDocument, opt => opt.MapFrom(src => src.ActiveDocument == null ? string.Empty : src.ActiveDocument.ID.ToString()));
+            CreateMap<IWorkspace, WorkspaceDTO>()
+                .ForMember(dest => dest.ActiveDocument, opt => opt.MapFrom(src => src.ActiveDocument == null ? string.Empty : src.ActiveDocument.ID.ToString()))
+                .ForMember(dest => dest.SelectedFolder, opt => opt.MapFrom(src => src.SelectedFolder == null ? string.Empty : src.SelectedFolder.Key));
         }
     }
 }

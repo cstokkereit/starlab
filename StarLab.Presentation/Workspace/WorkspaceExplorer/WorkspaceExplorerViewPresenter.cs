@@ -66,15 +66,6 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         }
 
         /// <summary>
-        /// Adds a chart to the specified workspace folder.
-        /// </summary>
-        /// <param name="path">The path to the folder.</param>
-        public void AddChart(string path)
-        {
-            AppController.ShowAddChartDialog(workspace, path);
-        }
-
-        /// <summary>
         /// Adds a folder with the specified parent folder.
         /// </summary>
         /// <param name="key">The key that identifies the parent folder.</param>
@@ -162,8 +153,8 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         public void CreateFolderContextMenu(string folder, IMenuManager manager)
         {
             manager.AddMenuItem(Constants.Add, StringResources.Add);
-            manager.AddMenuItem(Constants.Add, Constants.AddChart, StringResources.Chart + Constants.Ellipsis, CreateCommand(GetCommandName(Actions.AddChart, folder), () => AddChart(folder)));
-            //manager.AddMenuItem(Constants.Add, Constants.AddTable, StringResources.Table + Constants.Ellipsis, CreateCommand(GetCommandName(Actions.AddTable, folder), () => AddTable(folder)));
+            manager.AddMenuItem(Constants.Add, Constants.AddChart, StringResources.Chart + Constants.Ellipsis, CreateCommand(GetCommandName(Actions.AddChart, folder), () => AddDocument(folder, DocumentTypes.Chart)));
+            manager.AddMenuItem(Constants.Add, Constants.AddTable, StringResources.Table + Constants.Ellipsis, ImageResources.NewTable, CreateCommand(GetCommandName(Actions.AddTable, folder), () => AddDocument(folder, DocumentTypes.Table)));
             manager.AddMenuItem(Constants.Add, Constants.AddFolder, StringResources.NewFolder, ImageResources.NewFolder, CreateCommand(GetCommandName(Actions.AddFolder, folder), () => AddFolder(folder)));
             manager.AddMenuSeparator();
             manager.AddMenuItem(Constants.CollapseAll, StringResources.CollapseAllDescendants, ImageResources.Collapse, CreateCommand(GetCommandName(Actions.Collapse, folder), () => Collapse(folder)));
@@ -185,8 +176,8 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         public void CreateProjectContextMenu(string project, IMenuManager manager)
         {
             manager.AddMenuItem(Constants.Add, StringResources.Add);
-            manager.AddMenuItem(Constants.Add, Constants.AddChart, StringResources.Chart + Constants.Ellipsis, CreateCommand(Actions.AddChart, () => AddChart(project)));
-            manager.AddMenuItem(Constants.Add, Constants.AddTable, StringResources.Table + Constants.Ellipsis, CreateCommand(Actions.AddTable, () => AddTable(project)));
+            manager.AddMenuItem(Constants.Add, Constants.AddChart, StringResources.Chart + Constants.Ellipsis, CreateCommand(Actions.AddChart, () => AddDocument(project, DocumentTypes.Chart)));
+            manager.AddMenuItem(Constants.Add, Constants.AddTable, StringResources.Table + Constants.Ellipsis, ImageResources.NewTable, CreateCommand(Actions.AddTable, () => AddDocument(project, DocumentTypes.Table)));
             manager.AddMenuItem(Constants.Add, Constants.AddFolder, StringResources.NewFolder, ImageResources.NewFolder, CreateCommand(GetCommandName(Actions.AddFolder, project), () => AddFolder(project)));
             manager.AddMenuSeparator();
             manager.AddMenuItem(Constants.CollapseAll, StringResources.CollapseAllDescendants, ImageResources.Collapse, CreateCommand(GetCommandName(Actions.Collapse, project), () => Collapse(project)));
@@ -416,6 +407,15 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         }
 
         /// <summary>
+        /// Makes the folder with the specified node key the current folder.
+        /// </summary>
+        /// <param name="key">The node key.</param>
+        public void SetSelectedFolder(string key)
+        {
+            workspace.SetSelectedFolder(key);
+        }
+
+        /// <summary>
         /// Displays a <see cref="MessageBox"/> with the specified message.
         /// </summary>
         /// <param name="message">The message text.</param>
@@ -488,6 +488,16 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
             {
                 View.Detach();
             }
+        }
+
+        /// <summary>
+        /// Adds the specified document type to the specified workspace folder.
+        /// </summary>
+        /// <param name="path">The path to the folder.</param>
+        /// <param name="type">A <see cref="DocumentTypes"/> that specifies the type of document being added.</param>
+        private void AddDocument(string path, DocumentTypes type)
+        {
+            AppController.ShowAddDocumentDialog(workspace, path, type);
         }
 
         /// <summary>

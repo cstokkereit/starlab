@@ -20,5 +20,7 @@
         public List<ProjectDTO> Projects;
 
         public string? Layout;
+
+        public string? SelectedFolder;
     }
 }
