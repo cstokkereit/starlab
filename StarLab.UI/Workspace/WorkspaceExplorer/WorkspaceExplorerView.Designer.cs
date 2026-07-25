@@ -81,6 +81,7 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
             treeView.AfterLabelEdit += TreeView_AfterLabelEdit;
             treeView.AfterCollapse += TreeView_AfterCollapse;
             treeView.AfterExpand += TreeView_AfterExpand;
+            treeView.BeforeSelect += TreeView_BeforeSelect;
             treeView.NodeMouseClick += TreeView_NodeMouseClick;
             treeView.NodeMouseDoubleClick += TreeView_NodeDoubleClick;
             // 

@@ -180,6 +180,7 @@ namespace StarLab.Presentation.Workspace.Documents
 
             View.AddImage("ColourColourDiagram32X32", ImageResources.ColourColourDiagram32X32);
             View.AddImage("ColourMagnitudeDiagram32X32", ImageResources.ColourMagnitudeDiagram32X32);
+            View.AddImage("Table32X32", ImageResources.Table32X32);
         }
 
         /// <summary>

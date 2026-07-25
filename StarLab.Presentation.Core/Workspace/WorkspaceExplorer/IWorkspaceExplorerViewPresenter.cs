@@ -89,6 +89,12 @@
         void RenameWorkspace(string name);
 
         /// <summary>
+        /// Makes the folder with the specified node key the current folder.
+        /// </summary>
+        /// <param name="key">The node key.</param>
+        void SetSelectedFolder(string key);
+
+        /// <summary>
         /// Displays a <see cref="MessageBox"/> with the specified message.
         /// </summary>
         /// <param name="message">The message text.</param>

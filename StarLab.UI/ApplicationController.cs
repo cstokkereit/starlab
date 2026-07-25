@@ -299,19 +299,20 @@ namespace StarLab.UI
         }
 
         /// <summary>
-        /// Displays the Add Chart dialog.
+        /// Displays the Add Document dialog.
         /// </summary>
-        /// <param name="workspace">The <see cref="IWorkspace"/> to which the new chart document will be added.</param>
+        /// <param name="workspace">The <see cref="IWorkspace"/> to which the new document will be added.</param>
         /// <param name="path">The path to the folder.</param>
-        public void ShowAddChartDialog(IWorkspace workspace, string path)
+        /// <param name="type">A <see cref="DocumentTypes"/> that specifies the type of document being added.</param>
+        public void ShowAddDocumentDialog(IWorkspace workspace, string path, DocumentTypes type)
         {
             var view = GetView(ViewIDs.AddDocument);
 
             var controller = GetController(view);
 
-            controller.Run(new AddDocumentWorkflowContext(path, DocumentTypes.Chart));
+            controller.Run(new AddDocumentWorkflowContext(path, type));
 
-            this.controller.Show(view);
+            this.controller?.Show(view);
         }
 
         /// <summary>

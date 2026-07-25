@@ -1,4 +1,5 @@
-﻿using StarLab.Tests;
+﻿using AutoMapper;
+using StarLab.Tests;
 
 namespace StarLab.Application.Workspace.Documents
 {
@@ -148,6 +149,10 @@ namespace StarLab.Application.Workspace.Documents
                                         Arg.Is(InteractionResponses.OK));
 
             port.DidNotReceive().UpdateWorkspace(Arg.Any<WorkspaceDTO>());
+
+            //OutputPort.UpdateWorkspace(Mapper.Map<WorkspaceDTO>(workspace));
+
+            //OutputPort.OpenDocument(document.ID);
         }
 
         /// <summary>

@@ -455,4 +455,10 @@ Please enter a valid name.</value>
   <data name="InvalidPath" xml:space="preserve">
     <value>The path cannot be an empty string.</value>
   </data>
+  <data name="AddChart" xml:space="preserve">
+    <value>Add Chart</value>
+  </data>
+  <data name="AddTable" xml:space="preserve">
+    <value>Add Table</value>
+  </data>
 </root>

@@ -79,11 +79,29 @@ namespace StarLab.Shared.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add Chart.
+        /// </summary>
+        public static string AddChart {
+            get {
+                return ResourceManager.GetString("AddChart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add New Document.
         /// </summary>
         public static string AddDocument {
             get {
                 return ResourceManager.GetString("AddDocument", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Table.
+        /// </summary>
+        public static string AddTable {
+            get {
+                return ResourceManager.GetString("AddTable", resourceCulture);
             }
         }
         

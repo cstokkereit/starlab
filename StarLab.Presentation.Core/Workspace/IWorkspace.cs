@@ -44,6 +44,11 @@ namespace StarLab.Presentation.Workspace
         IEnumerable<IProject> Projects { get; }
 
         /// <summary>
+        /// Gets the selected <see cref="IFolder"/>.
+        /// </summary>
+        IFolder? SelectedFolder { get; }
+
+        /// <summary>
         /// Clears the active document.
         /// </summary>
         void ClearActiveDocument();
@@ -111,6 +116,12 @@ namespace StarLab.Presentation.Workspace
         /// </summary>
         /// <param name="id">The ID of the active <see cref="IDocument"/>.</param>
         void SetActiveDocument(DocumentID id);
+
+        /// <summary>
+        /// Sets the selected folder to be the <see cref="IFolder"/> with the specified path.
+        /// </summary>
+        /// <param name="path">The path of the selected folder.</param>
+        void SetSelectedFolder(string path);
 
         /// <summary>
         /// Updates the workspace layout.

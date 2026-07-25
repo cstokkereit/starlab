@@ -94,36 +94,6 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         }
 
         /// <summary>
-        /// Test that the <see cref="WorkspaceExplorerViewPresenter.AddChart(string)"/> method works correctly.
-        /// </summary>
-        [Test]
-        public void TestAddChart()
-        {
-            var presenter = CreatePresenter(true);
-
-            presenter.AddChart("Workspace/Project-1/Charts");
-
-            controller.Received(1).ShowAddChartDialog(workspace, "Workspace/Project-1/Charts");
-        }
-
-        /// <summary>
-        /// Test that the <see cref="WorkspaceExplorerViewPresenter.AddFolder(string)"/> method works correctly.
-        /// </summary>
-        [Test]
-        public void TestAddFolder()
-        {
-            var interactor = Substitute.For<IUseCase<WorkspaceDTO, string>>();
-
-            factory.CreateAddFolderUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
-
-            var presenter = CreatePresenter(true);
-
-            presenter.AddFolder("Workspace-1/Project-1/Documents/Charts");
-
-            interactor.Received(1).Execute(Arg.Is<WorkspaceDTO>(ws => ws.FileName == @"C:\Test\Workspace-1"), "Workspace-1/Project-1/Documents/Charts");
-        }
-
-        /// <summary>
         /// Test that the <see cref="WorkspaceExplorerViewPresenter.AddProject()"/> method works correctly.
         /// </summary>
         [Test]
@@ -324,11 +294,9 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
             menu.Received(1).AddMenuItem(Arg.Any<string>(), Arg.Any<string>());
             menu.Received(1).AddMenuItem(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<ICommand>());
             menu.Received(5).AddMenuItem(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<Image>(), Arg.Any<ICommand>());
-            menu.Received(1).AddMenuItem(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<Image>(), Arg.Any<ICommand>());
+            menu.Received(2).AddMenuItem(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<Image>(), Arg.Any<ICommand>());
 
-            //manager.AddMenuItem(Constants.Add, Constants.AddTable, StringResources.Table + Constants.Ellipsis, CreateCommand(GetCommandName(Actions.AddTable, folder), () => AddTable(folder)));
-
-            commands.Received(12).GetCommand(Arg.Any<string>());
+            commands.Received(13).GetCommand(Arg.Any<string>());
 
             paste.Received(1).Enabled = false;
         }
@@ -354,8 +322,8 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
             menu.Received(1).AddMenuItem(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<Image>());
             menu.Received(1).AddMenuItem(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<ICommand>());
             menu.Received(3).AddMenuItem(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<Image>(), Arg.Any<ICommand>());
-            menu.Received(2).AddMenuItem(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<ICommand>());
-            menu.Received(1).AddMenuItem(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<Image>(), Arg.Any<ICommand>());
+            menu.Received(1).AddMenuItem(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<ICommand>());
+            menu.Received(2).AddMenuItem(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<Image>(), Arg.Any<ICommand>());
 
             commands.Received(11).GetCommand(Arg.Any<string>());
 
@@ -841,6 +809,15 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
             var presenter = CreatePresenter(true);
 
             Assert.Throws<ArgumentException>(() => presenter.RenameWorkspace(string.Empty));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.SetSelectedFolder(string)"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestSetCurrentFolder()
+        {
+            Assert.Fail();
         }
 
         /// <summary>

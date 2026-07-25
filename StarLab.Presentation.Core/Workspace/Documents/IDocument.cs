@@ -1,7 +1,4 @@
-﻿using StarLab.Application;
-using StarLab.Presentation.Workspace.Documents.Charts;
-
-namespace StarLab.Presentation.Workspace.Documents
+﻿namespace StarLab.Presentation.Workspace.Documents
 {
     /// <summary>
     /// Represents a document within a workspace.
@@ -27,6 +24,11 @@ namespace StarLab.Presentation.Workspace.Documents
         /// Gets the path to the folder that contains the document.
         /// </summary>
         string Path { get; }
+
+        /// <summary>
+        /// Gets the name of the project that contains the document.
+        /// </summary>
+        string Project { get; }
 
         /// <summary>
         /// Gets the name of the view config section.

@@ -73,11 +73,12 @@ namespace StarLab.Presentation
         void ShowAboutDialog();
 
         /// <summary>
-        /// Displays the Add Chart dialog.
+        /// Displays the Add Document dialog.
         /// </summary>
-        /// <param name="workspace">The <see cref="IWorkspace"/> to which the new chart document will be added.</param>
+        /// <param name="workspace">The <see cref="IWorkspace"/> to which the new document will be added.</param>
         /// <param name="path">The path to the folder.</param>
-        void ShowAddChartDialog(IWorkspace workspace, string path);
+        /// <param name="type">A <see cref="DocumentTypes"/> that specifies the type of document being added.</param>
+        void ShowAddDocumentDialog(IWorkspace workspace, string path, DocumentTypes type);
 
         /// <summary>
         /// Displays a Document window that contains the <see cref="IDocument"/> provided.

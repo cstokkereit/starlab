@@ -29,6 +29,10 @@ namespace StarLab.Presentation.Configuration
         {
             documentDefinitions.Add(new DocumentDefinition("ColourMagnitudeDiagram", "Colour-Magnitude Diagram", "", DocumentTypes.Chart, "ColourMagnitudeDiagram32X32", "ColourMagnitudeDiagram"));
             documentDefinitions.Add(new DocumentDefinition("ColourColourDiagram", "Colour-Colour Diagram", "", DocumentTypes.Chart, "ColourColourDiagram32X32", "ColourColourDiagram"));
+            documentDefinitions.Add(new DocumentDefinition("AstrometricDataTable", "Astrometric Data Table", "", DocumentTypes.Table, "Table32X32", "Table"));
+            documentDefinitions.Add(new DocumentDefinition("PhotometricDataTable", "Photometric Data Table", "", DocumentTypes.Table, "Table32X32", "Table"));
+            documentDefinitions.Add(new DocumentDefinition("SpectroscopicDataTable", "Spectroscopic Data Table", "", DocumentTypes.Table, "Table32X32", "Table"));
+            documentDefinitions.Add(new DocumentDefinition("CustomTable", "Custom Table", "", DocumentTypes.Table, "Table32X32", "Table"));
         }
     }
 }
