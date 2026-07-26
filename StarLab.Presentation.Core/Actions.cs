@@ -25,7 +25,6 @@
 
         public const string HideSplitContent = "HideSplitContent";
 
-        public const string NewFolder = "NewFolder";
         public const string NewWorkspace = "NewWorkspace";
 
         public const string Open = "Open";

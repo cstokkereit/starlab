@@ -104,15 +104,5 @@
         /// Selects the node that represents the active document.
         /// </summary>
         void Synchronise();
-
-        /// <summary>
-        /// Notifies the presenter that the workspace node has been collapsed.
-        /// </summary>
-        void WorkspaceCollapsed();
-
-        /// <summary>
-        /// Notifies the presenter that the workspace node has been expanded.
-        /// </summary>
-        void WorkspaceExpanded();
     }
 }

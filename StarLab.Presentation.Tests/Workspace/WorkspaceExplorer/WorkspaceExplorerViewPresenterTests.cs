@@ -898,32 +898,6 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         }
 
         /// <summary>
-        /// Test that the <see cref="WorkspaceExplorerViewPresenter.WorkspaceCollapsed()"/> method works correctly.
-        /// </summary>
-        [Test]
-        public void TestWorkspaceCollapsed()
-        {
-            var presenter = CreatePresenter(true);
-
-            presenter.WorkspaceCollapsed();
-
-            workspace.Received(1).Collapse();
-        }
-
-        /// <summary>
-        /// Test that the <see cref="WorkspaceExplorerViewPresenter.WorkspaceExpanded()"/> method works correctly.
-        /// </summary>
-        [Test]
-        public void TestWorkspaceExpanded()
-        {
-            var presenter = CreatePresenter(true);
-
-            presenter.WorkspaceExpanded();
-
-            workspace.Received(1).Expand();
-        }
-
-        /// <summary>
         /// A factory method that creates a new instance of the <see cref="WorkspaceExplorerViewPresenter"/> class.
         /// </summary>
         /// <param name="initialise">true to initialise the presenter; false otherwise.</param>

@@ -66,6 +66,11 @@ namespace StarLab.Presentation.Workspace
         public IEnumerable<IDocument> Documents => documents.Values.OrderBy(document => document.Name);
 
         /// <summary>
+        /// Returns true if the workspace is expanded; false otherwise.
+        /// </summary>
+        public bool Expanded => true;
+
+        /// <summary>
         /// Gets the workspace file name.
         /// </summary>
         public string FileName { get; }
@@ -76,6 +81,11 @@ namespace StarLab.Presentation.Workspace
         public IEnumerable<IFolder> Folders => folders.Values.OrderBy(folder => folder.Key);
 
         /// <summary>
+        /// Gets the workspace key.
+        /// </summary>
+        public string Key => Constants.Workspace;
+
+        /// <summary>
         /// Gets the workspace layout.
         /// </summary>
         public string Layout { get; private set; }
@@ -84,6 +94,11 @@ namespace StarLab.Presentation.Workspace
         /// Gets the workspace name.
         /// </summary>
         public string Name { get; }
+
+        /// <summary>
+        /// Gets the parent folder key.
+        /// </summary>
+        public string ParentKey => string.Empty;
 
         /// <summary>
         /// Gets the projects within the workspace.
@@ -104,9 +119,17 @@ namespace StarLab.Presentation.Workspace
         }
 
         /// <summary>
-        /// Collapses all of the projects and folders within the workspace.
+        /// Collapses the workspace.
         /// </summary>
         public void Collapse()
+        {
+            // Do Nothing
+        }
+
+        /// <summary>
+        /// Recursively collapses the workspace and all of its children.
+        /// </summary>
+        public void CollapseAll()
         {
             foreach (var project in projects.Values)
             {
@@ -115,13 +138,21 @@ namespace StarLab.Presentation.Workspace
         }
 
         /// <summary>
-        /// Expands all of the projects and folders within the workspace.
+        /// Expands the workspace.
         /// </summary>
         public void Expand()
         {
-            foreach (var project in projects.Values)
+            // Do Nothing
+        }
+
+        /// <summary>
+        /// Recursively expands the workspace and all of its children.
+        /// </summary>
+        public void ExpandAll()
+        {
+            foreach (var project in projects)
             {
-                project.Expand();
+                project.Value.ExpandAll();
             }
         }
 
@@ -220,11 +251,17 @@ namespace StarLab.Presentation.Workspace
         /// <param name="path">The path of the selected folder.</param>
         public void SetSelectedFolder(string path)
         {
-            // TODO need to handle workspace and project paths as well as folder paths
-
-            if (folders.TryGetValue(path, out IFolder? folder))
+            if (path == Constants.Workspace)
+            {
+                SelectedFolder = null;
+            }
+            else if (folders.TryGetValue(path, out IFolder? folder))
             {
                 SelectedFolder = folder;
+            }
+            else if (projects.TryGetValue(path, out IProject? project))
+            {
+                SelectedFolder = project;
             }
             else if (documents.TryGetValue(new DocumentID(path), out IDocument? document))
             {

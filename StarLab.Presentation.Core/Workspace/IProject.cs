@@ -5,7 +5,7 @@ namespace StarLab.Presentation.Workspace
     /// <summary>
     /// Represents a project within the workspace.
     /// </summary>
-    public interface IProject : ICollapsible
+    public interface IProject : IFolder
     {
         /// <summary>
         /// Gets the documents in the project.
@@ -16,20 +16,5 @@ namespace StarLab.Presentation.Workspace
         /// Gets the folders in the project.
         /// </summary>
         IEnumerable<IFolder> Folders { get; }
-
-        /// <summary>
-        /// Gets the project key.
-        /// </summary>
-        string Key { get; }
-
-        /// <summary>
-        /// Gets the project name.
-        /// </summary>
-        string Name { get; }
-
-        /// <summary>
-        /// Gets the project parent key.
-        /// </summary>
-        string ParentKey { get; }
     }
 }

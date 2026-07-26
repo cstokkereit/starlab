@@ -79,6 +79,7 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
             treeView.Size = new Size(300, 525);
             treeView.TabIndex = 5;
             treeView.AfterLabelEdit += TreeView_AfterLabelEdit;
+            treeView.BeforeCollapse += TreeView_BeforeCollapse;
             treeView.AfterCollapse += TreeView_AfterCollapse;
             treeView.AfterExpand += TreeView_AfterExpand;
             treeView.BeforeSelect += TreeView_BeforeSelect;

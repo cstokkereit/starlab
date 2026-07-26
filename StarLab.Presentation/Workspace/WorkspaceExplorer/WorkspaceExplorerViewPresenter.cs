@@ -107,7 +107,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         {
             if (key.Equals(Constants.Workspace))
             {
-                workspace.Collapse();
+                workspace.CollapseAll();
             }
             else if (workspace.HasProject(key))
             {
@@ -461,22 +461,6 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         }
 
         /// <summary>
-        /// Notifies the presenter that the workspace node has been collapsed.
-        /// </summary>
-        public void WorkspaceCollapsed()
-        {
-            workspace.Collapse();
-        }
-
-        /// <summary>
-        /// Notifies the presenter that the workspace node has been expanded.
-        /// </summary>
-        public void WorkspaceExpanded()
-        {
-            workspace.Expand();
-        }
-
-        /// <summary>
         /// Releases any resources used by the <see cref="WorkspaceExplorerViewPresenter"/> object.
         /// </summary>
         /// <param name="disposing">true if managed resources can be disposed of; false otherwise.</param>
@@ -569,7 +553,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         {
             if (key == Constants.Workspace)
             {
-                View.ExpandNode(Constants.Workspace);
+                workspace.ExpandAll();
             }
             else
             {

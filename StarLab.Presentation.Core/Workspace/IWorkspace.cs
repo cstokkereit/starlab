@@ -6,7 +6,7 @@ namespace StarLab.Presentation.Workspace
     /// <summary>
     /// Represents the workspace.
     /// </summary>
-    public interface IWorkspace
+    public interface IWorkspace : IFolder
     {
         /// <summary>
         /// Gets the active <see cref="IDocument"/>.
@@ -34,11 +34,6 @@ namespace StarLab.Presentation.Workspace
         string Layout { get; }
 
         /// <summary>
-        /// Gets the workspace name.
-        /// </summary>
-        string Name { get; }
-
-        /// <summary>
         /// Gets the projects within the workspace.
         /// </summary>
         IEnumerable<IProject> Projects { get; }
@@ -52,16 +47,6 @@ namespace StarLab.Presentation.Workspace
         /// Clears the active document.
         /// </summary>
         void ClearActiveDocument();
-
-        /// <summary>
-        /// Collapses all of the projects and folders within the workspace.
-        /// </summary>
-        void Collapse();
-
-        /// <summary>
-        /// Expands all of the projects and folders within the workspace.
-        /// </summary>
-        void Expand();
 
         /// <summary>
         /// Gets the <see cref="IDocument"/> with the specified ID.

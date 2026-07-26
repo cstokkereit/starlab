@@ -5,7 +5,6 @@ using StarLab.Shared;
 using StarLab.Shared.Properties;
 using StarLab.UI.Controls;
 using Stratosoft.Commands;
-using System.Diagnostics;
 
 using Constants = StarLab.Presentation.Constants;
 
@@ -245,22 +244,20 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         /// <param name="e">A <see cref="TreeViewEventArgs"/> that provides context for the event.</param>
         private void TreeView_AfterCollapse(object sender, TreeViewEventArgs e)
         {
-            Debug.Assert(presenter != null);
-
             if (e != null && e.Node != null)
             {
                 switch (GetNodeType(e.Node))
                 {
                     case Constants.Folder:
-                        presenter.FolderCollapsed(e.Node.Name);
+                        presenter?.FolderCollapsed(e.Node.Name);
                         break;
 
                     case Constants.Project:
-                        presenter.ProjectCollapsed(e.Node.Name);
+                        presenter?.ProjectCollapsed(e.Node.Name);
                         break;
 
                     case Constants.Workspace:
-                        presenter.WorkspaceCollapsed();
+                        //presenter?.WorkspaceCollapsed();
                         break;
                 }
             }
@@ -273,22 +270,20 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         /// <param name="e">A <see cref="TreeViewEventArgs"/> that provides context for the event.</param>
         private void TreeView_AfterExpand(object sender, TreeViewEventArgs e)
         {
-            Debug.Assert(presenter != null);
-
             if (e != null && e.Node != null)
             {
                 switch (GetNodeType(e.Node))
                 {
                     case Constants.Folder:
-                        presenter.FolderExpanded(e.Node.Name);
+                        presenter?.FolderExpanded(e.Node.Name);
                         break;
 
                     case Constants.Project:
-                        presenter.ProjectExpanded(e.Node.Name);
+                        presenter?.ProjectExpanded(e.Node.Name);
                         break;
 
                     case Constants.Workspace:
-                        presenter.WorkspaceExpanded();
+                        //presenter?.WorkspaceExpanded();
                         break;
                 }
             }
@@ -301,8 +296,6 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         /// <param name="e">A <see cref="NodeLabelEditEventArgs"/> that provides context for the event.</param>
         private void TreeView_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)
         {
-            Debug.Assert(presenter != null);
-
             if (e != null && e.Label != null && e.Node != null)
             {
                 try
@@ -310,16 +303,16 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
                     switch (GetNodeType(e.Node))
                     {
                         case Constants.Document:
-                            presenter.RenameDocument(e.Node.Name, e.Label);
+                            presenter?.RenameDocument(e.Node.Name, e.Label);
                             break;
 
                         case Constants.Folder:
                         case Constants.Project:
-                            presenter.RenameFolder(e.Node.Name, e.Label);
+                            presenter?.RenameFolder(e.Node.Name, e.Label);
                             break;
 
                         case Constants.Workspace:
-                            presenter.RenameWorkspace(e.Label);
+                            presenter?.RenameWorkspace(e.Label);
                             break;
                     }
 
@@ -329,10 +322,23 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
                 {
                     e.CancelEdit = true;
 
-                    presenter.ShowMessage(ex.Message);
+                    presenter?.ShowMessage(ex.Message);
 
                     e.Node.BeginEdit();
                 }
+            }
+        }
+
+        /// <summary>
+        /// Event handler for the <see cref="TreeView.BeforeCollapse"/> event.
+        /// </summary>
+        /// <param name="sender">The <see cref="object"> that was the originator of the event.</param>
+        /// <param name="e">A <see cref="TreeViewCancelEventArgs"/> that provides context for the event.</param>
+        private void TreeView_BeforeCollapse(object sender, TreeViewCancelEventArgs e)
+        {
+            if (e != null && e.Node != null)
+            {
+                if (GetNodeType(e.Node) == Constants.Workspace) e.Cancel = true;
             }
         }
 
@@ -355,11 +361,9 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         /// <param name="e">A <see cref="TreeNodeMouseClickEventArgs"/> that provides context for the event.</param>
         private void TreeView_NodeDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
         {
-            Debug.Assert(presenter != null);
-
             if (e != null && e.Node != null)
             {
-                if (GetNodeType(e.Node) == Constants.Document) presenter.OpenDocument(e.Node.Name);
+                if (GetNodeType(e.Node) == Constants.Document) presenter?.OpenDocument(e.Node.Name);
             }
         }
 
@@ -370,15 +374,13 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         /// <param name="e">A <see cref="TreeNodeMouseClickEventArgs"/> that provides context for the event.</param>
         private void TreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
-            Debug.Assert(presenter != null);
-
             if (e != null)
             {
                 var node = treeView.GetNodeAt(e.X, e.Y);
 
                 if (node != null)
                 {
-                    presenter.SetSelectedFolder(node.Name);
+                    presenter?.SetSelectedFolder(node.Name);
 
                     if (e.Button == MouseButtons.Right)
                     {
@@ -387,19 +389,19 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
                         switch (GetNodeType(node))
                         {
                             case Constants.Document:
-                                presenter.CreateDocumentContextMenu(node.Name, menu);
+                                presenter?.CreateDocumentContextMenu(node.Name, menu);
                                 break;
 
                             case Constants.Folder:
-                                presenter.CreateFolderContextMenu(node.Name, menu);
+                                presenter?.CreateFolderContextMenu(node.Name, menu);
                                 break;
 
                             case Constants.Project:
-                                presenter.CreateProjectContextMenu(node.Name, menu);
+                                presenter?.CreateProjectContextMenu(node.Name, menu);
                                 break;
 
                             case Constants.Workspace:
-                                presenter.CreateWorkspaceContextMenu(menu);
+                                presenter?.CreateWorkspaceContextMenu(menu);
                                 break;
                         }
 

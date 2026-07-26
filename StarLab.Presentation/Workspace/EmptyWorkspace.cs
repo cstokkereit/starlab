@@ -19,6 +19,11 @@ namespace StarLab.Presentation.Workspace
         public IEnumerable<IDocument> Documents => new List<IDocument>();
 
         /// <summary>
+        /// Returns true if the workspace is expanded; false otherwise.
+        /// </summary>
+        public bool Expanded => false;
+
+        /// <summary>
         /// Gets the workspace file name.
         /// </summary>
         public string FileName => string.Empty;
@@ -29,6 +34,11 @@ namespace StarLab.Presentation.Workspace
         public IEnumerable<IFolder> Folders => new List<IFolder>();
 
         /// <summary>
+        /// Gets the workspace key.
+        /// </summary>
+        public string Key => Constants.Workspace;
+
+        /// <summary>
         /// Gets the workspace layout.
         /// </summary>
         public string Layout => string.Empty;
@@ -37,6 +47,11 @@ namespace StarLab.Presentation.Workspace
         /// Gets the workspace name.
         /// </summary>
         public string Name => string.Empty;
+
+        /// <summary>
+        /// Gets the parent folder key.
+        /// </summary>
+        public string ParentKey => string.Empty;
 
         /// <summary>
         /// Gets the projects within the workspace.
@@ -57,7 +72,7 @@ namespace StarLab.Presentation.Workspace
         }
 
         /// <summary>
-        /// Collapses all of the projects and folders within the workspace.
+        /// Collapses the workspace.
         /// </summary>
         public void Collapse()
         {
@@ -65,9 +80,25 @@ namespace StarLab.Presentation.Workspace
         }
 
         /// <summary>
-        /// Expands all of the projects and folders within the workspace.
+        /// Recursively collapses the workspace and all of its children.
+        /// </summary>
+        public void CollapseAll()
+        {
+            // Do Nothing
+        }
+
+        /// <summary>
+        /// Expands the workspace.
         /// </summary>
         public void Expand()
+        {
+            // Do Nothing
+        }
+
+        /// <summary>
+        /// Recursively expands the workspace and all of its children.
+        /// </summary>
+        public void ExpandAll()
         {
             // Do Nothing
         }

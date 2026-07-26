@@ -512,7 +512,7 @@ namespace StarLab.Presentation
             //View.AddMenuItem(Constants.Project, Constants.ProjectAddChart, StringResources.AddChart + Constants.Ellipsis, CreateCommand(Actions.Show + ViewIDs.AddChart, AddDocument(DocumentTypes.Chart)));
             //View.AddMenuItem(Constants.Project, Constants.ProjectAddTable, StringResources.AddTable + Constants.Ellipsis, ImageResources.NewTable, CreateCommand(Actions.Show + ViewIDs.AddTable, AddDocument(DocumentTypes.Table)));
             View.AddMenuSeparator(Constants.Project);
-            View.AddMenuItem(Constants.Project, Constants.ProjectNewFolder, StringResources.NewFolder + Constants.Ellipsis, ImageResources.NewFolder, CreateCommand(Actions.NewFolder, AddFolder));
+            View.AddMenuItem(Constants.Project, Constants.ProjectNewFolder, StringResources.NewFolder + Constants.Ellipsis, ImageResources.NewFolder, CreateCommand(Actions.AddFolder, AddFolder));
             View.AddMenuSeparator(Constants.Project);
         }
 
