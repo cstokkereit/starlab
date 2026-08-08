@@ -118,12 +118,12 @@ namespace StarLab.Presentation.Options
         }
 
         /// <summary>
-        /// Test that the <see cref="OptionsViewPresenter.Run(IWorkflowContext)"/> method works correctly.
+        /// Test that the <see cref="OptionsViewPresenter.Run(IViewContext)"/> method works correctly.
         /// </summary>
         [Test]
         public void TestRun()
         {
-            var wf = Substitute.For<IWorkflowContext>();
+            var wf = Substitute.For<IViewContext>();
 
             var presenter = CreatePresenter(true);
 

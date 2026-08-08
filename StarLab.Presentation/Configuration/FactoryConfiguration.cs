@@ -85,6 +85,10 @@ namespace StarLab.Presentation.Configuration
                 .AddChild(ViewNames.ChartSettings, SplitViewPanels.Panel1, "StarLab.UI.Workspace.Documents.Charts.ChartSettingsView, StarLab.UI", "StarLab.Presentation.Workspace.Documents.Charts.ChartSettingsViewPresenter, StarLab.Presentation")
                 .AddChild(ViewNames.Chart, SplitViewPanels.Panel2, "StarLab.UI.Workspace.Documents.Charts.ChartView, StarLab.UI", "StarLab.Presentation.Workspace.Documents.Charts.ColourMagnitudeChartViewPresenter, StarLab.Presentation"));
 
+            Add(new ViewConfiguration(ViewNames.Table, ViewTypes.Document)
+                .AddChild(ViewNames.TableSettings, SplitViewPanels.Panel1, "StarLab.UI.Workspace.Documents.Tables.TableSettingsView, StarLab.UI", "StarLab.Presentation.Workspace.Documents.Tables.TableSettingsViewPresenter, StarLab.Presentation")
+                .AddChild(ViewNames.Table, SplitViewPanels.Panel2, "StarLab.UI.Workspace.Documents.Tables.TableView, StarLab.UI", "StarLab.Presentation.Workspace.Documents.Tables.TableViewPresenter, StarLab.Presentation"));
+
             Add(new ViewConfiguration(ViewNames.TwoColourDiagram, ViewTypes.Document)
                 .AddChild(ViewNames.ChartSettings, SplitViewPanels.Panel1, "StarLab.UI.Workspace.Documents.Charts.ChartSettingsView, StarLab.UI", "StarLab.Presentation.Workspace.Documents.Charts.ChartSettingsViewPresenter, StarLab.Presentation")
                 .AddChild(ViewNames.Chart, SplitViewPanels.Panel2, "StarLab.UI.Workspace.Documents.Charts.ChartView, StarLab.UI", "StarLab.Presentation.Workspace.Documents.Charts.TwoColourChartViewPresenter, StarLab.Presentation"));

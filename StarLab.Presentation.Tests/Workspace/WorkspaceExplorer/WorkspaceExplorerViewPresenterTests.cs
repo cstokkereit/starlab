@@ -215,7 +215,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
 
             presenter.Collapse("Workspace");
 
-            workspace.Received(1).Collapse();
+            workspace.Received(1).CollapseAll();
 
             view.Received(1).ExpandNode(Constants.Workspace);
             view.Received(1).CollapseNode(projectKey);
@@ -294,7 +294,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
             menu.Received(1).AddMenuItem(Arg.Any<string>(), Arg.Any<string>());
             menu.Received(1).AddMenuItem(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<ICommand>());
             menu.Received(5).AddMenuItem(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<Image>(), Arg.Any<ICommand>());
-            menu.Received(2).AddMenuItem(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<Image>(), Arg.Any<ICommand>());
+            menu.Received(3).AddMenuItem(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<Image>(), Arg.Any<ICommand>());
 
             commands.Received(13).GetCommand(Arg.Any<string>());
 
@@ -322,8 +322,8 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
             menu.Received(1).AddMenuItem(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<Image>());
             menu.Received(1).AddMenuItem(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<ICommand>());
             menu.Received(3).AddMenuItem(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<Image>(), Arg.Any<ICommand>());
-            menu.Received(1).AddMenuItem(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<ICommand>());
-            menu.Received(2).AddMenuItem(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<Image>(), Arg.Any<ICommand>());
+            menu.Received(0).AddMenuItem(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<ICommand>());
+            menu.Received(3).AddMenuItem(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<Image>(), Arg.Any<ICommand>());
 
             commands.Received(11).GetCommand(Arg.Any<string>());
 
@@ -524,9 +524,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         {
             var presenter = CreatePresenter(true);
 
-            var e = Assert.Throws<InvalidOperationException>(() => presenter.Initialise(controller));
-
-            Assert.That(e.Message, Is.EqualTo("The WorkspaceExplorerViewPresenter has already been initialised."));
+            Assert.Throws<InvalidOperationException>(() => presenter.Initialise(controller));
         }
 
         /// <summary>
@@ -538,7 +536,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
             var modified = new Workspace(new WorkspaceDtoBuilder(@"C:\Workspace-1")
                 .AddProject("Project-1")
                 .AddFolder("Workspace-1/Project-1/Folder-1")
-                .AddDocument("19542B1A-36A5-494F-B6B0-CB562FA36CAC", "ChartView", "Document-1.1", "Workspace-1/Project-1/Folder-1")
+                .AddChart("19542B1A-36A5-494F-B6B0-CB562FA36CAC", "ChartView", "Chart-1.1", "Workspace-1/Project-1/Folder-1")
                 .AddChart("19542B1A-36A5-494F-B6B0-CB562FA36CAC", new ChartDtoBuilder().CreateChart())
                 .CreateWorkspace());
 
@@ -560,7 +558,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
             var modified = new Workspace(new WorkspaceDtoBuilder(@"C:\Workspace-1")
                 .AddProject("Project-1")
                 .AddFolder("Workspace-1/Project-1/Folder-1")
-                .AddDocument("19542B1A-36A5-494F-B6B0-CB562FA36CAC", "ChartView", "Document-1.1", "Workspace-1/Project-1/Folder-1")
+                .AddChart("19542B1A-36A5-494F-B6B0-CB562FA36CAC", "ChartView", "Chart-1.1", "Workspace-1/Project-1/Folder-1")
                 .AddChart("19542B1A-36A5-494F-B6B0-CB562FA36CAC", new ChartDtoBuilder().CreateChart())
                 .CreateWorkspace());
 
@@ -817,7 +815,11 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         [Test]
         public void TestSetCurrentFolder()
         {
-            Assert.Fail();
+            var presenter = CreatePresenter(true);
+
+            presenter.SetSelectedFolder("Workspace/Project");
+
+            workspace.Received(1).SetSelectedFolder("Workspace/Project");
         }
 
         /// <summary>

@@ -36,14 +36,15 @@ namespace StarLab.Presentation
             view = Substitute.For<IApplicationView>();
             view.ID.Returns(ViewIDs.Application);
 
-            var chart = new ChartDtoBuilder().CreateChart();
+            var charts = new ChartDtoBuilder();
 
             workspace = new WorkspaceDtoBuilder(@"C:\Workspace-1")
                 .AddProject("Project-1")
                 .AddFolder("Workspace-1/Project-1/Folder-1")
-                .AddDocument("19542B1A-36A5-494F-B6B0-CB562FA36CAB", "ChartView", "Document-1", "Workspace-1/Project-1/Folder-1")
-                .AddDocument("19542B1A-36A5-494F-B6B0-CB562FA36CAC", "ChartView", "Document-2", "Workspace-1/Project-1/Folder-1")
-                .AddChart("19542B1A-36A5-494F-B6B0-CB562FA36CAB", chart)
+                .AddChart("19542B1A-36A5-494F-B6B0-CB562FA36CAB", "ChartView", "Chart-1", "Workspace-1/Project-1/Folder-1")
+                .AddChart("19542B1A-36A5-494F-B6B0-CB562FA36CAB", charts.CreateChart())
+                .AddChart("19542B1A-36A5-494F-B6B0-CB562FA36CAC", "ChartView", "Chart-2", "Workspace-1/Project-1/Folder-1")
+                .AddChart("19542B1A-36A5-494F-B6B0-CB562FA36CAC", charts.CreateChart())
                 .CreateWorkspace();
         }
 
@@ -117,7 +118,8 @@ namespace StarLab.Presentation
             controller.Received(0).ShowMessage(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<InteractionResponses>());
             interactor.Received(0).Execute(Arg.Any<WorkspaceDTO>());
             command.Received(1).Enabled = false;
-            controller.Received(1).CloseDocument(Arg.Is<IDocument>(d => d.Name == "Document-1"));
+            controller.Received(1).CloseDocument(Arg.Is<IDocument>(d => d.Name == "Chart-1"));
+            controller.Received(1).CloseDocument(Arg.Is<IDocument>(d => d.Name == "Chart-2"));
 
             events.Received(1).Publish(Arg.Any<WorkspaceClosedEventArgs>(), true);
 
@@ -160,7 +162,8 @@ namespace StarLab.Presentation
 
             interactor.Received(0).Execute(Arg.Any<WorkspaceDTO>());
             command.Received(1).Enabled = false;
-            controller.Received(1).CloseDocument(Arg.Is<IDocument>(d => d.Name == "Document-1"));
+            controller.Received(1).CloseDocument(Arg.Is<IDocument>(d => d.Name == "Chart-1"));
+            controller.Received(1).CloseDocument(Arg.Is<IDocument>(d => d.Name == "Chart-2"));
 
             events.Received(1).Publish(Arg.Any<WorkspaceClosedEventArgs>(), true);
 
@@ -203,7 +206,8 @@ namespace StarLab.Presentation
 
             interactor.Received(1).Execute(Arg.Is<WorkspaceDTO>(e => e.FileName == @"C:\Workspace-1"));
             command.Received(1).Enabled = false;
-            controller.Received(1).CloseDocument(Arg.Is<IDocument>(d => d.Name == "Document-1"));
+            controller.Received(1).CloseDocument(Arg.Is<IDocument>(d => d.Name == "Chart-1"));
+            controller.Received(1).CloseDocument(Arg.Is<IDocument>(d => d.Name == "Chart-2"));
 
             events.Received(1).Publish(Arg.Any<WorkspaceClosedEventArgs>(), true);
 
@@ -413,14 +417,14 @@ namespace StarLab.Presentation
             events.Received(1).Subsribe(presenter);
 
             view.Received(0).AddMenuSeparator();
-            view.Received(7).AddMenuSeparator(Arg.Any<string>());
+            view.Received(8).AddMenuSeparator(Arg.Any<string>());
             view.Received(6).AddMenuItem(Arg.Any<string>(), Arg.Any<string>());
             view.Received(0).AddMenuItem(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<Image>());
             view.Received(0).AddMenuItem(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<ICommand>());
             view.Received(0).AddMenuItem(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<Image>(), Arg.Any<ICommand>());
             view.Received(2).AddMenuItem(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<Image>());
             view.Received(4).AddMenuItem(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<ICommand>());
-            view.Received(4).AddMenuItem(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<Image>(), Arg.Any<ICommand>());
+            view.Received(7).AddMenuItem(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<Image>(), Arg.Any<ICommand>());
 
             view.Received(2).AddToolbarButton(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<Image>(), Arg.Any<ICommand>());
 
@@ -823,7 +827,7 @@ namespace StarLab.Presentation
             presenter.UpdateDocument(new WorkspaceDtoBuilder(@"C:\Workspace-1")
                 .AddProject("Project-1")
                 .AddFolder("Workspace-1/Project-1/Folder-1")
-                .AddDocument("19542B1A-36A5-494F-B6B0-CB562FA36CAC", "ChartView", "Document-1.1", "Workspace-1/Project-1/Folder-1")
+                .AddChart("19542B1A-36A5-494F-B6B0-CB562FA36CAC", "ChartView", "Chart-1.1", "Workspace-1/Project-1/Folder-1")
                 .AddChart("19542B1A-36A5-494F-B6B0-CB562FA36CAC", new ChartDtoBuilder().CreateChart())
                 .CreateWorkspace(), "19542B1A-36A5-494F-B6B0-CB562FA36CAC");
 
@@ -836,11 +840,11 @@ namespace StarLab.Presentation
 
             Assert.That(document, Is.Not.Null);
             Assert.That(document.ID, Is.EqualTo(documentID));
-            Assert.That(document.Name, Is.EqualTo("Document-1.1"));
+            Assert.That(document.Name, Is.EqualTo("Chart-1.1"));
 
             Assert.That(doc, Is.Not.Null);
             Assert.That(doc.ID, Is.EqualTo(documentID));
-            Assert.That(doc.Name, Is.EqualTo("Document-1.1"));
+            Assert.That(doc.Name, Is.EqualTo("Chart-1.1"));
         }
 
         /// <summary>

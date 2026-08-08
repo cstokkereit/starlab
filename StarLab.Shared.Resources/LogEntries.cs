@@ -15,6 +15,8 @@
 
         public const string StartingApplication = "Starting the application.";
 
+        public const string UnrecognisedDocumentType = "The document type {0} is not recognised.";
+
         public const string ViewClosed = "The {0} has been closed.";
 
         public const string ViewCreated = "The {0} has been created.";

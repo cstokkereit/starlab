@@ -3,7 +3,6 @@ using StarLab.Presentation;
 using StarLab.Presentation.Workspace.Documents.Tables;
 using StarLab.Shared;
 using StarLab.Shared.Properties;
-using StarLab.UI.Workspace.Documents.Charts;
 
 namespace StarLab.UI.Workspace.Documents.Tables
 {
@@ -17,14 +16,14 @@ namespace StarLab.UI.Workspace.Documents.Tables
         private ITableSettingsViewPresenter? presenter; // The presenter that controls the view.
 
         /// <summary>
-        /// Initialises a new instance of the <see cref="ChartSettingsView"> class.
+        /// Initialises a new instance of the <see cref="TableSettingsView"> class.
         /// </summary>
         public TableSettingsView()
         {
             InitializeComponent();
 
-            ID = ViewIDs.ChartSettings;
-            Name = ViewNames.ChartSettings;
+            ID = ViewIDs.TableSettings;
+            Name = ViewNames.TableSettings;
         }
 
         /// <summary>
@@ -70,7 +69,7 @@ namespace StarLab.UI.Workspace.Documents.Tables
         /// </summary>
         public void Initialise()
         {
-            throw new NotImplementedException();
+            // TODO
         }
     }
 }

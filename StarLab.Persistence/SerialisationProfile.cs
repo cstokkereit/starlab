@@ -2,9 +2,11 @@
 using StarLab.Application.Workspace;
 using StarLab.Application.Workspace.Documents;
 using StarLab.Application.Workspace.Documents.Charts;
+using StarLab.Application.Workspace.Documents.Tables;
 using StarLab.Serialisation.Workspace;
 using StarLab.Serialisation.Workspace.Documents;
 using StarLab.Serialisation.Workspace.Documents.Charts;
+using StarLab.Serialisation.Workspace.Documents.Tables;
 
 namespace StarLab.Serialisation
 {
@@ -29,6 +31,7 @@ namespace StarLab.Serialisation
             CreateMap<PlotArea, PlotAreaDTO>().ReverseMap();
             CreateMap<Project, ProjectDTO>().ReverseMap();
             CreateMap<Scale, ScaleDTO>().ReverseMap();
+            CreateMap<Table, TableDTO>().ReverseMap();
             CreateMap<TickLabels, TickLabelsDTO>().ReverseMap();
             CreateMap<TickMarks, TickMarksDTO>().ReverseMap();
             CreateMap<Workspace.Workspace, WorkspaceDTO>().ReverseMap();

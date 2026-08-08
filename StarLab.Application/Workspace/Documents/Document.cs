@@ -1,4 +1,5 @@
 ﻿using StarLab.Application.Workspace.Documents.Charts;
+using StarLab.Application.Workspace.Documents.Tables;
 
 namespace StarLab.Application.Workspace.Documents
 {
@@ -7,6 +8,8 @@ namespace StarLab.Application.Workspace.Documents
     /// </summary>
     internal class Document
     {
+        private readonly string type; // The document type.
+
         private readonly string view; // The type name of the document view.
 
         private readonly string id; // The document ID.
@@ -25,13 +28,19 @@ namespace StarLab.Application.Workspace.Documents
 
             this.folder = folder ?? throw new ArgumentException();
 
-            Name = dto.Name ?? throw new ArgumentException();
+            Name = dto.Name ?? throw new ArgumentException(); // TODO - Validate dto and throw suitable exception (and elsewhere)
 
+            type = dto.Type ?? throw new ArgumentException();
             view = dto.View ?? throw new ArgumentException();
-
+            
             if (dto.Chart != null)
             {
                 Chart = new Chart(dto.Chart);
+            }
+
+            if (dto.Table != null)
+            {
+                Table = new Table(dto.Table);
             }
         }
 
@@ -51,8 +60,10 @@ namespace StarLab.Application.Workspace.Documents
             id = Guid.NewGuid().ToString();
 
             Chart = document.Chart;
+            Table = document.Table;
 
-            view = document.view;
+            type = document.Type;
+            view = document.View;
 
             Name = name;
         }
@@ -72,9 +83,11 @@ namespace StarLab.Application.Workspace.Documents
             id = Guid.NewGuid().ToString();
 
             Chart = document.Chart;
+            Table = document.Table;
             Name = document.Name;
 
-            view = document.view;
+            type = document.Type;
+            view = document.View;
         }
 
         /// <summary>
@@ -96,6 +109,16 @@ namespace StarLab.Application.Workspace.Documents
         /// Gets the document path.
         /// </summary>
         public string Path => folder.Path;
+
+        /// <summary>
+        /// Gets or sets the table.
+        /// </summary>
+        public Table? Table { get; set; }
+
+        /// <summary>
+        /// Gets the document type.
+        /// </summary>
+        public string Type => type;
 
         /// <summary>
         /// Gets the type name of the document view.

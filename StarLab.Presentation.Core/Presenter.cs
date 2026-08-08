@@ -1,4 +1,5 @@
 ﻿using StarLab.Presentation.Configuration;
+using StarLab.Shared.Properties;
 using Stratosoft.Commands;
 using System.Diagnostics;
 
@@ -38,7 +39,7 @@ namespace StarLab.Presentation
         /// <param name="controller">The <see cref="IApplicationController"/>.</param>
         public virtual void Initialise(IApplicationController controller)
         {
-            Debug.Assert(!Initialised); // TODO throw an error?
+            Debug.Assert(this.controller == null);
 
             this.controller = controller ?? throw new ArgumentNullException(nameof(controller));
 
@@ -52,7 +53,8 @@ namespace StarLab.Presentation
         {
             get
             {
-                Debug.Assert(controller != null);
+                if (controller == null) throw new InvalidOperationException(string.Format(Resources.NotInitialised, "presenter"));
+
                 return controller;
             }
         }
@@ -81,7 +83,7 @@ namespace StarLab.Presentation
         /// <exception cref="InvalidOperationException"></exception>
         protected ICommand CreateCommand(string name, Action action)
         {
-            if (!commands.ContainsCommand(name)) //throw new InvalidOperationException(string.Format(Resources.CommandAlreadyExists, name));
+            if (!commands.ContainsCommand(name))
             {
                 commands.AddCommand(name, new ComponentCommand(commands, action));
             }

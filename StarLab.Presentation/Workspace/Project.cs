@@ -1,7 +1,10 @@
-﻿using StarLab.Application.Workspace;
+﻿using log4net;
+using StarLab.Application.Workspace;
 using StarLab.Application.Workspace.Documents;
 using StarLab.Presentation.Workspace.Documents;
 using StarLab.Presentation.Workspace.Documents.Charts;
+using StarLab.Presentation.Workspace.Documents.Tables;
+using StarLab.Shared;
 
 namespace StarLab.Presentation.Workspace
 {
@@ -10,6 +13,8 @@ namespace StarLab.Presentation.Workspace
     /// </summary>
     internal class Project : IProject
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(Project)); // The logger that will be used for writing log messages.
+
         private readonly List<IDocument> documents = new List<IDocument>(); // A list containing the documents that belong to this project.
 
         private readonly List<IFolder> folders = new List<IFolder>(); // A list containing the child folders.
@@ -133,9 +138,19 @@ namespace StarLab.Presentation.Workspace
         {
             foreach (var dto in dtos)
             {
-                if (dto.Chart != null)
+                switch (dto.Type)
                 {
-                    documents.Add(new ChartDocument(dto)); // TODO - Handle diffferent types of document
+                    case "Chart":
+                        documents.Add(new ChartDocument(dto));
+                        break;
+
+                    case "Table":
+                        documents.Add(new TableDocument(dto));
+                        break;
+
+                    default:
+                        log.Warn(string.Format(LogEntries.UnrecognisedDocumentType, dto.Type));
+                        break;
                 }
             }
         }

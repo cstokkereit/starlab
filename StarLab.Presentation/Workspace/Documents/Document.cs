@@ -9,6 +9,8 @@ namespace StarLab.Presentation.Workspace.Documents
     {
         private readonly string path; // The path to the folder containing the document.
 
+        private readonly DocumentTypes type; // The document type.
+
         private readonly string view; // The name of the view config section.
 
         private readonly DocumentID id; // The document ID.
@@ -24,13 +26,15 @@ namespace StarLab.Presentation.Workspace.Documents
         {
             ArgumentNullException.ThrowIfNull(dto, nameof(dto));
 
-            ArgumentException.ThrowIfNullOrEmpty(dto.Name, nameof(dto.Name));
+            ArgumentException.ThrowIfNullOrEmpty(dto.Name, nameof(dto.Name)); // TODO - Validate dto and throw suitable exception (and elsewhere)
             ArgumentException.ThrowIfNullOrEmpty(dto.Path, nameof(dto.Path));
             ArgumentException.ThrowIfNullOrEmpty(dto.View, nameof(dto.View));
             ArgumentException.ThrowIfNullOrEmpty(dto.ID, nameof(dto.ID));
 
             id = new DocumentID(dto.ID);
 
+            if (dto.Type != null) type = Enum.Parse<DocumentTypes>(dto.Type);
+            
             name = dto.Name;
             path = dto.Path;
             view = dto.View;
@@ -55,6 +59,11 @@ namespace StarLab.Presentation.Workspace.Documents
         /// Gets the path to the folder that contains the document.
         /// </summary>
         public string Path => path;
+
+        /// <summary>
+        /// Gets the document type.
+        /// </summary>
+        public DocumentTypes Type => type;
 
         /// <summary>
         /// Gets the name of the project that contains the document.

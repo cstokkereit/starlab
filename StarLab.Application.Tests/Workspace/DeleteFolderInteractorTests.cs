@@ -46,12 +46,12 @@ namespace StarLab.Application.Workspace
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
-                .AddDocument("1", "Document1", "Workspace/Project1/Folder1")
+                .AddChart("1", "Document1", "Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder2")
-                .AddDocument("21", "Document2", "Workspace/Project1/Folder2")
-                .AddDocument("22", "Document3", "Workspace/Project1/Folder2")
+                .AddChart("21", "Document2", "Workspace/Project1/Folder2")
+                .AddChart("22", "Document3", "Workspace/Project1/Folder2")
                 .AddFolder("Workspace/Project1/Folder3")
-                .AddDocument("3", "Document4", "Workspace/Project1/Folder3")
+                .AddChart("3", "Document4", "Workspace/Project1/Folder3")
                 .CreateWorkspace();
 
             port.ShowMessage(Arg.Any<string>(),
@@ -81,12 +81,12 @@ namespace StarLab.Application.Workspace
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
-                .AddDocument("1", "Document1", "Workspace/Project1/Folder1")
+                .AddChart("1", "Document1", "Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder2")
-                .AddDocument("21", "Document2", "Workspace/Project1/Folder2")
-                .AddDocument("22", "Document3", "Workspace/Project1/Folder2")
+                .AddChart("21", "Document2", "Workspace/Project1/Folder2")
+                .AddChart("22", "Document3", "Workspace/Project1/Folder2")
                 .AddFolder("Workspace/Project1/Folder3")
-                .AddDocument("3", "Document4", "Workspace/Project1/Folder3")
+                .AddChart("3", "Document4", "Workspace/Project1/Folder3")
                 .CreateWorkspace();
 
             port.ShowMessage(Arg.Any<string>(),
@@ -113,18 +113,18 @@ namespace StarLab.Application.Workspace
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder1/Folder1")
-                .AddDocument("111", "Document1", "Workspace/Project1/Folder1/Folder1")
-                .AddDocument("112", "Document2", "Workspace/Project1/Folder1/Folder1")
+                .AddChart("111", "Document1", "Workspace/Project1/Folder1/Folder1")
+                .AddChart("112", "Document2", "Workspace/Project1/Folder1/Folder1")
                 .AddFolder("Workspace/Project1/Folder1/Folder2")
-                .AddDocument("121", "Document3", "Workspace/Project1/Folder1/Folder2")
-                .AddDocument("122", "Document4", "Workspace/Project1/Folder1/Folder2")
+                .AddChart("121", "Document3", "Workspace/Project1/Folder1/Folder2")
+                .AddChart("122", "Document4", "Workspace/Project1/Folder1/Folder2")
                 .AddFolder("Workspace/Project1/Folder2")
                 .AddFolder("Workspace/Project1/Folder2/Folder1")
-                .AddDocument("211", "Document5", "Workspace/Project1/Folder2/Folder1")
-                .AddDocument("212", "Document6", "Workspace/Project1/Folder2/Folder1")
+                .AddChart("211", "Document5", "Workspace/Project1/Folder2/Folder1")
+                .AddChart("212", "Document6", "Workspace/Project1/Folder2/Folder1")
                 .AddFolder("Workspace/Project1/Folder2/Folder2")
-                .AddDocument("221", "Document7", "Workspace/Project1/Folder2/Folder2")
-                .AddDocument("222", "Document8", "Workspace/Project1/Folder2/Folder2")
+                .AddChart("221", "Document7", "Workspace/Project1/Folder2/Folder2")
+                .AddChart("222", "Document8", "Workspace/Project1/Folder2/Folder2")
                 .CreateWorkspace();
 
             port.ShowMessage(Arg.Any<string>(),
@@ -204,12 +204,12 @@ namespace StarLab.Application.Workspace
 
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
-                .AddDocument("1", "Document1", "Workspace/Project1")
+                .AddChart("1", "Document1", "Workspace/Project1")
                 .AddProject("Project2")
-                .AddDocument("21", "Document2", "Workspace/Project2")
-                .AddDocument("22", "Document3", "Workspace/Project2")
+                .AddChart("21", "Document2", "Workspace/Project2")
+                .AddChart("22", "Document3", "Workspace/Project2")
                 .AddProject("Project3")
-                .AddDocument("3", "Document4", "Workspace/Project3")
+                .AddChart("3", "Document4", "Workspace/Project3")
                 .CreateWorkspace();
 
             port.ShowMessage(Arg.Any<string>(),
@@ -237,12 +237,12 @@ namespace StarLab.Application.Workspace
 
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
-                .AddDocument("1", "Document1", "Workspace/Project1")
+                .AddChart("1", "Document1", "Workspace/Project1")
                 .AddProject("Project2")
-                .AddDocument("21", "Document2", "Workspace/Project2")
-                .AddDocument("22", "Document3", "Workspace/Project2")
+                .AddChart("21", "Document2", "Workspace/Project2")
+                .AddChart("22", "Document3", "Workspace/Project2")
                 .AddProject("Project3")
-                .AddDocument("3", "Document4", "Workspace/Project3")
+                .AddChart("3", "Document4", "Workspace/Project3")
                 .CreateWorkspace();
 
             port.ShowMessage(Arg.Any<string>(),
@@ -269,19 +269,19 @@ namespace StarLab.Application.Workspace
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder1/Folder1")
-                .AddDocument("1111", "Document1", "Workspace/Project1/Folder1/Folder1")
-                .AddDocument("1112", "Document2", "Workspace/Project1/Folder1/Folder1")
+                .AddChart("1111", "Document1", "Workspace/Project1/Folder1/Folder1")
+                .AddChart("1112", "Document2", "Workspace/Project1/Folder1/Folder1")
                 .AddFolder("Workspace/Project1/Folder1/Folder2")
-                .AddDocument("1121", "Document3", "Workspace/Project1/Folder1/Folder2")
-                .AddDocument("1122", "Document4", "Workspace/Project1/Folder1/Folder2")
+                .AddChart("1121", "Document3", "Workspace/Project1/Folder1/Folder2")
+                .AddChart("1122", "Document4", "Workspace/Project1/Folder1/Folder2")
                 .AddProject("Project2")
                 .AddFolder("Workspace/Project2/Folder1")
                 .AddFolder("Workspace/Project2/Folder1/Folder1")
-                .AddDocument("2111", "Document5", "Workspace/Project2/Folder1/Folder1")
-                .AddDocument("2112", "Document6", "Workspace/Project2/Folder1/Folder1")
+                .AddChart("2111", "Document5", "Workspace/Project2/Folder1/Folder1")
+                .AddChart("2112", "Document6", "Workspace/Project2/Folder1/Folder1")
                 .AddFolder("Workspace/Project2/Folder1/Folder2")
-                .AddDocument("2121", "Document7", "Workspace/Project2/Folder1/Folder2")
-                .AddDocument("2122", "Document8", "Workspace/Project2/Folder1/Folder2")
+                .AddChart("2121", "Document7", "Workspace/Project2/Folder1/Folder2")
+                .AddChart("2122", "Document8", "Workspace/Project2/Folder1/Folder2")
                 .CreateWorkspace();
 
             port.ShowMessage(Arg.Any<string>(),

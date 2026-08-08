@@ -13,7 +13,7 @@
         /// <summary>
         /// Initiates the workflow managed by the dialog box.
         /// </summary>
-        /// <param name="context">An <see cref="IWorkflowContext"/> that contains the information required to execute the workflow.</param>
-        void Run(IWorkflowContext context);
+        /// <param name="context">An <see cref="IViewContext"/> that contains the information required to execute the workflow.</param>
+        void Run(IViewContext context);
     }
 }

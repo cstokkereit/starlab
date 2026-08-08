@@ -7,6 +7,8 @@
     {
         public static readonly char[] IllegalCharacters = { '\\', '/', ':', '*', '?', '\'', '\"', '<', '>', '|' };
 
+        public const string Chart = "Chart";
+
         public const string DefaultBackColour = "White";
         public const string DefaultFontFamily = "Segoe UI";
         public const int DefaultFontSize = 10;
@@ -18,6 +20,8 @@
         public const string InvalidPathMessage = "The path cannot be an empty string.";
 
         public const string NameExistsMessage = "A {0} with the name '{1}' already exists.";
+
+        public const string Table = "Table";
 
         public const string Workspace = "Workspace";
         public const string WorkspaceExtension = ".slw";

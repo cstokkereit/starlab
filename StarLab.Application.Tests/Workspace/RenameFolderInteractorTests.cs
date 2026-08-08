@@ -131,8 +131,8 @@ namespace StarLab.Application.Workspace
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
-                .AddDocument("1", "Document1", "Workspace/Project1/Folder1")
-                .AddDocument("2", "Document2", "Workspace/Project1/Folder1")
+                .AddChart("1", "Document1", "Workspace/Project1/Folder1")
+                .AddChart("2", "Document2", "Workspace/Project1/Folder1")
                 .CreateWorkspace();
 
             interactor.Execute(dto, "Workspace/Project1/Folder1", "Folder2");
@@ -167,13 +167,13 @@ namespace StarLab.Application.Workspace
                 .AddFolder("Workspace/Project1/Folder1/Folder11/Folder112")
                 .AddFolder("Workspace/Project1/Folder1/Folder12/Folder121")
                 .AddFolder("Workspace/Project1/Folder1/Folder12/Folder122")
-                .AddDocument("1", "Document1", "Workspace/Project1/Folder1")
-                .AddDocument("2", "Document2", "Workspace/Project1/Folder1/Folder11")
-                .AddDocument("3", "Document3", "Workspace/Project1/Folder1/Folder12")
-                .AddDocument("4", "Document4", "Workspace/Project1/Folder1/Folder11/Folder111")
-                .AddDocument("5", "Document5", "Workspace/Project1/Folder1/Folder11/Folder112")
-                .AddDocument("6", "Document6", "Workspace/Project1/Folder1/Folder12/Folder121")
-                .AddDocument("7", "Document7", "Workspace/Project1/Folder1/Folder12/Folder122")
+                .AddChart("1", "Document1", "Workspace/Project1/Folder1")
+                .AddChart("2", "Document2", "Workspace/Project1/Folder1/Folder11")
+                .AddChart("3", "Document3", "Workspace/Project1/Folder1/Folder12")
+                .AddChart("4", "Document4", "Workspace/Project1/Folder1/Folder11/Folder111")
+                .AddChart("5", "Document5", "Workspace/Project1/Folder1/Folder11/Folder112")
+                .AddChart("6", "Document6", "Workspace/Project1/Folder1/Folder12/Folder121")
+                .AddChart("7", "Document7", "Workspace/Project1/Folder1/Folder12/Folder122")
                 .CreateWorkspace();
 
             interactor.Execute(dto, "Workspace/Project1/Folder1", "Folder2");
@@ -224,13 +224,13 @@ namespace StarLab.Application.Workspace
                 .AddFolder("Workspace/Project1/Folder1/Folder11/Folder112")
                 .AddFolder("Workspace/Project1/Folder1/Folder12/Folder121")
                 .AddFolder("Workspace/Project1/Folder1/Folder12/Folder122")
-                .AddDocument("1", "Document1", "Workspace/Project1/Folder1")
-                .AddDocument("2", "Document2", "Workspace/Project1/Folder1/Folder11")
-                .AddDocument("3", "Document3", "Workspace/Project1/Folder1/Folder12")
-                .AddDocument("4", "Document4", "Workspace/Project1/Folder1/Folder11/Folder111")
-                .AddDocument("5", "Document5", "Workspace/Project1/Folder1/Folder11/Folder112")
-                .AddDocument("6", "Document6", "Workspace/Project1/Folder1/Folder12/Folder121")
-                .AddDocument("7", "Document7", "Workspace/Project1/Folder1/Folder12/Folder122")
+                .AddChart("1", "Document1", "Workspace/Project1/Folder1")
+                .AddChart("2", "Document2", "Workspace/Project1/Folder1/Folder11")
+                .AddChart("3", "Document3", "Workspace/Project1/Folder1/Folder12")
+                .AddChart("4", "Document4", "Workspace/Project1/Folder1/Folder11/Folder111")
+                .AddChart("5", "Document5", "Workspace/Project1/Folder1/Folder11/Folder112")
+                .AddChart("6", "Document6", "Workspace/Project1/Folder1/Folder12/Folder121")
+                .AddChart("7", "Document7", "Workspace/Project1/Folder1/Folder12/Folder122")
                 .CreateWorkspace();
 
             interactor.Execute(dto, "Workspace/Project1/Folder1/Folder12", "Folder2");
@@ -287,14 +287,14 @@ namespace StarLab.Application.Workspace
                 .AddFolder("Workspace/Project2/Folder2/Folder21")
                 .AddFolder("Workspace/Project2/Folder1/Folder11/Folder111")
                 .AddFolder("Workspace/Project2/Folder1/Folder11/Folder112")
-                .AddDocument("1", "Document1", "Workspace/Project1/Folder1/Folder11/Folder111")
-                .AddDocument("2", "Document2", "Workspace/Project1/Folder1/Folder11/Folder111")
-                .AddDocument("3", "Document3", "Workspace/Project1/Folder1/Folder11/Folder112")
-                .AddDocument("4", "Document4", "Workspace/Project1/Folder1/Folder11/Folder112")
-                .AddDocument("5", "Document5", "Workspace/Project2/Folder1/Folder11/Folder111")
-                .AddDocument("6", "Document6", "Workspace/Project2/Folder1/Folder11/Folder111")
-                .AddDocument("7", "Document7", "Workspace/Project2/Folder1/Folder11/Folder112")
-                .AddDocument("8", "Document8", "Workspace/Project2/Folder1/Folder11/Folder112")
+                .AddChart("1", "Document1", "Workspace/Project1/Folder1/Folder11/Folder111")
+                .AddChart("2", "Document2", "Workspace/Project1/Folder1/Folder11/Folder111")
+                .AddChart("3", "Document3", "Workspace/Project1/Folder1/Folder11/Folder112")
+                .AddChart("4", "Document4", "Workspace/Project1/Folder1/Folder11/Folder112")
+                .AddChart("5", "Document5", "Workspace/Project2/Folder1/Folder11/Folder111")
+                .AddChart("6", "Document6", "Workspace/Project2/Folder1/Folder11/Folder111")
+                .AddChart("7", "Document7", "Workspace/Project2/Folder1/Folder11/Folder112")
+                .AddChart("8", "Document8", "Workspace/Project2/Folder1/Folder11/Folder112")
                 .CreateWorkspace();
 
             interactor.Execute(dto, "Workspace/Project2", "Project3");

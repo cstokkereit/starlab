@@ -4,7 +4,6 @@ using StarLab.Application;
 using StarLab.Presentation;
 using StarLab.Presentation.Workspace;
 using StarLab.Presentation.Workspace.Documents;
-using StarLab.Presentation.Workspace.Documents.Charts;
 using StarLab.Shared;
 using StarLab.Shared.Properties;
 using StarLab.UI.Controls;
@@ -154,8 +153,6 @@ namespace StarLab.UI
 
             throw new KeyNotFoundException(string.Format(Resources.ViewNotFound, document.ID)); 
         }
-
-
 
         /// <summary>
         /// Gets the specified output port.
@@ -310,7 +307,7 @@ namespace StarLab.UI
 
             var controller = GetController(view);
 
-            controller.Run(new AddDocumentWorkflowContext(path, type));
+            controller.Run(new AddDocumentViewContext(path, type));
 
             this.controller?.Show(view);
         }
@@ -583,14 +580,22 @@ namespace StarLab.UI
         /// <returns>The specified log entry.</returns>
         private string CreateLogEntry(string template, IDocument document)
         {
-            string message = string.Empty;
+            string message;
 
-            if (document is IChartDocument)
+            switch (document.Type)
             {
-                message = string.Format(template, $"chart {document.Name} ({document.ID})");
-            }
+                case DocumentTypes.Chart:
+                    message = string.Format(template, $"chart {document.Name} ({document.ID})");
+                    break;
 
-            Debug.Assert(!string.IsNullOrEmpty(message));
+                case DocumentTypes.Table:
+                    message = string.Format(template, $"table {document.Name} ({document.ID})");
+                    break;
+
+                default:
+                    message = string.Format(LogEntries.UnrecognisedDocumentType, document.Type);
+                    break;
+            }
 
             return message;
         }
@@ -608,7 +613,7 @@ namespace StarLab.UI
 
             if (this.controller == null)
             {
-                throw new InvalidOperationException(Resources.NotInitialised);
+                throw new InvalidOperationException(string.Format(Resources.NotInitialised, $"{(view != null ? view.Name : "view")} controller"));
             }
             
             return this.controller;

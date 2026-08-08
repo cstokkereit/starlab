@@ -20,8 +20,8 @@ namespace StarLab.Application.Workspace.Documents
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
-                .AddDocument("1", "Document1", "Workspace/Project1/Folder1")
-                .AddDocument("2", "Document2", "Workspace/Project1/Folder1")
+                .AddChart("1", "Document1", "Workspace/Project1/Folder1")
+                .AddChart("2", "Document2", "Workspace/Project1/Folder1")
                 .CreateWorkspace();
 
             interactor.Execute(dto, "1", "Document3");
@@ -48,7 +48,7 @@ namespace StarLab.Application.Workspace.Documents
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
-                .AddDocument("1", "Document1", "Workspace/Project1/Folder1")
+                .AddChart("1", "Document1", "Workspace/Project1/Folder1")
                 .CreateWorkspace();
 
             var e = Assert.Throws<Exception>(() => interactor.Execute(dto, "1", string.Empty));
@@ -69,8 +69,8 @@ namespace StarLab.Application.Workspace.Documents
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
-                .AddDocument("1", "Document1", "Workspace/Project1/Folder1")
-                .AddDocument("2", "Document2", "Workspace/Project1/Folder1")
+                .AddChart("1", "Document1", "Workspace/Project1/Folder1")
+                .AddChart("2", "Document2", "Workspace/Project1/Folder1")
                 .CreateWorkspace();
 
             var e = Assert.Throws<Exception>(() => interactor.Execute(dto, "1", "Document2"));
@@ -91,7 +91,7 @@ namespace StarLab.Application.Workspace.Documents
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
-                .AddDocument("1", "Document1", "Workspace/Project1/Folder1")
+                .AddChart("1", "Document1", "Workspace/Project1/Folder1")
                 .CreateWorkspace();
 
             var e = Assert.Throws<Exception>(() => interactor.Execute(dto, "1", "Document1/"));

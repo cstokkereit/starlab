@@ -681,7 +681,7 @@ namespace StarLab.Shared.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This instance has not been properly initialised..
+        ///   Looks up a localized string similar to The {0} has not been initialised..
         /// </summary>
         public static string NotInitialised {
             get {

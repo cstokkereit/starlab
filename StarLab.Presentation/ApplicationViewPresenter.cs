@@ -447,7 +447,7 @@ namespace StarLab.Presentation
             {
                 var path = workspace.SelectedFolder.Key;
 
-                useCaseService.AddFolder(workspace, path);
+                //useCaseService.AddFolder(workspace, path); // ?????
 
                 AppController.ShowAddDocumentDialog(workspace, path, type);
             }
@@ -458,8 +458,6 @@ namespace StarLab.Presentation
         /// </summary>
         private void AddFolder()
         {
-            // TODO Need to handle project and workspace
-
             if (workspace.SelectedFolder != null)
             {
                 useCaseService.AddFolder(workspace, workspace.SelectedFolder.Key);
@@ -506,11 +504,9 @@ namespace StarLab.Presentation
         /// </summary>
         private void CreateProjectMenu()
         {
-            //CreateCommand(GetCommandName(Actions.AddChart, folder), () => AddChart(folder))
-
             View.AddMenuItem(Constants.Project, StringResources.Project);
-            //View.AddMenuItem(Constants.Project, Constants.ProjectAddChart, StringResources.AddChart + Constants.Ellipsis, CreateCommand(Actions.Show + ViewIDs.AddChart, AddDocument(DocumentTypes.Chart)));
-            //View.AddMenuItem(Constants.Project, Constants.ProjectAddTable, StringResources.AddTable + Constants.Ellipsis, ImageResources.NewTable, CreateCommand(Actions.Show + ViewIDs.AddTable, AddDocument(DocumentTypes.Table)));
+            View.AddMenuItem(Constants.Project, Constants.ProjectAddChart, StringResources.AddChart + Constants.Ellipsis, ImageResources.AddChart, CreateCommand(Actions.Show + Constants.AddChart, () => AddDocument(DocumentTypes.Chart)));
+            View.AddMenuItem(Constants.Project, Constants.ProjectAddTable, StringResources.AddTable + Constants.Ellipsis, ImageResources.AddTable, CreateCommand(Actions.Show + Constants.AddTable, () => AddDocument(DocumentTypes.Table)));
             View.AddMenuSeparator(Constants.Project);
             View.AddMenuItem(Constants.Project, Constants.ProjectNewFolder, StringResources.NewFolder + Constants.Ellipsis, ImageResources.NewFolder, CreateCommand(Actions.AddFolder, AddFolder));
             View.AddMenuSeparator(Constants.Project);

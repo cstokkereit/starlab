@@ -20,8 +20,8 @@ public class DeleteDocumentInteractorTests : InteractorTests
         var dto = new WorkspaceDtoBuilder("Workspace")
             .AddProject("Project1")
             .AddFolder("Workspace/Project1/Folder1")
-            .AddDocument("1", "Document1", "Workspace/Project1/Folder1")
-            .AddDocument("2", "Document2", "Workspace/Project1/Folder1")
+            .AddChart("1", "Document1", "Workspace/Project1/Folder1")
+            .AddChart("2", "Document2", "Workspace/Project1/Folder1")
             .CreateWorkspace();
 
         port.ShowMessage(Arg.Any<string>(),
@@ -49,8 +49,8 @@ public class DeleteDocumentInteractorTests : InteractorTests
         var dto = new WorkspaceDtoBuilder("Workspace")
             .AddProject("Project1")
             .AddFolder("Workspace/Project1/Folder1")
-            .AddDocument("1", "Document1", "Workspace/Project1")
-            .AddDocument("2", "Document2", "Workspace/Project1")
+            .AddChart("1", "Document1", "Workspace/Project1")
+            .AddChart("2", "Document2", "Workspace/Project1")
             .CreateWorkspace();
 
         port.ShowMessage(Arg.Any<string>(),
@@ -78,7 +78,7 @@ public class DeleteDocumentInteractorTests : InteractorTests
         var dto = new WorkspaceDtoBuilder("Workspace")
             .AddProject("Project1")
             .AddFolder("Workspace/Project1/Folder1")
-            .AddDocument("1", "Document1", "Workspace/Project1/Folder1")
+            .AddChart("1", "Document1", "Workspace/Project1/Folder1")
             .CreateWorkspace();
 
         interactor.Execute(dto, "2");

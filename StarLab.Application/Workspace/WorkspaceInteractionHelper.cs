@@ -79,15 +79,31 @@ namespace StarLab.Application.Workspace
 
 
         /// <summary>
-        /// Executes the use case.
+        /// Gets the default name for a new document based on its type.
         /// </summary>
         /// <param name="folder">The <see cref="IFolder"/> that will contain the new document.</param>
         /// <param name="dtoDocument">A <see cref="DocumentDTO"/> that defines the document being added.</param>
+        /// <returns>The default name for the new document.</returns>
         public static string GetDefaultName(IFolder folder, DocumentDTO dtoDocument)
         {
-            var seed = "Chart"; // TODO
+            string seed;
 
-            string name = seed;
+            switch (dtoDocument.Type)
+            {
+                case Constants.Chart:
+                    seed = Resources.Chart;
+                    break;
+
+                case Constants.Table:
+                    seed = Resources.Table;
+                    break;
+
+                default:
+                    seed = Resources.Document;
+                    break;
+            }
+
+            var name = seed;
             int index = 2;
 
             while (folder.ContainsDocument(name))

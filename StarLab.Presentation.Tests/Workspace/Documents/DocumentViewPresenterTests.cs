@@ -230,16 +230,21 @@ namespace StarLab.Presentation.Workspace.Documents
             chartController.UpdateChart(Arg.Do<IChart>(c => chart = c));
             controllers.Add(chartController);
 
-            var dtoChart = new ChartDtoBuilder()
+            var chart1 = new ChartDtoBuilder()
                 .AddTitle("Chart-1.1")
+                .CreateChart();
+
+            var chart2 = new ChartDtoBuilder()
+                .AddTitle("Chart-1.2")
                 .CreateChart();
 
             var dtoWorkspace = new WorkspaceDtoBuilder(@"C:\Workspace-1")
                 .AddProject("Project-1")
                 .AddFolder("Workspace-1/Project-1/Folder-1")
-                .AddDocument("19542B1A-36A5-494F-B6B0-CB562FA36CAB", "ChartView", "Document-1.1", "Workspace-1/Project-1/Folder-1")
-                .AddDocument("19542B1A-36A5-494F-B6B0-CB562FA36CAC", "ChartView", "Document-2", "Workspace-1/Project-1/Folder-1")
-                .AddChart("19542B1A-36A5-494F-B6B0-CB562FA36CAB", dtoChart)
+                .AddChart("19542B1A-36A5-494F-B6B0-CB562FA36CAB", "ChartView", "Chart-1.1", "Workspace-1/Project-1/Folder-1")
+                .AddChart("19542B1A-36A5-494F-B6B0-CB562FA36CAB", chart1)
+                .AddChart("19542B1A-36A5-494F-B6B0-CB562FA36CAC", "ChartView", "Chart-1.2", "Workspace-1/Project-1/Folder-1")
+                .AddChart("19542B1A-36A5-494F-B6B0-CB562FA36CAC", chart2)
                 .CreateWorkspace();
 
             var workspace = CreateWorkspace(dtoWorkspace);
@@ -250,10 +255,10 @@ namespace StarLab.Presentation.Workspace.Documents
 
             chartController.Received(1).UpdateChart(Arg.Any<IChart>());
             settingsController.Received(1).UpdateSettings(Arg.Any<IChartDocument>());
-            view.Received(1).SetName("Document-1.1");
+            view.Received(1).SetName("Chart-1.1");
 
             Assert.That(document, Is.Not.Null);
-            Assert.That(document.Name, Is.EqualTo("Document-1.1"));
+            Assert.That(document.Name, Is.EqualTo("Chart-1.1"));
             Assert.That(document.ID.ToString, Is.EqualTo("19542B1A-36A5-494F-B6B0-CB562FA36CAB"));
 
             Assert.That(chart, Is.Not.Null);
@@ -264,49 +269,51 @@ namespace StarLab.Presentation.Workspace.Documents
         /// Test that the <see cref="DocumentViewPresenter.OnEvent(WorkspaceChangedEventArgs)"/> method works correctly for a table document.
         /// </summary>
         [Test]
-        [Ignore("Functionality not implemented")]
         public void TestOnEventWhenDocumentIsTable()
         {
-            //IDocument? document = null;
+            IDocument? document = null;
 
-            //var settingsController = Substitute.For<IChartSettingsController>();
-            //settingsController.UpdateSettings(Arg.Do<IChartDocument>(d => document = d));
-            //controllers.Add(settingsController);
+            var settingsController = Substitute.For<ITableSettingsController>();
+            settingsController.UpdateSettings(Arg.Do<ITableDocument>(d => document = d));
+            controllers.Add(settingsController);
 
-            //IChart? chart = null;
+            ITable? table = null;
 
-            //var chartController = Substitute.For<IChartController>();
-            //chartController.UpdateChart(Arg.Do<IChart>(c => chart = c));
-            //controllers.Add(chartController);
+            var chartController = Substitute.For<ITableController>();
+            chartController.UpdateTable(Arg.Do<ITable>(t => table = t));
+            controllers.Add(chartController);
 
-            //var dtoChart = new ChartDtoBuilder()
-            //    .AddTitle("Chart-1.1")
-            //    .CreateChart();
+            var table1 = new TableDtoBuilder()
+                .CreateTable();
 
-            //var dtoWorkspace = new WorkspaceDtoBuilder(@"C:\Workspace-1")
-            //    .AddProject("Project-1")
-            //    .AddFolder("Workspace-1/Project-1/Folder-1")
-            //    .AddDocument("Document1", "ChartView", "Document-1.1", "Workspace-1/Project-1/Folder-1")
-            //    .AddDocument("Document2", "ChartView", "Document-2", "Workspace-1/Project-1/Folder-1")
-            //    .AddChart("Document1", dtoChart)
-            //    .CreateWorkspace();
+            var table2 = new TableDtoBuilder()
+                .CreateTable();
 
-            //var workspace = CreateWorkspace(dtoWorkspace);
+            var dtoWorkspace = new WorkspaceDtoBuilder(@"C:\Workspace-1")
+                .AddProject("Project-1")
+                .AddFolder("Workspace-1/Project-1/Folder-1")
+                .AddTable("19542B1A-36A5-494F-B6B0-CB562FA36CAB", "TableView", "Table-1.1", "Workspace-1/Project-1/Folder-1")
+                .AddTable("19542B1A-36A5-494F-B6B0-CB562FA36CAB", table1)
+                .AddTable("19542B1A-36A5-494F-B6B0-CB562FA36CAC", "TableView", "Table-1.2", "Workspace-1/Project-1/Folder-1")
+                .AddTable("19542B1A-36A5-494F-B6B0-CB562FA36CAC", table2)
+                .CreateWorkspace();
 
-            //var presenter = CreatePresenter(true);
+            var workspace = CreateWorkspace(dtoWorkspace);
 
-            //presenter.OnEvent(new WorkspaceChangedEventArgs(workspace));
+            var presenter = CreatePresenter(true);
 
-            //chartController.Received(1).UpdateChart(Arg.Any<IChart>());
-            //settingsController.Received(1).UpdateSettings(Arg.Any<IChartDocument>());
-            //view.Received(1).SetName("Document-1.1");
+            presenter.OnEvent(new WorkspaceChangedEventArgs(workspace));
 
-            //Assert.That(document, Is.Not.Null);
-            //Assert.That(document.Name, Is.EqualTo("Document-1.1"));
-            //Assert.That(document.ID, Is.EqualTo("Document1"));
+            chartController.Received(1).UpdateTable(Arg.Any<ITable>());
+            settingsController.Received(1).UpdateSettings(Arg.Any<ITableDocument>());
+            view.Received(1).SetName("Table-1.1");
 
-            //Assert.That(chart, Is.Not.Null);
-            //Assert.That(chart.Title.Text, Is.EqualTo("Chart-1.1"));
+            Assert.That(document, Is.Not.Null);
+            Assert.That(document.Name, Is.EqualTo("Table-1.1"));
+            Assert.That(document.ID.ToString, Is.EqualTo("19542B1A-36A5-494F-B6B0-CB562FA36CAB"));
+
+            Assert.That(table, Is.Not.Null);
+            //Assert.That(table.Title.Text, Is.EqualTo("Table-1.1"));
         }
 
         /// <summary>
@@ -335,7 +342,7 @@ namespace StarLab.Presentation.Workspace.Documents
             controllers.Add(chartController);
 
             var document = Substitute.For<IChartDocument, IDocument>();
-            document.Name.Returns("Document-1.1");
+            document.Name.Returns("Chart-1.1");
             document.ID.Returns(documentID);
 
             var presenter = CreatePresenter(true);
@@ -344,33 +351,32 @@ namespace StarLab.Presentation.Workspace.Documents
 
             chartController.Received(1).UpdateChart(document.Chart);
             settingsController.Received(1).UpdateSettings(document);
-            view.Received(1).SetName("Document-1.1");
+            view.Received(1).SetName("Chart-1.1");
         }
 
         /// <summary>
         /// Test that the <see cref="DocumentViewPresenter.UpdateDocument(IDocument)"/> method works correctly for table documents.
         /// </summary>
         [Test]
-        [Ignore("Functionality not implemented")]
         public void TestUpdateDocumentWhenDocumentIsTable()
         {
-            //var settingsController = Substitute.For<IChartSettingsController>();
-            //controllers.Add(settingsController);
+            var settingsController = Substitute.For<ITableSettingsController>();
+            controllers.Add(settingsController);
 
-            //var chartController = Substitute.For<IChartController>();
-            //controllers.Add(chartController);
+            var tableController = Substitute.For<ITableController>();
+            controllers.Add(tableController);
 
-            //var document = Substitute.For<IChartDocument, IDocument>();
-            //document.Name.Returns("Document-1.1");
-            //document.ID.Returns("Document1");
+            var document = Substitute.For<ITableDocument, IDocument>();
+            document.Name.Returns("Table-1.1");
+            document.ID.Returns(documentID);
 
-            //var presenter = CreatePresenter(true);
+            var presenter = CreatePresenter(true);
 
-            //presenter.UpdateDocument(document);
+            presenter.UpdateDocument(document);
 
-            //chartController.Received(1).UpdateChart(document.Chart);
-            //settingsController.Received(1).UpdateSettings(document);
-            //view.Received(1).SetName("Document-1.1");
+            tableController.Received(1).UpdateTable(document.Table);
+            settingsController.Received(1).UpdateSettings(document);
+            view.Received(1).SetName("Table-1.1");
         }
 
         /// <summary>

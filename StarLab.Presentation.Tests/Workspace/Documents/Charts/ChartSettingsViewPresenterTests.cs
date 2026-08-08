@@ -300,9 +300,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         {
             var presenter = new ChartSettingsViewPresenter(view, context, commands, services, events);
 
-            var e = Assert.Throws<InvalidOperationException>(() => presenter.Initialise(controller));
-
-            Assert.That(e.Message, Is.EqualTo("This instance has not been properly initialised."));
+            Assert.Throws<InvalidOperationException>(() => presenter.Initialise(controller));
         }
 
         /// <summary>

@@ -63,6 +63,16 @@ namespace StarLab.Presentation.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap AddChart {
+            get {
+                object obj = ResourceManager.GetObject("AddChart", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap AddFolder {
             get {
                 object obj = ResourceManager.GetObject("AddFolder", resourceCulture);
@@ -196,6 +206,16 @@ namespace StarLab.Presentation.Properties {
         public static System.Drawing.Bitmap Information {
             get {
                 object obj = ResourceManager.GetObject("Information", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap NewChart {
+            get {
+                object obj = ResourceManager.GetObject("NewChart", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

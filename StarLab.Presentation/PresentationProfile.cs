@@ -2,9 +2,11 @@
 using StarLab.Application.Workspace;
 using StarLab.Application.Workspace.Documents;
 using StarLab.Application.Workspace.Documents.Charts;
+using StarLab.Application.Workspace.Documents.Tables;
 using StarLab.Presentation.Workspace;
 using StarLab.Presentation.Workspace.Documents;
 using StarLab.Presentation.Workspace.Documents.Charts;
+using StarLab.Presentation.Workspace.Documents.Tables;
 
 namespace StarLab.Presentation
 {
@@ -21,12 +23,17 @@ namespace StarLab.Presentation
             CreateMap<IAxis, AxisDTO>();
             CreateMap<IAxisSettings, AxisDTO>();
             CreateMap<IChart, ChartDTO>();
-            
+            CreateMap<ITable, TableDTO>();
+
+            CreateMap<IChartDocument, DocumentDTO>();
+
             CreateMap<IChartSettings, ChartDTO>()
                 .ForMember(dest => dest.X1, opt => opt.MapFrom(src => src.Axes.X1))
                 .ForMember(dest => dest.X2, opt => opt.MapFrom(src => src.Axes.X2))
                 .ForMember(dest => dest.Y1, opt => opt.MapFrom(src => src.Axes.Y1))
                 .ForMember(dest => dest.Y2, opt => opt.MapFrom(src => src.Axes.Y2));
+
+            CreateMap<ITableDocument, DocumentDTO>();
 
             CreateMap<IFont, FontDTO>();
             CreateMap<IFont, FontDTO>();
@@ -45,7 +52,6 @@ namespace StarLab.Presentation
             CreateMap<ITickMarks, TickMarksDTO>();
             CreateMap<ITickMarkSettings, TickMarksDTO>();
 
-            CreateMap<IChartDocument, DocumentDTO>();
             CreateMap<IFolder, FolderDTO>().ForMember(dest => dest.Path, opt => opt.MapFrom(src => src.Key));
             CreateMap<IProject, ProjectDTO>();
 

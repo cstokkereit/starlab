@@ -1,6 +1,7 @@
 ﻿using StarLab.Application.Workspace;
 using StarLab.Application.Workspace.Documents;
 using StarLab.Application.Workspace.Documents.Charts;
+using StarLab.Application.Workspace.Documents.Tables;
 
 namespace StarLab.Tests
 {
@@ -50,6 +51,7 @@ namespace StarLab.Tests
             if (document != null)
             {
                 document.Chart = chart;
+                document.Type = "Chart";
             }
 
             return this;
@@ -63,21 +65,9 @@ namespace StarLab.Tests
         /// <param name="name">The docmument name.</param>
         /// <param name="path">The docmument path.</param>
         /// <returns>This instance so that other methods can be called to continue constructing the <see cref="WorkspaceDTO"/>.</returns>
-        public WorkspaceDtoBuilder AddDocument(string id, string view, string name, string path)
+        public WorkspaceDtoBuilder AddChart(string id, string view, string name, string path)
         {
-            var document = new DocumentDTO
-            {
-                ID = id,
-                Name = name,
-                Path = path,
-                View = view
-            };
-
-            var project = GetProject(path);
-
-            project?.Documents.Add(document);
-
-            return this;
+            return AddDocument(id, "Chart", view, name, path);
         }
 
         /// <summary>
@@ -87,9 +77,9 @@ namespace StarLab.Tests
         /// <param name="name">The docmument name.</param>
         /// <param name="path">The docmument path.</param>
         /// <returns>This instance so that other methods can be called to continue constructing the <see cref="WorkspaceDTO"/>.</returns>
-        public WorkspaceDtoBuilder AddDocument(string id, string name, string path)
+        public WorkspaceDtoBuilder AddChart(string id, string name, string path)
         {
-            return AddDocument(id, string.Empty, name, path);
+            return AddChart(id, string.Empty, name, path);
         }
 
         /// <summary>
@@ -129,12 +119,83 @@ namespace StarLab.Tests
         }
 
         /// <summary>
+        /// Adds the <see cref="TableDTO"/> provided to the specified document.
+        /// </summary>
+        /// <param name="id">The document ID.</param>
+        /// <param name="table">The <see cref="TableDTO"/> that defines the table.</param>
+        /// <returns>This instance so that other methods can be called to continue constructing the <see cref="WorkspaceDTO"/>.</returns>
+        public WorkspaceDtoBuilder AddTable(string id, TableDTO table)
+        {
+            var document = GetDocument(id);
+
+            if (document != null)
+            {
+                document.Table = table;
+                document.Type = "Table";
+            }
+
+            return this;
+        }
+
+        /// <summary>
+        /// Adds a <see cref="DocumentDTO"/> to the <see cref="WorkspaceDTO"/>.
+        /// </summary>
+        /// <param name="id">The docmument ID.</param>
+        /// <param name="view">The docmument view.</param>
+        /// <param name="name">The docmument name.</param>
+        /// <param name="path">The docmument path.</param>
+        /// <returns>This instance so that other methods can be called to continue constructing the <see cref="WorkspaceDTO"/>.</returns>
+        public WorkspaceDtoBuilder AddTable(string id, string view, string name, string path)
+        {
+            return AddDocument(id, "Table", view, name, path);
+        }
+
+        /// <summary>
+        /// Adds a <see cref="DocumentDTO"/> to the <see cref="WorkspaceDTO"/>.
+        /// </summary>
+        /// <param name="id">The docmument ID.</param>
+        /// <param name="name">The docmument name.</param>
+        /// <param name="path">The docmument path.</param>
+        /// <returns>This instance so that other methods can be called to continue constructing the <see cref="WorkspaceDTO"/>.</returns>
+        public WorkspaceDtoBuilder AddTable(string id, string name, string path)
+        {
+            return AddTable(id, string.Empty, name, path);
+        }
+
+        /// <summary>
         /// Creates the <see cref="WorkspaceDTO"/>.
         /// </summary>
         /// <returns>The required <see cref="WorkspaceDTO"/>.</returns>
         public WorkspaceDTO CreateWorkspace()
         {
             return workspace;
+        }
+
+        /// <summary>
+        /// Adds a <see cref="DocumentDTO"/> to the <see cref="WorkspaceDTO"/>.
+        /// </summary>
+        /// <param name="id">The docmument ID.</param>
+        /// <param name="type">The docmument type.</param>
+        /// <param name="view">The docmument view.</param>
+        /// <param name="name">The docmument name.</param>
+        /// <param name="path">The docmument path.</param>
+        /// <returns>This instance so that other methods can be called to continue constructing the <see cref="WorkspaceDTO"/>.</returns>
+        private WorkspaceDtoBuilder AddDocument(string id, string type, string view, string name, string path)
+        {
+            var document = new DocumentDTO
+            {
+                ID = id,
+                Name = name,
+                Path = path,
+                Type = type,
+                View = view
+            };
+
+            var project = GetProject(path);
+
+            project?.Documents.Add(document);
+
+            return this;
         }
 
         /// <summary>

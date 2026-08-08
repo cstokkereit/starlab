@@ -1,9 +1,25 @@
-﻿namespace StarLab.Presentation.Workspace.Documents.Tables
+﻿using StarLab.Application.Workspace.Documents;
+
+namespace StarLab.Presentation.Workspace.Documents.Tables
 {
     /// <summary>
     /// View model representation of a table document in the workspace hierarchy.
     /// </summary>
-    public class TableDocument
+    internal class TableDocument : Document, ITableDocument
     {
+        /// <summary>
+        /// Initialises a new instance of the <see cref="TableDocument"/>.
+        /// </summary>
+        /// <param name="dto">A <see cref="DocumentDTO"/> representation of the document.</param>
+        public TableDocument(DocumentDTO dto)
+            : base(dto)
+        {
+            Table = new Table(dto.Table);
+        }
+
+        /// <summary>
+        /// Gets the table.
+        /// </summary>
+        public ITable Table { get; }
     }
 }

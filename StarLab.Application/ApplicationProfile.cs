@@ -2,6 +2,7 @@
 using StarLab.Application.Workspace;
 using StarLab.Application.Workspace.Documents;
 using StarLab.Application.Workspace.Documents.Charts;
+using StarLab.Application.Workspace.Documents.Tables;
 
 namespace StarLab.Application
 {
@@ -28,6 +29,7 @@ namespace StarLab.Application
                                             .ForMember(dest => dest.Folders, opt => opt.MapFrom(src => src.AllFolders));
 
             CreateMap<Scale, ScaleDTO>();
+            CreateMap<Table,  TableDTO>  ();
             CreateMap<TickLabels, TickLabelsDTO>();
             CreateMap<TickMarks, TickMarksDTO>();
             CreateMap<Workspace.Workspace, WorkspaceDTO>();

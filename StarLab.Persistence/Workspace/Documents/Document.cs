@@ -21,6 +21,9 @@ namespace StarLab.Serialisation.Workspace.Documents
         [XmlAttribute("path")]
         public string? Path;
 
+        [XmlAttribute("type")]
+        public string? Type;
+
         [XmlAttribute("view")]
         public string? View;
     }

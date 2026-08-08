@@ -10,7 +10,7 @@
         public const string AddFolder = "AddFolder";
         public const string AddProject = "AddProject";
         public const string AddTable = "AddTable";
-        public const string ApplicationController = "ApplicationController"; // TODO - Might need a ControllerIDs class
+        public const string ApplicationController = "ApplicationController";
         public const string Axes = "Axes";
         public const string AxisX1 = "AxisX1";
         public const string AxisX2 = "AxisX2";

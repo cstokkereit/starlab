@@ -18,9 +18,9 @@
         void RegisterController(IViewController controller);
 
         /// <summary>
-        /// Initiates the workflow managed by the controller.
+        /// Runs the <see cref="IChildView">.
         /// </summary>
-        /// <param name="context">An <see cref="IWorkflowContext"/> that contains the information required to execute the workflow.</param>
-        void Run(IWorkflowContext context);
+        /// <param name="context">An <see cref="IViewContext"/> that contains the contextual information required to configure the <see cref="IChildView">.</param>
+        void Run(IViewContext context);
     }
 }

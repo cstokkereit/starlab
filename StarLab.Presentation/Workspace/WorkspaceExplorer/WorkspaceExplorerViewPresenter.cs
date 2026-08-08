@@ -153,7 +153,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         public void CreateFolderContextMenu(string folder, IMenuManager manager)
         {
             manager.AddMenuItem(Constants.Add, StringResources.Add);
-            manager.AddMenuItem(Constants.Add, Constants.AddChart, StringResources.Chart + Constants.Ellipsis, CreateCommand(GetCommandName(Actions.AddChart, folder), () => AddDocument(folder, DocumentTypes.Chart)));
+            manager.AddMenuItem(Constants.Add, Constants.AddChart, StringResources.Chart + Constants.Ellipsis, ImageResources.NewChart, CreateCommand(GetCommandName(Actions.AddChart, folder), () => AddDocument(folder, DocumentTypes.Chart)));
             manager.AddMenuItem(Constants.Add, Constants.AddTable, StringResources.Table + Constants.Ellipsis, ImageResources.NewTable, CreateCommand(GetCommandName(Actions.AddTable, folder), () => AddDocument(folder, DocumentTypes.Table)));
             manager.AddMenuItem(Constants.Add, Constants.AddFolder, StringResources.NewFolder, ImageResources.NewFolder, CreateCommand(GetCommandName(Actions.AddFolder, folder), () => AddFolder(folder)));
             manager.AddMenuSeparator();
@@ -176,7 +176,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         public void CreateProjectContextMenu(string project, IMenuManager manager)
         {
             manager.AddMenuItem(Constants.Add, StringResources.Add);
-            manager.AddMenuItem(Constants.Add, Constants.AddChart, StringResources.Chart + Constants.Ellipsis, CreateCommand(Actions.AddChart, () => AddDocument(project, DocumentTypes.Chart)));
+            manager.AddMenuItem(Constants.Add, Constants.AddChart, StringResources.Chart + Constants.Ellipsis, ImageResources.NewChart, CreateCommand(Actions.AddChart, () => AddDocument(project, DocumentTypes.Chart)));
             manager.AddMenuItem(Constants.Add, Constants.AddTable, StringResources.Table + Constants.Ellipsis, ImageResources.NewTable, CreateCommand(Actions.AddTable, () => AddDocument(project, DocumentTypes.Table)));
             manager.AddMenuItem(Constants.Add, Constants.AddFolder, StringResources.NewFolder, ImageResources.NewFolder, CreateCommand(GetCommandName(Actions.AddFolder, project), () => AddFolder(project)));
             manager.AddMenuSeparator();

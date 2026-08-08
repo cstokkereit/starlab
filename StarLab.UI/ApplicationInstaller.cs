@@ -9,6 +9,7 @@ using StarLab.Presentation;
 using StarLab.Presentation.Configuration;
 using StarLab.Presentation.Workspace.Documents;
 using StarLab.Presentation.Workspace.Documents.Charts;
+using StarLab.Presentation.Workspace.Documents.Tables;
 using StarLab.Presentation.Workspace.WorkspaceExplorer;
 using StarLab.Serialisation;
 using Stratosoft.Commands;
@@ -93,7 +94,9 @@ namespace StarLab.UI
                 Component.For<IUseCaseService>().ImplementedBy<AddDocumentUseCaseService>(),
                 Component.For<IUseCaseService>().ImplementedBy<ApplicationUseCaseService>(),
                 Component.For<IUseCaseService>().ImplementedBy<ChartUseCaseService>(),
+                Component.For<IUseCaseService>().ImplementedBy<TableUseCaseService>(),
                 Component.For<IUseCaseService>().ImplementedBy<ChartSettingsUseCaseService>(),
+                Component.For<IUseCaseService>().ImplementedBy<TableSettingsUseCaseService>(),
                 Component.For<IUseCaseService>().ImplementedBy<WorkspaceExplorerUseCaseService>(),
                 Component.For<IServiceRegistry>().ImplementedBy<ServiceRegistry>(),
                 Component.For<ISessionContext>().ImplementedBy<SessionContext>(),

@@ -255,7 +255,7 @@ Please enter a valid name.</value>
     <value>No</value>
   </data>
   <data name="NotInitialised" xml:space="preserve">
-    <value>This instance has not been properly initialised.</value>
+    <value>The {0} has not been initialised.</value>
   </data>
   <data name="OK" xml:space="preserve">
     <value>OK</value>

@@ -44,10 +44,10 @@ namespace StarLab.Presentation
         }
 
         /// <summary>
-        /// Initiates the workflow managed by the presenter.
+        /// Runs the <see cref="IChildView">.
         /// </summary>
-        /// <param name="context">An <see cref="IWorkflowContext"/> that contains the information required to execute the workflow.</param>
-        public virtual void Run(IWorkflowContext context)
+        /// <param name="context">An <see cref="IViewContext"/> that contains the contextual information required to configure the <see cref="IChildView">.</param>
+        public virtual void Run(IViewContext context)
         {
             // Do Nothing
         }
@@ -59,7 +59,7 @@ namespace StarLab.Presentation
         {
             get
             {
-                if (parentController == null) throw new InvalidOperationException(Resources.NotInitialised);
+                if (parentController == null) throw new InvalidOperationException(string.Format(Resources.NotInitialised, "parent controller"));
 
                 return parentController;
             }

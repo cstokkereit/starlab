@@ -40,7 +40,7 @@ namespace StarLab.Application.Workspace
             var dto = new WorkspaceDtoBuilder(filename)
                 .AddProject("Project1")
                 .AddFolder("Workspace1/Project1/Folder1")
-                .AddDocument("1", "Document1", "Workspace1/Project1/Folder1")
+                .AddChart("1", "Document1", "Workspace1/Project1/Folder1")
                 .CreateWorkspace();
 
             interactor.Execute(dto);
@@ -68,7 +68,7 @@ namespace StarLab.Application.Workspace
             var dto = new WorkspaceDtoBuilder(filename)
                 .AddProject("Project1")
                 .AddFolder("Workspace1/Project1/Folder1")
-                .AddDocument("1", "Document1", "Workspace1/Project1/Folder1")
+                .AddChart("1", "Document1", "Workspace1/Project1/Folder1")
                 .CreateWorkspace();
 
             CopyFile(Path.Combine(Resources, "Workspace1.slw"), filename);
@@ -98,12 +98,12 @@ namespace StarLab.Application.Workspace
             var dto = new WorkspaceDtoBuilder(filename)
                 .AddProject("Project1")
                 .AddFolder("Workspace1/Project1/Folder1")
-                .AddDocument("1", "Document1", "Workspace1/Project1/Folder1")
-                .AddDocument("2", "Document2", "Workspace1/Project1/Folder1")
+                .AddChart("1", "Document1", "Workspace1/Project1/Folder1")
+                .AddChart("2", "Document2", "Workspace1/Project1/Folder1")
                 .AddProject("Project2")
                 .AddFolder("Workspace1/Project2/Folder1")
-                .AddDocument("3", "Document3", "Workspace1/Project2/Folder1")
-                .AddDocument("4", "Document4", "Workspace1/Project2/Folder1")
+                .AddChart("3", "Document3", "Workspace1/Project2/Folder1")
+                .AddChart("4", "Document4", "Workspace1/Project2/Folder1")
                 .CreateWorkspace();
 
             saveInteractor.Execute(dto);

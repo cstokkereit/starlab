@@ -58,7 +58,7 @@ namespace StarLab.Presentation.Workspace.Documents
 
             var presenter = CreatePresenter(true);
 
-            presenter.Run(new AddDocumentWorkflowContext("Workspace/Project-1/Charts", DocumentTypes.Chart));
+            presenter.Run(new AddDocumentViewContext("Workspace/Project-1/Charts", DocumentTypes.Chart));
 
             presenter.AddDocument("Document1", "Chart1");
 
@@ -163,7 +163,7 @@ namespace StarLab.Presentation.Workspace.Documents
         }
 
         /// <summary>
-        /// Test that the <see cref="AddDocumentViewPresenter.Run(IWorkflowContext)"/> method works correctly.
+        /// Test that the <see cref="AddDocumentViewPresenter.Run(IViewContext)"/> method works correctly.
         /// </summary>
         [Test]
         public void TestRun()
@@ -174,7 +174,7 @@ namespace StarLab.Presentation.Workspace.Documents
 
             var presenter = CreatePresenter(true);
 
-            presenter.Run(new AddDocumentWorkflowContext("Workspace/Project-1/Charts", DocumentTypes.Chart));
+            presenter.Run(new AddDocumentViewContext("Workspace/Project-1/Charts", DocumentTypes.Chart));
 
             view.Received(1).ClearDocumentTypes();
             view.Received(1).AddDocumentType("Chart1", "  Chart-1", "ChartImage1");
@@ -182,14 +182,14 @@ namespace StarLab.Presentation.Workspace.Documents
         }
 
         /// <summary>
-        /// Test that the <see cref="AddDocumentViewPresenter.Run(IWorkflowContext)"/> method throws an exception for an invalid context type.
+        /// Test that the <see cref="AddDocumentViewPresenter.Run(IViewContext)"/> method throws an exception for an invalid context type.
         /// </summary>
         [Test]
         public void TestRunThrowsExceptionForInvalidContextType()
         {
             var presenter = CreatePresenter(true);
 
-            Assert.Throws<ArgumentException>(() => presenter.Run(Substitute.For<IWorkflowContext>()));
+            Assert.Throws<ArgumentException>(() => presenter.Run(Substitute.For<IViewContext>()));
         }
 
         /// <summary>

@@ -34,7 +34,7 @@ namespace StarLab.Presentation
         {
             get
             {
-                if (controller == null) throw new InvalidOperationException(Resources.NotInitialised);
+                if (controller == null) throw new InvalidOperationException(string.Format(Resources.NotInitialised, "application controller"));
 
                 return controller;
             }

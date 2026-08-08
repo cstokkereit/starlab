@@ -31,6 +31,11 @@
         string Project { get; }
 
         /// <summary>
+        /// Gets the document type.
+        /// </summary>
+        DocumentTypes Type { get; }
+
+        /// <summary>
         /// Gets the name of the view config section.
         /// </summary>
         string View { get; }

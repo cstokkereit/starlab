@@ -3,7 +3,7 @@
   <Projects>
     <Project expanded="true" name="Henry Draper Catalog">
       <Documents>
-        <Document id="fb97ba9c-7b51-43f9-9025-ed54a90db990" name="HR-Diagram 1" path="Workspace/Henry Draper Catalog/Charts/HRDiagrams/HRDiagrams" view="ColourMagnitudeDiagram">
+        <Document id="fb97ba9c-7b51-43f9-9025-ed54a90db990" name="HR-Diagram 1" path="Workspace/Henry Draper Catalog/Charts/HRDiagrams/HRDiagrams" type="Chart" view="ColourMagnitudeDiagram">
           <Chart backColour="Black" foreColour="Green">
             <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
             <PlotArea backColour="Black" foreColour="Green">
@@ -65,7 +65,7 @@
             </Y2>
           </Chart>
         </Document>
-        <Document id="e24fa5bd-fb27-41c9-aed1-25b837a6c152" name="HR-Diagram 2" path="Workspace/Henry Draper Catalog/Charts/HRDiagrams/HRDiagrams" view="ColourMagnitudeDiagram">
+        <Document id="e24fa5bd-fb27-41c9-aed1-25b837a6c152" name="HR-Diagram 2" path="Workspace/Henry Draper Catalog/Charts/HRDiagrams/HRDiagrams" type="Chart" view="ColourMagnitudeDiagram">
           <Chart backColour="Black" foreColour="Green">
             <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
             <PlotArea backColour="Black" foreColour="Green">
@@ -127,7 +127,7 @@
             </Y2>
           </Chart>
         </Document>
-        <Document id="6e82ff05-3c75-4a59-95d3-af176ef2571e" name="HR-Diagram 3" path="Workspace/Henry Draper Catalog/Charts/HRDiagrams/HRDiagrams" view="ColourMagnitudeDiagram">
+        <Document id="6e82ff05-3c75-4a59-95d3-af176ef2571e" name="HR-Diagram 3" path="Workspace/Henry Draper Catalog/Charts/HRDiagrams/HRDiagrams" type="Chart" view="ColourMagnitudeDiagram">
           <Chart backColour="Black" foreColour="Green">
             <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
             <PlotArea backColour="Black" foreColour="Green">
@@ -202,7 +202,7 @@
     </Project>
     <Project expanded="true" name="Yale Bright Star Catalog">
       <Documents>
-        <Document id="577cb05b-c02f-499c-bc36-deb47aff9029" name="HR-Diagram 1" path="Workspace/Yale Bright Star Catalog/Charts/HRDiagrams" view="ColourMagnitudeDiagram">
+        <Document id="577cb05b-c02f-499c-bc36-deb47aff9029" name="HR-Diagram 1" path="Workspace/Yale Bright Star Catalog/Charts/HRDiagrams" type="Chart" view="ColourMagnitudeDiagram">
           <Chart backColour="Black" foreColour="Green">
             <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
             <PlotArea backColour="Black" foreColour="Green">
@@ -264,7 +264,7 @@
             </Y2>
           </Chart>
         </Document>
-        <Document id="f7f6ec62-39d9-411e-ab6a-af547dca8dc5" name="HR-Diagram 2" path="Workspace/Yale Bright Star Catalog/Charts/HRDiagrams" view="ColourMagnitudeDiagram">
+        <Document id="f7f6ec62-39d9-411e-ab6a-af547dca8dc5" name="HR-Diagram 2" path="Workspace/Yale Bright Star Catalog/Charts/HRDiagrams" type="Chart" view="ColourMagnitudeDiagram">
           <Chart backColour="Black" foreColour="Green">
             <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
             <PlotArea backColour="Black" foreColour="Green">
@@ -326,7 +326,7 @@
             </Y2>
           </Chart>
         </Document>
-        <Document id="c46d67b8-78b6-4d34-9527-3f479131f5f3" name="HR-Diagram 3" path="Workspace/Yale Bright Star Catalog/Charts/HRDiagrams" view="ColourMagnitudeDiagram">
+        <Document id="c46d67b8-78b6-4d34-9527-3f479131f5f3" name="HR-Diagram 3" path="Workspace/Yale Bright Star Catalog/Charts/HRDiagrams" type="Chart" view="ColourMagnitudeDiagram">
           <Chart backColour="Black" foreColour="Green">
             <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
             <PlotArea backColour="Black" foreColour="Green">

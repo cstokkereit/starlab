@@ -62,17 +62,16 @@ namespace StarLab.Presentation.Workspace.Documents
         /// <param name="definitionName">The name of the document definition.</param>
         public void AddDocument(string name, string definitionName)
         {
-            var view = definitions[definitionName].View;
+            var definition = definitions[definitionName];
 
-            Debug.Assert(!string.IsNullOrEmpty(path));
-            Debug.Assert(!string.IsNullOrEmpty(view));
             Debug.Assert(workspace != null);
 
             var document = new DocumentDTO
             {
                 Name = name,
                 Path = path,
-                View = view
+                Type = definition.Type.ToString(),
+                View = definition.View
             };
 
             useCaseService.AddDocument(workspace, document);
@@ -117,13 +116,12 @@ namespace StarLab.Presentation.Workspace.Documents
         }
 
         /// <summary>
-        /// Initiates the workflow managed by the presenter.
+        /// Runs the <see cref="IChildView">.
         /// </summary>
-        /// <param name="context">An <see cref="IWorkflowContext"/> that contains the information required to execute the workflow.</param>
-        /// <exception cref="ArgumentException"></exception>
-        public override void Run(IWorkflowContext context)
+        /// <param name="context">An <see cref="IViewContext"/> that contains the contextual information required to configure the <see cref="IChildView">.</param>
+        public override void Run(IViewContext context)
         {
-            if (context is AddDocumentWorkflowContext config)
+            if (context is AddDocumentViewContext config)
             {
                 definitions.Clear();
 
@@ -133,7 +131,7 @@ namespace StarLab.Presentation.Workspace.Documents
             }
             else
             {
-                throw new ArgumentException(string.Format(StringResources.UnexpectedArgumentType, typeof(AddDocumentWorkflowContext), context.GetType()), nameof(context));
+                throw new ArgumentException(string.Format(StringResources.UnexpectedArgumentType, typeof(AddDocumentViewContext), context.GetType()), nameof(context));
             }
         }
 
@@ -162,13 +160,12 @@ namespace StarLab.Presentation.Workspace.Documents
 
             foreach(var definition in definitions)
             {
-                View.AddDocumentType(definition.Name, $"  {definition.DisplayName}", definition.Image);
-                this.definitions.Add(definition.Name, definition);
+                if (type == DocumentTypes.Any || definition.Type == type)
+                {
+                    View.AddDocumentType(definition.Name, $"  {definition.DisplayName}", definition.Image);
+                    this.definitions.Add(definition.Name, definition);
+                }
             }
-
-           
-            //view.AddChart("ScatterPlot", "Scatter Plot", "HRDiagram");
-            //view.AddChart("BarChart", "Bar Chart", "HRDiagram");
         }
 
         /// <summary>
