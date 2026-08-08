@@ -28,10 +28,44 @@
         /// </summary>
         private void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            buttonOK = new Button();
+            buttonCancel = new Button();
+            SuspendLayout();
+            // 
+            // buttonCancel
+            // 
+            buttonCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            buttonCancel.Location = new Point(483, 363);
+            buttonCancel.Name = "buttonCancel";
+            buttonCancel.Size = new Size(85, 25);
+            buttonCancel.TabIndex = 2;
+            buttonCancel.Text = "Cancel";
+            buttonCancel.UseVisualStyleBackColor = true;
+            // 
+            // buttonOK
+            // 
+            buttonOK.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            buttonOK.Location = new Point(388, 363);
+            buttonOK.Name = "buttonOK";
+            buttonOK.Size = new Size(85, 25);
+            buttonOK.TabIndex = 3;
+            buttonOK.Text = "OK";
+            buttonOK.UseVisualStyleBackColor = true;
+            // 
+            // TableSettingsView
+            // 
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(buttonCancel);
+            Controls.Add(buttonOK);
+            Name = "TableSettingsView";
+            Size = new Size(580, 400);
+            ResumeLayout(false);
         }
 
         #endregion
+
+        private Button buttonOK;
+        private Button buttonCancel;
     }
 }

@@ -3,6 +3,7 @@ using StarLab.Presentation;
 using StarLab.Presentation.Workspace.Documents.Tables;
 using StarLab.Shared;
 using StarLab.Shared.Properties;
+using Stratosoft.Commands;
 
 namespace StarLab.UI.Workspace.Documents.Tables
 {
@@ -47,6 +48,30 @@ namespace StarLab.UI.Workspace.Documents.Tables
             this.presenter = (ITableSettingsViewPresenter)presenter;
 
             log.Debug(string.Format(LogEntries.PresenterAttached, $"{presenter.GetType().Name}({Name})"));
+        }
+
+        /// <summary>
+        /// Attaches the <see cref="ICommand"/> provided to the Cancel button.
+        /// </summary>
+        /// <param name="command">The <see cref="ICommand"/> that will be executed when the Cancel button is clicked.</param>
+        public void AttachCancelButtonCommand(ICommand command)
+        {
+            if (command is IComponentCommand componentCommand)
+            {
+                componentCommand.AddInstance(buttonCancel);
+            }
+        }
+
+        /// <summary>
+        /// Attaches the <see cref="ICommand"/> provided to the OK button.
+        /// </summary>
+        /// <param name="command">The <see cref="ICommand"/> that will be executed when the OK button is clicked.</param>
+        public void AttachOKButtonCommand(ICommand command)
+        {
+            if (command is IComponentCommand componentCommand)
+            {
+                componentCommand.AddInstance(buttonOK);
+            }
         }
 
         /// <summary>

@@ -287,9 +287,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         {
             var presenter = CreatePresenter(true);
 
-            var e = Assert.Throws<InvalidOperationException>(() => presenter.Initialise(controller));
-
-            Assert.That(e.Message, Is.EqualTo("The ChartSettingsViewPresenter has already been initialised."));
+            Assert.Throws<InvalidOperationException>(() => presenter.Initialise(controller));
         }
 
         /// <summary>

@@ -24,6 +24,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
             ColourMagnitudeDiagram,
             Folder,
             Project,
+            Table,
             Workspace
         }
 
@@ -492,6 +493,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
             images.Add(NodeImages.ColourMagnitudeDiagram, View.AddImage(ImageResources.ColourMagnitudeDiagram16X16));
             images.Add(NodeImages.Folder, View.AddImage(ImageResources.Folder));
             images.Add(NodeImages.Project, View.AddImage(ImageResources.Project));
+            images.Add(NodeImages.Table, View.AddImage(ImageResources.Table16X16));
             images.Add(NodeImages.Workspace, View.AddImage(ImageResources.Workspace));
         }
 
@@ -500,9 +502,20 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// </summary>
         private void CreateDocumentNodes()
         {
+            // TODO Star Detail, Database/Catalog, Image, Link, Text?
+
             foreach (var document in workspace.Documents)
             {
-                View.AddDocumentNode(document.ID.ToString(), document.Path, document.Name, images[NodeImages.ColourMagnitudeDiagram]);
+                switch (document.Type)
+                {
+                    case DocumentTypes.Chart:
+                        View.AddDocumentNode(document.ID.ToString(), document.Path, document.Name, images[NodeImages.ColourMagnitudeDiagram]);
+                        break;
+
+                    case DocumentTypes.Table:
+                        View.AddDocumentNode(document.ID.ToString(), document.Path, document.Name, images[NodeImages.Table]);
+                        break;
+                }
             }
         }
 

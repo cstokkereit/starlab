@@ -16,17 +16,17 @@ namespace StarLab.Presentation.Workspace.Documents.Tables
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(TableSettingsViewPresenter)); // The logger that will be used for writing log messages.
 
-        private readonly Dictionary<string, SettingsGroupManager<ITableSettingsView>> groupManagers = new Dictionary<string, SettingsGroupManager<ITableSettingsView>>(); // A dictionary that contains the group managers indexed by group.
+        //private readonly Dictionary<string, SettingsGroupManager<ITableSettingsView>> groupManagers = new Dictionary<string, SettingsGroupManager<ITableSettingsView>>(); // A dictionary that contains the group managers indexed by group.
 
         private readonly ITableSettingsUseCaseService useCaseService; // A service that executes the use cases that implement the functionality.
 
         //private SettingsGroupManager<IChartSettingsView>? groupManager; // Displays the currently selected settings group.
 
-        //private IChartSettings? chart; // Represents the current state of the chart.
+        private ITableSettings? table; // Represents the current state of the table.
 
-        private IWorkspace? workspace; // The workspace that contains the chart.
+        private IWorkspace? workspace; // The workspace that contains the table.
 
-        private DocumentID? documentId; // The ID of the document that contains the chart.
+        private DocumentID? documentId; // The ID of the document that contains the table.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="TableSettingsViewPresenter"> class.
@@ -83,15 +83,17 @@ namespace StarLab.Presentation.Workspace.Documents.Tables
 
             ParentController.AddToolbarButton(Constants.ShowSettings, StringResources.Settings, ImageResources.Settings, CreateCommand(Actions.ShowSplitContent, () => ParentController.ShowSplitContent(View.Name)));
 
-            //View.AttachOKButtonCommand(CreateCommand(Actions.ApplySettings, () => {
-            //    ParentController.HideSplitContent(View.Name);
-            //    ApplySettings();
-            //}));
+            View.AttachOKButtonCommand(CreateCommand(Actions.ApplySettings, () =>
+            {
+                ParentController.HideSplitContent(View.Name);
+                ApplySettings();
+            }));
 
-            //View.AttachCancelButtonCommand(CreateCommand(Actions.RevertSettings, () => {
-            //    ParentController.HideSplitContent(View.Name);
-            //    RevertSettings();
-            //}));
+            View.AttachCancelButtonCommand(CreateCommand(Actions.RevertSettings, () =>
+            {
+                ParentController.HideSplitContent(View.Name);
+                RevertSettings();
+            }));
 
             //CreateSettingsGroups();
 
@@ -111,6 +113,9 @@ namespace StarLab.Presentation.Workspace.Documents.Tables
             //View.SelectNode(Constants.Chart);
         }
 
+        /// <summary>
+        /// Reverts the changes to the settings.
+        /// </summary>
         public void RevertSettings()
         {
             var controller = ParentController.GetController<ITableController>();
@@ -118,9 +123,13 @@ namespace StarLab.Presentation.Workspace.Documents.Tables
             controller.UpdatePreview();
         }
 
+        /// <summary>
+        /// Updates the table settings.
+        /// </summary>
+        /// <param name="document">The <see cref="ITableDocument"/> that contains the table.</param>
         public void UpdateSettings(ITableDocument document)
         {
-            //table = new ChartSettings(document.Table);
+            table = new TableSettings(document.Table);
 
             documentId = document.ID;
         }

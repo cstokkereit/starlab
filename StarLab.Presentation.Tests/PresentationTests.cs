@@ -9,6 +9,7 @@ using StarLab.Presentation.Configuration;
 using StarLab.Presentation.Workspace;
 using StarLab.Presentation.Workspace.Documents;
 using StarLab.Presentation.Workspace.Documents.Charts;
+using StarLab.Presentation.Workspace.Documents.Tables;
 using StarLab.Presentation.Workspace.WorkspaceExplorer;
 using Stratosoft.Commands;
 
@@ -69,6 +70,8 @@ namespace StarLab.Presentation
                 Component.For<IUseCaseService>().ImplementedBy<ApplicationUseCaseService>(),
                 Component.For<IUseCaseService>().ImplementedBy<ChartUseCaseService>(),
                 Component.For<IUseCaseService>().ImplementedBy<ChartSettingsUseCaseService>(),
+                Component.For<IUseCaseService>().ImplementedBy<TableUseCaseService>(),
+                Component.For<IUseCaseService>().ImplementedBy<TableSettingsUseCaseService>(),
                 Component.For<IUseCaseService>().ImplementedBy<WorkspaceExplorerUseCaseService>(),
                 Component.For<IServiceRegistry>().ImplementedBy<ServiceRegistry>(),
                 Classes.FromAssemblyNamed("StarLab.Application").BasedOn<Profile>().WithServiceBase(),
