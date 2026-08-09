@@ -1,4 +1,6 @@
-﻿namespace StarLab.Data
+﻿using StarLab.Application.Data;
+
+namespace StarLab.Data
 {
     /// <summary>
     /// Part of a database query that represents a value used in a predicate.

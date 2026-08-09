@@ -1,4 +1,5 @@
 ﻿using MongoDB.Bson;
+using StarLab.Application.Data;
 using StarLab.Shared.Properties;
 
 namespace StarLab.Data.MongoDB

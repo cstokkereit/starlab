@@ -49,7 +49,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StarLab.Data", "StarLab.Dat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StarLab.Data.Tests", "StarLab.Data.Tests\StarLab.Data.Tests.csproj", "{8A4053B5-A65B-4519-9A11-5746EA6FC559}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StarLab.Domain.Core.Tests", "StarLab.Domain.Core.Tests\StarLab.Domain.Core.Tests.csproj", "{CC7F4285-644A-4B31-B419-0ECB6A48AB3C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StarLab.Domain.Tests", "StarLab.Domain.Tests\StarLab.Domain.Tests.csproj", "{CC7F4285-644A-4B31-B419-0ECB6A48AB3C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StarLab.Presentation.Tests", "StarLab.Presentation.Tests\StarLab.Presentation.Tests.csproj", "{24B327D3-B180-4270-B8B7-83F9F83B2E38}"
 EndProject
@@ -60,6 +60,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StarLab.Data.MongoDB", "StarLab.Data.MongoDB\StarLab.Data.MongoDB.csproj", "{02DE83F4-3CEA-492F-9731-882A2FD9B605}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StarLab.Data.MongoDB.Tests", "StarLab.Data.MongoDB.Tests\StarLab.Data.MongoDB.Tests.csproj", "{376DF625-252B-46B4-9DA3-93A1091374D8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StarLab.Domain", "StarLab.Domain\StarLab.Domain.csproj", "{D6E50BC0-3641-4593-ADE7-5F4034AE50D0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -155,6 +157,10 @@ Global
 		{376DF625-252B-46B4-9DA3-93A1091374D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{376DF625-252B-46B4-9DA3-93A1091374D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{376DF625-252B-46B4-9DA3-93A1091374D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6E50BC0-3641-4593-ADE7-5F4034AE50D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6E50BC0-3641-4593-ADE7-5F4034AE50D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6E50BC0-3641-4593-ADE7-5F4034AE50D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6E50BC0-3641-4593-ADE7-5F4034AE50D0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -182,6 +188,7 @@ Global
 		{742372E4-85F5-4B0B-BB49-FF31365D53E2} = {2690B547-E925-4105-85A3-652A8B5856C6}
 		{02DE83F4-3CEA-492F-9731-882A2FD9B605} = {839E7B8B-C86A-47E0-82F6-9E4F4CCD53EA}
 		{376DF625-252B-46B4-9DA3-93A1091374D8} = {839E7B8B-C86A-47E0-82F6-9E4F4CCD53EA}
+		{D6E50BC0-3641-4593-ADE7-5F4034AE50D0} = {FCC0C76B-ADB5-4FF9-8170-D171FC9532F0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C901BDDE-CD19-4752-8A90-F4800FC22F0F}

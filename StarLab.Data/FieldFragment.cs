@@ -1,4 +1,6 @@
-﻿namespace StarLab.Data
+﻿using StarLab.Application.Data;
+
+namespace StarLab.Data
 {
     /// <summary>
     /// A data field that forms part of a database query.

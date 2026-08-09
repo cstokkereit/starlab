@@ -1,11 +1,11 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace StarLab
+namespace StarLab.Domain.Entities
 {
     /// <summary>
     /// The spectral type of a star defined in the Morgan-Keenan (MK) classification. See https://en.wikipedia.org/wiki/Stellar_classification for details.
     /// </summary>
-    public class SpectralType
+    public class SpectralType : ISpectralType
     {
         private static Regex regex = new Regex(@"([OBAFGKLMNRSTY]\(?\d?\.?\d?\+?\)?[-|\/]?[OBAFGKLMNRSTY]?\d?\.?\d?)(I{0,3}V?a?b?\+?[-|\/]?I{0,3}V?a?b?\+?)(.*)", RegexOptions.Compiled);
 

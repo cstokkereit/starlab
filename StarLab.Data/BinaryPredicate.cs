@@ -1,4 +1,6 @@
-﻿namespace StarLab.Data
+﻿using StarLab.Application.Data;
+
+namespace StarLab.Data
 {
     /// <summary>
     /// Part of a database query that compares two expressions in order to determine which values will be returned by the query.

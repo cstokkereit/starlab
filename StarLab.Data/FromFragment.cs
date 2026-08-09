@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using StarLab.Application.Data;
+using System.Text;
 
 namespace StarLab.Data
 {

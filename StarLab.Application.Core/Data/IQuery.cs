@@ -1,4 +1,4 @@
-﻿namespace StarLab.Data
+﻿namespace StarLab.Application.Data
 {
     /// <summary>
     /// Represents the filter criteria, sort order and fields to be returned from a database.

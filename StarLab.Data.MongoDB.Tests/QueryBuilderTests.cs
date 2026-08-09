@@ -1,4 +1,6 @@
-﻿namespace StarLab.Data.MongoDB
+﻿using StarLab.Application.Data;
+
+namespace StarLab.Data.MongoDB
 {
     /// <summary>
     /// A class for performing unit tests on the <see cref="QueryBuilder"/> class.

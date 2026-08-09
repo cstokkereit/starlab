@@ -1,4 +1,6 @@
-﻿namespace StarLab.Data
+﻿using StarLab.Application.Data;
+
+namespace StarLab.Data
 {
     /// <summary>
     /// A base implementation of the <see cref="IQueryFragment"/> interface that represents part of a query made up of two parts.

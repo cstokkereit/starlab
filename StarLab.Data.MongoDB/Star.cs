@@ -1,4 +1,5 @@
 ﻿using MongoDB.Bson;
+using StarLab.Domain.Entities;
 
 namespace StarLab.Data.MongoDB
 {
@@ -25,7 +26,7 @@ namespace StarLab.Data.MongoDB
 
             //Designation = data.GetElement("Designation").Value.AsString;
             //Name = data.GetElement("Name").Value.AsString;
-            SpectralType = new SpectralType(data.GetElement("Spectral Type").Value.AsString);
+            //SpectralType = new SpectralType(data.GetElement("Spectral Type").Value.AsString);
         }
 
         public double AbsoluteMagnitude {  get; }
@@ -38,6 +39,6 @@ namespace StarLab.Data.MongoDB
 
         public string Name { get; }
 
-        public SpectralType SpectralType { get; }
+        public ISpectralType SpectralType { get; }
     }
 }

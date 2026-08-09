@@ -1,4 +1,6 @@
-﻿namespace StarLab.Data
+﻿using StarLab.Application.Data;
+
+namespace StarLab.Data
 {
     /// <summary>
     /// Part of a database query that specifies how to sort the data returned by the query.

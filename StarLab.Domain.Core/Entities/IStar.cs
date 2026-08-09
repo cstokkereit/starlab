@@ -1,4 +1,4 @@
-﻿namespace StarLab
+﻿namespace StarLab.Domain.Entities
 {
     public interface IStar
     {
@@ -12,6 +12,6 @@
 
         string Name { get; }
 
-        SpectralType SpectralType { get; }
+        ISpectralType SpectralType { get; }
     }
 }

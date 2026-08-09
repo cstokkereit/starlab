@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\StarLab.Domain.Core\StarLab.Domain.Core.csproj" />
     <ProjectReference Include="..\StarLab.Shared.Resources\StarLab.Shared.Resources.csproj" />
   </ItemGroup>
 

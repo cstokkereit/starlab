@@ -1,4 +1,4 @@
-﻿namespace StarLab.Data
+﻿namespace StarLab.Application.Data
 {
     /// <summary>
     /// Represents part of a database query that specifies which tables contain the required data.

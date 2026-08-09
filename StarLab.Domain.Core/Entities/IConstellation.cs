@@ -1,4 +1,4 @@
-﻿namespace StarLab
+﻿namespace StarLab.Domain.Entities
 {
     public interface IConstellation
     {

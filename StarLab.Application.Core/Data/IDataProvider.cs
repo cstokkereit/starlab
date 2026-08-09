@@ -1,4 +1,6 @@
-﻿namespace StarLab.Data
+﻿using StarLab.Domain.Entities;
+
+namespace StarLab.Application.Data
 {
     /// <summary>
     /// Represents a database. Provides methods for accessing the data that it contains.

@@ -1,4 +1,6 @@
-﻿namespace StarLab.Data.Import
+﻿using StarLab.Application.Data;
+
+namespace StarLab.Data.Import
 {
     /// <summary>
     /// Represents a manager that can be used to import data into a database.

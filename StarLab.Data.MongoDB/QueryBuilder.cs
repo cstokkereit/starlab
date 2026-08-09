@@ -1,4 +1,6 @@
-﻿namespace StarLab.Data.MongoDB
+﻿using StarLab.Application.Data;
+
+namespace StarLab.Data.MongoDB
 {
     /// <summary>
     /// A class for constructing a MongoDB specific implementation of <see cref="IQuery"/> that specifies which records will be returned from a MongoDB database.

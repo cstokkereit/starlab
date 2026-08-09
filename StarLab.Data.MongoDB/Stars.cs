@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Driver;
+using StarLab.Domain.Entities;
 
 namespace StarLab.Data.MongoDB
 {

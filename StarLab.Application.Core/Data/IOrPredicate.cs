@@ -1,4 +1,4 @@
-﻿namespace StarLab.Data
+﻿namespace StarLab.Application.Data
 {
     /// <summary>
     /// Represents a predicate that combines multiple predicates using the OR operator.

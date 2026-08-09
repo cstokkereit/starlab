@@ -1,6 +1,4 @@
-﻿using StarLab.Data;
-
-namespace StarLab
+﻿namespace StarLab.Domain.Entities
 {
 
     //  https://ned.ipac.caltech.edu/level5/Gray/Gray_contents.html
@@ -37,6 +35,6 @@ namespace StarLab
 
         public string Name => name;
 
-        public SpectralType SpectralType { get; }
+        public ISpectralType SpectralType { get; }
     }
 }

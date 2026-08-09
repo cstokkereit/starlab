@@ -1,4 +1,6 @@
-﻿namespace StarLab.Data
+﻿using StarLab.Application.Data;
+
+namespace StarLab.Data
 {
     /// <summary>
     /// A fluent builder for constructing instances of objects that implement the <see cref="IQuery"/> interface.

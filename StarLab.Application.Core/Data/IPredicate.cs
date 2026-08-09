@@ -1,4 +1,4 @@
-﻿namespace StarLab.Data
+﻿namespace StarLab.Application.Data
 {
     /// <summary>
     /// Represents part of a database query that compares one or more expressions in order to determine which values will be returned by the query.
