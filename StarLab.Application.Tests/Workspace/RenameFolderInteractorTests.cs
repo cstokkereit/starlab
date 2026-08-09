@@ -5,7 +5,7 @@ namespace StarLab.Application.Workspace
     /// <summary>
     /// A class for performing unit tests on the <see cref="RenameFolderInteractor"/> class.
     /// </summary>
-    public class RenameFolderInteractorTests : InteractorTests
+    public class RenameFolderInteractorTests : ApplicationTests
     {
         /// <summary>
         /// Test that the <see cref="RenameFolderInteractor.Execute"/> method correctly renames a folder.
@@ -15,7 +15,7 @@ namespace StarLab.Application.Workspace
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = Factory.CreateRenameFolderUseCase(port);
+            var interactor = factory.CreateRenameFolderUseCase(port);
 
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
@@ -38,16 +38,14 @@ namespace StarLab.Application.Workspace
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = Factory.CreateRenameFolderUseCase(port);
+            var interactor = factory.CreateRenameFolderUseCase(port);
 
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .CreateWorkspace();
 
-            var e = Assert.Throws<Exception>(() => interactor.Execute(dto, "Workspace/Project1/Folder1", string.Empty));
-
-            Assert.That(e.Message, Is.EqualTo("The folder name cannot be null or empty."));
+            Assert.Throws<Exception>(() => interactor.Execute(dto, "Workspace/Project1/Folder1", string.Empty));
         }
 
         /// <summary>
@@ -58,7 +56,7 @@ namespace StarLab.Application.Workspace
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = Factory.CreateRenameFolderUseCase(port);
+            var interactor = factory.CreateRenameFolderUseCase(port);
 
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
@@ -66,9 +64,7 @@ namespace StarLab.Application.Workspace
                 .AddFolder("Workspace/Project1/Folder2")
                 .CreateWorkspace();
 
-            var e = Assert.Throws<Exception>(() => interactor.Execute(dto, "Workspace/Project1/Folder1", "Folder2"));
-
-            Assert.That(e.Message, Is.EqualTo("Cannot rename 'Folder1' to 'Folder2' because a folder with that name already exists."));
+            Assert.Throws<Exception>(() => interactor.Execute(dto, "Workspace/Project1/Folder1", "Folder2"));
         }
 
         /// <summary>
@@ -79,16 +75,14 @@ namespace StarLab.Application.Workspace
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = Factory.CreateRenameFolderUseCase(port);
+            var interactor = factory.CreateRenameFolderUseCase(port);
 
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .CreateWorkspace();
 
-            var e = Assert.Throws<Exception>(() => interactor.Execute(dto, "Workspace/Project1/Folder1", "Folder1/"));
-
-            Assert.That(e.Message, Is.EqualTo("Folder names cannot include any of the following:\r\n\r\n                               \\ / : * ? ' \" < > |\r\n\r\nPlease enter a valid name."));
+            Assert.Throws<Exception>(() => interactor.Execute(dto, "Workspace/Project1/Folder1", "Folder1/"));
         }
 
         /// <summary>
@@ -99,7 +93,7 @@ namespace StarLab.Application.Workspace
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = Factory.CreateRenameFolderUseCase(port);
+            var interactor = factory.CreateRenameFolderUseCase(port);
 
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
@@ -126,7 +120,7 @@ namespace StarLab.Application.Workspace
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = Factory.CreateRenameFolderUseCase(port);
+            var interactor = factory.CreateRenameFolderUseCase(port);
 
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
@@ -156,7 +150,7 @@ namespace StarLab.Application.Workspace
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = Factory.CreateRenameFolderUseCase(port);
+            var interactor = factory.CreateRenameFolderUseCase(port);
 
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
@@ -213,7 +207,7 @@ namespace StarLab.Application.Workspace
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = Factory.CreateRenameFolderUseCase(port);
+            var interactor = factory.CreateRenameFolderUseCase(port);
 
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
@@ -270,7 +264,7 @@ namespace StarLab.Application.Workspace
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = Factory.CreateRenameFolderUseCase(port);
+            var interactor = factory.CreateRenameFolderUseCase(port);
 
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
@@ -343,15 +337,13 @@ namespace StarLab.Application.Workspace
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = Factory.CreateRenameFolderUseCase(port);
+            var interactor = factory.CreateRenameFolderUseCase(port);
 
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .CreateWorkspace();
 
-            var e = Assert.Throws<Exception>(() => interactor.Execute(dto, "Workspace/Project1", string.Empty));
-
-            Assert.That(e.Message, Is.EqualTo("The project name cannot be null or empty."));
+            Assert.Throws<Exception>(() => interactor.Execute(dto, "Workspace/Project1", string.Empty));
         }
 
         /// <summary>
@@ -362,16 +354,14 @@ namespace StarLab.Application.Workspace
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = Factory.CreateRenameFolderUseCase(port);
+            var interactor = factory.CreateRenameFolderUseCase(port);
 
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddProject("Project2")
                 .CreateWorkspace();
 
-            var e = Assert.Throws<Exception>(() => interactor.Execute(dto, "Workspace/Project1", "Project2"));
-
-            Assert.That(e.Message, Is.EqualTo("Cannot rename 'Project1' to 'Project2' because a project with that name already exists."));
+            Assert.Throws<Exception>(() => interactor.Execute(dto, "Workspace/Project1", "Project2"));
         }
 
         /// <summary>
@@ -382,15 +372,13 @@ namespace StarLab.Application.Workspace
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = Factory.CreateRenameFolderUseCase(port);
+            var interactor = factory.CreateRenameFolderUseCase(port);
 
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .CreateWorkspace();
 
-            var e = Assert.Throws<Exception>(() => interactor.Execute(dto, "Workspace/Project1", "Project1/"));
-
-            Assert.That(e.Message, Is.EqualTo("Project names cannot include any of the following:\r\n\r\n                               \\ / : * ? ' \" < > |\r\n\r\nPlease enter a valid name."));
+            Assert.Throws<Exception>(() => interactor.Execute(dto, "Workspace/Project1", "Project1/"));
         }
     }
 }

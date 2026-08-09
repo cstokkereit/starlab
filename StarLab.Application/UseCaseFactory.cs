@@ -10,9 +10,9 @@ namespace StarLab.Application
     /// </summary>
     public class UseCaseFactory : IUseCaseFactory
     {
-        private readonly ISerialisationProvider serialiser; // Used to serialise and deserialise model objects.
-
         private readonly IMapper mapper; // Copies data from model objects to data transfer objects and vice versa.
+
+        private readonly ISerialisationProvider serialiser; // Used to serialise and deserialise model objects.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="UseCaseFactory"/> class.
@@ -144,6 +144,16 @@ namespace StarLab.Application
         public IUseCase<ChartDTO> ApplyChartSettingsUseCase(IChartOutputPort outputPort)
         {
             return new ApplyChartSettingsInteractor(outputPort, mapper);
+        }
+
+        /// <summary>
+        /// Creates a use case interactor that TODO
+        /// </summary>
+        /// <param name="outputPort">An <see cref="IChartOutputPort"/> that updates the UI in response to the outputs of the use case.</param>
+        /// <returns>An instance of <see cref="IUseCase{WorkspaceDTO}"/> that implements the use case.</returns>
+        public IUseCase<WorkspaceDTO> CreateUpdateChartUseCase(IChartOutputPort outputPort)
+        {
+            return new UpdateChartInteractor(outputPort, mapper);
         }
 
         /// <summary>

@@ -51,9 +51,9 @@ namespace StarLab.UI.Workspace.Documents.Charts
             RectanglePlot.FillStyle.Color = Colors.Red.WithAlpha(.2);
 
             // add events to trigger in response to mouse actions
-            formsPlot.MouseMove += FormsPlot1_MouseMove;
-            formsPlot.MouseDown += FormsPlot1_MouseDown;
-            formsPlot.MouseUp += FormsPlot1_MouseUp;
+            formsPlot.MouseMove += FormsPlot_MouseMove;
+            formsPlot.MouseDown += FormsPlot_MouseDown;
+            formsPlot.MouseUp += FormsPlot_MouseUp;
         }
 
         /// <summary>
@@ -390,8 +390,8 @@ namespace StarLab.UI.Workspace.Documents.Charts
                 {
                     //if (!string.IsNullOrEmpty(star.SpectralType.SpectralClass))
                     //{
-                        //xValues.Add(star.BVColourIndex);
-                        //yValues.Add(star.AbsoluteMagnitude);
+                    //xValues.Add(star.BVColourIndex);
+                    //yValues.Add(star.AbsoluteMagnitude);
                     //}
                 }
                 catch (Exception e)
@@ -444,7 +444,7 @@ namespace StarLab.UI.Workspace.Documents.Charts
             return retval;
         }
 
-        private void FormsPlot1_MouseDown(object? sender, MouseEventArgs e)
+        private void FormsPlot_MouseDown(object? sender, MouseEventArgs e)
         {
             if (!selectPoints)
                 return;
@@ -455,7 +455,7 @@ namespace StarLab.UI.Workspace.Documents.Charts
             //formsPlot.Interaction.Disable(); TODO - disable the default click-drag-pan behavior 
         }
 
-        private void FormsPlot1_MouseUp(object? sender, MouseEventArgs e)
+        private void FormsPlot_MouseUp(object? sender, MouseEventArgs e)
         {
             if (!selectPoints)
                 return;
@@ -489,7 +489,7 @@ namespace StarLab.UI.Workspace.Documents.Charts
             //formsPlot.Interaction.Enable(); // re-enable the default click-drag-pan behavior
         }
 
-        private void FormsPlot1_MouseMove(object? sender, MouseEventArgs e)
+        private void FormsPlot_MouseMove(object? sender, MouseEventArgs e)
         {
             if (!MouseIsDown || !selectPoints)
                 return;

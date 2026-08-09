@@ -28,7 +28,7 @@ namespace StarLab
 
             var container = new WindsorContainer();
 
-            container.Install(new ApplicationInstaller());
+            container.Install(new DependencyInstaller());
 
             var controller = container.Resolve<IApplicationController>();
 

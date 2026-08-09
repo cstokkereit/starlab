@@ -5,7 +5,7 @@ namespace StarLab.Application.Workspace
     /// <summary>
     /// A class for performing unit tests on the <see cref="DeleteFolderInteractor"/> class.
     /// </summary>
-    public class DeleteFolderInteractorTests : InteractorTests
+    public class DeleteFolderInteractorTests : ApplicationTests
     {
         /// <summary>
         /// Test that the <see cref="DeleteFolderInteractor.Execute"/> method correctly deletes an empty folder.
@@ -15,7 +15,7 @@ namespace StarLab.Application.Workspace
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = Factory.CreateDeleteFolderUseCase(port);
+            var interactor = factory.CreateDeleteFolderUseCase(port);
 
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
@@ -41,7 +41,7 @@ namespace StarLab.Application.Workspace
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = Factory.CreateDeleteFolderUseCase(port);
+            var interactor = factory.CreateDeleteFolderUseCase(port);
 
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
@@ -76,7 +76,7 @@ namespace StarLab.Application.Workspace
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = Factory.CreateDeleteFolderUseCase(port);
+            var interactor = factory.CreateDeleteFolderUseCase(port);
 
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
@@ -107,7 +107,7 @@ namespace StarLab.Application.Workspace
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = Factory.CreateDeleteFolderUseCase(port);
+            var interactor = factory.CreateDeleteFolderUseCase(port);
 
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
@@ -159,7 +159,7 @@ namespace StarLab.Application.Workspace
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = Factory.CreateDeleteFolderUseCase(port);
+            var interactor = factory.CreateDeleteFolderUseCase(port);
 
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
@@ -181,7 +181,7 @@ namespace StarLab.Application.Workspace
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = Factory.CreateDeleteFolderUseCase(port);
+            var interactor = factory.CreateDeleteFolderUseCase(port);
 
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
@@ -200,7 +200,7 @@ namespace StarLab.Application.Workspace
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = Factory.CreateDeleteFolderUseCase(port);
+            var interactor = factory.CreateDeleteFolderUseCase(port);
 
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
@@ -233,7 +233,7 @@ namespace StarLab.Application.Workspace
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = Factory.CreateDeleteFolderUseCase(port);
+            var interactor = factory.CreateDeleteFolderUseCase(port);
 
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
@@ -263,7 +263,7 @@ namespace StarLab.Application.Workspace
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = Factory.CreateDeleteFolderUseCase(port);
+            var interactor = factory.CreateDeleteFolderUseCase(port);
 
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
@@ -316,7 +316,7 @@ namespace StarLab.Application.Workspace
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = Factory.CreateDeleteFolderUseCase(port);
+            var interactor = factory.CreateDeleteFolderUseCase(port);
 
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")

@@ -19,7 +19,7 @@ namespace StarLab.UI
     /// <summary>
     /// A class for registering the injectable application dependencies with the WindsorContainer.
     /// </summary>
-    internal class ApplicationInstaller : IWindsorInstaller
+    internal class DependencyInstaller : IWindsorInstaller
     {
         /// <summary>
         /// Registers all of the application dependencies with the <see cref="IWindsorContainer"/>.

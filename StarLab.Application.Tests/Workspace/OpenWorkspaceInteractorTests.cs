@@ -1,9 +1,9 @@
-﻿namespace StarLab.Application.Workspace
+namespace StarLab.Application.Workspace
 {
     /// <summary>
     /// A class for performing unit tests on the <see cref="OpenWorkspaceInteractor"/> class.
     /// </summary>
-    public class OpenWorkspaceInteractorTests : InteractorTests
+    public class OpenWorkspaceInteractorTests : ApplicationTests
     {
         /// <summary>
         /// This will be run after each test.
@@ -13,7 +13,7 @@
         {
             try
             {
-                DeleteFile(Path.Combine(Folder, "Invalid.slw"));
+                DeleteFile(Path.Combine(folder, "Invalid.slw"));
             }
             catch (Exception)
             {
@@ -31,15 +31,15 @@
         {
             var port = Substitute.For<IApplicationOutputPort>();
 
-            var interactor = Factory.CreateOpenWorkspaceUseCase(port);
+            var interactor = factory.CreateOpenWorkspaceUseCase(port);
 
-            var filename = Path.Combine(Folder, "Workspace1.slw");
+            var filename = Path.Combine(folder, "Workspace1.slw");
 
-            CopyFile(Path.Combine(Resources, "Workspace1.slw"), filename);
+            CopyFile(Path.Combine(resources, "Workspace1.slw"), filename);
 
             interactor.Execute(filename);
 
-            port.Received().SetWorkspace(Arg.Is<WorkspaceDTO>(ws => ws.FileName == Path.Combine(Folder, "Workspace1.slw")));
+            port.Received().SetWorkspace(Arg.Is<WorkspaceDTO>(ws => ws.FileName == Path.Combine(folder, "Workspace1.slw")));
         }
 
         /// <summary>
@@ -50,11 +50,11 @@
         {
             var port = Substitute.For<IApplicationOutputPort>();
 
-            var interactor = Factory.CreateOpenWorkspaceUseCase(port);
+            var interactor = factory.CreateOpenWorkspaceUseCase(port);
 
-            var filename = Path.Combine(Folder, "Invalid.slw");
+            var filename = Path.Combine(folder, "Invalid.slw");
 
-            CopyFile(Path.Combine(Resources, "Invalid.slw"), filename);
+            CopyFile(Path.Combine(resources, "Invalid.slw"), filename);
 
             interactor.Execute(filename);
 
@@ -72,9 +72,9 @@
         {
             var port = Substitute.For<IApplicationOutputPort>();
 
-            var interactor = Factory.CreateOpenWorkspaceUseCase(port);
+            var interactor = factory.CreateOpenWorkspaceUseCase(port);
 
-            var filename = Path.Combine(Folder, "Missing.slw");
+            var filename = Path.Combine(folder, "Missing.slw");
 
             interactor.Execute(filename);
 

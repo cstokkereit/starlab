@@ -33,7 +33,6 @@
             // 
             // formsPlot
             // 
-            formsPlot.DisplayScale = 1F;
             formsPlot.Dock = DockStyle.Fill;
             formsPlot.Location = new Point(0, 0);
             formsPlot.Name = "formsPlot";

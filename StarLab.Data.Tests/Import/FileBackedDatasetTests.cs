@@ -15,13 +15,10 @@ namespace StarLab.Data.Import
         [Test]
         public void TestConstructor()
         {
-            // Arrange
             var importDefinition = ImportDefinitionBuilder.GetInstance(",").Build();
 
-            // Act
             var dataset = new FileBackedDataset(filename, importDefinition);
 
-            // Assert
             Assert.That(dataset, Is.Not.Null);
         }
 
@@ -31,13 +28,10 @@ namespace StarLab.Data.Import
         [Test]
         public void TestBOFAtBeginningOfFile()
         {
-            // Arrange
             var importDefinition = ImportDefinitionBuilder.GetInstance(",").Build();
 
-            // Act
             var dataset = new FileBackedDataset(filename, importDefinition);
 
-            // Assert
             Assert.That(dataset.BOF, Is.True);
         }
 
@@ -47,15 +41,12 @@ namespace StarLab.Data.Import
         [Test]
         public void TestBOFAfterBeginningOfFile()
         {
-            // Arrange
             var importDefinition = ImportDefinitionBuilder.GetInstance(",").Build();
 
             var dataset = new FileBackedDataset(filename, importDefinition);
 
-            // Act
             dataset.MoveFirst();
 
-            // Assert
             Assert.That(dataset.BOF, Is.False);
         }
 
@@ -65,12 +56,10 @@ namespace StarLab.Data.Import
         [Test]
         public void TestBOFAtEndOfFile()
         {
-            // Arrange
             var importDefinition = ImportDefinitionBuilder.GetInstance(",").Build();
 
             var dataset = new FileBackedDataset(filename, importDefinition);
 
-            // Act
             dataset.MoveLast();
             dataset.MoveNext();
 
@@ -83,12 +72,10 @@ namespace StarLab.Data.Import
         [Test]
         public void TestEOFAtBeginningOfFile()
         {
-            // Arrange
             var importDefinition = ImportDefinitionBuilder.GetInstance(",").Build();
 
             var dataset = new FileBackedDataset(filename, importDefinition);
 
-            // Assert
             Assert.That(dataset.EOF, Is.False);
         }
 
@@ -98,15 +85,12 @@ namespace StarLab.Data.Import
         [Test]
         public void TestEOFBeforeEndOfFile()
         {
-            // Arrange
             var importDefinition = ImportDefinitionBuilder.GetInstance(",").Build();
 
             var dataset = new FileBackedDataset(filename, importDefinition);
 
-            // Act
             dataset.MoveLast();
 
-            // Assert
             Assert.That(dataset.EOF, Is.False);
         }
 
@@ -116,16 +100,13 @@ namespace StarLab.Data.Import
         [Test]
         public void TestEOFAtEndOfFile()
         {
-            // Arrange
             var importDefinition = ImportDefinitionBuilder.GetInstance(",").Build();
 
             var dataset = new FileBackedDataset(filename, importDefinition);
 
-            // Act
             dataset.MoveLast();
             dataset.MoveNext();
 
-            // Assert
             Assert.That(dataset.EOF, Is.True);
         }
 

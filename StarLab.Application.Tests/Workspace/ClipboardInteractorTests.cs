@@ -5,7 +5,7 @@ namespace StarLab.Application.Workspace
     /// <summary>
     /// A class for performing unit tests on the <see cref="AddFolderInteractor"/> class.
     /// </summary>
-    public class ClipboardInteractorTests : InteractorTests
+    public class ClipboardInteractorTests : ApplicationTests
     {
         /// <summary>
         /// Test that the <see cref="ClipboardInteractor.Execute"/> method correctly pastes a copied document to the specified location within the workspace hierarchy.
@@ -15,7 +15,7 @@ namespace StarLab.Application.Workspace
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var copyInteractor = Factory.CreateUseCase(port, ClipboardOperations.Copy);
+            var copyInteractor = factory.CreateUseCase(port, ClipboardOperations.Copy);
 
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
@@ -26,7 +26,7 @@ namespace StarLab.Application.Workspace
 
             copyInteractor.Execute(dto, "1");
 
-            var pasteInteractor = Factory.CreateUseCase(port, ClipboardOperations.Paste);
+            var pasteInteractor = factory.CreateUseCase(port, ClipboardOperations.Paste);
 
             pasteInteractor.Execute(dto, "Workspace/Project1/Folder2");
 
@@ -52,7 +52,7 @@ namespace StarLab.Application.Workspace
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var copyInteractor = Factory.CreateUseCase(port, ClipboardOperations.Copy);
+            var copyInteractor = factory.CreateUseCase(port, ClipboardOperations.Copy);
 
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
@@ -63,7 +63,7 @@ namespace StarLab.Application.Workspace
 
             copyInteractor.Execute(dto, "1");
 
-            var pasteInteractor = Factory.CreateUseCase(port, ClipboardOperations.Paste);
+            var pasteInteractor = factory.CreateUseCase(port, ClipboardOperations.Paste);
 
             pasteInteractor.Execute(dto, "Workspace/Project1/Folder1");
 
@@ -89,7 +89,7 @@ namespace StarLab.Application.Workspace
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var copyInteractor = Factory.CreateUseCase(port, ClipboardOperations.Copy);
+            var copyInteractor = factory.CreateUseCase(port, ClipboardOperations.Copy);
 
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
@@ -100,7 +100,7 @@ namespace StarLab.Application.Workspace
 
             copyInteractor.Execute(dto, "Workspace/Project1/Folder1");
 
-            var pasteInteractor = Factory.CreateUseCase(port, ClipboardOperations.Paste);
+            var pasteInteractor = factory.CreateUseCase(port, ClipboardOperations.Paste);
 
             pasteInteractor.Execute(dto, "Workspace/Project1/Folder2");
 
@@ -121,7 +121,7 @@ namespace StarLab.Application.Workspace
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var copyInteractor = Factory.CreateUseCase(port, ClipboardOperations.Copy);
+            var copyInteractor = factory.CreateUseCase(port, ClipboardOperations.Copy);
 
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
@@ -133,7 +133,7 @@ namespace StarLab.Application.Workspace
 
             copyInteractor.Execute(dto, "Workspace/Project1/Folder1");
 
-            var pasteInteractor = Factory.CreateUseCase(port, ClipboardOperations.Paste);
+            var pasteInteractor = factory.CreateUseCase(port, ClipboardOperations.Paste);
 
             pasteInteractor.Execute(dto, "Workspace/Project1/Folder2");
 
@@ -157,7 +157,7 @@ namespace StarLab.Application.Workspace
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var copyInteractor = Factory.CreateUseCase(port, ClipboardOperations.Copy);
+            var copyInteractor = factory.CreateUseCase(port, ClipboardOperations.Copy);
 
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
@@ -169,7 +169,7 @@ namespace StarLab.Application.Workspace
 
             copyInteractor.Execute(dto, "Workspace/Project1/Folder1");
 
-            var pasteInteractor = Factory.CreateUseCase(port, ClipboardOperations.Paste);
+            var pasteInteractor = factory.CreateUseCase(port, ClipboardOperations.Paste);
 
             pasteInteractor.Execute(dto, "Workspace/Project1/Folder2");
 
@@ -202,7 +202,7 @@ namespace StarLab.Application.Workspace
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var copyInteractor = Factory.CreateUseCase(port, ClipboardOperations.Copy);
+            var copyInteractor = factory.CreateUseCase(port, ClipboardOperations.Copy);
 
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
@@ -224,7 +224,7 @@ namespace StarLab.Application.Workspace
 
             copyInteractor.Execute(dto, "Workspace/Project1/Folder1");
 
-            var pasteInteractor = Factory.CreateUseCase(port, ClipboardOperations.Paste);
+            var pasteInteractor = factory.CreateUseCase(port, ClipboardOperations.Paste);
 
             pasteInteractor.Execute(dto, "Workspace/Project1/Folder3/Folder32");
 
@@ -283,7 +283,7 @@ namespace StarLab.Application.Workspace
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var copyInteractor = Factory.CreateUseCase(port, ClipboardOperations.Copy);
+            var copyInteractor = factory.CreateUseCase(port, ClipboardOperations.Copy);
 
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
@@ -302,7 +302,7 @@ namespace StarLab.Application.Workspace
 
             copyInteractor.Execute(dto, "Workspace/Project1/Folder1");
 
-            var pasteInteractor = Factory.CreateUseCase(port, ClipboardOperations.Paste);
+            var pasteInteractor = factory.CreateUseCase(port, ClipboardOperations.Paste);
 
             pasteInteractor.Execute(dto, "Workspace/Project2");
 
@@ -349,7 +349,7 @@ namespace StarLab.Application.Workspace
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var copyInteractor = Factory.CreateUseCase(port, ClipboardOperations.Copy);
+            var copyInteractor = factory.CreateUseCase(port, ClipboardOperations.Copy);
 
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
@@ -368,7 +368,7 @@ namespace StarLab.Application.Workspace
 
             copyInteractor.Execute(dto, "Workspace/Project1/Folder1");
 
-            var pasteInteractor = Factory.CreateUseCase(port, ClipboardOperations.Paste);
+            var pasteInteractor = factory.CreateUseCase(port, ClipboardOperations.Paste);
 
             pasteInteractor.Execute(dto, "Workspace/Project2/Folder1");
 
@@ -415,7 +415,7 @@ namespace StarLab.Application.Workspace
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var cutInteractor = Factory.CreateUseCase(port, ClipboardOperations.Cut);
+            var cutInteractor = factory.CreateUseCase(port, ClipboardOperations.Cut);
 
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
@@ -426,7 +426,7 @@ namespace StarLab.Application.Workspace
 
             cutInteractor.Execute(dto, "1");
 
-            var pasteInteractor = Factory.CreateUseCase(port, ClipboardOperations.Paste);
+            var pasteInteractor = factory.CreateUseCase(port, ClipboardOperations.Paste);
 
             pasteInteractor.Execute(dto, "Workspace/Project1/Folder2");
 
@@ -449,7 +449,7 @@ namespace StarLab.Application.Workspace
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var cutInteractor = Factory.CreateUseCase(port, ClipboardOperations.Cut);
+            var cutInteractor = factory.CreateUseCase(port, ClipboardOperations.Cut);
 
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
@@ -460,7 +460,7 @@ namespace StarLab.Application.Workspace
 
             cutInteractor.Execute(dto, "1");
 
-            var pasteInteractor = Factory.CreateUseCase(port, ClipboardOperations.Paste);
+            var pasteInteractor = factory.CreateUseCase(port, ClipboardOperations.Paste);
 
             pasteInteractor.Execute(dto, "Workspace/Project1/Folder1");
 
@@ -480,7 +480,7 @@ namespace StarLab.Application.Workspace
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var cutInteractor = Factory.CreateUseCase(port, ClipboardOperations.Cut);
+            var cutInteractor = factory.CreateUseCase(port, ClipboardOperations.Cut);
 
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
@@ -492,7 +492,7 @@ namespace StarLab.Application.Workspace
 
             cutInteractor.Execute(dto, "1");
 
-            var pasteInteractor = Factory.CreateUseCase(port, ClipboardOperations.Paste);
+            var pasteInteractor = factory.CreateUseCase(port, ClipboardOperations.Paste);
 
             port.ShowMessage(Arg.Is("StarLab"),
                              Arg.Is("A document with the name 'Document1' already exists. Do you want to replace it?"),
@@ -512,7 +512,7 @@ namespace StarLab.Application.Workspace
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var cutInteractor = Factory.CreateUseCase(port, ClipboardOperations.Cut);
+            var cutInteractor = factory.CreateUseCase(port, ClipboardOperations.Cut);
 
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
@@ -524,7 +524,7 @@ namespace StarLab.Application.Workspace
 
             cutInteractor.Execute(dto, "1");
 
-            var pasteInteractor = Factory.CreateUseCase(port, ClipboardOperations.Paste);
+            var pasteInteractor = factory.CreateUseCase(port, ClipboardOperations.Paste);
 
             port.ShowMessage(Arg.Is("StarLab"),
                              Arg.Is("A document with the name 'Document1' already exists. Do you want to replace it?"),
@@ -552,7 +552,7 @@ namespace StarLab.Application.Workspace
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var cutInteractor = Factory.CreateUseCase(port, ClipboardOperations.Cut);
+            var cutInteractor = factory.CreateUseCase(port, ClipboardOperations.Cut);
 
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
@@ -564,7 +564,7 @@ namespace StarLab.Application.Workspace
 
             cutInteractor.Execute(dto, "1");
 
-            var pasteInteractor = Factory.CreateUseCase(port, ClipboardOperations.Paste);
+            var pasteInteractor = factory.CreateUseCase(port, ClipboardOperations.Paste);
 
             port.ShowMessage(Arg.Is("StarLab"),
                              Arg.Is("A document with the name 'Document1' already exists. Do you want to replace it?"),
@@ -592,7 +592,7 @@ namespace StarLab.Application.Workspace
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var cutInteractor = Factory.CreateUseCase(port, ClipboardOperations.Cut);
+            var cutInteractor = factory.CreateUseCase(port, ClipboardOperations.Cut);
 
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
@@ -603,7 +603,7 @@ namespace StarLab.Application.Workspace
 
             cutInteractor.Execute(dto, "Workspace/Project1/Folder1");
 
-            var pasteInteractor = Factory.CreateUseCase(port, ClipboardOperations.Paste);
+            var pasteInteractor = factory.CreateUseCase(port, ClipboardOperations.Paste);
 
             pasteInteractor.Execute(dto, "Workspace/Project1/Folder2");
 
@@ -623,7 +623,7 @@ namespace StarLab.Application.Workspace
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var cutInteractor = Factory.CreateUseCase(port, ClipboardOperations.Cut);
+            var cutInteractor = factory.CreateUseCase(port, ClipboardOperations.Cut);
 
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
@@ -635,7 +635,7 @@ namespace StarLab.Application.Workspace
 
             cutInteractor.Execute(dto, "Workspace/Project1/Folder1/Folder3");
 
-            var pasteInteractor = Factory.CreateUseCase(port, ClipboardOperations.Paste);
+            var pasteInteractor = factory.CreateUseCase(port, ClipboardOperations.Paste);
 
             port.ShowMessage(Arg.Is("StarLab"),
                              Arg.Is("This folder already contains a folder called 'Folder3'.\r\n\r\nIf documents in the existing folder have the same names as documents in the folder you are copying, do you want to replace the existing documents?"),
@@ -655,7 +655,7 @@ namespace StarLab.Application.Workspace
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var cutInteractor = Factory.CreateUseCase(port, ClipboardOperations.Cut);
+            var cutInteractor = factory.CreateUseCase(port, ClipboardOperations.Cut);
 
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
@@ -676,7 +676,7 @@ namespace StarLab.Application.Workspace
 
             cutInteractor.Execute(dto, "Workspace/Project1/Folder1");
 
-            var pasteInteractor = Factory.CreateUseCase(port, ClipboardOperations.Paste);
+            var pasteInteractor = factory.CreateUseCase(port, ClipboardOperations.Paste);
 
             port.ShowMessage(Arg.Is("StarLab"),
                              Arg.Is("This folder already contains a folder called 'Folder1'.\r\n\r\nIf documents in the existing folder have the same names as documents in the folder you are copying, do you want to replace the existing documents?"),
@@ -720,7 +720,7 @@ namespace StarLab.Application.Workspace
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var cutInteractor = Factory.CreateUseCase(port, ClipboardOperations.Cut);
+            var cutInteractor = factory.CreateUseCase(port, ClipboardOperations.Cut);
 
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
@@ -741,7 +741,7 @@ namespace StarLab.Application.Workspace
 
             cutInteractor.Execute(dto, "Workspace/Project1/Folder1");
 
-            var pasteInteractor = Factory.CreateUseCase(port, ClipboardOperations.Paste);
+            var pasteInteractor = factory.CreateUseCase(port, ClipboardOperations.Paste);
 
             port.ShowMessage(Arg.Is("StarLab"),
                              Arg.Is("This folder already contains a folder called 'Folder1'.\r\n\r\nIf documents in the existing folder have the same names as documents in the folder you are copying, do you want to replace the existing documents?"),
@@ -785,7 +785,7 @@ namespace StarLab.Application.Workspace
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var cutInteractor = Factory.CreateUseCase(port, ClipboardOperations.Cut);
+            var cutInteractor = factory.CreateUseCase(port, ClipboardOperations.Cut);
 
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
@@ -797,7 +797,7 @@ namespace StarLab.Application.Workspace
 
             cutInteractor.Execute(dto, "Workspace/Project1/Folder1");
 
-            var pasteInteractor = Factory.CreateUseCase(port, ClipboardOperations.Paste);
+            var pasteInteractor = factory.CreateUseCase(port, ClipboardOperations.Paste);
 
             pasteInteractor.Execute(dto, "Workspace/Project1/Folder2");
 
@@ -818,7 +818,7 @@ namespace StarLab.Application.Workspace
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var cutInteractor = Factory.CreateUseCase(port, ClipboardOperations.Cut);
+            var cutInteractor = factory.CreateUseCase(port, ClipboardOperations.Cut);
 
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
@@ -830,7 +830,7 @@ namespace StarLab.Application.Workspace
 
             cutInteractor.Execute(dto, "Workspace/Project1/Folder1");
 
-            var pasteInteractor = Factory.CreateUseCase(port, ClipboardOperations.Paste);
+            var pasteInteractor = factory.CreateUseCase(port, ClipboardOperations.Paste);
 
             pasteInteractor.Execute(dto, "Workspace/Project1/Folder2");
 
@@ -856,7 +856,7 @@ namespace StarLab.Application.Workspace
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var cutInteractor = Factory.CreateUseCase(port, ClipboardOperations.Cut);
+            var cutInteractor = factory.CreateUseCase(port, ClipboardOperations.Cut);
 
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
@@ -878,7 +878,7 @@ namespace StarLab.Application.Workspace
 
             cutInteractor.Execute(dto, "Workspace/Project1/Folder1");
 
-            var pasteInteractor = Factory.CreateUseCase(port, ClipboardOperations.Paste);
+            var pasteInteractor = factory.CreateUseCase(port, ClipboardOperations.Paste);
 
             pasteInteractor.Execute(dto, "Workspace/Project1/Folder3/Folder32");
 
@@ -922,7 +922,7 @@ namespace StarLab.Application.Workspace
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var cutInteractor = Factory.CreateUseCase(port, ClipboardOperations.Cut);
+            var cutInteractor = factory.CreateUseCase(port, ClipboardOperations.Cut);
 
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
@@ -941,7 +941,7 @@ namespace StarLab.Application.Workspace
 
             cutInteractor.Execute(dto, "Workspace/Project1/Folder1");
 
-            var pasteInteractor = Factory.CreateUseCase(port, ClipboardOperations.Paste);
+            var pasteInteractor = factory.CreateUseCase(port, ClipboardOperations.Paste);
 
             pasteInteractor.Execute(dto, "Workspace/Project2");
 
@@ -979,7 +979,7 @@ namespace StarLab.Application.Workspace
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var cutInteractor = Factory.CreateUseCase(port, ClipboardOperations.Cut);
+            var cutInteractor = factory.CreateUseCase(port, ClipboardOperations.Cut);
 
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
@@ -998,7 +998,7 @@ namespace StarLab.Application.Workspace
 
             cutInteractor.Execute(dto, "Workspace/Project1/Folder1");
 
-            var pasteInteractor = Factory.CreateUseCase(port, ClipboardOperations.Paste);
+            var pasteInteractor = factory.CreateUseCase(port, ClipboardOperations.Paste);
 
             pasteInteractor.Execute(dto, "Workspace/Project2/Folder1");
 

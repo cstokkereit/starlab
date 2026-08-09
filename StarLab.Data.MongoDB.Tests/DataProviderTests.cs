@@ -173,9 +173,7 @@ namespace StarLab.Data.MongoDB
             var query = builder.AddTable(COLLECTION)
                                .BuildQuery();
 
-            var e = Assert.Throws<InvalidOperationException>(() => provider.GetStars(query, 0, 20));
-
-            //Assert.That(e.Message, Is.EqualTo(""));
+            Assert.Throws<InvalidOperationException>(() => provider.GetStars(query, 0, 20));
         }
 
         /// <summary>
@@ -314,9 +312,7 @@ namespace StarLab.Data.MongoDB
 
             provider.OpenDatabase(DATABASE);
 
-            var e = Assert.Throws<InvalidOperationException>(() => provider.OpenDatabase(DATABASE));
-
-            //Assert.That(e.Message, Is.EqualTo(""));
+            Assert.Throws<InvalidOperationException>(() => provider.OpenDatabase(DATABASE));
         }
 
         // TODO - And and Or queries

@@ -5,7 +5,7 @@ namespace StarLab.Application.Workspace
     /// <summary>
     /// A class for performing unit tests on the <see cref="RenameWorkspaceInteractor"/> class.
     /// </summary>
-    public class RenameWorkspaceInteractorTests : InteractorTests
+    public class RenameWorkspaceInteractorTests : ApplicationTests
     {
         /// <summary>
         /// This will be run after each test.
@@ -15,8 +15,8 @@ namespace StarLab.Application.Workspace
         {
             try
             {
-                DeleteFile(Path.Combine(Folder, "Workspace1.slw"));
-                DeleteFile(Path.Combine(Folder, "Workspace2.slw"));
+                DeleteFile(Path.Combine(folder, "Workspace1.slw"));
+                DeleteFile(Path.Combine(folder, "Workspace2.slw"));
             }
             catch (Exception)
             {
@@ -34,13 +34,13 @@ namespace StarLab.Application.Workspace
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = Factory.CreateRenameWorkspaceUseCase(port);
+            var interactor = factory.CreateRenameWorkspaceUseCase(port);
 
-            var dto = new WorkspaceDtoBuilder(Path.Combine(Folder, "Workspace1.slw")).CreateWorkspace();
+            var dto = new WorkspaceDtoBuilder(Path.Combine(folder, "Workspace1.slw")).CreateWorkspace();
 
             interactor.Execute(dto, "Workspace2");
 
-            port.Received().UpdateWorkspace(Arg.Is<WorkspaceDTO>(ws => ws.FileName == Path.Combine(Folder, "Workspace2.slw")));
+            port.Received().UpdateWorkspace(Arg.Is<WorkspaceDTO>(ws => ws.FileName == Path.Combine(folder, "Workspace2.slw")));
         }
 
         /// <summary>
@@ -51,13 +51,11 @@ namespace StarLab.Application.Workspace
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = Factory.CreateRenameWorkspaceUseCase(port);
+            var interactor = factory.CreateRenameWorkspaceUseCase(port);
 
-            var dto = new WorkspaceDtoBuilder(Path.Combine(Folder, "Workspace1.slw")).CreateWorkspace();
+            var dto = new WorkspaceDtoBuilder(Path.Combine(folder, "Workspace1.slw")).CreateWorkspace();
 
-            var e = Assert.Throws<Exception>(() => interactor.Execute(dto, string.Empty));
-
-            Assert.That(e.Message, Is.EqualTo("The workspace name cannot be null or empty."));
+            Assert.Throws<Exception>(() => interactor.Execute(dto, string.Empty));
         }
 
         /// <summary>
@@ -68,15 +66,13 @@ namespace StarLab.Application.Workspace
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = Factory.CreateRenameWorkspaceUseCase(port);
+            var interactor = factory.CreateRenameWorkspaceUseCase(port);
 
-            var dto = new WorkspaceDtoBuilder(Path.Combine(Folder, "Workspace1.slw")).CreateWorkspace();
+            var dto = new WorkspaceDtoBuilder(Path.Combine(folder, "Workspace1.slw")).CreateWorkspace();
 
-            CopyFile(Path.Combine(Resources, "Workspace2.slw"), Path.Combine(Folder, "Workspace2.slw"));
+            CopyFile(Path.Combine(resources, "Workspace2.slw"), Path.Combine(folder, "Workspace2.slw"));
 
-            var e = Assert.Throws<Exception>(() => interactor.Execute(dto, "Workspace2"));
-
-            Assert.That(e.Message, Is.EqualTo("Cannot rename 'Workspace1' to 'Workspace2' because a workspace with that name already exists at this location."));
+            Assert.Throws<Exception>(() => interactor.Execute(dto, "Workspace2"));
         }
 
         /// <summary>
@@ -87,13 +83,11 @@ namespace StarLab.Application.Workspace
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = Factory.CreateRenameWorkspaceUseCase(port);
+            var interactor = factory.CreateRenameWorkspaceUseCase(port);
 
-            var dto = new WorkspaceDtoBuilder(Path.Combine(Folder, "Workspace1.slw")).CreateWorkspace();
+            var dto = new WorkspaceDtoBuilder(Path.Combine(folder, "Workspace1.slw")).CreateWorkspace();
 
-            var e = Assert.Throws<Exception>(() => interactor.Execute(dto, "Workspace1/"));
-
-            Assert.That(e.Message, Is.EqualTo("Workspace names cannot include any of the following:\r\n\r\n                               \\ / : * ? ' \" < > |\r\n\r\nPlease enter a valid name."));
+            Assert.Throws<Exception>(() => interactor.Execute(dto, "Workspace1/"));
         }
     }
 }

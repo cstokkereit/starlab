@@ -66,6 +66,8 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
 
             View.Initialise();
 
+            InitialiseChart();
+
             //View.MinimumSize = new Size(200, 200);
 
             log.Debug(string.Format(LogEntries.Initialised, $"{nameof(ColourMagnitudeChartViewPresenter)}({View.Name})"));
@@ -111,6 +113,20 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             {
                 View.Detach();
             }
+        }
+
+
+
+        private void InitialiseChart()
+        {
+
+
+
+
+
+
+
+
         }
     }
 }

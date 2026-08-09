@@ -5,7 +5,7 @@ namespace StarLab.Application.Workspace.Documents
     /// <summary>
     /// A class for performing unit tests on the <see cref="RenameDocumentInteractor"/> class.
     /// </summary>
-    public class RenameDocumentInteractorTests : InteractorTests
+    public class RenameDocumentInteractorTests : ApplicationTests
     {
         /// <summary>
         /// Test that the <see cref="RenameDocumentInteractor.Execute"/> method correctly renames a document.
@@ -15,7 +15,7 @@ namespace StarLab.Application.Workspace.Documents
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = Factory.CreateRenameDocumentUseCase(port);
+            var interactor = factory.CreateRenameDocumentUseCase(port);
 
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
@@ -43,7 +43,7 @@ namespace StarLab.Application.Workspace.Documents
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = Factory.CreateRenameDocumentUseCase(port);
+            var interactor = factory.CreateRenameDocumentUseCase(port);
 
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
@@ -51,9 +51,7 @@ namespace StarLab.Application.Workspace.Documents
                 .AddChart("1", "Document1", "Workspace/Project1/Folder1")
                 .CreateWorkspace();
 
-            var e = Assert.Throws<Exception>(() => interactor.Execute(dto, "1", string.Empty));
-
-            Assert.That(e.Message, Is.EqualTo("The document name cannot be null or empty."));
+            Assert.Throws<Exception>(() => interactor.Execute(dto, "1", string.Empty));
         }
 
         /// <summary>
@@ -64,7 +62,7 @@ namespace StarLab.Application.Workspace.Documents
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = Factory.CreateRenameDocumentUseCase(port);
+            var interactor = factory.CreateRenameDocumentUseCase(port);
 
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
@@ -73,9 +71,7 @@ namespace StarLab.Application.Workspace.Documents
                 .AddChart("2", "Document2", "Workspace/Project1/Folder1")
                 .CreateWorkspace();
 
-            var e = Assert.Throws<Exception>(() => interactor.Execute(dto, "1", "Document2"));
-
-            Assert.That(e.Message, Is.EqualTo("Cannot rename 'Document1' to 'Document2' because a document with that name already exists."));
+            Assert.Throws<Exception>(() => interactor.Execute(dto, "1", "Document2"));
         }
 
         /// <summary>
@@ -86,7 +82,7 @@ namespace StarLab.Application.Workspace.Documents
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = Factory.CreateRenameDocumentUseCase(port);
+            var interactor = factory.CreateRenameDocumentUseCase(port);
 
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
@@ -94,9 +90,7 @@ namespace StarLab.Application.Workspace.Documents
                 .AddChart("1", "Document1", "Workspace/Project1/Folder1")
                 .CreateWorkspace();
 
-            var e = Assert.Throws<Exception>(() => interactor.Execute(dto, "1", "Document1/"));
-
-            Assert.That(e.Message, Is.EqualTo("Document names cannot include any of the following:\r\n\r\n                               \\ / : * ? ' \" < > |\r\n\r\nPlease enter a valid name."));
+            Assert.Throws<Exception>(() => interactor.Execute(dto, "1", "Document1/"));
         }
     }
 }

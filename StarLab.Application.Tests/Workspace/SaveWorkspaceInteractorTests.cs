@@ -5,7 +5,7 @@ namespace StarLab.Application.Workspace
     /// <summary>
     /// A class for performing unit tests on the <see cref="SaveWorkspaceInteractor"/> class.
     /// </summary>
-    public class SaveWorkspaceInteractorTests : InteractorTests
+    public class SaveWorkspaceInteractorTests : ApplicationTests
     {
         /// <summary>
         /// This will be run after each test.
@@ -15,7 +15,7 @@ namespace StarLab.Application.Workspace
         {
             try
             {
-                DeleteFile(Path.Combine(Folder, "Workspace1.slw"));
+                DeleteFile(Path.Combine(folder, "Workspace1.slw"));
             }
             catch (Exception)
             {
@@ -33,9 +33,9 @@ namespace StarLab.Application.Workspace
         {
             var port = Substitute.For<IApplicationOutputPort>();
 
-            var interactor = Factory.CreateSaveWorkspaceUseCase(port);
+            var interactor = factory.CreateSaveWorkspaceUseCase(port);
 
-            var filename = Path.Combine(Folder, "Workspace1.slw");
+            var filename = Path.Combine(folder, "Workspace1.slw");
 
             var dto = new WorkspaceDtoBuilder(filename)
                 .AddProject("Project1")
@@ -61,9 +61,9 @@ namespace StarLab.Application.Workspace
         {
             var port = Substitute.For<IApplicationOutputPort>();
 
-            var interactor = Factory.CreateSaveWorkspaceUseCase(port);
+            var interactor = factory.CreateSaveWorkspaceUseCase(port);
 
-            var filename = Path.Combine(Folder, "Workspace1.slw");
+            var filename = Path.Combine(folder, "Workspace1.slw");
 
             var dto = new WorkspaceDtoBuilder(filename)
                 .AddProject("Project1")
@@ -71,7 +71,7 @@ namespace StarLab.Application.Workspace
                 .AddChart("1", "Document1", "Workspace1/Project1/Folder1")
                 .CreateWorkspace();
 
-            CopyFile(Path.Combine(Resources, "Workspace1.slw"), filename);
+            CopyFile(Path.Combine(resources, "Workspace1.slw"), filename);
 
             interactor.Execute(dto);
 
@@ -91,9 +91,9 @@ namespace StarLab.Application.Workspace
         {
             var port = Substitute.For<IApplicationOutputPort>();
 
-            var saveInteractor = Factory.CreateSaveWorkspaceUseCase(port);
+            var saveInteractor = factory.CreateSaveWorkspaceUseCase(port);
 
-            var filename = Path.Combine(Folder, "Workspace1.slw");
+            var filename = Path.Combine(folder, "Workspace1.slw");
 
             var dto = new WorkspaceDtoBuilder(filename)
                 .AddProject("Project1")
@@ -113,7 +113,7 @@ namespace StarLab.Application.Workspace
                                              Arg.Any<InteractionType>(),
                                              Arg.Any<InteractionResponses>());
 
-            var openInteractor = Factory.CreateOpenWorkspaceUseCase(port);
+            var openInteractor = factory.CreateOpenWorkspaceUseCase(port);
 
             openInteractor.Execute(filename);
 

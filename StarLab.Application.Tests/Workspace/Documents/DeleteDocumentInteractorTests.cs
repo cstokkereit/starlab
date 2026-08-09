@@ -5,7 +5,7 @@ namespace StarLab.Application.Workspace.Documents;
 /// <summary>
 /// A class for performing unit tests on the <see cref="DeleteDocumentInteractor"/> class.
 /// </summary>
-public class DeleteDocumentInteractorTests : InteractorTests
+public class DeleteDocumentInteractorTests : ApplicationTests
 {
     /// <summary>
     /// Test that the <see cref="DeleteDocumentInteractor.Execute"/> method correctly deletes a document from a folder within the project hierarchy.
@@ -15,7 +15,7 @@ public class DeleteDocumentInteractorTests : InteractorTests
     {
         var port = Substitute.For<IWorkspaceOutputPort>();
 
-        var interactor = Factory.CreateDeleteDocumentUseCase(port);
+        var interactor = factory.CreateDeleteDocumentUseCase(port);
 
         var dto = new WorkspaceDtoBuilder("Workspace")
             .AddProject("Project1")
@@ -44,7 +44,7 @@ public class DeleteDocumentInteractorTests : InteractorTests
     {
         var port = Substitute.For<IWorkspaceOutputPort>();
 
-        var interactor = Factory.CreateDeleteDocumentUseCase(port);
+        var interactor = factory.CreateDeleteDocumentUseCase(port);
 
         var dto = new WorkspaceDtoBuilder("Workspace")
             .AddProject("Project1")
@@ -73,7 +73,7 @@ public class DeleteDocumentInteractorTests : InteractorTests
     {
         var port = Substitute.For<IWorkspaceOutputPort>();
 
-        var interactor = Factory.CreateDeleteDocumentUseCase(port);
+        var interactor = factory.CreateDeleteDocumentUseCase(port);
 
         var dto = new WorkspaceDtoBuilder("Workspace")
             .AddProject("Project1")

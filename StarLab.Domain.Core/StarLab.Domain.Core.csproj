@@ -13,4 +13,8 @@
     <ProjectReference Include="..\Stratosoft.File.IO\Stratosoft.File.IO.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Entities\" />
+  </ItemGroup>
+
 </Project>

@@ -5,7 +5,7 @@ namespace StarLab.Application.Workspace
     /// <summary>
     /// A class for performing unit tests on the <see cref="AddProjectInteractor"/> class.
     /// </summary>
-    public class AddProjectInteractorTests : InteractorTests
+    public class AddProjectInteractorTests : ApplicationTests
     {
         /// <summary>
         /// Test that the <see cref="AddProjectInteractor.Execute"/> method correctly adds a project to the workspace.
@@ -15,7 +15,7 @@ namespace StarLab.Application.Workspace
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = Factory.CreateAddProjectUseCase(port);
+            var interactor = factory.CreateAddProjectUseCase(port);
 
             var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
@@ -46,7 +46,7 @@ namespace StarLab.Application.Workspace
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = Factory.CreateAddProjectUseCase(port);
+            var interactor = factory.CreateAddProjectUseCase(port);
 
             var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
@@ -75,7 +75,7 @@ namespace StarLab.Application.Workspace
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = Factory.CreateAddProjectUseCase(port);
+            var interactor = factory.CreateAddProjectUseCase(port);
 
             var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
@@ -104,7 +104,7 @@ namespace StarLab.Application.Workspace
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = Factory.CreateAddProjectUseCase(port);
+            var interactor = factory.CreateAddProjectUseCase(port);
 
             var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")

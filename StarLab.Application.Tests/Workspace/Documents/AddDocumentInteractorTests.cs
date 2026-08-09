@@ -5,7 +5,7 @@ namespace StarLab.Application.Workspace.Documents
     /// <summary>
     /// A class for performing unit tests on the <see cref="AddDocumentInteractor"/> class.
     /// </summary>
-    public class AddDocumentInteractorTests : InteractorTests
+    public class AddDocumentInteractorTests : ApplicationTests
     {
         /// <summary>
         /// Test that the <see cref="AddDocumentInteractor.Execute"/> method correctly adds a document to a folder in a project in the workspace hierarchy.
@@ -15,7 +15,7 @@ namespace StarLab.Application.Workspace.Documents
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = Factory.CreateAddDocumentUseCase(port);
+            var interactor = factory.CreateAddDocumentUseCase(port);
 
             var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
@@ -55,7 +55,7 @@ namespace StarLab.Application.Workspace.Documents
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = Factory.CreateAddDocumentUseCase(port);
+            var interactor = factory.CreateAddDocumentUseCase(port);
 
             var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
@@ -95,7 +95,7 @@ namespace StarLab.Application.Workspace.Documents
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = Factory.CreateAddDocumentUseCase(port);
+            var interactor = factory.CreateAddDocumentUseCase(port);
 
             var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
@@ -130,7 +130,7 @@ namespace StarLab.Application.Workspace.Documents
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = Factory.CreateAddDocumentUseCase(port);
+            var interactor = factory.CreateAddDocumentUseCase(port);
 
             var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
@@ -170,7 +170,7 @@ namespace StarLab.Application.Workspace.Documents
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = Factory.CreateAddDocumentUseCase(port);
+            var interactor = factory.CreateAddDocumentUseCase(port);
 
             var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
@@ -216,7 +216,7 @@ namespace StarLab.Application.Workspace.Documents
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = Factory.CreateAddDocumentUseCase(port);
+            var interactor = factory.CreateAddDocumentUseCase(port);
 
             var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
@@ -249,7 +249,7 @@ namespace StarLab.Application.Workspace.Documents
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = Factory.CreateAddDocumentUseCase(port);
+            var interactor = factory.CreateAddDocumentUseCase(port);
 
             var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
@@ -283,7 +283,7 @@ namespace StarLab.Application.Workspace.Documents
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = Factory.CreateAddDocumentUseCase(port);
+            var interactor = factory.CreateAddDocumentUseCase(port);
 
             var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
@@ -323,7 +323,7 @@ namespace StarLab.Application.Workspace.Documents
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = Factory.CreateAddDocumentUseCase(port);
+            var interactor = factory.CreateAddDocumentUseCase(port);
 
             var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")

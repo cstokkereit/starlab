@@ -77,7 +77,6 @@ namespace StarLab.Data.MongoDB
         [Test]
         public void TestConstructor()
         {
-            // Arrange
             var builder = new QueryBuilder();
 
             var query = builder.AddTable(COLLECTION)
@@ -85,10 +84,8 @@ namespace StarLab.Data.MongoDB
 
             var collection = database.GetCollection<BsonDocument>(COLLECTION);
 
-            // Act
             var stars = new Stars(collection.Find(((Query)query).GetFilter()).ToCursor());
 
-            // Assert
             Assert.That(stars, Is.Not.Null);
         }
 
@@ -98,7 +95,6 @@ namespace StarLab.Data.MongoDB
         [Test]
         public void TestCurrentAfterLast()
         {
-            // Arrange
             var builder = new QueryBuilder();
 
             var query = builder.AddTable(COLLECTION)
@@ -106,7 +102,6 @@ namespace StarLab.Data.MongoDB
 
             var collection = database.GetCollection<BsonDocument>(COLLECTION);
 
-            // Act
             var stars = new Stars(collection.Find(((Query)query).GetFilter()).ToCursor());
 
             while (stars.MoveNext())
@@ -116,7 +111,6 @@ namespace StarLab.Data.MongoDB
 
             stars.MoveNext();
 
-            // Assert
             Assert.That(stars.Current, Is.Null);
         }
 
@@ -126,7 +120,6 @@ namespace StarLab.Data.MongoDB
         [Test]
         public void TestCurrentBeforeFirst()
         {
-            // Arrange
             var builder = new QueryBuilder();
 
             var query = builder.AddTable(COLLECTION)
@@ -134,10 +127,8 @@ namespace StarLab.Data.MongoDB
 
             var collection = database.GetCollection<BsonDocument>(COLLECTION);
 
-            // Act
             var stars = new Stars(collection.Find(((Query)query).GetFilter()).ToCursor());
 
-            // Assert
             Assert.That(stars.Current, Is.Null);
         }
 
@@ -147,7 +138,6 @@ namespace StarLab.Data.MongoDB
         [Test]
         public void TestMoveNextWith10Stars()
         {
-            // Arrange
             var builder = new QueryBuilder();
 
             var query = builder.AddTable(COLLECTION)
@@ -156,10 +146,8 @@ namespace StarLab.Data.MongoDB
 
             var collection = database.GetCollection<BsonDocument>(COLLECTION);
 
-            // Act
             var stars = new Stars(collection.Find(((Query)query).GetFilter()).ToCursor());
 
-            // Assert
             Validate(stars, 10, s => Assert.That(s.ApparentMagnitude, Is.EqualTo(8.55)));
         }
 
@@ -169,7 +157,6 @@ namespace StarLab.Data.MongoDB
         [Test]
         public void TestMoveNextWith990Stars()
         {
-            // Arrange
             var provider = new DataProvider(connection);
 
             provider.OpenDatabase(DATABASE);
@@ -180,10 +167,8 @@ namespace StarLab.Data.MongoDB
                                .AddPredicate(builder.CreateField("Apparent Magnitude"), 8.55, ComparisonOperators.NotEquals)
                                .BuildQuery();
 
-            // Act
             var stars = provider.GetStars(query);
 
-            // Assert
             Validate(stars, 990, s => Assert.That(s.ApparentMagnitude, Is.Not.EqualTo(8.55)));
         }
 
@@ -193,7 +178,6 @@ namespace StarLab.Data.MongoDB
         [Test]
         public void TestMoveNextWithAllStars()
         {
-            // Arrange
             var provider = new DataProvider(connection);
 
             provider.OpenDatabase(DATABASE);
@@ -203,10 +187,8 @@ namespace StarLab.Data.MongoDB
             var query = builder.AddTable(COLLECTION)
                                .BuildQuery();
 
-            // Act
             var stars = provider.GetStars(query);
 
-            // Assert
             Validate(stars, 1000, s => {});
         }
 
@@ -216,7 +198,6 @@ namespace StarLab.Data.MongoDB
         [Test]
         public void TestMoveNextWithNoStars()
         {
-            // Arrange
             var builder = new QueryBuilder();
 
             var query = builder.AddTable(COLLECTION)
@@ -225,10 +206,8 @@ namespace StarLab.Data.MongoDB
 
             var collection = database.GetCollection<BsonDocument>(COLLECTION);
 
-            // Act
             var stars = new Stars(collection.Find(((Query)query).GetFilter()).ToCursor());
 
-            // Assert
             Validate(stars, 0, s => {});
         }
 

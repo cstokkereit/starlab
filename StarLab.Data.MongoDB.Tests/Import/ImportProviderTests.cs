@@ -72,10 +72,8 @@ namespace StarLab.Data.MongoDB.Import
         [Test]
         public void TestConstructor()
         {
-            // Act
             var provider = new ImportManager(connection);
 
-            // Assert
             Assert.That(provider, Is.Not.Null);
         }
 
@@ -85,10 +83,8 @@ namespace StarLab.Data.MongoDB.Import
         [Test]
         public void TestImport()
         {
-            // Arrange
             var provider = new ImportManager(connection);
 
-            // Act
             using (var dataset = new FileBackedDataset(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "Stars.dat"), importDefinition))
             {
                 provider.Import(dataset, DATABASE, COLLECTION);
@@ -98,7 +94,6 @@ namespace StarLab.Data.MongoDB.Import
 
             var count = collection.CountDocuments(Builders<BsonDocument>.Filter.Empty);
 
-            // Assert
             Assert.That(count, Is.EqualTo(1000));
         }
     }

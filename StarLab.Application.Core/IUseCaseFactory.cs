@@ -101,6 +101,13 @@ namespace StarLab.Application
         IUseCase<ChartDTO> ApplyChartSettingsUseCase(IChartOutputPort outputPort);
 
         /// <summary>
+        /// Creates a use case interactor that TODO
+        /// </summary>
+        /// <param name="outputPort">An <see cref="IChartOutputPort"/> that updates the UI in response to the outputs of the use case.</param>
+        /// <returns>An instance of <see cref="IUseCase{WorkspaceDTO}"/> that implements the use case.</returns>
+        IUseCase<WorkspaceDTO> CreateUpdateChartUseCase(IChartOutputPort outputPort);
+
+        /// <summary>
         /// Creates a use case interactor that updates a document in response to a settings change.
         /// </summary>
         /// <param name="outputPort">An <see cref="IChartOutputPort"/> that updates the UI in response to the outputs of the use case.</param>

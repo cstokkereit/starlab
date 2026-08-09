@@ -5,7 +5,7 @@ namespace StarLab.Application.Workspace
     /// <summary>
     /// A class for performing unit tests on the <see cref="AddFolderInteractor"/> class.
     /// </summary>
-    public class AddFolderInteractorTests : InteractorTests
+    public class AddFolderInteractorTests : ApplicationTests
     {
         /// <summary>
         /// Test that the <see cref="AddFolderInteractor.Execute"/> method correctly adds a folder to an existing folder.
@@ -15,7 +15,7 @@ namespace StarLab.Application.Workspace
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = Factory.CreateAddFolderUseCase(port);
+            var interactor = factory.CreateAddFolderUseCase(port);
 
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
@@ -41,7 +41,7 @@ namespace StarLab.Application.Workspace
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = Factory.CreateAddFolderUseCase(port);
+            var interactor = factory.CreateAddFolderUseCase(port);
 
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
@@ -69,7 +69,7 @@ namespace StarLab.Application.Workspace
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = Factory.CreateAddFolderUseCase(port);
+            var interactor = factory.CreateAddFolderUseCase(port);
 
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
@@ -93,7 +93,7 @@ namespace StarLab.Application.Workspace
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var interactor = Factory.CreateAddFolderUseCase(port);
+            var interactor = factory.CreateAddFolderUseCase(port);
 
             var dto = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
