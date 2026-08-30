@@ -16,8 +16,8 @@ namespace StarLab.Presentation.Workspace
         {
             ArgumentNullException.ThrowIfNull(dto, nameof(dto));
 
-            Host = dto.Host ?? string.Empty;
-            Name = dto.Name ?? string.Empty;
+            Host = dto.Host;
+            Name = dto.Name;
             Port = dto.Port;
         }
 

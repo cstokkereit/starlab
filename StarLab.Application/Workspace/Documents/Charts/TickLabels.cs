@@ -9,13 +9,13 @@
         /// Initialises a new instance of the <see cref="TickLabels"> class.
         /// </summary>
         /// <param name="dto">A data transfer object that specifies the initial state of the <see cref="TickLabels"/>.</param>
-        public TickLabels(TickLabelsDTO? dto)
+        public TickLabels(TickLabelsDTO dto)
         {
             ArgumentNullException.ThrowIfNull(dto, nameof(dto));
 
             Colour = string.IsNullOrEmpty(dto.Colour) ? Constants.DefaultForeColour : dto.Colour;
 
-            Font = dto.Font == null ? new Font() : new Font(dto.Font);
+            Font = new Font(dto.Font);
 
             Rotation = dto.Rotation;
             Visible = dto.Visible;

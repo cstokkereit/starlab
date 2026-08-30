@@ -17,12 +17,10 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         {
             ArgumentNullException.ThrowIfNull(dto, nameof(dto));
 
-            Debug.Assert(dto.Grid != null);
-
             BackColour = string.IsNullOrEmpty(dto.BackColour) ? Constants.DefaultBackColour : dto.BackColour;
             ForeColour = string.IsNullOrEmpty(dto.ForeColour) ? Constants.DefaultForeColour : dto.ForeColour;
 
-            Grid = dto.Grid == null ? new Grid() : new Grid(dto.Grid);
+            Grid = new Grid(dto.Grid);
         }
 
         /// <summary>

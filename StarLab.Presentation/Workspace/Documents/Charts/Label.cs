@@ -12,11 +12,11 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// </summary>
         /// <param name="dto">A data transfer object that specifies the initial state of the <see cref="Label"/>.</param>
         public Label(LabelDTO dto)
-            : base(dto.Colour, dto.Font == null ? null : new Font(dto.Font), dto.Visible)
+            : base(dto.Colour, new Font(dto.Font), dto.Visible)
         {
             ArgumentNullException.ThrowIfNull(dto, nameof(dto));
 
-            Text = string.Empty + dto.Text;
+            Text = dto.Text;
         }
 
         /// <summary>

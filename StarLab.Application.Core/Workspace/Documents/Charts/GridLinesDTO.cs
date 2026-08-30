@@ -5,7 +5,7 @@
     /// </summary>
     public class GridLinesDTO
     {
-        public string? Colour;
+        public string Colour = string.Empty;
 
         public double Opacity;
 

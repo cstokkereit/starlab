@@ -1,4 +1,5 @@
 ﻿using StarLab.Application.Workspace.Documents;
+using StarLab.Presentation.Workspace.Documents.Tables;
 
 namespace StarLab.Presentation.Workspace.Documents.Charts
 {
@@ -14,7 +15,9 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         public ChartDocument(DocumentDTO dto)
             : base(dto)
         {
-            Chart = new Chart(dto.Chart);
+            ArgumentNullException.ThrowIfNull(dto, nameof(dto));
+
+            Chart = dto.Chart != null ? new Chart(dto.Chart) : new Chart();
         }
 
         /// <summary>

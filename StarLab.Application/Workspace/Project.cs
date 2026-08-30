@@ -24,9 +24,9 @@ namespace StarLab.Application.Workspace
             ArgumentNullException.ThrowIfNull(parent, nameof(parent));
             ArgumentNullException.ThrowIfNull(dto, nameof(dto));
 
-            database = new Database(dto.Database ?? new DatabaseDTO());
-
             folder = new Folder(dto.Name, dto.Expanded, parent);
+
+            database = new Database(dto.Database);
 
             CreateFolders(dto.Folders);
             CreateDocuments(dto.Documents);

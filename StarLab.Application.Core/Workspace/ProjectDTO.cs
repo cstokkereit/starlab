@@ -7,23 +7,14 @@ namespace StarLab.Application.Workspace
     /// </summary>
     public class ProjectDTO
     {
-        /// <summary>
-        /// Initialises a new instance of the <see cref="ProjectDTO"/> class.
-        /// </summary>
-        public ProjectDTO()
-        {
-            Documents = new List<DocumentDTO>();
-            Folders = new List<FolderDTO>();
-        }
+        public DatabaseDTO Database = new DatabaseDTO();
 
-        public DatabaseDTO? Database;
-
-        public List<DocumentDTO> Documents;
+        public List<DocumentDTO> Documents = new List<DocumentDTO>();
 
         public bool Expanded;
 
-        public List<FolderDTO> Folders;
+        public List<FolderDTO> Folders = new List<FolderDTO>();
 
-        public string? Name;
+        public string Name = string.Empty;
     }
 }

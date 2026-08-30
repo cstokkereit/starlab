@@ -23,7 +23,7 @@ namespace StarLab.Presentation.Workspace
         {
             ArgumentNullException.ThrowIfNull(dto, nameof(dto));
 
-            Layout = dto.Layout ?? string.Empty;
+            Layout = dto.Layout;
 
             if (!string.IsNullOrEmpty(dto.FileName))
             {

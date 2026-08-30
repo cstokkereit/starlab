@@ -13,10 +13,10 @@
         {
             ArgumentNullException.ThrowIfNull(dto, nameof(dto));
 
-            Grid = dto.Grid == null ? new Grid() : new Grid(dto.Grid);
-
             BackColour = string.IsNullOrEmpty(dto.BackColour) ? Constants.DefaultBackColour : dto.BackColour;
             ForeColour = string.IsNullOrEmpty(dto.ForeColour) ? Constants.DefaultForeColour : dto.ForeColour;
+
+            Grid = new Grid(dto.Grid);
         }
 
         /// <summary>

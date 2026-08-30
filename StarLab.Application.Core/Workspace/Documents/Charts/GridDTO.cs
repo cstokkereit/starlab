@@ -5,11 +5,11 @@
     /// </summary>
     public class GridDTO
     {
-        public string? Colour;
+        public string Colour = string.Empty;
 
-        public GridLinesDTO? MajorGridLines;
+        public GridLinesDTO MajorGridLines = new GridLinesDTO();
 
-        public GridLinesDTO? MinorGridLines;
+        public GridLinesDTO MinorGridLines = new GridLinesDTO();
 
         public bool Visible;
     }

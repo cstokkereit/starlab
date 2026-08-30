@@ -13,13 +13,12 @@
         {
             ArgumentNullException.ThrowIfNull(dto, nameof(dto));
 
-            Font = dto.Font == null ? new Font() : new Font(dto.Font);
-
             Colour = string.IsNullOrEmpty(dto.Colour) ? Constants.DefaultForeColour : dto.Colour;
 
-            Text = dto.Text ?? string.Empty;
+            Font = new Font(dto.Font);
 
             Visible = dto.Visible;
+            Text = dto.Text;
         }
 
         /// <summary>

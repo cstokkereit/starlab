@@ -14,11 +14,11 @@ namespace StarLab.Application.Workspace
 
         private readonly Dictionary<string, IFolder> folders = new Dictionary<string, IFolder>(); // A dictionary containing all of the folders within the workspace hierarchy.
 
-        private readonly string? layout; // Holds the position, size and state of the dockable views.
+        private readonly string layout; // Holds the position, size and state of the dockable views.
 
-        private readonly string? document; // Holds the ID of the active document.
+        private readonly string document; // Holds the ID of the active document.
 
-        private readonly string filename;
+        private readonly string filename; // Holds the workspace filename.
 
         private readonly string folder; // Holds the path of the selected folder.
 
@@ -30,12 +30,11 @@ namespace StarLab.Application.Workspace
         {
             ArgumentNullException.ThrowIfNull(dto, nameof(dto));
 
-            filename = string.IsNullOrEmpty(dto.FileName) ? string.Empty : dto.FileName;
-
             CreateProjects(dto.Projects);
 
-            document = string.IsNullOrEmpty(dto.ActiveDocument) ? string.Empty : dto.ActiveDocument;
-            folder = string.IsNullOrEmpty(dto.SelectedFolder) ? string.Empty : dto.SelectedFolder;
+            document = dto.ActiveDocument;
+            folder = dto.SelectedFolder;
+            filename = dto.FileName;
             layout = dto.Layout;
         }
 
@@ -47,12 +46,13 @@ namespace StarLab.Application.Workspace
             document = string.Empty;
             filename = string.Empty;
             folder = string.Empty;
+            layout = string.Empty;
         }
 
         /// <summary>
         /// Gets the ID of the active document.
         /// </summary>
-        public string? ActiveDocument => document;
+        public string ActiveDocument => document;
 
         /// <summary>
         /// Gets an <see cref="IEnumerable{Document}"/> containing the documents in the workspace hierarchy.
@@ -77,7 +77,7 @@ namespace StarLab.Application.Workspace
         /// <summary>
         /// Gets the workspace layout.
         /// </summary>
-        public string? Layout => layout;
+        public string Layout => layout;
 
         /// <summary>
         /// Gets the workspace name.
@@ -103,7 +103,7 @@ namespace StarLab.Application.Workspace
         /// <summary>
         /// Gets the path of the selected folder.
         /// </summary>
-        public string? SelectedFolder => folder;
+        public string SelectedFolder => folder;
 
         /// <summary>
         /// Adds the <see cref="Document"/> provided to the workspace hierarchy.

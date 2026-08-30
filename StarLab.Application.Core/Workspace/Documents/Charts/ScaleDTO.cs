@@ -7,19 +7,19 @@
     {
         public bool Autoscale;
 
-        public string? Colour;
+        public string Colour = string.Empty;
 
-        public TickMarksDTO? MajorTickMarks;
+        public TickMarksDTO MajorTickMarks = new TickMarksDTO();
 
         public double Maximum;
 
         public double Minimum;
 
-        public TickMarksDTO? MinorTickMarks;
+        public TickMarksDTO MinorTickMarks = new TickMarksDTO();
 
         public bool Reversed;
 
-        public TickLabelsDTO? TickLabels;
+        public TickLabelsDTO TickLabels = new TickLabelsDTO();
 
         public bool Visible;
     }

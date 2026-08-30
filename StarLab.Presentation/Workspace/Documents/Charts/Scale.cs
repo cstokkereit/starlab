@@ -16,9 +16,9 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         {
             ArgumentNullException.ThrowIfNull(dto, nameof(dto));
 
-            MajorTickMarks = dto.MajorTickMarks == null ? new TickMarks(Constants.DefaultMajorTickLength) : new TickMarks(dto.MajorTickMarks);
-            MinorTickMarks = dto.MinorTickMarks == null ? new TickMarks(Constants.DefaultMinorTickLength) : new TickMarks(dto.MinorTickMarks);
-            TickLabels = dto.TickLabels == null ? new TickLabels() : new TickLabels(dto.TickLabels);
+            MajorTickMarks = new TickMarks(dto.MajorTickMarks);
+            MinorTickMarks = new TickMarks(dto.MinorTickMarks);
+            TickLabels = new TickLabels(dto.TickLabels);
 
             Autoscale = dto.Autoscale;
             Reversed = dto.Reversed;

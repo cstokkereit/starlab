@@ -14,7 +14,9 @@ namespace StarLab.Presentation.Workspace.Documents.Tables
         public TableDocument(DocumentDTO dto)
             : base(dto)
         {
-            Table = new Table(dto.Table);
+            ArgumentNullException.ThrowIfNull(dto, nameof(dto));
+
+            Table = dto.Table != null ? new Table(dto.Table) : new Table();
         }
 
         /// <summary>

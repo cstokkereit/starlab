@@ -5,11 +5,11 @@
     /// </summary>
     public class LabelDTO
     {
-        public string? Colour;
+        public string Colour = string.Empty;
 
-        public FontDTO? Font;
+        public FontDTO Font = new FontDTO();
 
-        public string? Text;
+        public string Text = string.Empty;
 
         public bool Visible;
     }

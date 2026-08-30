@@ -5,7 +5,7 @@
     /// </summary>
     public class TickMarksDTO
     {
-        public string? Colour;
+        public string Colour = string.Empty;
 
         public int Length;
 

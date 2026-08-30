@@ -16,8 +16,8 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         {
             ArgumentNullException.ThrowIfNull(dto, nameof(dto));
 
-            Label = dto.Label == null ? new Label() : new Label(dto.Label);
-            Scale = dto.Scale == null ? new Scale() : new Scale(dto.Scale);
+            Label = new Label(dto.Label);
+            Scale = new Scale(dto.Scale);
         }
 
         /// <summary>

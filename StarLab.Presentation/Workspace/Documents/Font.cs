@@ -32,8 +32,8 @@ namespace StarLab.Presentation.Workspace.Documents
         {
             ArgumentNullException.ThrowIfNull(dto, nameof(dto));
 
-            Family = string.Empty + dto.Family;
             Underline = dto.Underline;
+            Family = dto.Family;
             Italic = dto.Italic;
             Bold = dto.Bold;
             Size = dto.Size;

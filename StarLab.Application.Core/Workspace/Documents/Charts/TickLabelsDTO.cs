@@ -5,9 +5,9 @@
     /// </summary>
     public class TickLabelsDTO
     {
-        public string? Colour;
+        public string Colour = string.Empty;
 
-        public FontDTO? Font;
+        public FontDTO Font = new FontDTO();
 
         public int Rotation;
 

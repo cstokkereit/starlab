@@ -5,11 +5,11 @@
     /// </summary>
     public class PlotAreaDTO
     {
-        public string? BackColour;
+        public string BackColour = string.Empty;
 
-        public string? ForeColour;
+        public string ForeColour = string.Empty;
 
-        public GridDTO? Grid;
+        public GridDTO Grid = new GridDTO();
 
         public bool Visible;
     }

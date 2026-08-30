@@ -5,22 +5,14 @@
     /// </summary>
     public class WorkspaceDTO
     {
-        /// <summary>
-        /// Initialises a new instance of the <see cref="WorkspaceDTO"/> class.
-        /// </summary>
-        public WorkspaceDTO()
-        {
-            Projects = new List<ProjectDTO>();
-        }
+        public string ActiveDocument = string.Empty;
 
-        public string? ActiveDocument;
+        public string FileName = string.Empty;
 
-        public string? FileName;
+        public List<ProjectDTO> Projects = new List<ProjectDTO>();
 
-        public List<ProjectDTO> Projects;
+        public string Layout = string.Empty;
 
-        public string? Layout;
-
-        public string? SelectedFolder;
+        public string SelectedFolder = string.Empty;
     }
 }

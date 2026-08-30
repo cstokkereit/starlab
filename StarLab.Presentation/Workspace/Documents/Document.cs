@@ -31,10 +31,10 @@ namespace StarLab.Presentation.Workspace.Documents
             ArgumentException.ThrowIfNullOrEmpty(dto.View, nameof(dto.View));
             ArgumentException.ThrowIfNullOrEmpty(dto.ID, nameof(dto.ID));
 
+            type = Enum.Parse<DocumentTypes>(dto.Type);
+
             id = new DocumentID(dto.ID);
 
-            if (dto.Type != null) type = Enum.Parse<DocumentTypes>(dto.Type);
-            
             name = dto.Name;
             path = dto.Path;
             view = dto.View;

@@ -33,11 +33,8 @@ namespace StarLab.Presentation.Workspace
         {
             ArgumentNullException.ThrowIfNull(dto, nameof(dto));
 
-            if (string.IsNullOrEmpty(dto.Name)) throw new ArgumentException();
-
-            database = new Database(dto.Database ?? new DatabaseDTO());
-
             folder = new Folder(dto.Name, dto.Expanded);
+            database = new Database(dto.Database);
 
             CreateFolders(dto.Folders);
             CreateDocuments(dto.Documents);

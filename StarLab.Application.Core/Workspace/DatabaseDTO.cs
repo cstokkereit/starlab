@@ -5,9 +5,9 @@
     /// </summary>
     public class DatabaseDTO
     {
-        public string? Host;
+        public string Host = string.Empty;
 
-        public string? Name;
+        public string Name = string.Empty;
 
         public int Port;
     }

@@ -5,11 +5,11 @@
     /// </summary>
     public class AxisDTO
     {
-        public string? Colour;
+        public string Colour = string.Empty;
 
-        public LabelDTO? Label;
+        public LabelDTO Label = new LabelDTO();
 
-        public ScaleDTO? Scale;
+        public ScaleDTO Scale = new ScaleDTO();
 
         public bool Visible;
     }

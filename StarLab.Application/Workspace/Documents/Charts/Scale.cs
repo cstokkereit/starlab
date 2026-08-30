@@ -13,9 +13,9 @@
         {
             ArgumentNullException.ThrowIfNull(dto, nameof(dto));
 
-            MajorTickMarks = dto.MajorTickMarks == null ? new TickMarks(Constants.DefaultMajorTickMarkLength) : new TickMarks(dto.MajorTickMarks);
-            MinorTickMarks = dto.MinorTickMarks == null ? new TickMarks(Constants.DefaultMinorTickMarkLength) : new TickMarks(dto.MinorTickMarks);
-            TickLabels = dto.TickLabels == null ? new TickLabels() : new TickLabels(dto.TickLabels);
+            MajorTickMarks = new TickMarks(dto.MajorTickMarks);
+            MinorTickMarks = new TickMarks(dto.MinorTickMarks);
+            TickLabels = new TickLabels(dto.TickLabels);
 
             Colour = string.IsNullOrEmpty(dto.Colour) ? Constants.DefaultForeColour : dto.Colour;
 

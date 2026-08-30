@@ -8,18 +8,18 @@ namespace StarLab.Application.Workspace.Documents
     /// </summary>
     public class DocumentDTO
     {
-        public ChartDTO? Chart;
+        public ChartDTO? Chart = null;
 
-        public string? ID;
+        public string ID = string.Empty;
 
-        public string? Name;
+        public string Name = string.Empty;
 
-        public string? Path;
+        public string Path = string.Empty;
 
-        public TableDTO? Table;
+        public TableDTO? Table = null;
 
-        public string? Type;
+        public string Type = string.Empty;
 
-        public string? View;
+        public string View = string.Empty;
     }
 }

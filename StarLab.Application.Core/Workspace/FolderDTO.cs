@@ -5,8 +5,13 @@
     /// </summary>
     public class FolderDTO
     {
+        public FolderDTO()
+        {
+            Path = string.Empty;
+        }
+
         public bool Expanded;
 
-        public string? Path;
+        public string Path;
     }
 }

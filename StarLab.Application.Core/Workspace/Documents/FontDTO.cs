@@ -9,7 +9,7 @@
 
         public bool Italic;
 
-        public string? Family;
+        public string Family = string.Empty;
 
         public int Size;
 

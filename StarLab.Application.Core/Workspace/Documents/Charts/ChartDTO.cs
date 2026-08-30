@@ -5,22 +5,22 @@
     /// </summary>
     public class ChartDTO
     {
-        public string? BackColour;
+        public string BackColour = string.Empty;
 
-        public FontDTO? Font;
+        public FontDTO Font = new FontDTO();
 
-        public string? ForeColour;
+        public string ForeColour = string.Empty;
 
-        public PlotAreaDTO? PlotArea;
+        public PlotAreaDTO PlotArea = new PlotAreaDTO();
 
-        public LabelDTO? Title;
+        public LabelDTO Title = new LabelDTO();
 
-        public AxisDTO? X1;
+        public AxisDTO X1 = new AxisDTO();
 
-        public AxisDTO? X2;
+        public AxisDTO X2 = new AxisDTO();
 
-        public AxisDTO? Y1;
+        public AxisDTO Y1 = new AxisDTO();
 
-        public AxisDTO? Y2;
+        public AxisDTO Y2 = new AxisDTO();
     }
 }

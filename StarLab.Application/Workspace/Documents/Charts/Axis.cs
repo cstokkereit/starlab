@@ -15,8 +15,8 @@
 
             Colour = string.IsNullOrEmpty(dto.Colour) ? Constants.DefaultForeColour : dto.Colour;
 
-            Label = dto.Label == null ? new Label() : new Label(dto.Label);
-            Scale = dto.Scale == null ? new Scale() : new Scale(dto.Scale);
+            Label = new Label(dto.Label);
+            Scale = new Scale(dto.Scale);
 
             Visible = dto.Visible;
         }

@@ -16,13 +16,13 @@
             BackColour = string.IsNullOrEmpty(dto.BackColour) ? Constants.DefaultBackColour : dto.BackColour;
             ForeColour = string.IsNullOrEmpty(dto.ForeColour) ? Constants.DefaultForeColour : dto.ForeColour;
 
-            PlotArea = dto.PlotArea == null ? new PlotArea() : new PlotArea(dto.PlotArea);
-            Title = dto.Title == null ? new Label() : new Label(dto.Title);
-            Font = dto.Font == null ? new Font() : new Font(dto.Font);
-            X1 = dto.X1 == null ? new Axis() : new Axis(dto.X1);
-            X2 = dto.X2 == null ? new Axis() : new Axis(dto.X2);
-            Y1 = dto.Y1 == null ? new Axis() : new Axis(dto.Y1);
-            Y2 = dto.Y2 == null ? new Axis() : new Axis(dto.Y2);
+            PlotArea = new PlotArea(dto.PlotArea);
+            Title = new Label(dto.Title);
+            Font = new Font(dto.Font);
+            X1 = new Axis(dto.X1);
+            X2 = new Axis(dto.X2);
+            Y1 = new Axis(dto.Y1);
+            Y2 = new Axis(dto.Y2);
         }
 
         /// <summary>

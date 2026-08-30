@@ -16,8 +16,8 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         {
             ArgumentNullException.ThrowIfNull(dto, nameof(dto));
 
-            MajorGridLines = dto.MajorGridLines == null ? new GridLines() : new GridLines(dto.MajorGridLines);
-            MinorGridLines = dto.MinorGridLines == null ? new GridLines() : new GridLines(dto.MinorGridLines);
+            MajorGridLines = new GridLines(dto.MajorGridLines);
+            MinorGridLines = new GridLines(dto.MinorGridLines);
         }
 
         /// <summary>

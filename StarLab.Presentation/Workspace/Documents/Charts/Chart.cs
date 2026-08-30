@@ -11,7 +11,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// Initialises a new instance of the <see cref="Chart"> class.
         /// </summary>
         /// <param name="dto">A data transfer object that specifies the initial state of the <see cref="Chart"/>.</param>
-        public Chart(ChartDTO? dto)
+        public Chart(ChartDTO dto)
         {
             ArgumentNullException.ThrowIfNull(dto, nameof(dto));
 
@@ -26,6 +26,24 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             X2 = dto.X2 == null ? new Axis() : new Axis(dto.X2);
             Y1 = dto.Y1 == null ? new Axis() : new Axis(dto.Y1);
             Y2 = dto.Y2 == null ? new Axis() : new Axis(dto.Y2);
+        }
+
+        /// <summary>
+        /// Initialises a new instance of the <see cref="Chart"> class.
+        /// </summary>
+        public Chart()
+        {
+            BackColour = Constants.DefaultBackColour;
+            ForeColour = Constants.DefaultForeColour;
+
+            PlotArea = new PlotArea();
+            Title = new Label();
+            Font = new Font();
+
+            X1 = new Axis();
+            X2 = new Axis();
+            Y1 = new Axis();
+            Y2 = new Axis();
         }
 
         /// <summary>

@@ -28,20 +28,13 @@ namespace StarLab.Application.Workspace.Documents
 
             this.folder = folder ?? throw new ArgumentException();
 
-            Name = dto.Name ?? throw new ArgumentException();
+            Name = dto.Name ?? throw new ArgumentException(); // TODO - Error messages
 
             type = dto.Type ?? throw new ArgumentException();
             view = dto.View ?? throw new ArgumentException();
-            
-            if (dto.Chart != null)
-            {
-                Chart = new Chart(dto.Chart);
-            }
 
-            if (dto.Table != null)
-            {
-                Table = new Table(dto.Table);
-            }
+            Chart = dto.Chart == null ? null : new Chart(dto.Chart);
+            Table = dto.Table == null ? null : new Table(dto.Table);
         }
 
         /// <summary>
@@ -61,11 +54,10 @@ namespace StarLab.Application.Workspace.Documents
 
             Chart = document.Chart;
             Table = document.Table;
+            Name = name;
 
             type = document.Type;
             view = document.View;
-
-            Name = name;
         }
 
         /// <summary>

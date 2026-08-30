@@ -13,10 +13,10 @@
         {
             ArgumentNullException.ThrowIfNull(dto, nameof(dto));
 
-            MajorGridLines = dto.MajorGridLines == null ? new GridLines() : new GridLines(dto.MajorGridLines);
-            MinorGridLines = dto.MinorGridLines == null ? new GridLines() : new GridLines(dto.MinorGridLines);
-
             Colour = string.IsNullOrEmpty(dto.Colour) ? Constants.DefaultForeColour : dto.Colour;
+
+            MajorGridLines = new GridLines(dto.MajorGridLines);
+            MinorGridLines = new GridLines(dto.MinorGridLines);
 
             Visible = dto.Visible;
         }
@@ -26,11 +26,11 @@
         /// </summary
         public Grid()
         {
+            Colour = Constants.DefaultForeColour;
+
             MajorGridLines = new GridLines();
             MinorGridLines = new GridLines();
 
-            Colour = Constants.DefaultForeColour;
-            
             Visible = true;
         }
 
