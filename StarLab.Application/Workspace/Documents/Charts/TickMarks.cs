@@ -1,7 +1,7 @@
 ﻿namespace StarLab.Application.Workspace.Documents.Charts
 {
     /// <summary>
-    /// Domain model representation of the chart axis scale tick marks.
+    /// Application model representation of the chart axis scale tick marks.
     /// </summary>
     public class TickMarks
     {

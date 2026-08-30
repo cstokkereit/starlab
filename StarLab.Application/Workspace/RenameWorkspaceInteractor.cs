@@ -6,7 +6,7 @@ namespace StarLab.Application.Workspace
     /// <summary>
     /// A use case that renames the workspace.
     /// </summary>
-    internal class RenameWorkspaceInteractor : UseCaseInteractor<IWorkspaceOutputPort>, IUseCase<WorkspaceDTO, string>
+    internal class RenameWorkspaceInteractor : UseCaseInteractor<IWorkspaceOutputPort>, IUseCase<RenameWorkspaceUseCaseArgs>
     {
         private readonly ISerialisationProvider serialiser; // Used to serialise the workspace to a file.
 
@@ -25,43 +25,40 @@ namespace StarLab.Application.Workspace
         /// <summary>
         /// Executes the use case.
         /// </summary>
-        /// <param name="dto">A <see cref="WorkspaceDTO"/> that specifies the current state of the workspace.</param>
-        /// <param name="name">The new workspace name.</param>
-        public void Execute(WorkspaceDTO dto, string name)
+        /// <param name="args">The <see cref="RenameWorkspaceUseCaseArgs"/> that provide all of the information required to execute the use case.</param>
+        public void Execute(RenameWorkspaceUseCaseArgs args)
         {
-            ArgumentNullException.ThrowIfNull(dto, nameof(dto));
+            var filename = args.Workspace.FileName;
 
-            var filename = dto.FileName;
-
-            if (WorkspaceInteractionHelper.IsValid(name) && !string.IsNullOrEmpty(filename))
+            if (WorkspaceInteractionHelper.IsValid(args.Name) && !string.IsNullOrEmpty(filename))
             {
-                dto.FileName = Path.ChangeExtension(Path.Join(Path.GetDirectoryName(filename), name), Constants.WorkspaceExtension);
+                args.Workspace.FileName = Path.ChangeExtension(Path.Join(Path.GetDirectoryName(filename), args.Name), Constants.WorkspaceExtension);
                
-                if (!File.Exists(dto.FileName))
+                if (!File.Exists(args.Workspace.FileName))
                 {
                     try
                     {
-                        serialiser.SerialiseWorkspace(dto, dto.FileName);
+                        serialiser.SerialiseWorkspace(args.Workspace, args.Workspace.FileName);
                         File.Delete(filename);
                     }
                     catch (Exception e)
                     {
                         OutputPort.ShowMessage(Resources.StarLab, e.Message, InteractionType.Error, InteractionResponses.OK);
-                        dto.FileName = filename;
+                        args.Workspace.FileName = filename;
                     }
                     finally
                     {
-                        OutputPort.UpdateWorkspace(dto);
+                        OutputPort.UpdateWorkspace(args.Workspace);
                     }
                 }
                 else
                 {
-                    throw new Exception(WorkspaceInteractionHelper.CreateCannotRenameItemMessage(Path.GetFileName(filename), Path.GetFileName(dto.FileName), Resources.Workspace));
+                    throw new Exception(WorkspaceInteractionHelper.CreateCannotRenameItemMessage(Path.GetFileName(filename), Path.GetFileName(args.Workspace.FileName), Resources.Workspace));
                 }
             }
             else
             {
-                throw new Exception(WorkspaceInteractionHelper.CreateInvalidNameMessage(name, Resources.Workspace));
+                throw new Exception(WorkspaceInteractionHelper.CreateInvalidNameMessage(args.Name, Resources.Workspace));
             }
         }
     }

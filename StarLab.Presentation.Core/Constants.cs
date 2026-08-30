@@ -54,6 +54,7 @@
         public const string Cut = "Cut";
 
         public const string Data = "Data";
+        public const string Database = "Database";
         public const string DefaultBackColour = "White";
         public const string DefaultFontFamily = "Segoe UI";
         public const int DefaultFontSize = 10;

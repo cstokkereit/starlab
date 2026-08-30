@@ -6,7 +6,6 @@ using StarLab.Shared;
 using StarLab.Shared.Properties;
 using Stratosoft.Commands;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Text;
 using WeifenLuo.WinFormsUI.Docking;
 
@@ -255,21 +254,22 @@ namespace StarLab.UI.Workspace
         /// <param name="layout">An XML representation of the workspace.</param>
         public void SetLayout(string layout)
         {
-            Debug.Assert(presenter != null);
-
-            List<IDockContent> contents = [.. dockPanel.Contents];
-
-            foreach (var content in contents)
+            if (presenter != null)
             {
-                content.DockHandler.Close();
-            }
+                List<IDockContent> contents = [.. dockPanel.Contents];
 
-            using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(layout)))
-            {
-                dockPanel.LoadFromXml(stream, new DeserializeDockContent(config =>
+                foreach (var content in contents)
                 {
-                    return presenter.CreateView(config) as IDockContent;
-                }));
+                    content.DockHandler.Close();
+                }
+
+                using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(layout)))
+                {
+                    dockPanel.LoadFromXml(stream, new DeserializeDockContent(config =>
+                    {
+                        return presenter.CreateView(config) as IDockContent;
+                    }));
+                }
             }
         }
 
@@ -352,9 +352,7 @@ namespace StarLab.UI.Workspace
         /// <param name="e">An <see cref="EventArgs"/> that provides context for the event.</param>
         private void Form_Activated(object sender, EventArgs e)
         {
-            Debug.Assert(presenter != null);
-
-            presenter.ViewActivated();
+            presenter?.ViewActivated();
         }
 
         /// <summary>
@@ -364,9 +362,7 @@ namespace StarLab.UI.Workspace
         /// <param name="e">A <see cref="FormClosingEventArgs"/> that provides context for the event.</param>
         private void Form_Closing(object sender, FormClosingEventArgs e)
         {
-            Debug.Assert(presenter != null);
-
-            presenter.ViewClosing(e);
+            presenter?.ViewClosing(e);
         }
 
         /// <summary>
@@ -374,15 +370,13 @@ namespace StarLab.UI.Workspace
         /// </summary>
         private void UpdateActiveDocument()
         {
-            Debug.Assert(presenter != null);
-
             if (dockPanel.ActiveDocument is IDockableView view)
             {
-                presenter.SetActiveDocument(view.ID);
+                presenter?.SetActiveDocument(view.ID);
             }
             else
             {
-                presenter.ClearActiveDocument();
+                presenter?.ClearActiveDocument();
             }
         }
     }

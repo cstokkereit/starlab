@@ -36,9 +36,9 @@ namespace StarLab.Application.Workspace
 
             var interactor = factory.CreateRenameWorkspaceUseCase(port);
 
-            var dto = new WorkspaceDtoBuilder(Path.Combine(folder, "Workspace1.slw")).CreateWorkspace();
+            var workspace = new WorkspaceDtoBuilder(Path.Combine(folder, "Workspace1.slw")).CreateWorkspace();
 
-            interactor.Execute(dto, "Workspace2");
+            interactor.Execute(new RenameWorkspaceUseCaseArgs(workspace, "Workspace2"));
 
             port.Received().UpdateWorkspace(Arg.Is<WorkspaceDTO>(ws => ws.FileName == Path.Combine(folder, "Workspace2.slw")));
         }
@@ -53,9 +53,9 @@ namespace StarLab.Application.Workspace
 
             var interactor = factory.CreateRenameWorkspaceUseCase(port);
 
-            var dto = new WorkspaceDtoBuilder(Path.Combine(folder, "Workspace1.slw")).CreateWorkspace();
+            var workspace = new WorkspaceDtoBuilder(Path.Combine(folder, "Workspace1.slw")).CreateWorkspace();
 
-            Assert.Throws<Exception>(() => interactor.Execute(dto, string.Empty));
+            Assert.Throws<Exception>(() => interactor.Execute(new RenameWorkspaceUseCaseArgs(workspace, string.Empty)));
         }
 
         /// <summary>
@@ -68,11 +68,11 @@ namespace StarLab.Application.Workspace
 
             var interactor = factory.CreateRenameWorkspaceUseCase(port);
 
-            var dto = new WorkspaceDtoBuilder(Path.Combine(folder, "Workspace1.slw")).CreateWorkspace();
+            var workspace = new WorkspaceDtoBuilder(Path.Combine(folder, "Workspace1.slw")).CreateWorkspace();
 
             CopyFile(Path.Combine(resources, "Workspace2.slw"), Path.Combine(folder, "Workspace2.slw"));
 
-            Assert.Throws<Exception>(() => interactor.Execute(dto, "Workspace2"));
+            Assert.Throws<Exception>(() => interactor.Execute(new RenameWorkspaceUseCaseArgs(workspace, "Workspace2")));
         }
 
         /// <summary>
@@ -85,9 +85,9 @@ namespace StarLab.Application.Workspace
 
             var interactor = factory.CreateRenameWorkspaceUseCase(port);
 
-            var dto = new WorkspaceDtoBuilder(Path.Combine(folder, "Workspace1.slw")).CreateWorkspace();
+            var workspace = new WorkspaceDtoBuilder(Path.Combine(folder, "Workspace1.slw")).CreateWorkspace();
 
-            Assert.Throws<Exception>(() => interactor.Execute(dto, "Workspace1/"));
+            Assert.Throws<Exception>(() => interactor.Execute(new RenameWorkspaceUseCaseArgs(workspace, "Workspace1/")));
         }
     }
 }

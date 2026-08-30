@@ -10,28 +10,35 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
     /// <summary>
     /// Controls the behaviour of an <see cref="IChartView"/>.
     /// </summary>
-    public class ColourMagnitudeChartViewPresenter : ChildViewPresenter<IChartView, IDocumentController>, IChartViewPresenter, IChartController, IChartOutputPort
+    public class ColourMagnitudeChartViewPresenter : ChildViewPresenter<IChartView, IDocumentController>, IChartViewPresenter, IChartController, IChartOutputPort, ISubscriber<WorkspaceChangedEventArgs>
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(ColourMagnitudeChartViewPresenter)); // The logger that will be used for writing log messages.
 
-        private readonly IChartUseCaseService useCases; // A service that executes the use cases that implement the functionality.
+        private readonly IChartUseCaseService useCaseService; // A service that executes the use cases that implement the functionality.
 
         private IChart? chart; // The chart that the view represents.
+
+        private IDocument? document; // The document that contains the chart.
+
+        private IWorkspace? workspace; // The workspace that contains the document.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="ColourMagnitudeChartViewPresenter"> class.
         /// </summary>
         /// <param name="view">The <see cref="IChartView"/> controlled by this presenter.</param>
+        /// <param name="document">The <see cref="IDocument"/> that the presenter .</param>
         /// <param name="context">An <see cref="ISessionContext"/> that provides access to the session context.</param>
         /// <param name="commands">An <see cref="ICommandManager"/> that is required for the creation of <see cref="ICommand">s.</param>
         /// <param name="services">An <see cref="IServiceRegistry"/> that provides access to the registered services.</param>
         /// <param name="events">The <see cref="IEventAggregator"/> that manages application events.</param>
-        public ColourMagnitudeChartViewPresenter(IChartView view, ISessionContext context, ICommandManager commands, IServiceRegistry services, IEventAggregator events)
+        public ColourMagnitudeChartViewPresenter(IChartView view, IDocument document, ISessionContext context, ICommandManager commands, IServiceRegistry services, IEventAggregator events)
             : base(view, context, commands, events) 
         {
-            ArgumentNullException.ThrowIfNull(services, nameof(useCases));
+            this.document = document ?? throw new ArgumentNullException(nameof(document));
 
-            useCases = services.GetService<IChartUseCaseService>();
+            ArgumentNullException.ThrowIfNull(services, nameof(services));
+
+            useCaseService = services.GetService<IChartUseCaseService>();
 
             View.Attach(this);
         }
@@ -66,11 +73,18 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
 
             View.Initialise();
 
-            InitialiseChart();
-
             //View.MinimumSize = new Size(200, 200);
 
             log.Debug(string.Format(LogEntries.Initialised, $"{nameof(ColourMagnitudeChartViewPresenter)}({View.Name})"));
+        }
+
+        /// <summary>
+        /// Event handler for the WorkspaceChangedEvent event.
+        /// </summary>
+        /// <param name="args">A <see cref="WorkspaceChangedEventArgs"/> that provides context for the event.</param>
+        public void OnEvent(WorkspaceChangedEventArgs args)
+        {
+            workspace = args.Workspace;
         }
 
         /// <summary>
@@ -80,6 +94,25 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         public void UpdateChart(IChart chart)
         {
             View.UpdateChart(chart);
+
+
+
+
+            // The follwing will need to be called when the chart view is first shown and when the filter state changes
+
+            if (workspace != null && document != null)
+            {
+                useCaseService.UpdateChart(workspace, document.ID);
+            }
+
+
+
+            
+
+
+
+
+
 
             this.chart = chart;
         }
@@ -113,20 +146,6 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             {
                 View.Detach();
             }
-        }
-
-
-
-        private void InitialiseChart()
-        {
-
-
-
-
-
-
-
-
         }
     }
 }

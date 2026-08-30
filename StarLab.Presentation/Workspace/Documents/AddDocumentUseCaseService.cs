@@ -31,7 +31,7 @@ namespace StarLab.Presentation.Workspace.Documents
             
             var interactor = Factory.CreateAddDocumentUseCase(ApplicationController.GetOutputPort<IWorkspaceOutputPort>());
 
-            interactor.Execute(Mapper.Map<WorkspaceDTO>(workspace), document);
+            interactor.Execute(new AddDocumentUseCaseArgs(Mapper.Map<WorkspaceDTO>(workspace), document));
         }
     }
 }

@@ -14,6 +14,8 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
     {
         private IChartView view; // A mock of the IChartView interface that can be used in the unit tests.
 
+        private IDocument document; // A mock of the IDocument interface that can be used in the unit tests.
+
         /// <summary>
         /// Registers the dependencies with the IoC container and initialises the class level variables before each test.
         /// </summary>
@@ -23,15 +25,17 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
 
             view = Substitute.For<IChartView>();
             view.ID.Returns(ViewIDs.ColourMagnitudeDiagram);
+
+            document = Substitute.For<IDocument>();
         }
 
         /// <summary>
-        /// Test that the <see cref="ColourMagnitudeChartViewPresenter(IChartView, ISessionContext, ICommandManager, IServiceRegistry, IEventAggregator)"/> constructor works correctly.
+        /// Test that the <see cref="ColourMagnitudeChartViewPresenter(IChartView, IDocument, ISessionContext, ICommandManager, IServiceRegistry, IEventAggregator)"/> constructor works correctly.
         /// </summary>
         [Test]
         public void TestConstruction()
         {
-            var presenter = new ColourMagnitudeChartViewPresenter(view, context, commands, services, events);
+            var presenter = new ColourMagnitudeChartViewPresenter(view, document, context, commands, services, events);
 
             Assert.That(presenter, Is.Not.Null);
 
@@ -40,48 +44,57 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// Test that the <see cref="ColourMagnitudeChartViewPresenter(IChartView, ISessionContext, ICommandManager, IServiceRegistry, IEventAggregator)"/> constructor throws an exception when the commands argument is null.
+        /// Test that the <see cref="ColourMagnitudeChartViewPresenter(IChartView, IDocument, ISessionContext, ICommandManager, IServiceRegistry, IEventAggregator)"/> constructor throws an exception when the commands argument is null.
         /// </summary>
         [Test]
         public void TestConstructionThrowsExceptionWhenCommandsIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new ColourMagnitudeChartViewPresenter(view, context, null, services, events));
+            Assert.Throws<ArgumentNullException>(() => new ColourMagnitudeChartViewPresenter(view, document, context, null, services, events));
         }
 
         /// <summary>
-        /// Test that the <see cref="ColourMagnitudeChartViewPresenter(IChartView, ISessionContext, ICommandManager, IServiceRegistry, IEventAggregator)"/> constructor throws an exception when the context argument is null.
+        /// Test that the <see cref="ColourMagnitudeChartViewPresenter(IChartView, IDocument, ISessionContext, ICommandManager, IServiceRegistry, IEventAggregator)"/> constructor throws an exception when the context argument is null.
         /// </summary>
         [Test]
         public void TestConstructionThrowsExceptionWhenContextIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new ColourMagnitudeChartViewPresenter(view, null, commands, services, events));
+            Assert.Throws<ArgumentNullException>(() => new ColourMagnitudeChartViewPresenter(view, document, null, commands, services, events));
         }
 
         /// <summary>
-        /// Test that the <see cref="ColourMagnitudeChartViewPresenter(IChartView, ISessionContext, ICommandManager, IServiceRegistry, IEventAggregator)"/> constructor throws an exception when the events argument is null.
+        /// Test that the <see cref="ColourMagnitudeChartViewPresenter(IChartView, IDocument, ISessionContext, ICommandManager, IServiceRegistry, IEventAggregator)"/> constructor throws an exception when the document argument is null.
+        /// </summary>
+        [Test]
+        public void TestConstructionThrowsExceptionWhenDocumentIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => new ColourMagnitudeChartViewPresenter(view, null, context, commands, services, events));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="ColourMagnitudeChartViewPresenter(IChartView, IDocument, ISessionContext, ICommandManager, IServiceRegistry, IEventAggregator)"/> constructor throws an exception when the events argument is null.
         /// </summary>
         [Test]
         public void TestConstructionThrowsExceptionWhenEventsIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new ColourMagnitudeChartViewPresenter(view, context, commands, services, null));
+            Assert.Throws<ArgumentNullException>(() => new ColourMagnitudeChartViewPresenter(view, document, context, commands, services, null));
         }
 
         /// <summary>
-        /// Test that the <see cref="ColourMagnitudeChartViewPresenter(IChartView, ISessionContext, ICommandManager, IServiceRegistry, IEventAggregator)"/> constructor throws an exception when the services argument is null.
+        /// Test that the <see cref="ColourMagnitudeChartViewPresenter(IChartView, IDocument, ISessionContext, ICommandManager, IServiceRegistry, IEventAggregator)"/> constructor throws an exception when the services argument is null.
         /// </summary>
         [Test]
         public void TestConstructionThrowsExceptionWhenServicesIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new ColourMagnitudeChartViewPresenter(view, context, commands, null, events));
+            Assert.Throws<ArgumentNullException>(() => new ColourMagnitudeChartViewPresenter(view, document, context, commands, null, events));
         }
 
         /// <summary>
-        /// Test that the <see cref="ColourMagnitudeChartViewPresenter(IChartView, ISessionContext, ICommandManager, IServiceRegistry, IEventAggregator)"/> constructor throws an exception when the view argument is null.
+        /// Test that the <see cref="ColourMagnitudeChartViewPresenter(IChartView, IDocument, ISessionContext, ICommandManager, IServiceRegistry, IEventAggregator)"/> constructor throws an exception when the view argument is null.
         /// </summary>
         [Test]
         public void TestConstructionThrowsExceptionWhenViewIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new ColourMagnitudeChartViewPresenter(null, context, commands, services, events));
+            Assert.Throws<ArgumentNullException>(() => new ColourMagnitudeChartViewPresenter(null, document, context, commands, services, events));
         }
 
         /// <summary>
@@ -180,7 +193,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// <returns>Returns the newly created <see cref="ColourMagnitudeChartViewPresenter"/>.</returns>
         private ColourMagnitudeChartViewPresenter CreatePresenter(bool initialise)
         {
-            var presenter = new ColourMagnitudeChartViewPresenter(view, context, commands, services, events);
+            var presenter = new ColourMagnitudeChartViewPresenter(view, document, context, commands, services, events);
             
             var parent = Substitute.For<IDocumentController>();
             //parent.ID.Returns("DocumentController(Test)");

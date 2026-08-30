@@ -17,12 +17,12 @@ namespace StarLab.Application.Workspace
 
             var interactor = factory.CreateRenameFolderUseCase(port);
 
-            var dto = new WorkspaceDtoBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .CreateWorkspace();
 
-            interactor.Execute(dto, "Workspace/Project1/Folder1", "Folder2");
+            interactor.Execute(new RenameFolderUseCaseArgs(workspace, "Workspace/Project1/Folder1", "Folder2"));
 
             port.Received().UpdateWorkspace(Arg.Is<WorkspaceDTO>(ws =>
                 ws.Projects.Count == 1 &&
@@ -40,12 +40,12 @@ namespace StarLab.Application.Workspace
 
             var interactor = factory.CreateRenameFolderUseCase(port);
 
-            var dto = new WorkspaceDtoBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .CreateWorkspace();
 
-            Assert.Throws<Exception>(() => interactor.Execute(dto, "Workspace/Project1/Folder1", string.Empty));
+            Assert.Throws<Exception>(() => interactor.Execute(new RenameFolderUseCaseArgs(workspace, "Workspace/Project1/Folder1", string.Empty)));
         }
 
         /// <summary>
@@ -58,13 +58,13 @@ namespace StarLab.Application.Workspace
 
             var interactor = factory.CreateRenameFolderUseCase(port);
 
-            var dto = new WorkspaceDtoBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder2")
                 .CreateWorkspace();
 
-            Assert.Throws<Exception>(() => interactor.Execute(dto, "Workspace/Project1/Folder1", "Folder2"));
+            Assert.Throws<Exception>(() => interactor.Execute(new RenameFolderUseCaseArgs(workspace, "Workspace/Project1/Folder1", "Folder2")));
         }
 
         /// <summary>
@@ -77,12 +77,12 @@ namespace StarLab.Application.Workspace
 
             var interactor = factory.CreateRenameFolderUseCase(port);
 
-            var dto = new WorkspaceDtoBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .CreateWorkspace();
 
-            Assert.Throws<Exception>(() => interactor.Execute(dto, "Workspace/Project1/Folder1", "Folder1/"));
+            Assert.Throws<Exception>(() => interactor.Execute(new RenameFolderUseCaseArgs(workspace, "Workspace/Project1/Folder1", "Folder1/")));
         }
 
         /// <summary>
@@ -95,14 +95,14 @@ namespace StarLab.Application.Workspace
 
             var interactor = factory.CreateRenameFolderUseCase(port);
 
-            var dto = new WorkspaceDtoBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder1/Folder11")
                 .AddFolder("Workspace/Project1/Folder1/Folder12")
                 .CreateWorkspace();
 
-            interactor.Execute(dto, "Workspace/Project1/Folder1", "Folder2");
+            interactor.Execute(new RenameFolderUseCaseArgs(workspace, "Workspace/Project1/Folder1", "Folder2"));
 
             port.Received().UpdateWorkspace(Arg.Is<WorkspaceDTO>(ws =>
                 ws.Projects.Count == 1 &&
@@ -122,14 +122,14 @@ namespace StarLab.Application.Workspace
 
             var interactor = factory.CreateRenameFolderUseCase(port);
 
-            var dto = new WorkspaceDtoBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
-                .AddChart("1", "Document1", "Workspace/Project1/Folder1")
-                .AddChart("2", "Document2", "Workspace/Project1/Folder1")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A1", "Document1", "Workspace/Project1/Folder1")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A2", "Document2", "Workspace/Project1/Folder1")
                 .CreateWorkspace();
 
-            interactor.Execute(dto, "Workspace/Project1/Folder1", "Folder2");
+            interactor.Execute(new RenameFolderUseCaseArgs(workspace, "Workspace/Project1/Folder1", "Folder2"));
 
             port.Received().UpdateWorkspace(Arg.Is<WorkspaceDTO>(ws =>
                 ws.Projects.Count == 1 &&
@@ -152,7 +152,7 @@ namespace StarLab.Application.Workspace
 
             var interactor = factory.CreateRenameFolderUseCase(port);
 
-            var dto = new WorkspaceDtoBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder1/Folder11")
@@ -161,16 +161,16 @@ namespace StarLab.Application.Workspace
                 .AddFolder("Workspace/Project1/Folder1/Folder11/Folder112")
                 .AddFolder("Workspace/Project1/Folder1/Folder12/Folder121")
                 .AddFolder("Workspace/Project1/Folder1/Folder12/Folder122")
-                .AddChart("1", "Document1", "Workspace/Project1/Folder1")
-                .AddChart("2", "Document2", "Workspace/Project1/Folder1/Folder11")
-                .AddChart("3", "Document3", "Workspace/Project1/Folder1/Folder12")
-                .AddChart("4", "Document4", "Workspace/Project1/Folder1/Folder11/Folder111")
-                .AddChart("5", "Document5", "Workspace/Project1/Folder1/Folder11/Folder112")
-                .AddChart("6", "Document6", "Workspace/Project1/Folder1/Folder12/Folder121")
-                .AddChart("7", "Document7", "Workspace/Project1/Folder1/Folder12/Folder122")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A1", "Document1", "Workspace/Project1/Folder1")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A2", "Document2", "Workspace/Project1/Folder1/Folder11")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A3", "Document3", "Workspace/Project1/Folder1/Folder12")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A4", "Document4", "Workspace/Project1/Folder1/Folder11/Folder111")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A5", "Document5", "Workspace/Project1/Folder1/Folder11/Folder112")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A6", "Document6", "Workspace/Project1/Folder1/Folder12/Folder121")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A7", "Document7", "Workspace/Project1/Folder1/Folder12/Folder122")
                 .CreateWorkspace();
 
-            interactor.Execute(dto, "Workspace/Project1/Folder1", "Folder2");
+            interactor.Execute(new RenameFolderUseCaseArgs(workspace, "Workspace/Project1/Folder1", "Folder2"));
 
             port.Received().UpdateWorkspace(Arg.Is<WorkspaceDTO>(ws =>
                 ws.Projects.Count == 1 &&
@@ -209,7 +209,7 @@ namespace StarLab.Application.Workspace
 
             var interactor = factory.CreateRenameFolderUseCase(port);
 
-            var dto = new WorkspaceDtoBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder1/Folder11")
@@ -218,16 +218,16 @@ namespace StarLab.Application.Workspace
                 .AddFolder("Workspace/Project1/Folder1/Folder11/Folder112")
                 .AddFolder("Workspace/Project1/Folder1/Folder12/Folder121")
                 .AddFolder("Workspace/Project1/Folder1/Folder12/Folder122")
-                .AddChart("1", "Document1", "Workspace/Project1/Folder1")
-                .AddChart("2", "Document2", "Workspace/Project1/Folder1/Folder11")
-                .AddChart("3", "Document3", "Workspace/Project1/Folder1/Folder12")
-                .AddChart("4", "Document4", "Workspace/Project1/Folder1/Folder11/Folder111")
-                .AddChart("5", "Document5", "Workspace/Project1/Folder1/Folder11/Folder112")
-                .AddChart("6", "Document6", "Workspace/Project1/Folder1/Folder12/Folder121")
-                .AddChart("7", "Document7", "Workspace/Project1/Folder1/Folder12/Folder122")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A1", "Document1", "Workspace/Project1/Folder1")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A2", "Document2", "Workspace/Project1/Folder1/Folder11")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A3", "Document3", "Workspace/Project1/Folder1/Folder12")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A4", "Document4", "Workspace/Project1/Folder1/Folder11/Folder111")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A5", "Document5", "Workspace/Project1/Folder1/Folder11/Folder112")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A6", "Document6", "Workspace/Project1/Folder1/Folder12/Folder121")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A7", "Document7", "Workspace/Project1/Folder1/Folder12/Folder122")
                 .CreateWorkspace();
 
-            interactor.Execute(dto, "Workspace/Project1/Folder1/Folder12", "Folder2");
+            interactor.Execute(new RenameFolderUseCaseArgs(workspace, "Workspace/Project1/Folder1/Folder12", "Folder2"));
 
             port.Received().UpdateWorkspace(Arg.Is<WorkspaceDTO>(ws =>
                 ws.Projects.Count == 1 &&
@@ -266,7 +266,7 @@ namespace StarLab.Application.Workspace
 
             var interactor = factory.CreateRenameFolderUseCase(port);
 
-            var dto = new WorkspaceDtoBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddProject("Project2")
                 .AddFolder("Workspace/Project1/Folder1")
@@ -281,17 +281,17 @@ namespace StarLab.Application.Workspace
                 .AddFolder("Workspace/Project2/Folder2/Folder21")
                 .AddFolder("Workspace/Project2/Folder1/Folder11/Folder111")
                 .AddFolder("Workspace/Project2/Folder1/Folder11/Folder112")
-                .AddChart("1", "Document1", "Workspace/Project1/Folder1/Folder11/Folder111")
-                .AddChart("2", "Document2", "Workspace/Project1/Folder1/Folder11/Folder111")
-                .AddChart("3", "Document3", "Workspace/Project1/Folder1/Folder11/Folder112")
-                .AddChart("4", "Document4", "Workspace/Project1/Folder1/Folder11/Folder112")
-                .AddChart("5", "Document5", "Workspace/Project2/Folder1/Folder11/Folder111")
-                .AddChart("6", "Document6", "Workspace/Project2/Folder1/Folder11/Folder111")
-                .AddChart("7", "Document7", "Workspace/Project2/Folder1/Folder11/Folder112")
-                .AddChart("8", "Document8", "Workspace/Project2/Folder1/Folder11/Folder112")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A1", "Document1", "Workspace/Project1/Folder1/Folder11/Folder111")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A2", "Document2", "Workspace/Project1/Folder1/Folder11/Folder111")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A3", "Document3", "Workspace/Project1/Folder1/Folder11/Folder112")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A4", "Document4", "Workspace/Project1/Folder1/Folder11/Folder112")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A5", "Document5", "Workspace/Project2/Folder1/Folder11/Folder111")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A6", "Document6", "Workspace/Project2/Folder1/Folder11/Folder111")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A7", "Document7", "Workspace/Project2/Folder1/Folder11/Folder112")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A8", "Document8", "Workspace/Project2/Folder1/Folder11/Folder112")
                 .CreateWorkspace();
 
-            interactor.Execute(dto, "Workspace/Project2", "Project3");
+            interactor.Execute(new RenameFolderUseCaseArgs(workspace, "Workspace/Project2", "Project3"));
 
             port.Received().UpdateWorkspace(Arg.Is<WorkspaceDTO>(ws =>
                 ws.Projects.Count == 2 &&
@@ -339,11 +339,11 @@ namespace StarLab.Application.Workspace
 
             var interactor = factory.CreateRenameFolderUseCase(port);
 
-            var dto = new WorkspaceDtoBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .CreateWorkspace();
 
-            Assert.Throws<Exception>(() => interactor.Execute(dto, "Workspace/Project1", string.Empty));
+            Assert.Throws<Exception>(() => interactor.Execute(new RenameFolderUseCaseArgs(workspace, "Workspace/Project1", string.Empty)));
         }
 
         /// <summary>
@@ -356,12 +356,12 @@ namespace StarLab.Application.Workspace
 
             var interactor = factory.CreateRenameFolderUseCase(port);
 
-            var dto = new WorkspaceDtoBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddProject("Project2")
                 .CreateWorkspace();
 
-            Assert.Throws<Exception>(() => interactor.Execute(dto, "Workspace/Project1", "Project2"));
+            Assert.Throws<Exception>(() => interactor.Execute(new RenameFolderUseCaseArgs(workspace, "Workspace/Project1", "Project2")));
         }
 
         /// <summary>
@@ -374,11 +374,11 @@ namespace StarLab.Application.Workspace
 
             var interactor = factory.CreateRenameFolderUseCase(port);
 
-            var dto = new WorkspaceDtoBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .CreateWorkspace();
 
-            Assert.Throws<Exception>(() => interactor.Execute(dto, "Workspace/Project1", "Project1/"));
+            Assert.Throws<Exception>(() => interactor.Execute(new RenameFolderUseCaseArgs(workspace, "Workspace/Project1", "Project1/")));
         }
     }
 }

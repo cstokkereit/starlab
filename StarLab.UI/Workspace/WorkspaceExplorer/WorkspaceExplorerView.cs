@@ -55,6 +55,21 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         }
 
         /// <summary>
+        /// Adds a database node to the tree view that displays the structure of the workspace.
+        /// </summary>
+        /// <param name="key">The node key.</param>
+        /// <param name="parentKey">The parent node key.</param>
+        /// <param name="text">The node text.</param>
+        /// <param name="imageIndex">The index of the node image.</param>
+        public void AddDatabaseNode(string key, string parentKey, string text, int imageIndex)
+        {
+            var parent = nodes[parentKey];
+            var node = parent.Nodes.Add(key, text, imageIndex, imageIndex);
+            node.Tag = Constants.Database;
+            nodes.Add(key, node);
+        }
+
+        /// <summary>
         /// Adds a document node to the tree view that displays the structure of the workspace.
         /// </summary>
         /// <param name="key">The node key.</param>
@@ -388,6 +403,10 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
 
                         switch (GetNodeType(node))
                         {
+                            case Constants.Database:
+                                presenter?.CreateDatabaseContextMenu(node.Name, menu);
+                                break;
+
                             case Constants.Document:
                                 presenter?.CreateDocumentContextMenu(node.Name, menu);
                                 break;

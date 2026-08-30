@@ -16,6 +16,8 @@ namespace StarLab.Application.Workspace
             Folders = new List<FolderDTO>();
         }
 
+        public DatabaseDTO? Database;
+
         public List<DocumentDTO> Documents;
 
         public bool Expanded;

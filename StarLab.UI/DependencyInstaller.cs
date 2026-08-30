@@ -5,6 +5,8 @@ using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
 using Microsoft.Extensions.Logging;
 using StarLab.Application;
+using StarLab.Application.Data;
+using StarLab.Data.MongoDB;
 using StarLab.Presentation;
 using StarLab.Presentation.Configuration;
 using StarLab.Presentation.Workspace.Documents;
@@ -44,6 +46,7 @@ namespace StarLab.UI
         private void InstallApplicationClasses(IWindsorContainer container)
         {
             container.Register(
+                Component.For<IDatabaseManager>().ImplementedBy<DatabaseManager>(),
                 Component.For<IEventAggregator>().ImplementedBy<EventAggregator>(),
                 Classes.FromAssemblyNamed("StarLab.Application").Where(t => t.Name.EndsWith("Factory")).WithServiceDefaultInterfaces(),
                 Classes.FromAssemblyNamed("StarLab.Application").BasedOn<Profile>().WithServiceBase()

@@ -23,8 +23,6 @@ namespace StarLab.Presentation
             CreateMap<IAxis, AxisDTO>();
             CreateMap<IAxisSettings, AxisDTO>();
             CreateMap<IChart, ChartDTO>();
-            CreateMap<ITable, TableDTO>();
-
             CreateMap<IChartDocument, DocumentDTO>();
 
             CreateMap<IChartSettings, ChartDTO>()
@@ -33,7 +31,7 @@ namespace StarLab.Presentation
                 .ForMember(dest => dest.Y1, opt => opt.MapFrom(src => src.Axes.Y1))
                 .ForMember(dest => dest.Y2, opt => opt.MapFrom(src => src.Axes.Y2));
 
-            CreateMap<ITableDocument, DocumentDTO>();
+            CreateMap<IFolder, FolderDTO>().ForMember(dest => dest.Path, opt => opt.MapFrom(src => src.Key));
 
             CreateMap<IFont, FontDTO>();
             CreateMap<IFont, FontDTO>();
@@ -45,16 +43,20 @@ namespace StarLab.Presentation
             CreateMap<ILabelSettings, LabelDTO>();
             CreateMap<IPlotArea, PlotAreaDTO>();
             CreateMap<IPlotAreaSettings, PlotAreaDTO>();
+            CreateMap<IDatabase, DatabaseDTO>();
+            CreateMap<IProject, ProjectDTO>();
             CreateMap<IScale, ScaleDTO>();
             CreateMap<IScaleSettings, ScaleDTO>();
+            CreateMap<ITable, TableDTO>();
+            CreateMap<ITableDocument, DocumentDTO>();
+
+            
+            
             CreateMap<ITickLabels, TickLabelsDTO>();
             CreateMap<ITickLabelSettings, TickLabelsDTO>();
             CreateMap<ITickMarks, TickMarksDTO>();
             CreateMap<ITickMarkSettings, TickMarksDTO>();
-
-            CreateMap<IFolder, FolderDTO>().ForMember(dest => dest.Path, opt => opt.MapFrom(src => src.Key));
-            CreateMap<IProject, ProjectDTO>();
-
+  
             CreateMap<IWorkspace, WorkspaceDTO>()
                 .ForMember(dest => dest.ActiveDocument, opt => opt.MapFrom(src => src.ActiveDocument == null ? string.Empty : src.ActiveDocument.ID.ToString()))
                 .ForMember(dest => dest.SelectedFolder, opt => opt.MapFrom(src => src.SelectedFolder == null ? string.Empty : src.SelectedFolder.Key));

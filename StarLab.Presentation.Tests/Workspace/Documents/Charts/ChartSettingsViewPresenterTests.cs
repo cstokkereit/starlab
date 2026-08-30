@@ -3,6 +3,7 @@
 
 using StarLab.Application;
 using StarLab.Application.Workspace;
+using StarLab.Application.Workspace.Documents;
 using StarLab.Application.Workspace.Documents.Charts;
 using StarLab.Presentation.Configuration;
 using StarLab.Shared.Properties;
@@ -95,12 +96,12 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// Test that the <see cref="ChartSettingsViewPresenter(IChartSettingsView, ISessionContext, ICommandManager, IServiceRegistry, IEventAggregator)"/> constructor works correctly.
+        /// Test that the <see cref="ChartSettingsViewPresenter(IChartSettingsView, IDocument, ISessionContext, ICommandManager, IServiceRegistry, IEventAggregator)"/> constructor works correctly.
         /// </summary>
         [Test]
         public void TestConstruction()
         {
-            var presenter = new ChartSettingsViewPresenter(view, context, commands, services, events);
+            var presenter = new ChartSettingsViewPresenter(view, document, context, commands, services, events);
 
             Assert.That(presenter, Is.Not.Null);
 
@@ -109,48 +110,57 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// Test that the <see cref="ChartSettingsViewPresenter(IChartSettingsView, ISessionContext, ICommandManager, IServiceRegistry, IEventAggregator)"/> constructor throws an exception when the commands argument is null.
+        /// Test that the <see cref="ChartSettingsViewPresenter(IChartSettingsView, IDocument, ISessionContext, ICommandManager, IServiceRegistry, IEventAggregator)"/> constructor throws an exception when the commands argument is null.
         /// </summary>
         [Test]
         public void TestConstructionThrowsExceptionWhenCommandsIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new ChartSettingsViewPresenter(view, context, null, services, events));
+            Assert.Throws<ArgumentNullException>(() => new ChartSettingsViewPresenter(view, document, context, null, services, events));
         }
 
         /// <summary>
-        /// Test that the <see cref="ChartSettingsViewPresenter(IChartSettingsView, ISessionContext, ICommandManager, IServiceRegistry, IEventAggregator)"/> constructor throws an exception when the context argument is null.
+        /// Test that the <see cref="ChartSettingsViewPresenter(IChartSettingsView, IDocument, ISessionContext, ICommandManager, IServiceRegistry, IEventAggregator)"/> constructor throws an exception when the context argument is null.
         /// </summary>
         [Test]
         public void TestConstructionThrowsExceptionWhenContextIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new ChartSettingsViewPresenter(view, null, commands, services, events));
+            Assert.Throws<ArgumentNullException>(() => new ChartSettingsViewPresenter(view, document, null, commands, services, events));
         }
 
         /// <summary>
-        /// Test that the <see cref="ChartSettingsViewPresenter(IChartSettingsView, ISessionContext, ICommandManager, IServiceRegistry, IEventAggregator)"/> constructor throws an exception when the events argument is null.
+        /// Test that the <see cref="ChartSettingsViewPresenter(IChartSettingsView, IDocument, ISessionContext, ICommandManager, IServiceRegistry, IEventAggregator)"/> constructor throws an exception when the document argument is null.
+        /// </summary>
+        [Test]
+        public void TestConstructionThrowsExceptionWhenDocumentIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => new ChartSettingsViewPresenter(view, null, context, commands, services, events));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="ChartSettingsViewPresenter(IChartSettingsView, IDocument, ISessionContext, ICommandManager, IServiceRegistry, IEventAggregator)"/> constructor throws an exception when the events argument is null.
         /// </summary>
         [Test]
         public void TestConstructionThrowsExceptionWhenEventsIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new ChartSettingsViewPresenter(view, context, commands, services, null));
+            Assert.Throws<ArgumentNullException>(() => new ChartSettingsViewPresenter(view, document, context, commands, services, null));
         }
 
         /// <summary>
-        /// Test that the <see cref="ChartSettingsViewPresenter(IChartSettingsView, ISessionContext, ICommandManager, IServiceRegistry, IEventAggregator)"/> constructor throws an exception when the services argument is null.
+        /// Test that the <see cref="ChartSettingsViewPresenter(IChartSettingsView, IDocument, ISessionContext, ICommandManager, IServiceRegistry, IEventAggregator)"/> constructor throws an exception when the services argument is null.
         /// </summary>
         [Test]
         public void TestConstructionThrowsExceptionWhenServicesIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new ChartSettingsViewPresenter(view, context, commands, null, events));
+            Assert.Throws<ArgumentNullException>(() => new ChartSettingsViewPresenter(view, document, context, commands, null, events));
         }
 
         /// <summary>
-        /// Test that the <see cref="ChartSettingsViewPresenter(IChartSettingsView, ISessionContext, ICommandManager, IServiceRegistry, IEventAggregator)"/> constructor throws an exception when the view argument is null.
+        /// Test that the <see cref="ChartSettingsViewPresenter(IChartSettingsView, IDocument, ISessionContext, ICommandManager, IServiceRegistry, IEventAggregator)"/> constructor throws an exception when the view argument is null.
         /// </summary>
         [Test]
         public void TestConstructionThrowsExceptionWhenViewIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new ChartSettingsViewPresenter(null, context, commands, services, events));
+            Assert.Throws<ArgumentNullException>(() => new ChartSettingsViewPresenter(null, document, context, commands, services, events));
         }
 
         /// <summary>
@@ -161,7 +171,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         {
             var interactor = Substitute.For<IUseCase<ChartDTO>>();
 
-            factory.ApplyChartSettingsUseCase(Arg.Any<IChartOutputPort>()).Returns(interactor);
+            factory.CreateApplyChartSettingsUseCase(Arg.Any<IChartOutputPort>()).Returns(interactor);
 
             var presenter = CreatePresenter(true);
 
@@ -178,7 +188,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         [Test]
         public void TestApplySettings()
         {
-            var interactor = Substitute.For<IUseCase<WorkspaceDTO, string, ChartDTO>>();
+            var interactor = Substitute.For<IUseCase<UpdateDocumentUseCaseArgs>>();
 
             factory.CreateUpdateDocumentUseCase(Arg.Any<IApplicationOutputPort>()).Returns(interactor);
 
@@ -192,7 +202,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
 
             presenter.ApplySettings();
 
-            interactor.Received(1).Execute(Arg.Is<WorkspaceDTO>(ws => ws.FileName == @"C:\Test\Workspace"), documentID.ToString(), Arg.Is<ChartDTO>(chart => chart.Title.Text == "New Title"));
+            interactor.Received(1).Execute(Arg.Is<UpdateDocumentUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace" && args.DocumentID == documentID.ToString() && args.Chart.Title.Text == "New Title"));
         }
 
         /// <summary>
@@ -296,7 +306,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         [Test]
         public void TestInitialiseThrowsAnExceptionWhenParentNotRegistered()
         {
-            var presenter = new ChartSettingsViewPresenter(view, context, commands, services, events);
+            var presenter = new ChartSettingsViewPresenter(view, document, context, commands, services, events);
 
             Assert.Throws<InvalidOperationException>(() => presenter.Initialise(controller));
         }
@@ -598,7 +608,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         [Test]
         public void TestUpdateSettings()
         {
-            var interactor = Substitute.For<IUseCase<WorkspaceDTO, string, ChartDTO>>();
+            var interactor = Substitute.For<IUseCase<UpdateDocumentUseCaseArgs>>();
 
             factory.CreateUpdateDocumentUseCase(Arg.Any<IApplicationOutputPort>()).Returns(interactor);
 
@@ -619,7 +629,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
 
             presenter.ApplySettings();
 
-            interactor.Received(1).Execute(Arg.Is<WorkspaceDTO>(workspace => workspace.FileName == @"C:\Test\Workspace"), documentID.ToString(), Arg.Is<ChartDTO>(chart => chart.Title.Text == "Updated Test Title"));
+            interactor.Received(1).Execute(Arg.Is<UpdateDocumentUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace" && args.DocumentID == documentID.ToString() && args.Chart.Title.Text == "Updated Test Title"));
         }
 
         /// <summary>
@@ -629,7 +639,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// <returns>Returns the newly created <see cref="ChartSettingsViewPresenter"/>.</returns>
         private ChartSettingsViewPresenter CreatePresenter(IChartController chartController)
         {
-            var presenter = new ChartSettingsViewPresenter(view, context, commands, services, events);
+            var presenter = new ChartSettingsViewPresenter(view, document, context, commands, services, events);
 
             var parent = Substitute.For<IDocumentController>();
             parent.GetController<IChartController>().Returns(chartController);
@@ -649,11 +659,10 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// <returns>Returns the newly created <see cref="ChartSettingsViewPresenter"/>.</returns>
         private ChartSettingsViewPresenter CreatePresenter(bool initialise)
         {
-            var presenter = new ChartSettingsViewPresenter(view, context, commands, services, events);
+            var presenter = new ChartSettingsViewPresenter(view, document, context, commands, services, events);
 
             var parent = Substitute.For<IDocumentController>();
             parent.ID.Returns(new ControllerID(documentID));
-            parent.DocumentID.Returns(documentID);
 
             presenter.RegisterController(parent);
 

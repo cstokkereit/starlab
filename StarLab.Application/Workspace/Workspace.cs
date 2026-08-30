@@ -4,11 +4,11 @@ using StarLab.Shared.Properties;
 namespace StarLab.Application.Workspace
 {
     /// <summary>
-    /// Domain model represention of the workspace.
+    /// Application model represention of the workspace.
     /// </summary>
     internal class Workspace : IFolder
     {
-        private readonly Dictionary<string, Document> documents = new Dictionary<string, Document>(); // A dictionary containing all of the documents within the workspace hierarchy.
+        private readonly Dictionary<DocumentID, Document> documents = new Dictionary<DocumentID, Document>(); // A dictionary containing all of the documents within the workspace hierarchy.
 
         private readonly Dictionary<string, IFolder> projects = new Dictionary<string, IFolder>(); // A dictionary containing all of the projects within the workspace hierarchy.
 
@@ -238,7 +238,7 @@ namespace StarLab.Application.Workspace
         /// Removes the specified document from the workspace hierarchy.
         /// </summary>
         /// <param name="id">The ID of the document to be deleted.</param>
-        public void DeleteDocument(string id)
+        public void DeleteDocument(DocumentID id)
         {
             DeleteDocument(GetDocument(id));
         }
@@ -282,7 +282,7 @@ namespace StarLab.Application.Workspace
         /// </summary>
         /// <param name="id">The ID of the required document.</param>
         /// <returns>The required <see cref="Document"/>.</returns>
-        public Document GetDocument(string id)
+        public Document GetDocument(DocumentID id)
         {
             return documents[id];
         }
@@ -321,7 +321,7 @@ namespace StarLab.Application.Workspace
         /// </summary>
         /// <param name="id">A possible document ID.</param>
         /// <returns>true if the ID refers to a document in the workspace hierarchy; false otherwise.</returns>
-        public bool IsDocument(string id)
+        public bool IsDocument(DocumentID id)
         {
             return documents.ContainsKey(id);
         }

@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Driver;
+using StarLab.Application.Data;
 using StarLab.Application.Data.Import;
 using StarLab.Data.Import;
 
@@ -16,14 +17,16 @@ namespace StarLab.Data.MongoDB.Import
 
         private readonly IImportDefinition importDefinition;
 
-        private readonly Connection connection;
+        private readonly IDatabaseManager databases;
 
         /// <summary>
         /// Initialises a new instance of the <see cref="ImportProviderTests"/> class.
         /// </summary>
         public ImportProviderTests()
         {
-            connection = new Connection();
+            databases = new DatabaseManager();
+            
+            databases.OpenConnection("localhost", 27017);
 
             importDefinition = ImportDefinitionBuilder.GetInstance("|")
                 .AddField(5, "Apparent Magnitude", DataTypes.Decimal)
@@ -43,9 +46,7 @@ namespace StarLab.Data.MongoDB.Import
         [OneTimeTearDown]
         public void CleanUpFixture()
         {
-            connection.DropDatabase(DATABASE);
-
-            connection.Close();
+            databases.Dispose();
         }
 
         /// <summary>
@@ -54,16 +55,10 @@ namespace StarLab.Data.MongoDB.Import
         [TearDown]
         public void CleanUpTest()
         {
-            connection.GetDatabase(DATABASE).DropCollection(COLLECTION);
-        }
-
-        /// <summary>
-        /// Creates the database connection prior to running the tests.
-        /// </summary>
-        [OneTimeSetUp]
-        public void InitialiseFixture()
-        {
-            connection.Open();
+            if (databases.GetDatabase(DATABASE) is Database db)
+            {
+                db.DropCollection(COLLECTION);
+            }
         }
 
         /// <summary>
@@ -72,7 +67,7 @@ namespace StarLab.Data.MongoDB.Import
         [Test]
         public void TestConstructor()
         {
-            var provider = new ImportManager(connection);
+            var provider = new ImportManager(databases);
 
             Assert.That(provider, Is.Not.Null);
         }
@@ -83,18 +78,25 @@ namespace StarLab.Data.MongoDB.Import
         [Test]
         public void TestImport()
         {
-            var provider = new ImportManager(connection);
+            var provider = new ImportManager(databases);
 
             using (var dataset = new FileBackedDataset(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "Stars.dat"), importDefinition))
             {
                 provider.Import(dataset, DATABASE, COLLECTION);
             }
 
-            var collection = connection.GetDatabase(DATABASE).GetCollection<BsonDocument>(COLLECTION);
+            if (databases.GetDatabase(DATABASE) is Database db)
+            {
+                var collection = db.GetCollection(COLLECTION);
 
-            var count = collection.CountDocuments(Builders<BsonDocument>.Filter.Empty);
+                var count = collection.CountDocuments(Builders<BsonDocument>.Filter.Empty);
 
-            Assert.That(count, Is.EqualTo(1000));
+                Assert.That(count, Is.EqualTo(1000));
+            }
+            else
+            {
+                Assert.Fail();
+            }
         }
     }
 }

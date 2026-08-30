@@ -17,14 +17,14 @@ namespace StarLab.Application.Workspace
 
             var interactor = factory.CreateDeleteFolderUseCase(port);
 
-            var dto = new WorkspaceDtoBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder2")
                 .AddFolder("Workspace/Project1/Folder3")
                 .CreateWorkspace();
 
-            interactor.Execute(dto, "Workspace/Project1/Folder2");
+            interactor.Execute(new DeleteFolderUseCaseArgs(workspace, "Workspace/Project1/Folder2"));
 
             port.Received().UpdateWorkspace(Arg.Is<WorkspaceDTO>(ws =>
                 ws.Projects.Count == 1 &&
@@ -43,15 +43,15 @@ namespace StarLab.Application.Workspace
 
             var interactor = factory.CreateDeleteFolderUseCase(port);
 
-            var dto = new WorkspaceDtoBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
-                .AddChart("1", "Document1", "Workspace/Project1/Folder1")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A1", "Document1", "Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder2")
-                .AddChart("21", "Document2", "Workspace/Project1/Folder2")
-                .AddChart("22", "Document3", "Workspace/Project1/Folder2")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC021", "Document2", "Workspace/Project1/Folder2")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC022", "Document3", "Workspace/Project1/Folder2")
                 .AddFolder("Workspace/Project1/Folder3")
-                .AddChart("3", "Document4", "Workspace/Project1/Folder3")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A3", "Document4", "Workspace/Project1/Folder3")
                 .CreateWorkspace();
 
             port.ShowMessage(Arg.Any<string>(),
@@ -59,7 +59,7 @@ namespace StarLab.Application.Workspace
                              Arg.Is(InteractionType.Warning),
                              Arg.Is(InteractionResponses.OKCancel)).Returns(InteractionResult.OK);
 
-            interactor.Execute(dto, "Workspace/Project1/Folder2");
+            interactor.Execute(new DeleteFolderUseCaseArgs(workspace, "Workspace/Project1/Folder2"));
 
             port.Received().UpdateWorkspace(Arg.Is<WorkspaceDTO>(ws =>
                 ws.Projects.Count == 1 &&
@@ -78,15 +78,15 @@ namespace StarLab.Application.Workspace
 
             var interactor = factory.CreateDeleteFolderUseCase(port);
 
-            var dto = new WorkspaceDtoBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
-                .AddChart("1", "Document1", "Workspace/Project1/Folder1")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A1", "Document1", "Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder2")
-                .AddChart("21", "Document2", "Workspace/Project1/Folder2")
-                .AddChart("22", "Document3", "Workspace/Project1/Folder2")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC021", "Document2", "Workspace/Project1/Folder2")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC022", "Document3", "Workspace/Project1/Folder2")
                 .AddFolder("Workspace/Project1/Folder3")
-                .AddChart("3", "Document4", "Workspace/Project1/Folder3")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC03", "Document4", "Workspace/Project1/Folder3")
                 .CreateWorkspace();
 
             port.ShowMessage(Arg.Any<string>(),
@@ -94,7 +94,7 @@ namespace StarLab.Application.Workspace
                              Arg.Is(InteractionType.Warning),
                              Arg.Is(InteractionResponses.OKCancel)).Returns(InteractionResult.Cancel);
 
-            interactor.Execute(dto, "Workspace/Project1/Folder2");
+            interactor.Execute(new DeleteFolderUseCaseArgs(workspace, "Workspace/Project1/Folder2"));
 
             port.DidNotReceive().UpdateWorkspace(Arg.Any<WorkspaceDTO>());
         }
@@ -109,22 +109,22 @@ namespace StarLab.Application.Workspace
 
             var interactor = factory.CreateDeleteFolderUseCase(port);
 
-            var dto = new WorkspaceDtoBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder1/Folder1")
-                .AddChart("111", "Document1", "Workspace/Project1/Folder1/Folder1")
-                .AddChart("112", "Document2", "Workspace/Project1/Folder1/Folder1")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC111", "Document1", "Workspace/Project1/Folder1/Folder1")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC112", "Document2", "Workspace/Project1/Folder1/Folder1")
                 .AddFolder("Workspace/Project1/Folder1/Folder2")
-                .AddChart("121", "Document3", "Workspace/Project1/Folder1/Folder2")
-                .AddChart("122", "Document4", "Workspace/Project1/Folder1/Folder2")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC121", "Document3", "Workspace/Project1/Folder1/Folder2")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC122", "Document4", "Workspace/Project1/Folder1/Folder2")
                 .AddFolder("Workspace/Project1/Folder2")
                 .AddFolder("Workspace/Project1/Folder2/Folder1")
-                .AddChart("211", "Document5", "Workspace/Project1/Folder2/Folder1")
-                .AddChart("212", "Document6", "Workspace/Project1/Folder2/Folder1")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC211", "Document5", "Workspace/Project1/Folder2/Folder1")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC212", "Document6", "Workspace/Project1/Folder2/Folder1")
                 .AddFolder("Workspace/Project1/Folder2/Folder2")
-                .AddChart("221", "Document7", "Workspace/Project1/Folder2/Folder2")
-                .AddChart("222", "Document8", "Workspace/Project1/Folder2/Folder2")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC221", "Document7", "Workspace/Project1/Folder2/Folder2")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC222", "Document8", "Workspace/Project1/Folder2/Folder2")
                 .CreateWorkspace();
 
             port.ShowMessage(Arg.Any<string>(),
@@ -132,7 +132,7 @@ namespace StarLab.Application.Workspace
                              Arg.Is(InteractionType.Warning),
                              Arg.Is(InteractionResponses.OKCancel)).Returns(InteractionResult.OK);
 
-            interactor.Execute(dto, "Workspace/Project1/Folder1");
+            interactor.Execute(new DeleteFolderUseCaseArgs(workspace, "Workspace/Project1/Folder1"));
 
             port.Received().UpdateWorkspace(Arg.Is<WorkspaceDTO>(ws =>
                 ws.Projects.Count == 1 &&
@@ -142,13 +142,13 @@ namespace StarLab.Application.Workspace
                 ws.Projects[0].Folders[2].Path == "Workspace/Project1/Folder2/Folder2" &&
                 ws.Projects[0].Documents.Count == 4 &&
                 ws.Projects[0].Documents[0].Path == "Workspace/Project1/Folder2/Folder1" &&
-                ws.Projects[0].Documents[0].ID == "211" &&
+                ws.Projects[0].Documents[0].ID == "B997452E-AC89-40B5-B304-525F93CCC211" &&
                 ws.Projects[0].Documents[1].Path == "Workspace/Project1/Folder2/Folder1" &&
-                ws.Projects[0].Documents[1].ID == "212" &&
+                ws.Projects[0].Documents[1].ID == "B997452E-AC89-40B5-B304-525F93CCC212" &&
                 ws.Projects[0].Documents[2].Path == "Workspace/Project1/Folder2/Folder2" &&
-                ws.Projects[0].Documents[2].ID == "221" &&
+                ws.Projects[0].Documents[2].ID == "B997452E-AC89-40B5-B304-525F93CCC221" &&
                 ws.Projects[0].Documents[3].Path == "Workspace/Project1/Folder2/Folder2" &&
-                ws.Projects[0].Documents[3].ID == "222"));
+                ws.Projects[0].Documents[3].ID == "B997452E-AC89-40B5-B304-525F93CCC222"));
         }
 
         /// <summary>
@@ -161,12 +161,12 @@ namespace StarLab.Application.Workspace
 
             var interactor = factory.CreateDeleteFolderUseCase(port);
 
-            var dto = new WorkspaceDtoBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .CreateWorkspace();
 
-            interactor.Execute(dto, "Workspace/Project1/Folder2");
+            interactor.Execute(new DeleteFolderUseCaseArgs(workspace, "Workspace/Project1/Folder2"));
 
             port.DidNotReceive().ShowMessage(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<InteractionType>(), Arg.Any<InteractionResponses>());
 
@@ -183,11 +183,11 @@ namespace StarLab.Application.Workspace
 
             var interactor = factory.CreateDeleteFolderUseCase(port);
 
-            var dto = new WorkspaceDtoBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .CreateWorkspace();
 
-            interactor.Execute(dto, "Workspace/Project1");
+            interactor.Execute(new DeleteFolderUseCaseArgs(workspace, "Workspace/Project1"));
 
             port.Received().UpdateWorkspace(Arg.Is<WorkspaceDTO>(ws => ws.Projects.Count == 0));
         }
@@ -202,14 +202,14 @@ namespace StarLab.Application.Workspace
 
             var interactor = factory.CreateDeleteFolderUseCase(port);
 
-            var dto = new WorkspaceDtoBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
-                .AddChart("1", "Document1", "Workspace/Project1")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A1", "Document1", "Workspace/Project1")
                 .AddProject("Project2")
-                .AddChart("21", "Document2", "Workspace/Project2")
-                .AddChart("22", "Document3", "Workspace/Project2")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC021", "Document2", "Workspace/Project2")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC022", "Document3", "Workspace/Project2")
                 .AddProject("Project3")
-                .AddChart("3", "Document4", "Workspace/Project3")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A3", "Document4", "Workspace/Project3")
                 .CreateWorkspace();
 
             port.ShowMessage(Arg.Any<string>(),
@@ -217,7 +217,7 @@ namespace StarLab.Application.Workspace
                              Arg.Is(InteractionType.Warning),
                              Arg.Is(InteractionResponses.OKCancel)).Returns(InteractionResult.OK);
 
-            interactor.Execute(dto, "Workspace/Project2");
+            interactor.Execute(new DeleteFolderUseCaseArgs(workspace, "Workspace/Project2"));
 
             port.Received().UpdateWorkspace(Arg.Is<WorkspaceDTO>(ws =>
                 ws.Projects.Count == 2 &&
@@ -235,14 +235,14 @@ namespace StarLab.Application.Workspace
 
             var interactor = factory.CreateDeleteFolderUseCase(port);
 
-            var dto = new WorkspaceDtoBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
-                .AddChart("1", "Document1", "Workspace/Project1")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A1", "Document1", "Workspace/Project1")
                 .AddProject("Project2")
-                .AddChart("21", "Document2", "Workspace/Project2")
-                .AddChart("22", "Document3", "Workspace/Project2")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC021", "Document2", "Workspace/Project2")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC022", "Document3", "Workspace/Project2")
                 .AddProject("Project3")
-                .AddChart("3", "Document4", "Workspace/Project3")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A3", "Document4", "Workspace/Project3")
                 .CreateWorkspace();
 
             port.ShowMessage(Arg.Any<string>(),
@@ -250,7 +250,7 @@ namespace StarLab.Application.Workspace
                              Arg.Is(InteractionType.Warning),
                              Arg.Is(InteractionResponses.OKCancel)).Returns(InteractionResult.Cancel);
 
-            interactor.Execute(dto, "Workspace/Project2");
+            interactor.Execute(new DeleteFolderUseCaseArgs(workspace, "Workspace/Project2"));
 
             port.DidNotReceive().UpdateWorkspace(Arg.Any<WorkspaceDTO>());
         }
@@ -265,23 +265,23 @@ namespace StarLab.Application.Workspace
 
             var interactor = factory.CreateDeleteFolderUseCase(port);
 
-            var dto = new WorkspaceDtoBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder1/Folder1")
-                .AddChart("1111", "Document1", "Workspace/Project1/Folder1/Folder1")
-                .AddChart("1112", "Document2", "Workspace/Project1/Folder1/Folder1")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CC1111", "Document1", "Workspace/Project1/Folder1/Folder1")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CC1112", "Document2", "Workspace/Project1/Folder1/Folder1")
                 .AddFolder("Workspace/Project1/Folder1/Folder2")
-                .AddChart("1121", "Document3", "Workspace/Project1/Folder1/Folder2")
-                .AddChart("1122", "Document4", "Workspace/Project1/Folder1/Folder2")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CC1121", "Document3", "Workspace/Project1/Folder1/Folder2")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CC1122", "Document4", "Workspace/Project1/Folder1/Folder2")
                 .AddProject("Project2")
                 .AddFolder("Workspace/Project2/Folder1")
                 .AddFolder("Workspace/Project2/Folder1/Folder1")
-                .AddChart("2111", "Document5", "Workspace/Project2/Folder1/Folder1")
-                .AddChart("2112", "Document6", "Workspace/Project2/Folder1/Folder1")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CC2111", "Document5", "Workspace/Project2/Folder1/Folder1")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CC2112", "Document6", "Workspace/Project2/Folder1/Folder1")
                 .AddFolder("Workspace/Project2/Folder1/Folder2")
-                .AddChart("2121", "Document7", "Workspace/Project2/Folder1/Folder2")
-                .AddChart("2122", "Document8", "Workspace/Project2/Folder1/Folder2")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CC2121", "Document7", "Workspace/Project2/Folder1/Folder2")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CC2122", "Document8", "Workspace/Project2/Folder1/Folder2")
                 .CreateWorkspace();
 
             port.ShowMessage(Arg.Any<string>(),
@@ -289,7 +289,7 @@ namespace StarLab.Application.Workspace
                              Arg.Is(InteractionType.Warning),
                              Arg.Is(InteractionResponses.OKCancel)).Returns(InteractionResult.OK);
 
-            interactor.Execute(dto, "Workspace/Project1");
+            interactor.Execute(new DeleteFolderUseCaseArgs(workspace, "Workspace/Project1"));
 
             port.Received().UpdateWorkspace(Arg.Is<WorkspaceDTO>(ws =>
                 ws.Projects.Count == 1 &&
@@ -299,13 +299,13 @@ namespace StarLab.Application.Workspace
                 ws.Projects[0].Folders[2].Path == "Workspace/Project2/Folder1/Folder2" &&
                 ws.Projects[0].Documents.Count == 4 &&
                 ws.Projects[0].Documents[0].Path == "Workspace/Project2/Folder1/Folder1" &&
-                ws.Projects[0].Documents[0].ID == "2111" &&
+                ws.Projects[0].Documents[0].ID == "B997452E-AC89-40B5-B304-525F93CC2111" &&
                 ws.Projects[0].Documents[1].Path == "Workspace/Project2/Folder1/Folder1" &&
-                ws.Projects[0].Documents[1].ID == "2112" &&
+                ws.Projects[0].Documents[1].ID == "B997452E-AC89-40B5-B304-525F93CC2112" &&
                 ws.Projects[0].Documents[2].Path == "Workspace/Project2/Folder1/Folder2" &&
-                ws.Projects[0].Documents[2].ID == "2121" &&
+                ws.Projects[0].Documents[2].ID == "B997452E-AC89-40B5-B304-525F93CC2121" &&
                 ws.Projects[0].Documents[3].Path == "Workspace/Project2/Folder1/Folder2" &&
-                ws.Projects[0].Documents[3].ID == "2122"));
+                ws.Projects[0].Documents[3].ID == "B997452E-AC89-40B5-B304-525F93CC2122"));
         }
 
         /// <summary>
@@ -318,11 +318,11 @@ namespace StarLab.Application.Workspace
 
             var interactor = factory.CreateDeleteFolderUseCase(port);
 
-            var dto = new WorkspaceDtoBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .CreateWorkspace();
 
-            interactor.Execute(dto, "Workspace/Project2");
+            interactor.Execute(new DeleteFolderUseCaseArgs(workspace, "Workspace/Project2"));
 
             port.DidNotReceive().ShowMessage(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<InteractionType>(), Arg.Any<InteractionResponses>());
 

@@ -430,6 +430,15 @@ namespace StarLab.Shared.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A document with the name {0} could not be found in the folder {1}.
+        /// </summary>
+        public static string DocumentNotFound {
+            get {
+                return ResourceManager.GetString("DocumentNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The document has not been set..
         /// </summary>
         public static string DocumentNotSet {
@@ -555,6 +564,15 @@ namespace StarLab.Shared.Properties {
         public static string InterfaceNotImplemented {
             get {
                 return ResourceManager.GetString("InterfaceNotImplemented", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The item with key &apos;{0}&apos; is not valid for the current operation..
+        /// </summary>
+        public static string InvalidOperation {
+            get {
+                return ResourceManager.GetString("InvalidOperation", resourceCulture);
             }
         }
         

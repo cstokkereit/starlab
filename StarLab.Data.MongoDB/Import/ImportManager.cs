@@ -11,15 +11,15 @@ namespace StarLab.Data.MongoDB.Import
     {
         private const int BATCH_SIZE = 1000; // The number of documents that constitutes a batch.
 
-        private readonly Connection connection; // A wrapped connection to the MongoDB server.
+        private readonly IDatabaseManager databases; // Provides access to the MongoDB server.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="ImportManager"/> class.
         /// </summary>
-        /// <param name="connection">A <see cref="Connection"/> that can be used to access the MongoDB server.</param>
-        public ImportManager(Connection connection)
+        /// <param name="databases">An <see cref="IDatabaseManager"/> that can be used to access the MongoDB server.</param>
+        public ImportManager(IDatabaseManager databases)
         {
-            this.connection = connection;
+            this.databases = databases;
         }
 
         /// <summary>
@@ -30,13 +30,16 @@ namespace StarLab.Data.MongoDB.Import
         /// <param name="destination">The name of the destination collection.</param>
         public void Import(IDataset source, string database, string destination)
         {
-            var collection = connection.GetDatabase(database).GetCollection<BsonDocument>(destination);
-
-            while (!source.EOF)
+            if (databases.GetDatabase(database) is Database db)
             {
-                var documents = GetBatch(source);
+                var collection = db.GetCollection(destination);
 
-                if (documents.Count > 0) collection.InsertMany(documents);
+                while (!source.EOF)
+                {
+                    var documents = GetBatch(source);
+
+                    if (documents.Count > 0) collection.InsertMany(documents);
+                }
             }
         }
 
@@ -45,7 +48,7 @@ namespace StarLab.Data.MongoDB.Import
         /// </summary>
         /// <param name="dataset">An <see cref="IDataset"/> that contains the data being imported.</param>
         /// <returns>A <see cref="List{BsonDocument}"/> that contains at most the number of documents specified by the batch size.</returns>
-        private List<BsonDocument> GetBatch(IDataset dataset)
+        private static List<BsonDocument> GetBatch(IDataset dataset)
         {
             var documents = new List<BsonDocument>();
 

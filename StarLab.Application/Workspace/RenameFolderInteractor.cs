@@ -6,7 +6,7 @@ namespace StarLab.Application.Workspace
     /// <summary>
     /// A use case that renames a folder in the workspace hierarchy.
     /// </summary>
-    internal class RenameFolderInteractor : UseCaseInteractor<IWorkspaceOutputPort>, IUseCase<WorkspaceDTO, string, string>
+    internal class RenameFolderInteractor : UseCaseInteractor<IWorkspaceOutputPort>, IUseCase<RenameFolderUseCaseArgs>
     {
         /// <summary>
         /// Initialises a new instance of the <see cref="RenameFolderInteractor"/> class.
@@ -19,37 +19,33 @@ namespace StarLab.Application.Workspace
         /// <summary>
         /// Executes the use case.
         /// </summary>
-        /// <param name="dto">A <see cref="WorkspaceDTO"/> that specifies the current state of the workspace.</param>
-        /// <param name="key">The key that identifies the folder being renamed.</param>
-        /// <param name="name">The new folder name.</param>
-        public void Execute(WorkspaceDTO dto, string key, string name)
+        /// <param name="args">The <see cref="RenameFolderUseCaseArgs"/> that provide all of the information required to execute the use case.</param>
+        public void Execute(RenameFolderUseCaseArgs args)
         {
-            ArgumentNullException.ThrowIfNull(dto, nameof(dto));
+            var workspace = new Workspace(args.Workspace);
 
-            var workspace = new Workspace(dto);
-
-            var folder = workspace.GetFolder(key);
+            var folder = workspace.GetFolder(args.Path);
 
             var type = folder is Project ? Resources.Project : Resources.Folder;
 
-            if (WorkspaceInteractionHelper.IsValid(name))
+            if (WorkspaceInteractionHelper.IsValid(args.Name))
             {
                 var folders = folder is Project ? workspace.Projects : folder.Parent.Folders;
 
-                if (IsValid(folders, name))
+                if (IsValid(folders, args.Name))
                 {
-                    workspace.RenameFolder(folder, name);
+                    workspace.RenameFolder(folder, args.Name);
 
                     OutputPort.UpdateWorkspace(Mapper.Map<WorkspaceDTO>(workspace));
                 }
                 else
                 {
-                    throw new Exception(WorkspaceInteractionHelper.CreateCannotRenameItemMessage(key.Substring(key.LastIndexOf('/') + 1), name, type));
+                    throw new Exception(WorkspaceInteractionHelper.CreateCannotRenameItemMessage(args.Path.Substring(args.Path.LastIndexOf('/') + 1), args.Name, type));
                 }
             }
             else
             {
-                throw new Exception(WorkspaceInteractionHelper.CreateInvalidNameMessage(name, type));
+                throw new Exception(WorkspaceInteractionHelper.CreateInvalidNameMessage(args.Name, type));
             }
         }
 

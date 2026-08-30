@@ -5,7 +5,7 @@ namespace StarLab.Application.Data
     /// <summary>
     /// Represents a database. Provides methods for accessing the data that it contains.
     /// </summary>
-    public interface IDataProvider
+    public interface IDatabase
     {
         /// <summary>
         /// Retrieves the data specified in the query. If a large amount of data could be returned by the query use the skip and rowLimit parameters to limit the amount of data returned.
@@ -22,16 +22,5 @@ namespace StarLab.Application.Data
         /// <param name="query">The <see cref="IQuery"/> that determines which values will be returned.</param>
         /// <returns>An <see cref="IForwardOnlyCursor{IStar}"/> containg the specified values.</returns>
         IForwardOnlyCursor<IStar> GetStars(IQuery query);
-
-        /// <summary>
-        /// Closes the database that contains the data.
-        /// </summary>
-        void CloseDatabase();
-
-        /// <summary>
-        /// Opens the specified database.
-        /// </summary>
-        /// <param name="database">The name of the database.</param>
-        void OpenDatabase(string database);
     }
 }

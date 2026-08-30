@@ -461,4 +461,10 @@ Please enter a valid name.</value>
   <data name="AddTable" xml:space="preserve">
     <value>Add Table</value>
   </data>
+  <data name="DocumentNotFound" xml:space="preserve">
+    <value>A document with the name {0} could not be found in the folder {1}</value>
+  </data>
+  <data name="InvalidOperation" xml:space="preserve">
+    <value>The item with key '{0}' is not valid for the current operation.</value>
+  </data>
 </root>

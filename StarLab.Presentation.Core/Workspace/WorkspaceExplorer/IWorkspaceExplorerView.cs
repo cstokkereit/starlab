@@ -15,6 +15,15 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         int AddImage(Image image);
 
         /// <summary>
+        /// Adds a database node to the tree view that displays the structure of the workspace.
+        /// </summary>
+        /// <param name="key">The node key.</param>
+        /// <param name="parentKey">The parent node key.</param>
+        /// <param name="text">The node text.</param>
+        /// <param name="imageIndex">The index of the node image.</param>
+        void AddDatabaseNode(string key, string parentKey, string text, int imageIndex);
+
+        /// <summary>
         /// Adds a document node to the tree view that displays the structure of the workspace.
         /// </summary>
         /// <param name="key">The node key.</param>

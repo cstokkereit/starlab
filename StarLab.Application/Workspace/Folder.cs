@@ -1,9 +1,10 @@
 ﻿using StarLab.Application.Workspace.Documents;
+using StarLab.Shared.Properties;
 
 namespace StarLab.Application.Workspace
 {
     /// <summary>
-    /// Domain model represention of a folder.
+    /// Application model represention of a folder.
     /// </summary>
     internal class Folder : IFolder
     {
@@ -22,7 +23,7 @@ namespace StarLab.Application.Workspace
         /// <exception cref="ArgumentNullException"></exception>
         public Folder(FolderDTO dto, IFolder parent)
         {
-            if (string.IsNullOrEmpty(dto.Path)) throw new ArgumentException(Constants.InvalidPathMessage);
+            if (string.IsNullOrEmpty(dto.Path)) throw new ArgumentException(Resources.InvalidPath);
 
             Parent = parent ?? throw new ArgumentNullException(nameof(parent));
             Name = dto.Path.Substring(dto.Path.LastIndexOf('/') + 1);

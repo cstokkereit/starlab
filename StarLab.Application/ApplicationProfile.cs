@@ -18,6 +18,7 @@ namespace StarLab.Application
         {
             CreateMap<Axis, AxisDTO>();
             CreateMap<Chart, ChartDTO>();
+            CreateMap<Database, DatabaseDTO>();
             CreateMap<Document, DocumentDTO>();
             CreateMap<Folder, FolderDTO>();
             CreateMap<Font, FontDTO>();

@@ -17,14 +17,14 @@ namespace StarLab.Application.Workspace.Documents
 
             var interactor = factory.CreateRenameDocumentUseCase(port);
 
-            var dto = new WorkspaceDtoBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
-                .AddChart("1", "Document1", "Workspace/Project1/Folder1")
-                .AddChart("2", "Document2", "Workspace/Project1/Folder1")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A1", "Document1", "Workspace/Project1/Folder1")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A2", "Document2", "Workspace/Project1/Folder1")
                 .CreateWorkspace();
 
-            interactor.Execute(dto, "1", "Document3");
+            interactor.Execute(new RenameDocumentUseCaseArgs(workspace, "B997452E-AC89-40B5-B304-525F93CCC0A1", "Document3"));
 
             port.Received().UpdateDocument(Arg.Is<WorkspaceDTO>(ws =>
                 ws.Projects.Count == 1 &&
@@ -32,7 +32,7 @@ namespace StarLab.Application.Workspace.Documents
                 ws.Projects[0].Documents[0].Path == "Workspace/Project1/Folder1" &&
                 ws.Projects[0].Documents[0].Name == "Document3" &&
                 ws.Projects[0].Documents[1].Path == "Workspace/Project1/Folder1" &&
-                ws.Projects[0].Documents[1].Name == "Document2"), Arg.Is("1"));
+                ws.Projects[0].Documents[1].Name == "Document2"), Arg.Is("B997452E-AC89-40B5-B304-525F93CCC0A1"));
         }
 
         /// <summary>
@@ -45,13 +45,13 @@ namespace StarLab.Application.Workspace.Documents
 
             var interactor = factory.CreateRenameDocumentUseCase(port);
 
-            var dto = new WorkspaceDtoBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .AddChart("1", "Document1", "Workspace/Project1/Folder1")
                 .CreateWorkspace();
 
-            Assert.Throws<Exception>(() => interactor.Execute(dto, "1", string.Empty));
+            Assert.Throws<Exception>(() => interactor.Execute(new RenameDocumentUseCaseArgs(workspace, "1", string.Empty)));
         }
 
         /// <summary>
@@ -64,14 +64,14 @@ namespace StarLab.Application.Workspace.Documents
 
             var interactor = factory.CreateRenameDocumentUseCase(port);
 
-            var dto = new WorkspaceDtoBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
-                .AddChart("1", "Document1", "Workspace/Project1/Folder1")
-                .AddChart("2", "Document2", "Workspace/Project1/Folder1")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A1", "Document1", "Workspace/Project1/Folder1")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A2", "Document2", "Workspace/Project1/Folder1")
                 .CreateWorkspace();
 
-            Assert.Throws<Exception>(() => interactor.Execute(dto, "1", "Document2"));
+            Assert.Throws<Exception>(() => interactor.Execute(new RenameDocumentUseCaseArgs(workspace, "B997452E-AC89-40B5-B304-525F93CCC0A1", "Document2")));
         }
 
         /// <summary>
@@ -84,13 +84,13 @@ namespace StarLab.Application.Workspace.Documents
 
             var interactor = factory.CreateRenameDocumentUseCase(port);
 
-            var dto = new WorkspaceDtoBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .AddChart("1", "Document1", "Workspace/Project1/Folder1")
                 .CreateWorkspace();
 
-            Assert.Throws<Exception>(() => interactor.Execute(dto, "1", "Document1/"));
+            Assert.Throws<Exception>(() => interactor.Execute(new RenameDocumentUseCaseArgs(workspace, "1", "Document1/")));
         }
     }
 }

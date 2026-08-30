@@ -27,7 +27,7 @@ namespace StarLab.Application.Workspace
                 Name = "Project2"
             };
 
-            interactor.Execute(workspace, project);
+            interactor.Execute(new AddProjectUseCaseArgs(workspace, project));
 
             port.Received().UpdateWorkspace(Arg.Is<WorkspaceDTO>(ws =>
                 ws.Projects.Count == 2 &&
@@ -57,7 +57,7 @@ namespace StarLab.Application.Workspace
                 Name = "Project1"
             };
 
-            interactor.Execute(workspace, project);
+            interactor.Execute(new AddProjectUseCaseArgs(workspace, project));
 
             port.Received().ShowMessage(Arg.Is("StarLab"),
                                         Arg.Is("A project with the name 'Project1' already exists at this location.\r\nPlease provide a unique name for the project."),
@@ -86,7 +86,7 @@ namespace StarLab.Application.Workspace
                 Name = string.Empty
             };
 
-            interactor.Execute(workspace, project);
+            interactor.Execute(new AddProjectUseCaseArgs(workspace, project));
 
             port.Received().ShowMessage(Arg.Is("StarLab"),
                                         Arg.Is("The project name cannot be null or empty."),
@@ -115,7 +115,7 @@ namespace StarLab.Application.Workspace
                 Name = "Project1/"
             };
 
-            interactor.Execute(workspace, project);
+            interactor.Execute(new AddProjectUseCaseArgs(workspace, project));
 
             port.Received().ShowMessage(Arg.Is("StarLab"),
                                         Arg.Is("Project names cannot include any of the following:\r\n\r\n                               \\ / : * ? ' \" < > |\r\n\r\nPlease enter a valid name."),

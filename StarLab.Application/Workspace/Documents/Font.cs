@@ -1,7 +1,7 @@
 ﻿namespace StarLab.Application.Workspace.Documents
 {
     /// <summary>
-    /// Domain model represention of a font.
+    /// Application model represention of a font.
     /// </summary>
     internal class Font
     {

@@ -7,7 +7,7 @@ namespace StarLab.Application.Workspace
     /// <summary>
     /// A use case that removes a folder from the workspace hierarchy.
     /// </summary>
-    public class DeleteFolderInteractor : UseCaseInteractor<IWorkspaceOutputPort>, IUseCase<WorkspaceDTO, string>
+    public class DeleteFolderInteractor : UseCaseInteractor<IWorkspaceOutputPort>, IUseCase<DeleteFolderUseCaseArgs>
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(DeleteFolderInteractor)); // The logger that will be used for writing log messages.
 
@@ -22,23 +22,20 @@ namespace StarLab.Application.Workspace
         /// <summary>
         /// Executes the use case.
         /// </summary>
-        /// <param name="dto">A <see cref="WorkspaceDTO"/> that specifies the current state of the workspace.</param>
-        /// <param name="key">The key that identifies the folder being deleted.</param>
-        public void Execute(WorkspaceDTO dto, string key)
+        /// <param name="args">The <see cref="DeleteFolderUseCaseArgs"/> that provide all of the information required to execute the use case.</param>
+        public void Execute(DeleteFolderUseCaseArgs args)
         {
-            ArgumentNullException.ThrowIfNull(dto, nameof(dto));
-
-            dto.ActiveDocument = string.Empty;
+            args.Workspace.ActiveDocument = string.Empty;
 
             try
             {
-                var workspace = new Workspace(dto);
+                var workspace = new Workspace(args.Workspace);
 
-                var folder = workspace.GetFolder(key);
+                var folder = workspace.GetFolder(args.Path);
 
                 if (folder.IsEmpty || ConfirmAction(GetConfirmationMessage(folder)))
                 {
-                    workspace.DeleteFolder(key);
+                    workspace.DeleteFolder(args.Path);
 
                     OutputPort.UpdateWorkspace(Mapper.Map<WorkspaceDTO>(workspace));
                 }

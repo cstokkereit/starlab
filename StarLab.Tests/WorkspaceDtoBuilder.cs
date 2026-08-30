@@ -102,6 +102,18 @@ namespace StarLab.Tests
         }
 
         /// <summary>
+        /// Adds the <see cref="ProjectDTO"/> provided to the <see cref="WorkspaceDTO"/>.
+        /// </summary>
+        /// <param name="project">The project to add.</param>
+        /// <returns>This instance so that other methods can be called to continue constructing the <see cref="WorkspaceDTO"/>.</returns>
+        public WorkspaceDtoBuilder AddProject(ProjectDTO project)
+        {
+            workspace.Projects.Add(project);
+
+            return this;
+        }
+
+        /// <summary>
         /// Adds a <see cref="ProjectDTO"/> to the <see cref="WorkspaceDTO"/>.
         /// </summary>
         /// <param name="name">The project name.</param>
@@ -110,6 +122,11 @@ namespace StarLab.Tests
         {
             var project = new ProjectDTO
             {
+                Database = new DatabaseDTO
+                {
+                    Host = string.Empty,
+                    Name = string.Empty
+                },
                 Name = name
             };
 

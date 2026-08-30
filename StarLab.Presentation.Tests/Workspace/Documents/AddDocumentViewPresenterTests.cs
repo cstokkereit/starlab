@@ -2,8 +2,8 @@
 
 using StarLab.Application;
 using StarLab.Application.Workspace;
-using StarLab.Application.Workspace.Documents;
 using StarLab.Presentation.Configuration;
+using StarLab.Tests;
 using Stratosoft.Commands;
 
 namespace StarLab.Presentation.Workspace.Documents
@@ -52,20 +52,27 @@ namespace StarLab.Presentation.Workspace.Documents
         [Test]
         public void TestAddDocument()
         {
-            var interactor = Substitute.For<IUseCase<WorkspaceDTO, DocumentDTO>>();
+            var interactor = Substitute.For<IUseCase<AddDocumentUseCaseArgs>>();
 
             factory.CreateAddDocumentUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
 
+            var workspace = CreateWorkspace(new WorkspaceDtoBuilder(@"C:\Workspace-1")
+                .AddProject("Project-1")
+                .AddFolder("Workspace-1/Project-1/Folder-1")
+                .CreateWorkspace());
+
             var presenter = CreatePresenter(true);
+
+            presenter.OnEvent(new WorkspaceChangedEventArgs(workspace));
 
             presenter.Run(new AddDocumentViewContext("Workspace/Project-1/Charts", DocumentTypes.Chart));
 
             presenter.AddDocument("Document1", "Chart1");
 
-            interactor.Received(1).Execute(Arg.Any<WorkspaceDTO>(), Arg.Is<DocumentDTO>(d =>
-                d.Name == "Document1" &&
-                d.Path == "Workspace/Project-1/Charts" &&
-                d.View == "ChartView"));
+            interactor.Received(1).Execute(Arg.Is<AddDocumentUseCaseArgs>(args => args.Workspace.FileName == @"C:\Workspace-1" 
+                && args.Document.Name == "Document1" 
+                && args.Document.Path == "Workspace/Project-1/Charts" 
+                && args.Document.View == "ChartView"));
         }
 
         /// <summary>
@@ -168,7 +175,7 @@ namespace StarLab.Presentation.Workspace.Documents
         [Test]
         public void TestRun()
         {
-            var interactor = Substitute.For<IUseCase<WorkspaceDTO, DocumentDTO>>();
+            var interactor = Substitute.For<IUseCase<AddDocumentUseCaseArgs>>();
 
             factory.CreateAddDocumentUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
 

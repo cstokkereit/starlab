@@ -29,12 +29,6 @@
         void RenameProject(string path);
 
         /// <summary>
-        /// Updates the contents of the clipboard.
-        /// </summary>
-        /// <param name="key">The key that identifies the target of the current clipboard operation.</param>
-        void UpdateClipboard(string key);
-
-        /// <summary>
         /// Updates the state of the workspace represented by the <see cref="WorkspaceDTO"/> provided.
         /// </summary>
         /// <param name="dto">The <see cref="WorkspaceDTO"/> that contains the updated workspace state.</param>

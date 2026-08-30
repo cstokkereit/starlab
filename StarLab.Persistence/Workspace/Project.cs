@@ -8,6 +8,9 @@ namespace StarLab.Serialisation.Workspace
     /// </summary>
     public class Project
     {
+        [XmlElement("Database")]
+        public Database? Database;
+
         [XmlArray]
         public List<Document>? Documents;
 

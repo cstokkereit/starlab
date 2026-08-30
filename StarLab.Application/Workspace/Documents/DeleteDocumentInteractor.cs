@@ -7,7 +7,7 @@ namespace StarLab.Application.Workspace.Documents
     /// <summary>
     /// A use case that removes a document from the workspace hierarchy.
     /// </summary>
-    internal class DeleteDocumentInteractor : UseCaseInteractor<IWorkspaceOutputPort>, IUseCase<WorkspaceDTO, string>
+    internal class DeleteDocumentInteractor : UseCaseInteractor<IWorkspaceOutputPort>, IUseCase<DeleteDocumentUseCaseArgs>
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(DeleteDocumentInteractor)); // The logger that will be used for writing log messages.
 
@@ -22,23 +22,22 @@ namespace StarLab.Application.Workspace.Documents
         /// <summary>
         /// Executes the use case.
         /// </summary>
-        /// <param name="dtoWorkspace">A <see cref="WorkspaceDTO"/> that specifies the current state of the workspace.</param>
-        /// <param name="key">The key that identifies the document being removed.</param>
-        public void Execute(WorkspaceDTO dto, string key)
+        /// <param name="args">The <see cref="RenameWorkspaceUseCaseArgs"/> that provide all of the information required to execute the use case.</param>
+        public void Execute(DeleteDocumentUseCaseArgs args)
         {
-            ArgumentNullException.ThrowIfNull(dto, nameof(dto));
-
-            dto.ActiveDocument = string.Empty;
+            args.Workspace.ActiveDocument = string.Empty;
 
             try
             {
-                var workspace = new Workspace(dto);
+                var workspace = new Workspace(args.Workspace);
 
-                var document = workspace.GetDocument(key);
+                var id = new DocumentID(args.DocumentID);
+
+                var document = workspace.GetDocument(id);
 
                 if (ConfirmAction(string.Format(Resources.DeletionWarning, document.Name)))
                 {
-                    workspace.DeleteDocument(key);
+                    workspace.DeleteDocument(id);
 
                     OutputPort.UpdateWorkspace(Mapper.Map<WorkspaceDTO>(workspace));
                 }

@@ -4,11 +4,13 @@ using StarLab.Shared.Properties;
 namespace StarLab.Application.Workspace
 {
     /// <summary>
-    /// Domain model represention of a project.
+    /// Application model represention of a project.
     /// </summary>
     internal class Project : IFolder
     {
         private readonly Dictionary<string, Folder> folders = new Dictionary<string, Folder>(); // A dictionary containing all of the folders within the project hierarchy.
+
+        private readonly Database database; // The database associated with the project.
 
         private IFolder folder; // The project folder.
 
@@ -21,6 +23,8 @@ namespace StarLab.Application.Workspace
         {
             ArgumentNullException.ThrowIfNull(parent, nameof(parent));
             ArgumentNullException.ThrowIfNull(dto, nameof(dto));
+
+            database = new Database(dto.Database ?? new DatabaseDTO());
 
             folder = new Folder(dto.Name, dto.Expanded, parent);
 
@@ -65,6 +69,11 @@ namespace StarLab.Application.Workspace
                 return folders;
             }
         }
+
+        /// <summary>
+        /// Gets the <see cref="Database"/> associated with the project.
+        /// </summary>
+        public Database Database => database;
 
         /// <summary>
         /// Gets an <see cref="IEnumerable{Document}"/> containing the documents in the project folder.

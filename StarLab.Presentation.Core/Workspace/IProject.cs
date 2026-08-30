@@ -8,6 +8,11 @@ namespace StarLab.Presentation.Workspace
     public interface IProject : IFolder
     {
         /// <summary>
+        /// Gets the database associated with the project.
+        /// </summary>
+        IDatabase Database { get; }
+
+        /// <summary>
         /// Gets the documents in the project.
         /// </summary>
         IEnumerable<IDocument> Documents { get; }

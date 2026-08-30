@@ -63,11 +63,6 @@ namespace StarLab.Presentation.Workspace.Documents
         public IEnumerable<IChildViewController> ChildControllers => controllers;
 
         /// <summary>
-        /// Gets the document ID of the document that the view represents.
-        /// </summary>
-        public DocumentID DocumentID => document.ID;
-
-        /// <summary>
         /// Gets the controller ID.
         /// </summary>
         public override ControllerID ID { get; }

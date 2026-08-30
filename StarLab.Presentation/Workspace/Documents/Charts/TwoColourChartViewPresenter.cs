@@ -18,17 +18,24 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
 
         private IChart? chart; // The chart that the view represents.
 
+        private IDocument? document; // The document that contains the chart.
+
+        private IWorkspace? workspace; // The workspace that contains the document.
+
         /// <summary>
         /// Initialises a new instance of the <see cref="TwoColourChartViewPresenter"> class.
         /// </summary>
         /// <param name="view">The <see cref="IChartView"/> controlled by this presenter.</param>
+        /// <param name="document">The <see cref="IDocument"/> that the presenter .</param>
         /// <param name="context">An <see cref="ISessionContext"/> that provides access to the session context.</param>
         /// <param name="commands">An <see cref="ICommandManager"/> that is required for the creation of <see cref="ICommand">s.</param>
         /// <param name="services">An <see cref="IServiceRegistry"/> that provides access to the registered services.</param>
         /// <param name="events">The <see cref="IEventAggregator"/> that manages application events.</param>
-        public TwoColourChartViewPresenter(IChartView view, ISessionContext context, ICommandManager commands, IServiceRegistry services, IEventAggregator events)
+        public TwoColourChartViewPresenter(IChartView view, IDocument document, ISessionContext context, ICommandManager commands, IServiceRegistry services, IEventAggregator events)
             : base(view, context, commands, events) 
         {
+            this.document = document ?? throw new ArgumentNullException(nameof(document));
+
             ArgumentNullException.ThrowIfNull(services, nameof(useCases));
 
             useCases = services.GetService<IChartUseCaseService>();

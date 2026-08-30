@@ -24,24 +24,27 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
 
         private IChartSettings? chart; // Represents the current state of the chart.
 
-        private IWorkspace? workspace; // The workspace that contains the chart.
+        private IDocument? document; // The document that contains the chart.
 
-        private DocumentID? documentId; // The ID of the document that contains the chart.
+        private IWorkspace? workspace; // The workspace that contains the document.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="ChartSettingsViewPresenter"> class.
         /// </summary>
         /// <param name="view">The <see cref="IChartSettingsView"/> controlled by this presenter.</param>
+        /// <param name="document">The <see cref="IDocument"/> that the presenter .</param>
         /// <param name="context">An <see cref="ISessionContext"/> that provides access to the session context.</param>
         /// <param name="commands">An <see cref="ICommandManager"/> that is required for the creation of <see cref="ICommand">s.</param>
         /// <param name="services">An <see cref="IServiceRegistry"/> that provides access to the registered services.</param>
         /// <param name="events">The <see cref="IEventAggregator"/> that manages application events.</param>
-        public ChartSettingsViewPresenter(IChartSettingsView view, ISessionContext context, ICommandManager commands, IServiceRegistry services, IEventAggregator events)
+        public ChartSettingsViewPresenter(IChartSettingsView view, IDocument document, ISessionContext context, ICommandManager commands, IServiceRegistry services, IEventAggregator events)
             : base(view, context, commands, events)
         {
             ArgumentNullException.ThrowIfNull(services, nameof(services));
 
             useCaseService = services.GetService<IChartSettingsUseCaseService>();
+
+            this.document = document ?? throw new ArgumentNullException(nameof(document));
 
             View.MinimumSize = new Size(600, 150);
 
@@ -62,7 +65,10 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// <param name="chart">The <see cref="IChartSettings"/> that specifies the state of the chart.</param>
         public void ApplyPreviewSettings(IChartSettings chart)
         {
-            useCaseService.UpdateChart(ParentController.DocumentID, chart);
+            if (document == null) throw new InvalidOperationException(string.Format(StringResources.VariableNotSet, StringResources.Document.ToLower()));
+            if (chart == null) throw new InvalidOperationException(string.Format(StringResources.VariableNotSet, StringResources.Chart.ToLower()));
+
+            useCaseService.UpdateChart(document.ID, chart);
 
             this.chart = chart;
         }
@@ -72,11 +78,11 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// </summary>
         public void ApplySettings()
         {
-            if (documentId == null) throw new InvalidOperationException(string.Format(StringResources.VariableNotSet, StringResources.DocumentID.ToLower()));
             if (workspace == null) throw new InvalidOperationException(string.Format(StringResources.VariableNotSet, StringResources.Workspace.ToLower()));
+            if (document == null) throw new InvalidOperationException(string.Format(StringResources.VariableNotSet, StringResources.Document.ToLower()));
             if (chart == null) throw new InvalidOperationException(string.Format(StringResources.VariableNotSet, StringResources.Chart.ToLower()));
             
-            useCaseService.UpdateDocument(workspace, documentId, chart);
+            useCaseService.UpdateDocument(workspace, document.ID, chart);
         }
 
         /// <summary>
@@ -124,9 +130,9 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// <param name="args">A <see cref="WorkspaceChangedEventArgs"/> that provides context for the event.</param>
         public void OnEvent(WorkspaceChangedEventArgs args)
         {
-            workspace = args.Workspace;
-
             View.SelectNode(Constants.Chart);
+
+            workspace = args.Workspace;
         }
 
         /// <summary>
@@ -163,8 +169,6 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         public void UpdateSettings(IChartDocument document)
         {
             chart = new ChartSettings(document.Chart);
-
-            documentId = document.ID;
         }
 
         /// <summary>

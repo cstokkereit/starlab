@@ -1,6 +1,4 @@
-﻿using StarLab.Application.Workspace.Documents.Charts;
-using StarLab.Application.Workspace.Documents.Tables;
-using StarLab.Presentation.Workspace.Documents.Charts;
+﻿using StarLab.Application.Workspace.Documents.Tables;
 
 namespace StarLab.Tests
 {

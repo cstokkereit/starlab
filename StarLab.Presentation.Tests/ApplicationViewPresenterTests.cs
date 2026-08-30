@@ -807,7 +807,6 @@ namespace StarLab.Presentation
             var controllerID = new ControllerID(documentID);
 
             var dc = Substitute.For<IDocumentController>();
-            dc.DocumentID.Returns(documentID);
             dc.ID.Returns(controllerID);
 
             IDocument? doc = null;

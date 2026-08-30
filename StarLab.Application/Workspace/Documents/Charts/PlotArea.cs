@@ -1,7 +1,7 @@
 ﻿namespace StarLab.Application.Workspace.Documents.Charts
 {
     /// <summary>
-    /// Domain model representation of the chart plot area.
+    /// Application model representation of the chart plot area.
     /// </summary>
     internal class PlotArea
     {

@@ -138,7 +138,7 @@ namespace StarLab.Presentation
 
             foreach (var view in views)
             {
-                presenters.Add((IChildViewPresenter)CreateInstance(configuration.GetChildViewConfiguration(view.Name).Presenter, [view, context, commands, services, events]));
+                presenters.Add((IChildViewPresenter)CreateInstance(configuration.GetChildViewConfiguration(view.Name).Presenter, [view, document, context, commands, services, events]));
             }
 
             return presenters;

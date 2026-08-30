@@ -8,27 +8,23 @@ namespace StarLab.Application.Workspace
     public class ClipboardInteractorTests : ApplicationTests
     {
         /// <summary>
-        /// Test that the <see cref="ClipboardInteractor.Execute"/> method correctly pastes a copied document to the specified location within the workspace hierarchy.
+        /// Test that the <see cref="CopyAndPasteInteractor.Execute"/> method correctly pastes a copied document to the specified location within the workspace hierarchy.
         /// </summary>
         [Test]
         public void TestCopyAndPasteADocument()
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var copyInteractor = factory.CreateUseCase(port, ClipboardOperations.Copy);
-
-            var dto = new WorkspaceDtoBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
-                .AddChart("1", "Document1", "Workspace/Project1/Folder1")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A1", "Document1", "Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder2")
                 .CreateWorkspace();
 
-            copyInteractor.Execute(dto, "1");
+            var interactor = factory.CreateCopyAndPasteUseCase(port);
 
-            var pasteInteractor = factory.CreateUseCase(port, ClipboardOperations.Paste);
-
-            pasteInteractor.Execute(dto, "Workspace/Project1/Folder2");
+            interactor.Execute(new ClipboardUseCaseArgs(workspace, "B997452E-AC89-40B5-B304-525F93CCC0A1", "Workspace/Project1/Folder2"));
 
             port.Received().UpdateWorkspace(Arg.Is<WorkspaceDTO>(ws =>
                 ws.Projects.Count == 1 &&
@@ -38,34 +34,30 @@ namespace StarLab.Application.Workspace
                 ws.Projects[0].Documents.Count == 2 &&
                 ws.Projects[0].Documents[0].Path == "Workspace/Project1/Folder1" &&
                 ws.Projects[0].Documents[0].Name == "Document1" &&
-                ws.Projects[0].Documents[0].ID == "1" &&
+                ws.Projects[0].Documents[0].ID == "B997452E-AC89-40B5-B304-525F93CCC0A1" &&
                 ws.Projects[0].Documents[1].Path == "Workspace/Project1/Folder2" &&
                 ws.Projects[0].Documents[1].Name == "Document1" &&
-                ws.Projects[0].Documents[1].ID != "1"));
+                ws.Projects[0].Documents[1].ID != "B997452E-AC89-40B5-B304-525F93CCC0A1"));
         }
 
         /// <summary>
-        /// Test that the <see cref="ClipboardInteractor.Execute"/> method correctly renames and pastes the copied document to the same location within the workspace hierarchy as the original.
+        /// Test that the <see cref="CopyAndPasteInteractor.Execute"/> method correctly renames and pastes the copied document to the same location within the workspace hierarchy as the original.
         /// </summary>
         [Test]
         public void TestCopyAndPasteADocumentWhenSourceAndDestinationAreSameFolder()
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var copyInteractor = factory.CreateUseCase(port, ClipboardOperations.Copy);
-
-            var dto = new WorkspaceDtoBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
-                .AddChart("1", "Document1", "Workspace/Project1/Folder1")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A1", "Document1", "Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder2")
                 .CreateWorkspace();
 
-            copyInteractor.Execute(dto, "1");
+            var interactor = factory.CreateCopyAndPasteUseCase(port);
 
-            var pasteInteractor = factory.CreateUseCase(port, ClipboardOperations.Paste);
-
-            pasteInteractor.Execute(dto, "Workspace/Project1/Folder1");
+            interactor.Execute(new ClipboardUseCaseArgs(workspace, "B997452E-AC89-40B5-B304-525F93CCC0A1", "Workspace/Project1/Folder1"));
 
             port.Received().UpdateWorkspace(Arg.Is<WorkspaceDTO>(ws =>
                 ws.Projects.Count == 1 &&
@@ -75,34 +67,30 @@ namespace StarLab.Application.Workspace
                 ws.Projects[0].Documents.Count == 2 &&
                 ws.Projects[0].Documents[0].Path == "Workspace/Project1/Folder1" &&
                 ws.Projects[0].Documents[0].Name == "Document1" &&
-                ws.Projects[0].Documents[0].ID == "1" &&
+                ws.Projects[0].Documents[0].ID == "B997452E-AC89-40B5-B304-525F93CCC0A1" &&
                 ws.Projects[0].Documents[1].Path == "Workspace/Project1/Folder1" &&
                 ws.Projects[0].Documents[1].Name == "Document1 - Copy" &&
-                ws.Projects[0].Documents[1].ID != "1"));
+                ws.Projects[0].Documents[1].ID != "B997452E-AC89-40B5-B304-525F93CCC0A1"));
         }
 
         /// <summary>
-        /// Test that the <see cref="ClipboardInteractor.Execute"/> method correctly pastes a copied folder to the specified location within the workspace hierarchy.
+        /// Test that the <see cref="CopyAndPasteInteractor.Execute"/> method correctly pastes a copied folder to the specified location within the workspace hierarchy.
         /// </summary>
         [Test]
         public void TestCopyAndPasteAFolder()
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var copyInteractor = factory.CreateUseCase(port, ClipboardOperations.Copy);
-
-            var dto = new WorkspaceDtoBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder2")
                 .AddFolder("Workspace/Project1/Folder3")
                 .CreateWorkspace();
 
-            copyInteractor.Execute(dto, "Workspace/Project1/Folder1");
+            var interactor = factory.CreateCopyAndPasteUseCase(port);
 
-            var pasteInteractor = factory.CreateUseCase(port, ClipboardOperations.Paste);
-
-            pasteInteractor.Execute(dto, "Workspace/Project1/Folder2");
+            interactor.Execute(new ClipboardUseCaseArgs(workspace, "Workspace/Project1/Folder1", "Workspace/Project1/Folder2"));
 
             port.Received().UpdateWorkspace(Arg.Is<WorkspaceDTO>(ws =>
                 ws.Projects.Count == 1 &&
@@ -114,16 +102,14 @@ namespace StarLab.Application.Workspace
         }
 
         /// <summary>
-        /// Test that the <see cref="ClipboardInteractor.Execute"/> method correctly pastes a copied folder and its child folders to the specified location within the workspace hierarchy.
+        /// Test that the <see cref="CopyAndPasteInteractor.Execute"/> method correctly pastes a copied folder and its child folders to the specified location within the workspace hierarchy.
         /// </summary>
         [Test]
         public void TestCopyAndPasteAFolderWithChildFolders()
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var copyInteractor = factory.CreateUseCase(port, ClipboardOperations.Copy);
-
-            var dto = new WorkspaceDtoBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder1/Folder11")
@@ -131,11 +117,9 @@ namespace StarLab.Application.Workspace
                 .AddFolder("Workspace/Project1/Folder2")
                 .CreateWorkspace();
 
-            copyInteractor.Execute(dto, "Workspace/Project1/Folder1");
+            var interactor = factory.CreateCopyAndPasteUseCase(port);
 
-            var pasteInteractor = factory.CreateUseCase(port, ClipboardOperations.Paste);
-
-            pasteInteractor.Execute(dto, "Workspace/Project1/Folder2");
+            interactor.Execute(new ClipboardUseCaseArgs(workspace, "Workspace/Project1/Folder1", "Workspace/Project1/Folder2"));
 
             port.Received().UpdateWorkspace(Arg.Is<WorkspaceDTO>(ws =>
                 ws.Projects.Count == 1 &&
@@ -150,28 +134,24 @@ namespace StarLab.Application.Workspace
         }
 
         /// <summary>
-        /// Test that the <see cref="ClipboardInteractor.Execute"/> method correctly pastes a copied folder and its documents to the specified location within the workspace hierarchy.
+        /// Test that the <see cref="CopyAndPasteInteractor.Execute"/> method correctly pastes a copied folder and its documents to the specified location within the workspace hierarchy.
         /// </summary>
         [Test]
         public void TestCopyAndPasteAFolderWithDocuments()
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var copyInteractor = factory.CreateUseCase(port, ClipboardOperations.Copy);
-
-            var dto = new WorkspaceDtoBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
-                .AddChart("1", "Document1", "Workspace/Project1/Folder1")
-                .AddChart("2", "Document2", "Workspace/Project1/Folder1")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A1", "Document1", "Workspace/Project1/Folder1")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A2", "Document2", "Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder2")
                 .CreateWorkspace();
 
-            copyInteractor.Execute(dto, "Workspace/Project1/Folder1");
+            var interactor = factory.CreateCopyAndPasteUseCase(port);
 
-            var pasteInteractor = factory.CreateUseCase(port, ClipboardOperations.Paste);
-
-            pasteInteractor.Execute(dto, "Workspace/Project1/Folder2");
+            interactor.Execute(new ClipboardUseCaseArgs(workspace, "Workspace/Project1/Folder1", "Workspace/Project1/Folder2"));
 
             port.Received().UpdateWorkspace(Arg.Is<WorkspaceDTO>(ws =>
                 ws.Projects.Count == 1 &&
@@ -182,51 +162,47 @@ namespace StarLab.Application.Workspace
                 ws.Projects[0].Documents.Count == 4 &&
                 ws.Projects[0].Documents[0].Path == "Workspace/Project1/Folder1" &&
                 ws.Projects[0].Documents[0].Name == "Document1" &&
-                ws.Projects[0].Documents[0].ID == "1" &&
+                ws.Projects[0].Documents[0].ID == "B997452E-AC89-40B5-B304-525F93CCC0A1" &&
                 ws.Projects[0].Documents[1].Path == "Workspace/Project1/Folder1" &&
                 ws.Projects[0].Documents[1].Name == "Document2" &&
-                ws.Projects[0].Documents[1].ID == "2" &&
+                ws.Projects[0].Documents[1].ID == "B997452E-AC89-40B5-B304-525F93CCC0A2" &&
                 ws.Projects[0].Documents[2].Path == "Workspace/Project1/Folder2/Folder1" &&
                 ws.Projects[0].Documents[2].Name == "Document1" &&
-                ws.Projects[0].Documents[2].ID != "1" &&
+                ws.Projects[0].Documents[2].ID != "B997452E-AC89-40B5-B304-525F93CCC0A1" &&
                 ws.Projects[0].Documents[3].Path == "Workspace/Project1/Folder2/Folder1" &&
                 ws.Projects[0].Documents[3].Name == "Document2" &&
-                ws.Projects[0].Documents[3].ID != "2"));
+                ws.Projects[0].Documents[3].ID != "B997452E-AC89-40B5-B304-525F93CCC0A2"));
         }
 
         /// <summary>
-        /// Test that the <see cref="ClipboardInteractor.Execute"/> method correctly pastes a copied folder containing child folders and documents to the specified location within the workspace hierarchy.
+        /// Test that the <see cref="CopyAndPasteInteractor.Execute"/> method correctly pastes a copied folder containing child folders and documents to the specified location within the workspace hierarchy.
         /// </summary>
         [Test]
         public void TestCopyAndPasteFoldersWithChildFoldersAndDocuments()
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var copyInteractor = factory.CreateUseCase(port, ClipboardOperations.Copy);
-
-            var dto = new WorkspaceDtoBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
-                .AddChart("1", "Document1", "Workspace/Project1/Folder1")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A1", "Document1", "Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder1/Folder11")
-                .AddChart("2", "Document2", "Workspace/Project1/Folder1/Folder11")
-                .AddChart("3", "Document3", "Workspace/Project1/Folder1/Folder11")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A2", "Document2", "Workspace/Project1/Folder1/Folder11")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A3", "Document3", "Workspace/Project1/Folder1/Folder11")
                 .AddFolder("Workspace/Project1/Folder1/Folder12")
-                .AddChart("4", "Document4", "Workspace/Project1/Folder1/Folder12")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A4", "Document4", "Workspace/Project1/Folder1/Folder12")
                 .AddFolder("Workspace/Project1/Folder2")
                 .AddFolder("Workspace/Project1/Folder2/Folder21")
-                .AddChart("5", "Document5", "Workspace/Project1/Folder2/Folder21")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A5", "Document5", "Workspace/Project1/Folder2/Folder21")
                 .AddFolder("Workspace/Project1/Folder3")
                 .AddFolder("Workspace/Project1/Folder3/Folder31")
                 .AddFolder("Workspace/Project1/Folder3/Folder32")
-                .AddChart("6", "Document6", "Workspace/Project1/Folder3/Folder32")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A6", "Document6", "Workspace/Project1/Folder3/Folder32")
                 .CreateWorkspace();
 
-            copyInteractor.Execute(dto, "Workspace/Project1/Folder1");
+            var interactor = factory.CreateCopyAndPasteUseCase(port);
 
-            var pasteInteractor = factory.CreateUseCase(port, ClipboardOperations.Paste);
-
-            pasteInteractor.Execute(dto, "Workspace/Project1/Folder3/Folder32");
+            interactor.Execute(new ClipboardUseCaseArgs(workspace, "Workspace/Project1/Folder1", "Workspace/Project1/Folder3/Folder32"));
 
             port.Received().UpdateWorkspace(Arg.Is<WorkspaceDTO>(ws =>
                 ws.Projects.Count == 1 &&
@@ -245,66 +221,62 @@ namespace StarLab.Application.Workspace
                 ws.Projects[0].Documents.Count == 10 &&
                 ws.Projects[0].Documents[0].Path == "Workspace/Project1/Folder1" &&
                 ws.Projects[0].Documents[0].Name == "Document1" &&
-                ws.Projects[0].Documents[0].ID == "1" &&
+                ws.Projects[0].Documents[0].ID == "B997452E-AC89-40B5-B304-525F93CCC0A1" &&
                 ws.Projects[0].Documents[1].Path == "Workspace/Project1/Folder1/Folder11" &&
                 ws.Projects[0].Documents[1].Name == "Document2" &&
-                ws.Projects[0].Documents[1].ID == "2" &&
+                ws.Projects[0].Documents[1].ID == "B997452E-AC89-40B5-B304-525F93CCC0A2" &&
                 ws.Projects[0].Documents[2].Path == "Workspace/Project1/Folder1/Folder11" &&
                 ws.Projects[0].Documents[2].Name == "Document3" &&
-                ws.Projects[0].Documents[2].ID == "3" &&
+                ws.Projects[0].Documents[2].ID == "B997452E-AC89-40B5-B304-525F93CCC0A3" &&
                 ws.Projects[0].Documents[3].Path == "Workspace/Project1/Folder1/Folder12" &&
                 ws.Projects[0].Documents[3].Name == "Document4" &&
-                ws.Projects[0].Documents[3].ID == "4" &&
+                ws.Projects[0].Documents[3].ID == "B997452E-AC89-40B5-B304-525F93CCC0A4" &&
                 ws.Projects[0].Documents[4].Path == "Workspace/Project1/Folder2/Folder21" &&
                 ws.Projects[0].Documents[4].Name == "Document5" &&
-                ws.Projects[0].Documents[4].ID == "5" &&
+                ws.Projects[0].Documents[4].ID == "B997452E-AC89-40B5-B304-525F93CCC0A5" &&
                 ws.Projects[0].Documents[5].Path == "Workspace/Project1/Folder3/Folder32" &&
                 ws.Projects[0].Documents[5].Name == "Document6" &&
-                ws.Projects[0].Documents[5].ID == "6" &&
+                ws.Projects[0].Documents[5].ID == "B997452E-AC89-40B5-B304-525F93CCC0A6" &&
                 ws.Projects[0].Documents[6].Path == "Workspace/Project1/Folder3/Folder32/Folder1" &&
                 ws.Projects[0].Documents[6].Name == "Document1" &&
-                ws.Projects[0].Documents[6].ID != "1" &&
+                ws.Projects[0].Documents[6].ID != "B997452E-AC89-40B5-B304-525F93CCC0A1" &&
                 ws.Projects[0].Documents[7].Path == "Workspace/Project1/Folder3/Folder32/Folder1/Folder11" &&
                 ws.Projects[0].Documents[7].Name == "Document2" &&
-                ws.Projects[0].Documents[7].ID != "2" &&
+                ws.Projects[0].Documents[7].ID != "B997452E-AC89-40B5-B304-525F93CCC0A2" &&
                 ws.Projects[0].Documents[8].Path == "Workspace/Project1/Folder3/Folder32/Folder1/Folder11" &&
                 ws.Projects[0].Documents[8].Name == "Document3" &&
-                ws.Projects[0].Documents[8].ID != "3" &&
+                ws.Projects[0].Documents[8].ID != "B997452E-AC89-40B5-B304-525F93CCC0A3" &&
                 ws.Projects[0].Documents[9].Path == "Workspace/Project1/Folder3/Folder32/Folder1/Folder12" &&
                 ws.Projects[0].Documents[9].Name == "Document4" &&
-                ws.Projects[0].Documents[9].ID != "4"));
+                ws.Projects[0].Documents[9].ID != "B997452E-AC89-40B5-B304-525F93CCC0A4"));
         }
 
         /// <summary>
-        /// Test that the <see cref="ClipboardInteractor.Execute"/> method correctly pastes a copied folder and its documents to the specified location within the workspace hierarchy.
+        /// Test that the <see cref="CopyAndPasteInteractor.Execute"/> method correctly pastes a copied folder and its documents to the specified location within the workspace hierarchy.
         /// </summary>
         [Test]
         public void TestCopyAndPasteAFolderFromOneProjectToAnother()
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var copyInteractor = factory.CreateUseCase(port, ClipboardOperations.Copy);
-
-            var dto = new WorkspaceDtoBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder1/Folder11")
-                .AddChart("1", "Document1", "Workspace/Project1/Folder1/Folder11")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A1", "Document1", "Workspace/Project1/Folder1/Folder11")
                 .AddFolder("Workspace/Project1/Folder1/Folder12")
-                .AddChart("2", "Document2", "Workspace/Project1/Folder1/Folder12")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A2", "Document2", "Workspace/Project1/Folder1/Folder12")
                 .AddFolder("Workspace/Project1/Folder2")
                 .AddProject("Project2")
                 .AddFolder("Workspace/Project2/Folder2")
-                .AddChart("3", "Document3", "Workspace/Project2/Folder2")
-                .AddChart("4", "Document4", "Workspace/Project2/Folder2")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A3", "Document3", "Workspace/Project2/Folder2")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A4", "Document4", "Workspace/Project2/Folder2")
                 .AddFolder("Workspace/Project2/Folder3")
                 .CreateWorkspace();
 
-            copyInteractor.Execute(dto, "Workspace/Project1/Folder1");
+            var interactor = factory.CreateCopyAndPasteUseCase(port);
 
-            var pasteInteractor = factory.CreateUseCase(port, ClipboardOperations.Paste);
-
-            pasteInteractor.Execute(dto, "Workspace/Project2");
+            interactor.Execute(new ClipboardUseCaseArgs(workspace, "Workspace/Project1/Folder1", "Workspace/Project2"));
 
             port.Received().UpdateWorkspace(Arg.Is<WorkspaceDTO>(ws =>
                 ws.Projects.Count == 2 &&
@@ -316,10 +288,10 @@ namespace StarLab.Application.Workspace
                 ws.Projects[0].Documents.Count == 2 &&
                 ws.Projects[0].Documents[0].Path == "Workspace/Project1/Folder1/Folder11" &&
                 ws.Projects[0].Documents[0].Name == "Document1" &&
-                ws.Projects[0].Documents[0].ID == "1" &&
+                ws.Projects[0].Documents[0].ID == "B997452E-AC89-40B5-B304-525F93CCC0A1" &&
                 ws.Projects[0].Documents[1].Path == "Workspace/Project1/Folder1/Folder12" &&
                 ws.Projects[0].Documents[1].Name == "Document2" &&
-                ws.Projects[0].Documents[1].ID == "2" &&
+                ws.Projects[0].Documents[1].ID == "B997452E-AC89-40B5-B304-525F93CCC0A2" &&
                 ws.Projects[1].Folders.Count == 5 &&
                 ws.Projects[1].Folders[0].Path == "Workspace/Project2/Folder2" &&
                 ws.Projects[1].Folders[1].Path == "Workspace/Project2/Folder3" &&
@@ -329,48 +301,44 @@ namespace StarLab.Application.Workspace
                 ws.Projects[1].Documents.Count == 4 &&
                 ws.Projects[1].Documents[0].Path == "Workspace/Project2/Folder2" &&
                 ws.Projects[1].Documents[0].Name == "Document3" &&
-                ws.Projects[1].Documents[0].ID == "3" &&
+                ws.Projects[1].Documents[0].ID == "B997452E-AC89-40B5-B304-525F93CCC0A3" &&
                 ws.Projects[1].Documents[1].Path == "Workspace/Project2/Folder2" &&
                 ws.Projects[1].Documents[1].Name == "Document4" &&
-                ws.Projects[1].Documents[1].ID == "4" &&
+                ws.Projects[1].Documents[1].ID == "B997452E-AC89-40B5-B304-525F93CCC0A4" &&
                 ws.Projects[1].Documents[2].Path == "Workspace/Project2/Folder1/Folder11" &&
                 ws.Projects[1].Documents[2].Name == "Document1" &&
-                ws.Projects[1].Documents[2].ID != "1" &&
+                ws.Projects[1].Documents[2].ID != "B997452E-AC89-40B5-B304-525F93CCC0A1" &&
                 ws.Projects[1].Documents[3].Path == "Workspace/Project2/Folder1/Folder12" &&
                 ws.Projects[1].Documents[3].Name == "Document2" &&
-                ws.Projects[1].Documents[3].ID != "2"));
+                ws.Projects[1].Documents[3].ID != "B997452E-AC89-40B5-B304-525F93CCC0A2"));
         }
 
         /// <summary>
-        /// Test that the <see cref="ClipboardInteractor.Execute"/> method correctly pastes a copied folder and its documents to the specified location within the workspace hierarchy.
+        /// Test that the <see cref="CopyAndPasteInteractor.Execute"/> method correctly pastes a copied folder and its documents to the specified location within the workspace hierarchy.
         /// </summary>
         [Test]
         public void TestCopyAndPasteAFolderFromOneProjectToAFolderInAnotherProject()
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var copyInteractor = factory.CreateUseCase(port, ClipboardOperations.Copy);
-
-            var dto = new WorkspaceDtoBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder1/Folder11")
-                .AddChart("1", "Document1", "Workspace/Project1/Folder1/Folder11")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A1", "Document1", "Workspace/Project1/Folder1/Folder11")
                 .AddFolder("Workspace/Project1/Folder1/Folder12")
-                .AddChart("2", "Document2", "Workspace/Project1/Folder1/Folder12")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A2", "Document2", "Workspace/Project1/Folder1/Folder12")
                 .AddFolder("Workspace/Project1/Folder2")
                 .AddProject("Project2")
                 .AddFolder("Workspace/Project2/Folder1")
-                .AddChart("3", "Document3", "Workspace/Project2/Folder1")
-                .AddChart("4", "Document4", "Workspace/Project2/Folder1")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A3", "Document3", "Workspace/Project2/Folder1")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A4", "Document4", "Workspace/Project2/Folder1")
                 .AddFolder("Workspace/Project2/Folder2")
                 .CreateWorkspace();
 
-            copyInteractor.Execute(dto, "Workspace/Project1/Folder1");
+            var interactor = factory.CreateCopyAndPasteUseCase(port);
 
-            var pasteInteractor = factory.CreateUseCase(port, ClipboardOperations.Paste);
-
-            pasteInteractor.Execute(dto, "Workspace/Project2/Folder1");
+            interactor.Execute(new ClipboardUseCaseArgs(workspace, "Workspace/Project1/Folder1", "Workspace/Project2/Folder1"));
 
             port.Received().UpdateWorkspace(Arg.Is<WorkspaceDTO>(ws =>
                 ws.Projects.Count == 2 &&
@@ -382,10 +350,10 @@ namespace StarLab.Application.Workspace
                 ws.Projects[0].Documents.Count == 2 &&
                 ws.Projects[0].Documents[0].Path == "Workspace/Project1/Folder1/Folder11" &&
                 ws.Projects[0].Documents[0].Name == "Document1" &&
-                ws.Projects[0].Documents[0].ID == "1" &&
+                ws.Projects[0].Documents[0].ID == "B997452E-AC89-40B5-B304-525F93CCC0A1" &&
                 ws.Projects[0].Documents[1].Path == "Workspace/Project1/Folder1/Folder12" &&
                 ws.Projects[0].Documents[1].Name == "Document2" &&
-                ws.Projects[0].Documents[1].ID == "2" &&
+                ws.Projects[0].Documents[1].ID == "B997452E-AC89-40B5-B304-525F93CCC0A2" &&
                 ws.Projects[1].Folders.Count == 5 &&
                 ws.Projects[1].Folders[0].Path == "Workspace/Project2/Folder1" &&
                 ws.Projects[1].Folders[1].Path == "Workspace/Project2/Folder1/Folder1" &&
@@ -395,40 +363,36 @@ namespace StarLab.Application.Workspace
                 ws.Projects[1].Documents.Count == 4 &&
                 ws.Projects[1].Documents[0].Path == "Workspace/Project2/Folder1" &&
                 ws.Projects[1].Documents[0].Name == "Document3" &&
-                ws.Projects[1].Documents[0].ID == "3" &&
+                ws.Projects[1].Documents[0].ID == "B997452E-AC89-40B5-B304-525F93CCC0A3" &&
                 ws.Projects[1].Documents[1].Path == "Workspace/Project2/Folder1" &&
                 ws.Projects[1].Documents[1].Name == "Document4" &&
-                ws.Projects[1].Documents[1].ID == "4" &&
+                ws.Projects[1].Documents[1].ID == "B997452E-AC89-40B5-B304-525F93CCC0A4" &&
                 ws.Projects[1].Documents[2].Path == "Workspace/Project2/Folder1/Folder1/Folder11" &&
                 ws.Projects[1].Documents[2].Name == "Document1" &&
-                ws.Projects[1].Documents[2].ID != "1" &&
+                ws.Projects[1].Documents[2].ID != "B997452E-AC89-40B5-B304-525F93CCC0A1" &&
                 ws.Projects[1].Documents[3].Path == "Workspace/Project2/Folder1/Folder1/Folder12" &&
                 ws.Projects[1].Documents[3].Name == "Document2" &&
-                ws.Projects[1].Documents[3].ID != "2"));
+                ws.Projects[1].Documents[3].ID != "B997452E-AC89-40B5-B304-525F93CCC0A2"));
         }
 
         /// <summary>
-        /// Test that the <see cref="ClipboardInteractor.Execute"/> method correctly pastes a cut document to the specified location within the workspace hierarchy.
+        /// Test that the <see cref="CutAndPasteInteractor.Execute"/> method correctly pastes a cut document to the specified location within the workspace hierarchy.
         /// </summary>
         [Test]
         public void TestCutAndPasteADocument()
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var cutInteractor = factory.CreateUseCase(port, ClipboardOperations.Cut);
-
-            var dto = new WorkspaceDtoBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
-                .AddChart("1", "Document1", "Workspace/Project1/Folder1")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A1", "Document1", "Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder2")
                 .CreateWorkspace();
 
-            cutInteractor.Execute(dto, "1");
+            var interactor = factory.CreateCutAndPasteUseCase(port);
 
-            var pasteInteractor = factory.CreateUseCase(port, ClipboardOperations.Paste);
-
-            pasteInteractor.Execute(dto, "Workspace/Project1/Folder2");
+            interactor.Execute(new ClipboardUseCaseArgs(workspace, "B997452E-AC89-40B5-B304-525F93CCC0A1", "Workspace/Project1/Folder2"));
 
             port.Received().UpdateWorkspace(Arg.Is<WorkspaceDTO>(ws =>
                 ws.Projects.Count == 1 &&
@@ -438,31 +402,27 @@ namespace StarLab.Application.Workspace
                 ws.Projects[0].Documents.Count == 1 &&
                 ws.Projects[0].Documents[0].Path == "Workspace/Project1/Folder2" &&
                 ws.Projects[0].Documents[0].Name == "Document1" &&
-                ws.Projects[0].Documents[0].ID == "1"));
+                ws.Projects[0].Documents[0].ID == "B997452E-AC89-40B5-B304-525F93CCC0A1"));
         }
 
         /// <summary>
-        /// Test that the <see cref="ClipboardInteractor.Execute"/> method refuses to paste the cut document to the same location within the workspace hierarchy as the original.
+        /// Test that the <see cref="CutAndPasteInteractor.Execute"/> method refuses to paste the cut document to the same location within the workspace hierarchy as the original.
         /// </summary>
         [Test]
         public void TestCutAndPasteADocumentFailsIfSourceAndDestinationAreSameFolder()
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var cutInteractor = factory.CreateUseCase(port, ClipboardOperations.Cut);
-
-            var dto = new WorkspaceDtoBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
-                .AddChart("1", "Document1", "Workspace/Project1/Folder1")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A1", "Document1", "Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder2")
                 .CreateWorkspace();
 
-            cutInteractor.Execute(dto, "1");
+            var interactor = factory.CreateCutAndPasteUseCase(port);
 
-            var pasteInteractor = factory.CreateUseCase(port, ClipboardOperations.Paste);
-
-            pasteInteractor.Execute(dto, "Workspace/Project1/Folder1");
+            interactor.Execute(new ClipboardUseCaseArgs(workspace, "B997452E-AC89-40B5-B304-525F93CCC0A1", "Workspace/Project1/Folder1"));
 
             port.Received().ShowMessage(Arg.Is("StarLab"),
                                         Arg.Is("Cannot move 'Document1'. The destination folder is the same as the source folder."),
@@ -473,65 +433,57 @@ namespace StarLab.Application.Workspace
         }
 
         /// <summary>
-        /// Test that the <see cref="ClipboardInteractor.Execute"/> method does nothing when an existing document with the same name already exists and the paste operation is cancelled.
+        /// Test that the <see cref="CutAndPasteInteractor.Execute"/> method does nothing when an existing document with the same name already exists and the paste operation is cancelled.
         /// </summary>
         [Test]
         public void TestCutAndPasteADocumentWhenADocumentWithTheSameNameAlreadyExistsAndOperationCancelled()
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var cutInteractor = factory.CreateUseCase(port, ClipboardOperations.Cut);
-
-            var dto = new WorkspaceDtoBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
-                .AddChart("1", "Document1", "Workspace/Project1/Folder1")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A1", "Document1", "Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder2")
-                .AddChart("2", "Document1", "Workspace/Project1/Folder2")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A2", "Document1", "Workspace/Project1/Folder2")
                 .CreateWorkspace();
 
-            cutInteractor.Execute(dto, "1");
-
-            var pasteInteractor = factory.CreateUseCase(port, ClipboardOperations.Paste);
+            var interactor = factory.CreateCutAndPasteUseCase(port);
 
             port.ShowMessage(Arg.Is("StarLab"),
                              Arg.Is("A document with the name 'Document1' already exists. Do you want to replace it?"),
                              Arg.Is(InteractionType.Error),
                              Arg.Is(InteractionResponses.YesNoCancel)).Returns(InteractionResult.Cancel);
 
-            pasteInteractor.Execute(dto, "Workspace/Project1/Folder2");
+            interactor.Execute(new ClipboardUseCaseArgs(workspace, "B997452E-AC89-40B5-B304-525F93CCC0A1", "Workspace/Project1/Folder2"));
 
             port.DidNotReceive().UpdateWorkspace(Arg.Any<WorkspaceDTO>());
         }
 
         /// <summary>
-        /// Test that the <see cref="ClipboardInteractor.Execute"/> method deletes the cut document when the option to replace an existing document with the same name is not chosen.
+        /// Test that the <see cref="CutAndPasteInteractor.Execute"/> method deletes the cut document when the option to replace an existing document with the same name is not chosen.
         /// </summary>
         [Test]
         public void TestCutAndPasteADocumentWhenADocumentWithTheSameNameAlreadyExistsAndResponseIsNo()
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var cutInteractor = factory.CreateUseCase(port, ClipboardOperations.Cut);
-
-            var dto = new WorkspaceDtoBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
-                .AddChart("1", "Document1", "Workspace/Project1/Folder1")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A1", "Document1", "Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder2")
-                .AddChart("2", "Document1", "Workspace/Project1/Folder2")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A2", "Document1", "Workspace/Project1/Folder2")
                 .CreateWorkspace();
 
-            cutInteractor.Execute(dto, "1");
-
-            var pasteInteractor = factory.CreateUseCase(port, ClipboardOperations.Paste);
+            var interactor = factory.CreateCutAndPasteUseCase(port);
 
             port.ShowMessage(Arg.Is("StarLab"),
                              Arg.Is("A document with the name 'Document1' already exists. Do you want to replace it?"),
                              Arg.Is(InteractionType.Error),
                              Arg.Is(InteractionResponses.YesNoCancel)).Returns(InteractionResult.No);
 
-            pasteInteractor.Execute(dto, "Workspace/Project1/Folder2");
+            interactor.Execute(new ClipboardUseCaseArgs(workspace, "B997452E-AC89-40B5-B304-525F93CCC0A1", "Workspace/Project1/Folder2"));
 
             port.Received().UpdateWorkspace(Arg.Is<WorkspaceDTO>(ws =>
                 ws.Projects.Count == 1 &&
@@ -541,37 +493,33 @@ namespace StarLab.Application.Workspace
                 ws.Projects[0].Documents.Count == 1 &&
                 ws.Projects[0].Documents[0].Path == "Workspace/Project1/Folder2" &&
                 ws.Projects[0].Documents[0].Name == "Document1" &&
-                ws.Projects[0].Documents[0].ID == "2"));
+                ws.Projects[0].Documents[0].ID == "B997452E-AC89-40B5-B304-525F93CCC0A2"));
         }
 
         /// <summary>
-        /// Test that the <see cref="ClipboardInteractor.Execute"/> method replaces an existing document with the same name as the cut document when the option to replace the existing document is chosen.
+        /// Test that the <see cref="CutAndPasteInteractor.Execute"/> method replaces an existing document with the same name as the cut document when the option to replace the existing document is chosen.
         /// </summary>
         [Test]
         public void TestCutAndPasteADocumentWhenADocumentWithTheSameNameAlreadyExistsAndResponseIsYes()
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var cutInteractor = factory.CreateUseCase(port, ClipboardOperations.Cut);
-
-            var dto = new WorkspaceDtoBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
-                .AddChart("1", "Document1", "Workspace/Project1/Folder1")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A1", "Document1", "Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder2")
-                .AddChart("2", "Document1", "Workspace/Project1/Folder2")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A2", "Document1", "Workspace/Project1/Folder2")
                 .CreateWorkspace();
 
-            cutInteractor.Execute(dto, "1");
-
-            var pasteInteractor = factory.CreateUseCase(port, ClipboardOperations.Paste);
+            var interactor = factory.CreateCutAndPasteUseCase(port);
 
             port.ShowMessage(Arg.Is("StarLab"),
                              Arg.Is("A document with the name 'Document1' already exists. Do you want to replace it?"),
                              Arg.Is(InteractionType.Error),
                              Arg.Is(InteractionResponses.YesNoCancel)).Returns(InteractionResult.Yes);
 
-            pasteInteractor.Execute(dto, "Workspace/Project1/Folder2");
+            interactor.Execute(new ClipboardUseCaseArgs(workspace, "B997452E-AC89-40B5-B304-525F93CCC0A1", "Workspace/Project1/Folder2"));
 
             port.Received().UpdateWorkspace(Arg.Is<WorkspaceDTO>(ws =>
                 ws.Projects.Count == 1 &&
@@ -581,31 +529,27 @@ namespace StarLab.Application.Workspace
                 ws.Projects[0].Documents.Count == 1 &&
                 ws.Projects[0].Documents[0].Path == "Workspace/Project1/Folder2" &&
                 ws.Projects[0].Documents[0].Name == "Document1" &&
-                ws.Projects[0].Documents[0].ID == "1"));
+                ws.Projects[0].Documents[0].ID == "B997452E-AC89-40B5-B304-525F93CCC0A1"));
         }
 
         /// <summary>
-        /// Test that the <see cref="ClipboardInteractor.Execute"/> method correctly moves a cut folder to the specified location within the workspace hierarchy.
+        /// Test that the <see cref="CutAndPasteInteractor.Execute"/> method correctly moves a cut folder to the specified location within the workspace hierarchy.
         /// </summary>
         [Test]
         public void TestCutAndPasteAFolder()
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var cutInteractor = factory.CreateUseCase(port, ClipboardOperations.Cut);
-
-            var dto = new WorkspaceDtoBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder2")
                 .AddFolder("Workspace/Project1/Folder3")
                 .CreateWorkspace();
 
-            cutInteractor.Execute(dto, "Workspace/Project1/Folder1");
+            var interactor = factory.CreateCutAndPasteUseCase(port);
 
-            var pasteInteractor = factory.CreateUseCase(port, ClipboardOperations.Paste);
-
-            pasteInteractor.Execute(dto, "Workspace/Project1/Folder2");
+            interactor.Execute(new ClipboardUseCaseArgs(workspace, "Workspace/Project1/Folder1", "Workspace/Project1/Folder2"));
 
             port.Received().UpdateWorkspace(Arg.Is<WorkspaceDTO>(ws =>
                 ws.Projects.Count == 1 &&
@@ -616,16 +560,14 @@ namespace StarLab.Application.Workspace
         }
 
         /// <summary>
-        /// Test that the <see cref="ClipboardInteractor.Execute"/> method does nothing when an existing folder with the same name already exists and the paste operation is cancelled.
+        /// Test that the <see cref="CutAndPasteInteractor.Execute"/> method does nothing when an existing folder with the same name already exists and the paste operation is cancelled.
         /// </summary>
         [Test]
         public void TestCutAndPasteAFolderWhenAFolderWithTheSameNameAlreadyExistsAndOperationCancelled()
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var cutInteractor = factory.CreateUseCase(port, ClipboardOperations.Cut);
-
-            var dto = new WorkspaceDtoBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder1/Folder3")
@@ -633,57 +575,51 @@ namespace StarLab.Application.Workspace
                 .AddFolder("Workspace/Project1/Folder2/Folder3")
                 .CreateWorkspace();
 
-            cutInteractor.Execute(dto, "Workspace/Project1/Folder1/Folder3");
-
-            var pasteInteractor = factory.CreateUseCase(port, ClipboardOperations.Paste);
+            var interactor = factory.CreateCutAndPasteUseCase(port);
 
             port.ShowMessage(Arg.Is("StarLab"),
                              Arg.Is("This folder already contains a folder called 'Folder3'.\r\n\r\nIf documents in the existing folder have the same names as documents in the folder you are copying, do you want to replace the existing documents?"),
                              Arg.Is(InteractionType.Error),
                              Arg.Is(InteractionResponses.YesNoCancel)).Returns(InteractionResult.Cancel);
 
-            pasteInteractor.Execute(dto, "Workspace/Project1/Folder2");
+            interactor.Execute(new ClipboardUseCaseArgs(workspace, "Workspace/Project1/Folder1/Folder3", "Workspace/Project1/Folder2"));
 
             port.DidNotReceive().UpdateWorkspace(Arg.Any<WorkspaceDTO>());
         }
 
         /// <summary>
-        /// Test that the <see cref="ClipboardInteractor.Execute"/> method deletes the cut folder when the option to replace an existing folder with the same name is not chosen.
+        /// Test that the <see cref="CutAndPasteInteractor.Execute"/> method deletes the cut folder when the option to replace an existing folder with the same name is not chosen.
         /// </summary>
         [Test]
         public void TestCutAndPasteAFolderWhenAFolderWithTheSameNameAlreadyExistsAndResponseIsNo()
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var cutInteractor = factory.CreateUseCase(port, ClipboardOperations.Cut);
-
-            var dto = new WorkspaceDtoBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
-                .AddChart("1", "Document1", "Workspace/Project1/Folder1")
-                .AddChart("2", "Document2", "Workspace/Project1/Folder1")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A1", "Document1", "Workspace/Project1/Folder1")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A2", "Document2", "Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder1/Folder2")
-                .AddChart("3", "Document3", "Workspace/Project1/Folder1/Folder2")
-                .AddChart("4", "Document4", "Workspace/Project1/Folder1/Folder2")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A3", "Document3", "Workspace/Project1/Folder1/Folder2")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A4", "Document4", "Workspace/Project1/Folder1/Folder2")
                 .AddFolder("Workspace/Project1/Folder3")
                 .AddFolder("Workspace/Project1/Folder3/Folder1")
-                .AddChart("5", "Document1", "Workspace/Project1/Folder3/Folder1")
-                .AddChart("6", "Document3", "Workspace/Project1/Folder3/Folder1")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A5", "Document1", "Workspace/Project1/Folder3/Folder1")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A6", "Document3", "Workspace/Project1/Folder3/Folder1")
                 .AddFolder("Workspace/Project1/Folder3/Folder1/Folder2")
-                .AddChart("7", "Document1", "Workspace/Project1/Folder3/Folder1/Folder2")
-                .AddChart("8", "Document3", "Workspace/Project1/Folder3/Folder1/Folder2")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A7", "Document1", "Workspace/Project1/Folder3/Folder1/Folder2")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A8", "Document3", "Workspace/Project1/Folder3/Folder1/Folder2")
                 .CreateWorkspace();
 
-            cutInteractor.Execute(dto, "Workspace/Project1/Folder1");
-
-            var pasteInteractor = factory.CreateUseCase(port, ClipboardOperations.Paste);
+            var interactor = factory.CreateCutAndPasteUseCase(port);
 
             port.ShowMessage(Arg.Is("StarLab"),
                              Arg.Is("This folder already contains a folder called 'Folder1'.\r\n\r\nIf documents in the existing folder have the same names as documents in the folder you are copying, do you want to replace the existing documents?"),
                              Arg.Is(InteractionType.Error),
                              Arg.Is(InteractionResponses.YesNoCancel)).Returns(InteractionResult.No);
 
-            pasteInteractor.Execute(dto, "Workspace/Project1/Folder3");
+            interactor.Execute(new ClipboardUseCaseArgs(workspace, "Workspace/Project1/Folder1", "Workspace/Project1/Folder3"));
 
             port.Received().UpdateWorkspace(Arg.Is<WorkspaceDTO>(ws =>
                 ws.Projects.Count == 1 &&
@@ -694,61 +630,57 @@ namespace StarLab.Application.Workspace
                 ws.Projects[0].Documents.Count == 6 &&
                 ws.Projects[0].Documents[0].Path == "Workspace/Project1/Folder3/Folder1" &&
                 ws.Projects[0].Documents[0].Name == "Document1" &&
-                ws.Projects[0].Documents[0].ID == "5" &&
+                ws.Projects[0].Documents[0].ID == "B997452E-AC89-40B5-B304-525F93CCC0A5" &&
                 ws.Projects[0].Documents[1].Path == "Workspace/Project1/Folder3/Folder1" &&
                 ws.Projects[0].Documents[1].Name == "Document3" &&
-                ws.Projects[0].Documents[1].ID == "6" &&
+                ws.Projects[0].Documents[1].ID == "B997452E-AC89-40B5-B304-525F93CCC0A6" &&
                 ws.Projects[0].Documents[2].Path == "Workspace/Project1/Folder3/Folder1" &&
                 ws.Projects[0].Documents[2].Name == "Document2" &&
-                ws.Projects[0].Documents[2].ID == "2" &&
+                ws.Projects[0].Documents[2].ID == "B997452E-AC89-40B5-B304-525F93CCC0A2" &&
                 ws.Projects[0].Documents[3].Path == "Workspace/Project1/Folder3/Folder1/Folder2" &&
                 ws.Projects[0].Documents[3].Name == "Document1" &&
-                ws.Projects[0].Documents[3].ID == "7" &&
+                ws.Projects[0].Documents[3].ID == "B997452E-AC89-40B5-B304-525F93CCC0A7" &&
                 ws.Projects[0].Documents[4].Path == "Workspace/Project1/Folder3/Folder1/Folder2" &&
                 ws.Projects[0].Documents[4].Name == "Document3" &&
-                ws.Projects[0].Documents[4].ID == "8" &&
+                ws.Projects[0].Documents[4].ID == "B997452E-AC89-40B5-B304-525F93CCC0A8" &&
                 ws.Projects[0].Documents[5].Path == "Workspace/Project1/Folder3/Folder1/Folder2" &&
                 ws.Projects[0].Documents[5].Name == "Document4" &&
-                ws.Projects[0].Documents[5].ID == "4"));
+                ws.Projects[0].Documents[5].ID == "B997452E-AC89-40B5-B304-525F93CCC0A4"));
         }
 
         /// <summary>
-        /// Test that the <see cref="ClipboardInteractor.Execute"/> method replaces an existing folder with the same name as the cut folder when the option to replace the existing folder is chosen.
+        /// Test that the <see cref="CutAndPasteInteractor.Execute"/> method replaces an existing folder with the same name as the cut folder when the option to replace the existing folder is chosen.
         /// </summary>
         [Test]
         public void TestCutAndPasteAFolderWhenAFolderWithTheSameNameAlreadyExistsAndResponseIsYes()
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var cutInteractor = factory.CreateUseCase(port, ClipboardOperations.Cut);
-
-            var dto = new WorkspaceDtoBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
-                .AddChart("1", "Document1", "Workspace/Project1/Folder1")
-                .AddChart("2", "Document2", "Workspace/Project1/Folder1")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A1", "Document1", "Workspace/Project1/Folder1")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A2", "Document2", "Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder1/Folder2")
-                .AddChart("3", "Document3", "Workspace/Project1/Folder1/Folder2")
-                .AddChart("4", "Document4", "Workspace/Project1/Folder1/Folder2")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A3", "Document3", "Workspace/Project1/Folder1/Folder2")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A4", "Document4", "Workspace/Project1/Folder1/Folder2")
                 .AddFolder("Workspace/Project1/Folder3")
                 .AddFolder("Workspace/Project1/Folder3/Folder1")
-                .AddChart("5", "Document1", "Workspace/Project1/Folder3/Folder1")
-                .AddChart("6", "Document3", "Workspace/Project1/Folder3/Folder1")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A5", "Document1", "Workspace/Project1/Folder3/Folder1")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A6", "Document3", "Workspace/Project1/Folder3/Folder1")
                 .AddFolder("Workspace/Project1/Folder3/Folder1/Folder2")
-                .AddChart("7", "Document1", "Workspace/Project1/Folder3/Folder1/Folder2")
-                .AddChart("8", "Document3", "Workspace/Project1/Folder3/Folder1/Folder2")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A7", "Document1", "Workspace/Project1/Folder3/Folder1/Folder2")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A8", "Document3", "Workspace/Project1/Folder3/Folder1/Folder2")
                 .CreateWorkspace();
 
-            cutInteractor.Execute(dto, "Workspace/Project1/Folder1");
-
-            var pasteInteractor = factory.CreateUseCase(port, ClipboardOperations.Paste);
+            var interactor = factory.CreateCutAndPasteUseCase(port);
 
             port.ShowMessage(Arg.Is("StarLab"),
                              Arg.Is("This folder already contains a folder called 'Folder1'.\r\n\r\nIf documents in the existing folder have the same names as documents in the folder you are copying, do you want to replace the existing documents?"),
                              Arg.Is(InteractionType.Error),
                              Arg.Is(InteractionResponses.YesNoCancel)).Returns(InteractionResult.Yes);
 
-            pasteInteractor.Execute(dto, "Workspace/Project1/Folder3");
+            interactor.Execute(new ClipboardUseCaseArgs(workspace, "Workspace/Project1/Folder1", "Workspace/Project1/Folder3"));
 
             port.Received().UpdateWorkspace(Arg.Is<WorkspaceDTO>(ws =>
                 ws.Projects.Count == 1 &&
@@ -759,35 +691,33 @@ namespace StarLab.Application.Workspace
                 ws.Projects[0].Documents.Count == 6 &&
                 ws.Projects[0].Documents[0].Path == "Workspace/Project1/Folder3/Folder1" &&
                 ws.Projects[0].Documents[0].Name == "Document3" &&
-                ws.Projects[0].Documents[0].ID == "6" &&
+                ws.Projects[0].Documents[0].ID == "B997452E-AC89-40B5-B304-525F93CCC0A6" &&
                 ws.Projects[0].Documents[1].Path == "Workspace/Project1/Folder3/Folder1" &&
                 ws.Projects[0].Documents[1].Name == "Document1" &&
-                ws.Projects[0].Documents[1].ID == "1" &&
+                ws.Projects[0].Documents[1].ID == "B997452E-AC89-40B5-B304-525F93CCC0A1" &&
                 ws.Projects[0].Documents[2].Path == "Workspace/Project1/Folder3/Folder1" &&
                 ws.Projects[0].Documents[2].Name == "Document2" &&
-                ws.Projects[0].Documents[2].ID == "2" &&
+                ws.Projects[0].Documents[2].ID == "B997452E-AC89-40B5-B304-525F93CCC0A2" &&
                 ws.Projects[0].Documents[3].Path == "Workspace/Project1/Folder3/Folder1/Folder2" &&
                 ws.Projects[0].Documents[3].Name == "Document1" &&
-                ws.Projects[0].Documents[3].ID == "7" &&
+                ws.Projects[0].Documents[3].ID == "B997452E-AC89-40B5-B304-525F93CCC0A7" &&
                 ws.Projects[0].Documents[4].Path == "Workspace/Project1/Folder3/Folder1/Folder2" &&
                 ws.Projects[0].Documents[4].Name == "Document3" &&
-                ws.Projects[0].Documents[4].ID == "3" &&
+                ws.Projects[0].Documents[4].ID == "B997452E-AC89-40B5-B304-525F93CCC0A3" &&
                 ws.Projects[0].Documents[5].Path == "Workspace/Project1/Folder3/Folder1/Folder2" &&
                 ws.Projects[0].Documents[5].Name == "Document4" &&
-                ws.Projects[0].Documents[5].ID == "4"));
+                ws.Projects[0].Documents[5].ID == "B997452E-AC89-40B5-B304-525F93CCC0A4"));
         }
 
         /// <summary>
-        /// Test that the <see cref="ClipboardInteractor.Execute"/> method correctly pastes a cut folder and its child folders to the specified location within the workspace hierarchy.
+        /// Test that the <see cref="CutAndPasteInteractor.Execute"/> method correctly pastes a cut folder and its child folders to the specified location within the workspace hierarchy.
         /// </summary>
         [Test]
         public void TestCutAndPasteAFolderWithChildFolders()
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var cutInteractor = factory.CreateUseCase(port, ClipboardOperations.Cut);
-
-            var dto = new WorkspaceDtoBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder1/Folder11")
@@ -795,11 +725,9 @@ namespace StarLab.Application.Workspace
                 .AddFolder("Workspace/Project1/Folder2")
                 .CreateWorkspace();
 
-            cutInteractor.Execute(dto, "Workspace/Project1/Folder1");
+            var interactor = factory.CreateCutAndPasteUseCase(port);
 
-            var pasteInteractor = factory.CreateUseCase(port, ClipboardOperations.Paste);
-
-            pasteInteractor.Execute(dto, "Workspace/Project1/Folder2");
+            interactor.Execute(new ClipboardUseCaseArgs(workspace, "Workspace/Project1/Folder1", "Workspace/Project1/Folder2"));
 
             port.Received().UpdateWorkspace(Arg.Is<WorkspaceDTO>(ws =>
                 ws.Projects.Count == 1 &&
@@ -811,28 +739,24 @@ namespace StarLab.Application.Workspace
         }
 
         /// <summary>
-        /// Test that the <see cref="ClipboardInteractor.Execute"/> method correctly pastes a cut folder and its documents to the specified location within the workspace hierarchy.
+        /// Test that the <see cref="CutAndPasteInteractor.Execute"/> method correctly pastes a cut folder and its documents to the specified location within the workspace hierarchy.
         /// </summary>
         [Test]
         public void TestCutAndPasteAFolderWithDocuments()
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var cutInteractor = factory.CreateUseCase(port, ClipboardOperations.Cut);
-
-            var dto = new WorkspaceDtoBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
-                .AddChart("1", "Document1", "Workspace/Project1/Folder1")
-                .AddChart("2", "Document2", "Workspace/Project1/Folder1")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A1", "Document1", "Workspace/Project1/Folder1")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A2", "Document2", "Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder2")
                 .CreateWorkspace();
 
-            cutInteractor.Execute(dto, "Workspace/Project1/Folder1");
+            var interactor = factory.CreateCutAndPasteUseCase(port);
 
-            var pasteInteractor = factory.CreateUseCase(port, ClipboardOperations.Paste);
-
-            pasteInteractor.Execute(dto, "Workspace/Project1/Folder2");
+            interactor.Execute(new ClipboardUseCaseArgs(workspace, "Workspace/Project1/Folder1", "Workspace/Project1/Folder2"));
 
             port.Received().UpdateWorkspace(Arg.Is<WorkspaceDTO>(ws =>
                 ws.Projects.Count == 1 &&
@@ -842,45 +766,41 @@ namespace StarLab.Application.Workspace
                 ws.Projects[0].Documents.Count == 2 &&
                 ws.Projects[0].Documents[0].Path == "Workspace/Project1/Folder2/Folder1" &&
                 ws.Projects[0].Documents[0].Name == "Document1" &&
-                ws.Projects[0].Documents[0].ID == "1" &&
+                ws.Projects[0].Documents[0].ID == "B997452E-AC89-40B5-B304-525F93CCC0A1" &&
                 ws.Projects[0].Documents[1].Path == "Workspace/Project1/Folder2/Folder1" &&
                 ws.Projects[0].Documents[1].Name == "Document2" &&
-                ws.Projects[0].Documents[1].ID == "2"));
+                ws.Projects[0].Documents[1].ID == "B997452E-AC89-40B5-B304-525F93CCC0A2"));
         }
 
         /// <summary>
-        /// Test that the <see cref="ClipboardInteractor.Execute"/> method correctly pastes a cut folder containing child folders and documents to the specified location within the workspace hierarchy.
+        /// Test that the <see cref="CutAndPasteInteractor.Execute"/> method correctly pastes a cut folder containing child folders and documents to the specified location within the workspace hierarchy.
         /// </summary>
         [Test]
         public void TestCutAndPasteFoldersWithChildFoldersAndDocuments()
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var cutInteractor = factory.CreateUseCase(port, ClipboardOperations.Cut);
-
-            var dto = new WorkspaceDtoBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
-                .AddChart("1", "Document1", "Workspace/Project1/Folder1")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A1", "Document1", "Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder1/Folder11")
-                .AddChart("2", "Document2", "Workspace/Project1/Folder1/Folder11")
-                .AddChart("3", "Document3", "Workspace/Project1/Folder1/Folder11")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A2", "Document2", "Workspace/Project1/Folder1/Folder11")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A3", "Document3", "Workspace/Project1/Folder1/Folder11")
                 .AddFolder("Workspace/Project1/Folder1/Folder12")
-                .AddChart("4", "Document4", "Workspace/Project1/Folder1/Folder12")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A4", "Document4", "Workspace/Project1/Folder1/Folder12")
                 .AddFolder("Workspace/Project1/Folder2")
                 .AddFolder("Workspace/Project1/Folder2/Folder21")
-                .AddChart("5", "Document5", "Workspace/Project1/Folder2/Folder21")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A5", "Document5", "Workspace/Project1/Folder2/Folder21")
                 .AddFolder("Workspace/Project1/Folder3")
                 .AddFolder("Workspace/Project1/Folder3/Folder31")
                 .AddFolder("Workspace/Project1/Folder3/Folder32")
-                .AddChart("6", "Document6", "Workspace/Project1/Folder3/Folder32")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A6", "Document6", "Workspace/Project1/Folder3/Folder32")
                 .CreateWorkspace();
 
-            cutInteractor.Execute(dto, "Workspace/Project1/Folder1");
+            var interactor = factory.CreateCutAndPasteUseCase(port);
 
-            var pasteInteractor = factory.CreateUseCase(port, ClipboardOperations.Paste);
-
-            pasteInteractor.Execute(dto, "Workspace/Project1/Folder3/Folder32");
+            interactor.Execute(new ClipboardUseCaseArgs(workspace, "Workspace/Project1/Folder1", "Workspace/Project1/Folder3/Folder32"));
 
             port.Received().UpdateWorkspace(Arg.Is<WorkspaceDTO>(ws =>
                 ws.Projects.Count == 1 &&
@@ -896,54 +816,50 @@ namespace StarLab.Application.Workspace
                 ws.Projects[0].Documents.Count == 6 &&
                 ws.Projects[0].Documents[0].Path == "Workspace/Project1/Folder2/Folder21" &&
                 ws.Projects[0].Documents[0].Name == "Document5" &&
-                ws.Projects[0].Documents[0].ID == "5" &&
+                ws.Projects[0].Documents[0].ID == "B997452E-AC89-40B5-B304-525F93CCC0A5" &&
                 ws.Projects[0].Documents[1].Path == "Workspace/Project1/Folder3/Folder32" &&
                 ws.Projects[0].Documents[1].Name == "Document6" &&
-                ws.Projects[0].Documents[1].ID == "6" &&
+                ws.Projects[0].Documents[1].ID == "B997452E-AC89-40B5-B304-525F93CCC0A6" &&
                 ws.Projects[0].Documents[2].Path == "Workspace/Project1/Folder3/Folder32/Folder1" &&
                 ws.Projects[0].Documents[2].Name == "Document1" &&
-                ws.Projects[0].Documents[2].ID == "1" &&
+                ws.Projects[0].Documents[2].ID == "B997452E-AC89-40B5-B304-525F93CCC0A1" &&
                 ws.Projects[0].Documents[3].Path == "Workspace/Project1/Folder3/Folder32/Folder1/Folder11" &&
                 ws.Projects[0].Documents[3].Name == "Document2" &&
-                ws.Projects[0].Documents[3].ID == "2" &&
+                ws.Projects[0].Documents[3].ID == "B997452E-AC89-40B5-B304-525F93CCC0A2" &&
                 ws.Projects[0].Documents[4].Path == "Workspace/Project1/Folder3/Folder32/Folder1/Folder11" &&
                 ws.Projects[0].Documents[4].Name == "Document3" &&
-                ws.Projects[0].Documents[4].ID == "3" &&
+                ws.Projects[0].Documents[4].ID == "B997452E-AC89-40B5-B304-525F93CCC0A3" &&
                 ws.Projects[0].Documents[5].Path == "Workspace/Project1/Folder3/Folder32/Folder1/Folder12" &&
                 ws.Projects[0].Documents[5].Name == "Document4" &&
-                ws.Projects[0].Documents[5].ID == "4"));
+                ws.Projects[0].Documents[5].ID == "B997452E-AC89-40B5-B304-525F93CCC0A4"));
         }
 
         /// <summary>
-        /// Test that the <see cref="ClipboardInteractor.Execute"/> method correctly pastes a cut folder and its documents to the specified location within the workspace hierarchy.
+        /// Test that the <see cref="CutAndPasteInteractor.Execute"/> method correctly pastes a cut folder and its documents to the specified location within the workspace hierarchy.
         /// </summary>
         [Test]
         public void TestCutAndPasteAFolderFromOneProjectToAnother()
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var cutInteractor = factory.CreateUseCase(port, ClipboardOperations.Cut);
-
-            var dto = new WorkspaceDtoBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder1/Folder11")
-                .AddChart("1", "Document1", "Workspace/Project1/Folder1/Folder11")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A1", "Document1", "Workspace/Project1/Folder1/Folder11")
                 .AddFolder("Workspace/Project1/Folder1/Folder12")
-                .AddChart("2", "Document2", "Workspace/Project1/Folder1/Folder12")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A2", "Document2", "Workspace/Project1/Folder1/Folder12")
                 .AddFolder("Workspace/Project1/Folder2")
                 .AddProject("Project2")
                 .AddFolder("Workspace/Project2/Folder2")
-                .AddChart("3", "Document3", "Workspace/Project2/Folder2")
-                .AddChart("4", "Document4", "Workspace/Project2/Folder2")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A3", "Document3", "Workspace/Project2/Folder2")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A4", "Document4", "Workspace/Project2/Folder2")
                 .AddFolder("Workspace/Project2/Folder3")
                 .CreateWorkspace();
 
-            cutInteractor.Execute(dto, "Workspace/Project1/Folder1");
+            var interactor = factory.CreateCutAndPasteUseCase(port);
 
-            var pasteInteractor = factory.CreateUseCase(port, ClipboardOperations.Paste);
-
-            pasteInteractor.Execute(dto, "Workspace/Project2");
+            interactor.Execute(new ClipboardUseCaseArgs(workspace, "Workspace/Project1/Folder1", "Workspace/Project2"));
 
             port.Received().UpdateWorkspace(Arg.Is<WorkspaceDTO>(ws =>
                 ws.Projects.Count == 2 &&
@@ -959,48 +875,44 @@ namespace StarLab.Application.Workspace
                 ws.Projects[1].Documents.Count == 4 &&
                 ws.Projects[1].Documents[0].Path == "Workspace/Project2/Folder2" &&
                 ws.Projects[1].Documents[0].Name == "Document3" &&
-                ws.Projects[1].Documents[0].ID == "3" &&
+                ws.Projects[1].Documents[0].ID == "B997452E-AC89-40B5-B304-525F93CCC0A3" &&
                 ws.Projects[1].Documents[1].Path == "Workspace/Project2/Folder2" &&
                 ws.Projects[1].Documents[1].Name == "Document4" &&
-                ws.Projects[1].Documents[1].ID == "4" &&
+                ws.Projects[1].Documents[1].ID == "B997452E-AC89-40B5-B304-525F93CCC0A4" &&
                 ws.Projects[1].Documents[2].Path == "Workspace/Project2/Folder1/Folder11" &&
                 ws.Projects[1].Documents[2].Name == "Document1" &&
-                ws.Projects[1].Documents[2].ID == "1" &&
+                ws.Projects[1].Documents[2].ID == "B997452E-AC89-40B5-B304-525F93CCC0A1" &&
                 ws.Projects[1].Documents[3].Path == "Workspace/Project2/Folder1/Folder12" &&
                 ws.Projects[1].Documents[3].Name == "Document2" &&
-                ws.Projects[1].Documents[3].ID == "2"));
+                ws.Projects[1].Documents[3].ID == "B997452E-AC89-40B5-B304-525F93CCC0A2"));
         }
 
         /// <summary>
-        /// Test that the <see cref="ClipboardInteractor.Execute"/> method correctly pastes a cut folder and its documents to the specified location within the workspace hierarchy.
+        /// Test that the <see cref="CutAndPasteInteractor.Execute"/> method correctly pastes a cut folder and its documents to the specified location within the workspace hierarchy.
         /// </summary>
         [Test]
         public void TestCutAndPasteAFolderFromOneProjectToAFolderInAnotherProject()
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
-            var cutInteractor = factory.CreateUseCase(port, ClipboardOperations.Cut);
-
-            var dto = new WorkspaceDtoBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder1/Folder11")
-                .AddChart("1", "Document1", "Workspace/Project1/Folder1/Folder11")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A1", "Document1", "Workspace/Project1/Folder1/Folder11")
                 .AddFolder("Workspace/Project1/Folder1/Folder12")
-                .AddChart("2", "Document2", "Workspace/Project1/Folder1/Folder12")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A2", "Document2", "Workspace/Project1/Folder1/Folder12")
                 .AddFolder("Workspace/Project1/Folder2")
                 .AddProject("Project2")
                 .AddFolder("Workspace/Project2/Folder1")
-                .AddChart("3", "Document3", "Workspace/Project2/Folder1")
-                .AddChart("4", "Document4", "Workspace/Project2/Folder1")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A3", "Document3", "Workspace/Project2/Folder1")
+                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A4", "Document4", "Workspace/Project2/Folder1")
                 .AddFolder("Workspace/Project2/Folder2")
                 .CreateWorkspace();
 
-            cutInteractor.Execute(dto, "Workspace/Project1/Folder1");
+            var interactor = factory.CreateCutAndPasteUseCase(port);
 
-            var pasteInteractor = factory.CreateUseCase(port, ClipboardOperations.Paste);
-
-            pasteInteractor.Execute(dto, "Workspace/Project2/Folder1");
+            interactor.Execute(new ClipboardUseCaseArgs(workspace, "Workspace/Project1/Folder1", "Workspace/Project2/Folder1"));
 
             port.Received().UpdateWorkspace(Arg.Is<WorkspaceDTO>(ws =>
                 ws.Projects.Count == 2 &&
@@ -1016,16 +928,16 @@ namespace StarLab.Application.Workspace
                 ws.Projects[1].Documents.Count == 4 &&
                 ws.Projects[1].Documents[0].Path == "Workspace/Project2/Folder1" &&
                 ws.Projects[1].Documents[0].Name == "Document3" &&
-                ws.Projects[1].Documents[0].ID == "3" &&
+                ws.Projects[1].Documents[0].ID == "B997452E-AC89-40B5-B304-525F93CCC0A3" &&
                 ws.Projects[1].Documents[1].Path == "Workspace/Project2/Folder1" &&
                 ws.Projects[1].Documents[1].Name == "Document4" &&
-                ws.Projects[1].Documents[1].ID == "4" &&
+                ws.Projects[1].Documents[1].ID == "B997452E-AC89-40B5-B304-525F93CCC0A4" &&
                 ws.Projects[1].Documents[2].Path == "Workspace/Project2/Folder1/Folder1/Folder11" &&
                 ws.Projects[1].Documents[2].Name == "Document1" &&
-                ws.Projects[1].Documents[2].ID == "1" &&
+                ws.Projects[1].Documents[2].ID == "B997452E-AC89-40B5-B304-525F93CCC0A1" &&
                 ws.Projects[1].Documents[3].Path == "Workspace/Project2/Folder1/Folder1/Folder12" &&
                 ws.Projects[1].Documents[3].Name == "Document2" &&
-                ws.Projects[1].Documents[3].ID == "2"));
+                ws.Projects[1].Documents[3].ID == "B997452E-AC89-40B5-B304-525F93CCC0A2"));
         }
     }
 }

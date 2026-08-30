@@ -85,11 +85,6 @@ namespace StarLab.UI.Workspace.Documents
         {
             if (this.presenter != null) throw new InvalidOperationException(Resources.PresenterAlreadyAttached);
 
-            if (presenter is IDocumentController controller)
-            {
-                if (controller.DocumentID != DocumentID) throw new InvalidOperationException(string.Format(Resources.InvalidPresenterID, new ControllerID(this)));
-            }
-
             this.presenter = (IDockableViewPresenter)presenter;
 
             log.Debug(string.Format(LogEntries.PresenterAttached, $"{presenter.GetType().Name}({ID}:{Name})"));

@@ -1,7 +1,7 @@
 ﻿namespace StarLab.Application.Workspace.Documents.Tables
 {
     /// <summary>
-    /// Domain model representation of a table.
+    /// Application model representation of a table.
     /// </summary>
     internal class Table
     {

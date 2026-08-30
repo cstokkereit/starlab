@@ -238,16 +238,14 @@ namespace StarLab.Presentation.Workspace.Documents
                 .AddTitle("Chart-1.2")
                 .CreateChart();
 
-            var dtoWorkspace = new WorkspaceDtoBuilder(@"C:\Workspace-1")
+            var workspace = CreateWorkspace(new WorkspaceDtoBuilder(@"C:\Workspace-1")
                 .AddProject("Project-1")
                 .AddFolder("Workspace-1/Project-1/Folder-1")
                 .AddChart("19542B1A-36A5-494F-B6B0-CB562FA36CAB", "ChartView", "Chart-1.1", "Workspace-1/Project-1/Folder-1")
                 .AddChart("19542B1A-36A5-494F-B6B0-CB562FA36CAB", chart1)
                 .AddChart("19542B1A-36A5-494F-B6B0-CB562FA36CAC", "ChartView", "Chart-1.2", "Workspace-1/Project-1/Folder-1")
                 .AddChart("19542B1A-36A5-494F-B6B0-CB562FA36CAC", chart2)
-                .CreateWorkspace();
-
-            var workspace = CreateWorkspace(dtoWorkspace);
+                .CreateWorkspace());
 
             var presenter = CreatePresenter(true);
             

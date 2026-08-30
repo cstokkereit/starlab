@@ -368,7 +368,7 @@ namespace StarLab.UI.Workspace.Documents.Charts
         readonly Coordinates[] DataPoints;
         Coordinates MouseDownCoordinates;
         Coordinates MouseNowCoordinates;
-        CoordinateRect MouseSlectionRect => new(MouseDownCoordinates, MouseNowCoordinates);
+        CoordinateRect MouseSelectionRect => new(MouseDownCoordinates, MouseNowCoordinates);
         bool MouseIsDown = true;
 
         bool selectPoints = false;
@@ -467,7 +467,7 @@ namespace StarLab.UI.Workspace.Documents.Charts
             formsPlot.Plot.Remove<Marker>();
 
             // identify selectedPoints
-            var selectedPoints = scatter.Data.GetScatterPoints().Where(x => MouseSlectionRect.Contains(x));
+            var selectedPoints = scatter.Data.GetScatterPoints().Where(x => MouseSelectionRect.Contains(x));
 
             // add markers to outline selected points
             foreach (Coordinates selectedPoint in selectedPoints)
@@ -495,7 +495,7 @@ namespace StarLab.UI.Workspace.Documents.Charts
                 return;
 
             MouseNowCoordinates = formsPlot.Plot.GetCoordinates(e.X, e.Y);
-            RectanglePlot.CoordinateRect = MouseSlectionRect;
+            RectanglePlot.CoordinateRect = MouseSelectionRect;
             formsPlot.Refresh();
         }
     }

@@ -2,6 +2,9 @@
 <Workspace xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ActiveDocument="">
   <Projects>
     <Project expanded="true" name="Henry Draper Catalog">
+      <Database host="localhost" port="27017" name="local">
+        
+      </Database>
       <Documents>
         <Document id="fb97ba9c-7b51-43f9-9025-ed54a90db990" name="HR-Diagram 1" path="Workspace/Henry Draper Catalog/Charts/HRDiagrams/HRDiagrams" type="Chart" view="ColourMagnitudeDiagram">
           <Chart backColour="Black" foreColour="Green">
@@ -201,6 +204,9 @@
       </Folders>
     </Project>
     <Project expanded="true" name="Yale Bright Star Catalog">
+      <Database host="localhost" port="27017" name="local">
+
+      </Database>
       <Documents>
         <Document id="577cb05b-c02f-499c-bc36-deb47aff9029" name="HR-Diagram 1" path="Workspace/Yale Bright Star Catalog/Charts/HRDiagrams" type="Chart" view="ColourMagnitudeDiagram">
           <Chart backColour="Black" foreColour="Green">

@@ -1,7 +1,7 @@
 ﻿namespace StarLab.Application.Workspace.Documents.Charts
 {
     /// <summary>
-    /// Domain model representation of a chart axis.
+    /// Application model representation of a chart axis.
     /// </summary>
     internal class Axis
     {

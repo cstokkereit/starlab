@@ -6,6 +6,13 @@
     public interface IWorkspaceExplorerViewPresenter : IChildViewPresenter
     {
         /// <summary>
+        /// Creates a context menu for the specified database node using the <see cref="IMenuManager"/> provided.
+        /// </summary>
+        /// <param name="project">The database path.</param>
+        /// <param name="manager">The context menu manager.</param>
+        void CreateDatabaseContextMenu(string database, IMenuManager manager);
+
+        /// <summary>
         /// Creates a context menu for the specified document node using the <see cref="IMenuManager"/> provided.
         /// </summary>
         /// <param name="id">The document ID.</param>

@@ -16,11 +16,6 @@
         public const int DefaultMajorTickMarkLength = 4;
         public const int DefaultMinorTickMarkLength = 2;
 
-        public const string InvalidOperationMessage = "The item with key '{0}' is not valid for the current operation.";
-        public const string InvalidPathMessage = "The path cannot be an empty string.";
-
-        public const string NameExistsMessage = "A {0} with the name '{1}' already exists.";
-
         public const string Table = "Table";
 
         public const string Workspace = "Workspace";

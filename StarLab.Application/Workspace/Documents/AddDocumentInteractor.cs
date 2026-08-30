@@ -9,7 +9,7 @@ namespace StarLab.Application.Workspace.Documents
     /// <summary>
     /// A use case that adds a document to a folder in the workspace hierarchy.
     /// </summary>
-    internal class AddDocumentInteractor : UseCaseInteractor<IWorkspaceOutputPort>, IUseCase<WorkspaceDTO, DocumentDTO>
+    internal class AddDocumentInteractor : UseCaseInteractor<IWorkspaceOutputPort>, IUseCase<AddDocumentUseCaseArgs>
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(AddDocumentInteractor)); // The logger that will be used for writing log messages.
 
@@ -24,33 +24,29 @@ namespace StarLab.Application.Workspace.Documents
         /// <summary>
         /// Executes the use case.
         /// </summary>
-        /// <param name="dtoWorkspace">A <see cref="WorkspaceDTO"/> that specifies the current state of the workspace.</param>
-        /// <param name="dtoDocument">A <see cref="DocumentDTO"/> that defines the document being added.</param>
-        public void Execute(WorkspaceDTO dtoWorkspace, DocumentDTO dtoDocument)
+        /// <param name="args">The <see cref="AddDocumentUseCaseArgs"/> that provide all of the information required to execute the use case.</param>
+        public void Execute(AddDocumentUseCaseArgs args)
         {
-            ArgumentNullException.ThrowIfNull(dtoWorkspace, nameof(dtoWorkspace));
-            ArgumentNullException.ThrowIfNull(dtoDocument, nameof(dtoDocument));
+            var workspace = new Workspace(args.Workspace);
 
-            var workspace = new Workspace(dtoWorkspace);
-
-            if (string.IsNullOrEmpty(dtoDocument.Name))
+            if (string.IsNullOrEmpty(args.Document.Name))
             {
-                dtoDocument.Name = WorkspaceInteractionHelper.GetDefaultName(workspace.GetFolder(dtoDocument.Path), dtoDocument);
+                args.Document.Name = WorkspaceInteractionHelper.GetDefaultName(workspace.GetFolder(args.Document.Path), args.Document);
             }
 
-            if (WorkspaceInteractionHelper.IsValid(dtoDocument.Name))
+            if (WorkspaceInteractionHelper.IsValid(args.Document.Name))
             {
                 try
                 {
-                    var folder = workspace.GetFolder(dtoDocument.Path);
-                    var document = CreateDocument(dtoDocument, folder);
+                    var document = CreateDocument(args.Document, workspace.GetFolder(args.Document.Path));
+
                     workspace.AddDocument(document);
 
                     var dto = Mapper.Map<WorkspaceDTO>(workspace);
 
                     OutputPort.UpdateWorkspace(Mapper.Map<WorkspaceDTO>(workspace));
 
-                    OutputPort.OpenDocument(document.ID);
+                    OutputPort.OpenDocument(document.ID.ToString());
                 }
                 catch (NameExistsException e)
                 {
@@ -59,7 +55,7 @@ namespace StarLab.Application.Workspace.Documents
             }
             else
             {
-                OutputPort.ShowMessage(Resources.StarLab, WorkspaceInteractionHelper.CreateInvalidNameMessage(dtoDocument.Name, Resources.Document), InteractionType.Error, InteractionResponses.OK);
+                OutputPort.ShowMessage(Resources.StarLab, WorkspaceInteractionHelper.CreateInvalidNameMessage(args.Document.Name, Resources.Document), InteractionType.Error, InteractionResponses.OK);
             }
         }
 

@@ -2,11 +2,13 @@
 
 using StarLab.Application;
 using StarLab.Application.Workspace;
+using StarLab.Application.Workspace.Documents;
 using StarLab.Presentation.Configuration;
 using StarLab.Presentation.Workspace.Documents;
 using StarLab.Tests;
 using Stratosoft.Commands;
 using System.Drawing;
+using static SkiaSharp.HarfBuzz.SKShaper;
 
 namespace StarLab.Presentation.Workspace.WorkspaceExplorer
 {
@@ -223,27 +225,58 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         }
 
         /// <summary>
-        /// Test that the <see cref="WorkspaceExplorerViewPresenter.Copy(string)"/> method works correctly.
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.Copy(string)"/> and <see cref="WorkspaceExplorerViewPresenter.Paste(string)"/> methods work correctly for a document.
         /// </summary>
         [Test]
-        public void TestCopy()
+        public void TestCopyAndPasteDocument()
         {
             var workspace = new Workspace(new WorkspaceDtoBuilder(@"C:\Test\Workspace-2")
                 .AddProject("Project-1")
                 .AddFolder("Workspace/Project-1/Folder-1")
+                .AddFolder("Workspace/Project-1/Folder-2")
+                .AddChart("19542B1A-36A5-494F-B6B0-CB562FA36CAC", "ChartView", "Chart-1.1", "Workspace-1/Project-1/Folder-1")
                 .CreateWorkspace());
 
-            var interactor = Substitute.For<IUseCase<WorkspaceDTO, string>>();
+            var interactor = Substitute.For<IUseCase<ClipboardUseCaseArgs>>();
 
-            factory.CreateUseCase(Arg.Any<IWorkspaceOutputPort>(), ClipboardOperations.Copy).Returns(interactor);
+            factory.CreateCopyAndPasteUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
 
             var presenter = CreatePresenter(true);
 
             presenter.OnEvent(new WorkspaceChangedEventArgs(workspace));
 
-            presenter.Copy("Workspace/Project-1/Folder-1");
+            presenter.Copy("19542B1A-36A5-494F-B6B0-CB562FA36CAC");
 
-            interactor.Received(1).Execute(Arg.Is<WorkspaceDTO>(ws => ws.FileName == @"C:\Test\Workspace-2"), "Workspace/Project-1/Folder-1");
+            presenter.Paste("Workspace/Project-1/Folder-2");
+
+            interactor.Received(1).Execute(Arg.Is<ClipboardUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-2" && args.Source == "19542B1A-36A5-494F-B6B0-CB562FA36CAC" && args.Destination == "Workspace/Project-1/Folder-2"));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.Copy(string)"/> and <see cref="WorkspaceExplorerViewPresenter.Paste(string)"/> methods work correctly for a folder.
+        /// </summary>
+        [Test]
+        public void TestCopyAndPasteFolder()
+        {
+            var workspace = new Workspace(new WorkspaceDtoBuilder(@"C:\Test\Workspace-2")
+                .AddProject("Project-1")
+                .AddFolder("Workspace/Project-1/Folder-1")
+                .AddFolder("Workspace/Project-1/Folder-2")
+                .CreateWorkspace());
+
+            var interactor = Substitute.For<IUseCase<ClipboardUseCaseArgs>>();
+
+            factory.CreateCopyAndPasteUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
+
+            var presenter = CreatePresenter(true);
+
+            presenter.OnEvent(new WorkspaceChangedEventArgs(workspace));
+
+            presenter.Copy("Workspace/Project-1/Folder-2");
+
+            presenter.Paste("Workspace/Project-1/Folder-1");
+
+            interactor.Received(1).Execute(Arg.Is<ClipboardUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-2" && args.Source == "Workspace/Project-1/Folder-2" && args.Destination == "Workspace/Project-1/Folder-1"));
         }
 
         /// <summary>
@@ -255,6 +288,23 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
             var presenter = CreatePresenter(true);
 
             Assert.Throws<ArgumentException>(() => presenter.Copy(string.Empty));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.CreateDatabaseContextMenu(string, IMenuManager)"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestCreateDatabaseContextMenu()
+        {
+            var menu = Substitute.For<IMenuManager>();
+
+            var presenter = CreatePresenter(true);
+
+            presenter.CreateDatabaseContextMenu("Workspace/Project-1/Database", menu);
+
+            //menu.Received(1).AddMenuSeparator();
+            //menu.Received(1).AddMenuItem(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<ICommand>());
+            //menu.Received(4).AddMenuItem(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<Image>(), Arg.Any<ICommand>());
         }
 
         /// <summary>
@@ -351,27 +401,62 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         }
 
         /// <summary>
-        /// Test that the <see cref="WorkspaceExplorerViewPresenter.Cut(string)"/> method works correctly.
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.Cut(string)"/> and <see cref="WorkspaceExplorerViewPresenter.Paste(string)"/> methods work correctly for a document.
         /// </summary>
         [Test]
-        public void TestCut()
+        public void TestCutAndPasteDocument()
         {
             var workspace = new Workspace(new WorkspaceDtoBuilder(@"C:\Test\Workspace-2")
                 .AddProject("Project-1")
                 .AddFolder("Workspace/Project-1/Folder-1")
+                .AddFolder("Workspace/Project-1/Folder-2")
+                .AddChart("19542B1A-36A5-494F-B6B0-CB562FA36CAC", "ChartView", "Chart-1.1", "Workspace-1/Project-1/Folder-1")
                 .CreateWorkspace());
 
-            var interactor = Substitute.For<IUseCase<WorkspaceDTO, string>>();
+            var interactor = Substitute.For<IUseCase<ClipboardUseCaseArgs>>();
 
-            factory.CreateUseCase(Arg.Any<IWorkspaceOutputPort>(), ClipboardOperations.Cut).Returns(interactor);
+            factory.CreateCutAndPasteUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
 
             var presenter = CreatePresenter(true);
 
             presenter.OnEvent(new WorkspaceChangedEventArgs(workspace));
 
-            presenter.Cut("Workspace/Project-1/Folder-1");
+            presenter.Cut("19542B1A-36A5-494F-B6B0-CB562FA36CAC");
 
-            interactor.Received(1).Execute(Arg.Is<WorkspaceDTO>(ws => ws.FileName == @"C:\Test\Workspace-2"), "Workspace/Project-1/Folder-1");
+            presenter.Paste("Workspace/Project-1/Folder-2");
+
+            interactor.Received(1).Execute(Arg.Is<ClipboardUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-2" 
+                && args.Source == "19542B1A-36A5-494F-B6B0-CB562FA36CAC" 
+                && args.Destination == "Workspace/Project-1/Folder-2"));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.Cut(string)"/> and <see cref="WorkspaceExplorerViewPresenter.Paste(string)"/> methods work correctly for a folder.
+        /// </summary>
+        [Test]
+        public void TestCutAndPasteFolder()
+        {
+            var workspace = new Workspace(new WorkspaceDtoBuilder(@"C:\Test\Workspace-2")
+                .AddProject("Project-1")
+                .AddFolder("Workspace/Project-1/Folder-1")
+                .AddFolder("Workspace/Project-1/Folder-2")
+                .CreateWorkspace());
+
+            var interactor = Substitute.For<IUseCase<ClipboardUseCaseArgs>>();
+
+            factory.CreateCutAndPasteUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
+
+            var presenter = CreatePresenter(true);
+
+            presenter.OnEvent(new WorkspaceChangedEventArgs(workspace));
+
+            presenter.Cut("Workspace/Project-1/Folder-2");
+
+            presenter.Paste("Workspace/Project-1/Folder-1");
+
+            interactor.Received(1).Execute(Arg.Is<ClipboardUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-2" 
+                && args.Source == "Workspace/Project-1/Folder-2" 
+                && args.Destination == "Workspace/Project-1/Folder-1"));
         }
 
         /// <summary>
@@ -391,7 +476,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         [Test]
         public void TestDeleteDocument()
         {
-            var interactor = Substitute.For<IUseCase<WorkspaceDTO, string>>();
+            var interactor = Substitute.For<IUseCase<DeleteDocumentUseCaseArgs>>();
 
             factory.CreateDeleteDocumentUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
 
@@ -399,7 +484,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
 
             presenter.DeleteDocument("EBD0CED6-A2D0-4A77-A65D-69EB1A0585A8");
 
-            interactor.Received(1).Execute(Arg.Is<WorkspaceDTO>(ws => ws.FileName == @"C:\Test\Workspace-1"), "EBD0CED6-A2D0-4A77-A65D-69EB1A0585A8");
+            interactor.Received(1).Execute(Arg.Is<DeleteDocumentUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.DocumentID == "EBD0CED6-A2D0-4A77-A65D-69EB1A0585A8"));
         }
 
         /// <summary>
@@ -408,7 +493,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         [Test]
         public void TestDeleteFolder()
         {
-            var interactor = Substitute.For<IUseCase<WorkspaceDTO, string>>();
+            var interactor = Substitute.For<IUseCase<DeleteFolderUseCaseArgs>>();
 
             factory.CreateDeleteFolderUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
 
@@ -416,7 +501,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
 
             presenter.DeleteFolder("Workspace/Project-1/Documents");
 
-            interactor.Received(1).Execute(Arg.Is<WorkspaceDTO>(ws => ws.FileName == @"C:\Test\Workspace-1"), "Workspace/Project-1/Documents");
+            interactor.Received(1).Execute(Arg.Is<DeleteFolderUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.Path == "Workspace/Project-1/Documents"));
         }
 
         /// <summary>
@@ -436,7 +521,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         [Test]
         public void TestDeleteProject()
         {
-            var interactor = Substitute.For<IUseCase<WorkspaceDTO, string>>();
+            var interactor = Substitute.For<IUseCase<DeleteFolderUseCaseArgs>>();
 
             factory.CreateDeleteFolderUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
 
@@ -444,7 +529,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
 
             presenter.DeleteProject("Workspace/Project-1/Documents");
 
-            interactor.Received(1).Execute(Arg.Is<WorkspaceDTO>(ws => ws.FileName == @"C:\Test\Workspace-1"), "Workspace/Project-1/Documents");
+            interactor.Received(1).Execute(Arg.Is<DeleteFolderUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.Path == "Workspace/Project-1/Documents"));
         }
 
         /// <summary>
@@ -600,30 +685,6 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         }
 
         /// <summary>
-        /// Test that the <see cref="WorkspaceExplorerViewPresenter.Paste(string)"/> method works correctly.
-        /// </summary>
-        [Test]
-        public void TestPaste()
-        {
-            var workspace = new Workspace(new WorkspaceDtoBuilder(@"C:\Test\Workspace-2")
-                .AddProject("Project-1")
-                .AddFolder("Workspace/Project-1/Folder-1")
-                .CreateWorkspace());
-
-            var interactor = Substitute.For<IUseCase<WorkspaceDTO, string>>();
-
-            factory.CreateUseCase(Arg.Any<IWorkspaceOutputPort>(), ClipboardOperations.Paste).Returns(interactor);
-
-            var presenter = CreatePresenter(true);
-
-            presenter.OnEvent(new WorkspaceChangedEventArgs(workspace));
-
-            presenter.Paste("Workspace/Project-1/Folder-1");
-
-            interactor.Received(1).Execute(Arg.Is<WorkspaceDTO>(ws => ws.FileName == @"C:\Test\Workspace-2"), "Workspace/Project-1/Folder-1");
-        }
-
-        /// <summary>
         /// Test that the <see cref="WorkspaceExplorerViewPresenter.Paste(string)"/> method throws an exception when the target is an empty string.
         /// </summary>
         [Test]
@@ -674,7 +735,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         [Test]
         public void TestRenameDocument()
         {
-            var interactor = Substitute.For<IUseCase<WorkspaceDTO, string, string>>();
+            var interactor = Substitute.For<IUseCase<RenameDocumentUseCaseArgs>>();
 
             factory.CreateRenameDocumentUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
 
@@ -684,7 +745,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
 
             presenter.RenameDocument("19542B1A-36A5-494F-B6B0-CB562FA36CAC", "Document-2");
 
-            interactor.Received(1).Execute(Arg.Is<WorkspaceDTO>(ws => ws.FileName == @"C:\Test\Workspace-1"), "19542B1A-36A5-494F-B6B0-CB562FA36CAC", "Document-2");
+            interactor.Received(1).Execute(Arg.Is<RenameDocumentUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.DocumentID == "19542B1A-36A5-494F-B6B0-CB562FA36CAC" && args.Name == "Document-2"));
         }
 
         /// <summary>
@@ -715,7 +776,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         [Test]
         public void TestRenameFolder()
         {
-            var interactor = Substitute.For<IUseCase<WorkspaceDTO, string, string>>();
+            var interactor = Substitute.For<IUseCase<RenameFolderUseCaseArgs>>();
 
             factory.CreateRenameFolderUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
 
@@ -725,7 +786,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
 
             presenter.RenameFolder("Workspace-1/Project-1/Folder-1", "Folder-2");
 
-            interactor.Received(1).Execute(Arg.Is<WorkspaceDTO>(ws => ws.FileName == @"C:\Test\Workspace-1"), "Workspace-1/Project-1/Folder-1", "Folder-2");
+            interactor.Received(1).Execute(Arg.Is<RenameFolderUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.Path == "Workspace-1/Project-1/Folder-1" && args.Name == "Folder-2"));
         }
 
         /// <summary>
@@ -785,7 +846,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         [Test]
         public void TestRenameWorkspace()
         {
-            var interactor = Substitute.For<IUseCase<WorkspaceDTO, string>>();
+            var interactor = Substitute.For<IUseCase<RenameWorkspaceUseCaseArgs>>();
 
             factory.CreateRenameWorkspaceUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
 
@@ -795,7 +856,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
 
             presenter.RenameWorkspace("Workspace-2");
 
-            interactor.Received(1).Execute(Arg.Is<WorkspaceDTO>(ws => ws.FileName == @"C:\Test\Workspace-1"), "Workspace-2");
+            interactor.Received(1).Execute(Arg.Is<RenameWorkspaceUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.Name == "Workspace-2"));
         }
 
         /// <summary>
@@ -813,11 +874,26 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// Test that the <see cref="WorkspaceExplorerViewPresenter.SetSelectedFolder(string)"/> method works correctly.
         /// </summary>
         [Test]
-        public void TestSetCurrentFolder()
+        public void TestSetSelectedFolder()
         {
             var presenter = CreatePresenter(true);
 
             presenter.SetSelectedFolder("Workspace/Project");
+
+            workspace.Received(1).SetSelectedFolder("Workspace/Project");
+        }
+
+        /// <summary>
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.SetSelectedFolder(string)"/> method works correctly when given a database node key.
+        /// </summary>
+        [Test]
+        public void TestSetSelectedFolderWithDatabaseNodeKey()
+        {
+            workspace.HasProject("Workspace/Project").Returns(true);
+
+            var presenter = CreatePresenter(true);
+
+            presenter.SetSelectedFolder("Workspace/Project/Database");
 
             workspace.Received(1).SetSelectedFolder("Workspace/Project");
         }

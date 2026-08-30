@@ -17,12 +17,12 @@ namespace StarLab.Application.Workspace
 
             var interactor = factory.CreateAddFolderUseCase(port);
 
-            var dto = new WorkspaceDtoBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .CreateWorkspace();
 
-            interactor.Execute(dto, "Workspace/Project1/Folder1");
+            interactor.Execute(new AddFolderUseCaseArgs(workspace, "Workspace/Project1/Folder1"));
 
             port.Received().UpdateWorkspace(Arg.Is<WorkspaceDTO>(ws =>
                 ws.Projects.Count == 1 &&
@@ -43,13 +43,13 @@ namespace StarLab.Application.Workspace
 
             var interactor = factory.CreateAddFolderUseCase(port);
 
-            var dto = new WorkspaceDtoBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/Folder1")
                 .AddFolder("Workspace/Project1/Folder1/New Folder")
                 .CreateWorkspace();
 
-            interactor.Execute(dto, "Workspace/Project1/Folder1");
+            interactor.Execute(new AddFolderUseCaseArgs(workspace, "Workspace/Project1/Folder1"));
 
             port.Received().UpdateWorkspace(Arg.Is<WorkspaceDTO>(ws =>
                 ws.Projects.Count == 1 &&
@@ -71,11 +71,11 @@ namespace StarLab.Application.Workspace
 
             var interactor = factory.CreateAddFolderUseCase(port);
 
-            var dto = new WorkspaceDtoBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .CreateWorkspace();
 
-            interactor.Execute(dto, "Workspace/Project1");
+            interactor.Execute(new AddFolderUseCaseArgs(workspace, "Workspace/Project1"));
 
             port.Received().UpdateWorkspace(Arg.Is<WorkspaceDTO>(ws =>
                 ws.Projects.Count == 1 &&
@@ -95,12 +95,12 @@ namespace StarLab.Application.Workspace
 
             var interactor = factory.CreateAddFolderUseCase(port);
 
-            var dto = new WorkspaceDtoBuilder("Workspace")
+            var workspace = new WorkspaceDtoBuilder("Workspace")
                 .AddProject("Project1")
                 .AddFolder("Workspace/Project1/New Folder")
                 .CreateWorkspace();
 
-            interactor.Execute(dto, "Workspace/Project1");
+            interactor.Execute(new AddFolderUseCaseArgs(workspace, "Workspace/Project1"));
 
             port.Received().UpdateWorkspace(Arg.Is<WorkspaceDTO>(ws =>
                 ws.Projects.Count == 1 &&

@@ -2,6 +2,8 @@
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using Microsoft.Extensions.Logging;
+using StarLab.Application.Data;
+using StarLab.Data.MongoDB;
 using StarLab.Serialisation;
 using System.Reflection;
 
@@ -65,6 +67,7 @@ namespace StarLab.Application
             container.Register(Component.For<IMapper>().UsingFactoryMethod(kernel => new Mapper(kernel.Resolve<AutoMapper.IConfigurationProvider>(), kernel.Resolve)));
 
             container.Register(
+                Component.For<IDatabaseManager>().ImplementedBy<DatabaseManager>(),
                 Component.For<ISerialisationProvider>().ImplementedBy<SerialisationProvider>(),
                 Classes.FromAssemblyNamed("StarLab.Serialisation").BasedOn<Profile>().WithServiceBase(),
                 Classes.FromAssemblyNamed("StarLab.Application").Where(t => t.Name.EndsWith("Factory")).WithServiceDefaultInterfaces(),

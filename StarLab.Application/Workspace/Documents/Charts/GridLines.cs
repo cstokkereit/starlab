@@ -1,7 +1,7 @@
 ﻿namespace StarLab.Application.Workspace.Documents.Charts
 {
     /// <summary>
-    /// Domain model representation of the chart grid lines.
+    /// Application model representation of the chart grid lines.
     /// </summary>
     internal class GridLines
     {

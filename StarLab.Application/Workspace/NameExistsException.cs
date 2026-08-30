@@ -14,7 +14,7 @@ namespace StarLab.Application.Workspace
         /// <param name="name">The item name.</param>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
         public NameExistsException(ItemTypes type, string name)
-            : base(string.Format(Constants.NameExistsMessage, type.ToString().ToLower(), name))
+            : base(string.Format(Resources.NameAlreadyExists, type.ToString().ToLower(), name))
         {
             switch (type)
             {

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using StarLab.Application;
 using StarLab.Application.Workspace;
+using StarLab.Application.Workspace.Documents;
 using StarLab.Presentation.Workspace.Documents;
 
 namespace StarLab.Presentation.Workspace.WorkspaceExplorer
@@ -22,51 +23,55 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// Executes the AddFolder use case.
         /// </summary>
         /// <param name="workspace">The <see cref="IWorkspace"/> being modified.</param>
-        /// <param name="key">The key that identifies the parent folder.</param>
+        /// <param name="path">The path to the parent folder.</param>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="ArgumentException"></exception>
-        public void AddFolder(IWorkspace workspace, string key)
+        public void AddFolder(IWorkspace workspace, string path)
         {
             ArgumentNullException.ThrowIfNull(workspace, nameof(workspace));
-            ArgumentException.ThrowIfNullOrEmpty(key, nameof(key));
+            ArgumentException.ThrowIfNullOrEmpty(path, nameof(path));
 
             var interactor = Factory.CreateAddFolderUseCase(ApplicationController.GetOutputPort<IWorkspaceOutputPort>());
 
-            interactor.Execute(Mapper.Map<WorkspaceDTO>(workspace), key);
+            interactor.Execute(new AddFolderUseCaseArgs(Mapper.Map<WorkspaceDTO>(workspace), path));
         }
 
         /// <summary>
-        /// Executes the Copy use case.
+        /// Executes the CopyAndPaste use case.
         /// </summary>
         /// <param name="workspace">The <see cref="IWorkspace"/> being modified.</param>
-        /// <param name="key">The key that identifies the document or folder to be copied.</param>
-        /// <exception cref="ArgumentNullException"></exception>
-        /// <exception cref="ArgumentException"></exception>
-        public void Copy(IWorkspace workspace, string key)
+        /// <param name="source">The key that identifies the source document or folder.</param>
+        /// <param name="destination">The key that identifies the destination document or folder.</param>
+        public void CopyAndPaste(IWorkspace workspace, string source, string destination)
         {
+            ArgumentException.ThrowIfNullOrEmpty(destination, nameof(destination));
             ArgumentNullException.ThrowIfNull(workspace, nameof(workspace));
-            ArgumentException.ThrowIfNullOrEmpty(key, nameof(key));
+            ArgumentException.ThrowIfNullOrEmpty(source, nameof(source));
+            
+            // TODO UseCases should not show messages directly - this could be tricky to change
 
-            var interactor = Factory.CreateUseCase(ApplicationController.GetOutputPort<IWorkspaceOutputPort>(), ClipboardOperations.Copy);
+            var interactor = Factory.CreateCopyAndPasteUseCase(ApplicationController.GetOutputPort<IWorkspaceOutputPort>());
 
-            interactor.Execute(Mapper.Map<WorkspaceDTO>(workspace), key);
+            interactor.Execute(new ClipboardUseCaseArgs(Mapper.Map<WorkspaceDTO>(workspace), source, destination));
         }
 
         /// <summary>
-        /// Executes the Cut use case.
+        /// Executes the CutAndPaste use case.
         /// </summary>
         /// <param name="workspace">The <see cref="IWorkspace"/> being modified.</param>
-        /// <param name="key">The key that identifies the document or folder to be cut.</param>
-        /// <exception cref="ArgumentNullException"></exception>
-        /// <exception cref="ArgumentException"></exception>
-        public void Cut(IWorkspace workspace, string key)
+        /// <param name="source">The key that identifies the source document or folder.</param>
+        /// <param name="destination">The key that identifies the destination document or folder.</param>
+        public void CutAndPaste(IWorkspace workspace, string source, string destination)
         {
+            ArgumentException.ThrowIfNullOrEmpty(destination, nameof(destination));
             ArgumentNullException.ThrowIfNull(workspace, nameof(workspace));
-            ArgumentException.ThrowIfNullOrEmpty(key, nameof(key));
+            ArgumentException.ThrowIfNullOrEmpty(source, nameof(source));
 
-            var interactor = Factory.CreateUseCase(ApplicationController.GetOutputPort<IWorkspaceOutputPort>(), ClipboardOperations.Cut);
+            // TODO UseCases should not show messages directly - this could be tricky to change
 
-            interactor.Execute(Mapper.Map<WorkspaceDTO>(workspace), key);
+            var interactor = Factory.CreateCutAndPasteUseCase(ApplicationController.GetOutputPort<IWorkspaceOutputPort>());
+
+            interactor.Execute(new ClipboardUseCaseArgs(Mapper.Map<WorkspaceDTO>(workspace), source, destination));
         }
 
         /// <summary>
@@ -83,79 +88,62 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
 
             var interactor = Factory.CreateDeleteDocumentUseCase(ApplicationController.GetOutputPort<IWorkspaceOutputPort>());
 
-            interactor.Execute(Mapper.Map<WorkspaceDTO>(workspace), id.ToString());
+            interactor.Execute(new DeleteDocumentUseCaseArgs(Mapper.Map<WorkspaceDTO>(workspace), id.ToString()));
         }
 
         /// <summary>
         /// Executes the DeleteFolder use case.
         /// </summary>
         /// <param name="workspace">The <see cref="IWorkspace"/> being modified.</param>
-        /// <param name="key">The key that identifies the folder to be deleted.</param>
+        /// <param name="path">The path to the folder to be deleted.</param>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="ArgumentException"></exception>
-        public void DeleteFolder(IWorkspace workspace, string key)
+        public void DeleteFolder(IWorkspace workspace, string path)
         {
             ArgumentNullException.ThrowIfNull(workspace, nameof(workspace));
-            ArgumentException.ThrowIfNullOrEmpty(key, nameof(key));
+            ArgumentException.ThrowIfNullOrEmpty(path, nameof(path));
 
             var interactor = Factory.CreateDeleteFolderUseCase(ApplicationController.GetOutputPort<IWorkspaceOutputPort>());
 
-            interactor.Execute(Mapper.Map<WorkspaceDTO>(workspace), key);
-        }
-
-        /// <summary>
-        /// Executes the Paste use case.
-        /// </summary>
-        /// <param name="workspace">The <see cref="IWorkspace"/> being modified.</param>
-        /// <param name="key">The key that identifies the destination for the document or folder.</param>
-        /// <exception cref="ArgumentNullException"></exception>
-        /// <exception cref="ArgumentException"></exception>
-        public void Paste(IWorkspace workspace, string key)
-        {
-            ArgumentNullException.ThrowIfNull(workspace, nameof(workspace));
-            ArgumentException.ThrowIfNullOrEmpty(key, nameof(key));
-
-            var interactor = Factory.CreateUseCase(ApplicationController.GetOutputPort<IWorkspaceOutputPort>(), ClipboardOperations.Paste);
-
-            interactor.Execute(Mapper.Map<WorkspaceDTO>(workspace), key);
+            interactor.Execute(new DeleteFolderUseCaseArgs(Mapper.Map<WorkspaceDTO>(workspace), path));
         }
 
         /// <summary>
         /// Executes the RenameDocument use case.
         /// </summary>
         /// <param name="workspace">The <see cref="IWorkspace"/> being modified.</param>
-        /// <param name="key">The node key.</param>
+        /// <param name="id">The document ID.</param>
         /// <param name="name">The new name.</param>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="ArgumentException"></exception>
-        public void RenameDocument(IWorkspace workspace, string key, string name)
+        public void RenameDocument(IWorkspace workspace, DocumentID id, string name)
         {
             ArgumentNullException.ThrowIfNull(workspace, nameof(workspace));
             ArgumentException.ThrowIfNullOrEmpty(name, nameof(name));
-            ArgumentException.ThrowIfNullOrEmpty(key, nameof(key));
+            ArgumentNullException.ThrowIfNull(id, nameof(id));
 
             var interactor = Factory.CreateRenameDocumentUseCase(ApplicationController.GetOutputPort<IWorkspaceOutputPort>());
 
-            interactor.Execute(Mapper.Map<WorkspaceDTO>(workspace), key, name);
+            interactor.Execute(new RenameDocumentUseCaseArgs(Mapper.Map<WorkspaceDTO>(workspace), id.ToString(), name));
         }
 
         /// <summary>
         /// Executes the RenameFolder use case.
         /// </summary>
         /// <param name="workspace">The <see cref="IWorkspace"/> being modified.</param>
-        /// <param name="key">The node key.</param>
+        /// <param name="path">The folder path.</param>
         /// <param name="name">The new name.</param>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="ArgumentException"></exception>
-        public void RenameFolder(IWorkspace workspace, string key, string name)
+        public void RenameFolder(IWorkspace workspace, string path, string name)
         {
             ArgumentNullException.ThrowIfNull(workspace, nameof(workspace));
             ArgumentException.ThrowIfNullOrEmpty(name, nameof(name));
-            ArgumentException.ThrowIfNullOrEmpty(key, nameof(key));
+            ArgumentException.ThrowIfNullOrEmpty(path, nameof(path));
 
             var interactor = Factory.CreateRenameFolderUseCase(ApplicationController.GetOutputPort<IWorkspaceOutputPort>());
 
-            interactor.Execute(Mapper.Map<WorkspaceDTO>(workspace), key, name);
+            interactor.Execute(new RenameFolderUseCaseArgs(Mapper.Map<WorkspaceDTO>(workspace), path, name));
         }
 
         /// <summary>
@@ -172,7 +160,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
 
             var interactor = Factory.CreateRenameWorkspaceUseCase(ApplicationController.GetOutputPort<IWorkspaceOutputPort>());
 
-            interactor.Execute(Mapper.Map<WorkspaceDTO>(workspace), name);
+            interactor.Execute(new RenameWorkspaceUseCaseArgs(Mapper.Map<WorkspaceDTO>(workspace), name));
         }
     }
 }

@@ -447,7 +447,7 @@ namespace StarLab.Presentation
             {
                 var path = workspace.SelectedFolder.Key;
 
-                //useCaseService.AddFolder(workspace, path); // ?????
+                useCaseService.AddFolder(workspace, path); // ?????
 
                 AppController.ShowAddDocumentDialog(workspace, path, type);
             }

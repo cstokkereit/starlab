@@ -22,6 +22,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         private enum NodeImages
         {
             ColourMagnitudeDiagram,
+            Database,
             Folder,
             Project,
             Table,
@@ -34,7 +35,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
 
         private readonly IWorkspaceExplorerUseCaseService useCaseService; // A service that executes the use cases that implement the functionality.
 
-        private string clipboard = string.Empty; // The key that identifies the current contents of the clipboard.
+        private readonly Clipboard clipboard = new Clipboard(); // TODO
 
         private IWorkspace workspace; // The workspace that the view represents.
 
@@ -97,7 +98,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// </summary>
         public void ClearClipboard()
         {
-            clipboard = string.Empty;
+            clipboard.Clear();
         }
 
         /// <summary>
@@ -123,12 +124,22 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         }
 
         /// <summary>
-        /// Copies the specified document or folder.
+        /// Initiates a clipboard copy operation.
         /// </summary>
-        /// <param name="key">The key that identifies the document or folder to be copied.</param>
-        public void Copy(string key)
+        /// <param name="source">The key that identifies the document or folder to be copied.</param>
+        public void Copy(string source)
         {
-            useCaseService.Copy(workspace, key);
+            clipboard.Copy(source);
+        }
+
+        /// <summary>
+        /// Creates a context menu for the specified database node using the <see cref="IMenuManager"/> provided.
+        /// </summary>
+        /// <param name="project">The database path.</param>
+        /// <param name="manager">The context menu manager.</param>
+        public void CreateDatabaseContextMenu(string database, IMenuManager manager)
+        {
+            // Do Nothing
         }
 
         /// <summary>
@@ -166,7 +177,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
             manager.AddMenuItem(Constants.Delete, StringResources.Delete, CreateCommand(GetCommandName(Actions.Delete, folder), () => DeleteFolder(folder)));
             manager.AddMenuItem(Constants.Rename, StringResources.Rename, ImageResources.Rename, CreateCommand(GetCommandName(Actions.Rename, folder), () => RenameFolder(folder)));
 
-            UpdateCommandState(GetCommandName(Actions.Paste, folder), !string.IsNullOrEmpty(clipboard));
+            UpdateCommandState(GetCommandName(Actions.Paste, folder), !clipboard.IsEmpty);
         }
 
         /// <summary>
@@ -188,7 +199,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
             manager.AddMenuItem(Constants.Delete, StringResources.Delete, CreateCommand(GetCommandName(Actions.Delete, project), () => DeleteProject(project)));
             manager.AddMenuItem(Constants.Rename, StringResources.Rename, ImageResources.Rename, CreateCommand(GetCommandName(Actions.Rename, project), () => RenameProject(project)));
 
-            UpdateCommandState(GetCommandName(Actions.Paste, project), !string.IsNullOrEmpty(clipboard));
+            UpdateCommandState(GetCommandName(Actions.Paste, project), !clipboard.IsEmpty);
         }
 
         /// <summary>
@@ -206,12 +217,12 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         }
 
         /// <summary>
-        /// Cuts the specified document or folder.
+        /// Initiates a clipboard cut operation.
         /// </summary>
-        /// <param name="key">The key that identifies the document or folder to be cut.</param>
-        public void Cut(string key)
+        /// <param name="source">The key that identifies the document or folder to be cut.</param>
+        public void Cut(string source)
         {
-            useCaseService.Cut(workspace, key);
+            clipboard.Cut(source);
         }
 
         /// <summary>
@@ -315,10 +326,21 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <summary>
         /// Pastes a document or folder to the specified location.
         /// </summary>
-        /// <param name="key">The key that identifies the destination for the document or folder.</param>
-        public void Paste(string key)
+        /// <param name="destination">The key that identifies the destination document or folder.</param>
+        public void Paste(string destination)
         {
-            useCaseService.Paste(workspace, key);
+            ArgumentException.ThrowIfNullOrEmpty(destination, nameof(destination));
+
+            switch (clipboard.Operation)
+            {
+                case ClipboardOperation.Copy:
+                    useCaseService.CopyAndPaste(workspace, clipboard.Source, destination);
+                    break;
+
+                case ClipboardOperation.Cut:
+                    useCaseService.CutAndPaste(workspace, clipboard.Source, destination);
+                    break;
+            }
         }
 
         /// <summary>
@@ -345,6 +367,8 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="key">The key of the node to be renamed.</param>
         public void Rename(string key)
         {
+            ArgumentException.ThrowIfNullOrEmpty(key, nameof(key));
+
             if (key == Constants.Workspace)
             {
                 View.SetNodeText(key, workspace.Name);
@@ -363,7 +387,9 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="name">The new name.</param>
         public void RenameDocument(string key, string name)
         {
-            useCaseService.RenameDocument(workspace, key, name);
+            ArgumentException.ThrowIfNullOrEmpty(key, nameof(key));
+
+            useCaseService.RenameDocument(workspace, new DocumentID(key), name);
         }
 
         /// <summary>
@@ -373,6 +399,8 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="name">The new name.</param>
         public void RenameFolder(string key, string name)
         {
+            ArgumentException.ThrowIfNullOrEmpty(key, nameof(key));
+
             useCaseService.RenameFolder(workspace, key, name);
         }
 
@@ -413,6 +441,13 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="key">The node key.</param>
         public void SetSelectedFolder(string key)
         {
+            if (key.EndsWith(Constants.Database))
+            {
+                var project = key.Substring(0, key.Length - (Constants.Database.Length + 1));
+
+                if (workspace.HasProject(project)) key = project;
+            }
+
             workspace.SetSelectedFolder(key);
         }
 
@@ -431,15 +466,6 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         public void Synchronise()
         {
             UpdateSelectedNode(true);
-        }
-
-        /// <summary>
-        /// Updates the contents of the clipboard.
-        /// </summary>
-        /// <param name="key">The key that identifies the target of the current clipboard operation.</param>
-        public void UpdateClipboard(string key)
-        {
-            clipboard = key;
         }
 
         /// <summary>
@@ -491,6 +517,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         private void AddImages()
         {
             images.Add(NodeImages.ColourMagnitudeDiagram, View.AddImage(ImageResources.ColourMagnitudeDiagram16X16));
+            images.Add(NodeImages.Database, View.AddImage(ImageResources.Database));
             images.Add(NodeImages.Folder, View.AddImage(ImageResources.Folder));
             images.Add(NodeImages.Project, View.AddImage(ImageResources.Project));
             images.Add(NodeImages.Table, View.AddImage(ImageResources.Table16X16));
@@ -538,6 +565,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
             foreach (var project in workspace.Projects)
             {
                 View.AddProjectNode(project.Key, project.ParentKey, project.Name, images[NodeImages.Project]);
+                View.AddDatabaseNode($"{project.Key}/{Constants.Database}" , project.Key, project.Database.Name, images[NodeImages.Database]);
             }
         }
 

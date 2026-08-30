@@ -3,6 +3,7 @@
 
 using StarLab.Application;
 using StarLab.Application.Workspace;
+using StarLab.Application.Workspace.Documents;
 using StarLab.Application.Workspace.Documents.Tables;
 using StarLab.Presentation.Workspace.Documents.Charts;
 using Stratosoft.Commands;
@@ -143,7 +144,7 @@ namespace StarLab.Presentation.Workspace.Documents.Tables
         [Test]
         public void TestApplySettings()
         {
-            var interactor = Substitute.For<IUseCase<WorkspaceDTO, string, TableDTO>>();
+            var interactor = Substitute.For<IUseCase<UpdateDocumentUseCaseArgs>>();
 
             //factory.CreateUpdateDocumentUseCase(Arg.Any<IApplicationOutputPort>()).Returns(interactor);
 
@@ -258,7 +259,6 @@ namespace StarLab.Presentation.Workspace.Documents.Tables
 
             var parent = Substitute.For<IDocumentController>();
             parent.ID.Returns(new ControllerID(documentID));
-            parent.DocumentID.Returns(documentID);
 
             presenter.RegisterController(parent);
 

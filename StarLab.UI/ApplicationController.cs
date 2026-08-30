@@ -45,7 +45,8 @@ namespace StarLab.UI
         /// </summary>
         /// <param name="container">An <see cref="IWindsorContainer"/> that will be used to resolve dependencies.</param>
         /// <param name="viewFactory">An <see cref="IViewFactory"/> that will be used to create the views.</param>
-        /// <param name="presenterFactory">An <see cref="IPresenterFactory"/> that will be used to create the presenters.</param>
+        /// <param name="presenterFactory">An <see cref="IPresenterFactory"/> that will be used to crea
+        /// te the presenters.</param>
         /// <param name="events">An <see cref="IEventAggregator"> that can be used for subscribing to and publishing events.</param>
         /// <exception cref="ArgumentNullException"></exception>
         public ApplicationController(IWindsorContainer container, IViewFactory viewFactory, IPresenterFactory presenterFactory, IServiceRegistry useCaseManager, IEventAggregator events)

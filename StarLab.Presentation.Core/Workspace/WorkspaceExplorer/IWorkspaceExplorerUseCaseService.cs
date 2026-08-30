@@ -7,29 +7,12 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
     /// </summary>
     public interface IWorkspaceExplorerUseCaseService
     {
-        // TODO - Change key to path for folder and DocumentID for documents. May need to overload some methods to support both.
-
-
         /// <summary>
         /// Executes the AddFolder use case.
         /// </summary>
         /// <param name="workspace">The <see cref="IWorkspace"/> being modified.</param>
-        /// <param name="key">The key that identifies the parent folder.</param>
-        void AddFolder(IWorkspace workspace, string key);
-
-        /// <summary>
-        /// Executes the Copy use case.
-        /// </summary>
-        /// <param name="workspace">The <see cref="IWorkspace"/> being modified.</param>
-        /// <param name="key">The key that identifies the document or folder to be copied.</param>
-        void Copy(IWorkspace workspace, string key);
-
-        /// <summary>
-        /// Executes the Cut use case.
-        /// </summary>
-        /// <param name="workspace">The <see cref="IWorkspace"/> being modified.</param>
-        /// <param name="key">The key that identifies the document or folder to be cut.</param>
-        void Cut(IWorkspace workspace, string key);
+        /// <param name="path">The path to the parent folder.</param>
+        void AddFolder(IWorkspace workspace, string path);
 
         /// <summary>
         /// Executes the DeleteDocument use case.
@@ -42,31 +25,40 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// Executes the DeleteFolder use case.
         /// </summary>
         /// <param name="workspace">The <see cref="IWorkspace"/> being modified.</param>
-        /// <param name="key">The key that identifies the folder to be deleted.</param>
+        /// <param name="path">The path to the folder to be deleted.</param>
         void DeleteFolder(IWorkspace workspace, string key);
 
         /// <summary>
-        /// Executes the Paste use case.
+        /// Executes the CopyAndPaste use case.
         /// </summary>
         /// <param name="workspace">The <see cref="IWorkspace"/> being modified.</param>
-        /// <param name="key">The key that identifies the destination for the document or folder.</param>
-        void Paste(IWorkspace workspace, string key);
+        /// <param name="source">The key that identifies the source document or folder.</param>
+        /// <param name="destination">The key that identifies the destination document or folder.</param>
+        void CopyAndPaste(IWorkspace workspace, string source, string destination);
+
+        /// <summary>
+        /// Executes the CutAndPaste use case.
+        /// </summary>
+        /// <param name="workspace">The <see cref="IWorkspace"/> being modified.</param>
+        /// <param name="source">The key that identifies the source document or folder.</param>
+        /// <param name="destination">The key that identifies the destination document or folder.</param>
+        void CutAndPaste(IWorkspace workspace, string source, string destination);
 
         /// <summary>
         /// Executes the RenameDocument use case.
         /// </summary>
         /// <param name="workspace">The <see cref="IWorkspace"/> being modified.</param>
-        /// <param name="key">The node key.</param>
+        /// <param name="id">The document ID.</param>
         /// <param name="name">The new name.</param>
-        void RenameDocument(IWorkspace workspace, string key, string name);
+        void RenameDocument(IWorkspace workspace, DocumentID id, string name);
 
         /// <summary>
         /// Executes the RenameFolder use case.
         /// </summary>
         /// <param name="workspace">The <see cref="IWorkspace"/> being modified.</param>
-        /// <param name="key">The node key.</param>
+        /// <param name="path">The folder path.</param>
         /// <param name="name">The new name.</param>
-        void RenameFolder(IWorkspace workspace, string key, string name);
+        void RenameFolder(IWorkspace workspace, string path, string name);
 
         /// <summary>
         /// Executes the RenameWorkspace use case.

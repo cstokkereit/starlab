@@ -4,15 +4,15 @@ using StarLab.Application.Workspace.Documents.Tables;
 namespace StarLab.Application.Workspace.Documents
 {
     /// <summary>
-    /// Domain model represention of a document.
+    /// Application model represention of a document.
     /// </summary>
     internal class Document
     {
+        private readonly DocumentID id; // The document ID.
+
         private readonly string type; // The document type.
 
         private readonly string view; // The type name of the document view.
-
-        private readonly string id; // The document ID.
 
         private IFolder folder; // The folder that contains the document.
 
@@ -24,11 +24,11 @@ namespace StarLab.Application.Workspace.Documents
         /// <exception cref="ArgumentException"></exception>
         public Document(DocumentDTO dto, IFolder folder)
         {
-            id = string.IsNullOrEmpty(dto.ID) ? Guid.NewGuid().ToString() : dto.ID;
+            id = string.IsNullOrEmpty(dto.ID) ? new DocumentID() : new DocumentID(dto.ID);
 
             this.folder = folder ?? throw new ArgumentException();
 
-            Name = dto.Name ?? throw new ArgumentException(); // TODO - Validate dto and throw suitable exception (and elsewhere)
+            Name = dto.Name ?? throw new ArgumentException();
 
             type = dto.Type ?? throw new ArgumentException();
             view = dto.View ?? throw new ArgumentException();
@@ -57,7 +57,7 @@ namespace StarLab.Application.Workspace.Documents
 
             this.folder = folder ?? throw new ArgumentNullException();
 
-            id = Guid.NewGuid().ToString();
+            id = new DocumentID();
 
             Chart = document.Chart;
             Table = document.Table;
@@ -80,7 +80,7 @@ namespace StarLab.Application.Workspace.Documents
 
             this.folder = folder ?? throw new ArgumentNullException();
 
-            id = Guid.NewGuid().ToString();
+            id = new DocumentID();
 
             Chart = document.Chart;
             Table = document.Table;
@@ -98,7 +98,7 @@ namespace StarLab.Application.Workspace.Documents
         /// <summary>
         /// Gets the document ID.
         /// </summary>
-        public string ID => id;
+        public DocumentID ID => id;
 
         /// <summary>
         /// Gets or sets the document name.
@@ -109,6 +109,11 @@ namespace StarLab.Application.Workspace.Documents
         /// Gets the document path.
         /// </summary>
         public string Path => folder.Path;
+
+        /// <summary>
+        /// Gets the name of the project that contains the document.
+        /// </summary>
+        public string Project => Path.Split('/')[1];
 
         /// <summary>
         /// Gets or sets the table.

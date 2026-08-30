@@ -19,6 +19,8 @@ namespace StarLab.Presentation.Workspace
 
         private readonly List<IFolder> folders = new List<IFolder>(); // A list containing the child folders.
 
+        private readonly IDatabase database; // The database associated with the project.
+
         private readonly Folder folder; // The project folder.
 
         /// <summary>
@@ -33,6 +35,8 @@ namespace StarLab.Presentation.Workspace
 
             if (string.IsNullOrEmpty(dto.Name)) throw new ArgumentException();
 
+            database = new Database(dto.Database ?? new DatabaseDTO());
+
             folder = new Folder(dto.Name, dto.Expanded);
 
             CreateFolders(dto.Folders);
@@ -40,6 +44,11 @@ namespace StarLab.Presentation.Workspace
 
             folder.AddChildFolders(folders);
         }
+
+        /// <summary>
+        /// Gets the database associated with the project.
+        /// </summary>
+        public IDatabase Database => database;
 
         /// <summary>
         /// Gets the documents that belong to this project.

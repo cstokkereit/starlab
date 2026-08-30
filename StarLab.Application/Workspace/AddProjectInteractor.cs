@@ -6,7 +6,7 @@ namespace StarLab.Application.Workspace
     /// <summary>
     /// A use case that adds a project to the workspace.
     /// </summary>
-    internal class AddProjectInteractor : UseCaseInteractor<IWorkspaceOutputPort>, IUseCase<WorkspaceDTO, ProjectDTO>
+    internal class AddProjectInteractor : UseCaseInteractor<IWorkspaceOutputPort>, IUseCase<AddProjectUseCaseArgs>
     {
         /// <summary>
         /// Initialises a new instance of the <see cref="AddProjectInteractor"/> class.
@@ -19,20 +19,16 @@ namespace StarLab.Application.Workspace
         /// <summary>
         /// Executes the use case.
         /// </summary>
-        /// <param name="dtoWorkspace">A <see cref="WorkspaceDTO"/> that specifies the current state of the workspace.</param>
-        /// <param name="dtoProject">A <see cref="ProjectDTO"/> that defines the project being added.</param>
-        public void Execute(WorkspaceDTO dtoWorkspace, ProjectDTO dtoProject)
+        /// <param name="args">The <see cref="AddProjectUseCaseArgs"/> that provide all of the information required to execute the use case.</param>
+        public void Execute(AddProjectUseCaseArgs args)
         {
-            ArgumentNullException.ThrowIfNull(dtoWorkspace, nameof(dtoWorkspace));
-            ArgumentNullException.ThrowIfNull(dtoProject, nameof(dtoProject));
+            var workspace = new Workspace(args.Workspace);
 
-            var workspace = new Workspace(dtoWorkspace);
-
-            if (WorkspaceInteractionHelper.IsValid(dtoProject.Name))
+            if (WorkspaceInteractionHelper.IsValid(args.Project.Name))
             {
                 try
                 {
-                    var project = new Project(dtoProject, workspace);
+                    var project = new Project(args.Project, workspace);
 
                     workspace.AddProject(project);
 
@@ -45,7 +41,7 @@ namespace StarLab.Application.Workspace
             }
             else
             {
-                OutputPort.ShowMessage(Resources.StarLab, WorkspaceInteractionHelper.CreateInvalidNameMessage(dtoProject.Name, Resources.Project), InteractionType.Error, InteractionResponses.OK);
+                OutputPort.ShowMessage(Resources.StarLab, WorkspaceInteractionHelper.CreateInvalidNameMessage(args.Project.Name, Resources.Project), InteractionType.Error, InteractionResponses.OK);
             }
         }
     }

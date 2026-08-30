@@ -5,7 +5,7 @@ namespace StarLab.Application.Workspace.Documents.Charts
     /// <summary>
     /// A use case that updates the document following a change to the chart.
     /// </summary>
-    internal class UpdateDocumentInteractor : UseCaseInteractor<IApplicationOutputPort>, IUseCase<WorkspaceDTO, string, ChartDTO>
+    internal class UpdateDocumentInteractor : UseCaseInteractor<IApplicationOutputPort>, IUseCase<UpdateDocumentUseCaseArgs>
     {
         /// <summary>
         /// Initialises a new instance of the <see cref="AddDocumentInteractor"/> class.
@@ -18,19 +18,14 @@ namespace StarLab.Application.Workspace.Documents.Charts
         /// <summary>
         /// Executes the use case.
         /// </summary>
-        /// <param name="dtoWorkspace">A <see cref="WorkspaceDTO"/> that specifies the current state of the workspace.</param>
-        /// <param name="id">The ID of the document that contains the chart.</param>
-        /// <param name="dtoChart">A <see cref="ChartDTO"/> that specifies the current state of the chart.</param>
-        public void Execute(WorkspaceDTO dtoWorkspace, string id, ChartDTO dtoChart)
+        /// <param name="args">The <see cref="UpdateDocumentUseCaseArgs"/> that provide all of the information required to execute the use case.</param>
+        public void Execute(UpdateDocumentUseCaseArgs args)
         {
-            ArgumentNullException.ThrowIfNull(dtoWorkspace, nameof(dtoWorkspace));
-            ArgumentNullException.ThrowIfNull(dtoChart, nameof(dtoChart));
+            var workspace = new Workspace(args.Workspace);
 
-            var workspace = new Workspace(dtoWorkspace);
+            var document = workspace.GetDocument(new DocumentID(args.DocumentID));
 
-            var document = workspace.GetDocument(id);
-
-            document.Chart = new Chart(dtoChart);
+            document.Chart = new Chart(args.Chart);
 
             OutputPort.UpdateWorkspace(Mapper.Map<WorkspaceDTO>(workspace));
         }
