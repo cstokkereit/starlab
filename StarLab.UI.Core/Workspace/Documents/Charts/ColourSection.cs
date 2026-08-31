@@ -3,7 +3,7 @@ using StarLab.Shared.Properties;
 using StarLab.Presentation.Workspace.Documents.Charts;
 using System.Diagnostics;
 
-namespace StarLab.UI.Controls.Workspace.Documents.Charts
+namespace StarLab.UI.Core.Workspace.Documents.Charts
 {
     /// <summary>
     /// A <see cref="UserControl"/> that is used to update the settings that control the foreground and background colour of chart elements.

@@ -46,7 +46,7 @@
     <ProjectReference Include="..\StarLab.Persistence\StarLab.Serialisation.csproj" />
     <ProjectReference Include="..\StarLab.Presentation.Core\StarLab.Presentation.Core.csproj" />
     <ProjectReference Include="..\StarLab.Presentation\StarLab.Presentation.csproj" />
-    <ProjectReference Include="..\StarLab.UI.Controls\StarLab.UI.Controls.csproj" />
+    <ProjectReference Include="..\StarLab.UI.Core\StarLab.UI.Core.csproj" />
     <ProjectReference Include="..\Stratosoft.Commands\Stratosoft.Commands.csproj" />
   </ItemGroup>
 

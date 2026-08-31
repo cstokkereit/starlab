@@ -7,6 +7,11 @@
     public interface IChildView : IView
     {
         /// <summary>
+        /// Gets the <see cref="IClipboard"/>.
+        /// </summary>
+        IClipboard Clipboard { get; }
+
+        /// <summary>
         /// Gets or sets the minimum size of the view.
         /// </summary>
         Size MinimumSize { get; set; }
@@ -22,9 +27,9 @@
         Size Size { get; }
 
         /// <summary>
-        /// Attaches the <see cref="IChildViewPresenter"/> that controls the view.
+        /// Attaches the presenter that controls the view.
         /// </summary>
-        /// <param name="presenter">The <see cref="IChildViewPresenter"/> that controls the view.</param>
+        /// <param name="presenter">The presenter that controls the view.</param>
         void Attach(IChildViewPresenter presenter);
 
         /// <summary>

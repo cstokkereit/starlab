@@ -35,9 +35,9 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
 
         private readonly IWorkspaceExplorerUseCaseService useCaseService; // A service that executes the use cases that implement the functionality.
 
-        private readonly Clipboard clipboard = new Clipboard(); // TODO
-
         private IWorkspace workspace; // The workspace that the view represents.
+
+        private bool copy; // true if the clipboard contains copied data; false otherwise.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="WorkspaceExplorerViewPresenter"> class.
@@ -98,7 +98,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// </summary>
         public void ClearClipboard()
         {
-            clipboard.Clear();
+            View.Clipboard.Clear();
         }
 
         /// <summary>
@@ -129,7 +129,9 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="source">The key that identifies the document or folder to be copied.</param>
         public void Copy(string source)
         {
-            clipboard.Copy(source);
+            View.Clipboard.SetText(source);
+
+            copy = true;
         }
 
         /// <summary>
@@ -177,7 +179,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
             manager.AddMenuItem(Constants.Delete, StringResources.Delete, CreateCommand(GetCommandName(Actions.Delete, folder), () => DeleteFolder(folder)));
             manager.AddMenuItem(Constants.Rename, StringResources.Rename, ImageResources.Rename, CreateCommand(GetCommandName(Actions.Rename, folder), () => RenameFolder(folder)));
 
-            UpdateCommandState(GetCommandName(Actions.Paste, folder), !clipboard.IsEmpty);
+            UpdateCommandState(GetCommandName(Actions.Paste, folder), !View.Clipboard.IsEmpty);
         }
 
         /// <summary>
@@ -199,7 +201,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
             manager.AddMenuItem(Constants.Delete, StringResources.Delete, CreateCommand(GetCommandName(Actions.Delete, project), () => DeleteProject(project)));
             manager.AddMenuItem(Constants.Rename, StringResources.Rename, ImageResources.Rename, CreateCommand(GetCommandName(Actions.Rename, project), () => RenameProject(project)));
 
-            UpdateCommandState(GetCommandName(Actions.Paste, project), !clipboard.IsEmpty);
+            UpdateCommandState(GetCommandName(Actions.Paste, project), !View.Clipboard.IsEmpty);
         }
 
         /// <summary>
@@ -222,7 +224,9 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="source">The key that identifies the document or folder to be cut.</param>
         public void Cut(string source)
         {
-            clipboard.Cut(source);
+            View.Clipboard.SetText(source);
+
+            copy = false;
         }
 
         /// <summary>
@@ -331,15 +335,13 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         {
             ArgumentException.ThrowIfNullOrEmpty(destination, nameof(destination));
 
-            switch (clipboard.Operation)
+            if (copy)
             {
-                case ClipboardOperation.Copy:
-                    useCaseService.CopyAndPaste(workspace, clipboard.Source, destination);
-                    break;
-
-                case ClipboardOperation.Cut:
-                    useCaseService.CutAndPaste(workspace, clipboard.Source, destination);
-                    break;
+                useCaseService.CopyAndPaste(workspace, View.Clipboard.GetText(), destination);
+            }
+            else
+            {
+                useCaseService.CutAndPaste(workspace, View.Clipboard.GetText(), destination);
             }
         }
 

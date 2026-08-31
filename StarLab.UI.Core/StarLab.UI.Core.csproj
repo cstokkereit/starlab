@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
 	<UseWindowsForms>True</UseWindowsForms>
-	<RootNamespace>StarLab.UI.Controls</RootNamespace>
+	<RootNamespace>StarLab.UI.Core</RootNamespace>
 	<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 

@@ -3,13 +3,14 @@ using StarLab.Presentation;
 using StarLab.Presentation.Workspace.Documents.Tables;
 using StarLab.Shared;
 using StarLab.Shared.Properties;
+using StarLab.UI.Core;
 
 namespace StarLab.UI.Workspace.Documents.Tables
 {
     /// <summary>
     /// A <see cref="UserControl"/> that implements the <see cref="ITableView"/> interface used to control the behaviour that is specific to a table document.
     /// </summary>
-    public partial class TableView : UserControl, ITableView
+    public partial class TableView : ChildView, ITableView
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(TableView)); // The logger that will be used for writing log messages.
 
@@ -19,28 +20,18 @@ namespace StarLab.UI.Workspace.Documents.Tables
         /// Initialises a new instance of the <see cref="ChartView"> class.
         /// </summary>
         public TableView()
+            : base(ViewIDs.Table, SplitViewPanels.Panel2)
         {
             InitializeComponent();
 
-            ID = ViewIDs.Table;
             Name = ViewNames.Table;
         }
-
-        /// <summary>
-        /// Gets the view ID.
-        /// </summary>
-        public ViewID ID { get; }
-
-        /// <summary>
-        /// Gets the preferred panel, if any, in which to display the view.
-        /// </summary>
-        public SplitViewPanels Panel => SplitViewPanels.Panel2;
 
         /// <summary>
         /// Attaches the <see cref="IChildViewPresenter"/> that controls the view.
         /// </summary>
         /// <param name="presenter">The <see cref="IChildViewPresenter"/> that controls the view.</param>
-        public void Attach(IChildViewPresenter presenter)
+        public override void Attach(IChildViewPresenter presenter)
         {
             if (this.presenter != null) throw new InvalidOperationException(Resources.PresenterAlreadyAttached);
 
@@ -52,7 +43,7 @@ namespace StarLab.UI.Workspace.Documents.Tables
         /// <summary>
         /// Detaches the presenter that controls the view.
         /// </summary>
-        public void Detach()
+        public override void Detach()
         {
             if (presenter != null)
             {
@@ -62,14 +53,6 @@ namespace StarLab.UI.Workspace.Documents.Tables
 
                 log.Debug(string.Format(LogEntries.PresenterDetached, entry));
             }
-        }
-
-        /// <summary>
-        /// Initialises the view.
-        /// </summary>
-        public void Initialise()
-        {
-            throw new NotImplementedException();
         }
 
         /// <summary>

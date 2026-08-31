@@ -438,16 +438,16 @@ namespace StarLab.Presentation
         }
 
         /// <summary>
-        /// 
+        /// Adds a new document of the specified type to the currently active project.
         /// </summary>
-        /// <param name="type"></param>
+        /// <param name="type">A <see cref="DocumentTypes"/> that specifies the type of document.</param>
         private void AddDocument(DocumentTypes type)
         {
             if (workspace.SelectedFolder != null)
             {
                 var path = workspace.SelectedFolder.Key;
 
-                useCaseService.AddFolder(workspace, path); // ?????
+                useCaseService.AddFolder(workspace, path);
 
                 AppController.ShowAddDocumentDialog(workspace, path, type);
             }

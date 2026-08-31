@@ -1,7 +1,7 @@
 ﻿using StarLab.Presentation;
 using StarLab.Presentation.Workspace.Documents.Charts;
 
-namespace StarLab.UI.Controls.Workspace.Documents.Charts
+namespace StarLab.UI.Core.Workspace.Documents.Charts
 {
     /// <summary>
     /// A <see cref="UserControl"/> that is used to update the settings that control the visiblity of chart elements.

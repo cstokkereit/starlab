@@ -1,4 +1,4 @@
-﻿namespace StarLab.UI.Controls.Workspace.Documents.Charts
+﻿namespace StarLab.UI.Core.Workspace.Documents.Charts
 {
     partial class PlotAreaSection
     {

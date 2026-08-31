@@ -3,7 +3,7 @@ using StarLab.Presentation;
 using StarLab.Presentation.Workspace.WorkspaceExplorer;
 using StarLab.Shared;
 using StarLab.Shared.Properties;
-using StarLab.UI.Controls;
+using StarLab.UI.Core;
 using Stratosoft.Commands;
 
 using Constants = StarLab.Presentation.Constants;
@@ -13,7 +13,7 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
     /// <summary>
     /// A <see cref="UserControl"/> that implements the behaviour that is specific to the Workspace Explorer tool.
     /// </summary>
-    public partial class WorkspaceExplorerView : UserControl, IWorkspaceExplorerView
+    public partial class WorkspaceExplorerView : ChildView, IWorkspaceExplorerView
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(WorkspaceExplorerView)); // The logger that will be used for writing log messages.
 
@@ -25,22 +25,12 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         /// Initialises a new instance of the <see cref="WorkspaceExplorerView"/> class.
         /// </summary>
         public WorkspaceExplorerView()
+            : base(ViewIDs.WorkspaceExplorer)
         {
             InitializeComponent();
 
-            ID = ViewIDs.WorkspaceExplorer;
             Name = ViewNames.WorkspaceExplorer;
         }
-
-        /// <summary>
-        /// Gets the view ID.
-        /// </summary>
-        public ViewID ID { get; }
-
-        /// <summary>
-        /// Gets the preferred panel, if any, in which to display the view.
-        /// </summary>
-        public SplitViewPanels Panel => SplitViewPanels.Any;
 
         /// <summary>
         /// Adds an <see cref="Image"/> to the list of available images.
@@ -143,7 +133,7 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         /// Attaches the <see cref="IChildViewPresenter"/> that controls the view.
         /// </summary>
         /// <param name="presenter">The <see cref="IChildViewPresenter"/> that controls the view.</param>
-        public void Attach(IChildViewPresenter presenter)
+        public override void Attach(IChildViewPresenter presenter)
         {
             if (this.presenter != null) throw new InvalidOperationException(Resources.PresenterAlreadyAttached);
 
@@ -155,7 +145,7 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         /// <summary>
         /// Detaches the presenter that controls the view.
         /// </summary>
-        public void Detach()
+        public override void Detach()
         {
             if (presenter != null)
             {
@@ -223,14 +213,6 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         public string GetSelectedNode()
         {
             return treeView.SelectedNode == null ? string.Empty : treeView.SelectedNode.Name;
-        }
-
-        /// <summary>
-        /// Initialises the view.
-        /// </summary>
-        public void Initialise()
-        {
-            // Do Nothing
         }
 
         /// <summary>

@@ -3,13 +3,14 @@ using StarLab.Presentation;
 using StarLab.Presentation.Options;
 using StarLab.Shared;
 using StarLab.Shared.Properties;
+using StarLab.UI.Core;
 
 namespace StarLab.UI.Options
 {
     /// <summary>
     /// A <see cref="UserControl"/> that implements the behaviour that is specific to the Options dialog.
     /// </summary>
-    public partial class OptionsView : UserControl, IOptionsView
+    public partial class OptionsView : ChildView, IOptionsView
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(OptionsView)); // The logger that will be used for writing log messages.
 
@@ -19,28 +20,18 @@ namespace StarLab.UI.Options
         /// Initialises a new instance of the <see cref="OptionsView"> class.
         /// </summary>
         public OptionsView()
+            : base(ViewIDs.Options)
         {
             InitializeComponent();
 
-            ID = ViewIDs.Options;
             Name = ViewNames.Options;
         }
-
-        /// <summary>
-        /// Gets the view ID.
-        /// </summary>
-        public ViewID ID { get; }
-
-        /// <summary>
-        /// Gets the panel that will contain the view.
-        /// </summary>
-        public SplitViewPanels Panel => SplitViewPanels.Any;
 
         /// <summary>
         /// Attaches the <see cref="IChildViewPresenter"/> that controls the view.
         /// </summary>
         /// <param name="presenter">The <see cref="IChildViewPresenter"/> that controls the view.</param>
-        public void Attach(IChildViewPresenter presenter)
+        public override void Attach(IChildViewPresenter presenter)
         {
             if (this.presenter != null) throw new InvalidOperationException(Resources.PresenterAlreadyAttached);
 
@@ -52,7 +43,7 @@ namespace StarLab.UI.Options
         /// <summary>
         /// Detaches the presenter that controls the view.
         /// </summary>
-        public void Detach()
+        public override void Detach()
         {
             if (presenter != null)
             {
@@ -62,14 +53,6 @@ namespace StarLab.UI.Options
 
                 log.Debug(string.Format(LogEntries.PresenterDetached, entry));
             }
-        }
-
-        /// <summary>
-        /// Initialises the view.
-        /// </summary>
-        public void Initialise()
-        {
-            throw new NotImplementedException();
         }
     }
 }

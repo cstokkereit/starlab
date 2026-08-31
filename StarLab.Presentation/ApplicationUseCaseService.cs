@@ -28,8 +28,6 @@ namespace StarLab.Presentation
             ArgumentNullException.ThrowIfNull(workspace, nameof(workspace));
             ArgumentException.ThrowIfNullOrEmpty(key, nameof(key));
 
-            // TODO - Should this be AddProject and why is iut called here instead of in the Explorer? Change key to path or project
-
             var interactor = Factory.CreateAddFolderUseCase(ApplicationController.GetOutputPort<IWorkspaceOutputPort>());
 
             interactor.Execute(new AddFolderUseCaseArgs(Mapper.Map<WorkspaceDTO>(workspace), key));

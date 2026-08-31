@@ -3,6 +3,7 @@ using StarLab.Presentation;
 using StarLab.Presentation.Workspace.Documents.Tables;
 using StarLab.Shared;
 using StarLab.Shared.Properties;
+using StarLab.UI.Core;
 using Stratosoft.Commands;
 
 namespace StarLab.UI.Workspace.Documents.Tables
@@ -10,7 +11,7 @@ namespace StarLab.UI.Workspace.Documents.Tables
     /// <summary>
     /// A <see cref="UserControl"/> that implements the behaviour that is specific to the settings panel used to configure a table.
     /// </summary>
-    public partial class TableSettingsView : UserControl, ITableSettingsView
+    public partial class TableSettingsView : ChildView, ITableSettingsView
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(TableSettingsView)); // The logger that will be used for writing log messages.
 
@@ -20,28 +21,18 @@ namespace StarLab.UI.Workspace.Documents.Tables
         /// Initialises a new instance of the <see cref="TableSettingsView"> class.
         /// </summary>
         public TableSettingsView()
+            : base(ViewIDs.TableSettings, SplitViewPanels.Panel1)
         {
             InitializeComponent();
 
-            ID = ViewIDs.TableSettings;
             Name = ViewNames.TableSettings;
         }
-
-        /// <summary>
-        /// Gets the view ID.
-        /// </summary>
-        public ViewID ID { get; }
-
-        /// <summary>
-        /// Gets the panel that will contain the view.
-        /// </summary>
-        public SplitViewPanels Panel => SplitViewPanels.Panel1;
 
         /// <summary>
         /// Attaches the <see cref="IChildViewPresenter"/> that controls the view.
         /// </summary>
         /// <param name="presenter">The <see cref="IChildViewPresenter"/> that controls the view.</param>
-        public void Attach(IChildViewPresenter presenter)
+        public override void Attach(IChildViewPresenter presenter)
         {
             if (this.presenter != null) throw new InvalidOperationException(Resources.PresenterAlreadyAttached);
 
@@ -77,7 +68,7 @@ namespace StarLab.UI.Workspace.Documents.Tables
         /// <summary>
         /// Detaches the presenter that controls the view.
         /// </summary>
-        public void Detach()
+        public override void Detach()
         {
             if (presenter != null)
             {
@@ -87,14 +78,6 @@ namespace StarLab.UI.Workspace.Documents.Tables
 
                 log.Debug(string.Format(LogEntries.PresenterDetached, entry));
             }
-        }
-
-        /// <summary>
-        /// Initialises the view.
-        /// </summary>
-        public void Initialise()
-        {
-            // TODO
         }
     }
 }

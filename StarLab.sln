@@ -13,7 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Cross Cutting Concerns", "C
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application Layer", "Application Layer", "{41E8476A-36C2-4347-BFCB-B4EA80538A16}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarLab.UI.Controls", "StarLab.UI.Controls\StarLab.UI.Controls.csproj", "{615072B9-BD82-44E0-9AB7-9C91659CD94D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarLab.UI.Core", "StarLab.UI.Core\StarLab.UI.Core.csproj", "{615072B9-BD82-44E0-9AB7-9C91659CD94D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StarLab.Shared.Resources", "StarLab.Shared.Resources\StarLab.Shared.Resources.csproj", "{1CD3329D-0221-4C65-B7AE-011CF1B87286}"
 EndProject

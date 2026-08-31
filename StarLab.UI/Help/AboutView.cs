@@ -3,13 +3,14 @@ using StarLab.Presentation;
 using StarLab.Presentation.Help;
 using StarLab.Shared;
 using StarLab.Shared.Properties;
+using StarLab.UI.Core;
 
 namespace StarLab.UI.Help
 {
     /// <summary>
     /// A <see cref="UserControl"/> that implements the behaviour that is specific to the About dialog.
     /// </summary>
-    public partial class AboutView : UserControl, IAboutView
+    public partial class AboutView : ChildView, IAboutView
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(AboutView)); // The logger that will be used for writing log messages.
 
@@ -19,28 +20,18 @@ namespace StarLab.UI.Help
         /// Initialises a new instance of the <see cref="AboutView"> class.
         /// </summary>
         public AboutView()
+            : base(ViewIDs.About)
         {
             InitializeComponent();
 
-            ID = ViewIDs.About;
             Name = ViewNames.About;
         }
-
-        /// <summary>
-        /// Gets the view ID.
-        /// </summary>
-        public ViewID ID { get; }
-
-        /// <summary>
-        /// Gets the panel that will contain the view.
-        /// </summary>
-        public SplitViewPanels Panel => SplitViewPanels.Any;
 
         /// <summary>
         /// Attaches the <see cref="IChildViewPresenter"/> that controls the view.
         /// </summary>
         /// <param name="presenter">The <see cref="IChildViewPresenter"/> that controls the view.</param>
-        public void Attach(IChildViewPresenter presenter)
+        public override void Attach(IChildViewPresenter presenter)
         {
             if (this.presenter != null) throw new InvalidOperationException(Resources.PresenterAlreadyAttached);
 
@@ -52,7 +43,7 @@ namespace StarLab.UI.Help
         /// <summary>
         /// Detaches the presenter that controls the view.
         /// </summary>
-        public void Detach()
+        public override void Detach()
         {
             if (presenter != null)
             {
@@ -62,14 +53,6 @@ namespace StarLab.UI.Help
 
                 log.Debug(string.Format(LogEntries.PresenterDetached, entry));
             }
-        }
-
-        /// <summary>
-        /// Initialises the view.
-        /// </summary>
-        public void Initialise()
-        {
-            throw new NotImplementedException(); 
         }
 
         /// <summary>

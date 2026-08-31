@@ -57,6 +57,11 @@ namespace StarLab.UI.Workspace.Documents.Charts
         }
 
         /// <summary>
+        /// Gets the <see cref="IClipboard"/>.
+        /// </summary>
+        public IClipboard Clipboard { get; }
+
+        /// <summary>
         /// Gets the view ID.
         /// </summary>
         public ViewID ID { get; }

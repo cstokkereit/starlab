@@ -1,7 +1,7 @@
 ﻿using StarLab.Presentation;
 using Stratosoft.Commands;
 
-namespace StarLab.UI.Controls
+namespace StarLab.UI.Core
 {
     /// <summary>
     /// Extends the <see cref="ContextMenuStrip"/> control.

@@ -3,6 +3,7 @@ using StarLab.Presentation;
 using StarLab.Presentation.Workspace.Documents;
 using StarLab.Shared;
 using StarLab.Shared.Properties;
+using StarLab.UI.Core;
 using Stratosoft.Commands;
 
 namespace StarLab.UI.Workspace.Documents
@@ -10,7 +11,7 @@ namespace StarLab.UI.Workspace.Documents
     /// <summary>
     /// A <see cref="UserControl"/> that implements the behaviour that is specific to the Add Document dialog.
     /// </summary>
-    public partial class AddDocumentView : UserControl, IAddDocumentView
+    public partial class AddDocumentView : ChildView, IAddDocumentView
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(AddDocumentView)); // The logger that will be used for writing log messages.
 
@@ -20,22 +21,12 @@ namespace StarLab.UI.Workspace.Documents
         /// Initialises a new instance of the <see cref="AddDocumentView"/> class.
         /// </summary>
         public AddDocumentView()
+            : base(ViewIDs.AddDocument)
         {
             InitializeComponent();
 
-            ID = ViewIDs.AddDocument;
             Name = ViewNames.AddDocument;
         }
-
-        /// <summary>
-        /// Gets the view ID.
-        /// </summary>
-        public ViewID ID { get; }
-
-        /// <summary>
-        /// Gets the preferred panel, if any, in which to display the view.
-        /// </summary>
-        public SplitViewPanels Panel => SplitViewPanels.Any;
 
         /// <summary>
         /// Adds a document type to the list of available document types.
@@ -63,7 +54,7 @@ namespace StarLab.UI.Workspace.Documents
         /// Attaches the <see cref="IPresenter"/> that controls the view.
         /// </summary>
         /// <param name="presenter">The <see cref="IChildViewPresenter"/> that controls the view.</param>
-        public void Attach(IChildViewPresenter presenter)
+        public override void Attach(IChildViewPresenter presenter)
         {
             if (this.presenter != null) throw new InvalidOperationException(Resources.PresenterAlreadyAttached);
 
@@ -113,7 +104,7 @@ namespace StarLab.UI.Workspace.Documents
         /// <summary>
         /// Detaches the presenter that controls the view.
         /// </summary>
-        public void Detach()
+        public override void Detach()
         {
             if (presenter != null)
             {
@@ -128,7 +119,7 @@ namespace StarLab.UI.Workspace.Documents
         /// <summary>
         /// Initialises the view.
         /// </summary>
-        public void Initialise()
+        public override void Initialise()
         {
             listDocumentTypes.Columns.Add(string.Empty);
             listDocumentTypes.Columns[0].Width = listDocumentTypes.Width;

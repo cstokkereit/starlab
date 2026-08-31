@@ -3,7 +3,8 @@ using StarLab.Presentation;
 using StarLab.Presentation.Workspace.Documents.Charts;
 using StarLab.Shared;
 using StarLab.Shared.Properties;
-using StarLab.UI.Controls.Workspace.Documents.Charts;
+using StarLab.UI.Core;
+using StarLab.UI.Core.Workspace.Documents.Charts;
 using Stratosoft.Commands;
 using System.Diagnostics;
 
@@ -12,7 +13,7 @@ namespace StarLab.UI.Workspace.Documents.Charts
     /// <summary>
     /// A <see cref="UserControl"/> that implements the behaviour that is specific to the settings panel used to configure a chart.
     /// </summary>
-    public partial class ChartSettingsView : UserControl, IChartSettingsView
+    public partial class ChartSettingsView : ChildView, IChartSettingsView
     {
         private const int SECTION_MARGIN = 15; // The gap to leave between settings sections.
 
@@ -28,22 +29,12 @@ namespace StarLab.UI.Workspace.Documents.Charts
         /// Initialises a new instance of the <see cref="ChartSettingsView"> class.
         /// </summary>
         public ChartSettingsView()
+            : base(ViewIDs.ChartSettings, SplitViewPanels.Panel1)
         {
             InitializeComponent();
 
-            ID = ViewIDs.ChartSettings;
             Name = ViewNames.ChartSettings;
         }
-
-        /// <summary>
-        /// Gets the view ID.
-        /// </summary>
-        public ViewID ID { get; }
-
-        /// <summary>
-        /// Gets the panel that will contain the view.
-        /// </summary>
-        public SplitViewPanels Panel => SplitViewPanels.Panel1;
 
         /// <summary>
         /// Adds a node to the tree view that displays the chart property groups.
@@ -154,7 +145,7 @@ namespace StarLab.UI.Workspace.Documents.Charts
         /// Attaches the <see cref="IChildViewPresenter"/> that controls the view.
         /// </summary>
         /// <param name="presenter">The <see cref="IChildViewPresenter"/> that controls the view.</param>
-        public void Attach(IChildViewPresenter presenter)
+        public override void Attach(IChildViewPresenter presenter)
         {
             if (this.presenter != null) throw new InvalidOperationException(Resources.PresenterAlreadyAttached);
 
@@ -190,7 +181,7 @@ namespace StarLab.UI.Workspace.Documents.Charts
         /// <summary>
         /// Detaches the presenter that controls the view.
         /// </summary>
-        public void Detach()
+        public override void Detach()
         {
             if (presenter != null)
             {
@@ -220,7 +211,7 @@ namespace StarLab.UI.Workspace.Documents.Charts
         /// <summary>
         /// Initialises the view.
         /// </summary>
-        public void Initialise()
+        public override void Initialise()
         {
             foreach (TreeNode node in treeView.Nodes)
             {
