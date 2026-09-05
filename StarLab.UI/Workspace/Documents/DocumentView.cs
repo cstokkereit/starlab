@@ -87,7 +87,7 @@ namespace StarLab.UI.Workspace.Documents
 
             this.presenter = (IDockableViewPresenter)presenter;
 
-            log.Debug(string.Format(LogEntries.PresenterAttached, $"{presenter.GetType().Name}({ID}:{Name})"));
+            log.Debug(LogEntries.PresenterAttached(presenter.GetType(), Name, ID.ToString()));
         }
 
         /// <summary>
@@ -104,11 +104,11 @@ namespace StarLab.UI.Workspace.Documents
 
             if (presenter != null)
             {
-                var entry = $"{presenter.GetType().Name}({Name})";
+                var type = presenter.GetType();
 
                 presenter = null;
 
-                log.Debug(string.Format(LogEntries.PresenterDetached, entry));
+                log.Debug(LogEntries.PresenterDetached(type, Name, ID.ToString()));
             }
         }
 
@@ -145,7 +145,7 @@ namespace StarLab.UI.Workspace.Documents
                 //Width = presenter.Width;
             }
 
-            Show(dockPanel, (DockState)Enum.Parse(DockState.GetType(), presenter.Location)); // TODO
+            Show(dockPanel, (DockState)Enum.Parse(DockState.GetType(), presenter.Location));
         }
 
         /// <summary>

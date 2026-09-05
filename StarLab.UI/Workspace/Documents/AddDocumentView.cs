@@ -59,6 +59,8 @@ namespace StarLab.UI.Workspace.Documents
             if (this.presenter != null) throw new InvalidOperationException(Resources.PresenterAlreadyAttached);
 
             this.presenter = (IAddDocumentViewPresenter)presenter;
+
+            log.Debug(LogEntries.PresenterAttached(presenter.GetType()));
         }
 
         /// <summary>
@@ -108,11 +110,11 @@ namespace StarLab.UI.Workspace.Documents
         {
             if (presenter != null)
             {
-                var entry = $"{presenter.GetType().Name}({Name})";
+                var type = presenter.GetType();
 
                 presenter = null;
 
-                log.Debug(string.Format(LogEntries.PresenterDetached, entry));
+                log.Debug(LogEntries.PresenterDetached(type));
             }
         }
 

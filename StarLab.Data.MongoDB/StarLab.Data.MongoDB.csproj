@@ -21,6 +21,7 @@
   <ItemGroup>
     <ProjectReference Include="..\StarLab.Data\StarLab.Data.csproj" />
     <ProjectReference Include="..\StarLab.Domain.Core\StarLab.Domain.Core.csproj" />
+    <ProjectReference Include="..\StarLab.Domain\StarLab.Domain.csproj" />
   </ItemGroup>
 
 </Project>

@@ -34,7 +34,7 @@ namespace StarLab.Presentation.Workspace
 
             View.Attach(this);
 
-            Location = Constants.DockRight; // TODO - Optional default locations?
+            Location = Constants.DockRight;
         }
 
 		/// <summary>
@@ -76,13 +76,13 @@ namespace StarLab.Presentation.Workspace
         /// <param name="controller">The <see cref="IApplicationController"/>.</param>
         public override void Initialise(IApplicationController controller)
         {
-            if (Initialised) throw new InvalidOperationException(string.Format(Resources.AlreadyInitialised, nameof(ToolViewPresenter)));
+            if (Initialised) throw new InvalidOperationException(ExceptionMessages.PresenterAlreadyInitialised(GetType()));
 
             base.Initialise(controller);
 
             childController.Initialise(controller);
 
-            log.Debug(string.Format(LogEntries.Initialised, $"{nameof(ToolViewPresenter)}({View.Name})"));
+            log.Debug(LogEntries.PresenterInitialised(GetType(), View.Name));
         }
 
         /// <summary>

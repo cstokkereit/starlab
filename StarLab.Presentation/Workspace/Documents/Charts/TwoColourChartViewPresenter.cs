@@ -67,7 +67,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// <param name="controller">The <see cref="IApplicationController"/>.</param>
         public override void Initialise(IApplicationController controller)
         {
-            if (Initialised) throw new InvalidOperationException(string.Format(Resources.AlreadyInitialised, nameof(TwoColourChartViewPresenter)));
+            if (Initialised) throw new InvalidOperationException(ExceptionMessages.PresenterAlreadyInitialised(GetType()));
 
             base.Initialise(controller);
 
@@ -75,7 +75,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
 
             //View.MinimumSize = new Size(200, 200);
 
-            log.Debug(string.Format(LogEntries.Initialised, $"{nameof(TwoColourChartViewPresenter)}({View.Name})"));
+            log.Debug(LogEntries.PresenterInitialised(GetType()));
         }
 
         /// <summary>

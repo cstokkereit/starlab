@@ -53,11 +53,9 @@ namespace StarLab.Data.Import
         public void TestAddCompoundFieldThrowsExceptionIfNameNotUnique()
         {
             // Act
-            var e = Assert.Throws<ArgumentException>(() => ImportDefinitionBuilder.GetInstance(",")
+            var e = Assert.Throws<InvalidOperationException>(() => ImportDefinitionBuilder.GetInstance(",")
                 .AddField(0, "Field-1", DataTypes.Decimal)
                 .AddCompoundField("Field-1", "{0}-{1}", [1, 2]));
-
-            //Assert.That(e.Message, Is.EqualTo(""));
         }
 
         /// <summary>
@@ -67,7 +65,7 @@ namespace StarLab.Data.Import
         public void TestAddFieldThrowsExceptionIfNameNotUnique()
         {
             // Act
-            var e = Assert.Throws<ArgumentException>(() => ImportDefinitionBuilder.GetInstance(",")
+            var e = Assert.Throws<InvalidOperationException>(() => ImportDefinitionBuilder.GetInstance(",")
                 .AddField(0, "Field-1", DataTypes.Decimal)
                 .AddField(1, "Field-1", DataTypes.Decimal));
 

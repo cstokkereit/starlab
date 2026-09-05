@@ -8,7 +8,6 @@ using StarLab.Presentation.Workspace.Documents;
 using StarLab.Tests;
 using Stratosoft.Commands;
 using System.Drawing;
-using static SkiaSharp.HarfBuzz.SKShaper;
 
 namespace StarLab.Presentation.Workspace.WorkspaceExplorer
 {
@@ -237,6 +236,8 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
                 .AddChart("19542B1A-36A5-494F-B6B0-CB562FA36CAC", "ChartView", "Chart-1.1", "Workspace-1/Project-1/Folder-1")
                 .CreateWorkspace());
 
+            view.Clipboard.GetText().Returns("19542B1A-36A5-494F-B6B0-CB562FA36CAC");
+
             var interactor = Substitute.For<IUseCase<ClipboardUseCaseArgs>>();
 
             factory.CreateCopyAndPasteUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
@@ -248,6 +249,8 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
             presenter.Copy("19542B1A-36A5-494F-B6B0-CB562FA36CAC");
 
             presenter.Paste("Workspace/Project-1/Folder-2");
+
+            view.Clipboard.Received(1).SetText("19542B1A-36A5-494F-B6B0-CB562FA36CAC");
 
             interactor.Received(1).Execute(Arg.Is<ClipboardUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-2" && args.Source == "19542B1A-36A5-494F-B6B0-CB562FA36CAC" && args.Destination == "Workspace/Project-1/Folder-2"));
         }
@@ -264,6 +267,8 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
                 .AddFolder("Workspace/Project-1/Folder-2")
                 .CreateWorkspace());
 
+            view.Clipboard.GetText().Returns("Workspace/Project-1/Folder-2");
+
             var interactor = Substitute.For<IUseCase<ClipboardUseCaseArgs>>();
 
             factory.CreateCopyAndPasteUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
@@ -275,6 +280,8 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
             presenter.Copy("Workspace/Project-1/Folder-2");
 
             presenter.Paste("Workspace/Project-1/Folder-1");
+
+            view.Clipboard.Received(1).SetText("Workspace/Project-1/Folder-2");
 
             interactor.Received(1).Execute(Arg.Is<ClipboardUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-2" && args.Source == "Workspace/Project-1/Folder-2" && args.Destination == "Workspace/Project-1/Folder-1"));
         }
@@ -330,6 +337,8 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         [Test]
         public void TestCreateFolderContextMenu()
         {
+            view.Clipboard.IsEmpty.Returns(true);
+
             var paste = Substitute.For<IComponentCommand, ICommand>();
 
             commands.GetCommand("Paste(Workspace/Project-1/Documents)").Returns((ICommand)paste);
@@ -357,6 +366,8 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         [Test]
         public void TestCreateProjectContextMenu()
         {
+            view.Clipboard.IsEmpty.Returns(true);
+
             var paste = Substitute.For<IComponentCommand, ICommand>();
 
             commands.GetCommand("Paste(Workspace/Project-1)").Returns((ICommand)paste);
@@ -413,6 +424,8 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
                 .AddChart("19542B1A-36A5-494F-B6B0-CB562FA36CAC", "ChartView", "Chart-1.1", "Workspace-1/Project-1/Folder-1")
                 .CreateWorkspace());
 
+            view.Clipboard.GetText().Returns("19542B1A-36A5-494F-B6B0-CB562FA36CAC");
+
             var interactor = Substitute.For<IUseCase<ClipboardUseCaseArgs>>();
 
             factory.CreateCutAndPasteUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
@@ -424,6 +437,8 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
             presenter.Cut("19542B1A-36A5-494F-B6B0-CB562FA36CAC");
 
             presenter.Paste("Workspace/Project-1/Folder-2");
+
+            view.Clipboard.Received(1).SetText("19542B1A-36A5-494F-B6B0-CB562FA36CAC");
 
             interactor.Received(1).Execute(Arg.Is<ClipboardUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-2" 
                 && args.Source == "19542B1A-36A5-494F-B6B0-CB562FA36CAC" 
@@ -442,6 +457,8 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
                 .AddFolder("Workspace/Project-1/Folder-2")
                 .CreateWorkspace());
 
+            view.Clipboard.GetText().Returns("Workspace/Project-1/Folder-2");
+
             var interactor = Substitute.For<IUseCase<ClipboardUseCaseArgs>>();
 
             factory.CreateCutAndPasteUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
@@ -453,6 +470,8 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
             presenter.Cut("Workspace/Project-1/Folder-2");
 
             presenter.Paste("Workspace/Project-1/Folder-1");
+
+            view.Clipboard.Received(1).SetText("Workspace/Project-1/Folder-2");
 
             interactor.Received(1).Execute(Arg.Is<ClipboardUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-2" 
                 && args.Source == "Workspace/Project-1/Folder-2" 

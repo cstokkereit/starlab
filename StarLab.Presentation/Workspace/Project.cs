@@ -155,7 +155,7 @@ namespace StarLab.Presentation.Workspace
                         break;
 
                     default:
-                        log.Warn(string.Format(LogEntries.UnrecognisedDocumentType, dto.Type));
+                        log.Warn(LogEntries.UnrecognisedDocumentType(dto.Type));
                         break;
                 }
             }

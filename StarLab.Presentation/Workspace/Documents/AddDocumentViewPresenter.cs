@@ -93,7 +93,7 @@ namespace StarLab.Presentation.Workspace.Documents
         /// <param name="controller">The <see cref="IApplicationController"/>.</param>
         public override void Initialise(IApplicationController controller)
         {
-            if (Initialised) throw new InvalidOperationException(string.Format(StringResources.AlreadyInitialised, nameof(AddDocumentViewPresenter)));
+            if (Initialised) throw new InvalidOperationException(ExceptionMessages.PresenterAlreadyInitialised(GetType()));
 
             base.Initialise(controller);
 
@@ -103,7 +103,7 @@ namespace StarLab.Presentation.Workspace.Documents
 
             View.Initialise();
 
-            log.Debug(string.Format(LogEntries.Initialised, nameof(AddDocumentViewPresenter)));
+            log.Debug(LogEntries.PresenterInitialised(GetType()));
         }
 
         /// <summary>

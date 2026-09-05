@@ -1,5 +1,5 @@
 ﻿using StarLab.Application.Data.Import;
-using StarLab.Shared.Properties;
+using StarLab.Shared;
 
 namespace StarLab.Data.Import
 {
@@ -23,8 +23,9 @@ namespace StarLab.Data.Import
         public CompoundFieldDefinition(string name, string format, int[] components)
         {
             ArgumentException.ThrowIfNullOrEmpty(name, nameof(name));
+            ArgumentException.ThrowIfNullOrEmpty(format, nameof(format));
 
-            if (components.Length == 0) throw new ArgumentException(Resources.ComponentFieldIndicesRequired, nameof(components));
+            if (components.Length == 0) throw new ArgumentException(ExceptionMessages.ComponentFieldIndicesRequired, nameof(components));
 
             this.components = components;
             this.format = format;

@@ -1,6 +1,4 @@
-﻿using StarLab.Application;
-
-namespace StarLab.Presentation
+﻿namespace StarLab.Presentation
 {
     /// <summary>
     /// Defines the properties and methods that are common to all views.

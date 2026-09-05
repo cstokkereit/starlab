@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.5.1" />
+    <PackageReference Include="NSubstitute" Version="6.2.0" />
     <PackageReference Include="NUnit" Version="4.6.0" />
     <PackageReference Include="NUnit.Analyzers" Version="4.13.0">
       <PrivateAssets>all</PrivateAssets>
@@ -20,10 +21,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\StarLab.Domain.Core\StarLab.Domain.Core.csproj" />
+    <ProjectReference Include="..\StarLab.Domain\StarLab.Domain.csproj" />
     <ProjectReference Include="..\Stratosoft.File.IO\Stratosoft.File.IO.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <Using Include="NSubstitute" />
     <Using Include="NUnit.Framework" />
   </ItemGroup>
 

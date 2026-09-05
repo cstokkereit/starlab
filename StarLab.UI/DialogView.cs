@@ -70,7 +70,7 @@ namespace StarLab
 
             this.presenter = (IDialogViewPresenter)presenter;
 
-            log.Debug(string.Format(LogEntries.PresenterAttached, $"{presenter.GetType().Name}({Name})"));
+            log.Debug(LogEntries.PresenterAttached(presenter.GetType(), Name));
         }
 
         /// <summary>
@@ -82,11 +82,11 @@ namespace StarLab
 
             if (presenter != null)
             {
-                var entry = $"{presenter.GetType().Name}({Name})";
+                var type = presenter.GetType();
 
                 presenter = null;
 
-                log.Debug(string.Format(LogEntries.PresenterDetached, entry));
+                log.Debug(LogEntries.PresenterDetached(type, Name));
             }
         }
 

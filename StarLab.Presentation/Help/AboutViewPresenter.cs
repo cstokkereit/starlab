@@ -54,7 +54,7 @@ namespace StarLab.Presentation.Help
         /// <param name="controller">The <see cref="IApplicationController"/>.</param>
         public override void Initialise(IApplicationController controller)
         {
-            if (Initialised) throw new InvalidOperationException(string.Format(Resources.AlreadyInitialised, nameof(AboutViewPresenter)));
+            if (Initialised) throw new InvalidOperationException(ExceptionMessages.PresenterAlreadyInitialised(GetType()));
 
             base.Initialise(controller);
 
@@ -65,7 +65,7 @@ namespace StarLab.Presentation.Help
             //View.SetProductName(Resources.StarLab);
             //View.SetVersion(string.Format(Resources.Version, GetVersion()));
 
-            log.Debug(string.Format(LogEntries.Initialised, nameof(AboutViewPresenter)));
+            log.Debug(LogEntries.PresenterInitialised(GetType()));
         }
 
         /// <summary>

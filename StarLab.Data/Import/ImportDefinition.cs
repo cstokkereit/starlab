@@ -1,32 +1,31 @@
 ﻿using StarLab.Application.Data.Import;
+using StarLab.Shared;
 
 namespace StarLab.Data.Import
 {
     /// <summary>
-    /// TODO
+    /// Provides the information required to import data from a data file into the application.
     /// </summary>
     internal class ImportDefinition : IImportDefinition
     {
-        private const string DEFAULT_NAME = "New Import Definition"; //
+        private readonly List<ICompoundFieldDefinition> compoundFields = new List<ICompoundFieldDefinition>(); // A list containing the compound field definitions.
 
-        private readonly List<ICompoundFieldDefinition> compoundFields = new List<ICompoundFieldDefinition>(); //
+        private readonly List<IFieldDefinition> fields = new List<IFieldDefinition>(); // A list containing the field definitions.
 
-        private readonly List<IFieldDefinition> fields = new List<IFieldDefinition>(); //
+        private readonly List<string> fieldNames = new List<string>(); // A list containing the names of the fields.
 
-        private readonly List<string> fieldNames = new List<string>(); //
+        private readonly string delimiter = string.Empty; // The delimiter used to separate fields in a delimited text file.
 
-        private readonly string delimiter = string.Empty; //
+        private readonly FileTypes fileType; // The type of data file being imported.
 
-        private readonly FileTypes fileType; //
-
-        private readonly string textDelimiter = string.Empty; //
+        private readonly string textDelimiter = string.Empty; // The delimiter used to identify text fields in a delimited text file.
 
         /// <summary>
-        /// TODO
+        /// Initialises a new instance of the <see cref="ImportDefinition"/> class.
         /// </summary>
-        /// <param name="fileType"></param>
-        /// <param name="delimiter"></param>
-        /// <param name="textDelimiter"></param>
+        /// <param name="fileType">A <see cref="FileTypes"/> value specifying the type of data file being imported.</param>
+        /// <param name="delimiter">The delimiter used to separate fields in a delimited text file.</param>
+        /// <param name="textDelimiter">The delimiter used to identify text fields in a delimited text file.</param>
         public ImportDefinition(FileTypes fileType, string delimiter, string textDelimiter)
         {
             ArgumentException.ThrowIfNullOrEmpty(delimiter, nameof(delimiter));
@@ -35,24 +34,24 @@ namespace StarLab.Data.Import
             this.delimiter = delimiter;
             this.fileType = fileType;
 
-            Name = DEFAULT_NAME;
+            Name = Constants.NewImportDefinition;
         }
 
         /// <summary>
-        /// TODO
+        /// Initialises a new instance of the <see cref="ImportDefinition"/> class.
         /// </summary>
-        /// <param name="fileType"></param>
+        /// <param name="fileType">A <see cref="FileTypes"/> value specifying the type of data file being imported.</param>
         public ImportDefinition(FileTypes fileType)
         {
             textDelimiter = string.Empty;
             delimiter = string.Empty;
             this.fileType = fileType;
 
-            Name = DEFAULT_NAME;
+            Name = Constants.NewImportDefinition;
         }
 
         /// <summary>
-        /// TODO
+        /// Gets an <see cref="IReadOnlyList{ICompoundFieldDefinition}"/> containing the compound field definitions.
         /// </summary>
         public IReadOnlyList<ICompoundFieldDefinition> CompoundFields
         {
@@ -60,7 +59,7 @@ namespace StarLab.Data.Import
         }
 
         /// <summary>
-        /// TODO
+        /// Gets an <see cref="IReadOnlyList{IFieldDefinition}"/> containing the field definitions.
         /// </summary>
         public IReadOnlyList<IFieldDefinition> Fields
         { 
@@ -73,35 +72,35 @@ namespace StarLab.Data.Import
         }
 
         /// <summary>
-        /// TODO
+        /// Specifies the delimiter used to separate fields in a delimited text file.
         /// </summary>
         public string Delimiter => delimiter;
 
         /// <summary>
-        /// TODO
+        /// Specifies the type of data file being imported.
         /// </summary>
         public FileTypes FileType => fileType;
 
         /// <summary>
-        /// TODO
+        /// Gets the name of the import definition.
         /// </summary>
         public string Name { get; set; }
 
         /// <summary>
-        /// TODO
+        /// Specifies the delimiter used to identify text fields in a delimited text file.
         /// </summary>
         public string TextDelimiter => textDelimiter;
 
         /// <summary>
-        /// TODO
+        /// Adds a compound field to the import definition.
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="format"></param>
-        /// <param name="components"></param>
+        /// <param name="name">The name of the compound field.</param>
+        /// <param name="format">The format of the compound field.</param>
+        /// <param name="components">The components of the compound field.</param>
         /// <exception cref="ArgumentException"></exception>
         public void AddCompoundField(string name, string format, int[] components)
         {
-            if (fieldNames.Contains(name)) throw new ArgumentException(); // TODO
+            if (fieldNames.Contains(name)) throw new InvalidOperationException(ExceptionMessages.FieldAlreadyAdded(name));
  
             compoundFields.Add(new CompoundFieldDefinition(name, format, components));
 
@@ -109,14 +108,14 @@ namespace StarLab.Data.Import
         }
 
         /// <summary>
-        /// TODO
+        /// Adds a compound field to the import definition.
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="components"></param>
+        /// <param name="name">The name of the compound field.</param>
+        /// <param name="components">The components of the compound field.</param>
         /// <exception cref="ArgumentException"></exception>
         public void AddCompoundField(string name, int[] components)
         {
-            if (fieldNames.Contains(name)) throw new ArgumentException(); // TODO
+            if (fieldNames.Contains(name)) throw new InvalidOperationException(ExceptionMessages.FieldAlreadyAdded(name));
 
             compoundFields.Add(new CompoundFieldDefinition(name, components));
 
@@ -124,19 +123,21 @@ namespace StarLab.Data.Import
         }
 
         /// <summary>
-        /// TODO
+        /// Adds a field to the import definition.
         /// </summary>
-        /// <param name="index"></param>
-        /// <param name="name"></param>
-        /// <param name="width"></param>
-        /// <param name="dataType"></param>
+        /// <param name="index">The index of the field.</param>
+        /// <param name="name">The name of the field.</param>
+        /// <param name="width">The width of the field.</param>
+        /// <param name="dataType">The data type of the field.</param>
         /// <exception cref="InvalidOperationException"></exception>
         /// <exception cref="ArgumentException"></exception>
         public void AddField(int index, string name, int width, DataTypes dataType)
         {
-            if (FileType == FileTypes.DelimitedText) throw new InvalidOperationException();
+            if (FileType == FileTypes.DelimitedText) throw new InvalidOperationException(ExceptionMessages.WidthNotApplicable);
 
-            if (fieldNames.Contains(name)) throw new ArgumentException(); // TODO
+            if (fieldNames.Contains(name)) throw new InvalidOperationException(ExceptionMessages.FieldAlreadyAdded(name));
+
+            if (index < 0) throw new ArgumentException(ExceptionMessages.InvalidFieldIndex);
 
             fields.Add(new FieldDefinition(index, name, width, dataType));
 
@@ -144,18 +145,20 @@ namespace StarLab.Data.Import
         }
 
         /// <summary>
-        /// TODO
+        /// Adds a field to the import definition.
         /// </summary>
-        /// <param name="index"></param>
-        /// <param name="name"></param>
-        /// <param name="dataType"></param>
+        /// <param name="index">The index of the field.</param>
+        /// <param name="name">The name of the field.</param>
+        /// <param name="dataType">The data type of the field.</param>
         /// <exception cref="InvalidOperationException"></exception>
         /// <exception cref="ArgumentException"></exception>
         public void AddField(int index, string name, DataTypes dataType)
         {
-            if (FileType == FileTypes.FixedWidthText) throw new InvalidOperationException();
+            if (FileType == FileTypes.FixedWidthText) throw new InvalidOperationException(ExceptionMessages.WidthRequired);
 
-            if (fieldNames.Contains(name)) throw new ArgumentException(); // TODO
+            if (fieldNames.Contains(name)) throw new InvalidOperationException(ExceptionMessages.FieldAlreadyAdded(name));
+
+            if (index < 0) throw new ArgumentException(ExceptionMessages.InvalidFieldIndex);
 
             fields.Add(new FieldDefinition(index, name, dataType));
 
@@ -163,10 +166,10 @@ namespace StarLab.Data.Import
         }
 
         /// <summary>
-        /// TODO
+        /// Adds an excluded field to the import definition.
         /// </summary>
-        /// <param name="index"></param>
-        /// <param name="width"></param>
+        /// <param name="index">The index of the field to exclude.</param>
+        /// <param name="width">The width of the field to exclude.</param>
         public void ExcludeField(int index, int width)
         {
             fields.Add(new FieldDefinition(index, width));

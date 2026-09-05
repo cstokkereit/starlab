@@ -28,6 +28,9 @@ namespace StarLab.UI.Core
         public ChildView(ViewID id)
             : this(id, SplitViewPanels.Any) { }
 
+        /// <summary>
+        /// Initialises a new instance of the <see cref="ChildView"/> class.
+        /// </summary>
         public ChildView()
             : this(new ViewID()) { }
 

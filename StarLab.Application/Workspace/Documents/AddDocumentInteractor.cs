@@ -85,9 +85,6 @@ namespace StarLab.Application.Workspace.Documents
         /// <returns></returns>
         private Document CreateDocument(DocumentDTO dto, IFolder folder)
         {
-            // TODO - Names should be specified in a file and made available through cross cutting concerns?? 
-            // TODO - Consider having IChartDocumentDefinition and ITableDocumentDefinition both extend IDocumentDefinition - can then switch behaviour using overloading and/or casting
-
             switch (dto.Type)
             {
                 case Constants.Chart:

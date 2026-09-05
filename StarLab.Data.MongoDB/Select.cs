@@ -31,7 +31,7 @@ namespace StarLab.Data.MongoDB
 
             if (tables.Count == 1)
             {
-
+                projection.Include("");
             }
 
             return projection;

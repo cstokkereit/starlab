@@ -1,40 +1,86 @@
-﻿namespace StarLab.Domain.Entities
+﻿using StarLab.Domain.Data;
+
+namespace StarLab.Domain.Entities
 {
+    // https://www.pas.rochester.edu/~emamajek/EEM_dwarf_UBVIJHK_colors_Teff.txt
+    // https://en.wikipedia.org/wiki/Color_index
 
-    //  https://ned.ipac.caltech.edu/level5/Gray/Gray_contents.html
-
-
-
+    /// <summary>
+    /// 
+    /// </summary>
     public class Star : IStar
     {
-        private readonly Dictionary<string, IDesignation> designations = new Dictionary<string, IDesignation>();
+        private readonly Dictionary<ColourIndexTypes, double> colourIndices = new Dictionary<ColourIndexTypes, double>();
 
-        private readonly string designation;
+        private readonly IAstrometricData astrometry;
 
-        private readonly string name = string.Empty;
-
-        public Star(double apparentMagnitude, double parallax, string spectralType, double bvColourIndex)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="data"></param>
+        public Star(IEntityData data)
         {
-            ApparentMagnitude = apparentMagnitude;
+            AbsoluteMagnitude = data.GetDoubleValue("AbsoluteMagnitude");
+            ApparentMagnitude = data.GetDoubleValue("ApparentMagnitude");
+            
+            Designation = data.GetStringValue("Designation");
+            Name = data.GetStringValue("Name");
+            SpectralType = data.GetStringValue("SpectralType");
 
-            //var d = 1 / (parallax / 1000);
-            AbsoluteMagnitude = ApparentMagnitude + 5 * (Math.Log10(parallax / 1000) + 1);
+            astrometry = new AstrometricData(
+                data.GetDoubleValue("RightAscension"),
+                data.GetDoubleValue("Declination"),
+                data.GetDoubleValue("Parallax"),
+                data.GetDoubleValue("ProperMotionInRightAscension"),
+                data.GetDoubleValue("ProperMotionInDeclination")
+            );
 
-            BVColourIndex = bvColourIndex;
+            colourIndices.Add(ColourIndexTypes.UB, data.GetDoubleValue("U-B"));
+            colourIndices.Add(ColourIndexTypes.BV, data.GetDoubleValue("B-V"));
+            colourIndices.Add(ColourIndexTypes.VR, data.GetDoubleValue("V-R"));
+            colourIndices.Add(ColourIndexTypes.RI, data.GetDoubleValue("R-I"));
 
-            SpectralType = new SpectralType(spectralType);
+            EffectiveTemperature = CalculateEffectiveTemperature(colourIndices[ColourIndexTypes.BV]);
+        }
+
+        public Star(IAstrometricData astrometry)
+        {
+            this.astrometry = astrometry;
         }
 
         public double AbsoluteMagnitude { get; }
 
         public double ApparentMagnitude { get; }
 
-        public double BVColourIndex { get; }
+        public double ColourIndex(ColourIndexTypes type)
+        {
+            return colourIndices[type];
+        }
 
-        public string Designation => designation;
+        public double Declination => astrometry.Declination;
 
-        public string Name => name;
+        public string Designation { get; }
 
-        public ISpectralType SpectralType { get; }
+        public int EffectiveTemperature { get; }
+
+        public string Name { get; }
+
+        public double Parallax => astrometry.Parallax;
+
+        public double RightAscension => astrometry.RightAscension;
+
+        public string SpectralType { get; }
+
+        public double VIColourIndex { get; }
+
+        /// <summary>
+        /// Calculates the effective temperature in Kelvin using Ballesteros' formula for effective temperature based on B-V colour index
+        /// </summary>
+        /// <param name="colourIndex"></param>
+        /// <returns></returns>
+        private int CalculateEffectiveTemperature(double colourIndex)
+        {
+            return (int)Math.Round(4600 * (1 / (0.92 * colourIndex + 1.7) + 1 / (0.92 * colourIndex + 0.62)));
+        }
     }
 }

@@ -1,6 +1,4 @@
-﻿using StarLab.Shared.Properties;
-
-namespace Stratosoft.File.IO
+﻿namespace Stratosoft.File.IO
 {
     /// <summary>
     /// A class that can be used to parse a data file.
@@ -56,7 +54,7 @@ namespace Stratosoft.File.IO
         /// <exception cref="InvalidOperationException"></exception>
         public string GetValue(int index)
         {
-            if (EOF) throw new InvalidOperationException(Resources.EndOfFile);
+            if (EOF) throw new InvalidOperationException(Constants.EndOfFile);
 
             return data[index].Trim();
         }
@@ -69,7 +67,7 @@ namespace Stratosoft.File.IO
         /// <exception cref="InvalidOperationException"></exception>
         public string GetValue(string field)
         {
-            if (map == null) throw new InvalidOperationException(Resources.FieldMapNotSet);
+            if (map == null) throw new InvalidOperationException(Constants.FieldMapNotSet);
 
             return GetValue(map[field]);
         }

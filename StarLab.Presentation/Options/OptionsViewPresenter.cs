@@ -57,11 +57,11 @@ namespace StarLab.Presentation.Options
         /// <param name="controller">The <see cref="IApplicationController"/>.</param>
         public override void Initialise(IApplicationController controller)
         {
-            if (Initialised) throw new InvalidOperationException(string.Format(Resources.AlreadyInitialised, nameof(OptionsViewPresenter)));
+            if (Initialised) throw new InvalidOperationException(ExceptionMessages.PresenterAlreadyInitialised(GetType()));
 
             base.Initialise(controller);
 
-            log.Debug(string.Format(LogEntries.Initialised, nameof(OptionsViewPresenter)));
+            log.Debug(LogEntries.PresenterInitialised(GetType()));
         }
 
         /// <summary>

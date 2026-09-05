@@ -106,15 +106,6 @@ namespace StarLab.Shared.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The {0} has already been initialised..
-        /// </summary>
-        public static string AlreadyInitialised {
-            get {
-                return ResourceManager.GetString("AlreadyInitialised", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Axes.
         /// </summary>
         public static string Axes {
@@ -273,15 +264,6 @@ namespace StarLab.Shared.Properties {
         public static string CompanyName {
             get {
                 return ResourceManager.GetString("CompanyName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The indices of the component fields are required..
-        /// </summary>
-        public static string ComponentFieldIndicesRequired {
-            get {
-                return ResourceManager.GetString("ComponentFieldIndicesRequired", resourceCulture);
             }
         }
         
@@ -448,15 +430,6 @@ namespace StarLab.Shared.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot read past the end of the file..
-        /// </summary>
-        public static string EndOfFile {
-            get {
-                return ResourceManager.GetString("EndOfFile", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Exit.
         /// </summary>
         public static string Exit {
@@ -471,15 +444,6 @@ namespace StarLab.Shared.Properties {
         public static string Field {
             get {
                 return ResourceManager.GetString("Field", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The field map has not been set..
-        /// </summary>
-        public static string FieldMapNotSet {
-            get {
-                return ResourceManager.GetString("FieldMapNotSet", resourceCulture);
             }
         }
         

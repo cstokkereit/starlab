@@ -1,5 +1,6 @@
 ﻿using StarLab.Application.Data;
 using StarLab.Application.Data.Import;
+using StarLab.Shared;
 using Stratosoft.File.IO;
 
 namespace StarLab.Data.Import
@@ -204,7 +205,7 @@ namespace StarLab.Data.Import
                     break;
 
                 default:
-                    throw new ArgumentException(); // TODO
+                    throw new ArgumentException(ExceptionMessages.UnrecognisedFileType);
             }
 
             var map = BuildMap(importDefinition);

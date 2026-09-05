@@ -7,8 +7,4 @@
     <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\StarLab.Shared.Resources\StarLab.Shared.Resources.csproj" />
-  </ItemGroup>
-
 </Project>

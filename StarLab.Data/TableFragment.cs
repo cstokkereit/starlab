@@ -1,4 +1,5 @@
 ﻿using StarLab.Application.Data;
+using StarLab.Shared;
 
 namespace StarLab.Data
 {
@@ -55,7 +56,7 @@ namespace StarLab.Data
         /// <returns>A reference to this <see cref="ITable"/> object to allow fluent addition of fields.</returns>
         public ITable AddField(IField field)
         {
-            if (fields.ContainsKey(field.Name)) throw new ArgumentException(); // TODO
+            if (fields.ContainsKey(field.Name)) throw new InvalidOperationException(ExceptionMessages.FieldAlreadyAdded(field.Name));
 
             if (field.Table != Name)
             {

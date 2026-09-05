@@ -1,4 +1,5 @@
 ﻿using StarLab.Application.Data;
+using StarLab.Shared;
 using System.Text;
 
 namespace StarLab.Data
@@ -60,7 +61,7 @@ namespace StarLab.Data
         /// <param name="table">The <see cref="ITable"/> containing the fields being added to the query.</param>
         public virtual void AddTable(ITable table)
         {
-            if (tables.ContainsKey(table.Name)) throw new ArgumentException(); // TODO
+            if (tables.ContainsKey(table.Name)) throw new InvalidOperationException(ExceptionMessages.TableAlreadyAdded(table.Name));
 
             tables.Add(table.Name, table);
 

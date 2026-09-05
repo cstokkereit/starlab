@@ -6,7 +6,7 @@ using StarLab.Domain.Entities;
 namespace StarLab.Data.MongoDB
 {
     /// <summary>
-    /// TODO
+    /// A MongoDB specific implementation of the <see cref="IDatabase"/> interface.
     /// </summary>
     internal class Database : IDatabase
     {
@@ -41,22 +41,79 @@ namespace StarLab.Data.MongoDB
             return database.GetCollection<BsonDocument>(name);
         }
 
-        public IList<IStar> GetStars(IQuery query, int skip, int rowLimit)
+        /// <summary>
+        /// Retrieves the data specified in the query. If a large amount of data could be returned by the query use the skip and limit parameters to limit the amount of data returned.
+        /// </summary>
+        /// <param name="query">The <see cref="IQuery"/> that determines which values will be returned.</param>
+        /// <param name="skip">The number of records to skip before starting to retrieve records.</param>
+        /// <param name="limit">The maximum number of records to retrieve.</param>
+        /// <returns>An <see cref="IList{IStar}"/> containg the specified values.</returns>
+        public IList<IStar> GetStars(IQuery query, int skip, int limit)
         {
-            // Need to check that just one table
-            var collection = database.GetCollection<BsonDocument>(query.SelectStatement.Tables[0].Name);
+            if (query.FromClause.Size > 1) throw new NotImplementedException(); // Currently works with just one table
+
+            var stars = new List<IStar>();
 
             if (query is Query q)
             {
-                collection.Find(q.GetFilter()).Project(q.GetProjection());
+                var table = query.SelectStatement.Tables[0];
+
+                var collection = database.GetCollection<BsonDocument>(table.Name);
+
+                List<BsonDocument> documents;
+
+                if (!table.SelectAll)
+                {
+                    documents = collection.Find(q.GetFilter()).Project(q.GetProjection()).Skip(skip).Limit(limit).ToList();
+                }
+                else
+                {
+                    documents = collection.Find(q.GetFilter()).Skip(skip).Limit(limit).ToList();
+                }
+
+                var data = new EntityData(); 
+
+                foreach (var document in documents)
+                {
+                    data.SetData(document);
+
+                    stars.Add(new Star(data));
+                }
             }
 
-            throw new ArgumentException();
+            return stars;
         }
 
+        /// <summary>
+        /// Retrieves the data specified in the query. This is the preferred method for returning large amounts of data.
+        /// </summary>
+        /// <param name="query">The <see cref="IQuery"/> that determines which values will be returned.</param>
+        /// <returns>An <see cref="IForwardOnlyCursor{IStar}"/> containg the specified values.</returns>
         public IForwardOnlyCursor<IStar> GetStars(IQuery query)
         {
-            throw new NotImplementedException();
+            if (query.FromClause.Size > 1) throw new NotImplementedException(); // Currently works with just one table
+
+            if (query is Query q)
+            {
+                var table = query.SelectStatement.Tables[0];
+
+                var collection = database.GetCollection<BsonDocument>(table.Name);
+
+                IAsyncCursor<BsonDocument> documents;
+
+                if (!table.SelectAll)
+                {
+                    documents = collection.Find(q.GetFilter()).Project(q.GetProjection()).ToCursor();
+                }
+                else
+                {
+                    documents = collection.FindSync(q.GetFilter());
+                }
+
+                return new Stars(documents);
+            }
+
+            return new Stars();
         }
     }
 }

@@ -139,7 +139,7 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
 
             this.presenter = (IWorkspaceExplorerViewPresenter)presenter;
 
-            log.Debug(string.Format(LogEntries.PresenterAttached, $"{presenter.GetType().Name}({Name})"));
+            log.Debug(LogEntries.PresenterAttached(presenter.GetType()));
         }
 
         /// <summary>
@@ -149,11 +149,11 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         {
             if (presenter != null)
             {
-                var entry = $"{presenter.GetType().Name}({Name})";
+                var type = presenter.GetType();
 
                 presenter = null;
 
-                log.Debug(string.Format(LogEntries.PresenterDetached, entry));
+                log.Debug(LogEntries.PresenterDetached(type));
             }
         }
 

@@ -129,6 +129,8 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="source">The key that identifies the document or folder to be copied.</param>
         public void Copy(string source)
         {
+            ArgumentException.ThrowIfNullOrEmpty(source, nameof(source));
+
             View.Clipboard.SetText(source);
 
             copy = true;
@@ -224,6 +226,8 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="source">The key that identifies the document or folder to be cut.</param>
         public void Cut(string source)
         {
+            ArgumentException.ThrowIfNullOrEmpty(source, nameof(source));
+
             View.Clipboard.SetText(source);
 
             copy = false;
@@ -290,14 +294,14 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="controller">The <see cref="IApplicationController"/>.</param>
         public override void Initialise(IApplicationController controller)
         {
-            if (Initialised) throw new InvalidOperationException(string.Format(StringResources.AlreadyInitialised, nameof(WorkspaceExplorerViewPresenter)));
+            if (Initialised) throw new InvalidOperationException(ExceptionMessages.PresenterAlreadyInitialised(GetType()));
             
             base.Initialise(controller);
 
             AddImages();
             CreateToolbar();
             
-            log.Debug(string.Format(LogEntries.Initialised, nameof(WorkspaceExplorerViewPresenter)));
+            log.Debug(LogEntries.PresenterInitialised(GetType()));
         }
 
         /// <summary>
@@ -531,8 +535,6 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// </summary>
         private void CreateDocumentNodes()
         {
-            // TODO Star Detail, Database/Catalog, Image, Link, Text?
-
             foreach (var document in workspace.Documents)
             {
                 switch (document.Type)

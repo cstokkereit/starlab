@@ -78,11 +78,11 @@ namespace StarLab.UI
 
                 controller.Close();
 
-                log.Debug(CreateLogEntry(LogEntries.ViewClosed, document));
+                log.Debug(LogEntries.ViewClosed(document.ID.ToString(), document.Name));
             }
             catch (Exception e)
             {
-                log.Error(CreateLogEntry(LogEntries.ViewNotClosed, document), e);
+                log.Error(LogEntries.ViewNotClosed(document.ID.ToString(), document.Name), e);
             }
         }
 
@@ -238,7 +238,7 @@ namespace StarLab.UI
         {
             if (view != null && args.View != null)
             {
-                log.Debug(string.Format(LogEntries.ActiveViewChanged, view.ID, args.View.ID));
+                log.Debug(LogEntries.ActiveViewChanged(view.ID.ToString(), args.View.ID.ToString()));
             }
 
             view = args.View;
@@ -278,7 +278,7 @@ namespace StarLab.UI
             {
                 var application = CreateApplicationView();
 
-                log.Debug(string.Format(LogEntries.ViewCreated, ViewIDs.Application));
+                log.Debug(LogEntries.ViewCreated(ViewIDs.Application.ToString()));
 
                 System.Windows.Forms.Application.Run(application);
             }
@@ -471,13 +471,13 @@ namespace StarLab.UI
                     controller.Initialise(this);
                 }
 
-                log.Debug(string.Format(LogEntries.ViewCreated, view.Name));
+                log.Debug(LogEntries.ViewCreated(view.Name));
 
                 views.Add(view.ID, view);
             }
             catch (Exception e)
             {
-                log.Error(string.Format(LogEntries.ViewNotCreated, name), e);
+                log.Error(LogEntries.ViewNotCreated(name), e);
             }
         }
 
@@ -513,13 +513,13 @@ namespace StarLab.UI
                     controller.Initialise(this);
                 }
 
-                log.Debug(CreateLogEntry(LogEntries.ViewCreated, document));
+                log.Debug(LogEntries.ViewCreated(document.ID.ToString(), document.Name));
 
                 views.Add(view.ID, view);
             }
             catch (Exception e)
             {
-                log.Error(CreateLogEntry(LogEntries.ViewNotCreated, document), e);
+                log.Error(LogEntries.ViewNotCreated(document.Name), e);
             }
         }
 
@@ -546,13 +546,13 @@ namespace StarLab.UI
                     controller.Initialise(this);
                 }
 
-                log.Debug(string.Format(LogEntries.ViewCreated, view.Name));
+                log.Debug(LogEntries.ViewCreated(view.Name));
 
                 views.Add(view.ID, view);
             }
             catch (Exception e)
             {
-                log.Error(string.Format(LogEntries.ViewNotCreated, name), e);
+                log.Error(LogEntries.ViewNotCreated(name), e);
             }
         }
 
@@ -571,34 +571,6 @@ namespace StarLab.UI
         {
             CreateDialogViews();
             CreateToolViews();
-        }
-
-        /// <summary>
-        /// Creates the specified log entry from the information in the <see cref="IDocument"/> provided.
-        /// </summary>
-        /// <param name="template">The log entry template.</param>
-        /// <param name="document">The <see cref="IDocument"/> that is the subject of the log entry.</param>
-        /// <returns>The specified log entry.</returns>
-        private string CreateLogEntry(string template, IDocument document)
-        {
-            string message;
-
-            switch (document.Type)
-            {
-                case DocumentTypes.Chart:
-                    message = string.Format(template, $"chart {document.Name} ({document.ID})");
-                    break;
-
-                case DocumentTypes.Table:
-                    message = string.Format(template, $"table {document.Name} ({document.ID})");
-                    break;
-
-                default:
-                    message = string.Format(LogEntries.UnrecognisedDocumentType, document.Type);
-                    break;
-            }
-
-            return message;
         }
 
         /// <summary>

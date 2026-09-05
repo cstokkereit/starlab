@@ -111,7 +111,7 @@ namespace StarLab.Presentation
 
                 Events.Publish(new WorkspaceClosedEventArgs(workspace), true);
 
-                workspace = new EmptyWorkspace(); // TODO - Can we just use new Workspace?
+                workspace = new EmptyWorkspace();
 
                 Events.Publish(new WorkspaceChangedEventArgs(workspace));
             }
@@ -184,7 +184,7 @@ namespace StarLab.Presentation
         /// <param name="controller">The <see cref="IApplicationController"/>.</param>
         public override void Initialise(IApplicationController controller)
         {
-            if (Initialised) throw new InvalidOperationException(string.Format(StringResources.AlreadyInitialised, nameof(ApplicationViewPresenter)));
+            if (Initialised) throw new InvalidOperationException(ExceptionMessages.PresenterAlreadyInitialised(GetType()));
                 
             base.Initialise(controller);
 
@@ -199,7 +199,7 @@ namespace StarLab.Presentation
 
             OpenDefaultWorkspace();
 
-            log.Debug(string.Format(LogEntries.Initialised, nameof(ApplicationViewPresenter)));
+            log.Debug(LogEntries.PresenterInitialised(GetType()));
         }
 
         /// <summary>

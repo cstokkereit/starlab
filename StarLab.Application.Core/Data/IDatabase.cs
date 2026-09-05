@@ -8,13 +8,19 @@ namespace StarLab.Application.Data
     public interface IDatabase
     {
         /// <summary>
-        /// Retrieves the data specified in the query. If a large amount of data could be returned by the query use the skip and rowLimit parameters to limit the amount of data returned.
+        /// Drops the collection with the specified name.
+        /// </summary>
+        /// <param name="name">The name of the collection.</param>
+        void DropCollection(string name);
+
+        /// <summary>
+        /// Retrieves the data specified in the query. If a large amount of data could be returned by the query use the skip and limit parameters to limit the amount of data returned.
         /// </summary>
         /// <param name="query">The <see cref="IQuery"/> that determines which values will be returned.</param>
         /// <param name="skip">The number of records to skip before starting to retrieve records.</param>
-        /// <param name="rowLimit">The maximum number of records to retrieve.</param>
+        /// <param name="limit">The maximum number of records to retrieve.</param>
         /// <returns>An <see cref="IList{IStar}"/> containg the specified values.</returns>
-        IList<IStar> GetStars(IQuery query, int skip, int rowLimit);
+        IList<IStar> GetStars(IQuery query, int skip, int limit);
 
         /// <summary>
         /// Retrieves the data specified in the query. This is the preferred method for returning large amounts of data.

@@ -24,17 +24,17 @@ namespace StarLab.Application.Workspace.Documents
         /// <exception cref="ArgumentException"></exception>
         public Document(DocumentDTO dto, IFolder folder)
         {
+            this.folder = folder ?? throw new ArgumentNullException(nameof(folder));
+
             id = string.IsNullOrEmpty(dto.ID) ? new DocumentID() : new DocumentID(dto.ID);
-
-            this.folder = folder ?? throw new ArgumentException();
-
-            Name = dto.Name ?? throw new ArgumentException(); // TODO - Error messages
-
-            type = dto.Type ?? throw new ArgumentException();
-            view = dto.View ?? throw new ArgumentException();
 
             Chart = dto.Chart == null ? null : new Chart(dto.Chart);
             Table = dto.Table == null ? null : new Table(dto.Table);
+
+            Name = dto.Name;
+
+            type = dto.Type;
+            view = dto.View;
         }
 
         /// <summary>
@@ -48,12 +48,13 @@ namespace StarLab.Application.Workspace.Documents
         {
             ArgumentNullException.ThrowIfNull(document, nameof(document));
 
-            this.folder = folder ?? throw new ArgumentNullException();
+            this.folder = folder ?? throw new ArgumentNullException(nameof(folder));
 
             id = new DocumentID();
 
             Chart = document.Chart;
             Table = document.Table;
+
             Name = name;
 
             type = document.Type;
@@ -70,7 +71,7 @@ namespace StarLab.Application.Workspace.Documents
         {
             ArgumentNullException.ThrowIfNull(document, nameof(document));
 
-            this.folder = folder ?? throw new ArgumentNullException();
+            this.folder = folder ?? throw new ArgumentNullException(nameof(folder));
 
             id = new DocumentID();
 

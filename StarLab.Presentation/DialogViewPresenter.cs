@@ -25,6 +25,7 @@ namespace StarLab.Presentation
         /// <param name="context">An <see cref="ISessionContext"/> that provides access to the session context.</param>
         /// <param name="commands">An <see cref="ICommandManager"/> that is required for the creation of <see cref="ICommand">s.</param>
         /// <param name="events">The <see cref="IEventAggregator"/> that manages application events.</param>
+        /// <exception cref="ArgumentNullException"></exception>
         public DialogViewPresenter(IDialogView view, IChildViewController childController, ISessionContext context, ICommandManager commands, IEventAggregator events)
             : base(view, context, commands, events)
         {
@@ -79,13 +80,13 @@ namespace StarLab.Presentation
         /// <param name="controller">The <see cref="IApplicationController"/>.</param>
         public override void Initialise(IApplicationController controller)
         {
-            if (Initialised) throw new InvalidOperationException(string.Format(Resources.AlreadyInitialised, nameof(DialogViewPresenter)));
+            if (Initialised) throw new InvalidOperationException(ExceptionMessages.PresenterAlreadyInitialised(GetType()));
 
             base.Initialise(controller);
 
             childController.Initialise(controller);
 
-            log.Debug(string.Format(LogEntries.Initialised, $"{nameof(DialogViewPresenter)}({View.Name})"));
+            log.Debug(LogEntries.PresenterInitialised(GetType(), View.Name));
         }
 
         /// <summary>

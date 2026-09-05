@@ -917,7 +917,7 @@ namespace StarLab.Data.MongoDB
             field2.Table.Returns("Table-1");
             field2.Name.Returns("Field-1");
 
-            Assert.Throws<ArgumentException>(() => builder.CreateTable("Table-1", [field1, field2]));
+            Assert.Throws<InvalidOperationException>(() => builder.CreateTable("Table-1", [field1, field2]));
         }
 
         /// <summary>

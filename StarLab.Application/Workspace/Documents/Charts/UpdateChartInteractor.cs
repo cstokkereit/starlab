@@ -32,6 +32,9 @@ namespace StarLab.Application.Workspace.Documents.Charts
 
             var database = databases.GetDatabase(args.DatabaseName);
 
+            
+
+            //database.GetStars();
 
             // Will need to return the dataset returned by the query - async?
         }

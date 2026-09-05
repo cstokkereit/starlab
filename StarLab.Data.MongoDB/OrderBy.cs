@@ -5,6 +5,6 @@
     /// </summary>
     internal class OrderBy : OrderByFragment
     {
-        // TODO - Not implemented yet
+        // TODO - Sorting
     }
 }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using StarLab.Application;
 using StarLab.Application.Workspace;
+using StarLab.Shared;
 using System.Xml.Serialization;
 
 namespace StarLab.Serialisation
@@ -40,7 +41,7 @@ namespace StarLab.Serialisation
                 }
             }
 
-            if (workspace == null) throw new Exception(); // TODO - Exception message
+            if (workspace == null) throw new Exception(ExceptionMessages.WorkspaceNotLoaded(filename));
 
             return mapper.Map<Workspace.Workspace, WorkspaceDTO>(workspace);
         }

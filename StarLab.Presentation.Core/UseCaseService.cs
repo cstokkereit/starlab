@@ -56,7 +56,7 @@ namespace StarLab.Presentation
         /// <param name="controller">The application controller.</param>
         public void Initialise(IApplicationController controller)
         {
-            log.Debug(string.Format(LogEntries.Initialised, this));
+            log.Debug(LogEntries.ServiceInitialised(GetType()));
 
             this.controller = controller;
         }

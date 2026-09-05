@@ -101,7 +101,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// <param name="controller">The <see cref="IApplicationController"/>.</param>
         public override void Initialise(IApplicationController controller)
         {
-            if (Initialised) throw new InvalidOperationException(string.Format(StringResources.AlreadyInitialised, nameof(ChartSettingsViewPresenter)));
+            if (Initialised) throw new InvalidOperationException(ExceptionMessages.PresenterAlreadyInitialised(GetType()));
 
             base.Initialise(controller);
 
@@ -121,7 +121,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
 
             View.Initialise();
 
-            log.Debug(string.Format(LogEntries.Initialised, $"{nameof(ChartSettingsViewPresenter)}({View.Name})"));
+            log.Debug(LogEntries.PresenterInitialised(GetType()));
         }
 
         /// <summary>
