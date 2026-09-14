@@ -1,5 +1,5 @@
 ﻿using StarLab.Presentation.Configuration;
-using StarLab.Shared.Properties;
+using StarLab.Shared;
 using Stratosoft.Commands;
 using System.Diagnostics;
 
@@ -53,7 +53,7 @@ namespace StarLab.Presentation
         {
             get
             {
-                if (controller == null) throw new InvalidOperationException(string.Format(Resources.NotInitialised, "presenter"));
+                if (controller == null) throw new InvalidOperationException(ExceptionMessages.ObjectNotInitialised(GetType()));
 
                 return controller;
             }

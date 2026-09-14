@@ -155,8 +155,7 @@ namespace StarLab.Presentation.Workspace
                         break;
 
                     default:
-                        log.Warn(LogEntries.UnrecognisedDocumentType(dto.Type));
-                        break;
+                        throw new Exception(ExceptionMessages.UnknownType(dto.Type));
                 }
             }
         }

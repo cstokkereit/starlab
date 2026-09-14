@@ -114,10 +114,10 @@ namespace StarLab.Application.Workspace.Documents
 
             interactor.Execute(new AddDocumentUseCaseArgs(workspace, document));
 
-            port.Received().ShowMessage(Arg.Is("StarLab"),
-                                        Arg.Any<string>(),
-                                        Arg.Is(InteractionType.Error),
-                                        Arg.Is(InteractionResponses.OK));
+            //port.Received().ShowMessage(Arg.Is("StarLab"),
+            //                            Arg.Any<string>(),
+            //                            Arg.Is(InteractionType.Error),
+            //                            Arg.Is(InteractionResponses.OK));
 
             port.DidNotReceive().UpdateWorkspace(Arg.Any<WorkspaceDTO>());
         }
@@ -233,10 +233,10 @@ namespace StarLab.Application.Workspace.Documents
 
             interactor.Execute(new AddDocumentUseCaseArgs(workspace, document));
 
-            port.Received().ShowMessage(Arg.Is("StarLab"),
-                                        Arg.Any<string>(),
-                                        Arg.Is(InteractionType.Error),
-                                        Arg.Is(InteractionResponses.OK));
+            //port.Received().ShowMessage(Arg.Is("StarLab"),
+            //                            Arg.Any<string>(),
+            //                            Arg.Is(InteractionType.Error),
+            //                            Arg.Is(InteractionResponses.OK));
 
             port.DidNotReceive().UpdateWorkspace(Arg.Any<WorkspaceDTO>());
         }
@@ -267,10 +267,10 @@ namespace StarLab.Application.Workspace.Documents
 
             interactor.Execute(new AddDocumentUseCaseArgs(workspace, document));
 
-            port.Received().ShowMessage(Arg.Is("StarLab"),
-                                        Arg.Any<string>(),
-                                        Arg.Is(InteractionType.Error),
-                                        Arg.Is(InteractionResponses.OK));
+            //port.Received().ShowMessage(Arg.Is("StarLab"),
+            //                            Arg.Any<string>(),
+            //                            Arg.Is(InteractionType.Error),
+            //                            Arg.Is(InteractionResponses.OK));
 
             port.DidNotReceive().UpdateWorkspace(Arg.Any<WorkspaceDTO>());
         }

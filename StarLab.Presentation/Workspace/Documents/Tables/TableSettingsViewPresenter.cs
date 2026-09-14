@@ -36,6 +36,7 @@ namespace StarLab.Presentation.Workspace.Documents.Tables
         /// <param name="commands">An <see cref="ICommandManager"/> that is required for the creation of <see cref="ICommand">s.</param>
         /// <param name="services">An <see cref="IServiceRegistry"/> that provides access to the registered services.</param>
         /// <param name="events">The <see cref="IEventAggregator"/> that manages application events.</param>
+        /// <exception cref="ArgumentNullException"></exception>
         public TableSettingsViewPresenter(ITableSettingsView view, ISessionContext context, ICommandManager commands, IServiceRegistry services, IEventAggregator events)
             : base(view, context, commands, events)
         {

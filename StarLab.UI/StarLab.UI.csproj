@@ -41,6 +41,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\StarLab.Application.Core\StarLab.Application.Core.csproj" />
+    <ProjectReference Include="..\StarLab.Application\StarLab.Application.csproj" />
     <ProjectReference Include="..\StarLab.Data.MongoDB\StarLab.Data.MongoDB.csproj" />
     <ProjectReference Include="..\StarLab.Data\StarLab.Data.csproj" />
     <ProjectReference Include="..\StarLab.Persistence\StarLab.Serialisation.csproj" />

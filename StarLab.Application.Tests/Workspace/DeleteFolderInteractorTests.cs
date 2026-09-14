@@ -54,10 +54,10 @@ namespace StarLab.Application.Workspace
                 .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A3", "Document4", "Workspace/Project1/Folder3")
                 .CreateWorkspace();
 
-            port.ShowMessage(Arg.Any<string>(),
-                             Arg.Is("The folder 'Folder2' and all of its contents will be deleted permanently."),
-                             Arg.Is(InteractionType.Warning),
-                             Arg.Is(InteractionResponses.OKCancel)).Returns(InteractionResult.OK);
+            //port.ShowMessage(Arg.Any<string>(),
+            //                 Arg.Is("The folder 'Folder2' and all of its contents will be deleted permanently."),
+            //                 Arg.Is(InteractionType.Warning),
+            //                 Arg.Is(InteractionResponses.OKCancel)).Returns(InteractionResult.OK);
 
             interactor.Execute(new DeleteFolderUseCaseArgs(workspace, "Workspace/Project1/Folder2"));
 
@@ -89,10 +89,10 @@ namespace StarLab.Application.Workspace
                 .AddChart("B997452E-AC89-40B5-B304-525F93CCC03", "Document4", "Workspace/Project1/Folder3")
                 .CreateWorkspace();
 
-            port.ShowMessage(Arg.Any<string>(),
-                             Arg.Is("The folder 'Folder2' and all of its contents will be deleted permanently."),
-                             Arg.Is(InteractionType.Warning),
-                             Arg.Is(InteractionResponses.OKCancel)).Returns(InteractionResult.Cancel);
+            //port.ShowMessage(Arg.Any<string>(),
+            //                 Arg.Is("The folder 'Folder2' and all of its contents will be deleted permanently."),
+            //                 Arg.Is(InteractionType.Warning),
+            //                 Arg.Is(InteractionResponses.OKCancel)).Returns(InteractionResult.Cancel);
 
             interactor.Execute(new DeleteFolderUseCaseArgs(workspace, "Workspace/Project1/Folder2"));
 
@@ -127,10 +127,10 @@ namespace StarLab.Application.Workspace
                 .AddChart("B997452E-AC89-40B5-B304-525F93CCC222", "Document8", "Workspace/Project1/Folder2/Folder2")
                 .CreateWorkspace();
 
-            port.ShowMessage(Arg.Any<string>(),
-                             Arg.Is("The folder 'Folder1' and all of its contents will be deleted permanently."),
-                             Arg.Is(InteractionType.Warning),
-                             Arg.Is(InteractionResponses.OKCancel)).Returns(InteractionResult.OK);
+            //port.ShowMessage(Arg.Any<string>(),
+            //                 Arg.Is("The folder 'Folder1' and all of its contents will be deleted permanently."),
+            //                 Arg.Is(InteractionType.Warning),
+            //                 Arg.Is(InteractionResponses.OKCancel)).Returns(InteractionResult.OK);
 
             interactor.Execute(new DeleteFolderUseCaseArgs(workspace, "Workspace/Project1/Folder1"));
 
@@ -168,7 +168,7 @@ namespace StarLab.Application.Workspace
 
             interactor.Execute(new DeleteFolderUseCaseArgs(workspace, "Workspace/Project1/Folder2"));
 
-            port.DidNotReceive().ShowMessage(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<InteractionType>(), Arg.Any<InteractionResponses>());
+            //port.DidNotReceive().ShowMessage(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<InteractionType>(), Arg.Any<InteractionResponses>());
 
             port.DidNotReceive().UpdateWorkspace(Arg.Any<WorkspaceDTO>());
         }
@@ -212,10 +212,10 @@ namespace StarLab.Application.Workspace
                 .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A3", "Document4", "Workspace/Project3")
                 .CreateWorkspace();
 
-            port.ShowMessage(Arg.Any<string>(),
-                             Arg.Is("The project 'Project2' and all of its contents will be deleted permanently."),
-                             Arg.Is(InteractionType.Warning),
-                             Arg.Is(InteractionResponses.OKCancel)).Returns(InteractionResult.OK);
+            //port.ShowMessage(Arg.Any<string>(),
+            //                 Arg.Is("The project 'Project2' and all of its contents will be deleted permanently."),
+            //                 Arg.Is(InteractionType.Warning),
+            //                 Arg.Is(InteractionResponses.OKCancel)).Returns(InteractionResult.OK);
 
             interactor.Execute(new DeleteFolderUseCaseArgs(workspace, "Workspace/Project2"));
 
@@ -245,10 +245,10 @@ namespace StarLab.Application.Workspace
                 .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A3", "Document4", "Workspace/Project3")
                 .CreateWorkspace();
 
-            port.ShowMessage(Arg.Any<string>(),
-                             Arg.Is("The project 'Project2' and all of its contents will be deleted permanently."),
-                             Arg.Is(InteractionType.Warning),
-                             Arg.Is(InteractionResponses.OKCancel)).Returns(InteractionResult.Cancel);
+            //port.ShowMessage(Arg.Any<string>(),
+            //                 Arg.Is("The project 'Project2' and all of its contents will be deleted permanently."),
+            //                 Arg.Is(InteractionType.Warning),
+            //                 Arg.Is(InteractionResponses.OKCancel)).Returns(InteractionResult.Cancel);
 
             interactor.Execute(new DeleteFolderUseCaseArgs(workspace, "Workspace/Project2"));
 
@@ -284,10 +284,10 @@ namespace StarLab.Application.Workspace
                 .AddChart("B997452E-AC89-40B5-B304-525F93CC2122", "Document8", "Workspace/Project2/Folder1/Folder2")
                 .CreateWorkspace();
 
-            port.ShowMessage(Arg.Any<string>(),
-                             Arg.Is("The project 'Project1' and all of its contents will be deleted permanently."),
-                             Arg.Is(InteractionType.Warning),
-                             Arg.Is(InteractionResponses.OKCancel)).Returns(InteractionResult.OK);
+            //port.ShowMessage(Arg.Any<string>(),
+            //                 Arg.Is("The project 'Project1' and all of its contents will be deleted permanently."),
+            //                 Arg.Is(InteractionType.Warning),
+            //                 Arg.Is(InteractionResponses.OKCancel)).Returns(InteractionResult.OK);
 
             interactor.Execute(new DeleteFolderUseCaseArgs(workspace, "Workspace/Project1"));
 
@@ -324,7 +324,7 @@ namespace StarLab.Application.Workspace
 
             interactor.Execute(new DeleteFolderUseCaseArgs(workspace, "Workspace/Project2"));
 
-            port.DidNotReceive().ShowMessage(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<InteractionType>(), Arg.Any<InteractionResponses>());
+            //port.DidNotReceive().ShowMessage(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<InteractionType>(), Arg.Any<InteractionResponses>());
 
             port.DidNotReceive().UpdateWorkspace(Arg.Any<WorkspaceDTO>());
         }

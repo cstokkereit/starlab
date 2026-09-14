@@ -78,11 +78,11 @@ namespace StarLab.UI
 
                 controller.Close();
 
-                log.Debug(LogEntries.ViewClosed(document.ID.ToString(), document.Name));
+                log.Debug(LogEntries.ViewClosed(document.ID, document.Name));
             }
             catch (Exception e)
             {
-                log.Error(LogEntries.ViewNotClosed(document.ID.ToString(), document.Name), e);
+                log.Error(e.Message, e);
             }
         }
 
@@ -142,17 +142,21 @@ namespace StarLab.UI
         /// <returns>The specified <see cref="IDocumentController"/>.</returns>
         public IDocumentController GetController(IDocument document)
         {
+            var viewID = new ViewID(document);
+
             if (views.TryGetValue(new ViewID(document), out IView? view))
             {
-                if (controllers.TryGetValue(new ControllerID(view), out IViewController? controller))
+                var controllerID = new ControllerID(view);
+
+                if (controllers.TryGetValue(controllerID, out IViewController? controller))
                 {
                     if (controller is IDocumentController required) return required;
                 }
 
-                throw new KeyNotFoundException(string.Format(Resources.ControllerNotFound, document.ID));
+                throw new KeyNotFoundException(ExceptionMessages.ControllerNotFound(controllerID));
             }
 
-            throw new KeyNotFoundException(string.Format(Resources.ViewNotFound, document.ID)); 
+            throw new KeyNotFoundException(ExceptionMessages.ViewNotFound(viewID));
         }
 
         /// <summary>
@@ -174,7 +178,7 @@ namespace StarLab.UI
                 }
             }
 
-            throw new Exception(string.Format(Resources.UnknownType, typeof(TOutputPort)));
+            throw new Exception(ExceptionMessages.UnknownType(typeof(TOutputPort)));
         }
 
         /// <summary>
@@ -195,7 +199,7 @@ namespace StarLab.UI
                 }
             }
 
-            throw new Exception(string.Format(Resources.UnknownType, typeof(TOutputPort)));
+            throw new Exception(ExceptionMessages.UnknownType(typeof(TOutputPort)));
         }
 
         /// <summary>
@@ -227,7 +231,7 @@ namespace StarLab.UI
                 return view;
             }
 
-            throw new ArgumentException(string.Format(Resources.ViewNotFound, id), nameof(id));
+            throw new KeyNotFoundException(ExceptionMessages.ViewNotFound(id));
         }
 
         /// <summary>
@@ -238,7 +242,7 @@ namespace StarLab.UI
         {
             if (view != null && args.View != null)
             {
-                log.Debug(LogEntries.ActiveViewChanged(view.ID.ToString(), args.View.ID.ToString()));
+                log.Debug(LogEntries.ActiveViewChanged(view.ID, args.View.ID));
             }
 
             view = args.View;
@@ -308,9 +312,16 @@ namespace StarLab.UI
 
             var controller = GetController(view);
 
-            controller.Run(new AddDocumentViewContext(path, type));
+            try
+            {
+                controller.Run(new AddDocumentViewContext(path, type));
 
-            this.controller?.Show(view);
+                this.controller?.Show(view);
+            }
+            catch (Exception e)
+            {
+                log.Error(e.Message, e);
+            }
         }
 
         /// <summary>
@@ -343,6 +354,18 @@ namespace StarLab.UI
         }
 
         /// <summary>
+        /// Displays a message box with the specified message, message type and available responses.
+        /// </summary>
+        /// <param name="message">The message text.</param>
+        /// <param name="type">An <see cref="InteractionType"/> that specifies the type of message being displayed.</param>
+        /// <param name="responses">An <see cref="InteractionResponses"/> that specifies the available responses.</param>
+        /// <returns>An <see cref="InteractionResult"/> that identifies the chosen response.</returns>
+        public InteractionResult ShowMessage(string message, InteractionType type, InteractionResponses responses)
+        {
+            return ShowMessage(Resources.StarLab, message, type, responses);
+        }
+
+        /// <summary>
         /// Displays a message box with the specified caption, message and available responses.
         /// </summary>
         /// <param name="caption">The message box caption.</param>
@@ -355,6 +378,17 @@ namespace StarLab.UI
         }
 
         /// <summary>
+        /// Displays a message box with the specified message and available responses.
+        /// </summary>
+        /// <param name="message">The message text.</param>
+        /// <param name="responses">An <see cref="InteractionResponses"/> that specifies the available responses.</param>
+        /// <returns>An <see cref="InteractionResult"/> that identifies the chosen response.</returns>
+        public InteractionResult ShowMessage(string message, InteractionResponses responses)
+        {
+            return ShowMessage(Resources.StarLab, message, responses);
+        }
+
+        /// <summary>
         /// Displays a message box with the specified caption and message.
         /// </summary>
         /// <param name="caption">The message box caption.</param>
@@ -362,6 +396,15 @@ namespace StarLab.UI
         public void ShowMessage(string caption, string message)
         {
             ShowMessage(caption, message, InteractionResponses.OK);
+        }
+
+        /// <summary>
+        /// Displays a message box with the specified message.
+        /// </summary>
+        /// <param name="message">The message text.</param>
+        public void ShowMessage(string message)
+        {
+            ShowMessage(Resources.StarLab, message);
         }
 
         /// <summary>
@@ -477,7 +520,7 @@ namespace StarLab.UI
             }
             catch (Exception e)
             {
-                log.Error(LogEntries.ViewNotCreated(name), e);
+                log.Error(e.Message, e);
             }
         }
 
@@ -513,13 +556,13 @@ namespace StarLab.UI
                     controller.Initialise(this);
                 }
 
-                log.Debug(LogEntries.ViewCreated(document.ID.ToString(), document.Name));
+                log.Debug(LogEntries.ViewCreated(document.ID, document.Name));
 
                 views.Add(view.ID, view);
             }
             catch (Exception e)
             {
-                log.Error(LogEntries.ViewNotCreated(document.Name), e);
+                log.Error(e.Message, e);
             }
         }
 
@@ -552,7 +595,7 @@ namespace StarLab.UI
             }
             catch (Exception e)
             {
-                log.Error(LogEntries.ViewNotCreated(name), e);
+                log.Error(e.Message, e);
             }
         }
 
@@ -586,7 +629,7 @@ namespace StarLab.UI
 
             if (this.controller == null)
             {
-                throw new InvalidOperationException(string.Format(Resources.NotInitialised, $"{(view != null ? view.Name : "view")} controller"));
+                throw new InvalidOperationException(ExceptionMessages.ControllerNotInitialised(view != null ? view.Name : Constants.View));
             }
             
             return this.controller;
@@ -607,7 +650,7 @@ namespace StarLab.UI
                 if (controller is IDialogController required) return required;
             }
 
-            throw new KeyNotFoundException(string.Format(Resources.ControllerNotFound, id));
+            throw new KeyNotFoundException(ExceptionMessages.ControllerNotFound(id));
         }
 
         /// <summary>
@@ -625,7 +668,7 @@ namespace StarLab.UI
             }
             else
             {
-                throw new ArgumentException(string.Format(Resources.ViewNotFound, id), nameof(id));
+                throw new KeyNotFoundException(ExceptionMessages.ViewNotFound(id));
             }
         }
     }

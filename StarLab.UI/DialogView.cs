@@ -66,7 +66,7 @@ namespace StarLab
         /// <param name="presenter">The <see cref="IPresenter"/> that controls the view.</param>
         public void Attach(IPresenter presenter)
         {
-            if (this.presenter != null) throw new InvalidOperationException(Resources.PresenterAlreadyAttached);
+            if (this.presenter != null) throw new InvalidOperationException(ExceptionMessages.PresenterAlreadyAttached);
 
             this.presenter = (IDialogViewPresenter)presenter;
 
@@ -110,6 +110,18 @@ namespace StarLab
         public InteractionResult ShowMessage(string caption, string message, InteractionType type, InteractionResponses responses)
         {
             return DialogController.ShowMessage(this, caption, message, type, responses);
+        }
+
+        /// <summary>
+        /// Displays a message box with the specified message, message type and available responses.
+        /// </summary>
+        /// <param name="message">The message text.</param>
+        /// <param name="type">An <see cref="InteractionType"/> that specifies the type of message being displayed.</param>
+        /// <param name="responses">An <see cref="InteractionResponses"/> that specifies the available responses.</param>
+        /// <returns>An <see cref="InteractionResult"/> that identifies the chosen response.</returns>
+        public InteractionResult ShowMessage(string message, InteractionType type, InteractionResponses responses)
+        {
+            return ShowMessage(Resources.StarLab, message, type, responses);
         }
 
         /// <summary>

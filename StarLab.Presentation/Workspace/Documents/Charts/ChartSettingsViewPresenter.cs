@@ -65,8 +65,8 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// <param name="chart">The <see cref="IChartSettings"/> that specifies the state of the chart.</param>
         public void ApplyPreviewSettings(IChartSettings chart)
         {
-            if (document == null) throw new InvalidOperationException(string.Format(StringResources.VariableNotSet, StringResources.Document.ToLower()));
-            if (chart == null) throw new InvalidOperationException(string.Format(StringResources.VariableNotSet, StringResources.Chart.ToLower()));
+            if (document == null) throw new InvalidOperationException(string.Format(StringResources.VariableNotSet, StringResources.Document.ToLower())); // TODO - Use ExceptionMessages
+            if (chart == null) throw new InvalidOperationException(string.Format(StringResources.VariableNotSet, StringResources.Chart.ToLower())); // TODO - Use ExceptionMessages
 
             useCaseService.UpdateChart(document.ID, chart);
 
@@ -78,10 +78,10 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// </summary>
         public void ApplySettings()
         {
-            if (workspace == null) throw new InvalidOperationException(string.Format(StringResources.VariableNotSet, StringResources.Workspace.ToLower()));
-            if (document == null) throw new InvalidOperationException(string.Format(StringResources.VariableNotSet, StringResources.Document.ToLower()));
-            if (chart == null) throw new InvalidOperationException(string.Format(StringResources.VariableNotSet, StringResources.Chart.ToLower()));
-            
+            if (workspace == null) throw new InvalidOperationException(string.Format(StringResources.VariableNotSet, StringResources.Workspace.ToLower())); // TODO - Use ExceptionMessages
+            if (document == null) throw new InvalidOperationException(string.Format(StringResources.VariableNotSet, StringResources.Document.ToLower())); // TODO - Use ExceptionMessages
+            if (chart == null) throw new InvalidOperationException(string.Format(StringResources.VariableNotSet, StringResources.Chart.ToLower())); // TODO - Use ExceptionMessages
+
             useCaseService.UpdateDocument(workspace, document.ID, chart);
         }
 
@@ -151,7 +151,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// <param name="group">The name of the settings group to show.</param>
         public void ShowSettingsGroup(string group)
         {
-            if (chart == null) throw new InvalidOperationException(string.Format(StringResources.VariableNotSet, StringResources.Chart.ToLower()));
+            if (chart == null) throw new InvalidOperationException(string.Format(StringResources.VariableNotSet, StringResources.Chart.ToLower())); // TODO - Use ExceptionMessages
 
             Debug.Assert(groupManagers.ContainsKey(group));
 

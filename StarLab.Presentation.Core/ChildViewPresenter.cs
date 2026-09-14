@@ -1,5 +1,6 @@
 ﻿using StarLab.Application;
 using StarLab.Presentation.Configuration;
+using StarLab.Shared;
 using StarLab.Shared.Properties;
 using Stratosoft.Commands;
 
@@ -37,10 +38,12 @@ namespace StarLab.Presentation
         /// <summary>
         /// Registers the parent <see cref="IViewController"/> with the <see cref="ChildViewPresenter{TView, TParent}"/>.
         /// </summary>
-        /// <param name="parentController">An <see cref="IViewController"/> that can be used to control the behaviour of the parent view.</param>
-        public virtual void RegisterController(IViewController parentController)
+        /// <param name="controller">An <see cref="IViewController"/> that can be used to control the behaviour of the parent view.</param>
+        public virtual void RegisterController(IViewController controller)
         {
-            this.parentController = (TParent)parentController;
+            ArgumentNullException.ThrowIfNull(controller, nameof(controller));
+
+            parentController = (TParent)controller;
         }
 
         /// <summary>
@@ -49,6 +52,8 @@ namespace StarLab.Presentation
         /// <param name="context">An <see cref="IViewContext"/> that contains the contextual information required to configure the <see cref="IChildView">.</param>
         public virtual void Run(IViewContext context)
         {
+            ArgumentNullException.ThrowIfNull(context, nameof(context));
+
             // Do Nothing
         }
 
@@ -59,12 +64,22 @@ namespace StarLab.Presentation
         {
             get
             {
-                if (parentController == null) throw new InvalidOperationException(string.Format(Resources.NotInitialised, "parent controller"));
+                if (parentController == null) throw new InvalidOperationException(ExceptionMessages.ParentControllerNotInitialised());
 
                 return parentController;
             }
 
             private set { parentController = value; }
+        }
+
+        /// <summary>
+        /// Displays a message box requesting confirmation to proceed with the action described in the message text.
+        /// </summary>
+        /// <param name="message">The message text.</param>
+        /// <returns>true if the user agrees to proceed with the action; false otherwise.</returns>
+        protected bool ConfirmAction(string message)
+        {
+            return ShowMessage(message, InteractionType.Warning, InteractionResponses.OKCancel) == InteractionResult.OK;
         }
 
         /// <summary>
@@ -75,9 +90,21 @@ namespace StarLab.Presentation
         /// <param name="type">An <see cref="InteractionType"/> that specifies the type of message being displayed.</param>
         /// <param name="responses">An <see cref="InteractionResponses"/> that specifies the available responses.</param>
         /// <returns>An <see cref="InteractionResult"/> that identifies the chosen response.</returns>
-        public InteractionResult ShowMessage(string caption, string message, InteractionType type, InteractionResponses responses)
+        protected InteractionResult ShowMessage(string caption, string message, InteractionType type, InteractionResponses responses)
         {
             return AppController.ShowMessage(caption, message, type, responses);
+        }
+
+        /// <summary>
+        /// Displays a message box with the specified message, message type and available responses.
+        /// </summary>
+        /// <param name="message">The message text.</param>
+        /// <param name="type">An <see cref="InteractionType"/> that specifies the type of message being displayed.</param>
+        /// <param name="responses">An <see cref="InteractionResponses"/> that specifies the available responses.</param>
+        /// <returns>An <see cref="InteractionResult"/> that identifies the chosen response.</returns>
+        protected InteractionResult ShowMessage(string message, InteractionType type, InteractionResponses responses)
+        {
+            return AppController.ShowMessage(message, type, responses);
         }
 
         /// <summary>
@@ -87,9 +114,20 @@ namespace StarLab.Presentation
         /// <param name="message">The message text.</param>
         /// <param name="responses">An <see cref="InteractionResponses"/> that specifies the available responses.</param>
         /// <returns>An <see cref="InteractionResult"/> that identifies the chosen response.</returns>
-        public InteractionResult ShowMessage(string caption, string message, InteractionResponses responses)
+        protected InteractionResult ShowMessage(string caption, string message, InteractionResponses responses)
         {
             return AppController.ShowMessage(caption, message, responses);
+        }
+
+        /// <summary>
+        /// Displays a message box with the specified message and available responses.
+        /// </summary>
+        /// <param name="message">The message text.</param>
+        /// <param name="responses">An <see cref="InteractionResponses"/> that specifies the available responses.</param>
+        /// <returns>An <see cref="InteractionResult"/> that identifies the chosen response.</returns>
+        protected InteractionResult ShowMessage(string message, InteractionResponses responses)
+        {
+            return AppController.ShowMessage(message, responses);
         }
 
         /// <summary>
@@ -97,9 +135,18 @@ namespace StarLab.Presentation
         /// </summary>
         /// <param name="caption">The message box caption.</param>
         /// <param name="message">The message text.</param>
-        public void ShowMessage(string caption, string message)
+        protected void ShowMessage(string caption, string message)
         {
             AppController.ShowMessage(caption, message);
+        }
+
+        /// <summary>
+        /// Displays a message box with the specified message.
+        /// </summary>
+        /// <param name="message">The message text.</param>
+        protected void ShowMessage(string message)
+        {
+            AppController.ShowMessage(message);
         }
     }
 }

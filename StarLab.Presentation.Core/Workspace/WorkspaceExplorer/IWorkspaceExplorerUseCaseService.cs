@@ -42,6 +42,15 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="workspace">The <see cref="IWorkspace"/> being modified.</param>
         /// <param name="source">The key that identifies the source document or folder.</param>
         /// <param name="destination">The key that identifies the destination document or folder.</param>
+        /// <param name="replace">true to replace an existing document or folder; false otherwise.</param>
+        void CutAndPaste(IWorkspace workspace, string source, string destination, bool replace);
+
+        /// <summary>
+        /// Executes the CutAndPaste use case.
+        /// </summary>
+        /// <param name="workspace">The <see cref="IWorkspace"/> being modified.</param>
+        /// <param name="source">The key that identifies the source document or folder.</param>
+        /// <param name="destination">The key that identifies the destination document or folder.</param>
         void CutAndPaste(IWorkspace workspace, string source, string destination);
 
         /// <summary>

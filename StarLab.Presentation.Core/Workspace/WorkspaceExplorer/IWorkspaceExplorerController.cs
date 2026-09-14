@@ -26,14 +26,14 @@
         /// <summary>
         /// Deletes the specified folder.
         /// </summary>
-        /// <param name="key">The key that identifies the folder to be deleted.</param>
-        void DeleteFolder(string key);
+        /// <param name="folder">The path to the folder.</param>
+        void DeleteFolder(string folder);
 
         /// <summary>
         /// Deletes the specified project.
         /// </summary>
-        /// <param name="key">The key that identifies the project to be deleted.</param>
-        void DeleteProject(string key);
+        /// <param name="project">The project to be deleted.</param>
+        void DeleteProject(string project);
 
         /// <summary>
         /// Renames the specified node in the workspace hierarchy.

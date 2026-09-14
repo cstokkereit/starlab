@@ -97,6 +97,13 @@ namespace StarLab.Presentation.Workspace
         bool HasProject(string key);
 
         /// <summary>
+        /// Determines if the folder or project with the specified key is empty.
+        /// </summary>
+        /// <param name="key">The key of the folder or project.</param>
+        /// <returns>true if the folder or project with the specified key is empty; false otherwise.</returns>
+        bool IsEmpty(string key);
+
+        /// <summary>
         /// Sets the active document to be the <see cref="IDocument"/> with the specified ID.
         /// </summary>
         /// <param name="id">The ID of the active <see cref="IDocument"/>.</param>

@@ -1,4 +1,5 @@
 ﻿using StarLab.Application.Workspace.Documents;
+using StarLab.Shared;
 using StarLab.Shared.Properties;
 
 namespace StarLab.Application.Workspace
@@ -109,10 +110,10 @@ namespace StarLab.Application.Workspace
         /// Adds the <see cref="Document"/> provided to the workspace hierarchy.
         /// </summary>
         /// <param name="document">The <see cref="Document"/> to be added.</param>
-        /// <exception cref="NameExistsException"></exception>
+        /// <exception cref="DocumentExistsException"></exception>
         public void AddDocument(Document document)
         {
-            if (DocumentExists(document)) throw new NameExistsException(ItemTypes.Document, document.Name);
+            if (DocumentExists(document)) throw new DocumentExistsException(document.ID, document.Name, document.Path);
 
             var folder = GetFolder(document.Path);
             folder.AddDocument(document);
@@ -140,9 +141,10 @@ namespace StarLab.Application.Workspace
         /// </summary>
         /// <param name="folder">The <see cref="IFolder"/> being added.</param>
         /// <param name="path">The path to the parent folder.</param>
+        /// <exception cref="FolderExistsException"></exception>
         public void AddFolder(IFolder folder, string path)
         {
-            if (folders.ContainsKey($"{path}/{folder.Name}")) throw new NameExistsException(ItemTypes.Folder, folder.Name);
+            if (folders.ContainsKey($"{path}/{folder.Name}")) throw new FolderExistsException(folder.Name);
 
             var parent = GetFolder(path);
 
@@ -161,7 +163,9 @@ namespace StarLab.Application.Workspace
         /// <exception cref="ArgumentException"></exception>
         public void AddFolder(IFolder folder)
         {
-            if (folder is Workspace) throw new ArgumentException(string.Format(Resources.UnexpectedArgumentType, typeof(Workspace), folder.GetType()), nameof(folder));
+            ArgumentNullException.ThrowIfNull(folder, nameof(folder));
+
+            if (folder is Workspace) throw new ArgumentException(ExceptionMessages.UnexpectedArgumentType(typeof(Workspace), folder.GetType()), nameof(folder));
 
             if (folder is Project)
             {
@@ -180,7 +184,7 @@ namespace StarLab.Application.Workspace
         /// <exception cref="NameExistsException"></exception>
         public void AddProject(Project project)
         {
-            if (projects.ContainsKey(project.Path)) throw new NameExistsException(ItemTypes.Project, project.Name);
+            if (projects.ContainsKey(project.Path)) throw new FolderExistsException(ExceptionMessages.FolderExists(project.Path));
 
             projects.Add(project.Path, project);
         }
@@ -221,11 +225,11 @@ namespace StarLab.Application.Workspace
                 }
                 else if (IsFolder(document.Path))
                 {
-                    folder = folders[document.Path]; 
+                    folder = folders[document.Path];
                 }
                 else
                 {
-                    throw new Exception(); // TODO - Exception message.
+                    throw new Exception(ExceptionMessages.DocumentCouldNotBeDeleted(document.Name, document.ID));
                 }
 
                 folder.DeleteDocument(document);
@@ -443,7 +447,7 @@ namespace StarLab.Application.Workspace
                 if (folder.Path.StartsWith(project.Path)) return (Project)project;
             }
 
-            throw new ArgumentException(nameof(folder)); // TODO - Exception message
+            throw new Exception(ExceptionMessages.ParentProjectNotFound(folder.Path));
         }
 
         /// <summary>

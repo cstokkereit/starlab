@@ -24,10 +24,10 @@ public class DeleteDocumentInteractorTests : ApplicationTests
             .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A2", "Document2", "Workspace/Project1/Folder1")
             .CreateWorkspace();
 
-        port.ShowMessage(Arg.Any<string>(),
-                             Arg.Is("'Document1' will be deleted permanently."),
-                             Arg.Is(InteractionType.Warning),
-                             Arg.Is(InteractionResponses.OKCancel)).Returns(InteractionResult.OK);
+        //port.ShowMessage(Arg.Any<string>(),
+        //                     Arg.Is("'Document1' will be deleted permanently."),
+        //                     Arg.Is(InteractionType.Warning),
+        //                     Arg.Is(InteractionResponses.OKCancel)).Returns(InteractionResult.OK);
 
         interactor.Execute(new DeleteDocumentUseCaseArgs(workspace, "B997452E-AC89-40B5-B304-525F93CCC0A1"));
 
@@ -53,10 +53,10 @@ public class DeleteDocumentInteractorTests : ApplicationTests
             .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A2", "Document2", "Workspace/Project1")
             .CreateWorkspace();
 
-        port.ShowMessage(Arg.Any<string>(),
-                         Arg.Is("'Document1' will be deleted permanently."),
-                         Arg.Is(InteractionType.Warning),
-                         Arg.Is(InteractionResponses.OKCancel)).Returns(InteractionResult.OK);
+        //port.ShowMessage(Arg.Any<string>(),
+        //                 Arg.Is("'Document1' will be deleted permanently."),
+        //                 Arg.Is(InteractionType.Warning),
+        //                 Arg.Is(InteractionResponses.OKCancel)).Returns(InteractionResult.OK);
 
         interactor.Execute(new DeleteDocumentUseCaseArgs(workspace, "B997452E-AC89-40B5-B304-525F93CCC0A1"));
 
@@ -83,7 +83,7 @@ public class DeleteDocumentInteractorTests : ApplicationTests
 
         interactor.Execute(new DeleteDocumentUseCaseArgs(workspace, "2"));
 
-        port.DidNotReceive().ShowMessage(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<InteractionType>(), Arg.Any<InteractionResponses>());
+        //port.DidNotReceive().ShowMessage(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<InteractionType>(), Arg.Any<InteractionResponses>());
 
         port.DidNotReceive().UpdateWorkspace(Arg.Any<WorkspaceDTO>());
     }

@@ -2,7 +2,6 @@
 using log4net;
 using StarLab.Application;
 using StarLab.Shared;
-using StarLab.Shared.Properties;
 
 namespace StarLab.Presentation
 {
@@ -34,7 +33,7 @@ namespace StarLab.Presentation
         {
             get
             {
-                if (controller == null) throw new InvalidOperationException(string.Format(Resources.NotInitialised, "application controller"));
+                if (controller == null) throw new InvalidOperationException(ExceptionMessages.ObjectNotInitialised(GetType()));
 
                 return controller;
             }

@@ -1,4 +1,5 @@
-﻿using StarLab.Shared.Properties;
+﻿using StarLab.Shared;
+using StarLab.Shared.Properties;
 
 namespace StarLab.Presentation
 {
@@ -30,8 +31,8 @@ namespace StarLab.Presentation
             {
                 if (service is TService required) return required;
             }
-
-            throw new Exception(string.Format(Resources.UnknownType, typeof(TService)));
+            
+            throw new Exception(ExceptionMessages.UnknownType(typeof(TService)));
         }
 
         /// <summary>

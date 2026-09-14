@@ -1,4 +1,5 @@
 ﻿using StarLab.Application.Workspace.Documents;
+using StarLab.Shared;
 using StarLab.Shared.Properties;
 
 namespace StarLab.Application.Workspace
@@ -23,7 +24,7 @@ namespace StarLab.Application.Workspace
         /// <exception cref="ArgumentNullException"></exception>
         public Folder(FolderDTO dto, IFolder parent)
         {
-            if (string.IsNullOrEmpty(dto.Path)) throw new ArgumentException(Resources.InvalidPath);
+            if (string.IsNullOrEmpty(dto.Path)) throw new ArgumentException(ExceptionMessages.InvalidPath, nameof(dto));
 
             Parent = parent ?? throw new ArgumentNullException(nameof(parent));
             Name = dto.Path.Substring(dto.Path.LastIndexOf('/') + 1);

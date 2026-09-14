@@ -1,12 +1,10 @@
 ﻿using log4net;
+using StarLab.Application;
 using StarLab.Application.Workspace.Documents;
 using StarLab.Presentation.Configuration;
+using StarLab.Presentation.Properties;
 using StarLab.Shared;
 using Stratosoft.Commands;
-using System.Diagnostics;
-
-using ImageResources = StarLab.Presentation.Properties.Resources;
-using StringResources = StarLab.Shared.Properties.Resources;
 
 namespace StarLab.Presentation.Workspace.Documents
 {
@@ -21,9 +19,9 @@ namespace StarLab.Presentation.Workspace.Documents
 
         private readonly IAddDocumentUseCaseService useCaseService; // A service that executes the use cases that implement the functionality.
 
-        private IWorkspace? workspace; // The current workspace.
+        private IWorkspace workspace; // The current workspace.
 
-        private string? path; // The path to the folder within the workspace hierarchy that will contain the new document.
+        private string path; // The path to the folder within the workspace hierarchy that will contain the new document.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="AddDocumentViewPresenter"/> class.
@@ -43,6 +41,8 @@ namespace StarLab.Presentation.Workspace.Documents
             view.Attach(this);
 
             workspace = new EmptyWorkspace();
+            
+            path = string.Empty;
 
             AddImages();
         }
@@ -62,9 +62,10 @@ namespace StarLab.Presentation.Workspace.Documents
         /// <param name="definitionName">The name of the document definition.</param>
         public void AddDocument(string name, string definitionName)
         {
-            var definition = definitions[definitionName];
+            ArgumentException.ThrowIfNullOrEmpty(definitionName, nameof(definitionName));
+            ArgumentNullException.ThrowIfNull(name, nameof(name));
 
-            Debug.Assert(workspace != null);
+            var definition = definitions[definitionName];
 
             var document = new DocumentDTO
             {
@@ -74,7 +75,24 @@ namespace StarLab.Presentation.Workspace.Documents
                 View = definition.View
             };
 
-            useCaseService.AddDocument(workspace, document);
+            try
+            {
+                useCaseService.AddDocument(workspace, document);
+            }
+            catch (DocumentExistsException)
+            {
+                AppController.ShowMessage(MessageBuilder.DocumentAlreadyExists(document.Name), InteractionType.Error, InteractionResponses.OK);
+            }
+            catch (InvalidNameException)
+            {
+                AppController.ShowMessage(MessageBuilder.DocumentNameInvalid(document.Name), InteractionType.Error, InteractionResponses.OK);
+            }
+            catch (Exception e)
+            {
+                AppController.ShowMessage(MessageBuilder.DocumentCouldNotBeCreated, InteractionType.Error, InteractionResponses.OK);
+
+                log.Error(e.Message, e);
+            }
         }
 
         /// <summary>
@@ -93,11 +111,13 @@ namespace StarLab.Presentation.Workspace.Documents
         /// <param name="controller">The <see cref="IApplicationController"/>.</param>
         public override void Initialise(IApplicationController controller)
         {
+            ArgumentNullException.ThrowIfNull(controller, nameof(controller));
+
             if (Initialised) throw new InvalidOperationException(ExceptionMessages.PresenterAlreadyInitialised(GetType()));
 
             base.Initialise(controller);
 
-            View.AttachAddButtonCommand(CreateCommand(Actions.Close, () => ParentController.Close()));
+            View.AttachAddButtonCommand(CreateCommand(Actions.Close, ParentController.Close));
 
             View.AttachCancelButtonCommand(GetCommand(Actions.Close));
 
@@ -112,6 +132,8 @@ namespace StarLab.Presentation.Workspace.Documents
         /// <param name="args">A <see cref="WorkspaceChangedEventArgs"/> that provides context for the event.</param>
         public void OnEvent(WorkspaceChangedEventArgs args)
         {
+            ArgumentNullException.ThrowIfNull(args, nameof(args));
+
             workspace = args.Workspace;
         }
 
@@ -121,6 +143,8 @@ namespace StarLab.Presentation.Workspace.Documents
         /// <param name="context">An <see cref="IViewContext"/> that contains the contextual information required to configure the <see cref="IChildView">.</param>
         public override void Run(IViewContext context)
         {
+            ArgumentNullException.ThrowIfNull(context, nameof(context));
+
             if (context is AddDocumentViewContext config)
             {
                 definitions.Clear();
@@ -131,7 +155,7 @@ namespace StarLab.Presentation.Workspace.Documents
             }
             else
             {
-                throw new ArgumentException(string.Format(StringResources.UnexpectedArgumentType, typeof(AddDocumentViewContext), context.GetType()), nameof(context));
+                throw new ArgumentException(ExceptionMessages.UnexpectedArgumentType(typeof(AddDocumentViewContext), context.GetType()), nameof(context));
             }
         }
 
@@ -175,9 +199,9 @@ namespace StarLab.Presentation.Workspace.Documents
         {
             View.ClearImages();
 
-            View.AddImage("ColourColourDiagram32X32", ImageResources.ColourColourDiagram32X32);
-            View.AddImage("ColourMagnitudeDiagram32X32", ImageResources.ColourMagnitudeDiagram32X32);
-            View.AddImage("Table32X32", ImageResources.Table32X32);
+            View.AddImage("ColourColourDiagram32X32", Resources.ColourColourDiagram32X32);
+            View.AddImage("ColourMagnitudeDiagram32X32", Resources.ColourMagnitudeDiagram32X32);
+            View.AddImage("Table32X32", Resources.Table32X32);
         }
 
         /// <summary>

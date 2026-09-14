@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using log4net;
-using StarLab.Shared.Properties;
 
 namespace StarLab.Application.Workspace
 {
@@ -27,33 +26,13 @@ namespace StarLab.Application.Workspace
         {
             args.Workspace.ActiveDocument = string.Empty;
 
-            try
-            {
-                var workspace = new Workspace(args.Workspace);
+            var workspace = new Workspace(args.Workspace);
 
-                var folder = workspace.GetFolder(args.Path);
+            var folder = workspace.GetFolder(args.Path);
 
-                if (folder.IsEmpty || ConfirmAction(GetConfirmationMessage(folder)))
-                {
-                    workspace.DeleteFolder(args.Path);
+            workspace.DeleteFolder(args.Path);
 
-                    OutputPort.UpdateWorkspace(Mapper.Map<WorkspaceDTO>(workspace));
-                }
-            }
-            catch (Exception e)
-            {
-                log.Error(e.Message, e);
-            }
-        }
-
-        /// <summary>
-        /// Returns a message requesting confirmation of the deletion of the specified project or folder.
-        /// </summary>
-        /// <param name="target">The <see cref="IFolder"/> being deleted.</param>
-        /// <returns>The required confirmation message.</returns>
-        private static string GetConfirmationMessage(IFolder target)
-        {
-            return string.Format(Resources.FolderDeletionWarning, (target is Project ? Resources.Project : Resources.Folder).ToLower(), target.Name);
+            OutputPort.UpdateWorkspace(Mapper.Map<WorkspaceDTO>(workspace));
         }
     }
 }

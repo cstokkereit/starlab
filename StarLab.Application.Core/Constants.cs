@@ -5,7 +5,7 @@
     /// </summary>
     public static class Constants
     {
-        public static readonly char[] IllegalCharacters = { '\\', '/', ':', '*', '?', '\'', '\"', '<', '>', '|' };
+        public static char[] IllegalCharacters = { '\\', '/', ':', '*', '?', '\'', '\"', '<', '>', '|' };
 
         public const string Chart = "Chart";
 

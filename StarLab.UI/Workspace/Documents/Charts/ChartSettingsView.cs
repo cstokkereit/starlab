@@ -2,7 +2,6 @@
 using StarLab.Presentation;
 using StarLab.Presentation.Workspace.Documents.Charts;
 using StarLab.Shared;
-using StarLab.Shared.Properties;
 using StarLab.UI.Core;
 using StarLab.UI.Core.Workspace.Documents.Charts;
 using Stratosoft.Commands;
@@ -147,7 +146,7 @@ namespace StarLab.UI.Workspace.Documents.Charts
         /// <param name="presenter">The <see cref="IChildViewPresenter"/> that controls the view.</param>
         public override void Attach(IChildViewPresenter presenter)
         {
-            if (this.presenter != null) throw new InvalidOperationException(Resources.PresenterAlreadyAttached);
+            if (this.presenter != null) throw new InvalidOperationException(ExceptionMessages.PresenterAlreadyAttached);
 
             this.presenter = (IChartSettingsViewPresenter)presenter;
 

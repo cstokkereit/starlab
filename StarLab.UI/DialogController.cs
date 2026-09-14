@@ -1,5 +1,7 @@
 ﻿using StarLab.Application;
 using StarLab.Presentation;
+using StarLab.Serialisation.Workspace;
+using StarLab.Shared;
 using StarLab.Shared.Properties;
 
 namespace StarLab.UI
@@ -21,8 +23,8 @@ namespace StarLab.UI
         public static InteractionResult ShowMessage(IView owner, string caption, string message, InteractionType type, InteractionResponses responses)
         {
             if (owner is Form form) return MessageBox.Show(form, message, caption, responses, type);
-            
-            throw new ArgumentException(string.Format(Resources.UnexpectedArgumentType, typeof(Form).Name, owner.GetType().Name), nameof(owner));
+
+            throw new ArgumentException(ExceptionMessages.UnexpectedArgumentType(typeof(Form), owner.GetType()), nameof(owner));
         }
 
         /// <summary>

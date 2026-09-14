@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using log4net;
-using StarLab.Shared.Properties;
 
 namespace StarLab.Application.Workspace.Documents
 {
@@ -27,25 +26,15 @@ namespace StarLab.Application.Workspace.Documents
         {
             args.Workspace.ActiveDocument = string.Empty;
 
-            try
-            {
-                var workspace = new Workspace(args.Workspace);
+            var workspace = new Workspace(args.Workspace);
 
-                var id = new DocumentID(args.DocumentID);
+            var id = new DocumentID(args.DocumentID);
 
-                var document = workspace.GetDocument(id);
+            var document = workspace.GetDocument(id);
 
-                if (ConfirmAction(string.Format(Resources.DeletionWarning, document.Name)))
-                {
-                    workspace.DeleteDocument(id);
+            workspace.DeleteDocument(id);
 
-                    OutputPort.UpdateWorkspace(Mapper.Map<WorkspaceDTO>(workspace));
-                }
-            }
-            catch (Exception e)
-            {
-                log.Error(e.Message, e);
-            }
+            OutputPort.UpdateWorkspace(Mapper.Map<WorkspaceDTO>(workspace));
         }
     }
 }

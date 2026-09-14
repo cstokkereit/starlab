@@ -48,8 +48,6 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
             ArgumentNullException.ThrowIfNull(workspace, nameof(workspace));
             ArgumentException.ThrowIfNullOrEmpty(source, nameof(source));
             
-            // TODO UseCases should not show messages directly - this could be tricky to change
-
             var interactor = Factory.CreateCopyAndPasteUseCase(ApplicationController.GetOutputPort<IWorkspaceOutputPort>());
 
             interactor.Execute(new ClipboardUseCaseArgs(Mapper.Map<WorkspaceDTO>(workspace), source, destination));
@@ -61,17 +59,28 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="workspace">The <see cref="IWorkspace"/> being modified.</param>
         /// <param name="source">The key that identifies the source document or folder.</param>
         /// <param name="destination">The key that identifies the destination document or folder.</param>
-        public void CutAndPaste(IWorkspace workspace, string source, string destination)
+        /// <param name="replace">true to replace an existing document or folder; false otherwise.</param>
+        public void CutAndPaste(IWorkspace workspace, string source, string destination, bool replace)
         {
             ArgumentException.ThrowIfNullOrEmpty(destination, nameof(destination));
             ArgumentNullException.ThrowIfNull(workspace, nameof(workspace));
             ArgumentException.ThrowIfNullOrEmpty(source, nameof(source));
 
-            // TODO UseCases should not show messages directly - this could be tricky to change
-
             var interactor = Factory.CreateCutAndPasteUseCase(ApplicationController.GetOutputPort<IWorkspaceOutputPort>());
 
-            interactor.Execute(new ClipboardUseCaseArgs(Mapper.Map<WorkspaceDTO>(workspace), source, destination));
+            interactor.Execute(new ClipboardUseCaseArgs(Mapper.Map<WorkspaceDTO>(workspace), source, destination, replace));
+        }
+
+        /// <summary>
+        /// Executes the CutAndPaste use case.
+        /// </summary>
+        /// <param name="workspace">The <see cref="IWorkspace"/> being modified.</param>
+        /// <param name="source">The key that identifies the source document or folder.</param>
+        /// <param name="destination">The key that identifies the destination document or folder.</param>
+        /// <param name="replace">true to replace an existing document or folder; false otherwise.</param>
+        public void CutAndPaste(IWorkspace workspace, string source, string destination)
+        {
+            CutAndPaste(workspace, source, destination, false);
         }
 
         /// <summary>

@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using log4net;
 using StarLab.Application;
 using StarLab.Application.Workspace;
 using StarLab.Shared;
+using System.Runtime.Serialization;
 using System.Xml.Serialization;
 
 namespace StarLab.Serialisation
@@ -11,6 +13,8 @@ namespace StarLab.Serialisation
     /// </summary>
     public class SerialisationProvider : ISerialisationProvider
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(SerialisationProvider)); // The logger that will be used for writing log messages.
+
         private readonly IMapper mapper; // Maps POCOs to DTOs and vice versa.
 
         /// <summary>
@@ -32,16 +36,25 @@ namespace StarLab.Serialisation
         {
             Workspace.Workspace? workspace = null;
 
-            if (!string.IsNullOrEmpty(filename) && Path.GetExtension(filename) == Constants.WorkspaceExtension)
+            try
             {
-                using (var stream = new FileStream(filename, FileMode.Open, FileAccess.Read))
+                if (!string.IsNullOrEmpty(filename) && Path.GetExtension(filename) == Constants.WorkspaceExtension)
                 {
-                    XmlSerializer serializer = new XmlSerializer(typeof(Workspace.Workspace));
-                    workspace = serializer.Deserialize(stream) as Workspace.Workspace;
+                    using (var stream = new FileStream(filename, FileMode.Open, FileAccess.Read))
+                    {
+                        XmlSerializer serializer = new XmlSerializer(typeof(Workspace.Workspace));
+                        workspace = serializer.Deserialize(stream) as Workspace.Workspace;
+                    }
                 }
-            }
 
-            if (workspace == null) throw new Exception(ExceptionMessages.WorkspaceNotLoaded(filename));
+                if (workspace == null) throw new Exception(ExceptionMessages.WorkspaceNotLoaded(filename));
+            }
+            catch (Exception e)
+            {
+                log.Error(e.Message, e);
+
+                throw new SerializationException(ExceptionMessages.FileCouldNotBeLoaded(filename), e);
+            }
 
             return mapper.Map<Workspace.Workspace, WorkspaceDTO>(workspace);
         }
@@ -55,11 +68,20 @@ namespace StarLab.Serialisation
         {
             Workspace.Workspace? workspace = mapper.Map<WorkspaceDTO, Workspace.Workspace>(dto);
 
-            using (var stream = new FileStream(filename, FileMode.OpenOrCreate, FileAccess.Write))
+            try
             {
-                stream.SetLength(0);
-                XmlSerializer serializer = new XmlSerializer(typeof(Workspace.Workspace));
-                serializer.Serialize(stream, workspace);
+                using (var stream = new FileStream(filename, FileMode.OpenOrCreate, FileAccess.Write))
+                {
+                    stream.SetLength(0);
+                    XmlSerializer serializer = new XmlSerializer(typeof(Workspace.Workspace));
+                    serializer.Serialize(stream, workspace);
+                }
+            }
+            catch (Exception e)
+            {
+                log.Error(e.Message, e);
+
+                throw new SerializationException(ExceptionMessages.FileCouldNotBeSaved(filename), e);
             }
         }
     }

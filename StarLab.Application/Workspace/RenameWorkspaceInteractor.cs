@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
-using StarLab.Shared.Properties;
+using StarLab.Shared;
 
 namespace StarLab.Application.Workspace
 {
     /// <summary>
     /// A use case that renames the workspace.
     /// </summary>
-    internal class RenameWorkspaceInteractor : UseCaseInteractor<IWorkspaceOutputPort>, IUseCase<RenameWorkspaceUseCaseArgs>
+    internal class RenameWorkspaceInteractor : WorkspaceInteractor, IUseCase<RenameWorkspaceUseCaseArgs>
     {
         private readonly ISerialisationProvider serialiser; // Used to serialise the workspace to a file.
 
@@ -30,35 +30,26 @@ namespace StarLab.Application.Workspace
         {
             var filename = args.Workspace.FileName;
 
-            if (WorkspaceInteractionHelper.IsValid(args.Name) && !string.IsNullOrEmpty(filename))
+            if (IsValid(args.Name) && !string.IsNullOrEmpty(filename))
             {
                 args.Workspace.FileName = Path.ChangeExtension(Path.Join(Path.GetDirectoryName(filename), args.Name), Constants.WorkspaceExtension);
                
                 if (!File.Exists(args.Workspace.FileName))
                 {
-                    try
-                    {
-                        serialiser.SerialiseWorkspace(args.Workspace, args.Workspace.FileName);
-                        File.Delete(filename);
-                    }
-                    catch (Exception e)
-                    {
-                        OutputPort.ShowMessage(Resources.StarLab, e.Message, InteractionType.Error, InteractionResponses.OK);
-                        args.Workspace.FileName = filename;
-                    }
-                    finally
-                    {
-                        OutputPort.UpdateWorkspace(args.Workspace);
-                    }
+                    serialiser.SerialiseWorkspace(args.Workspace, args.Workspace.FileName);
+
+                    File.Delete(filename);
+
+                    OutputPort.UpdateWorkspace(args.Workspace);
                 }
                 else
                 {
-                    throw new Exception(WorkspaceInteractionHelper.CreateCannotRenameItemMessage(Path.GetFileName(filename), Path.GetFileName(args.Workspace.FileName), Resources.Workspace));
+                    throw new InvalidOperationException(ExceptionMessages.FileExists(args.Workspace.FileName));
                 }
             }
             else
             {
-                throw new Exception(WorkspaceInteractionHelper.CreateInvalidNameMessage(args.Name, Resources.Workspace));
+                throw new InvalidNameException(args.Name);
             }
         }
     }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using StarLab.Shared;
 using StarLab.Shared.Properties;
 
 namespace StarLab.Application.Workspace.Documents
@@ -6,7 +7,7 @@ namespace StarLab.Application.Workspace.Documents
     /// <summary>
     /// A use case that renames a document in the workspace hierarchy.
     /// </summary>
-    internal class RenameDocumentInteractor : UseCaseInteractor<IWorkspaceOutputPort>, IUseCase<RenameDocumentUseCaseArgs>
+    internal class RenameDocumentInteractor : WorkspaceInteractor, IUseCase<RenameDocumentUseCaseArgs>
     {
         /// <summary>
         /// Initialises a new instance of the <see cref="AddDocumentInteractor"/> class.
@@ -22,14 +23,14 @@ namespace StarLab.Application.Workspace.Documents
         /// <param name="args">The <see cref="RenameDocumentUseCaseArgs"/> that provide all of the information required to execute the use case.</param>
         public void Execute(RenameDocumentUseCaseArgs args)
         {
-            if (WorkspaceInteractionHelper.IsValid(args.Name))
+            if (IsValid(args.Name))
             {
                 var workspace = new Workspace(args.Workspace);
 
                 var document = workspace.GetDocument(new DocumentID(args.DocumentID));
 
                 var folder = workspace.GetFolder(document.Path);
-
+                
                 if (IsValid(folder, args.Name))
                 {
                     workspace.RenameDocument(document, args.Name);
@@ -38,12 +39,12 @@ namespace StarLab.Application.Workspace.Documents
                 }
                 else
                 {
-                    throw new Exception(WorkspaceInteractionHelper.CreateCannotRenameItemMessage(document.Name, args.Name, Resources.Document));
+                    throw new DocumentExistsException(document.ID, args.Name, document.Path);
                 }
             }
             else
             {
-                throw new Exception(WorkspaceInteractionHelper.CreateInvalidNameMessage(args.Name, Resources.Document));
+                throw new InvalidNameException(args.Name);
             }
         }
 

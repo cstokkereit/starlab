@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using StarLab.Application.Workspace.Documents;
-using StarLab.Shared.Properties;
+using StarLab.Shared;
 
 namespace StarLab.Application.Workspace
 {
@@ -32,7 +32,7 @@ namespace StarLab.Application.Workspace
             }
             else
             {
-                throw new InvalidOperationException(string.Format(Resources.InvalidOperation, args.Destination));
+                throw new Exception(ExceptionMessages.InvalidDestination(args.Destination));
             }
 
             OutputPort.ClearClipboard();
@@ -65,7 +65,7 @@ namespace StarLab.Application.Workspace
                 }
                 else
                 {
-                    throw new InvalidOperationException(string.Format(Resources.InvalidOperation, source));
+                    throw new Exception(ExceptionMessages.InvalidSource(source));
                 }
             }
 

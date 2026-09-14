@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using StarLab.Shared.Properties;
 
 namespace StarLab.Application
 {
@@ -19,7 +18,7 @@ namespace StarLab.Application
         /// <param name="outputPort">The <see cref="IOutputPort"/> that updates the UI in response to the outputs of the use case.</param>
         /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
         /// <exception cref="ArgumentNullException"></exception>
-        public UseCaseInteractor(TOutputPort outputPort, IMapper mapper)
+        protected UseCaseInteractor(TOutputPort outputPort, IMapper mapper)
         {
             this.outputPort = outputPort ?? throw new ArgumentNullException(nameof(outputPort));
             this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
@@ -34,15 +33,5 @@ namespace StarLab.Application
         /// Gets the <see cref="IOutputPort"/> that updates the UI in response to the outputs of the use case.
         /// </summary>
         protected TOutputPort OutputPort => outputPort;
-
-        /// <summary>
-        /// Displays a confirmation dialog box with the specified message.
-        /// </summary>
-        /// <param name="message">The message text.</param>
-        /// <returns>true if the action was confirmed; false otherwise.</returns>
-        protected bool ConfirmAction(string message)
-        {
-            return OutputPort.ShowMessage(Resources.StarLab, message, InteractionType.Warning, InteractionResponses.OKCancel) == InteractionResult.OK;
-        }
     }
 }

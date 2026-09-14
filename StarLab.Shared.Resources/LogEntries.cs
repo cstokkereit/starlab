@@ -1,7 +1,7 @@
 ﻿namespace StarLab.Shared
 {
     /// <summary>
-    /// A static class containing the string constants used to create log entries.
+    /// A static class containing the string constants used to create information and warning log entries. Error messages should be logged directly using the exception.
     /// </summary>
     public static class LogEntries
     {
@@ -10,10 +10,10 @@
         /// <summary>
         /// Builds an ActiveViewChanged log entry for the specified views.
         /// </summary>
-        /// <param name="oldView">The name of the old view.</param>
-        /// <param name="newView">The name of the new view.</param>
+        /// <param name="oldView">The ID of the old view.</param>
+        /// <param name="newView">The ID of the new view.</param>
         /// <returns>The required log entry.</returns>
-        public static string ActiveViewChanged(string oldView, string newView)
+        public static string ActiveViewChanged(object oldView, object newView)
         {
             return $"The active view has changed from {oldView} to {newView}.";
         }
@@ -25,7 +25,7 @@
         /// <param name="name">The view name</param>
         /// <param name="id">The view ID.</param>
         /// <returns>The required log entry.</returns>
-        public static string PresenterAttached(Type type, string name, string id)
+        public static string PresenterAttached(Type type, string name, object id)
         {
             return $"The {type.Name}({name} ({id})) has been attached.";
         }
@@ -58,7 +58,7 @@
         /// <param name="name">The view name</param>
         /// <param name="id">The view ID.</param>
         /// <returns>The required log entry.</returns>
-        public static string PresenterDetached(Type type, string name, string id)
+        public static string PresenterDetached(Type type, string name, object id)
         {
             return $"The {type.Name}({name} ({id})) has been detached.";
         }
@@ -91,7 +91,7 @@
         /// <param name="name">The view name.</param>
         /// <param name="id">The view ID.</param>
         /// <returns>The required log entry.</returns>
-        public static string PresenterInitialised(Type type, string name, string id)
+        public static string PresenterInitialised(Type type, string name, object id)
         {
             return $"The {type.Name}({name} ({id})) has been initialised.";
         }
@@ -127,22 +127,12 @@
         }
 
         /// <summary>
-        /// Builds an UnrecognisedDocumentType log entry for the specified document type.
-        /// </summary>
-        /// <param name="documentType">The document type.</param>
-        /// <returns>The required log entry.</returns>
-        public static string UnrecognisedDocumentType(string documentType)
-        {
-            return $"The document type {documentType} is not recognised.";
-        }
-
-        /// <summary>
         /// Builds a ViewClosed log entry for the specified document.
         /// </summary>
         /// <param name="id">The document ID.</param>
         /// <param name="name">The document name.</param>
         /// <returns>The required log entry.</returns>
-        public static string ViewClosed(string id, string name)
+        public static string ViewClosed(object id, string name)
         {
             return $"The document {name} ({id}) has been closed.";
         }
@@ -163,7 +153,7 @@
         /// <param name="id">The document ID.</param>
         /// <param name="name">The document name.</param>
         /// <returns>The required log entry.</returns>
-        public static string ViewCreated(string id, string name)
+        public static string ViewCreated(object id, string name)
         {
             return $"The document {name} ({id}) has been created.";
         }
@@ -176,36 +166,6 @@
         public static string ViewCreated(string view)
         {
             return $"The {view} view has been created.";
-        }
-
-        /// <summary>
-        /// Builds a ViewNotClosed log entry for the specified view.
-        /// </summary>
-        /// <param name="view">The view name.</param>
-        /// <returns>The required log entry.</returns>
-        public static string ViewNotClosed(string id, string name)
-        {
-            return $"The document {name} ({id}) could not be closed.";
-        }
-
-        /// <summary>
-        /// Builds a ViewNotClosed log entry for the specified view.
-        /// </summary>
-        /// <param name="view">The view name.</param>
-        /// <returns>The required log entry.</returns>
-        public static string ViewNotClosed(string view)
-        {
-            return $"The {view} view could not be closed.";
-        }
-
-        /// <summary>
-        /// Builds a ViewNotCreated log entry for the specified view.
-        /// </summary>
-        /// <param name="view">The view name.</param>
-        /// <returns>The required log entry.</returns>
-        public static string ViewNotCreated(string view)
-        {
-            return $"The {view} could not be created.";
         }
     }
 }

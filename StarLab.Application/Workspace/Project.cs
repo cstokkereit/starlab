@@ -1,4 +1,5 @@
 ﻿using StarLab.Application.Workspace.Documents;
+using StarLab.Shared;
 using StarLab.Shared.Properties;
 
 namespace StarLab.Application.Workspace
@@ -140,7 +141,7 @@ namespace StarLab.Application.Workspace
         /// <param name="folder">The <see cref="IFolder"/> to be added.</param>
         public void AddFolder(IFolder folder)
         {
-            if (folder is not Folder) throw new ArgumentException(string.Format(Resources.UnexpectedArgumentType, typeof(Folder), folder.GetType()), nameof(folder));
+            if (folder is not Folder) throw new ArgumentException(ExceptionMessages.UnexpectedArgumentType(typeof(Folder), folder.GetType()), nameof(folder));
 
             this.folder.AddFolder(folder);
         }
@@ -161,7 +162,7 @@ namespace StarLab.Application.Workspace
         /// <exception cref="InvalidOperationException"></exception>
         public void DeleteFolder(IFolder folder)
         {
-            if (folder is not Folder) throw new ArgumentException(string.Format(Resources.UnexpectedArgumentType, typeof(Folder), folder.GetType()), nameof(folder));
+            if (folder is not Folder) throw new ArgumentException(ExceptionMessages.UnexpectedArgumentType(typeof(Folder), folder.GetType()), nameof(folder));
 
             this.folder.DeleteFolder(folder);
         }
@@ -173,7 +174,7 @@ namespace StarLab.Application.Workspace
         /// <param name="name">The new folder name.</param>
         public void RenameFolder(IFolder folder, string name)
         {
-            if (folder is Project) throw new ArgumentException(string.Format(Resources.UnexpectedArgumentType, typeof(Project), folder.GetType()), nameof(folder));
+            if (folder is not Project) throw new ArgumentException(ExceptionMessages.UnexpectedArgumentType(typeof(Project), folder.GetType()), nameof(folder));
 
             var project = folder.Path == this.folder.Path;
 

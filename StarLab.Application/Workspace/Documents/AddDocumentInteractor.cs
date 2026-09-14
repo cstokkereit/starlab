@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using log4net;
 using StarLab.Application.Workspace.Documents.Charts;
 using StarLab.Application.Workspace.Documents.Tables;
+using StarLab.Shared;
 using StarLab.Shared.Properties;
 
 namespace StarLab.Application.Workspace.Documents
@@ -9,10 +9,8 @@ namespace StarLab.Application.Workspace.Documents
     /// <summary>
     /// A use case that adds a document to a folder in the workspace hierarchy.
     /// </summary>
-    internal class AddDocumentInteractor : UseCaseInteractor<IWorkspaceOutputPort>, IUseCase<AddDocumentUseCaseArgs>
+    internal class AddDocumentInteractor : WorkspaceInteractor, IUseCase<AddDocumentUseCaseArgs>
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(AddDocumentInteractor)); // The logger that will be used for writing log messages.
-
         /// <summary>
         /// Initialises a new instance of the <see cref="AddDocumentInteractor"/> class.
         /// </summary>
@@ -31,58 +29,51 @@ namespace StarLab.Application.Workspace.Documents
 
             if (string.IsNullOrEmpty(args.Document.Name))
             {
-                args.Document.Name = WorkspaceInteractionHelper.GetDefaultName(workspace.GetFolder(args.Document.Path), args.Document);
+                args.Document.Name = GetDefaultName(workspace.GetFolder(args.Document.Path), args.Document);
             }
 
-            if (WorkspaceInteractionHelper.IsValid(args.Document.Name))
+            if (IsValid(args.Document.Name))
             {
-                try
-                {
-                    var document = CreateDocument(args.Document, workspace.GetFolder(args.Document.Path));
+                var document = CreateDocument(args.Document, workspace.GetFolder(args.Document.Path));
 
-                    workspace.AddDocument(document);
+                workspace.AddDocument(document);
 
-                    var dto = Mapper.Map<WorkspaceDTO>(workspace);
+                var dto = Mapper.Map<WorkspaceDTO>(workspace);
 
-                    OutputPort.UpdateWorkspace(Mapper.Map<WorkspaceDTO>(workspace));
+                OutputPort.UpdateWorkspace(Mapper.Map<WorkspaceDTO>(workspace));
 
-                    OutputPort.OpenDocument(document.ID.ToString());
-                }
-                catch (NameExistsException e)
-                {
-                    OutputPort.ShowMessage(Resources.StarLab, string.Format(Resources.NameAlreadyExists, e.Target, e.Name), InteractionType.Error, InteractionResponses.OK);
-                }
+                OutputPort.OpenDocument(document.ID.ToString());
             }
             else
             {
-                OutputPort.ShowMessage(Resources.StarLab, WorkspaceInteractionHelper.CreateInvalidNameMessage(args.Document.Name, Resources.Document), InteractionType.Error, InteractionResponses.OK);
+                throw new InvalidNameException(args.Document.Name);
             }
         }
 
         /// <summary>
-        /// 
+        /// Creates a <see cref="ChartDTO"> that represents a new chart.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The new <see cref="ChartDTO">.</returns>
         private ChartDTO CreateChart()
         {
             return new ChartDTO { }; // TODO - This should be created from a template that can be configured in the options dialog and/or chart settings. Import/export as XML.
         }
 
         /// <summary>
-        /// 
+        /// Creates a <see cref="TableDTO"> that represents a new table.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The new <see cref="TableDTO">.</returns>
         private TableDTO CreateTable()
         {
             return new TableDTO { }; // TODO - This should be created from a template that can be configured in the options dialog and/or table settings. Import/export as XML.
         }
 
         /// <summary>
-        /// 
+        /// Creates a document in the specified folder from the data transfer object provided.
         /// </summary>
-        /// <param name="dto"></param>
-        /// <param name="folder"></param>
-        /// <returns></returns>
+        /// <param name="dto">The data transfer object that represents the document.</param>
+        /// <param name="folder">The folder that contains the document.</param>
+        /// <returns>The new document.</returns>
         private Document CreateDocument(DocumentDTO dto, IFolder folder)
         {
             switch (dto.Type)
@@ -96,10 +87,46 @@ namespace StarLab.Application.Workspace.Documents
                     break;
 
                 default:
-                    throw new InvalidOperationException(string.Format(Resources.UnknownType, dto.Type));
+                    throw new Exception(ExceptionMessages.UnknownType(dto.Type));
             }
 
             return new Document(dto, folder);
+        }
+
+        /// <summary>
+        /// Gets the default name for a new document based on its type.
+        /// </summary>
+        /// <param name="folder">The <see cref="IFolder"/> that will contain the new document.</param>
+        /// <param name="dtoDocument">A <see cref="DocumentDTO"/> that defines the document being added.</param>
+        /// <returns>The default name for the new document.</returns>
+        private static string GetDefaultName(IFolder folder, DocumentDTO dtoDocument)
+        {
+            string seed;
+
+            switch (dtoDocument.Type)
+            {
+                case Constants.Chart:
+                    seed = Resources.Chart;
+                    break;
+
+                case Constants.Table:
+                    seed = Resources.Table;
+                    break;
+
+                default:
+                    seed = Resources.Document;
+                    break;
+            }
+
+            var name = seed;
+            int index = 2;
+
+            while (folder.ContainsDocument(name))
+            {
+                name = $"{seed} ({index++})";
+            };
+
+            return name;
         }
     }
 }

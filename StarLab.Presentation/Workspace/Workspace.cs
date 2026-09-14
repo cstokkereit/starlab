@@ -233,6 +233,39 @@ namespace StarLab.Presentation.Workspace
         }
 
         /// <summary>
+        /// Determines if the folder or project with the specified key is empty.
+        /// </summary>
+        /// <param name="key">The key of the folder or project.</param>
+        /// <returns>true if the folder or project with the specified key is empty; false otherwise.</returns>
+        public bool IsEmpty(string key)
+        {
+            var empty = true;
+
+            foreach (var folder in folders.Values)
+            {
+                if (folder.Key.StartsWith(key) && folder.Key != key)
+                {
+                    empty = false;
+                    break;
+                }
+            }
+
+            if (empty)
+            {
+                foreach (var document in documents.Values)
+                {
+                    if (document.Path.StartsWith(key))
+                    {
+                        empty = false;
+                        break;
+                    }
+                }
+            }
+
+            return empty;
+        }
+
+        /// <summary>
         /// Sets the active document to be the <see cref="IDocument"/> with the specified ID.
         /// </summary>
         /// <param name="id">The ID of the active <see cref="IDocument"/>.</param>

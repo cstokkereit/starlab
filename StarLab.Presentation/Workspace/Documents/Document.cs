@@ -26,11 +26,6 @@ namespace StarLab.Presentation.Workspace.Documents
         {
             ArgumentNullException.ThrowIfNull(dto, nameof(dto));
 
-            ArgumentException.ThrowIfNullOrEmpty(dto.Name, nameof(dto.Name)); // TODO - Validate dto and throw suitable exception (and elsewhere)
-            ArgumentException.ThrowIfNullOrEmpty(dto.Path, nameof(dto.Path));
-            ArgumentException.ThrowIfNullOrEmpty(dto.View, nameof(dto.View));
-            ArgumentException.ThrowIfNullOrEmpty(dto.ID, nameof(dto.ID));
-
             type = Enum.Parse<DocumentTypes>(dto.Type);
 
             id = new DocumentID(dto.ID);

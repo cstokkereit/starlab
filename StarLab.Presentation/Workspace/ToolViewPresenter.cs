@@ -2,7 +2,6 @@
 using StarLab.Application;
 using StarLab.Presentation.Configuration;
 using StarLab.Shared;
-using StarLab.Shared.Properties;
 using Stratosoft.Commands;
 
 namespace StarLab.Presentation.Workspace

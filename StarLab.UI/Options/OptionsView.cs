@@ -33,7 +33,7 @@ namespace StarLab.UI.Options
         /// <param name="presenter">The <see cref="IChildViewPresenter"/> that controls the view.</param>
         public override void Attach(IChildViewPresenter presenter)
         {
-            if (this.presenter != null) throw new InvalidOperationException(Resources.PresenterAlreadyAttached);
+            if (this.presenter != null) throw new InvalidOperationException(ExceptionMessages.PresenterAlreadyAttached);
 
             this.presenter = (IOptionsViewPresenter)presenter;
 

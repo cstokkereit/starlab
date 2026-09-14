@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using StarLab.Application.Workspace.Documents;
-using StarLab.Shared.Properties;
+using StarLab.Shared;
 
 namespace StarLab.Application.Workspace
 {
@@ -28,11 +28,11 @@ namespace StarLab.Application.Workspace
 
             if (workspace.IsFolder(args.Destination) || workspace.IsProject(args.Destination))
             {
-                CutAndPaste(workspace, args.Source, workspace.GetFolder(args.Destination));
+                CutAndPaste(workspace, args.Source, workspace.GetFolder(args.Destination), args.Replace);
             }
             else
             {
-                throw new InvalidOperationException(string.Format(Resources.InvalidOperation, args.Destination));
+                throw new Exception(ExceptionMessages.InvalidDestination(args.Destination));
             }
             
             OutputPort.ClearClipboard();
@@ -44,12 +44,20 @@ namespace StarLab.Application.Workspace
         /// <param name="workspace">The current <see cref="Workspace"/>.</param>
         /// <param name="source">The key that identifies the document or folder being moved.</param>
         /// <param name="destination">The destination <see cref="IFolder"/>.</param>
+        /// 
         /// <exception cref="InvalidOperationException"></exception>
-        private void CutAndPaste(Workspace workspace, string source, IFolder destination)
+        private void CutAndPaste(Workspace workspace, string source, IFolder destination, bool replace)
         {
             if (workspace.IsFolder(source) || workspace.IsProject(source))
             {
-                UpdateWorkspace(workspace, workspace.GetFolder(source), destination);
+                var folder = workspace.GetFolder(source);
+
+                if (FolderNameExists(destination, folder.Name) && replace)
+                {
+                    workspace.DeleteFolder(GetFolder(workspace, destination, folder.Name));
+                }
+
+                UpdateWorkspace(workspace, folder, destination);
             }
             else
             {
@@ -57,11 +65,18 @@ namespace StarLab.Application.Workspace
 
                 if (workspace.IsDocument(id))
                 {
-                    UpdateWorkspace(workspace, workspace.GetDocument(id), destination);
+                    var document = workspace.GetDocument(id);
+
+                    if (DocumentNameExists(destination, document.Name) && replace)
+                    {
+                        workspace.DeleteDocument(GetDocumentID(destination, document.Name));
+                    }
+
+                    UpdateWorkspace(workspace, document, destination);
                 }
                 else
                 {
-                    throw new InvalidOperationException(string.Format(Resources.InvalidOperation, source));
+                    throw new Exception(ExceptionMessages.InvalidSource(source));
                 }
             }
         }
@@ -77,20 +92,13 @@ namespace StarLab.Application.Workspace
         {
             workspace.DeleteDocument(document);
 
-            if (DocumentNameExists(destination, document.Name))
+            if (DocumentNameExists(destination, document.Name) && replace)
             {
-                if (replace)
-                {
-                    workspace.DeleteDocument(GetDocumentID(destination, document.Name));
-                    document.SetFolder(destination);
-                    workspace.AddDocument(document);
-                }
+                workspace.DeleteDocument(GetDocumentID(destination, document.Name));
             }
-            else
-            {
-                document.SetFolder(destination);
-                workspace.AddDocument(document);
-            }
+
+            document.SetFolder(destination);
+            workspace.AddDocument(document);
         }
 
         /// <summary>
@@ -101,29 +109,16 @@ namespace StarLab.Application.Workspace
         /// <param name="destination">The destination <see cref="IFolder"/>.</param>
         private void UpdateWorkspace(Workspace workspace, Document document, IFolder destination)
         {
-            if (document.Path == destination.Path)
+            if (document.Path == destination.Path || DocumentNameExists(destination, document.Name))
             {
-                OutputPort.ShowMessage(Resources.StarLab, string.Format(Resources.DestinationSameAsSource, document.Name), InteractionType.Error, InteractionResponses.OK);
+                throw new DocumentExistsException(document.ID, document.Name, destination.Path);
             }
-            else if (DocumentNameExists(destination, document.Name))
-            {
-                var result = OutputPort.ShowMessage(Resources.StarLab, string.Format(Resources.DocumentAlreadyExists, document.Name), InteractionType.Error, InteractionResponses.YesNoCancel);
 
-                if (result != InteractionResult.Cancel)
-                {
-                    UpdateWorkspace(workspace, document, destination, result == InteractionResult.Yes);
+            workspace.DeleteDocument(document);
+            document.SetFolder(destination);
+            workspace.AddDocument(document);
 
-                    OutputPort.UpdateWorkspace(Mapper.Map<WorkspaceDTO>(workspace));
-                }
-            }
-            else
-            {
-                workspace.DeleteDocument(document);
-                document.SetFolder(destination);
-                workspace.AddDocument(document);
-
-                OutputPort.UpdateWorkspace(Mapper.Map<WorkspaceDTO>(workspace));
-            }
+            OutputPort.UpdateWorkspace(Mapper.Map<WorkspaceDTO>(workspace));
         }
 
         /// <summary>
@@ -161,28 +156,15 @@ namespace StarLab.Application.Workspace
         /// <param name="destination">The <see cref="IFolder"/> that is the destination for the cut folder.</param>
         private void UpdateWorkspace(Workspace workspace, IFolder folder, IFolder destination)
         {
-            if (destination.Path == folder.Path)
+            if (destination.Path == folder.Path || FolderNameExists(destination, folder.Name))
             {
-                OutputPort.ShowMessage(Resources.StarLab, string.Format(Resources.DestinationSameAsSource, folder.Name), InteractionType.Error, InteractionResponses.OK);
+                throw new FolderExistsException(folder.Path, destination.Path);
             }
-            else if (FolderNameExists(destination, folder.Name))
-            {
-                var result = OutputPort.ShowMessage(Resources.StarLab, string.Format(Resources.FolderAlreadyExists, folder.Name), InteractionType.Error, InteractionResponses.YesNoCancel);
 
-                if (result != InteractionResult.Cancel)
-                {
-                    UpdateWorkspace(workspace, folder, destination, result == InteractionResult.Yes);
+            workspace.DeleteFolder(folder);
+            workspace.AddFolder(folder, destination.Path);
 
-                    OutputPort.UpdateWorkspace(Mapper.Map<WorkspaceDTO>(workspace));
-                }
-            }
-            else
-            {
-                workspace.DeleteFolder(folder);
-                workspace.AddFolder(folder, destination.Path);
-
-                OutputPort.UpdateWorkspace(Mapper.Map<WorkspaceDTO>(workspace));
-            }
+            OutputPort.UpdateWorkspace(Mapper.Map<WorkspaceDTO>(workspace));
         }
 
         /// <summary>
@@ -230,7 +212,7 @@ namespace StarLab.Application.Workspace
                 if (document.Name == name) return document.ID;
             }
 
-            throw new ArgumentException(string.Format(Resources.DocumentNotFound, name, folder.Path));
+            throw new Exception(ExceptionMessages.DocumentNotFound(name, folder.Path));
         }
 
         /// <summary>

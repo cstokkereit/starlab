@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using StarLab.Application.Data;
+using StarLab.Shared;
 using StarLab.Shared.Properties;
 using System.Diagnostics;
 
@@ -137,7 +138,7 @@ namespace StarLab.Data.MongoDB
         /// <exception cref="InvalidOperationException"></exception>
         public void MoveNext()
         {
-            if (EOF) throw new InvalidOperationException(Resources.CursorAtEndoOfFile);
+            if (EOF) throw new InvalidOperationException(ExceptionMessages.CursorAtEndOfFile);
 
             Move(row + 1);
         }
@@ -148,7 +149,7 @@ namespace StarLab.Data.MongoDB
         /// <exception cref="InvalidOperationException"></exception>
         public void MovePrevious()
         {
-            if (BOF) throw new InvalidOperationException(Resources.CursorAtBeginningOfFile);
+            if (BOF) throw new InvalidOperationException(ExceptionMessages.CursorAtBeginningOfFile);
 
             Move(row - 1);
         }

@@ -135,7 +135,7 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         /// <param name="presenter">The <see cref="IChildViewPresenter"/> that controls the view.</param>
         public override void Attach(IChildViewPresenter presenter)
         {
-            if (this.presenter != null) throw new InvalidOperationException(Resources.PresenterAlreadyAttached);
+            if (this.presenter != null) throw new InvalidOperationException(ExceptionMessages.PresenterAlreadyAttached);
 
             this.presenter = (IWorkspaceExplorerViewPresenter)presenter;
 
@@ -319,7 +319,7 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
                 {
                     e.CancelEdit = true;
 
-                    presenter?.ShowMessage(ex.Message);
+                    presenter?.ShowErrorMessage(ex.Message);
 
                     e.Node.BeginEdit();
                 }

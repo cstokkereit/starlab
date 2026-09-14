@@ -146,7 +146,7 @@ namespace StarLab.Presentation
 
             factory.CreateSaveWorkspaceUseCase(Arg.Any<IApplicationOutputPort>()).Returns(interactor);
 
-            controller.ShowMessage(Resources.StarLab, Resources.WorkspaceClosing, InteractionResponses.YesNoCancel).Returns(InteractionResult.No);
+            controller.ShowMessage(Resources.WorkspaceClosing, InteractionResponses.YesNoCancel).Returns(InteractionResult.No);
 
             var presenter = CreatePresenter(true);
 
@@ -190,7 +190,7 @@ namespace StarLab.Presentation
 
             factory.CreateSaveWorkspaceUseCase(Arg.Any<IApplicationOutputPort>()).Returns(interactor);
 
-            controller.ShowMessage(Resources.StarLab, Resources.WorkspaceClosing, InteractionResponses.YesNoCancel).Returns(InteractionResult.Yes);
+            controller.ShowMessage(Resources.WorkspaceClosing, InteractionResponses.YesNoCancel).Returns(InteractionResult.Yes);
 
             var presenter = CreatePresenter(true);
 
@@ -230,7 +230,7 @@ namespace StarLab.Presentation
 
             factory.CreateSaveWorkspaceUseCase(Arg.Any<IApplicationOutputPort>()).Returns(interactor);
 
-            controller.ShowMessage(Resources.StarLab, Resources.WorkspaceClosing, InteractionResponses.YesNoCancel).Returns(InteractionResult.Cancel);
+            controller.ShowMessage(Resources.WorkspaceClosing, InteractionResponses.YesNoCancel).Returns(InteractionResult.Cancel);
 
             var presenter = CreatePresenter(true);
 

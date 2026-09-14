@@ -35,6 +35,15 @@ namespace StarLab.Presentation
         InteractionResult ShowMessage(string caption, string message, InteractionType type, InteractionResponses responses);
 
         /// <summary>
+        /// Displays a message box with the specified message, message type and available responses.
+        /// </summary>
+        /// <param name="message">The message text.</param>
+        /// <param name="type">An <see cref="InteractionType"/> that specifies the type of message being displayed.</param>
+        /// <param name="responses">An <see cref="InteractionResponses"/> that specifies the available responses.</param>
+        /// <returns>An <see cref="InteractionResult"/> that identifies the chosen response.</returns>
+        InteractionResult ShowMessage(string message, InteractionType type, InteractionResponses responses);
+
+        /// <summary>
         /// Displays an <see cref="OpenFileDialog"/> with the specified options.
         /// </summary>
         /// <param name="title">The dialog title.</param>

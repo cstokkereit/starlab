@@ -102,10 +102,10 @@
         void SetSelectedFolder(string key);
 
         /// <summary>
-        /// Displays a <see cref="MessageBox"/> with the specified message.
+        /// Displays a message box with the specified error message.
         /// </summary>
         /// <param name="message">The message text.</param>
-        void ShowMessage(string message);
+        void ShowErrorMessage(string message);
 
         /// <summary>
         /// Selects the node that represents the active document.

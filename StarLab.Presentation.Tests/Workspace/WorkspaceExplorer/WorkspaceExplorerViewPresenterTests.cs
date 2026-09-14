@@ -918,19 +918,6 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         }
 
         /// <summary>
-        /// Test that the <see cref="WorkspaceExplorerViewPresenter.ShowMessage(string)"/> method works correctly.
-        /// </summary>
-        [Test]
-        public void TestShowMessage()
-        {
-            var presenter = CreatePresenter(true);
-
-            presenter.ShowMessage("Test message.");
-
-            controller.Received(1).ShowMessage("StarLab", "Test message.", InteractionType.Error, InteractionResponses.OK);
-        }
-
-        /// <summary>
         /// Test that the <see cref="WorkspaceExplorerViewPresenter.Synchronise()"/> method works correctly.
         /// </summary>
         [Test]

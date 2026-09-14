@@ -1,4 +1,5 @@
-﻿using StarLab.Shared.Properties;
+﻿using StarLab.Shared;
+using StarLab.Shared.Properties;
 
 namespace StarLab.Presentation.Configuration
 {
@@ -34,15 +35,15 @@ namespace StarLab.Presentation.Configuration
                 return childConfigurations[0];
             }
 
-            throw new ArgumentException(string.Format(Resources.ConfigurationNotFound, name), nameof(name));
+            throw new KeyNotFoundException(ExceptionMessages.ConfigurationNotFound(name));
         }
 
         /// <summary>
         /// Gets the specified <see cref="IViewConfiguration"/> instance.
         /// </summary>
-        /// <param name="name">The name of the reuired <see cref="IViewConfiguration"/> instance.</param>
+        /// <param name="name">The name of the required <see cref="IViewConfiguration"/> instance.</param>
         /// <returns>The specified <see cref="IViewConfiguration"/> instance.</returns>
-        /// <exception cref="ArgumentException"></exception>
+        /// <exception cref="KeyNotFoundException"></exception>
         public IViewConfiguration GetConfiguration(string name)
         {
             if (configurations.TryGetValue(name, out IViewConfiguration? configuration))
@@ -50,7 +51,7 @@ namespace StarLab.Presentation.Configuration
                 return configuration;
             }
 
-            throw new ArgumentException(string.Format(Resources.ConfigurationNotFound, name), nameof(name));
+            throw new KeyNotFoundException(ExceptionMessages.ConfigurationNotFound(name));
         }
 
         /// <summary>

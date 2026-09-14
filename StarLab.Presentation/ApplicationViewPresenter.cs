@@ -96,7 +96,7 @@ namespace StarLab.Presentation
 
             if (dirty)
             {
-                var result = AppController.ShowMessage(StringResources.StarLab, StringResources.WorkspaceClosing, InteractionResponses.YesNoCancel);
+                var result = AppController.ShowMessage(MessageBuilder.WorkspaceClosing, InteractionResponses.YesNoCancel);
 
                 if (result == InteractionResult.Yes) SaveWorkspace();
 
@@ -217,6 +217,11 @@ namespace StarLab.Presentation
         public void OnEvent(ActiveDocumentChangedEventArgs args)
         {
             UpdateCommandState(Actions.Close, args.Workspace.ActiveDocument != null);
+
+            if (args.Workspace.ActiveDocument != null)
+            {
+                Events.Publish(new ActiveViewChangedEventArgs(AppController.GetView(args.Workspace.ActiveDocument)));
+            }
         }
 
         /// <summary>
@@ -245,9 +250,18 @@ namespace StarLab.Presentation
         {
             workspace.UpdateLayout(View.GetLayout());
 
-            useCaseService.SaveWorkspace(workspace);
+            try
+            {
+                useCaseService.SaveWorkspace(workspace);
 
-            dirty = false; // TODO - either throw the exception or return a failure response in which case do not set dirty to false.
+                dirty = false;
+            }
+            catch (Exception e)
+            {
+                View.ShowMessage(MessageBuilder.WorkspaceCouldNotBeSaved, InteractionType.Error, InteractionResponses.OK);
+
+                log.Error(e.Message, e);
+            }
         }
 
         /// <summary>
@@ -445,11 +459,7 @@ namespace StarLab.Presentation
         {
             if (workspace.SelectedFolder != null)
             {
-                var path = workspace.SelectedFolder.Key;
-
-                useCaseService.AddFolder(workspace, path);
-
-                AppController.ShowAddDocumentDialog(workspace, path, type);
+                AppController.ShowAddDocumentDialog(workspace, workspace.SelectedFolder.Key, type);
             }
         }
 
@@ -580,9 +590,22 @@ namespace StarLab.Presentation
         {
             ArgumentException.ThrowIfNullOrEmpty(filename, nameof(filename));
 
-            useCaseService.OpenWorkspace(filename);
+            try
+            {
+                useCaseService.OpenWorkspace(filename);
 
-            UpdateCommandState(Actions.CloseWorkspace, true);
+                UpdateCommandState(Actions.CloseWorkspace, true);
+            }
+            catch (FileNotFoundException)
+            {
+                View.ShowMessage(MessageBuilder.FileNotFound(filename), InteractionType.Error, InteractionResponses.OK);
+            }
+            catch (Exception e)
+            {
+                View.ShowMessage(MessageBuilder.FileCouldNotBeOpened(filename), InteractionType.Error, InteractionResponses.OK);
+
+                log.Error(e.Message, e);
+            }
         }
     }
 }

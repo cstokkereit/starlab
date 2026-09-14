@@ -1,4 +1,5 @@
 ﻿using StarLab.Application.Workspace;
+using StarLab.Shared;
 using StarLab.Shared.Properties;
 
 namespace StarLab.Presentation.Workspace
@@ -25,7 +26,8 @@ namespace StarLab.Presentation.Workspace
         public Folder(FolderDTO dto)
         {
             ArgumentNullException.ThrowIfNull(dto, nameof(dto));
-            ArgumentException.ThrowIfNullOrEmpty(dto.Path, Resources.InvalidPath);
+
+            if (string.IsNullOrEmpty(dto.Path)) throw new ArgumentException(ExceptionMessages.InvalidPath, nameof(dto));
 
             key = dto.Path;
 

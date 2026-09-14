@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using StarLab.Shared.Properties;
 
 namespace StarLab.Application.Workspace
 {
@@ -30,14 +29,7 @@ namespace StarLab.Application.Workspace
         {
             ArgumentNullException.ThrowIfNull(dto, nameof(dto));
 
-            try
-            {
-                if (!string.IsNullOrEmpty(dto.FileName)) serialiser.SerialiseWorkspace(dto, dto.FileName);
-            }
-            catch (Exception e)
-            {
-                OutputPort.ShowMessage(Resources.StarLab, e.Message, InteractionType.Error, InteractionResponses.OK);
-            }
+            if (!string.IsNullOrEmpty(dto.FileName)) serialiser.SerialiseWorkspace(dto, dto.FileName);
         }
     }
 }

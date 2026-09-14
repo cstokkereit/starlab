@@ -1,4 +1,5 @@
 ﻿using StarLab.Presentation.Configuration;
+using StarLab.Shared;
 using StarLab.Shared.Properties;
 
 namespace StarLab.Presentation
@@ -45,15 +46,15 @@ namespace StarLab.Presentation
 
             if (type == null)
             {
-                throw new Exception(string.Format(Resources.UnknownType, typeName));
+                throw new Exception(ExceptionMessages.UnknownType(typeName));
             }
             else
             {
                 instance = Activator.CreateInstance(type, args);
             }
 
-            if (instance == null) throw new Exception(string.Format(Resources.UnableToCreateInstance, typeName));
-            
+            if (instance == null) throw new Exception(ExceptionMessages.InstanceCouldNotBeCreated(typeName));
+
             return instance;
         }
     }

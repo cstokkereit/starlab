@@ -169,24 +169,6 @@ namespace StarLab.Shared.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot rename &apos;{0}&apos; to &apos;{1}&apos; because a {2} with that name already exists..
-        /// </summary>
-        public static string CannotRenameItem {
-            get {
-                return ResourceManager.GetString("CannotRenameItem", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Cannot rename &apos;{0}&apos; to &apos;{1}&apos; because a workspace with that name already exists at this location..
-        /// </summary>
-        public static string CannotRenameWorkspace {
-            get {
-                return ResourceManager.GetString("CannotRenameWorkspace", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Chart.
         /// </summary>
         public static string Chart {
@@ -201,6 +183,15 @@ namespace StarLab.Shared.Properties {
         public static string ChildViewNotAControl {
             get {
                 return ResourceManager.GetString("ChildViewNotAControl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The contents of the clipboard could not be pasted into the folder &apos;{0}&apos;..
+        /// </summary>
+        public static string ClipboardContentsCouldNotBePasted {
+            get {
+                return ResourceManager.GetString("ClipboardContentsCouldNotBePasted", resourceCulture);
             }
         }
         
@@ -268,24 +259,6 @@ namespace StarLab.Shared.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The {0} configuration could not be found..
-        /// </summary>
-        public static string ConfigurationNotFound {
-            get {
-                return ResourceManager.GetString("ConfigurationNotFound", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to A controller with ID {0} could not be found..
-        /// </summary>
-        public static string ControllerNotFound {
-            get {
-                return ResourceManager.GetString("ControllerNotFound", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Copy.
         /// </summary>
         public static string Copy {
@@ -300,24 +273,6 @@ namespace StarLab.Shared.Properties {
         public static string Copyright {
             get {
                 return ResourceManager.GetString("Copyright", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The cursor is already positioned at the beginning of the file..
-        /// </summary>
-        public static string CursorAtBeginningOfFile {
-            get {
-                return ResourceManager.GetString("CursorAtBeginningOfFile", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The cursor is already positioned at the end of the file..
-        /// </summary>
-        public static string CursorAtEndoOfFile {
-            get {
-                return ResourceManager.GetString("CursorAtEndoOfFile", resourceCulture);
             }
         }
         
@@ -367,15 +322,6 @@ namespace StarLab.Shared.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; will be deleted permanently..
-        /// </summary>
-        public static string DeletionWarning {
-            get {
-                return ResourceManager.GetString("DeletionWarning", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Cannot move &apos;{0}&apos;. The destination folder is the same as the source folder..
         /// </summary>
         public static string DestinationSameAsSource {
@@ -394,11 +340,47 @@ namespace StarLab.Shared.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A document with the name &apos;{0}&apos; already exists. Do you want to replace it?.
+        ///   Looks up a localized string similar to A document with the name &apos;{0}&apos; already exists..
         /// </summary>
         public static string DocumentAlreadyExists {
             get {
                 return ResourceManager.GetString("DocumentAlreadyExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The document could not be created..
+        /// </summary>
+        public static string DocumentCouldNotBeCreated {
+            get {
+                return ResourceManager.GetString("DocumentCouldNotBeCreated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The document with the name &apos;{0}&apos; could not be deleted..
+        /// </summary>
+        public static string DocumentCouldNotBeDeleted {
+            get {
+                return ResourceManager.GetString("DocumentCouldNotBeDeleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot rename &apos;{0}&apos; to &apos;{1}&apos; because a document with that name already exists..
+        /// </summary>
+        public static string DocumentCouldNotBeRenamed {
+            get {
+                return ResourceManager.GetString("DocumentCouldNotBeRenamed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The document with the name &apos;{0}&apos; will be deleted permanently..
+        /// </summary>
+        public static string DocumentDeletionWarning {
+            get {
+                return ResourceManager.GetString("DocumentDeletionWarning", resourceCulture);
             }
         }
         
@@ -412,20 +394,11 @@ namespace StarLab.Shared.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A document with the name {0} could not be found in the folder {1}.
+        ///   Looks up a localized string similar to Do you want to replace it?.
         /// </summary>
-        public static string DocumentNotFound {
+        public static string DoYouWantToReplaceIt {
             get {
-                return ResourceManager.GetString("DocumentNotFound", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The document has not been set..
-        /// </summary>
-        public static string DocumentNotSet {
-            get {
-                return ResourceManager.GetString("DocumentNotSet", resourceCulture);
+                return ResourceManager.GetString("DoYouWantToReplaceIt", resourceCulture);
             }
         }
         
@@ -453,6 +426,15 @@ namespace StarLab.Shared.Properties {
         public static string File {
             get {
                 return ResourceManager.GetString("File", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The file {0} could not be opened..
+        /// </summary>
+        public static string FileCouldNotBeOpened {
+            get {
+                return ResourceManager.GetString("FileCouldNotBeOpened", resourceCulture);
             }
         }
         
@@ -487,7 +469,34 @@ namespace StarLab.Shared.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The {0} &apos;{1}&apos; and all of its contents will be deleted permanently..
+        ///   Looks up a localized string similar to The folder could not be added to the folder &apos;{0}&apos;..
+        /// </summary>
+        public static string FolderCouldNotBeAdded {
+            get {
+                return ResourceManager.GetString("FolderCouldNotBeAdded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The folder &apos;{0}&apos; could not be deleted..
+        /// </summary>
+        public static string FolderCouldNotBeDeleted {
+            get {
+                return ResourceManager.GetString("FolderCouldNotBeDeleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot rename &apos;{0}&apos; to &apos;{1}&apos; because a folder with that name already exists..
+        /// </summary>
+        public static string FolderCouldNotBeRenamed {
+            get {
+                return ResourceManager.GetString("FolderCouldNotBeRenamed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The folder &apos;{0}&apos; and all of its contents will be deleted permanently..
         /// </summary>
         public static string FolderDeletionWarning {
             get {
@@ -537,15 +546,6 @@ namespace StarLab.Shared.Properties {
         public static string InvalidOperation {
             get {
                 return ResourceManager.GetString("InvalidOperation", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The path cannot be an empty string..
-        /// </summary>
-        public static string InvalidPath {
-            get {
-                return ResourceManager.GetString("InvalidPath", resourceCulture);
             }
         }
         
@@ -614,24 +614,24 @@ namespace StarLab.Shared.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} names cannot include any of the following:
-        ///
-        ///                               {1}
-        ///
-        ///Please enter a valid name..
+        ///   Looks up a localized string similar to The {0} name cannot be null or empty..
         /// </summary>
-        public static string NameCannotInclude {
+        public static string NameCannotBeNullOrEmpty {
             get {
-                return ResourceManager.GetString("NameCannotInclude", resourceCulture);
+                return ResourceManager.GetString("NameCannotBeNullOrEmpty", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The {0} name cannot be null or empty..
+        ///   Looks up a localized string similar to {0} names cannot include any of the following:
+        ///
+        ///                              \ / : * ? &apos; &quot; &lt; &gt; |
+        ///
+        ///Please enter a valid name..
         /// </summary>
-        public static string NameNullOrEmpty {
+        public static string NameContainsIllegalCharacters {
             get {
-                return ResourceManager.GetString("NameNullOrEmpty", resourceCulture);
+                return ResourceManager.GetString("NameContainsIllegalCharacters", resourceCulture);
             }
         }
         
@@ -735,15 +735,6 @@ namespace StarLab.Shared.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The presenter has already been attached to this view..
-        /// </summary>
-        public static string PresenterAlreadyAttached {
-            get {
-                return ResourceManager.GetString("PresenterAlreadyAttached", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Print.
         /// </summary>
         public static string Print {
@@ -762,20 +753,20 @@ namespace StarLab.Shared.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Its a thing.
-        /// </summary>
-        public static string ProductDescription {
-            get {
-                return ResourceManager.GetString("ProductDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Project.
         /// </summary>
         public static string Project {
             get {
                 return ResourceManager.GetString("Project", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The project {0} could not be deleted..
+        /// </summary>
+        public static string ProjectCouldNotBeDeleted {
+            get {
+                return ResourceManager.GetString("ProjectCouldNotBeDeleted", resourceCulture);
             }
         }
         
@@ -906,38 +897,11 @@ namespace StarLab.Shared.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An instance of the type &apos;{0}&apos; could not be created..
-        /// </summary>
-        public static string UnableToCreateInstance {
-            get {
-                return ResourceManager.GetString("UnableToCreateInstance", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The argument was not of the correct type. Expected {0} but was {1} .
-        /// </summary>
-        public static string UnexpectedArgumentType {
-            get {
-                return ResourceManager.GetString("UnexpectedArgumentType", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Unexpected view type: {0}.
         /// </summary>
         public static string UnexpectedViewType {
             get {
                 return ResourceManager.GetString("UnexpectedViewType", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Unknown type: {0}.
-        /// </summary>
-        public static string UnknownType {
-            get {
-                return ResourceManager.GetString("UnknownType", resourceCulture);
             }
         }
         
@@ -987,15 +951,6 @@ namespace StarLab.Shared.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A view with ID {0} could not be found. .
-        /// </summary>
-        public static string ViewNotFound {
-            get {
-                return ResourceManager.GetString("ViewNotFound", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Window.
         /// </summary>
         public static string Window {
@@ -1028,6 +983,33 @@ namespace StarLab.Shared.Properties {
         public static string WorkspaceCouldNotBeOpened {
             get {
                 return ResourceManager.GetString("WorkspaceCouldNotBeOpened", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The workspace could not be renamed..
+        /// </summary>
+        public static string WorkspaceCouldNotBeRenamed {
+            get {
+                return ResourceManager.GetString("WorkspaceCouldNotBeRenamed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot rename &apos;{0}&apos; to &apos;{1}&apos; because a workspace with that name already exists at this location..
+        /// </summary>
+        public static string WorkspaceCouldNotBeRenamedAsAlreadyExists {
+            get {
+                return ResourceManager.GetString("WorkspaceCouldNotBeRenamedAsAlreadyExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The workspace could not be saved..
+        /// </summary>
+        public static string WorkspaceCouldNotBeSaved {
+            get {
+                return ResourceManager.GetString("WorkspaceCouldNotBeSaved", resourceCulture);
             }
         }
         

@@ -73,7 +73,18 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="key">The key that identifies the parent folder.</param>
         public void AddFolder(string key)
         {
-            useCaseService.AddFolder(workspace, key);
+            ArgumentException.ThrowIfNullOrEmpty(key, nameof(key));
+
+            try
+            {
+                useCaseService.AddFolder(workspace, key);
+            }
+            catch (Exception e)
+            {
+                ShowErrorMessage(MessageBuilder.FolderCouldNotBeAdded(key));
+
+                log.Error(e.Message, e);
+            }
         }
 
         /// <summary>
@@ -107,6 +118,8 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="key">The workspace, project or folder key.</param>
         public void Collapse(string key)
         {
+            ArgumentException.ThrowIfNullOrEmpty(key, nameof(key));
+
             if (key.Equals(Constants.Workspace))
             {
                 workspace.CollapseAll();
@@ -153,6 +166,9 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="manager">The context menu manager.</param>
         public void CreateDocumentContextMenu(string id, IMenuManager manager)
         {
+            ArgumentNullException.ThrowIfNull(manager, nameof(manager));
+            ArgumentException.ThrowIfNullOrEmpty(id, nameof(id));
+            
             manager.AddMenuItem(Constants.Open, StringResources.Open, ImageResources.Open, CreateCommand(GetCommandName(Actions.Open, id), () => OpenDocument(id)));
             manager.AddMenuSeparator();
             manager.AddMenuItem(Constants.Cut, StringResources.Cut, ImageResources.Cut, CreateCommand(GetCommandName(Actions.Cut, id), () => Cut(id)));
@@ -168,6 +184,9 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="manager">The context menu manager.</param>
         public void CreateFolderContextMenu(string folder, IMenuManager manager)
         {
+            ArgumentException.ThrowIfNullOrEmpty(folder, nameof(folder));
+            ArgumentNullException.ThrowIfNull(manager, nameof(manager));
+            
             manager.AddMenuItem(Constants.Add, StringResources.Add);
             manager.AddMenuItem(Constants.Add, Constants.AddChart, StringResources.Chart + Constants.Ellipsis, ImageResources.NewChart, CreateCommand(GetCommandName(Actions.AddChart, folder), () => AddDocument(folder, DocumentTypes.Chart)));
             manager.AddMenuItem(Constants.Add, Constants.AddTable, StringResources.Table + Constants.Ellipsis, ImageResources.NewTable, CreateCommand(GetCommandName(Actions.AddTable, folder), () => AddDocument(folder, DocumentTypes.Table)));
@@ -191,6 +210,9 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="manager">The context menu manager.</param>
         public void CreateProjectContextMenu(string project, IMenuManager manager)
         {
+            ArgumentException.ThrowIfNullOrEmpty(project, nameof(project));
+            ArgumentNullException.ThrowIfNull(manager, nameof(manager));
+
             manager.AddMenuItem(Constants.Add, StringResources.Add);
             manager.AddMenuItem(Constants.Add, Constants.AddChart, StringResources.Chart + Constants.Ellipsis, ImageResources.NewChart, CreateCommand(Actions.AddChart, () => AddDocument(project, DocumentTypes.Chart)));
             manager.AddMenuItem(Constants.Add, Constants.AddTable, StringResources.Table + Constants.Ellipsis, ImageResources.NewTable, CreateCommand(Actions.AddTable, () => AddDocument(project, DocumentTypes.Table)));
@@ -212,6 +234,8 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="manager">The context menu manager.</param>
         public void CreateWorkspaceContextMenu(IMenuManager manager)
         {
+            ArgumentNullException.ThrowIfNull(manager, nameof(manager));
+
             manager.AddMenuItem(Constants.CollapseAll, StringResources.CollapseAllDescendants, ImageResources.Collapse, CreateCommand(Actions.CollapseWorkspace, () => Collapse(Constants.Workspace)));
             manager.AddMenuSeparator();
             manager.AddMenuItem(Constants.Add, StringResources.Add);
@@ -236,28 +260,80 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <summary>
         /// Deletes the document with the specified ID.
         /// </summary>
-        /// <param name="key">The key that identifies the Document to be deleted.</param>
-        public void DeleteDocument(string key)
+        /// <param name="id">The key that identifies the Document to be deleted.</param>
+        public void DeleteDocument(string id)
         {
-            useCaseService.DeleteDocument(workspace, new DocumentID(key));
+            ArgumentException.ThrowIfNullOrEmpty(id, nameof(id));
+
+            var document = workspace.GetDocument(new DocumentID(id));
+
+            if (ConfirmAction(MessageBuilder.DocumentDeletionWarning(document.Name)))
+            {
+                try
+                {
+                    useCaseService.DeleteDocument(workspace, new DocumentID(id));
+                }
+                catch (Exception e)
+                {
+                    ShowErrorMessage(MessageBuilder.DocumentCouldNotBeDeleted(document.Name));
+
+                    log.Error(e.Message, e);
+                }
+            }
         }
 
         /// <summary>
         /// Deletes the specified folder.
         /// </summary>
-        /// <param name="key">The key that identifies the folder to be deleted.</param>
-        public void DeleteFolder(string key)
+        /// <param name="folder">The path to the folder.</param>
+        public void DeleteFolder(string folder)
         {
-            useCaseService.DeleteFolder(workspace, key);
+            ArgumentException.ThrowIfNullOrEmpty(folder, nameof(folder));
+
+            if (workspace.HasFolder(folder))
+            {
+                if (workspace.IsEmpty(folder) || ConfirmAction(MessageBuilder.FolderDeletionWarning(workspace.GetFolder(folder).Name)))
+                {
+                    try
+                    {
+                        useCaseService.DeleteFolder(workspace, folder);
+                    }
+                    catch (Exception e)
+                    {
+                        ShowErrorMessage(MessageBuilder.FolderCouldNotBeDeleted(folder));
+
+                        log.Error(e.Message, e);
+                    }
+                }
+            }
         }
 
         /// <summary>
         /// Deletes the specified project.
         /// </summary>
-        /// <param name="key">The key that identifies the project to be deleted.</param>
-        public void DeleteProject(string key)
+        /// <param name="project">The project to be deleted.</param>
+        public void DeleteProject(string project)
         {
-            useCaseService.DeleteFolder(workspace, key);
+            ArgumentException.ThrowIfNullOrEmpty(project, nameof(project));
+
+            if (workspace.HasProject(project))
+            {
+                var name = workspace.GetProject(project).Name;
+
+                if (workspace.IsEmpty(project) || ConfirmAction(MessageBuilder.ProjectDeletionWarning(name)))
+                {
+                    try
+                    {
+                        useCaseService.DeleteFolder(workspace, project);
+                    }
+                    catch (Exception e)
+                    {
+                        ShowErrorMessage(MessageBuilder.ProjectCouldNotBeDeleted(name));
+
+                        log.Error(e.Message, e);
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -276,6 +352,8 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="key">The node key.</param>
         public void FolderCollapsed(string key)
         {
+            ArgumentException.ThrowIfNullOrEmpty(key, nameof(key));
+
             workspace.GetFolder(key).Collapse();
         }
 
@@ -285,6 +363,8 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="key">The node key.</param>
         public void FolderExpanded(string key)
         {
+            ArgumentException.ThrowIfNullOrEmpty(key, nameof(key));
+
             workspace.GetFolder(key).Expand();
         }
 
@@ -294,6 +374,8 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="controller">The <see cref="IApplicationController"/>.</param>
         public override void Initialise(IApplicationController controller)
         {
+            ArgumentNullException.ThrowIfNull(controller, nameof(controller));
+
             if (Initialised) throw new InvalidOperationException(ExceptionMessages.PresenterAlreadyInitialised(GetType()));
             
             base.Initialise(controller);
@@ -310,6 +392,8 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="args">An <see cref="ActiveDocumentChangedEventArgs"/> that provides context for the event.</param>
         public void OnEvent(ActiveDocumentChangedEventArgs args)
         {
+            ArgumentNullException.ThrowIfNull(args, nameof(args));
+
             UpdateCommandState(Actions.Synchronise, args.Workspace.ActiveDocument != null);
         }
 
@@ -319,6 +403,8 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="args">A <see cref="WorkspaceChangedEventArgs"/> that provides context for the event.</param>
         public void OnEvent(WorkspaceChangedEventArgs args)
         {
+            ArgumentNullException.ThrowIfNull(args, nameof(args));
+
             UpdateWorkspace(args.Workspace);
         }
 
@@ -328,6 +414,8 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="key">The node key.</param>
         public void OpenDocument(string key)
         {
+            ArgumentException.ThrowIfNullOrEmpty(key, nameof(key));
+
             AppController.ShowDocument(workspace.GetDocument(new DocumentID(key)));
         }
 
@@ -341,11 +429,11 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
 
             if (copy)
             {
-                useCaseService.CopyAndPaste(workspace, View.Clipboard.GetText(), destination);
+                DoCopyAndPaste(destination);
             }
             else
             {
-                useCaseService.CutAndPaste(workspace, View.Clipboard.GetText(), destination);
+                DoCutAndPaste(destination);
             }
         }
 
@@ -355,6 +443,8 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="key">The node key.</param>
         public void ProjectCollapsed(string key)
         {
+            ArgumentException.ThrowIfNullOrEmpty(key, nameof(key));
+
             workspace.GetProject(key).Collapse();
         }
 
@@ -364,6 +454,8 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="key">The node key.</param>
         public void ProjectExpanded(string key)
         {
+            ArgumentException.ThrowIfNullOrEmpty(key, nameof(key));
+
             workspace.GetProject(key).Expand();
         }
 
@@ -393,9 +485,23 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="name">The new name.</param>
         public void RenameDocument(string key, string name)
         {
+            ArgumentException.ThrowIfNullOrEmpty(name, nameof(name));
             ArgumentException.ThrowIfNullOrEmpty(key, nameof(key));
 
-            useCaseService.RenameDocument(workspace, new DocumentID(key), name);
+            var id = new DocumentID(key);
+
+            try
+            {
+                useCaseService.RenameDocument(workspace, id, name);
+            }
+            catch (DocumentExistsException)
+            {
+                ShowErrorMessage(MessageBuilder.DocumentCouldNotBeRenamed(workspace.GetDocument(id).Name, name));
+            }
+            catch (InvalidNameException)
+            {
+                ShowErrorMessage(MessageBuilder.DocumentNameInvalid(name));
+            }
         }
 
         /// <summary>
@@ -405,9 +511,21 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="name">The new name.</param>
         public void RenameFolder(string key, string name)
         {
+            ArgumentException.ThrowIfNullOrEmpty(name, nameof(name));
             ArgumentException.ThrowIfNullOrEmpty(key, nameof(key));
 
-            useCaseService.RenameFolder(workspace, key, name);
+            try
+            {
+                useCaseService.RenameFolder(workspace, key, name);
+            }
+            catch (InvalidOperationException)
+            {
+                ShowErrorMessage(MessageBuilder.FolderCouldNotBeRenamed(key.Substring(key.LastIndexOf('/') + 1), name));
+            }
+            catch (InvalidNameException)
+            {
+                ShowErrorMessage(MessageBuilder.FolderNameInvalid(name));
+            }
         }
 
         /// <summary>
@@ -416,6 +534,8 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="key">The node key.</param>
         public void RenameFolder(string key)
         {
+            ArgumentException.ThrowIfNullOrEmpty(key, nameof(key));
+
             var folder = workspace.GetFolder(key);
             Expand(folder.ParentKey);
             Rename(key);
@@ -427,6 +547,8 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="key">The node key.</param>
         public void RenameProject(string key)
         {
+            ArgumentException.ThrowIfNullOrEmpty(key, nameof(key));
+
             var folder = workspace.GetProject(key);
             Expand(folder.ParentKey);
             Rename(key);
@@ -438,7 +560,26 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="name">The new name.</param>
         public void RenameWorkspace(string name)
         {
-            useCaseService.RenameWorkspace(workspace, name);
+            ArgumentException.ThrowIfNullOrEmpty(name, nameof(name));
+
+            try
+            {
+                useCaseService.RenameWorkspace(workspace, name);
+            }
+            catch (InvalidOperationException)
+            {
+                ShowErrorMessage(MessageBuilder.WorkspaceCouldNotBeRenamed(workspace.Name, name));
+            }
+            catch (InvalidNameException)
+            {
+                ShowErrorMessage(MessageBuilder.WorkspaceNameInvalid(name));
+            }
+            catch (Exception e)
+            {
+                ShowErrorMessage(MessageBuilder.WorkspaceCouldNotBeRenamed());
+
+                log.Error(e.Message, e);
+            }   
         }
 
         /// <summary>
@@ -447,6 +588,8 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="key">The node key.</param>
         public void SetSelectedFolder(string key)
         {
+            ArgumentException.ThrowIfNullOrEmpty(key, nameof(key));
+
             if (key.EndsWith(Constants.Database))
             {
                 var project = key.Substring(0, key.Length - (Constants.Database.Length + 1));
@@ -458,12 +601,12 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         }
 
         /// <summary>
-        /// Displays a <see cref="MessageBox"/> with the specified message.
+        /// Displays a message box with the specified error message.
         /// </summary>
         /// <param name="message">The message text.</param>
-        public void ShowMessage(string message)
+        public void ShowErrorMessage(string message)
         {
-            ShowMessage(StringResources.StarLab, message, InteractionType.Error, InteractionResponses.OK);
+            ShowMessage(message, InteractionType.Error, InteractionResponses.OK);
         }
 
         /// <summary>
@@ -481,6 +624,9 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="id">The ID of the document that was modified.</param>
         public void UpdateDocument(WorkspaceDTO dto, string id)
         {
+            ArgumentException.ThrowIfNullOrEmpty(id, nameof(id));
+            ArgumentNullException.ThrowIfNull(dto, nameof(dto));
+            
             AppController.GetOutputPort<IApplicationOutputPort>().UpdateDocument(dto, id);
         }
 
@@ -490,6 +636,8 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="dto">The <see cref="WorkspaceDTO"/> that contains the updated workspace state.</param>
         public void UpdateWorkspace(WorkspaceDTO dto)
         {
+            ArgumentNullException.ThrowIfNull(dto, nameof(dto));
+
             AppController.GetOutputPort<IApplicationOutputPort>().UpdateWorkspace(dto);
         }
 
@@ -588,6 +736,120 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         private void CreateWorkspaceNode()
         {
             View.AddWorkspaceNode(Constants.Workspace, GetWorkspaceName(), images[NodeImages.Workspace]);
+        }
+
+        /// <summary>
+        /// Performs the copy and paste operation.
+        /// </summary>
+        /// <param name="destination">The destination key.</param>
+        private void DoCopyAndPaste(string destination)
+        {
+            try
+            {
+                useCaseService.CopyAndPaste(workspace, View.Clipboard.GetText(), destination);
+            }
+            catch (Exception e)
+            {
+                ShowErrorMessage(MessageBuilder.ClipboardContentsCouldNotBePasted(destination));
+
+                log.Error(e.Message, e);
+            }
+        }
+
+        /// <summary>
+        /// Performs the cut and paste operation in the event of a <see cref="DocumentExistsException"/> having been thrown.
+        /// </summary>
+        /// <param name="exception"></param>
+        /// <param name="destination">The destination key.</param>
+        private void DoCutAndPaste(DocumentExistsException exception, string destination)
+        {
+            var id = new DocumentID(View.Clipboard.GetText());
+
+            var document = workspace.GetDocument(id);
+
+            if (destination == document.Path)
+            {
+                ShowErrorMessage(MessageBuilder.DestinationSameAsSource(document.Name));
+            }
+            else
+            {
+                var result = ShowMessage(MessageBuilder.DocumentAlreadyExistsWithReplaceOption(exception.Name), InteractionType.Error, InteractionResponses.YesNoCancel);
+
+                switch (result)
+                {
+                    case InteractionResult.Yes:
+                        useCaseService.CutAndPaste(workspace, exception.ID, exception.Path, true);
+                        break;
+
+                    case InteractionResult.Cancel:
+                        View.Clipboard.Clear();
+                        break;
+
+                    case InteractionResult.No:
+                        // Do Nothing
+                        break;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Performs the cut and paste operation in the event of a <see cref="DocumentExistsException"/> having been thrown.
+        /// </summary>
+        /// <param name="exception"></param>
+        /// <param name="destination">The destination key.</param>
+        private void DoCutAndPaste(FolderExistsException exception, string destination)
+        {
+            var folder = workspace.GetFolder(exception.DestinationFolder);
+
+            if (exception.DestinationFolder == exception.SourceFolder)
+            {
+                ShowErrorMessage(MessageBuilder.DestinationSameAsSource(exception.DestinationFolder));
+            }
+            else
+            {
+                var result = ShowMessage(MessageBuilder.FolderAlreadyExists(folder.Name), InteractionType.Error, InteractionResponses.YesNoCancel);
+
+                switch (result)
+                {
+                    case InteractionResult.Yes:
+                        useCaseService.CutAndPaste(workspace, exception.SourceFolder, exception.DestinationFolder, true);
+                        break;
+
+                    case InteractionResult.Cancel:
+                        View.Clipboard.Clear();
+                        break;
+
+                    case InteractionResult.No:
+                        // Do Nothing
+                        break;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Performs the cut and paste operation.
+        /// </summary>
+        /// <param name="destination">The destination key.</param>
+        private void DoCutAndPaste(string destination)
+        {
+            try
+            {
+                useCaseService.CutAndPaste(workspace, View.Clipboard.GetText(), destination);
+            }
+            catch (DocumentExistsException e1)
+            {
+                DoCutAndPaste(e1, destination);
+            }
+            catch (FolderExistsException e2)
+            {
+                DoCutAndPaste(e2, destination);
+            }
+            catch (Exception e3)
+            {
+                ShowErrorMessage(MessageBuilder.ClipboardContentsCouldNotBePasted(destination));
+
+                log.Error(e3.Message, e3);
+            }
         }
 
         /// <summary>

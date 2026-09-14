@@ -115,7 +115,7 @@ namespace StarLab.Presentation.Workspace.Documents
                 if (controller is TController required) return required;
             }
 
-            throw new InvalidOperationException(string.Format(Resources.UnknownType, typeof(TController)));
+            throw new Exception(ExceptionMessages.UnknownType(typeof(TController)));
         }
 
         /// <summary>
@@ -144,7 +144,7 @@ namespace StarLab.Presentation.Workspace.Documents
 
             UpdateChildControllers();
 
-            log.Debug(LogEntries.PresenterInitialised(GetType(), View.Name, ID.ToString()));
+            log.Debug(LogEntries.PresenterInitialised(GetType(), View.Name, ID));
         }
 
         /// <summary>

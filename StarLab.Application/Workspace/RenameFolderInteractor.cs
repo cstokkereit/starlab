@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using StarLab.Shared;
 using StarLab.Shared.Properties;
 
 namespace StarLab.Application.Workspace
@@ -6,7 +7,7 @@ namespace StarLab.Application.Workspace
     /// <summary>
     /// A use case that renames a folder in the workspace hierarchy.
     /// </summary>
-    internal class RenameFolderInteractor : UseCaseInteractor<IWorkspaceOutputPort>, IUseCase<RenameFolderUseCaseArgs>
+    internal class RenameFolderInteractor : WorkspaceInteractor, IUseCase<RenameFolderUseCaseArgs>
     {
         /// <summary>
         /// Initialises a new instance of the <see cref="RenameFolderInteractor"/> class.
@@ -28,7 +29,7 @@ namespace StarLab.Application.Workspace
 
             var type = folder is Project ? Resources.Project : Resources.Folder;
 
-            if (WorkspaceInteractionHelper.IsValid(args.Name))
+            if (IsValid(args.Name))
             {
                 var folders = folder is Project ? workspace.Projects : folder.Parent.Folders;
 
@@ -40,12 +41,12 @@ namespace StarLab.Application.Workspace
                 }
                 else
                 {
-                    throw new Exception(WorkspaceInteractionHelper.CreateCannotRenameItemMessage(args.Path.Substring(args.Path.LastIndexOf('/') + 1), args.Name, type));
+                    throw new InvalidOperationException(ExceptionMessages.FolderExists($"{folder}/{args.Path}"));
                 }
             }
             else
             {
-                throw new Exception(WorkspaceInteractionHelper.CreateInvalidNameMessage(args.Name, type));
+                throw new InvalidNameException(args.Name);
             }
         }
 

@@ -50,7 +50,7 @@ namespace StarLab.Presentation
                 return new ApplicationViewPresenter(application, context, commands, services, events);
             }
 
-            throw new ArgumentException(string.Format(Resources.UnexpectedViewType, view.GetType().Name), nameof(view));
+            throw new ArgumentException(string.Format(Resources.UnexpectedViewType, view.GetType().Name), nameof(view)); // TODO - Use ExceptionMessages
         }
 
         /// <summary>
@@ -76,10 +76,10 @@ namespace StarLab.Presentation
             }
             else
             {
-                throw new ArgumentException(string.Format(Resources.InterfaceNotImplemented, nameof(childPresenter), nameof(IChildViewController)));
+                throw new ArgumentException(string.Format(Resources.InterfaceNotImplemented, nameof(childPresenter), nameof(IChildViewController))); // TODO - Use ExceptionMessages
             }
 
-            throw new ArgumentException(string.Format(Resources.UnexpectedViewType, view.GetType().Name), nameof(view));
+            throw new ArgumentException(string.Format(Resources.UnexpectedViewType, view.GetType().Name), nameof(view)); // TODO - Use ExceptionMessages
         }
 
         /// <summary>
@@ -103,7 +103,7 @@ namespace StarLab.Presentation
                 }
                 else
                 {
-                    throw new Exception(string.Format(Resources.InterfaceNotImplemented, nameof(childPresenter), nameof(IChildViewController)));
+                    throw new Exception(string.Format(Resources.InterfaceNotImplemented, nameof(childPresenter), nameof(IChildViewController))); // TODO - Use ExceptionMessages
                 }
             }
 
