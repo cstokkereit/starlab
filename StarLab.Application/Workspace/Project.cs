@@ -1,19 +1,15 @@
 ﻿using StarLab.Application.Workspace.Documents;
-using StarLab.Shared;
-using StarLab.Shared.Properties;
 
 namespace StarLab.Application.Workspace
 {
     /// <summary>
     /// Application model represention of a project.
     /// </summary>
-    internal class Project : IFolder
+    internal class Project : Folder
     {
         private readonly Dictionary<string, Folder> folders = new Dictionary<string, Folder>(); // A dictionary containing all of the folders within the project hierarchy.
 
         private readonly Database database; // The database associated with the project.
-
-        private IFolder folder; // The project folder.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="Project"/> class.
@@ -21,11 +17,10 @@ namespace StarLab.Application.Workspace
         /// <param name="dto">A data transfer object that specifies the initial state of the <see cref="Project"/>.</param>
         /// <param name="parent">The <see cref="IFolder"/> that contains the <see cref="Project"/></param>
         public Project(ProjectDTO dto, IFolder parent)
+            : base(dto.Name, dto.Expanded,parent)
         {
             ArgumentNullException.ThrowIfNull(parent, nameof(parent));
             ArgumentNullException.ThrowIfNull(dto, nameof(dto));
-
-            folder = new Folder(dto.Name, dto.Expanded, parent);
 
             database = new Database(dto.Database);
 
@@ -77,106 +72,15 @@ namespace StarLab.Application.Workspace
         public Database Database => database;
 
         /// <summary>
-        /// Gets an <see cref="IEnumerable{Document}"/> containing the documents in the project folder.
-        /// </summary>
-        public IEnumerable<Document> Documents => folder.Documents;
-
-        /// <summary>
-        /// Gets an <see cref="IEnumerable{IFolder}"/> containing the folders in the project folder.
-        /// </summary>
-        public IEnumerable<IFolder> Folders => folder.Folders;
-
-        /// <summary>
-        /// Returns true if the project does not contain any documents or folders; false otherwise.
-        /// </summary>
-        public bool IsEmpty => folder.IsEmpty;
-
-        /// <summary>
-        /// Gets the project name.
-        /// </summary>
-        public string Name { get => folder.Name; set => RenameFolder(folder, value); }
-
-        /// <summary>
-        /// Gets the <see cref="IFolder"/> that contains the project.
-        /// </summary>
-        public IFolder Parent => folder.Parent;
-
-        /// <summary>
-        /// Gets the project path.
-        /// </summary>
-        public string Path => folder.Path;
-
-        /// <summary>
-        /// Adds the <see cref="Document"/> provided to the project folder.
-        /// </summary>
-        /// <param name="document">The <see cref="Document"/> to be added.</param>
-        public void AddDocument(Document document)
-        {
-            folder.AddDocument(document);
-        }
-
-        /// <summary>
-        /// Determines if this <see cref="IFolder"> contains a document with the specified name.
-        /// </summary>
-        /// <param name="name">The name of the document.</param>
-        /// <returns>true if this folder contains a document with the specified name; false otherwise.</returns>
-        public bool ContainsDocument(string name)
-        {
-            return folder.ContainsDocument(name);
-        }
-
-        /// <summary>
-        /// Determines if this <see cref="IFolder"> contains a child folder with the specified name.
-        /// </summary>
-        /// <param name="name">The name of the child folder.</param>
-        /// <returns>true if this folder contains a child folder with the specified name; false otherwise.</returns>
-        public bool ContainsFolder(string name)
-        {
-            return folder.ContainsFolder(name);
-        }
-
-        /// <summary>
-        /// Adds the <see cref="IFolder"/> provided to the project folder.
-        /// </summary>
-        /// <param name="folder">The <see cref="IFolder"/> to be added.</param>
-        public void AddFolder(IFolder folder)
-        {
-            if (folder is not Folder) throw new ArgumentException(ExceptionMessages.UnexpectedArgumentType(typeof(Folder), folder.GetType()), nameof(folder));
-
-            this.folder.AddFolder(folder);
-        }
-
-        /// <summary>
-        /// Deletes the <see cref="Document"/> provided from the folder.
-        /// </summary>
-        /// <param name="document">The <see cref="Document"/> to be deleted.</param>
-        public void DeleteDocument(Document document)
-        {
-            folder.DeleteDocument(document);
-        }  
-
-        /// <summary>
-        /// Deletes the <see cref="IFolder"/> provided from the project folder.
-        /// </summary>
-        /// <param name="folder">The <see cref="IFolder"/> to be deleted.</param>
-        /// <exception cref="InvalidOperationException"></exception>
-        public void DeleteFolder(IFolder folder)
-        {
-            if (folder is not Folder) throw new ArgumentException(ExceptionMessages.UnexpectedArgumentType(typeof(Folder), folder.GetType()), nameof(folder));
-
-            this.folder.DeleteFolder(folder);
-        }
-
-        /// <summary>
         /// Renames the <see cref="IFolder"/> provided.
         /// </summary>
         /// <param name="folder">The <see cref="IFolder"/> to be renamed.</param>
         /// <param name="name">The new folder name.</param>
         public void RenameFolder(IFolder folder, string name)
         {
-            if (folder is not Project) throw new ArgumentException(ExceptionMessages.UnexpectedArgumentType(typeof(Project), folder.GetType()), nameof(folder));
+            //if (folder is Project) throw new ArgumentException(ExceptionMessages.UnexpectedArgumentType(typeof(Project), folder.GetType()), nameof(folder));
 
-            var project = folder.Path == this.folder.Path;
+            var project = folder.Path == Path;
 
             var children = GetChildFolders(folder);
 
@@ -293,7 +197,7 @@ namespace StarLab.Application.Workspace
         /// <param name="documents">A <see cref="List{Document}"/> containing the documents that have been collected.</param>
         private void GetDocuments(List<Document> documents)
         {
-            foreach (Document document in folder.Documents)
+            foreach (Document document in Documents)
             {
                 documents.Add(document);
             }

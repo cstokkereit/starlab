@@ -1,6 +1,5 @@
 ﻿using StarLab.Application.Workspace.Documents;
 using StarLab.Shared;
-using StarLab.Shared.Properties;
 
 namespace StarLab.Application.Workspace
 {
@@ -426,7 +425,7 @@ namespace StarLab.Application.Workspace
 
             foreach (var folder in folders)
             {
-                if (folder.Path.StartsWith(parent.Path))
+                if (folder.Path.StartsWith(parent.Path) && folder.Path != parent.Path)
                 {
                     this.folders.Remove(folder.Path);
                     DeleteDocuments(folder);

@@ -1,6 +1,5 @@
 ﻿using StarLab.Application.Workspace.Documents;
 using StarLab.Shared;
-using StarLab.Shared.Properties;
 
 namespace StarLab.Application.Workspace
 {
@@ -41,7 +40,7 @@ namespace StarLab.Application.Workspace
         /// <param name="expanded">true if the folder is expanded; false otherwise.</param>
         /// <param name="parent">The <see cref="IFolder"/> that contains the folder.</param>
         /// <exception cref="ArgumentNullException"></exception>
-        public Folder(string? name, bool expanded, IFolder parent)
+        protected Folder(string? name, bool expanded, IFolder parent)
         {
             Parent = parent ?? throw new ArgumentNullException(nameof(parent));
             Name = name ?? throw new ArgumentNullException(nameof(name));

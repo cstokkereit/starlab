@@ -1,4 +1,4 @@
-﻿using log4net;
+using log4net;
 using StarLab.Application.Workspace;
 using StarLab.Application.Workspace.Documents;
 using StarLab.Presentation.Workspace.Documents;
@@ -55,7 +55,7 @@ namespace StarLab.Presentation.Workspace
         /// <summary>
         /// Returns true if the project is expanded; false otherwise.
         /// </summary>
-        public bool Expanded { get; private set; }
+        public bool Expanded => folder.Expanded;
 
         /// <summary>
         /// Gets the child folders.
@@ -82,7 +82,7 @@ namespace StarLab.Presentation.Workspace
         /// </summary>
         public void Collapse()
         {
-            Expanded = false;
+            folder.Collapse();
         }
 
         /// <summary>
@@ -103,7 +103,7 @@ namespace StarLab.Presentation.Workspace
         /// </summary>
         public void Expand()
         {
-            Expanded = true;
+            folder.Expand();
         }
 
         /// <summary>
