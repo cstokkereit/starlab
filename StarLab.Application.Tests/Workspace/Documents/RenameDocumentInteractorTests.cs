@@ -51,7 +51,7 @@ namespace StarLab.Application.Workspace.Documents
                 .AddChart("1", "Document1", "Workspace/Project1/Folder1")
                 .CreateWorkspace();
 
-            Assert.Throws<Exception>(() => interactor.Execute(new RenameDocumentUseCaseArgs(workspace, "1", string.Empty)));
+            Assert.Throws<InvalidNameException>(() => interactor.Execute(new RenameDocumentUseCaseArgs(workspace, "1", string.Empty)));
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace StarLab.Application.Workspace.Documents
                 .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A2", "Document2", "Workspace/Project1/Folder1")
                 .CreateWorkspace();
 
-            Assert.Throws<Exception>(() => interactor.Execute(new RenameDocumentUseCaseArgs(workspace, "B997452E-AC89-40B5-B304-525F93CCC0A1", "Document2")));
+            Assert.Throws<DocumentExistsException>(() => interactor.Execute(new RenameDocumentUseCaseArgs(workspace, "B997452E-AC89-40B5-B304-525F93CCC0A1", "Document2")));
         }
 
         /// <summary>
@@ -90,7 +90,7 @@ namespace StarLab.Application.Workspace.Documents
                 .AddChart("1", "Document1", "Workspace/Project1/Folder1")
                 .CreateWorkspace();
 
-            Assert.Throws<Exception>(() => interactor.Execute(new RenameDocumentUseCaseArgs(workspace, "1", "Document1/")));
+            Assert.Throws<InvalidNameException>(() => interactor.Execute(new RenameDocumentUseCaseArgs(workspace, "1", "Document1/")));
         }
     }
 }
