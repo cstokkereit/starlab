@@ -45,7 +45,7 @@ namespace StarLab.Application.Workspace
                 .AddFolder("Workspace/Project1/Folder1")
                 .CreateWorkspace();
 
-            Assert.Throws<Exception>(() => interactor.Execute(new RenameFolderUseCaseArgs(workspace, "Workspace/Project1/Folder1", string.Empty)));
+            Assert.Throws<InvalidNameException>(() => interactor.Execute(new RenameFolderUseCaseArgs(workspace, "Workspace/Project1/Folder1", string.Empty)));
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace StarLab.Application.Workspace
                 .AddFolder("Workspace/Project1/Folder2")
                 .CreateWorkspace();
 
-            Assert.Throws<Exception>(() => interactor.Execute(new RenameFolderUseCaseArgs(workspace, "Workspace/Project1/Folder1", "Folder2")));
+            Assert.Throws<InvalidOperationException>(() => interactor.Execute(new RenameFolderUseCaseArgs(workspace, "Workspace/Project1/Folder1", "Folder2")));
         }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace StarLab.Application.Workspace
                 .AddFolder("Workspace/Project1/Folder1")
                 .CreateWorkspace();
 
-            Assert.Throws<Exception>(() => interactor.Execute(new RenameFolderUseCaseArgs(workspace, "Workspace/Project1/Folder1", "Folder1/")));
+            Assert.Throws<InvalidNameException>(() => interactor.Execute(new RenameFolderUseCaseArgs(workspace, "Workspace/Project1/Folder1", "Folder1/")));
         }
 
         /// <summary>
@@ -343,7 +343,7 @@ namespace StarLab.Application.Workspace
                 .AddProject("Project1")
                 .CreateWorkspace();
 
-            Assert.Throws<Exception>(() => interactor.Execute(new RenameFolderUseCaseArgs(workspace, "Workspace/Project1", string.Empty)));
+            Assert.Throws<InvalidNameException>(() => interactor.Execute(new RenameFolderUseCaseArgs(workspace, "Workspace/Project1", string.Empty)));
         }
 
         /// <summary>
@@ -361,7 +361,7 @@ namespace StarLab.Application.Workspace
                 .AddProject("Project2")
                 .CreateWorkspace();
 
-            Assert.Throws<Exception>(() => interactor.Execute(new RenameFolderUseCaseArgs(workspace, "Workspace/Project1", "Project2")));
+            Assert.Throws<InvalidOperationException>(() => interactor.Execute(new RenameFolderUseCaseArgs(workspace, "Workspace/Project1", "Project2")));
         }
 
         /// <summary>
@@ -378,7 +378,7 @@ namespace StarLab.Application.Workspace
                 .AddProject("Project1")
                 .CreateWorkspace();
 
-            Assert.Throws<Exception>(() => interactor.Execute(new RenameFolderUseCaseArgs(workspace, "Workspace/Project1", "Project1/")));
+            Assert.Throws<InvalidNameException>(() => interactor.Execute(new RenameFolderUseCaseArgs(workspace, "Workspace/Project1", "Project1/")));
         }
     }
 }

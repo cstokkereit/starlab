@@ -91,7 +91,7 @@ namespace StarLab.Application.Workspace.Documents
         /// Test that the <see cref="AddDocumentInteractor.Execute"/> method shows an error message if a document with the same name already exists.
         /// </summary>
         [Test]
-        public void TestAddDocumentWhenDocumentWithSameNameExists()
+        public void TestAddDocumentThrowsExceptionWhenDocumentWithSameNameExists()
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
@@ -112,12 +112,7 @@ namespace StarLab.Application.Workspace.Documents
                 View = "View1"
             };
 
-            interactor.Execute(new AddDocumentUseCaseArgs(workspace, document));
-
-            //port.Received().ShowMessage(Arg.Is("StarLab"),
-            //                            Arg.Any<string>(),
-            //                            Arg.Is(InteractionType.Error),
-            //                            Arg.Is(InteractionResponses.OK));
+            Assert.Throws<DocumentExistsException>(() => interactor.Execute(new AddDocumentUseCaseArgs(workspace, document)));
 
             port.DidNotReceive().UpdateWorkspace(Arg.Any<WorkspaceDTO>());
         }
@@ -231,12 +226,7 @@ namespace StarLab.Application.Workspace.Documents
                 View = "View1"
             };
 
-            interactor.Execute(new AddDocumentUseCaseArgs(workspace, document));
-
-            //port.Received().ShowMessage(Arg.Is("StarLab"),
-            //                            Arg.Any<string>(),
-            //                            Arg.Is(InteractionType.Error),
-            //                            Arg.Is(InteractionResponses.OK));
+            Assert.Throws<InvalidNameException>(() => interactor.Execute(new AddDocumentUseCaseArgs(workspace, document)));
 
             port.DidNotReceive().UpdateWorkspace(Arg.Any<WorkspaceDTO>());
         }
@@ -259,18 +249,13 @@ namespace StarLab.Application.Workspace.Documents
             var document = new DocumentDTO
             {
                 ID = "B997452E-AC89-40B5-B304-525F93CCC0A1",
-                Name = "Document1/",
+                Name = "Document1",
                 Path = "Workspace/Project1/Folder1",
                 Type = "InvalidType",
                 View = "View1"
             };
 
-            interactor.Execute(new AddDocumentUseCaseArgs(workspace, document));
-
-            //port.Received().ShowMessage(Arg.Is("StarLab"),
-            //                            Arg.Any<string>(),
-            //                            Arg.Is(InteractionType.Error),
-            //                            Arg.Is(InteractionResponses.OK));
+            Assert.Throws<Exception>(() => interactor.Execute(new AddDocumentUseCaseArgs(workspace, document)));
 
             port.DidNotReceive().UpdateWorkspace(Arg.Any<WorkspaceDTO>());
         }

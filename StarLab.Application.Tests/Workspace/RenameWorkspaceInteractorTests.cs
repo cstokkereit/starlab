@@ -55,7 +55,7 @@ namespace StarLab.Application.Workspace
 
             var workspace = new WorkspaceDtoBuilder(Path.Combine(folder, "Workspace1.slw")).CreateWorkspace();
 
-            Assert.Throws<Exception>(() => interactor.Execute(new RenameWorkspaceUseCaseArgs(workspace, string.Empty)));
+            Assert.Throws<InvalidNameException>(() => interactor.Execute(new RenameWorkspaceUseCaseArgs(workspace, string.Empty)));
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace StarLab.Application.Workspace
 
             CopyFile(Path.Combine(resources, "Workspace2.slw"), Path.Combine(folder, "Workspace2.slw"));
 
-            Assert.Throws<Exception>(() => interactor.Execute(new RenameWorkspaceUseCaseArgs(workspace, "Workspace2")));
+            Assert.Throws<InvalidOperationException>(() => interactor.Execute(new RenameWorkspaceUseCaseArgs(workspace, "Workspace2")));
         }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace StarLab.Application.Workspace
 
             var workspace = new WorkspaceDtoBuilder(Path.Combine(folder, "Workspace1.slw")).CreateWorkspace();
 
-            Assert.Throws<Exception>(() => interactor.Execute(new RenameWorkspaceUseCaseArgs(workspace, "Workspace1/")));
+            Assert.Throws<InvalidNameException>(() => interactor.Execute(new RenameWorkspaceUseCaseArgs(workspace, "Workspace1/")));
         }
     }
 }
