@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using log4net;
+using StarLab.Shared;
 
 namespace StarLab.Application.Workspace
 {
@@ -30,11 +31,18 @@ namespace StarLab.Application.Workspace
         /// <param name="filename">The name of the file that defines the workspace.</param>
         public void Execute(string filename)
         {
-            var dto = serialiser.DeserialiseWorkspace(filename);
+            if (File.Exists(filename))
+            {
+                var dto = serialiser.DeserialiseWorkspace(filename);
 
-            dto.FileName = filename;
+                dto.FileName = filename;
 
-            OutputPort.SetWorkspace(dto);
+                OutputPort.SetWorkspace(dto);
+            }
+            else
+            {
+                throw new FileNotFoundException(ExceptionMessages.FileNotFound(filename));
+            }
         }
     }
 }

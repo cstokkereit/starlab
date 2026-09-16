@@ -8,7 +8,7 @@ namespace StarLab.Application.Workspace
     public class DeleteFolderInteractorTests : ApplicationTests
     {
         /// <summary>
-        /// Test that the <see cref="DeleteFolderInteractor.Execute"/> method correctly deletes an empty folder.
+        /// Test that the <see cref="DeleteFolderInteractor.Execute"/> method deletes an empty folder.
         /// </summary>
         [Test]
         public void TestDeleteEmptyFolder()
@@ -34,7 +34,7 @@ namespace StarLab.Application.Workspace
         }
 
         /// <summary>
-        /// Test that the <see cref="DeleteFolderInteractor.Execute"/> method gets confirmation and then correctly deletes a folder and its documents.
+        /// Test that the <see cref="DeleteFolderInteractor.Execute"/> method deletes a folder and its documents.
         /// </summary>
         [Test]
         public void TestDeleteFolderWithDocuments()
@@ -54,11 +54,6 @@ namespace StarLab.Application.Workspace
                 .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A3", "Document4", "Workspace/Project1/Folder3")
                 .CreateWorkspace();
 
-            //port.ShowMessage(Arg.Any<string>(),
-            //                 Arg.Is("The folder 'Folder2' and all of its contents will be deleted permanently."),
-            //                 Arg.Is(InteractionType.Warning),
-            //                 Arg.Is(InteractionResponses.OKCancel)).Returns(InteractionResult.OK);
-
             interactor.Execute(new DeleteFolderUseCaseArgs(workspace, "Workspace/Project1/Folder2"));
 
             port.Received().UpdateWorkspace(Arg.Is<WorkspaceDTO>(ws =>
@@ -69,38 +64,7 @@ namespace StarLab.Application.Workspace
         }
 
         /// <summary>
-        /// Test that the <see cref="DeleteFolderInteractor.Execute"/> method does not delete a folder if the action is cancelled.
-        /// </summary>
-        [Test]
-        public void TestDeleteFolderWithDocumentsCancelled()
-        {
-            var port = Substitute.For<IWorkspaceOutputPort>();
-
-            var interactor = factory.CreateDeleteFolderUseCase(port);
-
-            var workspace = new WorkspaceDtoBuilder("Workspace")
-                .AddProject("Project1")
-                .AddFolder("Workspace/Project1/Folder1")
-                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A1", "Document1", "Workspace/Project1/Folder1")
-                .AddFolder("Workspace/Project1/Folder2")
-                .AddChart("B997452E-AC89-40B5-B304-525F93CCC021", "Document2", "Workspace/Project1/Folder2")
-                .AddChart("B997452E-AC89-40B5-B304-525F93CCC022", "Document3", "Workspace/Project1/Folder2")
-                .AddFolder("Workspace/Project1/Folder3")
-                .AddChart("B997452E-AC89-40B5-B304-525F93CCC03", "Document4", "Workspace/Project1/Folder3")
-                .CreateWorkspace();
-
-            //port.ShowMessage(Arg.Any<string>(),
-            //                 Arg.Is("The folder 'Folder2' and all of its contents will be deleted permanently."),
-            //                 Arg.Is(InteractionType.Warning),
-            //                 Arg.Is(InteractionResponses.OKCancel)).Returns(InteractionResult.Cancel);
-
-            interactor.Execute(new DeleteFolderUseCaseArgs(workspace, "Workspace/Project1/Folder2"));
-
-            port.DidNotReceive().UpdateWorkspace(Arg.Any<WorkspaceDTO>());
-        }
-
-        /// <summary>
-        /// Test that the <see cref="DeleteFolderInteractor.Execute"/> method gets confirmation and then correctly deletes a folder, its child folders and documents.
+        /// Test that the <see cref="DeleteFolderInteractor.Execute"/> method deletes a folder, its child folders and documents.
         /// </summary>
         [Test]
         public void TestDeleteFolderWithChildFoldersAndDocuments()
@@ -127,11 +91,6 @@ namespace StarLab.Application.Workspace
                 .AddChart("B997452E-AC89-40B5-B304-525F93CCC222", "Document8", "Workspace/Project1/Folder2/Folder2")
                 .CreateWorkspace();
 
-            //port.ShowMessage(Arg.Any<string>(),
-            //                 Arg.Is("The folder 'Folder1' and all of its contents will be deleted permanently."),
-            //                 Arg.Is(InteractionType.Warning),
-            //                 Arg.Is(InteractionResponses.OKCancel)).Returns(InteractionResult.OK);
-
             interactor.Execute(new DeleteFolderUseCaseArgs(workspace, "Workspace/Project1/Folder1"));
 
             port.Received().UpdateWorkspace(Arg.Is<WorkspaceDTO>(ws =>
@@ -152,10 +111,10 @@ namespace StarLab.Application.Workspace
         }
 
         /// <summary>
-        /// Test that the <see cref="DeleteFolderInteractor.Execute"/> method does nothing if the target folder does not exist.
+        /// Test that the <see cref="DeleteFolderInteractor.Execute"/> method throws an exception if the target folder does not exist.
         /// </summary>
         [Test]
-        public void TestDeleteNonExistentFolder()
+        public void TestDeleteNonExistentFolderThrowsException()
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
@@ -166,15 +125,13 @@ namespace StarLab.Application.Workspace
                 .AddFolder("Workspace/Project1/Folder1")
                 .CreateWorkspace();
 
-            interactor.Execute(new DeleteFolderUseCaseArgs(workspace, "Workspace/Project1/Folder2"));
-
-            //port.DidNotReceive().ShowMessage(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<InteractionType>(), Arg.Any<InteractionResponses>());
+            Assert.Throws<KeyNotFoundException>(() => interactor.Execute(new DeleteFolderUseCaseArgs(workspace, "Workspace/Project1/Folder2")));
 
             port.DidNotReceive().UpdateWorkspace(Arg.Any<WorkspaceDTO>());
         }
 
         /// <summary>
-        /// Test that the <see cref="DeleteProjectInteractor.Execute"/> method correctly deletes an empty project.
+        /// Test that the <see cref="DeleteProjectInteractor.Execute"/> method deletes an empty project.
         /// </summary>
         [Test]
         public void TestDeleteEmptyProject()
@@ -193,7 +150,7 @@ namespace StarLab.Application.Workspace
         }
 
         /// <summary>
-        /// Test that the <see cref="DeleteFolderInteractor.Execute"/> method gets confirmation and then correctly deletes a project and its documents.
+        /// Test that the <see cref="DeleteFolderInteractor.Execute"/> method deletes a project and its documents.
         /// </summary>
         [Test]
         public void TestDeleteProjectWithDocuments()
@@ -212,11 +169,6 @@ namespace StarLab.Application.Workspace
                 .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A3", "Document4", "Workspace/Project3")
                 .CreateWorkspace();
 
-            //port.ShowMessage(Arg.Any<string>(),
-            //                 Arg.Is("The project 'Project2' and all of its contents will be deleted permanently."),
-            //                 Arg.Is(InteractionType.Warning),
-            //                 Arg.Is(InteractionResponses.OKCancel)).Returns(InteractionResult.OK);
-
             interactor.Execute(new DeleteFolderUseCaseArgs(workspace, "Workspace/Project2"));
 
             port.Received().UpdateWorkspace(Arg.Is<WorkspaceDTO>(ws =>
@@ -226,37 +178,7 @@ namespace StarLab.Application.Workspace
         }
 
         /// <summary>
-        /// Test that the <see cref="DeleteFolderInteractor.Execute"/> method does not delete a project if the action is cancelled.
-        /// </summary>
-        [Test]
-        public void TestDeleteProjectWithDocumentsCancelled()
-        {
-            var port = Substitute.For<IWorkspaceOutputPort>();
-
-            var interactor = factory.CreateDeleteFolderUseCase(port);
-
-            var workspace = new WorkspaceDtoBuilder("Workspace")
-                .AddProject("Project1")
-                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A1", "Document1", "Workspace/Project1")
-                .AddProject("Project2")
-                .AddChart("B997452E-AC89-40B5-B304-525F93CCC021", "Document2", "Workspace/Project2")
-                .AddChart("B997452E-AC89-40B5-B304-525F93CCC022", "Document3", "Workspace/Project2")
-                .AddProject("Project3")
-                .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A3", "Document4", "Workspace/Project3")
-                .CreateWorkspace();
-
-            //port.ShowMessage(Arg.Any<string>(),
-            //                 Arg.Is("The project 'Project2' and all of its contents will be deleted permanently."),
-            //                 Arg.Is(InteractionType.Warning),
-            //                 Arg.Is(InteractionResponses.OKCancel)).Returns(InteractionResult.Cancel);
-
-            interactor.Execute(new DeleteFolderUseCaseArgs(workspace, "Workspace/Project2"));
-
-            port.DidNotReceive().UpdateWorkspace(Arg.Any<WorkspaceDTO>());
-        }
-
-        /// <summary>
-        /// Test that the <see cref="DeleteFolderInteractor.Execute"/> method gets confirmation and then correctly deletes a project, its folders and documents.
+        /// Test that the <see cref="DeleteFolderInteractor.Execute"/> method deletes a project, its folders and documents.
         /// </summary>
         [Test]
         public void TestDeleteProjectWithChildFoldersAndDocuments()
@@ -284,11 +206,6 @@ namespace StarLab.Application.Workspace
                 .AddChart("B997452E-AC89-40B5-B304-525F93CC2122", "Document8", "Workspace/Project2/Folder1/Folder2")
                 .CreateWorkspace();
 
-            //port.ShowMessage(Arg.Any<string>(),
-            //                 Arg.Is("The project 'Project1' and all of its contents will be deleted permanently."),
-            //                 Arg.Is(InteractionType.Warning),
-            //                 Arg.Is(InteractionResponses.OKCancel)).Returns(InteractionResult.OK);
-
             interactor.Execute(new DeleteFolderUseCaseArgs(workspace, "Workspace/Project1"));
 
             port.Received().UpdateWorkspace(Arg.Is<WorkspaceDTO>(ws =>
@@ -309,10 +226,10 @@ namespace StarLab.Application.Workspace
         }
 
         /// <summary>
-        /// Test that the <see cref="DeleteFolderInteractor.Execute"/> method does nothing if the target project does not exist.
+        /// Test that the <see cref="DeleteFolderInteractor.Execute"/> method throws an exception if the target project does not exist.
         /// </summary>
         [Test]
-        public void TestDeleteNonExistentProject()
+        public void TestDeleteNonExistentProjectThrowsException()
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
@@ -322,9 +239,7 @@ namespace StarLab.Application.Workspace
                 .AddProject("Project1")
                 .CreateWorkspace();
 
-            interactor.Execute(new DeleteFolderUseCaseArgs(workspace, "Workspace/Project2"));
-
-            //port.DidNotReceive().ShowMessage(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<InteractionType>(), Arg.Any<InteractionResponses>());
+            Assert.Throws<KeyNotFoundException>(() => interactor.Execute(new DeleteFolderUseCaseArgs(workspace, "Workspace/Project2")));
 
             port.DidNotReceive().UpdateWorkspace(Arg.Any<WorkspaceDTO>());
         }

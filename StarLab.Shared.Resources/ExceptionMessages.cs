@@ -99,7 +99,17 @@ namespace StarLab.Shared
         {
             return $"The file {filename} could not be saved.";
         }
-        
+
+        /// <summary>
+        /// Builds a FileNotFound exception message for the specified file.
+        /// </summary>
+        /// <param name="filename">The path to the file.</param>
+        /// <returns>The required exception message.</returns>
+        public static string FileNotFound(string filename)
+        {
+            return $"The file {filename} could not be found.";
+        }
+
         /// <summary>
         /// Builds a FolderCouldNotBeAdded exception message for the specified parent folder.
         /// </summary>

@@ -39,10 +39,10 @@ namespace StarLab.Application.Workspace
         }
 
         /// <summary>
-        /// Test that the <see cref="AddProjectInteractor.Execute"/> method shows an error message if a project with the same name already exists.
+        /// Test that the <see cref="AddProjectInteractor.Execute"/> method throws an exception if a project with the same name already exists.
         /// </summary>
         [Test]
-        public void TestAddProjectWhenProjectWithSameNameExists()
+        public void TestAddProjectThrowsExceptionWhenProjectWithSameNameExists()
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
@@ -57,21 +57,16 @@ namespace StarLab.Application.Workspace
                 Name = "Project1"
             };
 
-            interactor.Execute(new AddProjectUseCaseArgs(workspace, project));
-
-            //port.Received().ShowMessage(Arg.Is("StarLab"),
-            //                            Arg.Is("A project with the name 'Project1' already exists at this location.\r\nPlease provide a unique name for the project."),
-            //                            Arg.Is(InteractionType.Error),
-            //                            Arg.Is(InteractionResponses.OK));
+            Assert.Throws<FolderExistsException>(() => interactor.Execute(new AddProjectUseCaseArgs(workspace, project)));
 
             port.DidNotReceive().UpdateWorkspace(Arg.Any<WorkspaceDTO>());
         }
 
         /// <summary>
-        /// Test that the <see cref="AddProjectInteractor.Execute"/> method shows an error message if the project name is an empty string.
+        /// Test that the <see cref="AddProjectInteractor.Execute"/> method throws an exception if the project name is an empty string.
         /// </summary>
         [Test]
-        public void TestAddProjectWhenNameIsAnEmptyString()
+        public void TestAddProjectWhenNameIsAnEmptyStringThrowsException()
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
@@ -86,21 +81,16 @@ namespace StarLab.Application.Workspace
                 Name = string.Empty
             };
 
-            interactor.Execute(new AddProjectUseCaseArgs(workspace, project));
-
-            //port.Received().ShowMessage(Arg.Is("StarLab"),
-            //                            Arg.Is("The project name cannot be null or empty."),
-            //                            Arg.Is(InteractionType.Error),
-            //                            Arg.Is(InteractionResponses.OK));
+            Assert.Throws<InvalidNameException>(() => interactor.Execute(new AddProjectUseCaseArgs(workspace, project)));
 
             port.DidNotReceive().UpdateWorkspace(Arg.Any<WorkspaceDTO>());
         }
 
         /// <summary>
-        /// Test that the <see cref="AddProjectInteractor.Execute"/> method shows an error message if the project name contains one or more illegal characters.
+        /// Test that the <see cref="AddProjectInteractor.Execute"/> method throws an exception if the project name contains one or more illegal characters.
         /// </summary>
         [Test]
-        public void TestAddProjectWhenNameIsInvalid()
+        public void TestAddProjectThrowsExceptionWhenNameIsInvalid()
         {
             var port = Substitute.For<IWorkspaceOutputPort>();
 
@@ -115,12 +105,7 @@ namespace StarLab.Application.Workspace
                 Name = "Project1/"
             };
 
-            interactor.Execute(new AddProjectUseCaseArgs(workspace, project));
-
-            //port.Received().ShowMessage(Arg.Is("StarLab"),
-            //                            Arg.Is("Project names cannot include any of the following:\r\n\r\n                               \\ / : * ? ' \" < > |\r\n\r\nPlease enter a valid name."),
-            //                            Arg.Is(InteractionType.Error),
-            //                            Arg.Is(InteractionResponses.OK));
+            Assert.Throws<InvalidNameException>(() => interactor.Execute(new AddProjectUseCaseArgs(workspace, project)));
 
             port.DidNotReceive().UpdateWorkspace(Arg.Any<WorkspaceDTO>());
         }

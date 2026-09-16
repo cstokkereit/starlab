@@ -45,11 +45,6 @@ namespace StarLab.Application.Workspace
 
             interactor.Execute(dto);
 
-            //port.DidNotReceive().ShowMessage(Arg.Is("StarLab"),
-            //                                 Arg.Any<string>(),
-            //                                 Arg.Any<InteractionType>(),
-            //                                 Arg.Any<InteractionResponses>());
-
             Assert.That(File.Exists(filename), Is.True);
         }
 
@@ -74,11 +69,6 @@ namespace StarLab.Application.Workspace
             CopyFile(Path.Combine(resources, "Workspace1.slw"), filename);
 
             interactor.Execute(dto);
-
-            //port.DidNotReceive().ShowMessage(Arg.Is("StarLab"),
-            //                                 Arg.Any<string>(),
-            //                                 Arg.Any<InteractionType>(),
-            //                                 Arg.Any<InteractionResponses>());
 
             Assert.That(File.Exists(filename), Is.True);
         }
@@ -107,11 +97,6 @@ namespace StarLab.Application.Workspace
                 .CreateWorkspace();
 
             saveInteractor.Execute(dto);
-
-            //port.DidNotReceive().ShowMessage(Arg.Is("StarLab"),
-            //                                 Arg.Any<string>(),
-            //                                 Arg.Any<InteractionType>(),
-            //                                 Arg.Any<InteractionResponses>());
 
             var openInteractor = factory.CreateOpenWorkspaceUseCase(port);
 

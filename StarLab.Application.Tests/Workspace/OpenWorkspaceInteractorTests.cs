@@ -1,3 +1,5 @@
+using System.Runtime.Serialization;
+
 namespace StarLab.Application.Workspace
 {
     /// <summary>
@@ -24,6 +26,40 @@ namespace StarLab.Application.Workspace
         }
 
         /// <summary>
+        /// Test that the <see cref="OpenWorkspaceInteractor.Execute"/> method throws an exception if the workspace file cannot be loaded.
+        /// </summary>
+        [Test]
+        public void TestOpenInvalidWorkspaceFileThrowsException()
+        {
+            var port = Substitute.For<IApplicationOutputPort>();
+
+            var interactor = factory.CreateOpenWorkspaceUseCase(port);
+
+            var filename = Path.Combine(folder, "Invalid.slw");
+
+            CopyFile(Path.Combine(resources, "Invalid.slw"), filename);
+
+            Assert.Throws<SerializationException>(() => interactor.Execute(filename));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="OpenWorkspaceInteractor.Execute"/> method throws an exception if the workspace file does not exist.
+        /// </summary>
+        [Test]
+        public void TestOpenNonExistentWorkspaceFileThrowsException()
+        {
+            var port = Substitute.For<IApplicationOutputPort>();
+
+            var interactor = factory.CreateOpenWorkspaceUseCase(port);
+
+            var filename = Path.Combine(folder, "Missing.slw");
+
+            Assert.Throws<FileNotFoundException>(() => interactor.Execute(filename));
+
+            port.DidNotReceive().UpdateWorkspace(Arg.Any<WorkspaceDTO>());
+        }
+
+        /// <summary>
         /// Test that the <see cref="OpenWorkspaceInteractor.Execute"/> method correctly opens a workspace.
         /// </summary>
         [Test]
@@ -40,48 +76,6 @@ namespace StarLab.Application.Workspace
             interactor.Execute(filename);
 
             port.Received().SetWorkspace(Arg.Is<WorkspaceDTO>(ws => ws.FileName == Path.Combine(folder, "Workspace1.slw")));
-        }
-
-        /// <summary>
-        /// Test that the <see cref="OpenWorkspaceInteractor.Execute"/> method displays an error message if the workspace file cannot be loaded.
-        /// </summary>
-        [Test]
-        public void TestOpenInvalidWorkspaceFileDisplaysAnErrorMessage()
-        {
-            var port = Substitute.For<IApplicationOutputPort>();
-
-            var interactor = factory.CreateOpenWorkspaceUseCase(port);
-
-            var filename = Path.Combine(folder, "Invalid.slw");
-
-            CopyFile(Path.Combine(resources, "Invalid.slw"), filename);
-
-            interactor.Execute(filename);
-
-            //port.Received().ShowMessage(Arg.Is("StarLab"),
-            //                            Arg.Is($"The file {filename} could not be opened."),
-            //                            Arg.Is(InteractionType.Error),
-            //                            Arg.Is(InteractionResponses.OK));
-        }
-
-        /// <summary>
-        /// Test that the <see cref="OpenWorkspaceInteractor.Execute"/> method displays an error message if the workspace file does not exist.
-        /// </summary>
-        [Test]
-        public void TestOpenNonExistentWorkspaceFileDisplaysAnErrorMessage()
-        {
-            var port = Substitute.For<IApplicationOutputPort>();
-
-            var interactor = factory.CreateOpenWorkspaceUseCase(port);
-
-            var filename = Path.Combine(folder, "Missing.slw");
-
-            interactor.Execute(filename);
-
-            //port.Received().ShowMessage(Arg.Is("StarLab"),
-            //                            Arg.Is($"The file {filename} could not be found.\r\nCheck the filename and try again."),
-            //                            Arg.Is(InteractionType.Error),
-            //                            Arg.Is(InteractionResponses.OK));
         }
     }
 }
