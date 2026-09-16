@@ -532,15 +532,6 @@ namespace StarLab.Shared.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} does not implement the {1} interface..
-        /// </summary>
-        public static string InterfaceNotImplemented {
-            get {
-                return ResourceManager.GetString("InterfaceNotImplemented", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The item with key &apos;{0}&apos; is not valid for the current operation..
         /// </summary>
         public static string InvalidOperation {
@@ -893,33 +884,6 @@ namespace StarLab.Shared.Properties {
         public static string Tools {
             get {
                 return ResourceManager.GetString("Tools", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Unexpected view type: {0}.
-        /// </summary>
-        public static string UnexpectedViewType {
-            get {
-                return ResourceManager.GetString("UnexpectedViewType", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Unrecognised view type: {0}.
-        /// </summary>
-        public static string UnrecognisedViewType {
-            get {
-                return ResourceManager.GetString("UnrecognisedViewType", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The {0} has not been set..
-        /// </summary>
-        public static string VariableNotSet {
-            get {
-                return ResourceManager.GetString("VariableNotSet", resourceCulture);
             }
         }
         

@@ -174,7 +174,7 @@ namespace StarLab.Presentation
 
             var child = Substitute.For<IChildViewPresenter>();
 
-            Assert.Throws<Exception>(() => factory.CreatePresenter(document, view, [child], commands));
+            Assert.Throws<ArgumentException>(() => factory.CreatePresenter(document, view, [child], commands));
         }
 
         /// <summary>

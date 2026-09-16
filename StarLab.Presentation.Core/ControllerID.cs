@@ -1,7 +1,7 @@
 ﻿using StarLab.Application;
-using StarLab.Shared.Properties;
 using StarLab.Presentation.Workspace;
 using StarLab.Presentation.Workspace.Documents;
+using StarLab.Shared;
 
 namespace StarLab.Presentation
 {
@@ -71,7 +71,7 @@ namespace StarLab.Presentation
                     return view.ID.ToString();
 
                 default:
-                    throw new ArgumentException(Resources.UnexpectedViewType, nameof(view));
+                    throw new ArgumentException(ExceptionMessages.UnexpectedArgumentType(view.GetType()), nameof(view));
             }
         }
     }

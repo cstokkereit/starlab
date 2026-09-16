@@ -20,6 +20,8 @@ namespace StarLab.Shared
 
         public const string InvalidPath = "The path cannot be an empty string.";
 
+        public const string InvalidState = "One or more state variables have not been initialised.";
+
         public static string PresenterAlreadyAttached = "The presenter has already been attached to this view.";
 
         public const string UnrecognisedFileType = "Unrecognised file type.";
@@ -181,6 +183,17 @@ namespace StarLab.Shared
         }
 
         /// <summary>
+        /// Builds a InterfaceNotImplemented exception message for the specified type and interface.
+        /// </summary>
+        /// <param name="type">The implementing type.</param>
+        /// <param name="required">The required interface.</param>
+        /// <returns>The required exception message.</returns>
+        public static string InterfaceNotImplemented(Type type, Type required)
+        {
+            return $"{type.Name} dees not implement {required.Name}.";
+        }
+
+        /// <summary>
         /// Builds an InvalidDestination exception message for the specified folder.
         /// </summary>
         /// <param name="destination">The destination folder.</param>
@@ -261,13 +274,23 @@ namespace StarLab.Shared
         }
 
         /// <summary>
+        /// Builds an UnexpectedArgumentType exception message for the specified type.
+        /// </summary>
+        /// <param name="type">The argument type.</param>
+        /// <returns>The required exception message.</returns>
+        public static string UnexpectedArgumentType(Type type)
+        {
+            return $"Unexpected argument type {type.Name}.";
+        }
+
+        /// <summary>
         /// Builds an UnknownType exception message for the specified type.
         /// </summary>
         /// <param name="type">The unknown type.</param>
         /// <returns>The required exception message.</returns>
         public static string UnknownType(Type type)
         {
-            return $"Unknown type: {type}.";
+            return $"Unknown type: {type.Name}.";
         }
 
         /// <summary>
