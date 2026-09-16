@@ -24,11 +24,6 @@ public class DeleteDocumentInteractorTests : ApplicationTests
             .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A2", "Document2", "Workspace/Project1/Folder1")
             .CreateWorkspace();
 
-        //port.ShowMessage(Arg.Any<string>(),
-        //                     Arg.Is("'Document1' will be deleted permanently."),
-        //                     Arg.Is(InteractionType.Warning),
-        //                     Arg.Is(InteractionResponses.OKCancel)).Returns(InteractionResult.OK);
-
         interactor.Execute(new DeleteDocumentUseCaseArgs(workspace, "B997452E-AC89-40B5-B304-525F93CCC0A1"));
 
         port.Received().UpdateWorkspace(Arg.Is<WorkspaceDTO>(ws =>
@@ -53,11 +48,6 @@ public class DeleteDocumentInteractorTests : ApplicationTests
             .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A2", "Document2", "Workspace/Project1")
             .CreateWorkspace();
 
-        //port.ShowMessage(Arg.Any<string>(),
-        //                 Arg.Is("'Document1' will be deleted permanently."),
-        //                 Arg.Is(InteractionType.Warning),
-        //                 Arg.Is(InteractionResponses.OKCancel)).Returns(InteractionResult.OK);
-
         interactor.Execute(new DeleteDocumentUseCaseArgs(workspace, "B997452E-AC89-40B5-B304-525F93CCC0A1"));
 
         port.Received().UpdateWorkspace(Arg.Is<WorkspaceDTO>(ws =>
@@ -78,12 +68,10 @@ public class DeleteDocumentInteractorTests : ApplicationTests
         var workspace = new WorkspaceDtoBuilder("Workspace")
             .AddProject("Project1")
             .AddFolder("Workspace/Project1/Folder1")
-            .AddChart("1", "Document1", "Workspace/Project1/Folder1")
+            .AddChart("B997452E-AC89-40B5-B304-525F93CCC0A1", "Document1", "Workspace/Project1/Folder1")
             .CreateWorkspace();
 
-        interactor.Execute(new DeleteDocumentUseCaseArgs(workspace, "2"));
-
-        //port.DidNotReceive().ShowMessage(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<InteractionType>(), Arg.Any<InteractionResponses>());
+        Assert.Throws<KeyNotFoundException>(() => interactor.Execute(new DeleteDocumentUseCaseArgs(workspace, "294BC63B-616F-448F-AA80-4A24C8740244")));
 
         port.DidNotReceive().UpdateWorkspace(Arg.Any<WorkspaceDTO>());
     }
