@@ -1,5 +1,6 @@
 ﻿#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
 
+using Castle.MicroKernel.Registration;
 using StarLab.Application;
 using StarLab.Application.Workspace;
 using StarLab.Presentation.Configuration;
@@ -13,6 +14,8 @@ namespace StarLab.Presentation.Workspace.Documents
     /// </summary>
     public class AddDocumentViewPresenterTests : PresentationTests
     {
+        private IDialogController viewController; // A mock of the IViewController interface that can be used in the unit tests.
+
         private IAddDocumentView view; // A mock of the IAddDocumentView interface that can be used in the unit tests.
 
         /// <summary>
@@ -42,8 +45,20 @@ namespace StarLab.Presentation.Workspace.Documents
 
             context.Configuration.Returns(configuration);
 
+            viewController = Substitute.For<IDialogController>();
+
             view = Substitute.For<IAddDocumentView>();
             view.ID.Returns(ViewIDs.AddDocument);
+        }
+
+        /// <summary>
+        /// Cleans up after each test.
+        /// </summary>
+        public override void TearDown()
+        {
+            base.TearDown();
+
+            viewController.Dispose();
         }
 
         /// <summary>
@@ -207,6 +222,8 @@ namespace StarLab.Presentation.Workspace.Documents
         private AddDocumentViewPresenter CreatePresenter(bool initialise)
         {
             var presenter = new AddDocumentViewPresenter(view, context, commands, services, events);
+
+            presenter.RegisterController(viewController);
 
             if (initialise) presenter.Initialise(controller);
 
