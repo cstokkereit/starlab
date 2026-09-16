@@ -265,19 +265,24 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         {
             ArgumentException.ThrowIfNullOrEmpty(id, nameof(id));
 
-            var document = workspace.GetDocument(new DocumentID(id));
+            var documentID = new DocumentID(id);
 
-            if (ConfirmAction(MessageBuilder.DocumentDeletionWarning(document.Name)))
+            if (workspace.HasDocument(documentID))
             {
-                try
-                {
-                    useCaseService.DeleteDocument(workspace, new DocumentID(id));
-                }
-                catch (Exception e)
-                {
-                    ShowErrorMessage(MessageBuilder.DocumentCouldNotBeDeleted(document.Name));
+                var document = workspace.GetDocument(documentID);
 
-                    log.Error(e.Message, e);
+                if (ConfirmAction(MessageBuilder.DocumentDeletionWarning(document.Name)))
+                {
+                    try
+                    {
+                        useCaseService.DeleteDocument(workspace, documentID);
+                    }
+                    catch (Exception e)
+                    {
+                        ShowErrorMessage(MessageBuilder.DocumentCouldNotBeDeleted(document.Name));
+
+                        log.Error(e.Message, e);
+                    }
                 }
             }
         }

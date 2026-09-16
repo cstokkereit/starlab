@@ -490,37 +490,175 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         }
 
         /// <summary>
-        /// Test that the <see cref="WorkspaceExplorerViewPresenter.DeleteDocument(string)"/> method works correctly.
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.DeleteDocument(string)"/> method deletes the specified document when confirmation of the deletion is not provided.
         /// </summary>
         [Test]
-        public void TestDeleteDocument()
+        public void TestDeleteDocumentThatDoesNotExist()
         {
+            var document = "EBD0CED6-A2D0-4A77-A65D-69EB1A0585A8";
+
+            var id = new DocumentID(document);
+
             var interactor = Substitute.For<IUseCase<DeleteDocumentUseCaseArgs>>();
+
+            workspace.HasDocument(id).Returns(false);
+
+            controller.ShowMessage(Arg.Any<string>(), InteractionType.Warning, InteractionResponses.OKCancel).Returns(InteractionResult.Cancel);
 
             factory.CreateDeleteDocumentUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
 
             var presenter = CreatePresenter(true);
 
-            presenter.DeleteDocument("EBD0CED6-A2D0-4A77-A65D-69EB1A0585A8");
+            presenter.DeleteDocument(document);
 
-            interactor.Received(1).Execute(Arg.Is<DeleteDocumentUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.DocumentID == "EBD0CED6-A2D0-4A77-A65D-69EB1A0585A8"));
+            workspace.DidNotReceive().GetDocument(id);
+            controller.DidNotReceive().ShowMessage(Arg.Any<string>(), InteractionType.Warning, InteractionResponses.OKCancel);
+            interactor.DidNotReceive().Execute(Arg.Is<DeleteDocumentUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.DocumentID == document));
         }
 
         /// <summary>
-        /// Test that the <see cref="WorkspaceExplorerViewPresenter.DeleteFolder(string)"/> method works correctly.
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.DeleteDocument(string)"/> method deletes the specified document when confirmation of the deletion is provided.
         /// </summary>
         [Test]
-        public void TestDeleteFolder()
+        public void TestDeleteDocumentWithConfirmation()
         {
+            var document = "EBD0CED6-A2D0-4A77-A65D-69EB1A0585A8";
+
+            var id = new DocumentID(document);
+
+            var interactor = Substitute.For<IUseCase<DeleteDocumentUseCaseArgs>>();
+
+            workspace.HasDocument(id).Returns(true);
+
+            controller.ShowMessage(Arg.Any<string>(), InteractionType.Warning, InteractionResponses.OKCancel).Returns(InteractionResult.OK);
+
+            factory.CreateDeleteDocumentUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
+
+            var presenter = CreatePresenter(true);
+
+            presenter.DeleteDocument(document);
+
+            interactor.Received(1).Execute(Arg.Is<DeleteDocumentUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.DocumentID == document));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.DeleteDocument(string)"/> method does nothing when confirmation of the deletion is not provided.
+        /// </summary>
+        [Test]
+        public void TestDeleteDocumentWithoutConfirmation()
+        {
+            var document = "EBD0CED6-A2D0-4A77-A65D-69EB1A0585A8";
+
+            var id = new DocumentID(document);
+
+            var interactor = Substitute.For<IUseCase<DeleteDocumentUseCaseArgs>>();
+
+            workspace.HasDocument(id).Returns(true);
+
+            controller.ShowMessage(Arg.Any<string>(), InteractionType.Warning, InteractionResponses.OKCancel).Returns(InteractionResult.Cancel);
+
+            factory.CreateDeleteDocumentUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
+
+            var presenter = CreatePresenter(true);
+
+            presenter.DeleteDocument(document);
+
+            interactor.DidNotReceive().Execute(Arg.Is<DeleteDocumentUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.DocumentID == document));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.DeleteFolder(string)"/> method deletes the specified empty folder without requiring confirmation.
+        /// </summary>
+        [Test]
+        public void TestDeleteEmptyFolder()
+        {
+            var folder = "Workspace/Project-1/Documents";
+
             var interactor = Substitute.For<IUseCase<DeleteFolderUseCaseArgs>>();
+
+            workspace.HasFolder(folder).Returns(true);
+            workspace.IsEmpty(folder).Returns(true);
 
             factory.CreateDeleteFolderUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
 
             var presenter = CreatePresenter(true);
 
-            presenter.DeleteFolder("Workspace/Project-1/Documents");
+            presenter.DeleteFolder(folder);
 
-            interactor.Received(1).Execute(Arg.Is<DeleteFolderUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.Path == "Workspace/Project-1/Documents"));
+            controller.DidNotReceive().ShowMessage(Arg.Any<string>(), InteractionType.Warning, InteractionResponses.OKCancel);
+
+            interactor.Received(1).Execute(Arg.Is<DeleteFolderUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.Path == folder));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.DeleteFolder(string)"/> method does nothing when the specified folder does not exist.
+        /// </summary>
+        [Test]
+        public void TestDeleteFolderThatDoesNotExist()
+        {
+            var folder = "Workspace/Project-1/Documents";
+
+            var interactor = Substitute.For<IUseCase<DeleteFolderUseCaseArgs>>();
+
+            workspace.HasFolder(folder).Returns(false);
+
+            factory.CreateDeleteFolderUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
+
+            var presenter = CreatePresenter(true);
+
+            presenter.DeleteFolder(folder);
+
+            workspace.DidNotReceive().GetFolder(folder);
+            controller.DidNotReceive().ShowMessage(Arg.Any<string>(), InteractionType.Warning, InteractionResponses.OKCancel);
+            interactor.DidNotReceive().Execute(Arg.Is<DeleteFolderUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.Path == folder));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.DeleteFolder(string)"/> method deletes the specified folder when confirmation of the deletion is provided.
+        /// </summary>
+        [Test]
+        public void TestDeleteFolderWithConfirmation()
+        {
+            var folder = "Workspace/Project-1/Documents";
+
+            var interactor = Substitute.For<IUseCase<DeleteFolderUseCaseArgs>>();
+
+            workspace.HasFolder(folder).Returns(true);
+            workspace.IsEmpty(folder).Returns(false);
+
+            controller.ShowMessage(Arg.Any<string>(), InteractionType.Warning, InteractionResponses.OKCancel).Returns(InteractionResult.OK);
+
+            factory.CreateDeleteFolderUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
+
+            var presenter = CreatePresenter(true);
+
+            presenter.DeleteFolder(folder);
+
+            interactor.Received(1).Execute(Arg.Is<DeleteFolderUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.Path == folder));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.DeleteFolder(string)"/> method does nothing when confirmation of the deletion is not provided.
+        /// </summary>
+        [Test]
+        public void TestDeleteFolderWithoutConfirmation()
+        {
+            var folder = "Workspace/Project-1/Documents";
+
+            var interactor = Substitute.For<IUseCase<DeleteFolderUseCaseArgs>>();
+
+            workspace.HasFolder(folder).Returns(true);
+            workspace.IsEmpty(folder).Returns(false);
+
+            controller.ShowMessage(Arg.Any<string>(), InteractionType.Warning, InteractionResponses.OKCancel).Returns(InteractionResult.Cancel);
+
+            factory.CreateDeleteFolderUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
+
+            var presenter = CreatePresenter(true);
+
+            presenter.DeleteFolder(folder);
+
+            interactor.DidNotReceive().Execute(Arg.Is<DeleteFolderUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.Path == folder));
         }
 
         /// <summary>
@@ -535,20 +673,74 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         }
 
         /// <summary>
-        /// Test that the <see cref="WorkspaceExplorerViewPresenter.DeleteProject(string)"/> method works correctly.
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.DeleteProject(string)"/> method does nothing when the specified project does not exist.
         /// </summary>
         [Test]
-        public void TestDeleteProject()
+        public void TestDeleteProjectThatDoesNotExist()
         {
+            var project = "Workspace/Project-1/Documents";
+
             var interactor = Substitute.For<IUseCase<DeleteFolderUseCaseArgs>>();
+
+            workspace.HasProject(project).Returns(false);
 
             factory.CreateDeleteFolderUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
 
             var presenter = CreatePresenter(true);
 
-            presenter.DeleteProject("Workspace/Project-1/Documents");
+            presenter.DeleteProject(project);
 
-            interactor.Received(1).Execute(Arg.Is<DeleteFolderUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.Path == "Workspace/Project-1/Documents"));
+            workspace.DidNotReceive().GetFolder(project);
+            controller.DidNotReceive().ShowMessage(Arg.Any<string>(), InteractionType.Warning, InteractionResponses.OKCancel);
+            interactor.DidNotReceive().Execute(Arg.Is<DeleteFolderUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.Path == project));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.DeleteProject(string)"/> method deletes the specified project when confirmation of the deletion is provided.
+        /// </summary>
+        [Test]
+        public void TestDeleteProjectWithConfirmation()
+        {
+            var project = "Workspace/Project-1/Documents";
+
+            var interactor = Substitute.For<IUseCase<DeleteFolderUseCaseArgs>>();
+
+            workspace.HasProject(project).Returns(true);
+            workspace.IsEmpty(project).Returns(false);
+
+            controller.ShowMessage(Arg.Any<string>(), InteractionType.Warning, InteractionResponses.OKCancel).Returns(InteractionResult.OK);
+
+            factory.CreateDeleteFolderUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
+
+            var presenter = CreatePresenter(true);
+
+            presenter.DeleteProject(project);
+
+            interactor.Received(1).Execute(Arg.Is<DeleteFolderUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.Path == project));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.DeleteProject(string)"/> method does nothing when confirmation of the deletion is provided.
+        /// </summary>
+        [Test]
+        public void TestDeleteProjectWithoutConfirmation()
+        {
+            var project = "Workspace/Project-1/Documents";
+
+            var interactor = Substitute.For<IUseCase<DeleteFolderUseCaseArgs>>();
+
+            workspace.HasFolder(project).Returns(true);
+            workspace.IsEmpty(project).Returns(false);
+
+            controller.ShowMessage(Arg.Any<string>(), InteractionType.Warning, InteractionResponses.OKCancel).Returns(InteractionResult.Cancel);
+
+            factory.CreateDeleteFolderUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
+
+            var presenter = CreatePresenter(true);
+
+            presenter.DeleteProject(project);
+
+            interactor.DidNotReceive().Execute(Arg.Is<DeleteFolderUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.Path == project));
         }
 
         /// <summary>
@@ -895,11 +1087,13 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         [Test]
         public void TestSetSelectedFolder()
         {
+            var project = "Workspace/Project";
+
             var presenter = CreatePresenter(true);
 
-            presenter.SetSelectedFolder("Workspace/Project");
+            presenter.SetSelectedFolder(project);
 
-            workspace.Received(1).SetSelectedFolder("Workspace/Project");
+            workspace.Received(1).SetSelectedFolder(project);
         }
 
         /// <summary>
@@ -908,13 +1102,15 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         [Test]
         public void TestSetSelectedFolderWithDatabaseNodeKey()
         {
-            workspace.HasProject("Workspace/Project").Returns(true);
+            var project = "Workspace/Project";
+
+            workspace.HasProject(project).Returns(true);
 
             var presenter = CreatePresenter(true);
 
             presenter.SetSelectedFolder("Workspace/Project/Database");
 
-            workspace.Received(1).SetSelectedFolder("Workspace/Project");
+            workspace.Received(1).SetSelectedFolder(project);
         }
 
         /// <summary>
@@ -923,8 +1119,10 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         [Test]
         public void TestSynchronise()
         {
+            var id = "19542B1A-36A5-494F-B6B0-CB562FA36CAC";
+
             var document = Substitute.For<IDocument>();
-            document.ID.Returns(new DocumentID("19542B1A-36A5-494F-B6B0-CB562FA36CAC"));
+            document.ID.Returns(new DocumentID(id));
 
             workspace.ActiveDocument.Returns(document);
 
@@ -934,7 +1132,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
 
             view.Received(1).FocusOnSelectedNode();
 
-            view.Received(1).SelectNode("19542B1A-36A5-494F-B6B0-CB562FA36CAC");
+            view.Received(1).SelectNode(id);
         }
 
         /// <summary>
@@ -943,6 +1141,8 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         [Test]
         public void TestUpdateDocument()
         {
+            var id = "19542B1A-36A5-494F-B6B0-CB562FA36CAC";
+
             var port = Substitute.For<IApplicationOutputPort>();
 
             controller.GetOutputPort<IApplicationOutputPort>().Returns(port);
@@ -954,9 +1154,9 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
                 FileName = @"C:\Test\Workspace-1"
             };
 
-            presenter.UpdateDocument(dto, "19542B1A-36A5-494F-B6B0-CB562FA36CAC");
+            presenter.UpdateDocument(dto, id);
 
-            port.Received(1).UpdateDocument(Arg.Is<WorkspaceDTO>(ws => ws.FileName == @"C:\Test\Workspace-1"), "19542B1A-36A5-494F-B6B0-CB562FA36CAC");
+            port.Received(1).UpdateDocument(Arg.Is<WorkspaceDTO>(ws => ws.FileName == @"C:\Test\Workspace-1"), id);
         }
 
         /// <summary>
