@@ -72,7 +72,7 @@ namespace StarLab.Application.Workspace
 
             CopyFile(Path.Combine(resources, "Workspace2.slw"), Path.Combine(folder, "Workspace2.slw"));
 
-            Assert.Throws<InvalidOperationException>(() => interactor.Execute(new RenameWorkspaceUseCaseArgs(workspace, "Workspace2")));
+            Assert.Throws<IOException>(() => interactor.Execute(new RenameWorkspaceUseCaseArgs(workspace, "Workspace2")));
         }
 
         /// <summary>

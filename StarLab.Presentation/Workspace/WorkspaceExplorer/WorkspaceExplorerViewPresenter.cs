@@ -488,9 +488,9 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// </summary>
         /// <param name="key">The node key.</param>
         /// <param name="name">The new name.</param>
-        public void RenameDocument(string key, string name)
+        /// <returns>true if the document was successfully renamed; false otherwise.</returns>
+        public bool RenameDocument(string key, string name)
         {
-            ArgumentException.ThrowIfNullOrEmpty(name, nameof(name));
             ArgumentException.ThrowIfNullOrEmpty(key, nameof(key));
 
             var id = new DocumentID(key);
@@ -498,6 +498,8 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
             try
             {
                 useCaseService.RenameDocument(workspace, id, name);
+
+                return true;
             }
             catch (DocumentExistsException)
             {
@@ -507,6 +509,8 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
             {
                 ShowErrorMessage(MessageBuilder.DocumentNameInvalid(name));
             }
+
+            return false;
         }
 
         /// <summary>
@@ -514,16 +518,18 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// </summary>
         /// <param name="key">The node key.</param>
         /// <param name="name">The new name.</param>
-        public void RenameFolder(string key, string name)
+        /// <returns>true if the folder was successfully renamed; false otherwise.</returns>
+        public bool RenameFolder(string key, string name)
         {
-            ArgumentException.ThrowIfNullOrEmpty(name, nameof(name));
             ArgumentException.ThrowIfNullOrEmpty(key, nameof(key));
 
             try
             {
                 useCaseService.RenameFolder(workspace, key, name);
+
+                return true;
             }
-            catch (InvalidOperationException)
+            catch (FolderExistsException)
             {
                 ShowErrorMessage(MessageBuilder.FolderCouldNotBeRenamed(key.Substring(key.LastIndexOf('/') + 1), name));
             }
@@ -531,6 +537,8 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
             {
                 ShowErrorMessage(MessageBuilder.FolderNameInvalid(name));
             }
+
+            return false;
         }
 
         /// <summary>
@@ -563,28 +571,31 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// Renames the workspace.
         /// </summary>
         /// <param name="name">The new name.</param>
-        public void RenameWorkspace(string name)
+        /// <returns>true if the workspace was successfully renamed; false otherwise.</returns>
+        public bool RenameWorkspace(string name)
         {
-            ArgumentException.ThrowIfNullOrEmpty(name, nameof(name));
-
             try
             {
                 useCaseService.RenameWorkspace(workspace, name);
-            }
-            catch (InvalidOperationException)
-            {
-                ShowErrorMessage(MessageBuilder.WorkspaceCouldNotBeRenamed(workspace.Name, name));
+
+                return true;
             }
             catch (InvalidNameException)
             {
                 ShowErrorMessage(MessageBuilder.WorkspaceNameInvalid(name));
+            }
+            catch (IOException)
+            {
+                ShowErrorMessage(MessageBuilder.WorkspaceCouldNotBeRenamed(workspace.Name, name));
             }
             catch (Exception e)
             {
                 ShowErrorMessage(MessageBuilder.WorkspaceCouldNotBeRenamed());
 
                 log.Error(e.Message, e);
-            }   
+            }
+
+            return false;
         }
 
         /// <summary>

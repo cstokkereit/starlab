@@ -44,7 +44,7 @@ namespace StarLab.Application.Workspace
                 }
                 else
                 {
-                    throw new InvalidOperationException(ExceptionMessages.FileExists(args.Workspace.FileName));
+                    throw new IOException(ExceptionMessages.FileExists(args.Workspace.FileName));
                 }
             }
             else

@@ -1,7 +1,7 @@
 ﻿namespace StarLab.Shared
 {
     /// <summary>
-    /// A static class containing the string constants used to create information and warning log entries. Error messages should be logged directly using the exception.
+    /// A static class containing the string constants used to create information and warning log entries. Error messages should be logged directly using the information provided by the <see cref="Exception">.
     /// </summary>
     public static class LogEntries
     {
