@@ -80,20 +80,23 @@
         /// </summary>
         /// <param name="key">The node key.</param>
         /// <param name="name">The new name.</param>
-        void RenameDocument(string key, string name);
+        /// <returns>true if the document was successfully renamed; false otherwise.</returns>
+        bool RenameDocument(string key, string name);
 
         /// <summary>
         /// Renames the specified folder.
         /// </summary>
         /// <param name="key">The node key.</param>
         /// <param name="name">The new name.</param>
-        void RenameFolder(string key, string name);
+        /// <returns>true if the folder was successfully renamed; false otherwise.</returns>
+        bool RenameFolder(string key, string name);
 
         /// <summary>
         /// Renames the workspace.
         /// </summary>
         /// <param name="name">The new name.</param>
-        void RenameWorkspace(string name);
+        /// <returns>true if the workspace was successfully renamed; false otherwise.</returns>
+        bool RenameWorkspace(string name);
 
         /// <summary>
         /// Makes the folder with the specified node key the current folder.

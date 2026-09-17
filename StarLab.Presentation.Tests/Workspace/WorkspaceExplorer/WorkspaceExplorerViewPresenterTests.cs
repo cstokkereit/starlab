@@ -954,7 +954,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
 
             presenter.OnEvent(new WorkspaceChangedEventArgs(workspace));
 
-            presenter.RenameDocument("19542B1A-36A5-494F-B6B0-CB562FA36CAC", "Document-2");
+            Assert.True(presenter.RenameDocument("19542B1A-36A5-494F-B6B0-CB562FA36CAC", "Document-2"));
 
             interactor.Received(1).Execute(Arg.Is<RenameDocumentUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.DocumentID == "19542B1A-36A5-494F-B6B0-CB562FA36CAC" && args.Name == "Document-2"));
         }
@@ -971,14 +971,45 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         }
 
         /// <summary>
-        /// Test that the <see cref="WorkspaceExplorerViewPresenter.RenameDocument(string, string)"/> method throws an exception when the name is an empty string.
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.RenameDocument(string, string)"/> method returns false when the name is invalid.
         /// </summary>
         [Test]
-        public void TestRenameDocumentThrowsExceptionWhenNameIsEmptyString()
+        public void TestRenameDocumentWhenNameIsInvalid()
         {
+            var interactor = Substitute.For<IUseCase<RenameDocumentUseCaseArgs>>();
+
+            interactor.When(x => x.Execute(Arg.Any<RenameDocumentUseCaseArgs>())).Do(x => throw new InvalidNameException(string.Empty));
+
+            factory.CreateRenameDocumentUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
+
             var presenter = CreatePresenter(true);
 
-            Assert.Throws<ArgumentException>(() => presenter.RenameDocument("19542B1A-36A5-494F-B6B0-CB562FA36CAC", string.Empty));
+            presenter.OnEvent(new WorkspaceChangedEventArgs(workspace));
+
+            Assert.False(presenter.RenameDocument("19542B1A-36A5-494F-B6B0-CB562FA36CAC", string.Empty));
+
+            interactor.Received(1).Execute(Arg.Is<RenameDocumentUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.DocumentID == "19542B1A-36A5-494F-B6B0-CB562FA36CAC" && args.Name == string.Empty));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.RenameDocument(string, string)"/> method returns false when a document with the same name already exists.
+        /// </summary>
+        [Test]
+        public void TestRenameDocumentWhenDocumentAlreadyExists()
+        {
+            var interactor = Substitute.For<IUseCase<RenameDocumentUseCaseArgs>>();
+
+            interactor.When(x => x.Execute(Arg.Any<RenameDocumentUseCaseArgs>())).Do(x => throw new DocumentExistsException(new DocumentID("19542B1A-36A5-494F-B6B0-CB562FA36CAC"), "Document-1", "Workspace/Project-1/Documents"));
+
+            factory.CreateRenameDocumentUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
+
+            var presenter = CreatePresenter(true);
+
+            presenter.OnEvent(new WorkspaceChangedEventArgs(workspace));
+
+            Assert.False(presenter.RenameDocument("19542B1A-36A5-494F-B6B0-CB562FA36CAC", "Document-1"));
+
+            interactor.Received(1).Execute(Arg.Is<RenameDocumentUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.DocumentID == "19542B1A-36A5-494F-B6B0-CB562FA36CAC" && args.Name == "Document-1"));
         }
 
         /// <summary>
@@ -995,7 +1026,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
 
             presenter.OnEvent(new WorkspaceChangedEventArgs(workspace));
 
-            presenter.RenameFolder("Workspace-1/Project-1/Folder-1", "Folder-2");
+            Assert.True(presenter.RenameFolder("Workspace-1/Project-1/Folder-1", "Folder-2"));
 
             interactor.Received(1).Execute(Arg.Is<RenameFolderUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.Path == "Workspace-1/Project-1/Folder-1" && args.Name == "Folder-2"));
         }
@@ -1012,14 +1043,45 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         }
 
         /// <summary>
-        /// Test that the <see cref="WorkspaceExplorerViewPresenter.RenameFolder(string, string)"/> method throws an exception when the name is an empty string.
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.RenameFolder(string, string)"/> method returns false when a folder with the same name already exists.
         /// </summary>
         [Test]
-        public void TestRenameFolderThrowsExceptionWhenNameIsEmptyString()
+        public void TestRenameFolderWhenFolderAlreadyExists()
         {
+            var interactor = Substitute.For<IUseCase<RenameFolderUseCaseArgs>>();
+
+            interactor.When(x => x.Execute(Arg.Any<RenameFolderUseCaseArgs>())).Do(x => throw new FolderExistsException("Workspace/Project-1/Folder-2"));
+
+            factory.CreateRenameFolderUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
+
             var presenter = CreatePresenter(true);
 
-            Assert.Throws<ArgumentException>(() => presenter.RenameFolder("Workspace-1/Project-1/Folder-1", string.Empty));
+            presenter.OnEvent(new WorkspaceChangedEventArgs(workspace));
+
+            Assert.False(presenter.RenameFolder("Workspace-1/Project-1/Folder-1", "Folder-2"));
+
+            interactor.Received(1).Execute(Arg.Is<RenameFolderUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.Path == "Workspace-1/Project-1/Folder-1" && args.Name == "Folder-2"));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.RenameFolder(string, string)"/> method returns false when the name is invalid.
+        /// </summary>
+        [Test]
+        public void TestRenameFolderWhenNameIsInvalid()
+        {
+            var interactor = Substitute.For<IUseCase<RenameFolderUseCaseArgs>>();
+
+            interactor.When(x => x.Execute(Arg.Any<RenameFolderUseCaseArgs>())).Do(x => throw new InvalidNameException(string.Empty));
+
+            factory.CreateRenameFolderUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
+
+            var presenter = CreatePresenter(true);
+
+            presenter.OnEvent(new WorkspaceChangedEventArgs(workspace));
+
+            Assert.False(presenter.RenameFolder("Workspace-1/Project-1/Folder-1", string.Empty));
+
+            interactor.Received(1).Execute(Arg.Is<RenameFolderUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.Path == "Workspace-1/Project-1/Folder-1" && args.Name == string.Empty));
         }
 
         /// <summary>
@@ -1065,20 +1127,51 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
 
             presenter.OnEvent(new WorkspaceChangedEventArgs(workspace));
 
-            presenter.RenameWorkspace("Workspace-2");
+            Assert.True(presenter.RenameWorkspace("Workspace-2"));
 
             interactor.Received(1).Execute(Arg.Is<RenameWorkspaceUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.Name == "Workspace-2"));
         }
 
         /// <summary>
-        /// Test that the <see cref="WorkspaceExplorerViewPresenter.RenameWorkspace(string)"/> method throws an exception when the name is an empty string.
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.RenameWorkspace(string)"/> method returns false when the name is invalid.
         /// </summary>
         [Test]
-        public void TestRenameWorkspaceThrowsExceptionWhenKeyIsEmptyString()
+        public void TestRenameWorkspaceWhenNameIsInvalid()
         {
+            var interactor = Substitute.For<IUseCase<RenameWorkspaceUseCaseArgs>>();
+
+            interactor.When(x => x.Execute(Arg.Any<RenameWorkspaceUseCaseArgs>())).Do(x => throw new InvalidNameException(string.Empty));
+
+            factory.CreateRenameWorkspaceUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
+
             var presenter = CreatePresenter(true);
 
-            Assert.Throws<ArgumentException>(() => presenter.RenameWorkspace(string.Empty));
+            presenter.OnEvent(new WorkspaceChangedEventArgs(workspace));
+
+            Assert.False(presenter.RenameWorkspace(string.Empty));
+
+            interactor.Received(1).Execute(Arg.Is<RenameWorkspaceUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.Name == string.Empty));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="WorkspaceExplorerViewPresenter.RenameWorkspace(string)"/> method returns false when a workspace with the same name already exists.
+        /// </summary>
+        [Test]
+        public void TestRenameWorkspaceWhenWorkspaceAlreadyExists()
+        {
+            var interactor = Substitute.For<IUseCase<RenameWorkspaceUseCaseArgs>>();
+
+            interactor.When(x => x.Execute(Arg.Any<RenameWorkspaceUseCaseArgs>())).Do(x => throw new IOException());
+
+            factory.CreateRenameWorkspaceUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
+
+            var presenter = CreatePresenter(true);
+
+            presenter.OnEvent(new WorkspaceChangedEventArgs(workspace));
+
+            Assert.False(presenter.RenameWorkspace("Workspace-2"));
+
+            interactor.Received(1).Execute(Arg.Is<RenameWorkspaceUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.Name == "Workspace-2"));
         }
 
         /// <summary>

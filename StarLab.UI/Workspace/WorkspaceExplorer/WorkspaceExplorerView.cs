@@ -1,4 +1,5 @@
 ﻿using log4net;
+using MongoDB.Bson;
 using StarLab.Presentation;
 using StarLab.Presentation.Workspace.WorkspaceExplorer;
 using StarLab.Shared;
@@ -235,6 +236,66 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         }
 
         /// <summary>
+        /// Renames the document specified by the <see cref="NodeLabelEditEventArgs"/> provided.
+        /// </summary>
+        /// <param name="e">A <see cref="NodeLabelEditEventArgs"/> that provides the information required to rename the document.</param>
+        private void RenameDocument(NodeLabelEditEventArgs e)
+        {
+            if (presenter != null && e != null && e.Label != null && e.Node != null)
+            {
+                if (presenter.RenameDocument(e.Node.Name, e.Label))
+                {
+                    treeView.LabelEdit = false;
+                }
+                else
+                {
+                    e.CancelEdit = true;
+                    e.Node.BeginEdit();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Renames the project or folder specified by the <see cref="NodeLabelEditEventArgs"/> provided.
+        /// </summary>
+        /// <param name="e">A <see cref="NodeLabelEditEventArgs"/> that provides the information required to rename the project or folder.</param>
+        private void RenameFolder(NodeLabelEditEventArgs e)
+        {
+            if (presenter != null && e != null && e.Label != null && e.Node != null)
+            {
+                if (presenter.RenameFolder(e.Node.Name, e.Label))
+                {
+                    treeView.LabelEdit = false;
+                }
+                else
+                {
+                    e.CancelEdit = true;
+                    e.Node.BeginEdit();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Renames the workspace specified by the <see cref="NodeLabelEditEventArgs"/> provided.
+        /// </summary>
+        /// <param name="e">A <see cref="NodeLabelEditEventArgs"/> that provides the information required to rename the workspace.</param>
+        private void RenameWorkspace(NodeLabelEditEventArgs e)
+        {
+            if (presenter != null && e != null && e.Label != null && e.Node != null)
+            {
+                if (presenter.RenameWorkspace(e.Label))
+                {
+                    treeView.LabelEdit = false;
+                }
+                else
+                {
+                    e.CancelEdit = true;
+                    e.Node.BeginEdit();
+                }
+            }
+        }
+
+        /// <summary>
         /// Event handler for the <see cref="TreeView.AfterCollapse"/> event.
         /// </summary>
         /// <param name="sender">The <see cref="object"> that was the originator of the event.</param>
@@ -251,10 +312,6 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
 
                     case Constants.Project:
                         presenter?.ProjectCollapsed(e.Node.Name);
-                        break;
-
-                    case Constants.Workspace:
-                        //presenter?.WorkspaceCollapsed();
                         break;
                 }
             }
@@ -278,10 +335,6 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
                     case Constants.Project:
                         presenter?.ProjectExpanded(e.Node.Name);
                         break;
-
-                    case Constants.Workspace:
-                        //presenter?.WorkspaceExpanded();
-                        break;
                 }
             }
         }
@@ -293,36 +346,25 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         /// <param name="e">A <see cref="NodeLabelEditEventArgs"/> that provides context for the event.</param>
         private void TreeView_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)
         {
-            if (e != null && e.Label != null && e.Node != null)
+            if (e != null && e.Node != null)
             {
-                try
+                switch (GetNodeType(e.Node))
                 {
-                    switch (GetNodeType(e.Node))
-                    {
-                        case Constants.Document:
-                            presenter?.RenameDocument(e.Node.Name, e.Label);
-                            break;
+                    case Constants.Document:
+                        RenameDocument(e);
+                        break;
 
-                        case Constants.Folder:
-                        case Constants.Project:
-                            presenter?.RenameFolder(e.Node.Name, e.Label);
-                            break;
+                    case Constants.Folder:
+                    case Constants.Project:
+                        RenameFolder(e);
+                        break;
 
-                        case Constants.Workspace:
-                            presenter?.RenameWorkspace(e.Label);
-                            break;
-                    }
-
-                    treeView.LabelEdit = false;
+                    case Constants.Workspace:
+                        RenameWorkspace(e);
+                        break;
                 }
-                catch (Exception ex)
-                {
-                    e.CancelEdit = true;
 
-                    presenter?.ShowErrorMessage(ex.Message);
-
-                    e.Node.BeginEdit();
-                }
+                if (e.CancelEdit) e.Node.BeginEdit();
             }
         }
 

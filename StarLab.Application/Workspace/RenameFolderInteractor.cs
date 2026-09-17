@@ -41,7 +41,7 @@ namespace StarLab.Application.Workspace
                 }
                 else
                 {
-                    throw new InvalidOperationException(ExceptionMessages.FolderExists($"{folder}/{args.Path}"));
+                    throw new FolderExistsException(ExceptionMessages.FolderExists($"{folder.Parent.Path}/{args.Name}"));
                 }
             }
             else

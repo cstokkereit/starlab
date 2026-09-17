@@ -128,7 +128,6 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         public void RenameDocument(IWorkspace workspace, DocumentID id, string name)
         {
             ArgumentNullException.ThrowIfNull(workspace, nameof(workspace));
-            ArgumentException.ThrowIfNullOrEmpty(name, nameof(name));
             ArgumentNullException.ThrowIfNull(id, nameof(id));
 
             var interactor = Factory.CreateRenameDocumentUseCase(ApplicationController.GetOutputPort<IWorkspaceOutputPort>());
@@ -147,7 +146,6 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         public void RenameFolder(IWorkspace workspace, string path, string name)
         {
             ArgumentNullException.ThrowIfNull(workspace, nameof(workspace));
-            ArgumentException.ThrowIfNullOrEmpty(name, nameof(name));
             ArgumentException.ThrowIfNullOrEmpty(path, nameof(path));
 
             var interactor = Factory.CreateRenameFolderUseCase(ApplicationController.GetOutputPort<IWorkspaceOutputPort>());
@@ -161,11 +159,9 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="workspace">The <see cref="IWorkspace"/> being modified.</param>
         /// <param name="name">The new name.</param>
         /// <exception cref="ArgumentNullException"></exception>
-        /// <exception cref="ArgumentException"></exception>
         public void RenameWorkspace(IWorkspace workspace, string name)
         {
             ArgumentNullException.ThrowIfNull(workspace, nameof(workspace));
-            ArgumentException.ThrowIfNullOrEmpty(name, nameof(name));
 
             var interactor = Factory.CreateRenameWorkspaceUseCase(ApplicationController.GetOutputPort<IWorkspaceOutputPort>());
 
