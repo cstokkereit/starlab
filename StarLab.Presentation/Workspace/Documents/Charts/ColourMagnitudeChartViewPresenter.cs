@@ -52,10 +52,9 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
 
             var converter = new SpectralClassConverter();
 
-
+            // Make the IForwardOnlyCursor implement async methods
             // Add a Data section to the settings view to choose the data series for the x and y axes
             // Use the nomenclature dictionary to load the names of data fields and series, units, symbols etc
-            // Switch to async data retrieval to improve UI experience
             // Scale points with zoom
             // Dragable axis lines
             // scale points according to number of stars
@@ -151,14 +150,6 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         public void UpdateChart(IChart chart)
         {
             View.UpdateChart(chart);
-
-
-            
-
-
-
-
-
 
             this.chart = chart;
         }

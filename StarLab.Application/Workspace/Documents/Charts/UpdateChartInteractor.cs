@@ -9,13 +9,13 @@ namespace StarLab.Application.Workspace.Documents.Charts
     /// <summary>
     /// A use case that .
     /// </summary>
-    internal class UpdateChartInteractor : UseCaseInteractor<IChartOutputPort>, IUseCase<UpdateChartUseCaseArgs>
+    internal class UpdateChartInteractor : UseCaseInteractor<IChartOutputPort>, IUseCaseAsync<UpdateChartUseCaseArgs>
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(UpdateChartInteractor)); // The logger that will be used for writing log messages.
 
-        private readonly IDatabaseManager databases; //
+        private readonly IDatabaseManager databases; // TODO
 
-        private readonly IQueryBuilder builder; //
+        private readonly IQueryBuilder builder; // TODO
 
         /// <summary>
         /// Initialises a new instance of the <see cref="ApplyChartSettingsInteractor"/> class.
@@ -32,10 +32,11 @@ namespace StarLab.Application.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// Executes the use case.
+        /// Executes the use case asynchronously.
         /// </summary>
         /// <param name="args">The <see cref="UpdateChartUseCaseArgs"/> that provide all of the information required to execute the use case.</param>
-        public void Execute(UpdateChartUseCaseArgs args)
+        /// <returns>A <see cref="Task"/> that represents the asynchronous operation.</returns>
+        public async Task ExecuteAsync(UpdateChartUseCaseArgs args)
         {
             if (log.IsDebugEnabled) StartStopWatch();
 
@@ -48,28 +49,32 @@ namespace StarLab.Application.Workspace.Documents.Charts
                                .AddField(builder.CreateField("Parallax"))
                                .AddField(builder.CreateField("B-V"))
                                .BuildQuery();
-            
-            var stars = database.GetStars(query);
 
             var dto = new List<StarDTO>();
 
             var rows = 0;
 
-            while (stars.MoveNext())
-            {
-                var star = stars.Current;
+            await Task.Run(() => {
 
-                if (star != null)
+                using (var stars = database.GetStars(query))
                 {
-                    dto.Add(new StarDTO
+                    while (stars.MoveNext())
                     {
-                        AbsoluteMagnitude = star.ApparentMagnitude + 5 * (Math.Log10(star.Parallax/1000) + 1),
-                        ColourIndex = star.ColourIndex(ColourIndexTypes.BV)
-                    });
-                }
+                        var star = stars.Current;
 
-                rows++;
-            }
+                        if (star != null)
+                        {
+                            dto.Add(new StarDTO
+                            {
+                                AbsoluteMagnitude = star.ApparentMagnitude + 5 * (Math.Log10(star.Parallax / 1000) + 1),
+                                ColourIndex = star.ColourIndex(ColourIndexTypes.BV)
+                            });
+                        }
+
+                        rows++;
+                    }
+                }
+            });
 
             if (log.IsDebugEnabled) log.Debug(LogEntries.QueryPerformance(query.ToString(), rows, GetElapsedTime()));
 

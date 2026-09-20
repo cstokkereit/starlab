@@ -36,7 +36,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
 
             var database = workspace.GetProject(workspace.GetDocument(id).Project).Database;
 
-            interactor.Execute(new UpdateChartUseCaseArgs(id.ToString(), database.Host, database.Port, database.Name));
+            interactor.ExecuteAsync(new UpdateChartUseCaseArgs(id.ToString(), database.Host, database.Port, database.Name));
         }
     }
 }

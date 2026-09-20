@@ -4,7 +4,7 @@
     /// Represents a forward only cursor.
     /// </summary>
     /// <typeparam name="T">The type of record that this cursor iterates over.</typeparam>
-    public interface IForwardOnlyCursor<T>
+    public interface IForwardOnlyCursor<T> : IDisposable
     {
         /// <summary>
         /// Gets the current record.

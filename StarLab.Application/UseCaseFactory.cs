@@ -169,7 +169,7 @@ namespace StarLab.Application
         /// </summary>
         /// <param name="outputPort">An <see cref="IChartOutputPort"/> that updates the UI in response to the outputs of the use case.</param>
         /// <returns>An instance of <see cref="IUseCase{WorkspaceDTO}"/> that implements the use case.</returns>
-        public IUseCase<UpdateChartUseCaseArgs> CreateUpdateChartUseCase(IChartOutputPort outputPort)
+        public IUseCaseAsync<UpdateChartUseCaseArgs> CreateUpdateChartUseCase(IChartOutputPort outputPort)
         {
             return new UpdateChartInteractor(outputPort, mapper, dataProvider, builder);
         }
