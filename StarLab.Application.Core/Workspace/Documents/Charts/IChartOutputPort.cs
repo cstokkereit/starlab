@@ -6,6 +6,13 @@
     public interface IChartOutputPort : IOutputPort
     {
         /// <summary>
+        /// TODO
+        /// </summary>
+        /// <param name=""></param>
+        void SetData(List<StarDTO> stars);
+
+
+        /// <summary>
         /// Applies the new chart settings to the preview.
         /// </summary>
         /// <param name="dto">A <see cref="ChartDTO"/> that specifies the state of the chart.</param>

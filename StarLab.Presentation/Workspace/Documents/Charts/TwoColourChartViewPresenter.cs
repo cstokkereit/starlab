@@ -78,6 +78,15 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="stars"></param>
+        public void SetData(List<StarDTO> stars)
+        {
+            // TODO
+        }
+
+        /// <summary>
         /// Updates the chart following a change to the document or workspace.
         /// </summary>
         /// <param name="chart">An <see cref="IChart"/> that specifies the state of the chart.</param>

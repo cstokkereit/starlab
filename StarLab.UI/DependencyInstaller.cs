@@ -35,6 +35,7 @@ namespace StarLab.UI
             InstallMapperClasses(container);
             InstallInfrastructureClasses(container);
             InstallApplicationClasses(container);
+            InstallPersistenceClasses(container);
             InstallPresentationClasses(container);
             InstallUserInterfaceClasses(container);
         }
@@ -83,6 +84,15 @@ namespace StarLab.UI
 
             // Register IMapper with registered IConfigurationProvider
             container.Register(Component.For<IMapper>().UsingFactoryMethod(kernel => new Mapper(kernel.Resolve<IConfigurationProvider>(), kernel.Resolve)));
+        }
+
+        /// <summary>
+        /// Registers the dependencies from assemblies within the persistence layer with the <see cref="IWindsorContainer"/>.
+        /// </summary>
+        /// <param name="container">The <see cref="IWindsorContainer"/> that will be used to register the dependencies.</param>
+        private void InstallPersistenceClasses(IWindsorContainer container)
+        {
+            container.Register(Component.For<IQueryBuilder>().ImplementedBy<QueryBuilder>());
         }
 
         /// <summary>

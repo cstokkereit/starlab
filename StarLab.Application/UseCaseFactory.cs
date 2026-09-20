@@ -17,16 +17,20 @@ namespace StarLab.Application
 
         private readonly IDatabaseManager dataProvider; // Used to retrieve data from the database.
 
+        private readonly IQueryBuilder builder; // Used to build database queries.
+
         /// <summary>
         /// Initialises a new instance of the <see cref="UseCaseFactory"/> class.
         /// </summary>
         /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
         /// <param name="dataProvider">An <see cref="IDatabaseManager"/> that will be used to retrieve data from the database.</param>
+        /// <param name="builder">An <see cref="IQueryBuilder"/> that will be used to build database queries.</param>
         /// <param name="serialiser">An <see cref="ISerialisationProvider"/> that will be used for serialise and deserialisation of model objects.</param>
-        public UseCaseFactory(IMapper mapper, IDatabaseManager dataProvider, ISerialisationProvider serialiser)
+        public UseCaseFactory(IMapper mapper, IDatabaseManager dataProvider, IQueryBuilder builder, ISerialisationProvider serialiser)
         {
             this.dataProvider = dataProvider ?? throw new ArgumentNullException(nameof(dataProvider));
             this.serialiser = serialiser ?? throw new ArgumentNullException(nameof(serialiser));
+            this.builder = builder ?? throw new ArgumentNullException(nameof(builder));
             this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
@@ -167,7 +171,7 @@ namespace StarLab.Application
         /// <returns>An instance of <see cref="IUseCase{WorkspaceDTO}"/> that implements the use case.</returns>
         public IUseCase<UpdateChartUseCaseArgs> CreateUpdateChartUseCase(IChartOutputPort outputPort)
         {
-            return new UpdateChartInteractor(outputPort, mapper, dataProvider);
+            return new UpdateChartInteractor(outputPort, mapper, dataProvider, builder);
         }
 
         /// <summary>

@@ -31,6 +31,16 @@ namespace StarLab.Shared
         public const string WidthRequired = "The width is required for fixed width text files.";
 
         /// <summary>
+        /// Builds a CannotCreateField exception message for the specified field.
+        /// </summary>
+        /// <param name="name">The field name.</param>
+        /// <returns>The required exception message.</returns>
+        public static string CannotCreateField(string name)
+        {
+            return $"The field '{name}' cannot be created because the database contains more than one table.";
+        }
+
+        /// <summary>
         /// Builds a ControllerNotFound exception message for the specified controller id.
         /// </summary>
         /// <param name="id">The controller ID.</param>

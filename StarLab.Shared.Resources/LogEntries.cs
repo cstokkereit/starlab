@@ -118,6 +118,23 @@
         }
 
         /// <summary>
+        /// Builds a QueryPerformance log entry for the specified presenter.
+        /// </summary>
+        /// <param name="query">The query that was executed.</param>
+        /// <param name="rows">The number of rows retrieved.</param>
+        /// <param name="time">The time taken in milliseconds.</param>
+        /// <returns>The required log entry.</returns>
+        public static string QueryPerformance(string? query, long rows, long time)
+        {
+            if (!string.IsNullOrEmpty(query))
+            {
+                return $"Performance Benchmarking: {rows} rows retrieved in {time} ms by the query {query}";
+            }
+
+            return $"Performance Benchmarking: {rows} rows retrieved in {time} ms.";
+        }
+
+        /// <summary>
         /// Builds an ServiceInitialised log entry for the specified service.
         /// </summary>
         /// <param name="type">The service type name.</param>

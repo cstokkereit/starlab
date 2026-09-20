@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using System.Diagnostics;
 
 namespace StarLab.Application
 {
@@ -11,6 +12,8 @@ namespace StarLab.Application
         private readonly IMapper mapper; // Copies data from model objects to data transfer objects and vice versa.
 
         private readonly TOutputPort outputPort; // Updates the UI in response to the outputs of the use case.
+
+        private readonly Stopwatch stopwatch = new Stopwatch(); // A stopwatch that can be used for benchmarking code execution.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="UseCaseInteractor{TOutputPort}"/> class.
@@ -33,5 +36,24 @@ namespace StarLab.Application
         /// Gets the <see cref="IOutputPort"/> that updates the UI in response to the outputs of the use case.
         /// </summary>
         protected TOutputPort OutputPort => outputPort;
+
+        /// <summary>
+        /// Stops the performance benchmarking stopwatch and returns the elapsed time in milliseconds.
+        /// </summary>
+        /// <returns>The ellapsed time in milliseconds.</returns>
+        protected long GetElapsedTime()
+        {
+            stopwatch.Stop();
+
+            return stopwatch.ElapsedMilliseconds;
+        }
+
+        /// <summary>
+        /// Starts the performance benchmarking stopwatch.
+        /// </summary>
+        protected void StartStopWatch()
+        {
+            stopwatch.Restart();
+        }
     }
 }

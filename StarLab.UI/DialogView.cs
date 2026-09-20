@@ -4,7 +4,6 @@ using StarLab.Presentation;
 using StarLab.Shared;
 using StarLab.Shared.Properties;
 using StarLab.UI;
-using System.Diagnostics;
 
 namespace StarLab
 {
@@ -154,9 +153,7 @@ namespace StarLab
         /// <param name="e">An <see cref="EventArgs"/> that provides context for the event.</param>
         private void Form_Activated(object sender, EventArgs e)
         {
-            Debug.Assert(presenter != null);
-
-            presenter.ViewActivated();
+            presenter?.ViewActivated();
         }
 
         /// <summary>
@@ -166,9 +163,17 @@ namespace StarLab
         /// <param name="e">A <see cref="FormClosingEventArgs"/> that provides context for the event.</param>
         private void Form_Closing(object sender, FormClosingEventArgs e)
         {
-            Debug.Assert(presenter != null);
+            presenter?.ViewClosing(e);
+        }
 
-            presenter.ViewClosing(e);
+        /// <summary>
+        /// Event handler for the <see cref="Form.OnShown)"/> event.
+        /// </summary>
+        /// <param name="sender">The <see cref="object"> that was the originator of the event.</param>
+        /// <param name="e">A <see cref="FormClosingEventArgs"/> that provides context for the event.</param>
+        private void Form_OnShown(object sender, EventArgs e)
+        {
+            presenter?.ViewActivated();
         }
     }
 }

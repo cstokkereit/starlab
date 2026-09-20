@@ -1,5 +1,4 @@
 ﻿using StarLab.Shared;
-using StarLab.Shared.Properties;
 
 namespace StarLab.Presentation
 {

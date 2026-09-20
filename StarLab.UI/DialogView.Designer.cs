@@ -41,6 +41,7 @@
             Text = "View";
             Activated += Form_Activated;
             FormClosing += Form_Closing;
+            Shown += Form_OnShown;
             ResumeLayout(false);
         }
 

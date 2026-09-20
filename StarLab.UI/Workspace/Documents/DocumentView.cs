@@ -4,7 +4,6 @@ using StarLab.Presentation;
 using StarLab.Presentation.Workspace;
 using StarLab.Presentation.Workspace.Documents;
 using StarLab.Shared;
-using StarLab.Shared.Properties;
 using Stratosoft.Commands;
 using System.Diagnostics;
 using WeifenLuo.WinFormsUI.Docking;
@@ -229,6 +228,16 @@ namespace StarLab.UI.Workspace.Documents
         /// <param name="sender">The <see cref="object"> that was the originator of the event.</param>
         /// <param name="e">An <see cref="EventArgs"/> that provides context for the event.</param>
         private void Form_Activated(object sender, EventArgs e)
+        {
+            presenter?.ViewActivated();
+        }
+
+        /// <summary>
+        /// Event handler for the <see cref="Form.OnShown"/> event.
+        /// </summary>
+        /// <param name="sender">The <see cref="object"> that was the originator of the event.</param>
+        /// <param name="e">An <see cref="EventArgs"/> that provides context for the event.</param>
+        private void Form_OnShown(object sender, EventArgs e)
         {
             presenter?.ViewActivated();
         }

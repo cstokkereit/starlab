@@ -13,10 +13,8 @@ namespace StarLab.Data.Import
         [Test]
         public void TestGetInstance()
         {
-            // Act
             var builder = ImportDefinitionBuilder.GetInstance();
 
-            // Assert
             Assert.That(builder, Is.Not.Null);
         }
 
@@ -26,10 +24,8 @@ namespace StarLab.Data.Import
         [Test]
         public void TestGetInstanceWithDelimiter()
         {
-            // Act
             var builder = ImportDefinitionBuilder.GetInstance(",");
 
-            // Assert
             Assert.That(builder, Is.Not.Null);
         }
 
@@ -39,10 +35,8 @@ namespace StarLab.Data.Import
         [Test]
         public void TestGetInstanceWithDelimiterAndTextDelimiter()
         {
-            // Act
             var builder = ImportDefinitionBuilder.GetInstance(",", "\"");
 
-            // Assert
             Assert.That(builder, Is.Not.Null);
         }
 
@@ -52,7 +46,6 @@ namespace StarLab.Data.Import
         [Test]
         public void TestAddCompoundFieldThrowsExceptionIfNameNotUnique()
         {
-            // Act
             var e = Assert.Throws<InvalidOperationException>(() => ImportDefinitionBuilder.GetInstance(",")
                 .AddField(0, "Field-1", DataTypes.Decimal)
                 .AddCompoundField("Field-1", "{0}-{1}", [1, 2]));
@@ -64,7 +57,6 @@ namespace StarLab.Data.Import
         [Test]
         public void TestAddFieldThrowsExceptionIfNameNotUnique()
         {
-            // Act
             var e = Assert.Throws<InvalidOperationException>(() => ImportDefinitionBuilder.GetInstance(",")
                 .AddField(0, "Field-1", DataTypes.Decimal)
                 .AddField(1, "Field-1", DataTypes.Decimal));
@@ -78,13 +70,10 @@ namespace StarLab.Data.Import
         [Test]
         public void TestBuildImportDefinitionForAFixedWidthTextFile()
         {
-            // Arrange
             var builder = ImportDefinitionBuilder.GetInstance();
 
-            // Act
             var importDef = builder.Build();
 
-            // Assert
             Assert.That(importDef, Is.Not.Null);
             Assert.That(importDef.FileType, Is.EqualTo(FileTypes.FixedWidthText));
             Assert.That(importDef.TextDelimiter, Is.EqualTo(string.Empty));
@@ -97,13 +86,10 @@ namespace StarLab.Data.Import
         [Test]
         public void TestBuildImportDefinitionForACommaDelimitedTextFile()
         {
-            // Arrange
             var builder = ImportDefinitionBuilder.GetInstance(",");
 
-            // Act
             var importDef = builder.Build();
 
-            // Assert
             Assert.That(importDef, Is.Not.Null);
             Assert.That(importDef.FileType, Is.EqualTo(FileTypes.DelimitedText));
             Assert.That(importDef.TextDelimiter, Is.EqualTo(string.Empty));
@@ -116,13 +102,10 @@ namespace StarLab.Data.Import
         [Test]
         public void TestBuildImportDefinitionForACommaDelimitedTextFileWithTextDelimiters()
         {
-            // Arrange
             var builder = ImportDefinitionBuilder.GetInstance(",", "\"");
 
-            // Act
             var importDef = builder.Build();
 
-            // Assert
             Assert.That(importDef, Is.Not.Null);
             Assert.That(importDef.FileType, Is.EqualTo(FileTypes.DelimitedText));
             Assert.That(importDef.TextDelimiter, Is.EqualTo("\""));
@@ -135,10 +118,8 @@ namespace StarLab.Data.Import
         [Test]
         public void TestBuildImportDefinitionThatIncludesCompoundFields()
         {
-            // Arrange
             var builder = ImportDefinitionBuilder.GetInstance(",");
 
-            // Act
             var importDef = builder.AddField(0, "Field-1", DataTypes.Decimal)
                 .AddField(3, "Field-4", DataTypes.Decimal)
                 .AddField(5, "Field-6", DataTypes.Decimal)
@@ -146,7 +127,6 @@ namespace StarLab.Data.Import
                 .AddCompoundField("CompoundField-2", [1, 4])
                 .Build();
 
-            // Assert
             Assert.That(importDef.CompoundFields.Count, Is.EqualTo(2));
 
             var field1 = importDef.CompoundFields[0];
@@ -169,16 +149,13 @@ namespace StarLab.Data.Import
         [Test]
         public void TestBuildImportDefinitionThatIncludesDelimitedTextFields()
         {
-            // Arrange
             var builder = ImportDefinitionBuilder.GetInstance(",");
 
-            // Act
             var importDef = builder.AddField(0, "Field-1", DataTypes.Decimal)
                 .AddField(3, "Field-4", DataTypes.Decimal)
                 .AddField(5, "Field-6", DataTypes.Decimal)
                 .Build();
 
-            // Assert
             Assert.That(importDef.Fields.Count, Is.EqualTo(3));
 
             var field1 = importDef.Fields[0];
@@ -207,10 +184,8 @@ namespace StarLab.Data.Import
         [Test]
         public void TestBuildImportDefinitionThatExcludesFixedWidthTextFields()
         {
-            // Arrange
             var builder = ImportDefinitionBuilder.GetInstance();
 
-            // Act
             var importDef = builder.AddField(0, "Field-1", 2, DataTypes.Decimal)
                 .ExcludeField(1, 8)
                 .AddField(2, "Field-3", 7, DataTypes.Decimal)
@@ -218,7 +193,6 @@ namespace StarLab.Data.Import
                 .AddField(4, "Field-5", 5, DataTypes.Decimal)
                 .Build();
 
-            // Assert
             Assert.That(importDef.Fields.Count, Is.EqualTo(5));
 
             var field1 = importDef.Fields[0];
@@ -259,16 +233,13 @@ namespace StarLab.Data.Import
         [Test]
         public void TestBuildImportDefinitionThatIncludesFixedWidthTextFields()
         {
-            // Assert
             var builder = ImportDefinitionBuilder.GetInstance();
 
-            // Act
             var importDef = builder.AddField(0, "Field-1", 2, DataTypes.Decimal)
                 .AddField(1, "Field-2", 7, DataTypes.Decimal)
                 .AddField(2, "Field-3", 5, DataTypes.Decimal)
                 .Build();
 
-            // Assert
             Assert.That(importDef.Fields.Count, Is.EqualTo(3));
 
             var field1 = importDef.Fields[0];

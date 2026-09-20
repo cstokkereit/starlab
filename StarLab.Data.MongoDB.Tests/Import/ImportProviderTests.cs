@@ -29,14 +29,14 @@ namespace StarLab.Data.MongoDB.Import
             databases.OpenConnection("localhost", 27017);
 
             importDefinition = ImportDefinitionBuilder.GetInstance("|")
-                .AddField(5, "Apparent Magnitude", DataTypes.Decimal)
+                .AddField(5, "ApparentMagnitude", DataTypes.Decimal)
                 .AddField(8, "RightAscension", DataTypes.Decimal)
                 .AddField(9, "Declination", DataTypes.Decimal)
                 .AddField(11, "Parallax", DataTypes.Decimal)
                 .AddField(37, "B-V", DataTypes.Decimal)
                 .AddField(40, "V-I", DataTypes.Decimal)
-                .AddField(76, "Spectral Type", DataTypes.Text)
-                .AddCompoundField("ID", "{0}-{1}", [0, 1])
+                .AddField(76, "SpectralType", DataTypes.Text)
+                .AddCompoundField("HIP", "{0}-{1}", [0, 1])
                 .Build();
         }
 

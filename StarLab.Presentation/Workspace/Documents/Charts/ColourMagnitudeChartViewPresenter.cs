@@ -2,7 +2,6 @@
 using StarLab.Application.Workspace.Documents.Charts;
 using StarLab.Presentation.Configuration;
 using StarLab.Shared;
-using StarLab.Shared.Properties;
 using Stratosoft.Commands;
 
 namespace StarLab.Presentation.Workspace.Documents.Charts
@@ -16,11 +15,15 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
 
         private readonly IChartUseCaseService useCaseService; // A service that executes the use cases that implement the functionality.
 
+        private readonly ChartData data; //
+
         private IChart? chart; // The chart that the view represents.
 
         private IDocument? document; // The document that contains the chart.
 
         private IWorkspace? workspace; // The workspace that contains the document.
+
+        private bool dirty; // A flag indicating that the chart data needs to be refreshed.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="ColourMagnitudeChartViewPresenter"> class.
@@ -40,7 +43,32 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
 
             useCaseService = services.GetService<IChartUseCaseService>();
 
+            data = new ChartData();
+
+            dirty = true;
+
             View.Attach(this);
+
+
+            var converter = new SpectralClassConverter();
+
+
+            // Add a Data section to the settings view to choose the data series for the x and y axes
+            // Use the nomenclature dictionary to load the names of data fields and series, units, symbols etc
+            // Switch to async data retrieval to improve UI experience
+            // Scale points with zoom
+            // Dragable axis lines
+            // scale points according to number of stars
+            // Colour points - spectrum
+            // Colour back ground - spectrum
+            // Tick mark density
+            // Teff and Luminosity axes
+            // Select points
+            // Add magnitude class overlay
+            // Add variable star overlays
+            // Select data for each axis (B-V, U-I, Spectral Class, Teff, Luminosity) - enforce that this is a temp/luminosity not a 2 colour diagram
+            // Table of data (B-V, U-I, Spectral Class, Teff, Luminosity) available to the chart - should not add other fields. So may include parallax/distance apparent magnitude.
+            // Filter for data used to make the table and variable types.
         }
 
         /// <summary>
@@ -85,6 +113,35 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         public void OnEvent(WorkspaceChangedEventArgs args)
         {
             workspace = args.Workspace;
+
+            UpdateChart();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void SetData(List<StarDTO> stars)
+        {
+            if (chart != null)
+            {
+                var nn = stars.Count;
+
+                var xs = new double[nn];
+                var ys = new double[nn];
+
+                for (var n = 0; n < nn; n++)
+                {
+                    xs[n] = stars[n].ColourIndex;
+                    ys[n] = stars[n].AbsoluteMagnitude;
+                }
+
+                data.AddSeries("B-V", xs);
+                data.AddSeries("Absolute Magnitude", ys);
+
+                View.UpdateChart(chart, data);
+
+                dirty = false;
+            }
         }
 
         /// <summary>
@@ -94,17 +151,6 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         public void UpdateChart(IChart chart)
         {
             View.UpdateChart(chart);
-
-
-
-
-            // The follwing will need to be called when the chart view is first shown and when the filter state changes
-
-            if (workspace != null && document != null)
-            {
-                useCaseService.UpdateChart(workspace, document.ID);
-            }
-
 
 
             
@@ -145,6 +191,17 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             if (disposing)
             {
                 View.Detach();
+            }
+        }
+
+        /// <summary>
+        /// Updates the chart.
+        /// </summary>
+        private void UpdateChart()
+        {
+            if (dirty && workspace != null && document != null)
+            {
+                useCaseService.UpdateChart(workspace, document.ID);
             }
         }
     }

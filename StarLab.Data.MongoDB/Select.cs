@@ -31,12 +31,13 @@ namespace StarLab.Data.MongoDB
 
             if (tables.Count == 1)
             {
-                projection.Include("");
+                foreach (var field in Tables[0].Fields)
+                {
+                    projection.Include(field.Name);
+                }
             }
 
             return projection;
         }
-
-        
     }
 }

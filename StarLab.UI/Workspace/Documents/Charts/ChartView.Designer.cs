@@ -28,22 +28,22 @@
         /// </summary>
         private void InitializeComponent()
         {
-            formsPlot = new ScottPlot.WinForms.FormsPlot();
+            chart = new ScottPlot.WinForms.FormsPlot();
             SuspendLayout();
             // 
             // formsPlot
             // 
-            formsPlot.Dock = DockStyle.Fill;
-            formsPlot.Location = new Point(0, 0);
-            formsPlot.Name = "formsPlot";
-            formsPlot.Size = new Size(625, 570);
-            formsPlot.TabIndex = 0;
+            chart.Dock = DockStyle.Fill;
+            chart.Location = new Point(0, 0);
+            chart.Name = "formsPlot";
+            chart.Size = new Size(625, 570);
+            chart.TabIndex = 0;
             // 
             // ChartView
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            Controls.Add(formsPlot);
+            Controls.Add(chart);
             Name = "ChartView";
             Size = new Size(625, 570);
             ResumeLayout(false);
@@ -51,6 +51,6 @@
 
         #endregion
 
-        private ScottPlot.WinForms.FormsPlot formsPlot;
+        private ScottPlot.WinForms.FormsPlot chart;
     }
 }

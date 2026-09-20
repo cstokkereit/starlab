@@ -639,22 +639,33 @@ namespace StarLab.Data.MongoDB
         }
 
         /// <summary>
-        /// Test that the <see cref="QueryBuilder.CreateField(string)"/> method correctly creates an <see cref="IField">.
+        /// Test that the <see cref="QueryBuilder.CreateField(string)"/> method correctly creates an <see cref="IField"> and adds it to the table.
         /// </summary>
         [Test]
         public void TestCreateField()
         {
-            var builder = new QueryBuilder();
+            var builder = new QueryBuilder().AddTable("Table-1");
 
             var field = builder.CreateField("Field-1");
 
             Assert.That(field, Is.Not.Null);
 
             Assert.That(field.FullName, Is.EqualTo(".Field-1"));
-            Assert.That(field.Table, Is.EqualTo(string.Empty));
+            Assert.That(field.Table, Is.EqualTo("Table-1"));
             Assert.That(field.Name, Is.EqualTo("Field-1"));
 
             Assert.That(field.ToString, Is.EqualTo(".Field-1"));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="QueryBuilder.CreateField(string)"/> method throws an exception if the database contains more than one table.
+        /// </summary>
+        [Test]
+        public void TestCreateFieldThrowsExceptionIfMoreThanOneTable()
+        {
+            var builder = new QueryBuilder().AddTable("Table-1").AddTable("Table-2");
+
+            Assert.Throws<InvalidOperationException>(() => builder.CreateField("Field-1"));
         }
 
         /// <summary>

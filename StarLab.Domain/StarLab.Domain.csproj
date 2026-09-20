@@ -10,9 +10,4 @@
     <ProjectReference Include="..\StarLab.Domain.Core\StarLab.Domain.Core.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Workspace\Documents\Charts\" />
-    <Folder Include="Workspace\Documents\Tables\" />
-  </ItemGroup>
-
 </Project>

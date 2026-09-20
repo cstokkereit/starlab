@@ -1,52 +1,20 @@
-﻿using StarLab.Application.Data;
-
-namespace StarLab.Data
+﻿namespace StarLab.Application.Data
 {
-    /// <summary>
-    /// A fluent builder for constructing instances of objects that implement the <see cref="IQuery"/> interface.
-    /// </summary>
-    public abstract class QueryBuilderBase : IQueryBuilder
+    public interface IQueryBuilder
     {
-        private List<string> tables = new List<string>(); // A list that contains the names of the tables.
-
-        private IQuery query; // The query being constructed.
-
-        /// <summary>
-        /// Initialises a new instance of the <see cref="QueryBuilderBase"/> class.
-        /// </summary>
-        public QueryBuilderBase()
-        {
-            query = CreateQuery();
-        }
-
         /// <summary>
         /// Adds a field to the select statement.
         /// </summary>
         /// <param name="field">An <see cref="IField"/> that is to be added to the select statement.</param>
-        /// <returns>A reference to this <see cref="QueryBuilderBase"/> object to allow fluent modification of the query.</returns>
-        public IQueryBuilder AddField(IField field)
-        {
-            query.SelectStatement.AddField(field.Table, field);
-
-            if (!tables.Contains(field.Table))
-            {
-                tables.Add(field.Table);
-            }
-
-            return this;
-        }
+        /// <returns>A reference to this <see cref="IQueryBuilder"/> object to allow fluent modification of the query.</returns>
+        IQueryBuilder AddField(IField field);
 
         /// <summary>
         /// Adds the <see cref="IPredicate"/> provided to the where clause.
         /// </summary>
         /// <param name="predicate">The <see cref="IPredicate"/> to add.</param>
-        /// <returns>A reference to this <see cref="QueryBuilderBase"/> object to allow fluent modification of the query.</returns>
-        public IQueryBuilder AddPredicate(IPredicate predicate)
-        {
-            query.WhereClause.AddPredicate(predicate);
-            
-            return this;
-        }
+        /// <returns>A reference to this <see cref="IQueryBuilder"/> object to allow fluent modification of the query.</returns>
+        IQueryBuilder AddPredicate(IPredicate predicate);
 
         /// <summary>
         /// Adds the specified predicate to the where clause.
@@ -55,24 +23,16 @@ namespace StarLab.Data
         /// <param name="field">The <see cref="IField"/> containg the values being compared.</param>
         /// <param name="value">The comparison value.</param>
         /// <param name="type">A <see cref="ComparisonOperators"/> that specifies how the value of the field is to be compared to the comparison value.</param>
-        /// <returns>A reference to this <see cref="QueryBuilderBase"/> object to allow fluent modification of the query.</returns>
-        public IQueryBuilder AddPredicate<T>(IField field, T value, ComparisonOperators type)
-        {
-            return AddPredicate(CreatePredicate(field, value, type));
-        }
+        /// <returns>A reference to this <see cref="IQueryBuilder"/> object to allow fluent modification of the query.</returns>
+        IQueryBuilder AddPredicate<T>(IField field, T value, ComparisonOperators type);
 
         /// <summary>
         /// Adds the field provided to the order by clause.
         /// </summary>
         /// <param name="field">An <see cref="IField"/> that is to be added to the order by clause.</param>
         /// <param name="sortOrder">A <see cref="SortOrder"/> that specifies the sort order for the field.</param>
-        /// <returns>A reference to this <see cref="QueryBuilderBase"/> object to allow fluent modification of the query.</returns>
-        public IQueryBuilder AddSortField(IField field, SortOrder sortOrder)
-        {
-            query.OrderByClause.AddSortField(field, sortOrder);
-
-            return this;
-        }
+        /// <returns>A reference to this <see cref="IQueryBuilder"/> object to allow fluent modification of the query.</returns>
+        IQueryBuilder AddSortField(IField field, SortOrder sortOrder);
 
         /// <summary>
         /// Adds the specified field to the order by clause.
@@ -80,66 +40,41 @@ namespace StarLab.Data
         /// <param name="table">The name of the table containing the field.</param>
         /// <param name="field">The name of the field.</param>
         /// <param name="sortOrder">A <see cref="SortOrder"/> that specifies the sort order for the field.</param>
-        /// <returns>A reference to this <see cref="QueryBuilderBase"/> object to allow fluent modification of the query.</returns>
-        public IQueryBuilder AddSortField(string table, string field, SortOrder sortOrder)
-        {
-            return AddSortField(new FieldFragment(table, field), sortOrder);
-        }
+        /// <returns>A reference to this <see cref="IQueryBuilder"/> object to allow fluent modification of the query.</returns>
+        IQueryBuilder AddSortField(string table, string field, SortOrder sortOrder);
 
         /// <summary>
         /// Adds the <see cref="ITable"/> provided to the select statement.
         /// </summary>
         /// <param name="table">An <see cref="ITable"/> that is to be added to the select statement.</param>
-        /// <returns>A reference to this <see cref="QueryBuilderBase"/> object to allow fluent modification of the query.</returns>
-        public IQueryBuilder AddTable(ITable table)
-        {
-            query.SelectStatement.AddTable(table);
-
-            if (!tables.Contains(table.Name))
-            {
-                tables.Add(table.Name);
-            }
-            
-            return this;
-        }
+        /// <returns>A reference to this <see cref="IQueryBuilder"/> object to allow fluent modification of the query.</returns>
+        IQueryBuilder AddTable(ITable table);
 
         /// <summary>
         /// Adds the specified table to the select statement.
         /// </summary>
         /// <param name="table">The name of the table that is to be added to the select statement.</param>
-        /// <returns>A reference to this <see cref="QueryBuilderBase"/> object to allow fluent modification of the query.</returns>
-        public IQueryBuilder AddTable(string table)
-        {
-            return AddTable(new TableFragment(table));
-        }
+        /// <returns>A reference to this <see cref="IQueryBuilder"/> object to allow fluent modification of the query.</returns>
+        IQueryBuilder AddTable(string table);
 
         /// <summary>
         /// Builds an instance of <see cref="IQuery"/> that specifies the data that will be returned from a database.
         /// </summary>
         /// <returns>An instance of <see cref="IQuery"/> that specifies the data that will be returned from a database.</returns>
-        public IQuery BuildQuery()
-        {
-            tables.Clear();
-
-            var temp = query;
-
-            query = CreateQuery();
-
-            return temp;
-        }
+        IQuery BuildQuery();
 
         /// <summary>
         /// Creates an empty instance of the <see cref="IAndPredicate"/> interface.
         /// </summary>
         /// <returns>An instance of the <see cref="IAndPredicate"/> interface containing no child predicates.</returns>
-        public abstract IAndPredicate CreateAndPredicate();
+        IAndPredicate CreateAndPredicate();
 
         /// <summary>
         /// Creates an instance of the <see cref="IAndPredicate"/> interface and initialises it with the predicates contained in the <see cref="IEnumerable{IPredicate}"/> provided.
         /// </summary>
         /// <param name="predicates">An <see cref="IEnumerable{IPredicate}"/> containing the predicates that will be combined using the AND operator.</param>
         /// <returns>An instance of the <see cref="IAndPredicate"/> interface containing the child predicates provided.</returns>
-        public abstract IAndPredicate CreateAndPredicate(IEnumerable<IPredicate> predicates);
+        IAndPredicate CreateAndPredicate(IEnumerable<IPredicate> predicates);
 
         /// <summary>
         /// Creates an instance of <see cref="IField"/> with the specified parent table and name.
@@ -147,27 +82,27 @@ namespace StarLab.Data
         /// <param name="table">The name of the table that contains the field.</param>
         /// <param name="name">The name of the field.</param>
         /// <returns>An instance of the <see cref="IOrPredicate"/> interface.</returns>
-        public abstract IField CreateField(string table, string name);
+        IField CreateField(string table, string name);
 
         /// <summary>
         /// Creates an instance of <see cref="IField"/> with the specified name.
         /// </summary>
         /// <param name="name">The name of the field.</param>
         /// <returns>An instance of the <see cref="IOrPredicate"/> interface.</returns>
-        public abstract IField CreateField(string name);
+        IField CreateField(string name);
 
         /// <summary>
         /// Creates an empty instance of the <see cref="IOrPredicate"/> interface.
         /// </summary>
         /// <returns>An instance of the <see cref="IOrPredicate"/> interface containing no child predicates.</returns>
-        public abstract IOrPredicate CreateOrPredicate();
+        IOrPredicate CreateOrPredicate();
 
         /// <summary>
         /// Creates an instance of the <see cref="IOrPredicate"/> interface and initialises it with the predicates contained in the <see cref="IEnumerable{IPredicate}"/> provided.
         /// </summary>
         /// <param name="predicates">An <see cref="IEnumerable{IPredicate}"/> containing the predicates that will be combined using the OR operator.</param>
         /// <returns>An instance of the <see cref="IOrPredicate"/> interface containing the child predicates provided.</returns>
-        public abstract IOrPredicate CreateOrPredicate(IEnumerable<IPredicate> predicates);
+        IOrPredicate CreateOrPredicate(IEnumerable<IPredicate> predicates);
 
         /// <summary>
         /// Creates an <see cref="IPredicate"/> of the specified type.
@@ -177,17 +112,6 @@ namespace StarLab.Data
         /// <param name="value">The comparison value.</param>
         /// <param name="type">A <see cref="ComparisonOperators"/> that specifies how the value of the field is to be compared to the comparison value.</param>
         /// <returns>An instance of the required <see cref="IPredicate"/>.</returns>
-        public abstract IPredicate CreatePredicate<T>(IField field, T value, ComparisonOperators type);
-
-        /// <summary>
-        /// Gets the names of the tables.
-        /// </summary>
-        protected List<string> Tables => tables;
-
-        /// <summary>
-        /// A function for creating an instance of <see cref="IQuery"/> that will be implemented in derived classes.
-        /// </summary>
-        /// <returns>An instance of <see cref="IQuery"/> that contains no fields, filter criteria or sort ordering.</returns>
-        protected abstract IQuery CreateQuery();
+        IPredicate CreatePredicate<T>(IField field, T value, ComparisonOperators type);
     }
 }

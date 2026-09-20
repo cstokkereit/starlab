@@ -40,7 +40,7 @@ namespace StarLab.Domain.Entities
 
             if (magnitudeClass == "sd")
             {
-                spectralType = magnitudeClass + spectralClass +peculiarities;
+                spectralType = magnitudeClass + spectralClass + peculiarities;
             }
             else
             {

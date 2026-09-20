@@ -4,7 +4,6 @@ using ScottPlot.Plottables;
 using StarLab.Presentation;
 using StarLab.Presentation.Workspace.Documents.Charts;
 using StarLab.Shared;
-using StarLab.Shared.Properties;
 
 namespace StarLab.UI.Workspace.Documents.Charts
 {
@@ -19,41 +18,30 @@ namespace StarLab.UI.Workspace.Documents.Charts
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(ChartView)); // The logger that will be used for writing log messages.
 
-        readonly ScottPlot.Plottables.Rectangle RectanglePlot; //
+        readonly ScottPlot.Plottables.Rectangle selector; //
 
         private IChartViewPresenter? presenter; // The presenter that controls the view.
 
-        private Scatter scatter; //
+        private Scatter? points; //
 
         /// <summary>
         /// Initialises a new instance of the <see cref="ChartView"> class.
         /// </summary>
         public ChartView()
         {
-            // Scale points with zoom
-            // Dragable axis lines
-            // scale points according to number of stars
-            // Colour points - spectrum
-            // Colour back ground - spectrum
-            // Tick mark density
-
             InitializeComponent();
 
             ID = ViewIDs.Chart;
             Name = ViewNames.Chart;
 
+            selector = chart.Plot.Add.Rectangle(0, 0, 0, 0);
 
 
-            // TODO - This is all temporary - calculations etc need to happen in a worker thread
-
-            // add a rectangle we can use as a selection indicator
-            RectanglePlot = formsPlot.Plot.Add.Rectangle(0, 0, 0, 0);
-            RectanglePlot.FillStyle.Color = Colors.Red.WithAlpha(.2);
 
             // add events to trigger in response to mouse actions
-            formsPlot.MouseMove += FormsPlot_MouseMove;
-            formsPlot.MouseDown += FormsPlot_MouseDown;
-            formsPlot.MouseUp += FormsPlot_MouseUp;
+            chart.MouseMove += OnMouseMove;
+            chart.MouseDown += OnMouseDown;
+            chart.MouseUp += OnMouseUp;
         }
 
         /// <summary>
@@ -104,86 +92,32 @@ namespace StarLab.UI.Workspace.Documents.Charts
         /// </summary>
         public void Initialise()
         {
-            // This is all temporary
-
-            // Split data into vertical series and colour according to spectral class
-
-            Tuple<double[], double[]> data = GetData();
-
-            scatter = formsPlot.Plot.Add.ScatterPoints(data.Item1, data.Item2);
-
-            scatter.MarkerColor = Colors.Green;
-            scatter.MarkerSize = 1;
-            formsPlot.Refresh();
-
-            //double[] tickPositions = new double[70];
-            //string[] tickLabels = new string[70]; // = { "O", "B", "A", "F", "G", "K", "M" };
-
-            //string c = "O";
-            //int s = 2;
-
-            //for (int n = 2; n < 70; n++)
-            //{
-            //    if (s > 9)
-            //    {
-            //        s = 0;
-            //    }
-
-            //    if (n > 9)
-            //    {
-            //        c = "B";
-            //    }
-            //    if (n > 19)
-            //    {
-            //        c = "A";
-            //    }
-            //    if (n > 29)
-            //    {
-            //        c = "F";
-            //    }
-            //    if (n > 39)
-            //    {
-            //        c = "G";
-            //    }
-            //    if (n > 49)
-            //    {
-            //        c = "K";
-            //    }
-            //    if (n > 59)
-            //    {
-            //        c = "M";
-            //    }
-
-            //    tickPositions[n] = n;
-            //    tickLabels[n] = c + s.ToString();
-            //    s++;
-            //}
-
-            //ScottPlot.TickGenerators.NumericAutomatic tickGenX = new();
-            //tickGenX.TargetTickCount = 10;
-            //formsPlot.Plot.Axes.Bottom.TickGenerator = tickGenX;
-
-            //ScottPlot.TickGenerators.NumericAutomatic tickGenX = new();
-            //tickGenX.MinimumTickSpacing = 5;
-            //formsPlot.Plot.Axes.Bottom.TickGenerator = tickGenX;
-
-
-            //formsPlot.Plot.Axes.Bottom.SetTicks(tickPositions, tickLabels);
-
-            // Lock the X axis min and max
-            formsPlot.Plot.Axes.Rules.Clear();
-            formsPlot.Plot.Axes.Rules.Add(new LockAxisRule());
+            selector.FillStyle.Color = Colors.Red.WithAlpha(.2);
         }
 
         /// <summary>
-        /// Updates the state of the chart.
+        /// Updates the chart following a change to the chart data.
         /// </summary>
-        /// <param name="chart">The <see cref="IChart"/> that specifies the new state of the chart.</param>
-        public void UpdateChart(IChart chart)
+        /// <param name="config">An <see cref="IChart"/> used to configure the chart.</param>
+        /// <param name="data">An <see cref="IChartData"> that holds data that will be used to generate the chart.</param>
+        public void UpdateChart(IChart config, IChartData data)
         {
-            ConfigureChart(formsPlot.Plot, chart);
+            points = chart.Plot.Add.ScatterPoints(data.GetSeries("B-V"), data.GetSeries("Absolute Magnitude"));
 
-            formsPlot.Refresh();
+            ConfigurePoints(config);
+
+            chart.Refresh();
+        }
+
+        /// <summary>
+        /// Updates the chart following a change to the chart configuration.
+        /// </summary>
+        /// <param name="config">The <see cref="IChart"/> used to configure the chart.</param>
+        public void UpdateChart(IChart config)
+        {
+            ConfigureChart(config);
+
+            chart.Refresh();
         }
 
         /// <summary>
@@ -203,27 +137,30 @@ namespace StarLab.UI.Workspace.Documents.Charts
         /// <summary>
         /// Configures a chart.
         /// </summary>
-        /// <param name="chart">The <see cref="Plot"/> being configured.</param>
-        /// <param name="config">The <see cref="IChart"/> configuration being applied.</param>
-        private void ConfigureChart(Plot chart, IChart config)
+        /// <param name="config">The <see cref="IChart"/> used to configure the chart.</param>
+        private void ConfigureChart(IChart config)
         {
-            ConfigureLabel(chart.Axes.Title.Label, config.Title);
+            var plot = chart.Plot;
 
-            ConfigureAxis(chart.Axes.Bottom, config.X1);
-            ConfigureAxis(chart.Axes.Right, config.Y2);
-            ConfigureAxis(chart.Axes.Left, config.Y1);
-            ConfigureAxis(chart.Axes.Top, config.X2);
+            plot.FigureBackground.Color = GetColour(config.BackColour);
 
-            ConfigurePlotArea(chart, config);
+            ConfigureLabel(plot.Axes.Title.Label, config.Title);
 
-            chart.FigureBackground.Color = GetColour(config.BackColour);
+            ConfigureAxis(plot.Axes.Bottom, config.X1);
+            ConfigureAxis(plot.Axes.Right, config.Y2);
+            ConfigureAxis(plot.Axes.Left, config.Y1);
+            ConfigureAxis(plot.Axes.Top, config.X2);
+
+            ConfigurePlotArea(plot, config);
+
+            ConfigurePoints(config);
         }
 
         /// <summary>
         /// Configures a label.
         /// </summary>
         /// <param name="label">The <see cref="LabelStyle"/> being configured.</param>
-        /// <param name="config">The <see cref="ILabel"/> configuration being applied.</param>
+        /// <param name="config">The <see cref="ILabel"/> used to configure the label.</param>
         private void ConfigureLabel(LabelStyle label, ILabel config)
         {
             label.ForeColor = GetColour(config.Colour);
@@ -243,7 +180,7 @@ namespace StarLab.UI.Workspace.Documents.Charts
         /// Configures the plot area.
         /// </summary>
         /// <param name="chart">The <see cref="Plot"/> being configured.</param>
-        /// <param name="config">The <see cref="IChart"/> configuration being applied.</param>
+        /// <param name="config">The <see cref="IChart"/> used to configure the plot area.</param>
         private void ConfigurePlotArea(Plot chart, IChart config)
         {
             chart.DataBackground.Color = GetColour(config.BackColour); // Should be plot area background colour
@@ -275,10 +212,24 @@ namespace StarLab.UI.Workspace.Documents.Charts
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="config">The <see cref="IChart"/> used to configure the points.</param>
+        private void ConfigurePoints(IChart config)
+        {
+            if (points != null)
+            {
+                points.MarkerColor = GetColour(config.PlotArea.ForeColour);
+
+                points.MarkerSize = 1;
+            }
+        }
+
+        /// <summary>
         /// Configures the axis scale.
         /// </summary>
         /// <param name="axis">The <see cref="ScottPlot.IAxis"/> being configured.</param>
-        /// <param name="config">The <see cref="IScale"/> configuration being applied.</param>
+        /// <param name="config">The <see cref="IScale"/> used to configure the scale.</param>
         private void ConfigureScale(ScottPlot.IAxis axis, IScale config)
         {
             axis.TickLabelStyle.IsVisible = config.Visible;
@@ -303,7 +254,7 @@ namespace StarLab.UI.Workspace.Documents.Charts
         /// Configures the tick labels.
         /// </summary>
         /// <param name="tickLabels">The <see cref="LabelStyle"/> being configured.</param>
-        /// <param name="config">The <see cref="ITickLabels"/> configuration being applied.</param>
+        /// <param name="config">The <see cref="ITickLabels"/> used to configure the tick labels.</param>
         private void ConfigureTickLabels(LabelStyle tickLabels, ITickLabels config)
         {
             tickLabels.ForeColor = GetColour(config.Colour);
@@ -323,7 +274,7 @@ namespace StarLab.UI.Workspace.Documents.Charts
         /// Configures the tick marks.
         /// </summary>
         /// <param name="tickMarks">The <see cref="TickMarkStyle"/> being configured.</param>
-        /// <param name="config">The <see cref="ITickMarks"/> configuration being applied.</param>
+        /// <param name="config">The <see cref="ITickMarks"/> used to configure the tick marks.</param>
         private void ConfigureTickMarks(TickMarkStyle tickMarks, ITickMarks config)
         {
             tickMarks.Color = GetColour(config.Colour);
@@ -355,6 +306,69 @@ namespace StarLab.UI.Workspace.Documents.Charts
 
 
 
+        // This is all temporary
+
+        // Split data into vertical series and colour according to spectral class
+
+
+
+        //double[] tickPositions = new double[70];
+        //string[] tickLabels = new string[70]; // = { "O", "B", "A", "F", "G", "K", "M" };
+
+        //string c = "O";
+        //int s = 2;
+
+        //for (int n = 2; n < 70; n++)
+        //{
+        //    if (s > 9)
+        //    {
+        //        s = 0;
+        //    }
+
+        //    if (n > 9)
+        //    {
+        //        c = "B";
+        //    }
+        //    if (n > 19)
+        //    {
+        //        c = "A";
+        //    }
+        //    if (n > 29)
+        //    {
+        //        c = "F";
+        //    }
+        //    if (n > 39)
+        //    {
+        //        c = "G";
+        //    }
+        //    if (n > 49)
+        //    {
+        //        c = "K";
+        //    }
+        //    if (n > 59)
+        //    {
+        //        c = "M";
+        //    }
+
+        //    tickPositions[n] = n;
+        //    tickLabels[n] = c + s.ToString();
+        //    s++;
+        //}
+
+        //ScottPlot.TickGenerators.NumericAutomatic tickGenX = new();
+        //tickGenX.TargetTickCount = 10;
+        //formsPlot.Plot.Axes.Bottom.TickGenerator = tickGenX;
+
+        //ScottPlot.TickGenerators.NumericAutomatic tickGenX = new();
+        //tickGenX.MinimumTickSpacing = 5;
+        //formsPlot.Plot.Axes.Bottom.TickGenerator = tickGenX;
+
+
+        //formsPlot.Plot.Axes.Bottom.SetTicks(tickPositions, tickLabels);
+
+       // Lock the X axis min and max
+       //formsPlot.Plot.Axes.Rules.Clear();
+       // formsPlot.Plot.Axes.Rules.Add(new LockAxisRule());
 
 
 
@@ -366,11 +380,6 @@ namespace StarLab.UI.Workspace.Documents.Charts
 
 
 
-
-
-
-
-        readonly Coordinates[] DataPoints;
         Coordinates MouseDownCoordinates;
         Coordinates MouseNowCoordinates;
         CoordinateRect MouseSelectionRect => new(MouseDownCoordinates, MouseNowCoordinates);
@@ -378,106 +387,36 @@ namespace StarLab.UI.Workspace.Documents.Charts
 
         bool selectPoints = false;
 
-        private Tuple<double[], double[]> GetData()
-        {
-            //var stars = new StarsRepository(); // TODO - This should be done through the presenter, this should not know about the Domain model
-
-            //stars.Populate();
-
-            List<double> xValues = new List<double>();
-            List<double> yValues = new List<double>();
-
-            var errors = 0;
-
-            //foreach (var star in stars)
-            {
-                try
-                {
-                    //if (!string.IsNullOrEmpty(star.SpectralType.SpectralClass))
-                    //{
-                    //xValues.Add(star.BVColourIndex);
-                    //yValues.Add(star.AbsoluteMagnitude);
-                    //}
-                }
-                catch (Exception e)
-                {
-                    errors++;
-                }
-            }
-
-            return new Tuple<double[], double[]>(xValues.ToArray(), yValues.ToArray());
-        }
-
-        private double Parse(string spectralType)
-        {
-            double retval = 0;
-
-            if (!spectralType.Contains('/') && !spectralType.Contains('-'))
-            {
-                if (spectralType.StartsWith("B"))
-                {
-                    retval = 10;
-                }
-                else if (spectralType.StartsWith("A"))
-                {
-                    retval = 20;
-                }
-                else if (spectralType.StartsWith("F"))
-                {
-                    retval = 30;
-                }
-                else if (spectralType.StartsWith("G"))
-                {
-                    retval = 40;
-                }
-                else if (spectralType.StartsWith("K"))
-                {
-                    retval = 50;
-                }
-                else if (spectralType.StartsWith("M"))
-                {
-                    retval = 60;
-                }
-                else
-                {
-                    throw new InvalidOperationException();
-                }
-
-                retval = retval + double.Parse(spectralType.Substring(1));
-            }
-
-            return retval;
-        }
-
-        private void FormsPlot_MouseDown(object? sender, MouseEventArgs e)
+       
+        private void OnMouseDown(object? sender, MouseEventArgs e)
         {
             if (!selectPoints)
                 return;
 
             MouseIsDown = true;
-            RectanglePlot.IsVisible = true;
-            MouseDownCoordinates = formsPlot.Plot.GetCoordinates(e.X, e.Y);
+            selector.IsVisible = true;
+            MouseDownCoordinates = chart.Plot.GetCoordinates(e.X, e.Y);
             //formsPlot.Interaction.Disable(); TODO - disable the default click-drag-pan behavior 
         }
 
-        private void FormsPlot_MouseUp(object? sender, MouseEventArgs e)
+        private void OnMouseUp(object? sender, MouseEventArgs e)
         {
             if (!selectPoints)
                 return;
 
             MouseIsDown = false;
-            RectanglePlot.IsVisible = false;
+            selector.IsVisible = false;
 
             // clear old markers
-            formsPlot.Plot.Remove<Marker>();
+            chart.Plot.Remove<Marker>();
 
             // identify selectedPoints
-            var selectedPoints = scatter.Data.GetScatterPoints().Where(x => MouseSelectionRect.Contains(x));
+            var selectedPoints = points?.Data.GetScatterPoints().Where(x => MouseSelectionRect.Contains(x));
 
             // add markers to outline selected points
             foreach (Coordinates selectedPoint in selectedPoints)
             {
-                var newMarker = formsPlot.Plot.Add.Marker(selectedPoint);
+                var newMarker = chart.Plot.Add.Marker(selectedPoint);
                 newMarker.MarkerStyle.Shape = MarkerShape.OpenCircle;
                 newMarker.MarkerStyle.Size = 10;
                 newMarker.MarkerStyle.FillColor = Colors.Red.WithAlpha(.2);
@@ -490,18 +429,17 @@ namespace StarLab.UI.Workspace.Documents.Charts
             MouseNowCoordinates = Coordinates.NaN;
 
             // update the plot
-            formsPlot.Refresh();
+            chart.Refresh();
             //formsPlot.Interaction.Enable(); // re-enable the default click-drag-pan behavior
         }
 
-        private void FormsPlot_MouseMove(object? sender, MouseEventArgs e)
+        private void OnMouseMove(object? sender, MouseEventArgs e)
         {
-            if (!MouseIsDown || !selectPoints)
-                return;
+            if (!MouseIsDown || !selectPoints) return;
 
-            MouseNowCoordinates = formsPlot.Plot.GetCoordinates(e.X, e.Y);
-            RectanglePlot.CoordinateRect = MouseSelectionRect;
-            formsPlot.Refresh();
+            MouseNowCoordinates = chart.Plot.GetCoordinates(e.X, e.Y);
+            selector.CoordinateRect = MouseSelectionRect;
+            chart.Refresh();
         }
     }
 

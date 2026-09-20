@@ -1,17 +1,18 @@
 ﻿using StarLab.Application.Data;
+using StarLab.Shared;
 
 namespace StarLab.Data.MongoDB
 {
     /// <summary>
     /// A class for constructing a MongoDB specific implementation of <see cref="IQuery"/> that specifies which records will be returned from a MongoDB database.
     /// </summary>
-    public class QueryBuilder : QueryBuilderBase
+    public class QueryBuilder : QueryBuilderBase, IQueryBuilder
     {
         /// <summary>
         /// Creates an empty instance of the <see cref="IAndPredicate"/> interface.
         /// </summary>
         /// <returns>An instance of the <see cref="IAndPredicate"/> interface containing no child predicates.</returns>
-        public IAndPredicate CreateAndPredicate()
+        public override IAndPredicate CreateAndPredicate()
         {
             return new AndFilter();
         }
@@ -21,28 +22,9 @@ namespace StarLab.Data.MongoDB
         /// </summary>
         /// <param name="predicates">An <see cref="IEnumerable{IPredicate}"/> containing the predicates that will be combined using the AND operator.</param>
         /// <returns>An instance of the <see cref="IAndPredicate"/> interface containing the child predicates provided.</returns>
-        public IAndPredicate CreateAndPredicate(IEnumerable<IPredicate> predicates)
+        public override IAndPredicate CreateAndPredicate(IEnumerable<IPredicate> predicates)
         {
             return new AndFilter(predicates);
-        }
-
-        /// <summary>
-        /// Creates an empty instance of the <see cref="IOrPredicate"/> interface.
-        /// </summary>
-        /// <returns>An instance of the <see cref="IOrPredicate"/> interface containing no child predicates.</returns>
-        public IOrPredicate CreateOrPredicate()
-        {
-            return new OrFilter();
-        }
-
-        /// <summary>
-        /// Creates an instance of the <see cref="IOrPredicate"/> interface and initialises it with the predicates contained in the <see cref="IEnumerable{IPredicate}"/> provided.
-        /// </summary>
-        /// <param name="predicates">An <see cref="IEnumerable{IPredicate}"/> containing the predicates that will be combined using the OR operator.</param>
-        /// <returns>An instance of the <see cref="IOrPredicate"/> interface containing the child predicates provided.</returns>
-        public IOrPredicate CreateOrPredicate(IEnumerable<IPredicate> predicates)
-        {
-            return new OrFilter(predicates);
         }
 
         /// <summary>
@@ -51,7 +33,7 @@ namespace StarLab.Data.MongoDB
         /// <param name="table">The name of the table that contains the field.</param>
         /// <param name="name">The name of the field.</param>
         /// <returns>An instance of the <see cref="IOrPredicate"/> interface.</returns>
-        public IField CreateField(string table, string name)
+        public override IField CreateField(string table, string name)
         {
             return new FieldFragment(table, name);
         }
@@ -61,9 +43,30 @@ namespace StarLab.Data.MongoDB
         /// </summary>
         /// <param name="name">The name of the field.</param>
         /// <returns>An instance of the <see cref="IOrPredicate"/> interface.</returns>
-        public IField CreateField(string name)
+        public override IField CreateField(string name)
         {
-            return new FieldFragment(name);
+            if (Tables.Count > 1) throw new InvalidOperationException(ExceptionMessages.CannotCreateField(name));
+            
+            return new FieldFragment(Tables[0], name);
+        }
+
+        /// <summary>
+        /// Creates an empty instance of the <see cref="IOrPredicate"/> interface.
+        /// </summary>
+        /// <returns>An instance of the <see cref="IOrPredicate"/> interface containing no child predicates.</returns>
+        public override IOrPredicate CreateOrPredicate()
+        {
+            return new OrFilter();
+        }
+
+        /// <summary>
+        /// Creates an instance of the <see cref="IOrPredicate"/> interface and initialises it with the predicates contained in the <see cref="IEnumerable{IPredicate}"/> provided.
+        /// </summary>
+        /// <param name="predicates">An <see cref="IEnumerable{IPredicate}"/> containing the predicates that will be combined using the OR operator.</param>
+        /// <returns>An instance of the <see cref="IOrPredicate"/> interface containing the child predicates provided.</returns>
+        public override IOrPredicate CreateOrPredicate(IEnumerable<IPredicate> predicates)
+        {
+            return new OrFilter(predicates);
         }
 
         /// <summary>

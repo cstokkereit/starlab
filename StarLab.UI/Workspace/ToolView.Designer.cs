@@ -39,6 +39,7 @@
             Name = "ToolView";
             Text = "ToolView1";
             Activated += Form_Activated;
+            Shown += Form_OnShown;
             ResumeLayout(false);
         }
 

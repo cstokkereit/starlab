@@ -30,16 +30,6 @@ namespace StarLab.Data
         }
 
         /// <summary>
-        /// Initialises a new instance of the <see cref="FieldFragment"/> class.
-        /// </summary>
-        /// <param name="name">The name of the field.</param>
-        public FieldFragment(string name)
-        {
-            Table = string.Empty;
-            Name = name; 
-        }
-
-        /// <summary>
         /// Gets the table qualified field name.
         /// </summary>
         public string FullName => $"{Table}.{Name}";
