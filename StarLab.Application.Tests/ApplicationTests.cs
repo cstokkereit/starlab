@@ -55,7 +55,7 @@ namespace StarLab.Application
         {
             container = new WindsorContainer();
 
-            container.Register(Component.For<AutoMapper.IConfigurationProvider>().UsingFactoryMethod(kernel =>
+            container.Register(Component.For<IConfigurationProvider>().UsingFactoryMethod(kernel =>
             {
                 return new MapperConfiguration(configuration =>
                 {
@@ -64,9 +64,10 @@ namespace StarLab.Application
 
             }).LifestyleSingleton());
 
-            container.Register(Component.For<IMapper>().UsingFactoryMethod(kernel => new Mapper(kernel.Resolve<AutoMapper.IConfigurationProvider>(), kernel.Resolve)));
+            container.Register(Component.For<IMapper>().UsingFactoryMethod(kernel => new Mapper(kernel.Resolve<IConfigurationProvider>(), kernel.Resolve)));
 
             container.Register(
+                Component.For<IQueryBuilder>().ImplementedBy<QueryBuilder>(),
                 Component.For<IDatabaseManager>().ImplementedBy<DatabaseManager>(),
                 Component.For<ISerialisationProvider>().ImplementedBy<SerialisationProvider>(),
                 Classes.FromAssemblyNamed("StarLab.Serialisation").BasedOn<Profile>().WithServiceBase(),

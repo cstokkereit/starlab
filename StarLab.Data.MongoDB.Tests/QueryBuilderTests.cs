@@ -654,7 +654,7 @@ namespace StarLab.Data.MongoDB
             Assert.That(field.Table, Is.EqualTo("Table-1"));
             Assert.That(field.Name, Is.EqualTo("Field-1"));
 
-            Assert.That(field.ToString, Is.EqualTo(".Field-1"));
+            Assert.That(field.ToString, Is.EqualTo("Table-1.Field-1"));
         }
 
         /// <summary>
