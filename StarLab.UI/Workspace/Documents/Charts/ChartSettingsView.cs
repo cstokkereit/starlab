@@ -79,7 +79,7 @@ namespace StarLab.UI.Workspace.Documents.Charts
         {
             var section = new ColourSection(settings, group);
 
-            section.SectionChanged += Section_SettingsChanged;
+            section.SectionChanged += OnSettingsChanged;
 
             AppendSection(section);
         }
@@ -93,7 +93,7 @@ namespace StarLab.UI.Workspace.Documents.Charts
         {
             var section = new FontSection(settings, group);
 
-            section.SectionChanged += Section_SettingsChanged;
+            section.SectionChanged += OnSettingsChanged;
 
             AppendSection(section);
         }
@@ -107,7 +107,21 @@ namespace StarLab.UI.Workspace.Documents.Charts
         {
             var section = new ScaleSection(settings, group);
 
-            section.SectionChanged += Section_SettingsChanged;
+            section.SectionChanged += OnSettingsChanged;
+
+            AppendSection(section);
+        }
+
+        /// <summary>
+        /// Appends a size settings section to the settings panel.
+        /// </summary>
+        /// <param name="settings">An <see cref="IChartSettings"/> that represents the current state of the chart.</param>
+        /// <param name="group">The name of the settings group.</param>
+        public void AppendSizeSection(IChartSettings settings, string group)
+        {
+            var section = new SizeSection(settings);
+
+            section.SectionChanged += OnSettingsChanged;
 
             AppendSection(section);
         }
@@ -121,7 +135,7 @@ namespace StarLab.UI.Workspace.Documents.Charts
         {
             var section = new LabelSection(settings, group);
 
-            section.SectionChanged += Section_SettingsChanged;
+            section.SectionChanged += OnSettingsChanged;
 
             AppendSection(section);
         }
@@ -135,7 +149,7 @@ namespace StarLab.UI.Workspace.Documents.Charts
         {
             var section = new VisibleSection(settings, group);
 
-            section.SectionChanged += Section_SettingsChanged;
+            section.SectionChanged += OnSettingsChanged;
 
             AppendSection(section);
         }
@@ -199,7 +213,7 @@ namespace StarLab.UI.Workspace.Documents.Charts
         {
             foreach (var section in sections)
             {
-                section.SectionChanged -= Section_SettingsChanged;
+                section.SectionChanged -= OnSettingsChanged;
             }
 
             panelSettings.Controls.Clear();
@@ -252,7 +266,7 @@ namespace StarLab.UI.Workspace.Documents.Charts
         /// </summary>
         /// <param name="sender">The <see cref="object"> that was the originator of the event.</param>
         /// <param name="e">An <see cref="EventArgs"/> that provides context for the event.</param>
-        private void Section_SettingsChanged(object? sender, IChartSettings e)
+        private void OnSettingsChanged(object? sender, IChartSettings e)
         {
             Debug.Assert(presenter != null);
 

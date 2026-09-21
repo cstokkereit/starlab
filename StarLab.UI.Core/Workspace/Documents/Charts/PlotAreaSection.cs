@@ -9,26 +9,17 @@ namespace StarLab.UI.Core.Workspace.Documents.Charts
     {
         private readonly IChartSettings settings; // The chart settings that are bound to this control.
 
-        private readonly string group; // The name of the settings group that this control represents.
-
         public event EventHandler<IChartSettings>? SectionChanged;
 
-        public PlotAreaSection(IChartSettings settings, string group)
+        /// <summary>
+        /// Initialises a new instance of the <see cref="PlotAreaSection"> class.
+        /// </summary>
+        /// <param name="settings">The <see cref="IChartSettings"/> that are bound to this control.</param>
+        public PlotAreaSection(IChartSettings settings)
         {
             InitializeComponent();
 
-            this.group = group;
             this.settings = settings;
-        }
-
-        /// <summary>
-        /// Gets the <see cref="IChartElementSettings"/> for the specified settings group within the bound <see cref="IChartSettings"/>.
-        /// </summary>
-        /// <returns>The required <see cref="IChartElementSettings"/>.</returns>
-        /// <exception cref="ArgumentOutOfRangeException"></exception>
-        private IChartElementSettings GetSettings()
-        {
-            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -38,9 +29,18 @@ namespace StarLab.UI.Core.Workspace.Documents.Charts
         /// <param name="e">An <see cref="EventArgs"/> that provides context for the event.</param>
         private void OnCheckStateChanged(object? sender, EventArgs e)
         {
-            //GetSettings().Visible = checkBoxVisible.Checked;
-
             SectionChanged?.Invoke(this, settings);
         }
+
+        // Overlays 
+        //  Named stars
+        //  Magnitude classes
+        //  Variable types
+        //  Radius
+        //  Life cycle path
+
+        // Background - Spectrum
+
+        // Gridline opacity
     }
 }

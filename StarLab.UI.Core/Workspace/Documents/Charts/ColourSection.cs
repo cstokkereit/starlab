@@ -53,6 +53,10 @@ namespace StarLab.UI.Core.Workspace.Documents.Charts
                     Initialise(settings.PlotArea);
                     break;
 
+                case Constants.ChartPlotAreaPoints:
+                    Initialise(settings.PlotArea.Points);
+                    break;
+
                 default:
                     Initialise(GetSettings());
                     break;
@@ -151,6 +155,21 @@ namespace StarLab.UI.Core.Workspace.Documents.Charts
         }
 
         /// <summary>
+        /// Configures the initial state of this control.
+        /// </summary>
+        /// <param name="settings">The <see cref="IPointSettings"/> used to configure the initial state.</param>
+        private void Initialise(IPointSettings settings)
+        {
+            comboForeground.SelectedText = GetColourName(settings.Colour);
+            comboForeground.TextChanged += OnColourChanged;
+            comboForeground.DropDown += OnDropDown;
+
+            labelForeground.Text = Resources.Colour;
+
+            Height = 43;
+        }
+
+        /// <summary>
         /// Event handler for the <see cref="Button.Click"> event.
         /// </summary>
         /// <param name="sender">The <see cref="object"> that was the originator of the event.</param>
@@ -169,6 +188,10 @@ namespace StarLab.UI.Core.Workspace.Documents.Charts
 
                     case Constants.ChartPlotArea:
                         UpdateSettings(button, settings.PlotArea);
+                        break;
+
+                    case Constants.ChartPlotAreaPoints:
+                        UpdateSettings(button, settings.PlotArea.Points);
                         break;
 
                     default:
@@ -195,6 +218,10 @@ namespace StarLab.UI.Core.Workspace.Documents.Charts
 
                     case Constants.ChartPlotArea:
                         UpdateSettings(combo, settings.PlotArea);
+                        break;
+
+                    case Constants.ChartPlotAreaPoints:
+                        UpdateSettings(combo, settings.PlotArea.Points);
                         break;
 
                     default:
@@ -282,6 +309,22 @@ namespace StarLab.UI.Core.Workspace.Documents.Charts
         }
 
         /// <summary>
+        /// Updates the settings in response to a button click event.
+        /// </summary>
+        /// <param name="button">The <see cref="Button"/> that was clicked.</param>
+        /// <param name="settings">The <see cref="IPointSettings"/> being updated.</param>
+        private void UpdateSettings(Button button, IPointSettings settings)
+        {
+            Debug.Assert(button.Name == BUTTON_FOREGROUND);
+
+            settings.Colour = $"#{dialogCustomColour.Color.ToArgb()}";
+
+            comboForeground.SelectAll();
+
+            comboForeground.SelectedText = GetColourName(settings.Colour);
+        }
+
+        /// <summary>
         /// Updates the settings in response to a combo box text changed event.
         /// </summary>
         /// <param name="combo">The <see cref="ComboBox"/> for which the text was changed.</param>
@@ -306,6 +349,18 @@ namespace StarLab.UI.Core.Workspace.Documents.Charts
         /// <param name="combo">The <see cref="ComboBox"/> for which the text was changed.</param>
         /// <param name="settings">The <see cref="IFrameElementSettings"/> being updated.</param>
         private void UpdateSettings(ComboBox combo, IFrameElementSettings settings)
+        {
+            Debug.Assert(combo.Name == COMBO_FOREGROUND);
+
+            settings.Colour = (combo.Text == Resources.Custom && !string.IsNullOrEmpty(customForeColour)) ? customForeColour : combo.Text;
+        }
+
+        /// <summary>
+        /// Updates the settings in response to a button click event.
+        /// </summary>
+        /// <param name="combo">The <see cref="ComboBox"/> for which the text was changed.</param>
+        /// <param name="settings">The <see cref="IPointSettings"/> being updated.</param>
+        private void UpdateSettings(ComboBox combo, IPointSettings settings)
         {
             Debug.Assert(combo.Name == COMBO_FOREGROUND);
 

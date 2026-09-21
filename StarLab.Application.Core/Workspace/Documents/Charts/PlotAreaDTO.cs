@@ -11,6 +11,8 @@
 
         public GridDTO Grid = new GridDTO();
 
+        public PointsDTO Points = new PointsDTO();
+
         public bool Visible;
     }
 }

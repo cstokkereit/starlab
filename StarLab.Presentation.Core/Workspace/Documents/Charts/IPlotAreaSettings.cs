@@ -9,5 +9,10 @@
         /// Gets the chart grid settings.
         /// </summary>
         IGridSettings Grid { get; }
+
+        /// <summary>
+        /// Gets the data point settings.
+        /// </summary>
+        IPointSettings Points { get; }
     }
 }

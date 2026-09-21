@@ -69,6 +69,7 @@ namespace StarLab.UI.Core.Workspace.Documents.Charts
                 settingsByGroup.Add(Constants.ChartPlotAreaGrid, settings.PlotArea.Grid);
                 settingsByGroup.Add(Constants.ChartPlotAreaMajorGridLines, settings.PlotArea.Grid.MajorGridLines);
                 settingsByGroup.Add(Constants.ChartPlotAreaMinorGridLines, settings.PlotArea.Grid.MinorGridLines);
+                settingsByGroup.Add(Constants.ChartPlotAreaPoints, settings.PlotArea.Points);
                 settingsByGroup.Add(Constants.ChartTitle, settings.Title);
             }
 

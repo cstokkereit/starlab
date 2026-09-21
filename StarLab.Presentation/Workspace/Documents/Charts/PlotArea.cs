@@ -1,5 +1,4 @@
 ﻿using StarLab.Application.Workspace.Documents.Charts;
-using System.Diagnostics;
 
 namespace StarLab.Presentation.Workspace.Documents.Charts
 {
@@ -13,12 +12,14 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// </summary>
         /// <param name="dto">A data transfer object that specifies the initial state of the <see cref="PlotArea"/>.</param>
         public PlotArea(PlotAreaDTO dto)
-            : base(true)
+            : base(dto.Visible)
         {
             ArgumentNullException.ThrowIfNull(dto, nameof(dto));
-
+            
             BackColour = string.IsNullOrEmpty(dto.BackColour) ? Constants.DefaultBackColour : dto.BackColour;
             ForeColour = string.IsNullOrEmpty(dto.ForeColour) ? Constants.DefaultForeColour : dto.ForeColour;
+
+            Points = new Points(dto.Points);
 
             Grid = new Grid(dto.Grid);
         }
@@ -31,6 +32,8 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         {
             BackColour = Constants.DefaultBackColour;
             ForeColour = Constants.DefaultForeColour;
+
+            Points = new Points();
 
             Grid = new Grid();
         }
@@ -49,5 +52,10 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// Gets the chart grid.
         /// </summary>
         public IGrid Grid { get; }
+
+        /// <summary>
+        /// Gets the chart data points.
+        /// </summary>
+        public IPoints Points { get; }
     }
 }

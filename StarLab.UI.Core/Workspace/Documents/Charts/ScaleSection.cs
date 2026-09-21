@@ -16,6 +16,11 @@ namespace StarLab.UI.Core.Workspace.Documents.Charts
 
         public event EventHandler<IChartSettings>? SectionChanged; // An event that gets fired whenever any of the section settings is changed.
 
+        /// <summary>
+        /// Initialises a new instance of the <see cref="ScaleSection"> class.
+        /// </summary>
+        /// <param name="settings">The <see cref="IChartSettings"/> that are bound to this control.</param>
+        /// <param name="group">The name of the settings group that this control represents.</param>
         public ScaleSection(IChartSettings settings, string group)
         {
             InitializeComponent();

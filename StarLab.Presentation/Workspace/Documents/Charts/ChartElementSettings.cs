@@ -8,7 +8,7 @@
         /// <summary>
         /// Initialises a new instance of the <see cref="ChartElementSettings"/> class.
         /// </summary>
-        /// <param name="visible">A flag indicating whether the frame element is visible.</param>
+        /// <param name="visible">A flag indicating whether the chart element is visible.</param>
         public ChartElementSettings(bool visible)
         {
             Visible = visible;

@@ -11,10 +11,12 @@
         /// Initialises a new instance of the <see cref="PlotAreaSettings"/> class.
         /// </summary>
         /// <param name="plotArea">An <see cref="IPlotArea"/> that specifies the initial state of the plot area.</param>
-        /// <param name="visible"></param>
+        /// <param name="visible">Specifies whether this chart element is visble or not.</param>
         public PlotAreaSettings(IPlotArea plotArea, bool visible)
             : base(visible)
         {
+            Points = new PointSettings(plotArea.Points);
+
             Grid = new GridSettings(plotArea.Grid);
 
             BackColour = plotArea.BackColour;
@@ -36,6 +38,7 @@
 
             set
             {
+                Points.Colour = value;
                 Grid.Colour = value;
 
                 foreColour = value;
@@ -46,5 +49,10 @@
         /// Gets the grid settings.
         /// </summary>
         public IGridSettings Grid { get; }
+
+        /// <summary>
+        /// Gets the data point settings.
+        /// </summary>
+        public IPointSettings Points { get; }
     }
 }

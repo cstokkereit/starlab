@@ -699,6 +699,15 @@ namespace StarLab.Shared.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Overlays.
+        /// </summary>
+        public static string Overlays {
+            get {
+                return ResourceManager.GetString("Overlays", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Page Setup.
         /// </summary>
         public static string PageSetup {
@@ -722,6 +731,15 @@ namespace StarLab.Shared.Properties {
         public static string PlotArea {
             get {
                 return ResourceManager.GetString("PlotArea", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Points.
+        /// </summary>
+        public static string Points {
+            get {
+                return ResourceManager.GetString("Points", resourceCulture);
             }
         }
         

@@ -30,6 +30,7 @@ namespace StarLab.Serialisation
             CreateMap<GridLines, GridLinesDTO>().ReverseMap();
             CreateMap<Label, LabelDTO>().ReverseMap();
             CreateMap<PlotArea, PlotAreaDTO>().ReverseMap();
+            CreateMap<Points, PointsDTO>().ReverseMap();
             CreateMap<Project, ProjectDTO>().ReverseMap();
             CreateMap<Scale, ScaleDTO>().ReverseMap();
             CreateMap<Table, TableDTO>().ReverseMap();

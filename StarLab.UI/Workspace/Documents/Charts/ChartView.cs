@@ -104,7 +104,7 @@ namespace StarLab.UI.Workspace.Documents.Charts
         {
             points = chart.Plot.Add.ScatterPoints(data.GetSeries("B-V"), data.GetSeries("Absolute Magnitude"));
 
-            ConfigurePoints(config);
+            ConfigurePoints(config.PlotArea.Points);
 
             chart.Refresh();
         }
@@ -152,8 +152,6 @@ namespace StarLab.UI.Workspace.Documents.Charts
             ConfigureAxis(plot.Axes.Top, config.X2);
 
             ConfigurePlotArea(plot, config);
-
-            ConfigurePoints(config);
         }
 
         /// <summary>
@@ -183,7 +181,9 @@ namespace StarLab.UI.Workspace.Documents.Charts
         /// <param name="config">The <see cref="IChart"/> used to configure the plot area.</param>
         private void ConfigurePlotArea(Plot chart, IChart config)
         {
-            chart.DataBackground.Color = GetColour(config.BackColour); // Should be plot area background colour
+            chart.DataBackground.Color = GetColour(config.PlotArea.BackColour);
+
+            chart.Layout.Fixed(new PixelPadding(50, 50, 50, 50));
 
             var majorGridLines = config.PlotArea.Grid.MajorGridLines;
             var minorGridLines = config.PlotArea.Grid.MinorGridLines;
@@ -208,20 +208,20 @@ namespace StarLab.UI.Workspace.Documents.Charts
                 chart.HideGrid();
             }
 
-            chart.Layout.Fixed(new PixelPadding(50, 50, 50, 50));
+            ConfigurePoints(config.PlotArea.Points);
         }
 
         /// <summary>
-        /// 
+        /// Configures the data points.
         /// </summary>
-        /// <param name="config">The <see cref="IChart"/> used to configure the points.</param>
-        private void ConfigurePoints(IChart config)
+        /// <param name="config">The <see cref="IChart"/> used to configure the data points.</param>
+        private void ConfigurePoints(IPoints config)
         {
             if (points != null)
             {
-                points.MarkerColor = GetColour(config.PlotArea.ForeColour);
-
-                points.MarkerSize = 1;
+                points.IsVisible = config.Visible;
+                points.MarkerColor = GetColour(config.Colour);
+                points.MarkerSize = config.Size;
             }
         }
 

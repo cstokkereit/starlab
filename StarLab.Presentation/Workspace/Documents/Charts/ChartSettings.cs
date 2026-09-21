@@ -38,10 +38,7 @@
         /// </summary>
         public string BackColour 
         {
-            get
-            {
-                return backColour;
-            }
+            get => backColour;
 
             set
             {
@@ -72,10 +69,7 @@
         /// </summary>
         public string ForeColour
         {
-            get
-            {
-                return foreColour;
-            }
+            get => foreColour;
 
             set
             {

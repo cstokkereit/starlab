@@ -44,6 +44,13 @@
         void AppendScaleSection(IChartSettings settings, string group);
 
         /// <summary>
+        /// Appends a size settings section to the settings panel.
+        /// </summary>
+        /// <param name="settings">An <see cref="IChartSettings"/> that represents the current state of the chart.</param>
+        /// <param name="group">The name of the settings group.</param>
+        void AppendSizeSection(IChartSettings settings, string group);
+
+        /// <summary>
         /// Appends a text settings section to the settings panel.
         /// </summary>
         /// <param name="settings">An <see cref="IChartSettings"/> that represents the current state of the chart.</param>

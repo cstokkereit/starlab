@@ -437,4 +437,10 @@ Please enter a valid name.</value>
   <data name="DocumentCouldNotBeCreated" xml:space="preserve">
     <value>The document could not be created.</value>
   </data>
+  <data name="Points" xml:space="preserve">
+    <value>Points</value>
+  </data>
+  <data name="Overlays" xml:space="preserve">
+    <value>Overlays</value>
+  </data>
 </root>

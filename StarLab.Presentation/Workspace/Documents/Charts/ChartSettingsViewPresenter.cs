@@ -242,6 +242,10 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
 
             AddGroupManager(new GridLineSettingsGroupManager(View, View.AddNode(Constants.MinorGridLines, grid, StringResources.MinorGridLines)));
             AddGroupManager(new GridLineSettingsGroupManager(View, View.AddNode(Constants.MajorGridLines, grid, StringResources.MajorGridLines)));
+
+            AddGroupManager(new PointsSettingsGroupManager(View, View.AddNode(Constants.Points, plotArea, StringResources.Points)));
+
+            var overlays = View.AddNode(Constants.Overlays, Constants.Chart, StringResources.Overlays);
         }
     }
 }

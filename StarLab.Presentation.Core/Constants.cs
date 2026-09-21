@@ -47,6 +47,7 @@
         public const string ChartPlotAreaGrid = $"{Chart}/{PlotArea}/{Grid}";
         public const string ChartPlotAreaMajorGridLines = $"{Chart}/{PlotArea}/{Grid}/{MajorGridLines}";
         public const string ChartPlotAreaMinorGridLines = $"{Chart}/{PlotArea}/{Grid}/{MinorGridLines}";
+        public const string ChartPlotAreaPoints = $"{Chart}/{PlotArea}/{Points}";
         public const string ChartSettings = "ChartSettings";
         public const string ChartTitle = $"{Chart}/{Title}";
         public const string CollapseAll = "CollapseAll";
@@ -104,9 +105,11 @@
         public const string MinorTickMarks = "MinorTickMarks";
 
         public const string Open = "Open";
+        public const string Overlays = "Overlays";
 
         public const string Paste = "Paste";
         public const string PlotArea = "PlotArea";
+        public const string Points = "Points";
         public const string Project = "Project";
         public const string ProjectAddChart = "ProjectAddChart";
         public const string ProjectAddTable = "ProjectAddTable";

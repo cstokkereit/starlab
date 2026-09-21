@@ -44,14 +44,14 @@ namespace StarLab.Presentation
             CreateMap<IPlotArea, PlotAreaDTO>();
             CreateMap<IPlotAreaSettings, PlotAreaDTO>();
             CreateMap<IDatabase, DatabaseDTO>();
+            CreateMap<IPoints, PointsDTO>();
+            CreateMap<IPointSettings, PointsDTO>();
             CreateMap<IProject, ProjectDTO>();
             CreateMap<IScale, ScaleDTO>();
             CreateMap<IScaleSettings, ScaleDTO>();
             CreateMap<ITable, TableDTO>();
             CreateMap<ITableDocument, DocumentDTO>();
 
-            
-            
             CreateMap<ITickLabels, TickLabelsDTO>();
             CreateMap<ITickLabelSettings, TickLabelsDTO>();
             CreateMap<ITickMarks, TickMarksDTO>();

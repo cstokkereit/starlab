@@ -15,7 +15,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
 
         private readonly IChartUseCaseService useCaseService; // A service that executes the use cases that implement the functionality.
 
-        private readonly ChartData data; //
+        private readonly ChartData data; // The current chart data.
 
         private IChart? chart; // The chart that the view represents.
 
@@ -42,7 +42,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             ArgumentNullException.ThrowIfNull(services, nameof(services));
 
             useCaseService = services.GetService<IChartUseCaseService>();
-
+            
             data = new ChartData();
 
             dirty = true;
@@ -50,7 +50,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             View.Attach(this);
 
 
-            var converter = new SpectralClassConverter();
+            //var converter = new SpectralClassConverter();
 
             // Make the IForwardOnlyCursor implement async methods
             // Add a Data section to the settings view to choose the data series for the x and y axes

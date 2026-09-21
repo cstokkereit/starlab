@@ -16,5 +16,8 @@ namespace StarLab.Serialisation.Workspace.Documents.Charts
 
         [XmlElement]
         public Grid? Grid;
+
+        [XmlElement]
+        public Points? Points;
     }
 }

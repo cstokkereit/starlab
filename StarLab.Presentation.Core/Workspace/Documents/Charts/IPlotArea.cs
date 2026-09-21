@@ -19,5 +19,10 @@
         /// Gets the chart grid.
         /// </summary>
         IGrid Grid { get; }
+
+        /// <summary>
+        /// Gets the chart data points.
+        /// </summary>
+        IPoints Points { get; }
     }
 }

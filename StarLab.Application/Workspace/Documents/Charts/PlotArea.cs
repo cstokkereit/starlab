@@ -16,6 +16,8 @@
             BackColour = string.IsNullOrEmpty(dto.BackColour) ? Constants.DefaultBackColour : dto.BackColour;
             ForeColour = string.IsNullOrEmpty(dto.ForeColour) ? Constants.DefaultForeColour : dto.ForeColour;
 
+            Points = new Points(dto.Points);
+
             Grid = new Grid(dto.Grid);
         }
 
@@ -26,6 +28,8 @@
         {
             BackColour = Constants.DefaultBackColour;
             ForeColour = Constants.DefaultForeColour;
+
+            Points = new Points();
 
             Grid = new Grid();
         }
@@ -44,5 +48,10 @@
         /// Gets the chart grid.
         /// </summary>
         public Grid Grid { get; }
+
+        /// <summary>
+        /// Gets the chart data points.
+        /// </summary>
+        public Points Points { get; }
     }
 }

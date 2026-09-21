@@ -26,6 +26,7 @@ namespace StarLab.Application
             CreateMap<GridLines, GridLinesDTO>();
             CreateMap<Label, LabelDTO>();
             CreateMap<PlotArea, PlotAreaDTO>();
+            CreateMap<Points, PointsDTO>();
             CreateMap<Project, ProjectDTO>().ForMember(dest => dest.Documents, opt => opt.MapFrom(src => src.AllDocuments))
                                             .ForMember(dest => dest.Folders, opt => opt.MapFrom(src => src.AllFolders));
 

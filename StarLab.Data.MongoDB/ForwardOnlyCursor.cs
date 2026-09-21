@@ -26,6 +26,24 @@ namespace StarLab.Data.MongoDB
         }
 
         /// <summary>
+        /// The finaliser will only called if the <see cref="Dispose"/> method has not been called.
+        /// </summary>
+        ~ForwardOnlyCursor()
+        {
+            Dispose(false);
+        }
+
+        /// <summary>
+        /// Releases all resources used by the <see cref="ForwardOnlyCursor{T}"/> object.
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(true);
+
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
         /// Gets the current record.
         /// </summary>
         public T? Current
@@ -55,6 +73,18 @@ namespace StarLab.Data.MongoDB
             }
 
             return buffer.Count > 0 && index < buffer.Count;
+        }
+
+        /// <summary>
+        /// Releases any resources used by the <see cref="ColourMagnitudeChartViewPresenter"/> object.
+        /// </summary>
+        /// <param name="disposing">true if managed resources can be disposed of; false otherwise.</param>
+        protected void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                cursor.Dispose();
+            }
         }
 
         /// <summary>
