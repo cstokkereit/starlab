@@ -3,21 +3,21 @@
     /// <summary>
     /// Represents the current state of an axis while the chart is being configured.
     /// </summary>
-    internal class AxisSettings : FrameElementSettings, IAxisSettings
+    internal class AxisSettings : ChartElementSettings, IAxisSettings
     {
         /// <summary>
         /// Initialises a new instance of the <see cref="AxisSettings"/> class.
         /// </summary>
-        /// <param name="axis">An <see cref="IAxis"/> that specifies the initial state of the axis.</param>
+        /// <param name="axis">An <see cref="IAxis"/> that specifies the initial state of the axis settings.</param>
         public AxisSettings(IAxis axis)
-            : base(axis.Colour, axis.Visible)
+            : base(axis)
         {
             Label = new LabelSettings(axis.Label);
             Scale = new ScaleSettings(axis.Scale);
         }
 
         /// <summary>
-        /// Gets or sets the foreground colour.
+        /// Gets or sets the colour.
         /// </summary>
         public override string Colour
         {
@@ -28,8 +28,8 @@
 
             set
             {
-                if (Label != null) Label.Colour = value;
-                if (Scale != null) Scale.Colour = value;
+                Label?.Colour = value;
+                Scale?.Colour = value;
 
                 base.Colour = value;
             }
@@ -54,8 +54,8 @@
 
             set
             {
-                if (Label != null) Label.Visible = value;
-                if (Scale != null) Scale.Visible = value;
+                Label?.Visible = value;
+                Scale?.Visible = value;
 
                 base.Visible = value;
             }

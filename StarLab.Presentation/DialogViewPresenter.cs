@@ -89,12 +89,12 @@ namespace StarLab.Presentation
         }
 
         /// <summary>
-        /// Initiates the workflow managed by the dialog box.
+        /// Runs the dialog view.
         /// </summary>
-        /// <param name="context">An <see cref="IViewContext"/> that contains the information required to execute the workflow.</param>
-        public void Run(IViewContext context)
+        /// <param name="args">An <see cref="INamedArguments"/> that contains information required to run the view.</param>
+        public void Run(INamedArguments args)
         {
-            childController.Run(context);
+            childController.Run(args);
         }
 
         /// <summary>

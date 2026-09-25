@@ -3,7 +3,7 @@
     /// <summary>
     /// Represents the current state of an axis while the chart is being configured.
     /// </summary>
-    public interface IAxisSettings : IFrameElementSettings
+    public interface IAxisSettings : IChartElementSettings
     {
         /// <summary>
         /// Gets the axis label settings.

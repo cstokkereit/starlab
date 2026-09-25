@@ -3,7 +3,7 @@
     /// <summary>
     /// Represents a chart axis scale.
     /// </summary>
-    public interface IScale : IFrameElement
+    public interface IScale : IChartElement
     {
         /// <summary>
         /// A flag indicating that the scale is generated automatically to fit the data.

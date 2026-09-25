@@ -1,5 +1,4 @@
-﻿using StarLab.Presentation;
-using StarLab.Presentation.Workspace.Documents.Charts;
+﻿using StarLab.Presentation.Workspace.Documents.Charts;
 
 namespace StarLab.UI.Core.Workspace.Documents.Charts
 {
@@ -8,32 +7,24 @@ namespace StarLab.UI.Core.Workspace.Documents.Charts
     /// </summary>
     public partial class ScaleSection : UserControl, ISettingsSection
     {
-        private readonly IDictionary<string , IScaleSettings> settingsByGroup = new Dictionary<string , IScaleSettings>(); // A dictionary containing the scale settings indexed by settings group.
+        private readonly IScaleSettings settings; // The chart settings that are bound to this control.
 
-        private readonly IChartSettings settings; // The chart settings that are bound to this control.
-
-        private readonly string group; // The name of the settings group that this control represents.
-
-        public event EventHandler<IChartSettings>? SectionChanged; // An event that gets fired whenever any of the section settings is changed.
+        public event EventHandler? SectionChanged; // An event that gets fired whenever any of the section settings is changed.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="ScaleSection"> class.
         /// </summary>
         /// <param name="settings">The <see cref="IChartSettings"/> that are bound to this control.</param>
-        /// <param name="group">The name of the settings group that this control represents.</param>
-        public ScaleSection(IChartSettings settings, string group)
+        public ScaleSection(IScaleSettings settings)
         {
             InitializeComponent();
 
-            this.group = group;
             this.settings = settings;
 
-            var scaleSettings = GetSettings();
-
-            textMaximum.Text = scaleSettings.Maximum.ToString();
-            textMinimum.Text = scaleSettings.Minimum.ToString();
-            checkAutoScale.Checked = scaleSettings.Autoscale;
-            checkReversed.Checked = scaleSettings.Reversed;
+            textMaximum.Text = settings.Maximum.ToString();
+            textMinimum.Text = settings.Minimum.ToString();
+            checkAutoScale.Checked = settings.Autoscale;
+            checkReversed.Checked = settings.Reversed;
 
             AttachEventHandlers();
         }
@@ -50,38 +41,19 @@ namespace StarLab.UI.Core.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// Gets the <see cref="ILabelSettings"/> for the specified settings group within the bound <see cref="IChartSettings"/>.
-        /// </summary>
-        /// <returns>The required <see cref="IScaleSettings"/>.</returns>
-        private IScaleSettings GetSettings()
-        {
-            if (settingsByGroup.Count == 0)
-            {
-                settingsByGroup.Add(Constants.ChartAxisX1Scale, settings.Axes.X1.Scale);
-                settingsByGroup.Add(Constants.ChartAxisX2Scale, settings.Axes.X2.Scale);
-                settingsByGroup.Add(Constants.ChartAxisY1Scale, settings.Axes.Y1.Scale);
-                settingsByGroup.Add(Constants.ChartAxisY2Scale, settings.Axes.Y2.Scale);
-            }
-
-            return settingsByGroup[group];
-        }
-
-        /// <summary>
         /// Event handler for the <see cref="TextBox.TextChanged"/> and <see cref="CheckBox.CheckStateChanged"> events.
         /// </summary>
         /// <param name="sender">The <see cref="object"> that was the originator of the event.</param>
         /// <param name="e">An <see cref="EventArgs"/> that provides context for the event.</param>
         private void OnScaleChanged(object? sender, EventArgs e)
         {
-            var scaleSettings = settingsByGroup[group];
+            if (double.TryParse(textMinimum.Text, out double minimum)) settings.Minimum = minimum;
+            if (double.TryParse(textMaximum.Text, out double maximum)) settings.Maximum = maximum;
 
-            if (double.TryParse(textMinimum.Text, out double minimum)) scaleSettings.Minimum = minimum;
-            if (double.TryParse(textMaximum.Text, out double maximum)) scaleSettings.Maximum = maximum;
-            
-            scaleSettings.Autoscale = checkAutoScale.Checked;
-            scaleSettings.Reversed = checkReversed.Checked;
+            settings.Autoscale = checkAutoScale.Checked;
+            settings.Reversed = checkReversed.Checked;
 
-            SectionChanged?.Invoke(this, settings);
+            SectionChanged?.Invoke(this, new EventArgs());
         }
     }
 }

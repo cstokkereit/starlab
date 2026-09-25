@@ -3,14 +3,14 @@
     /// <summary>
     /// Represents the current state of an axis scale while the chart is being configured.
     /// </summary>
-    internal class ScaleSettings : FrameElementSettings, IScaleSettings
+    internal class ScaleSettings : ChartElementSettings, IScaleSettings
     {
         /// <summary>
         /// Initialises a new instance of the <see cref="ScaleSettings"/> class.
         /// </summary>
         /// <param name="scale">An <see cref="IScale"/> that specifies the initial state of the scale.</param>
         public ScaleSettings(IScale scale)
-            : base(scale.Colour, scale.Visible)
+            : base(scale)
         {
             MajorTickMarks = new TickMarkSettings(scale.MajorTickMarks);
             MinorTickMarks = new TickMarkSettings(scale.MinorTickMarks);
@@ -27,7 +27,7 @@
         public bool Autoscale { get; set; }
 
         /// <summary>
-        /// Gets or sets the background colour.
+        /// Gets or sets the colour.
         /// </summary>
         public override string Colour
         {
@@ -38,9 +38,9 @@
 
             set
             {
-                if (MajorTickMarks != null) MajorTickMarks.Colour = value;
-                if (MinorTickMarks != null) MinorTickMarks.Colour = value;
-                if (TickLabels != null) TickLabels.Colour = value;
+                MajorTickMarks?.Colour = value;
+                MinorTickMarks?.Colour = value;
+                TickLabels?.Colour = value;
 
                 base.Colour = value;
             }
@@ -81,13 +81,13 @@
         /// </summary>
         public override bool Visible
         {
-            get => base.Visible;
+            get => base.Visible || MajorTickMarks.Visible || MinorTickMarks.Visible || TickLabels.Visible;
 
             set
             {
-                if (MajorTickMarks != null) MajorTickMarks.Visible = value;
-                if (MinorTickMarks != null) MinorTickMarks.Visible = value;
-                if (TickLabels != null) TickLabels.Visible = value;
+                MajorTickMarks?.Visible = value;
+                MinorTickMarks?.Visible = value;
+                TickLabels?.Visible = value;
 
                 base.Visible = value;
             }

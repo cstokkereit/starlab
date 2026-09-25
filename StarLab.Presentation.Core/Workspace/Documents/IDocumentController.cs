@@ -11,11 +11,13 @@
         void Close();
 
         /// <summary>
-        /// Gets the specified controller.
+        /// Gets the controller with the specified <see cref="ControllerID"/>.
         /// </summary>
-        /// <typeparam name="TController">The type of the required controller.</typeparam>
+        /// <typeparam name="T">The type of the required controller.</typeparam>
+        /// <param name="id">The ID of the required controller.</param>
         /// <returns>The specified controller.</returns>
-        TController GetController<TController>();
+        /// <exception cref="Exception"></exception>
+        T GetController<T>(ControllerID id);
 
         /// <summary>
         /// Hides the specified split content.

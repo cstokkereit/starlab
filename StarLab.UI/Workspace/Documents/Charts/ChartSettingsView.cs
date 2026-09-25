@@ -73,84 +73,88 @@ namespace StarLab.UI.Workspace.Documents.Charts
         /// <summary>
         /// Appends a colour settings section to the settings panel.
         /// </summary>
-        /// <param name="settings">An <see cref="IChartSettings"/> that represents the current state of the chart.</param>
-        /// <param name="group">The name of the settings group.</param>
-        public void AppendColourSection(IChartSettings settings, string group)
+        /// <param name="settings">An <see cref="IChartElementSettings"/> that represents the current state of the chart element.</param>
+        public void AppendColourSection(IChartElementSettings settings)
         {
-            var section = new ColourSection(settings, group);
-
+            var section = new ColourSection(settings);
             section.SectionChanged += OnSettingsChanged;
+            AppendSection(section);
+        }
 
+        /// <summary>
+        /// Appends a colour settings section to the settings panel.
+        /// </summary>
+        /// <param name="settings">An <see cref="IChartSettings"/> that represents the current state of the chart.</param>
+        public void AppendColourSection(IChartSettings settings)
+        {
+            var section = new ColourSection(settings);
+            section.SectionChanged += OnSettingsChanged;
+            AppendSection(section);
+        }
+
+        /// <summary>
+        /// Appends a colour settings section to the settings panel.
+        /// </summary>
+        /// <param name="settings">An <see cref="IPlotAreaSettings"/> that represents the current state of the chart.</param>
+        public void AppendColourSection(IPlotAreaSettings settings)
+        {
+            var section = new ColourSection(settings);
+            section.SectionChanged += OnSettingsChanged;
             AppendSection(section);
         }
 
         /// <summary>
         /// Appends a font settings section to the settings panel.
         /// </summary>
-        /// <param name="settings">An <see cref="IChartSettings"/> that represents the current state of the chart.</param>
-        /// <param name="group">The name of the settings group.</param>
-        public void AppendFontSection(IChartSettings settings, string group)
+        /// <param name="settings">An <see cref="IFontSettings"/> that TODO.</param>
+        public void AppendFontSection(IFontSettings settings)
         {
-            var section = new FontSection(settings, group);
-
+            var section = new FontSection(settings);
             section.SectionChanged += OnSettingsChanged;
-
             AppendSection(section);
         }
 
         /// <summary>
         /// Appends a scale settings section to the settings panel.
         /// </summary>
-        /// <param name="settings">An <see cref="IChartSettings"/> that represents the current state of the chart.</param>
-        /// <param name="group">The name of the settings group.</param>
-        public void AppendScaleSection(IChartSettings settings, string group)
+        /// <param name="settings">An <see cref="IScaleSettings"/> that represents the current state of the axis scale.</param>
+        public void AppendScaleSection(IScaleSettings settings)
         {
-            var section = new ScaleSection(settings, group);
-
+            var section = new ScaleSection(settings);
             section.SectionChanged += OnSettingsChanged;
-
             AppendSection(section);
         }
 
         /// <summary>
         /// Appends a size settings section to the settings panel.
         /// </summary>
-        /// <param name="settings">An <see cref="IChartSettings"/> that represents the current state of the chart.</param>
-        /// <param name="group">The name of the settings group.</param>
-        public void AppendSizeSection(IChartSettings settings, string group)
+        /// <param name="settings">An <see cref="IPointSettings"/> that represents the current state of the data points.</param>
+        public void AppendSizeSection(IPointSettings settings)
         {
-            var section = new SizeSection(settings);
-
+            var section = new NumericSection(settings);
             section.SectionChanged += OnSettingsChanged;
-
             AppendSection(section);
         }
 
         /// <summary>
         /// Appends a text settings section to the settings panel.
         /// </summary>
-        /// <param name="settings">An <see cref="IChartSettings"/> that represents the current state of the chart.</param>
-        /// <param name="group">The name of the settings group.</param>
-        public void AppendTextSection(IChartSettings settings, string group)
+        /// <param name="settings">An <see cref="ILabelSettings"/> that represents the current state of the label.</param>
+        public void AppendTextSection(ILabelSettings settings)
         {
-            var section = new LabelSection(settings, group);
-
+            var section = new LabelSection(settings);
             section.SectionChanged += OnSettingsChanged;
-
             AppendSection(section);
         }
 
         /// <summary>
         /// Appends a visibility settings section to the settings panel.
         /// </summary>
-        /// <param name="settings">An <see cref="IChartSettings"/> that represents the current state of the chart.</param>
-        /// <param name="group">The name of the settings group.</param>
-        public void AppendVisibleSection(IChartSettings settings, string group)
+        /// <param name="settings">An <see cref="IChartElementSettings"/> that represents the current state of the chart element.</param>
+        public void AppendVisibleSection(IChartElementSettings settings)
         {
-            var section = new VisibleSection(settings, group);
-
+            var section = new VisibleSection(settings);
             section.SectionChanged += OnSettingsChanged;
-
             AppendSection(section);
         }
 
@@ -222,6 +226,15 @@ namespace StarLab.UI.Workspace.Documents.Charts
         }
 
         /// <summary>
+        /// Expands the specified tree view node.
+        /// </summary>
+        /// <param name="key">The node key.</param>
+        public void ExpandNode(string key)
+        {
+            nodes[key].Expand();
+        }
+
+        /// <summary>
         /// Initialises the view.
         /// </summary>
         public override void Initialise()
@@ -266,11 +279,11 @@ namespace StarLab.UI.Workspace.Documents.Charts
         /// </summary>
         /// <param name="sender">The <see cref="object"> that was the originator of the event.</param>
         /// <param name="e">An <see cref="EventArgs"/> that provides context for the event.</param>
-        private void OnSettingsChanged(object? sender, IChartSettings e)
+        private void OnSettingsChanged(object? sender, EventArgs e)
         {
             Debug.Assert(presenter != null);
 
-            presenter.ApplyPreviewSettings(e);
+            presenter.ApplyPreviewSettings();
         }
 
         /// <summary>
@@ -284,7 +297,7 @@ namespace StarLab.UI.Workspace.Documents.Charts
 
             if (e != null && e.Node != null)
             {
-                presenter.ShowSettingsGroup(e.Node.Name);
+                presenter.ShowSettings(e.Node.Name);
             }
         }
     }

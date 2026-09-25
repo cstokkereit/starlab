@@ -3,8 +3,11 @@
     /// <summary>
     /// Represents the current state of the chart axes while the chart is being configured.
     /// </summary>
-    internal class AxesSettings : TextElementSettings, IAxesSettings
+    internal class AxesSettings : ChartElementSettings, IAxesSettings
     {
+
+        private IFont font; // The axis font.
+
         /// <summary>
         /// Initialises a new instance of the <see cref="AxesSettings"> class.
         /// </summary>
@@ -13,12 +16,50 @@
         /// <param name="y1">An <see cref="IAxis"/> that specifies the initial state of the left axis.</param>
         /// <param name="y2">An <see cref="IAxis"/> that specifies the initial state of the right axis.</param>
         public AxesSettings(IAxis x1, IAxis x2, IAxis y1, IAxis y2)
-            : base(GetColour(x1, x2, y1, y2), GetFont(x1, x2, y1, y2), GetVisible(x1, x2, y1, y2))
+            : base(GetColour(x1, x2, y1, y2), GetVisible(x1, x2, y1, y2))
         {
+            font = GetFont(x1, x2, y1, y2);
+
             X1 = new AxisSettings(x1);
             X2 = new AxisSettings(x2);
             Y1 = new AxisSettings(y1);
             Y2 = new AxisSettings(y2);
+        }
+
+        /// <summary>
+        /// Gets or sets the colour.
+        /// </summary>
+        public override string Colour
+        {
+            get => base.Colour;
+
+            set
+            {
+                X1?.Colour = value;
+                X2?.Colour = value;
+                Y1?.Colour = value;
+                Y2?.Colour = value;
+
+                base.Colour = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the font for the axes.
+        /// </summary>
+        public IFont Font
+        {
+            get => font;
+
+            set
+            {
+                if (X1 != null) X1.Label.Font = value;
+                if (X2 != null) X2.Label.Font = value;
+                if (Y1 != null) Y1.Label.Font = value;
+                if (Y2 != null) Y2.Label.Font = value;
+
+                font = value;
+            }
         }
 
         /// <summary>
@@ -40,48 +81,6 @@
         /// Gets the settings for the right axis.
         /// </summary>
         public IAxisSettings Y2 { get; }
-
-        /// <summary>
-        /// Gets or sets the colour.
-        /// </summary>
-        public override string Colour
-        {
-            get
-            {
-                return base.Colour;
-            }
-
-            set
-            {
-                if (X1 != null) X1.Colour = value;
-                if (X2 != null) X2.Colour = value;
-                if (Y1 != null) Y1.Colour = value;
-                if (Y2 != null) Y2.Colour = value;
-
-                base.Colour = value;
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the font for the axes.
-        /// </summary>
-        public override IFont Font
-        { 
-            get
-            {
-                return base.Font;
-            }
-            
-            set
-            {
-                if (X1 != null) X1.Label.Font = value;
-                if (X2 != null) X2.Label.Font = value;
-                if (Y1 != null) Y1.Label.Font = value;
-                if (Y2 != null) Y2.Label.Font = value;
-
-                base.Font = value;
-            }
-        }
 
         /// <summary>
         /// Gets or sets a flag that determines whether the axes are visible.
@@ -108,7 +107,7 @@
         /// <param name="x2">The top axis.</param>
         /// <param name="y1">The left axis.</param>
         /// <param name="y2">The right axis.</param>
-        /// <returns>The colour that is applied to the greatest number of axes.</returns>
+        /// <returns>The background colour that is applied to the greatest number of axes.</returns>
         private static string GetColour(IAxis x1, IAxis x2, IAxis y1, IAxis y2)
         {
             var colours = new List<string>();

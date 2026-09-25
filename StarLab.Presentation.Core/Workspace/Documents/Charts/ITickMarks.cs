@@ -3,7 +3,7 @@
     /// <summary>
     /// Represents the chart axis scale tick marks.
     /// </summary>
-    public interface ITickMarks : IFrameElement
+    public interface ITickMarks : IChartElement
     {
         /// <summary>
         /// Gets the length of the tickamrks.

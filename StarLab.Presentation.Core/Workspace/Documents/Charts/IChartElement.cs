@@ -6,6 +6,11 @@
     public interface IChartElement
     {
         /// <summary>
+        /// Gets the colour of the chart element.
+        /// </summary>
+        public string Colour { get; }
+
+        /// <summary>
         /// A flag indicating that the chart element is visible.
         /// </summary>
         bool Visible { get; }

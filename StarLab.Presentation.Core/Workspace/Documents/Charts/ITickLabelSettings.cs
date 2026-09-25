@@ -3,7 +3,7 @@
     /// <summary>
     /// Represents the current state of the tick marks for an axis while the chart is being configured.
     /// </summary>
-    public interface ITickLabelSettings : ITextElementSettings
+    public interface ITickLabelSettings : IChartElementSettings, IFontSettings
     {
         /// <summary>
         /// Gets or sets the angle of rotation for the tick labels.

@@ -6,6 +6,11 @@
     public interface IChartElementSettings
     {
         /// <summary>
+        /// Gets or sets the colour of the chart element.
+        /// </summary>
+        string Colour { get; set; }
+
+        /// <summary>
         /// Gets or sets a flag that determines whether the chart element is visible.
         /// </summary>
         bool Visible { get; set; }

@@ -1,7 +1,6 @@
 ﻿using StarLab.Application;
 using StarLab.Presentation.Configuration;
 using StarLab.Shared;
-using StarLab.Shared.Properties;
 using Stratosoft.Commands;
 
 namespace StarLab.Presentation
@@ -47,13 +46,21 @@ namespace StarLab.Presentation
         }
 
         /// <summary>
-        /// Runs the <see cref="IChildView">.
+        /// Runs the child view.
         /// </summary>
-        /// <param name="context">An <see cref="IViewContext"/> that contains the contextual information required to configure the <see cref="IChildView">.</param>
-        public virtual void Run(IViewContext context)
+        /// <param name="args">An <see cref="INamedArguments"/> that contains information required to run the view.</param>
+        public virtual void Run(INamedArguments args)
         {
-            ArgumentNullException.ThrowIfNull(context, nameof(context));
+            ArgumentNullException.ThrowIfNull(args, nameof(args));
 
+            // Do Nothing
+        }
+
+        /// <summary>
+        /// Runs the child view.
+        /// </summary>
+        public virtual void Run()
+        {
             // Do Nothing
         }
 

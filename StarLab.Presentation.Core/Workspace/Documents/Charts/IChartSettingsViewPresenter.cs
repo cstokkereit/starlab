@@ -8,13 +8,12 @@
         /// <summary>
         /// Applies the preview settings to the chart view.
         /// </summary>
-        /// <param name="settings">The <see cref="IChartSettings"/> that specifies the state of the chart.</param>
-        void ApplyPreviewSettings(IChartSettings settings);
+        void ApplyPreviewSettings();
 
         /// <summary>
-        /// Shows the settings for the specified settings group.
+        /// Shows the settings for the specified key.
         /// </summary>
-        /// <param name="group">The name of the settings group to show.</param>
-        void ShowSettingsGroup(string name);
+        /// <param name="key">The settings key.</param>
+        void ShowSettings(string key);
     }
 }

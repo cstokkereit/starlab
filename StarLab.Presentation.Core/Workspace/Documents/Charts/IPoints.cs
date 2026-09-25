@@ -6,11 +6,6 @@
     public interface IPoints : IChartElement
     {
         /// <summary>
-        /// Gets the colour.
-        /// </summary>
-        string Colour { get; }
-
-        /// <summary>
         /// Gets the size.
         /// </summary>
         int Size { get; }

@@ -1,5 +1,4 @@
-﻿using StarLab.Presentation;
-using StarLab.Presentation.Workspace.Documents.Charts;
+﻿using StarLab.Presentation.Workspace.Documents.Charts;
 
 namespace StarLab.UI.Core.Workspace.Documents.Charts
 {
@@ -8,24 +7,18 @@ namespace StarLab.UI.Core.Workspace.Documents.Charts
     /// </summary>
     public partial class FontSection : UserControl, ISettingsSection
     {
-        private readonly IDictionary<string, ITextElementSettings> settingsByGroup = new Dictionary<string, ITextElementSettings>(); // A dictionary containing the font settings indexed by settings group.
+        private readonly IFontSettings settings; // The font settings that are bound to this control.
 
-        private readonly IChartSettings settings; // The chart settings that are bound to this control.
-
-        private readonly string group; // The name of the settings group that this control represents.
-
-        public event EventHandler<IChartSettings>? SectionChanged; // An event that gets fired whenever any of the section settings is changed.
+        public event EventHandler? SectionChanged; // An event that gets fired whenever any of the section settings is changed.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="FontSection"/> class.
         /// </summary>
         /// <param name="settings">The <see cref="IChartSettings"/> that are bound to this control.</param>
-        /// <param name="group">The name of the settings group that this control represents.</param>
-        public FontSection(IChartSettings settings, string group)
+        public FontSection(IFontSettings settings)
         {
             InitializeComponent();
 
-            this.group = group;
             this.settings = settings;
 
             for (int size = 6; size < 25; size++)
@@ -33,7 +26,7 @@ namespace StarLab.UI.Core.Workspace.Documents.Charts
                 comboFontSizes.Items.Add(size.ToString());
             }
 
-            var font = GetSettings().Font;
+            var font = settings.Font;
 
             comboFontFamilies.SelectedText = font.Family;
             comboFontSizes.SelectedIndex = font.Size - 6;
@@ -42,28 +35,6 @@ namespace StarLab.UI.Core.Workspace.Documents.Charts
             checkBoxBold.Checked = font.Bold;
 
             AttachEventHandlers();
-        }
-
-        /// <summary>
-        /// Gets the <see cref="ITextElementSettings"/> for the specified settings group within the bound <see cref="IChartSettings"/>.
-        /// </summary>
-        /// <returns>The required <see cref="ITextElementSettings"/>.</returns>
-        private ITextElementSettings GetSettings()
-        {
-            if (settingsByGroup.Count == 0)
-            {
-                settingsByGroup.Add(Constants.ChartAxisX1Label, settings.Axes.X1.Label);
-                settingsByGroup.Add(Constants.ChartAxisX1TickLabels, settings.Axes.X1.Scale.TickLabels);
-                settingsByGroup.Add(Constants.ChartAxisX2Label, settings.Axes.X2.Label);
-                settingsByGroup.Add(Constants.ChartAxisX2TickLabels, settings.Axes.X2.Scale.TickLabels);
-                settingsByGroup.Add(Constants.ChartAxisY1Label, settings.Axes.Y1.Label);
-                settingsByGroup.Add(Constants.ChartAxisY1TickLabels, settings.Axes.Y1.Scale.TickLabels);
-                settingsByGroup.Add(Constants.ChartAxisY2Label, settings.Axes.Y2.Label);
-                settingsByGroup.Add(Constants.ChartAxisY2TickLabels, settings.Axes.Y2.Scale.TickLabels);
-                settingsByGroup.Add(Constants.ChartTitle, settings.Title);
-            }
-
-            return settingsByGroup[group];
         }
 
         /// <summary>
@@ -101,11 +72,9 @@ namespace StarLab.UI.Core.Workspace.Documents.Charts
         /// <param name="e">An <see cref="EventArgs"/> that provides context for the event.</param>
         private void OnFontChanged(object? sender, EventArgs e)
         {
-            var textSettings = GetSettings();
+            settings.SetFont(comboFontFamilies.Text, int.Parse(comboFontSizes.Text), checkBoxBold.Checked, checkBoxItalic.Checked, checkBoxUnderline.Checked);
 
-            textSettings.SetFont(comboFontFamilies.Text, int.Parse(comboFontSizes.Text), checkBoxBold.Checked, checkBoxItalic.Checked, checkBoxUnderline.Checked);
-
-            SectionChanged?.Invoke(this, settings);
+            SectionChanged?.Invoke(this, new EventArgs());
         }
     }
 }

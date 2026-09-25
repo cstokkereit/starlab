@@ -3,7 +3,7 @@
     /// <summary>
     /// Represents the chart grid lines.
     /// </summary>
-    public interface IGridLines : IFrameElement
+    public interface IGridLines : IChartElement
     {
         /// <summary>
         /// Gets the opacity of the grid lines.

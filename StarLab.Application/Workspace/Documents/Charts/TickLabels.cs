@@ -8,7 +8,7 @@
         /// <summary>
         /// Initialises a new instance of the <see cref="TickLabels"> class.
         /// </summary>
-        /// <param name="dto">A data transfer object that specifies the initial state of the <see cref="TickLabels"/>.</param>
+        /// <param name="dto">A data transfer object that specifies the initial state of the tick labels.</param>
         public TickLabels(TickLabelsDTO dto)
         {
             ArgumentNullException.ThrowIfNull(dto, nameof(dto));
@@ -25,22 +25,23 @@
         /// Initialises a new instance of the <see cref="TickLabels"> class.
         /// </summary>
         public TickLabels()
-        {   
+        {
             Colour = Constants.DefaultForeColour;
+
             Font = new Font();
             Visible = true;
             Rotation = 0;
         }
 
         /// <summary>
-        /// Gets the colour.
-        /// </summary>
-        public string Colour { get; }
-
-        /// <summary>
         /// Gets the tick label font.
         /// </summary>
         public Font Font { get; }
+
+        /// <summary>
+        /// Gets the colour.
+        /// </summary>
+        public string Colour { get; }
 
         /// <summary>
         /// Gets the angle of rotation for the tick labels.

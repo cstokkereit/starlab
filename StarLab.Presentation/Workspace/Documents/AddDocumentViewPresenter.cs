@@ -138,25 +138,18 @@ namespace StarLab.Presentation.Workspace.Documents
         }
 
         /// <summary>
-        /// Runs the <see cref="IChildView">.
+        /// Runs the child view.
         /// </summary>
-        /// <param name="context">An <see cref="IViewContext"/> that contains the contextual information required to configure the <see cref="IChildView">.</param>
-        public override void Run(IViewContext context)
+        /// <param name="args">An <see cref="INamedArguments"/> that contains information required to run the view.</param>
+        public override void Run(INamedArguments args)
         {
-            ArgumentNullException.ThrowIfNull(context, nameof(context));
+            ArgumentNullException.ThrowIfNull(args, nameof(args));
 
-            if (context is AddDocumentViewContext config)
-            {
-                definitions.Clear();
+            definitions.Clear();
 
-                AddDocumentTypes(config.Type);
+            AddDocumentTypes(args.GetArgument<DocumentTypes>(Constants.Type));
 
-                path = config.Path;
-            }
-            else
-            {
-                throw new ArgumentException(ExceptionMessages.UnexpectedArgumentType(typeof(AddDocumentViewContext), context.GetType()), nameof(context));
-            }
+            path = args.GetArgument<string>(Constants.Path);
         }
 
         /// <summary>

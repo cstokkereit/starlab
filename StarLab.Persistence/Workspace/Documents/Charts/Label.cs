@@ -15,7 +15,7 @@ namespace StarLab.Serialisation.Workspace.Documents.Charts
         public Font? Font;
 
         [XmlAttribute("text")]
-        public string? Text;
+        public string Text = string.Empty;
 
         [XmlAttribute("visible")]
         public bool Visible;

@@ -119,7 +119,7 @@ namespace StarLab.Presentation.Workspace.Documents.Tables
         /// </summary>
         public void RevertSettings()
         {
-            var controller = ParentController.GetController<ITableController>();
+            var controller = ParentController.GetController<ITableController>(new ControllerID(Constants.Table));
 
             controller.UpdatePreview();
         }

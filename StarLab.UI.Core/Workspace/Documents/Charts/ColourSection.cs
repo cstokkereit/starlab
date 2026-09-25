@@ -1,7 +1,5 @@
-﻿using StarLab.Presentation;
+﻿using StarLab.Presentation.Workspace.Documents.Charts;
 using StarLab.Shared.Properties;
-using StarLab.Presentation.Workspace.Documents.Charts;
-using System.Diagnostics;
 
 namespace StarLab.UI.Core.Workspace.Documents.Charts
 {
@@ -16,51 +14,80 @@ namespace StarLab.UI.Core.Workspace.Documents.Charts
         private const string COMBO_BACKGROUND = "comboBackground"; // The name of the background colour combo box.
         private const string COMBO_FOREGROUND = "comboForeground"; // The name of the foreground colour combo box.
 
-        private readonly IDictionary<string, IFrameElementSettings> settingsByGroup = new Dictionary<string, IFrameElementSettings>(); // A dictionary containing the colour settings indexed by settings group.
-
-        private readonly IChartSettings settings; // The chart settings that are bound to this control.
-
-        private readonly string group; // The name of the settings group that this control represents.
+        private readonly IColourSettings settings; // The colour settings that are bound to this control.
 
         private string customBackColour; // The custom background colour.
 
         private string customForeColour; // The custom foreground colour.
 
-        public event EventHandler<IChartSettings>? SectionChanged; // An event that gets fired whenever any of the section settings is changed.
+        public event EventHandler? SectionChanged; // An event that gets fired whenever any of the section settings is changed.
+
+        /// <summary>
+        /// Initialises a new instance of the <see cref="ColourSection"> class.
+        /// </summary>
+        /// <param name="settings">The <see cref="IChartElementSettings"/> that are bound to this control.</param>
+        public ColourSection(IChartElementSettings settings)
+            : this (new ChartElementSettingsAdapter(settings)) { }
 
         /// <summary>
         /// Initialises a new instance of the <see cref="ColourSection"> class.
         /// </summary>
         /// <param name="settings">The <see cref="IChartSettings"/> that are bound to this control.</param>
-        /// <param name="group">The name of the settings group that this control represents.</param>
-        public ColourSection(IChartSettings settings, string group)
+        public ColourSection(IChartSettings settings)
+            : this (new ChartSettingsAdapter(settings)) { }
+
+        /// <summary>
+        /// Initialises a new instance of the <see cref="ColourSection"> class.
+        /// </summary>
+        /// <param name="settings">The <see cref="IPlotAreaSettings"/> that are bound to this control.</param>
+        public ColourSection(IPlotAreaSettings settings)
+            : this(new PlotAreaSettingsAdapter(settings)) { }
+
+        /// <summary>
+        /// Initialises a new instance of the <see cref="ColourSection"> class.
+        /// </summary>
+        /// <param name="settings">The <see cref="IColourSettings"/> that are bound to this control.</param>
+        private ColourSection(IColourSettings settings)
         {
             InitializeComponent();
 
-            customBackColour = settings.BackColour.StartsWith('#') ? settings.BackColour : string.Empty;
+            this.settings = settings;
+
+            ConfigureSection();
+        }
+
+        /// <summary>
+        /// TODO
+        /// </summary>
+        private void ConfigureSection()
+        {
+            // The SelectedText property must be set before wiring up the DropDown event handler.
+
+            if (!settings.ForegroundOnly)
+            {
+                customBackColour = settings.BackColour.StartsWith('#') ? settings.BackColour : string.Empty;
+
+                comboBackground.SelectedText = GetColourName(settings.BackColour);
+                comboBackground.TextChanged += OnColourChanged;
+                comboBackground.DropDown += OnDropDown;
+
+                labelForeground.Text = Resources.ForeColour;
+                labelBackground.Text = Resources.BackColour;
+
+                Height = 100;
+            }
+            else
+            {
+                labelForeground.Text = Resources.Colour;
+
+                Height = 50;
+            }
+
             customForeColour = settings.ForeColour.StartsWith('#') ? settings.ForeColour : string.Empty;
 
-            this.settings = settings;
-            this.group = group;
-
-            switch (group)
-            {
-                case Constants.Chart:
-                    Initialise(settings);
-                    break;
-
-                case Constants.ChartPlotArea:
-                    Initialise(settings.PlotArea);
-                    break;
-
-                case Constants.ChartPlotAreaPoints:
-                    Initialise(settings.PlotArea.Points);
-                    break;
-
-                default:
-                    Initialise(GetSettings());
-                    break;
-            }
+            comboForeground.SelectedText = GetColourName(settings.ForeColour);
+            comboForeground.TextChanged += OnColourChanged;
+            comboForeground.DropDown += OnDropDown;
         }
 
         /// <summary>
@@ -74,102 +101,6 @@ namespace StarLab.UI.Core.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// Gets the <see cref="IFrameElementSettings"/> for the specified settings group within the bound <see cref="IChartSettings"/>.
-        /// </summary>
-        /// <returns>The required <see cref="IFrameElementSettings"/>.</returns>
-        private IFrameElementSettings GetSettings()
-        {
-            if (settingsByGroup.Count == 0)
-            {
-                settingsByGroup.Add(Constants.ChartAxes, settings.Axes);
-                settingsByGroup.Add(Constants.ChartAxisX1, settings.Axes.X1);
-                settingsByGroup.Add(Constants.ChartAxisX1Label, settings.Axes.X1.Label);
-                settingsByGroup.Add(Constants.ChartAxisX1MajorTickMarks, settings.Axes.X1.Scale.MajorTickMarks);
-                settingsByGroup.Add(Constants.ChartAxisX1MinorTickMarks, settings.Axes.X1.Scale.MinorTickMarks);
-                settingsByGroup.Add(Constants.ChartAxisX1Scale, settings.Axes.X1.Scale);
-                settingsByGroup.Add(Constants.ChartAxisX1TickLabels, settings.Axes.X1.Scale.TickLabels);
-                settingsByGroup.Add(Constants.ChartAxisX2, settings.Axes.X2);
-                settingsByGroup.Add(Constants.ChartAxisX2Label, settings.Axes.X2.Label);
-                settingsByGroup.Add(Constants.ChartAxisX2MajorTickMarks, settings.Axes.X2.Scale.MajorTickMarks);
-                settingsByGroup.Add(Constants.ChartAxisX2MinorTickMarks, settings.Axes.X2.Scale.MinorTickMarks);
-                settingsByGroup.Add(Constants.ChartAxisX2Scale, settings.Axes.X2.Scale);
-                settingsByGroup.Add(Constants.ChartAxisX2TickLabels, settings.Axes.X2.Scale.TickLabels);
-                settingsByGroup.Add(Constants.ChartAxisY1, settings.Axes.Y1);
-                settingsByGroup.Add(Constants.ChartAxisY1Label, settings.Axes.Y1.Label);
-                settingsByGroup.Add(Constants.ChartAxisY1MajorTickMarks, settings.Axes.Y1.Scale.MajorTickMarks);
-                settingsByGroup.Add(Constants.ChartAxisY1MinorTickMarks, settings.Axes.Y1.Scale.MinorTickMarks);
-                settingsByGroup.Add(Constants.ChartAxisY1Scale, settings.Axes.Y1.Scale);
-                settingsByGroup.Add(Constants.ChartAxisY1TickLabels, settings.Axes.Y1.Scale.TickLabels);
-                settingsByGroup.Add(Constants.ChartAxisY2, settings.Axes.Y2);
-                settingsByGroup.Add(Constants.ChartAxisY2Label, settings.Axes.Y2.Label);
-                settingsByGroup.Add(Constants.ChartAxisY2MajorTickMarks, settings.Axes.Y2.Scale.MajorTickMarks);
-                settingsByGroup.Add(Constants.ChartAxisY2MinorTickMarks, settings.Axes.Y2.Scale.MinorTickMarks);
-                settingsByGroup.Add(Constants.ChartAxisY2Scale, settings.Axes.Y2.Scale);
-                settingsByGroup.Add(Constants.ChartAxisY2TickLabels, settings.Axes.Y2.Scale.TickLabels);
-                settingsByGroup.Add(Constants.ChartPlotAreaGrid, settings.PlotArea.Grid);
-                settingsByGroup.Add(Constants.ChartPlotAreaMajorGridLines, settings.PlotArea.Grid.MajorGridLines);
-                settingsByGroup.Add(Constants.ChartPlotAreaMinorGridLines, settings.PlotArea.Grid.MinorGridLines);
-                settingsByGroup.Add(Constants.ChartTitle, settings.Title);
-            }
-
-            return settingsByGroup[group];
-        }
-
-        /// <summary>
-        /// Configures the initial state of this control.
-        /// </summary>
-        /// <param name="settings">The <see cref="IChartAreaSettings"/> used to configure the initial state.</param>
-        private void Initialise(IChartAreaSettings settings)
-        {
-            // The SelectedText property must be set before wiring up the DropDown event handler.
-
-            comboForeground.SelectedText = GetColourName(settings.ForeColour);
-            comboForeground.TextChanged += OnColourChanged;
-            comboForeground.DropDown += OnDropDown;
-
-            comboBackground.SelectedText = GetColourName(settings.BackColour);
-            comboBackground.TextChanged += OnColourChanged;
-            comboBackground.DropDown += OnDropDown;
-
-            labelBackground.Text = Resources.BackColour;
-            labelForeground.Text = Resources.ForeColour;
-
-            Height = 100;
-        }
-
-        /// <summary>
-        /// Configures the initial state of this control.
-        /// </summary>
-        /// <param name="settings">The <see cref="IFrameElementSettings"/> used to configure the initial state.</param>
-        private void Initialise(IFrameElementSettings settings)
-        {
-            // The SelectedText property must be set before wiring up the DropDown event handler.
-
-            comboForeground.SelectedText = GetColourName(settings.Colour);
-            comboForeground.TextChanged += OnColourChanged;
-            comboForeground.DropDown += OnDropDown;
-
-            labelForeground.Text = Resources.Colour;
-
-            Height = 43;
-        }
-
-        /// <summary>
-        /// Configures the initial state of this control.
-        /// </summary>
-        /// <param name="settings">The <see cref="IPointSettings"/> used to configure the initial state.</param>
-        private void Initialise(IPointSettings settings)
-        {
-            comboForeground.SelectedText = GetColourName(settings.Colour);
-            comboForeground.TextChanged += OnColourChanged;
-            comboForeground.DropDown += OnDropDown;
-
-            labelForeground.Text = Resources.Colour;
-
-            Height = 43;
-        }
-
-        /// <summary>
         /// Event handler for the <see cref="Button.Click"> event.
         /// </summary>
         /// <param name="sender">The <see cref="object"> that was the originator of the event.</param>
@@ -180,22 +111,20 @@ namespace StarLab.UI.Core.Workspace.Documents.Charts
             {
                 // TODO - Will need to maintain a list of custom colours and use them to populate the dialog, save to settings etc.
 
-                switch (group)
+                var colour = $"#{dialogCustomColour.Color.ToArgb()}";
+
+                switch (button.Name)
                 {
-                    case Constants.Chart:
-                        UpdateSettings(button, settings);
+                    case BUTTON_BACKGROUND:
+                        settings.BackColour = colour;
+                        comboBackground.SelectAll();
+                        comboBackground.SelectedText = GetColourName(settings.BackColour);
                         break;
 
-                    case Constants.ChartPlotArea:
-                        UpdateSettings(button, settings.PlotArea);
-                        break;
-
-                    case Constants.ChartPlotAreaPoints:
-                        UpdateSettings(button, settings.PlotArea.Points);
-                        break;
-
-                    default:
-                        UpdateSettings(button, GetSettings());
+                    case BUTTON_FOREGROUND:
+                        settings.ForeColour = colour;
+                        comboForeground.SelectAll();
+                        comboForeground.SelectedText = GetColourName(settings.ForeColour);
                         break;
                 }
             }
@@ -210,26 +139,18 @@ namespace StarLab.UI.Core.Workspace.Documents.Charts
         {
             if (sender is ComboBox combo)
             {
-                switch (group)
+                switch (combo.Name)
                 {
-                    case Constants.Chart:
-                        UpdateSettings(combo, settings);
+                    case COMBO_BACKGROUND:
+                        settings.BackColour = (combo.Text == Resources.Custom && !string.IsNullOrEmpty(customBackColour)) ? customBackColour : combo.Text;
                         break;
 
-                    case Constants.ChartPlotArea:
-                        UpdateSettings(combo, settings.PlotArea);
-                        break;
-
-                    case Constants.ChartPlotAreaPoints:
-                        UpdateSettings(combo, settings.PlotArea.Points);
-                        break;
-
-                    default:
-                        UpdateSettings(combo, GetSettings());
+                    case COMBO_FOREGROUND:
+                        settings.ForeColour = (combo.Text == Resources.Custom && !string.IsNullOrEmpty(customForeColour)) ? customForeColour : combo.Text;
                         break;
                 }
 
-                SectionChanged?.Invoke(this, settings);
+                SectionChanged?.Invoke(this, new EventArgs());
             }
         }
 
@@ -268,103 +189,72 @@ namespace StarLab.UI.Core.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// Updates the settings in response to a button click event.
+        /// Represents the available colour settings.
         /// </summary>
-        /// <param name="button">The <see cref="Button"/> that was clicked.</param>
-        /// <param name="settings">The <see cref="IChartAreaSettings"/> being updated.</param>
-        private void UpdateSettings(Button button, IChartAreaSettings settings)
+        private interface IColourSettings
         {
-            var colour = $"#{dialogCustomColour.Color.ToArgb()}";
+            /// <summary>
+            /// Gets or sets the background colour.
+            /// </summary>
+            string BackColour { get; set; }
 
-            switch (button.Name)
-            {
-                case BUTTON_BACKGROUND:
-                    settings.BackColour = colour;
-                    comboBackground.SelectAll();
-                    comboBackground.SelectedText = GetColourName(settings.BackColour);
-                    break;
+            /// <summary>
+            /// Gets or sets the foreground colour.
+            /// </summary>
+            string ForeColour { get; set; }
 
-                case BUTTON_FOREGROUND:
-                    settings.ForeColour = colour;
-                    comboForeground.SelectAll();
-                    comboForeground.SelectedText = GetColourName(settings.ForeColour);
-                    break;
-            }
+            /// <summary>
+            /// A flag indicating that only the foreground colour can be modified.
+            /// </summary>
+            bool ForegroundOnly { get; }
         }
 
         /// <summary>
-        /// Updates the settings in response to a button click event.
+        /// The available colour settings for a chart element.
         /// </summary>
-        /// <param name="button">The <see cref="Button"/> that was clicked.</param>
-        /// <param name="settings">The <see cref="IFrameElementSettings"/> being updated.</param>
-        private void UpdateSettings(Button button, IFrameElementSettings settings)
+        private class ChartElementSettingsAdapter : IColourSettings
         {
-            Debug.Assert(button.Name == BUTTON_FOREGROUND);
+            private readonly IChartElementSettings settings;
 
-            settings.Colour = $"#{dialogCustomColour.Color.ToArgb()}";
+            public ChartElementSettingsAdapter(IChartElementSettings settings) { this.settings = settings; }
 
-            comboForeground.SelectAll();
+            public string BackColour { get => throw new NotSupportedException(); set => throw new NotSupportedException(); }
 
-            comboForeground.SelectedText = GetColourName(settings.Colour);
+            public string ForeColour { get => settings.Colour; set { settings.Colour = value; } }
+
+            public bool ForegroundOnly => true;
         }
 
         /// <summary>
-        /// Updates the settings in response to a button click event.
+        /// The available colour settings for the chart.
         /// </summary>
-        /// <param name="button">The <see cref="Button"/> that was clicked.</param>
-        /// <param name="settings">The <see cref="IPointSettings"/> being updated.</param>
-        private void UpdateSettings(Button button, IPointSettings settings)
+        private class ChartSettingsAdapter : IColourSettings
         {
-            Debug.Assert(button.Name == BUTTON_FOREGROUND);
+            private readonly IChartSettings settings;
 
-            settings.Colour = $"#{dialogCustomColour.Color.ToArgb()}";
+            public ChartSettingsAdapter(IChartSettings settings) { this.settings = settings; }
 
-            comboForeground.SelectAll();
+            public string BackColour { get => settings.BackColour; set { settings.BackColour = value; } }
 
-            comboForeground.SelectedText = GetColourName(settings.Colour);
+            public string ForeColour { get => settings.ForeColour; set { settings.ForeColour = value; } }
+
+            public bool ForegroundOnly => false;
         }
 
         /// <summary>
-        /// Updates the settings in response to a combo box text changed event.
+        /// The available colour settings for the plot area.
         /// </summary>
-        /// <param name="combo">The <see cref="ComboBox"/> for which the text was changed.</param>
-        /// <param name="settings">The <see cref="IChartAreaSettings"/> being updated.</param>
-        private void UpdateSettings(ComboBox combo, IChartAreaSettings settings)
+        private class PlotAreaSettingsAdapter : IColourSettings
         {
-            switch (combo.Name)
-            {
-                case COMBO_BACKGROUND:
-                    settings.BackColour = (combo.Text == Resources.Custom && !string.IsNullOrEmpty(customBackColour)) ? customBackColour : combo.Text;
-                    break;
+            private readonly IPlotAreaSettings settings;
 
-                case COMBO_FOREGROUND:
-                    settings.ForeColour = (combo.Text == Resources.Custom && !string.IsNullOrEmpty(customForeColour)) ? customForeColour : combo.Text;
-                    break;
-            }
-        }
+            public PlotAreaSettingsAdapter(IPlotAreaSettings settings) { this.settings = settings; }
 
-        /// <summary>
-        /// Updates the settings in response to a combo box text changed event.
-        /// </summary>
-        /// <param name="combo">The <see cref="ComboBox"/> for which the text was changed.</param>
-        /// <param name="settings">The <see cref="IFrameElementSettings"/> being updated.</param>
-        private void UpdateSettings(ComboBox combo, IFrameElementSettings settings)
-        {
-            Debug.Assert(combo.Name == COMBO_FOREGROUND);
+            public string BackColour { get => settings.BackColour; set { settings.BackColour = value; } }
 
-            settings.Colour = (combo.Text == Resources.Custom && !string.IsNullOrEmpty(customForeColour)) ? customForeColour : combo.Text;
-        }
+            public string ForeColour { get => settings.ForeColour; set { settings.ForeColour = value; } }
 
-        /// <summary>
-        /// Updates the settings in response to a button click event.
-        /// </summary>
-        /// <param name="combo">The <see cref="ComboBox"/> for which the text was changed.</param>
-        /// <param name="settings">The <see cref="IPointSettings"/> being updated.</param>
-        private void UpdateSettings(ComboBox combo, IPointSettings settings)
-        {
-            Debug.Assert(combo.Name == COMBO_FOREGROUND);
-
-            settings.Colour = (combo.Text == Resources.Custom && !string.IsNullOrEmpty(customForeColour)) ? customForeColour : combo.Text;
+            public bool ForegroundOnly => false;
         }
     }
 }

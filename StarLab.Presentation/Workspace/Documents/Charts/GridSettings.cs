@@ -3,21 +3,21 @@
     /// <summary>
     /// Represents the current state of the grid while the chart is being configured.
     /// </summary>
-    internal class GridSettings : FrameElementSettings, IGridSettings
+    internal class GridSettings : ChartElementSettings, IGridSettings
     {
         /// <summary>
         /// Initialises a new instance of the <see cref="GridSettings"/> class.
         /// </summary>
         /// <param name="grid">An <see cref="IGrid"/> that specifies the initial state of the grid.</param>
         public GridSettings(IGrid grid)
-            : base(grid.Colour, grid.Visible)
+            : base(grid)
         {
             MajorGridLines = new GridLineSettings(grid.MajorGridLines);
             MinorGridLines = new GridLineSettings(grid.MinorGridLines);
         }
 
         /// <summary>
-        /// Gets or sets the foreground colour.
+        /// Gets or sets the colour.
         /// </summary>
         public override string Colour 
         {
@@ -47,7 +47,7 @@
         /// </summary>
         public override bool Visible
         { 
-            get => base.Visible;
+            get => base.Visible || MajorGridLines.Visible || MinorGridLines.Visible;
 
             set
             {

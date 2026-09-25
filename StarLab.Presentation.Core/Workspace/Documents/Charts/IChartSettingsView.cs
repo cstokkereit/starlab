@@ -25,49 +25,61 @@
         /// <summary>
         /// Appends a colour settings section to the settings panel.
         /// </summary>
+        /// <param name="settings">An <see cref="IChartElementSettings"/> that represents the current state of the chart element.</param>
+        void AppendColourSection(IChartElementSettings settings);
+
+        /// <summary>
+        /// Appends a colour settings section to the settings panel.
+        /// </summary>
         /// <param name="settings">An <see cref="IChartSettings"/> that represents the current state of the chart.</param>
-        /// <param name="group"></param>
-        void AppendColourSection(IChartSettings settings, string group);
+        void AppendColourSection(IChartSettings settings);
+
+        /// <summary>
+        /// Appends a colour settings section to the settings panel.
+        /// </summary>
+        /// <param name="settings">An <see cref="IPlotAreaSettings"/> that represents the current state of the plot area.</param>
+        void AppendColourSection(IPlotAreaSettings settings);
 
         /// <summary>
         /// Appends a font settings section to the settings panel.
         /// </summary>
-        /// <param name="settings">An <see cref="IChartSettings"/> that represents the current state of the chart.</param>
-        /// <param name="group">The name of the settings group.</param>
-        void AppendFontSection(IChartSettings settings, string group);
+        /// <param name="settings">An <see cref="IFontSettings"/> that TODO.</param>
+        void AppendFontSection(IFontSettings settings);
 
         /// <summary>
         /// Appends a scale settings section to the settings panel.
         /// </summary>
-        /// <param name="settings">An <see cref="IChartSettings"/> that represents the current state of the chart.</param>
-        /// <param name="group">The name of the settings group.</param>
-        void AppendScaleSection(IChartSettings settings, string group);
+        /// <param name="settings">An <see cref="IScaleSettings"/> that represents the current state of the axis scale.</param>
+        void AppendScaleSection(IScaleSettings settings);
 
         /// <summary>
         /// Appends a size settings section to the settings panel.
         /// </summary>
-        /// <param name="settings">An <see cref="IChartSettings"/> that represents the current state of the chart.</param>
-        /// <param name="group">The name of the settings group.</param>
-        void AppendSizeSection(IChartSettings settings, string group);
+        /// <param name="settings">An <see cref="IPointSettings"/> that represents the current state of the data points.</param>
+        void AppendSizeSection(IPointSettings settings);
 
         /// <summary>
         /// Appends a text settings section to the settings panel.
         /// </summary>
-        /// <param name="settings">An <see cref="IChartSettings"/> that represents the current state of the chart.</param>
-        /// <param name="group">The name of the settings group.</param>
-        void AppendTextSection(IChartSettings settings, string group);
+        /// <param name="settings">An <see cref="ILabelSettings"/> that represents the current state of the label.</param>
+        void AppendTextSection(ILabelSettings settings);
 
         /// <summary>
         /// Appends a visibility settings section to the settings panel.
         /// </summary>
-        /// <param name="settings">An <see cref="IChartSettings"/> that represents the current state of the chart.</param>
-        /// <param name="group">The name of the settings group.</param>
-        void AppendVisibleSection(IChartSettings settings, string group);
+        /// <param name="settings">An <see cref="IChartElementSettings"/> that represents the current state of the chart element.</param>
+        void AppendVisibleSection(IChartElementSettings settings);
 
         /// <summary>
         /// Clears the settings panel.
         /// </summary>
         void Clear();
+
+        /// <summary>
+        /// Expands the specified tree view node.
+        /// </summary>
+        /// <param name="key">The node key.</param>
+        void ExpandNode(string key);
 
         /// <summary>
         /// Selects the specified tree view node.

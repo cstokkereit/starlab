@@ -1,6 +1,6 @@
 ﻿namespace StarLab.UI.Core.Workspace.Documents.Charts
 {
-    partial class SizeSection
+    partial class NumericSection
     {
         /// <summary> 
         /// Required designer variable.
@@ -45,11 +45,12 @@
             // 
             // trackBarSize
             // 
+            trackBarSize.AutoSize = false;
             trackBarSize.LargeChange = 3;
-            trackBarSize.Location = new Point(43, 7);
+            trackBarSize.Location = new Point(40, 7);
             trackBarSize.Minimum = 1;
             trackBarSize.Name = "trackBarSize";
-            trackBarSize.Size = new Size(209, 45);
+            trackBarSize.Size = new Size(209, 40);
             trackBarSize.TabIndex = 3;
             trackBarSize.TickStyle = TickStyle.Both;
             trackBarSize.Value = 1;

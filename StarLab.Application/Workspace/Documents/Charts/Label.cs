@@ -8,7 +8,7 @@
         /// <summary>
         /// Initialises a new instance of the <see cref="Label"> class.
         /// </summary>
-        /// <param name="dto">A data transfer object that specifies the initial state of the <see cref="Label"/>.</param>
+        /// <param name="dto">A data transfer object that specifies the initial state of the label.</param>
         public Label(LabelDTO dto)
         {
             ArgumentNullException.ThrowIfNull(dto, nameof(dto));
@@ -27,6 +27,7 @@
         public Label()
         {
             Colour = Constants.DefaultForeColour;
+
             Text = string.Empty;
             Font = new Font();
             Visible = true;

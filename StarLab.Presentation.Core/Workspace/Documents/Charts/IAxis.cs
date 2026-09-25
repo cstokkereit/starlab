@@ -3,7 +3,7 @@
     /// <summary>
     /// Represents a chart axis.
     /// </summary>
-    public interface IAxis : IFrameElement
+    public interface IAxis : IChartElement
     {
         /// <summary>
         /// Gets the axis <see cref="ILabel"/>.

@@ -11,9 +11,9 @@
         void Close();
 
         /// <summary>
-        /// Initiates the workflow managed by the dialog box.
+        /// Runs the dialog view.
         /// </summary>
-        /// <param name="context">An <see cref="IViewContext"/> that contains the information required to execute the workflow.</param>
-        void Run(IViewContext context);
+        /// <param name="args">An <see cref="INamedArguments"/> that contains information required to run the view.</param>
+        void Run(INamedArguments args);
     }
 }

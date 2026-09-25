@@ -3,7 +3,7 @@
     /// <summary>
     /// Represents the current state of the tick marks for an axis while the chart is being configured.
     /// </summary>
-    public interface ITickMarkSettings : IFrameElementSettings
+    public interface ITickMarkSettings : IChartElementSettings
     {
         /// <summary>
         /// Gets or sets the length of the tickamrks.

@@ -3,10 +3,10 @@
     /// <summary>
     /// Represents the current state of a label while the chart is being configured.
     /// </summary>
-    public interface ILabelSettings : ITextElementSettings
+    public interface ILabelSettings : IChartElementSettings, IFontSettings
     {
         /// <summary>
-        /// Gets or sets the label text.
+        /// Gets or sets the text.
         /// </summary>
         string Text { get; set; }
     }

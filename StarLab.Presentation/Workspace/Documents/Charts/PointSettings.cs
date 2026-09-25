@@ -10,16 +10,10 @@
         /// </summary>
         /// <param name="points">An <see cref="IPoints"/> that specifies the initial state of the data points.</param>
         public PointSettings(IPoints points)
-            : base(points.Visible)
+            : base(points)
         {
-            Colour = points.Colour;
             Size = points.Size;
         }
-
-        /// <summary>
-        /// Gets or sets the point colour.
-        /// </summary>
-        public string Colour { get; set; }
 
         /// <summary>
         /// Gets or sets the point size.

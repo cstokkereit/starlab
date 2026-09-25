@@ -127,10 +127,11 @@ namespace StarLab.UI.Workspace.Documents.Charts
         /// <param name="config">An <see cref="Presentation.Workspace.Documents.Charts.IAxis"/> configuration being applied.</param>
         private void ConfigureAxis(ScottPlot.IAxis axis, Presentation.Workspace.Documents.Charts.IAxis config)
         {
+            axis.FrameLineStyle.Color = GetColour(config.Colour);
+
             ConfigureLabel(axis.Label, config.Label);
             ConfigureScale(axis, config.Scale);
 
-            axis.FrameLineStyle.Color = GetColour(config.Colour);
             axis.IsVisible = config.Visible;
         }
 
@@ -190,18 +191,15 @@ namespace StarLab.UI.Workspace.Documents.Charts
 
             var grid = chart.Grid;
 
-            if (config.PlotArea.Grid.Visible)
+            if (config.PlotArea.Grid.Visible || majorGridLines.Visible || minorGridLines.Visible)
             {
                 chart.ShowGrid();
 
-                grid.MajorLineWidth = majorGridLines.Visible ? 2 : 0;
-
                 grid.MajorLineColor = GetColour(majorGridLines.Colour).WithOpacity(majorGridLines.Opacity);
-
-                grid.MinorLineWidth = minorGridLines.Visible ? 2 : 0;
-
                 grid.MinorLineColor = GetColour(minorGridLines.Colour).WithOpacity(minorGridLines.Opacity);
 
+                grid.MajorLineWidth = majorGridLines.Visible ? 2 : 0;
+                grid.MinorLineWidth = minorGridLines.Visible ? 2 : 0;
             }
             else
             {
@@ -219,8 +217,8 @@ namespace StarLab.UI.Workspace.Documents.Charts
         {
             if (points != null)
             {
-                points.IsVisible = config.Visible;
                 points.MarkerColor = GetColour(config.Colour);
+                points.IsVisible = config.Visible;
                 points.MarkerSize = config.Size;
             }
         }

@@ -1,17 +1,17 @@
 ﻿namespace StarLab.Presentation.Workspace.Documents.Charts
 {
     /// <summary>
-    /// Represents the current state of a text element while the chart is being configured.
+    /// TODO while the chart is being configured.
     /// </summary>
-    public interface ITextElementSettings : IFrameElementSettings
+    public interface IFontSettings
     {
         /// <summary>
-        /// Gets or sets the font for the text element.
+        /// Gets or sets the font.
         /// </summary>
         IFont Font { get; set; }
 
         /// <summary>
-        /// Sets the font for the text element.
+        /// Sets the font.
         /// </summary>
         /// <param name="family">The name of the font family.</param>
         /// <param name="size">The font size.</param>

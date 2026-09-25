@@ -328,7 +328,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// Test that the <see cref="ChartSettingsViewPresenter.ShowSettingsGroup(string)"/> method correctly shows the axis settings.
+        /// Test that the <see cref="ChartSettingsViewPresenter.ShowSettings(string)"/> method correctly shows the axis settings.
         /// </summary>
         [Test]
         public void TestShowAxisSettingsGroup()
@@ -338,7 +338,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             var presenter = CreatePresenter(true);
             presenter.ApplyPreviewSettings(settings);
 
-            presenter.ShowSettingsGroup("Chart/Axes/AxisX1");
+            presenter.ShowSettings("Chart/Axes/AxisX1");
 
             view.Received(1).Clear();
 
@@ -350,7 +350,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// Test that the <see cref="ChartSettingsViewPresenter.ShowSettingsGroup(string)"/> method correctly shows the axis label settings.
+        /// Test that the <see cref="ChartSettingsViewPresenter.ShowSettings(string)"/> method correctly shows the axis label settings.
         /// </summary>
         [Test]
         public void TestShowAxisLabelSettingsGroup()
@@ -360,7 +360,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             var presenter = CreatePresenter(true);
             presenter.ApplyPreviewSettings(settings);
 
-            presenter.ShowSettingsGroup("Chart/Axes/AxisX1/Label");
+            presenter.ShowSettings("Chart/Axes/AxisX1/Label");
 
             view.Received(1).Clear();
 
@@ -372,7 +372,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// Test that the <see cref="ChartSettingsViewPresenter.ShowSettingsGroup(string)"/> method correctly shows the axis scale settings.
+        /// Test that the <see cref="ChartSettingsViewPresenter.ShowSettings(string)"/> method correctly shows the axis scale settings.
         /// </summary>
         [Test]
         public void TestShowAxisScaleSettingsGroup()
@@ -382,7 +382,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             var presenter = CreatePresenter(true);
             presenter.ApplyPreviewSettings(settings);
 
-            presenter.ShowSettingsGroup("Chart/Axes/AxisX1/Scale");
+            presenter.ShowSettings("Chart/Axes/AxisX1/Scale");
 
             view.Received(1).Clear();
 
@@ -394,7 +394,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// Test that the <see cref="ChartSettingsViewPresenter.ShowSettingsGroup(string)"/> method correctly shows the chart settings.
+        /// Test that the <see cref="ChartSettingsViewPresenter.ShowSettings(string)"/> method correctly shows the chart settings.
         /// </summary>
         [Test]
         public void TestShowChartSettingsGroup()
@@ -404,7 +404,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             var presenter = CreatePresenter(true);
             presenter.ApplyPreviewSettings(settings);
 
-            presenter.ShowSettingsGroup("Chart");
+            presenter.ShowSettings("Chart");
 
             view.Received(1).Clear();
 
@@ -416,7 +416,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// Test that the <see cref="ChartSettingsViewPresenter.ShowSettingsGroup(string)"/> method correctly shows the chart title settings.
+        /// Test that the <see cref="ChartSettingsViewPresenter.ShowSettings(string)"/> method correctly shows the chart title settings.
         /// </summary>
         [Test]
         public void TestShowChartTitleSettingsGroup()
@@ -426,7 +426,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             var presenter = CreatePresenter(true);
             presenter.ApplyPreviewSettings(settings);
 
-            presenter.ShowSettingsGroup("Chart/Title");
+            presenter.ShowSettings("Chart/Title");
 
             view.Received(1).Clear();
 
@@ -438,7 +438,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// Test that the <see cref="ChartSettingsViewPresenter.ShowSettingsGroup(string)"/> method correctly shows the grid settings.
+        /// Test that the <see cref="ChartSettingsViewPresenter.ShowSettings(string)"/> method correctly shows the grid settings.
         /// </summary>
         [Test]
         public void TestShowGridSettingsGroup()
@@ -448,7 +448,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             var presenter = CreatePresenter(true);
             presenter.ApplyPreviewSettings(settings);
 
-            presenter.ShowSettingsGroup("Chart/PlotArea/Grid");
+            presenter.ShowSettings("Chart/PlotArea/Grid");
 
             view.Received(1).Clear();
 
@@ -460,7 +460,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// Test that the <see cref="ChartSettingsViewPresenter.ShowSettingsGroup(string)"/> method correctly shows the major grid line settings.
+        /// Test that the <see cref="ChartSettingsViewPresenter.ShowSettings(string)"/> method correctly shows the major grid line settings.
         /// </summary>
         [Test]
         public void TestShowMajorGridLinesSettingsGroup()
@@ -470,7 +470,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             var presenter = CreatePresenter(true);
             presenter.ApplyPreviewSettings(settings);
 
-            presenter.ShowSettingsGroup("Chart/PlotArea/Grid/MajorGridLines");
+            presenter.ShowSettings("Chart/PlotArea/Grid/MajorGridLines");
 
             view.Received(1).Clear();
 
@@ -482,7 +482,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// Test that the <see cref="ChartSettingsViewPresenter.ShowSettingsGroup(string)"/> method correctly shows the major tick mark settings.
+        /// Test that the <see cref="ChartSettingsViewPresenter.ShowSettings(string)"/> method correctly shows the major tick mark settings.
         /// </summary>
         [Test]
         public void TestShowMajorTickMarkSettingsGroup()
@@ -492,7 +492,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             var presenter = CreatePresenter(true);
             presenter.ApplyPreviewSettings(settings);
 
-            presenter.ShowSettingsGroup("Chart/Axes/AxisX1/Scale/MajorTickMarks");
+            presenter.ShowSettings("Chart/Axes/AxisX1/Scale/MajorTickMarks");
 
             view.Received(1).Clear();
 
@@ -504,7 +504,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// Test that the <see cref="ChartSettingsViewPresenter.ShowSettingsGroup(string)"/> method correctly shows the minor grid line settings.
+        /// Test that the <see cref="ChartSettingsViewPresenter.ShowSettings(string)"/> method correctly shows the minor grid line settings.
         /// </summary>
         [Test]
         public void TestShowMinorGridLinesSettingsGroup()
@@ -514,7 +514,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             var presenter = CreatePresenter(true);
             presenter.ApplyPreviewSettings(settings);
 
-            presenter.ShowSettingsGroup("Chart/PlotArea/Grid/MinorGridLines");
+            presenter.ShowSettings("Chart/PlotArea/Grid/MinorGridLines");
 
             view.Received(1).Clear();
 
@@ -526,7 +526,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// Test that the <see cref="ChartSettingsViewPresenter.ShowSettingsGroup(string)"/> method correctly shows the minor tick mark settings.
+        /// Test that the <see cref="ChartSettingsViewPresenter.ShowSettings(string)"/> method correctly shows the minor tick mark settings.
         /// </summary>
         [Test]
         public void TestShowMinorTickMarkSettingsGroup()
@@ -536,7 +536,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             var presenter = CreatePresenter(true);
             presenter.ApplyPreviewSettings(settings);
 
-            presenter.ShowSettingsGroup("Chart/Axes/AxisX1/Scale/MinorTickMarks");
+            presenter.ShowSettings("Chart/Axes/AxisX1/Scale/MinorTickMarks");
 
             view.Received(1).Clear();
 
@@ -548,7 +548,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// Test that the <see cref="ChartSettingsViewPresenter.ShowSettingsGroup(string)"/> method correctly shows the plot area settings.
+        /// Test that the <see cref="ChartSettingsViewPresenter.ShowSettings(string)"/> method correctly shows the plot area settings.
         /// </summary>
         [Test]
         public void TestShowPlotAreaSettingsGroup()
@@ -558,7 +558,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             var presenter = CreatePresenter(true);
             presenter.ApplyPreviewSettings(settings);
 
-            presenter.ShowSettingsGroup("Chart/PlotArea");
+            presenter.ShowSettings("Chart/PlotArea");
 
             view.Received(1).Clear();
 
@@ -570,7 +570,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// Test that the <see cref="ChartSettingsViewPresenter.ShowSettingsGroup(string)"/> method correctly shows the tick label settings.
+        /// Test that the <see cref="ChartSettingsViewPresenter.ShowSettings(string)"/> method correctly shows the tick label settings.
         /// </summary>
         [Test]
         public void TestShowTickLabelSettingsGroup()
@@ -580,7 +580,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             var presenter = CreatePresenter(true);
             presenter.ApplyPreviewSettings(settings);
 
-            presenter.ShowSettingsGroup("Chart/Axes/AxisX1/Scale/TickLabels");
+            presenter.ShowSettings("Chart/Axes/AxisX1/Scale/TickLabels");
 
             view.Received(1).Clear();
 
@@ -592,14 +592,14 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// Test that the <see cref="ChartSettingsViewPresenter.ShowSettingsGroup(string)"/> method throws an exception when the chart has not been set.
+        /// Test that the <see cref="ChartSettingsViewPresenter.ShowSettings(string)"/> method throws an exception when the chart has not been set.
         /// </summary>
         [Test]
         public void TestShowSettingsGroupThrowsAnExceptionWhenChartNotSet()
         {
             var presenter = CreatePresenter(true);
 
-            Assert.Throws<InvalidOperationException>(() => presenter.ShowSettingsGroup("Chart"));
+            Assert.Throws<InvalidOperationException>(() => presenter.ShowSettings("Chart"));
         }
 
         /// <summary>

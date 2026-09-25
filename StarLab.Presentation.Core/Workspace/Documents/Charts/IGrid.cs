@@ -3,7 +3,7 @@
     /// <summary>
     /// Represents the chart grid.
     /// </summary>
-    public interface IGrid : IFrameElement
+    public interface IGrid : IChartElement
     {
         /// <summary>
         /// Gets the major grid lines.

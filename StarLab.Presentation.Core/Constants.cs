@@ -43,7 +43,7 @@
         public const string ChartAxisY2MinorTickMarks = $"{Chart}/{Axes}/{AxisY2}/{Scale}/{MinorTickMarks}";
         public const string ChartAxisY2Scale = $"{Chart}/{Axes}/{AxisY2}/{Scale}";
         public const string ChartAxisY2TickLabels = $"{Chart}/{Axes}/{AxisY2}/{Scale}/{TickLabels}";
-        public const string ChartPlotArea = $"{Chart}/{PlotArea}";
+        public const string ChartPlotArea = "Chart/PlotArea";
         public const string ChartPlotAreaGrid = $"{Chart}/{PlotArea}/{Grid}";
         public const string ChartPlotAreaMajorGridLines = $"{Chart}/{PlotArea}/{Grid}/{MajorGridLines}";
         public const string ChartPlotAreaMinorGridLines = $"{Chart}/{PlotArea}/{Grid}/{MinorGridLines}";
@@ -108,6 +108,7 @@
         public const string Overlays = "Overlays";
 
         public const string Paste = "Paste";
+        public const string Path = "Path";
         public const string PlotArea = "PlotArea";
         public const string Points = "Points";
         public const string Project = "Project";
@@ -122,12 +123,14 @@
         public const string StarLab = "StarLab";
         public const string Synchronise = "Synchronise";
 
+        public const string Table = "Table";
         public const string TickLabels = "TickLabels";
         public const string Title = "Title";
         public const string Tool = "Tool";
         public const string Tools = "Tools";
         public const string ToolsOptions = "ToolsOptions";
-        
+        public const string Type = "Type";
+
         public const string View = "View";
         public const string ViewWorkspaceExplorer = "ViewWorkspaceExplorer";
 

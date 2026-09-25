@@ -2,7 +2,6 @@
 using StarLab.Presentation.Configuration;
 using StarLab.Shared;
 using Stratosoft.Commands;
-using System.Diagnostics;
 
 using ImageResources = StarLab.Presentation.Properties.Resources;
 using StringResources = StarLab.Shared.Properties.Resources;
@@ -16,11 +15,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(ChartSettingsViewPresenter)); // The logger that will be used for writing log messages.
 
-        private readonly Dictionary<string, SettingsGroupManager<IChartSettingsView>> groupManagers = new Dictionary<string, SettingsGroupManager<IChartSettingsView>>(); // A dictionary that contains the group managers indexed by group.
-
         private readonly IChartSettingsUseCaseService useCaseService; // A service that executes the use cases that implement the functionality.
-
-        private SettingsGroupManager<IChartSettingsView>? groupManager; // Displays the currently selected settings group.
 
         private IChartSettings? chart; // Represents the current state of the chart.
 
@@ -63,14 +58,12 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// Applies the preview settings to the chart view.
         /// </summary>
         /// <param name="chart">The <see cref="IChartSettings"/> that specifies the state of the chart.</param>
-        public void ApplyPreviewSettings(IChartSettings chart)
+        public void ApplyPreviewSettings()
         {
             if (document == null) throw new InvalidOperationException(ExceptionMessages.InvalidState); 
             if (chart == null) throw new InvalidOperationException(ExceptionMessages.InvalidState);
 
             useCaseService.UpdateChart(document.ID, chart);
-
-            this.chart = chart;
         }
 
         /// <summary>
@@ -117,9 +110,9 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
                 RevertSettings();
             }));
 
-            CreateSettingsGroups();
-
             View.Initialise();
+
+            CreateSettingsNavigator();
 
             log.Debug(LogEntries.PresenterInitialised(GetType()));
         }
@@ -140,44 +133,50 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// </summary>
         public void RevertSettings()
         {
-            var controller = ParentController.GetController<IChartController>();
+            var controller = ParentController.GetController<IChartController>(new ControllerID(Constants.Chart));
 
             controller.UpdatePreview();
         }
 
         /// <summary>
-        /// Shows the settings for the specified settings group.
+        /// Runs the child view.
         /// </summary>
-        /// <param name="group">The name of the settings group to show.</param>
-        public void ShowSettingsGroup(string group)
+        public override void Run()
+        {
+            var controller = ParentController.GetController<IChartController>(new ControllerID(Constants.Chart));
+
+            if (controller.Chart != null)
+            {
+                chart = new ChartSettings(controller.Chart);
+            }
+
+            View.ExpandNode(Constants.Chart);
+        }
+
+        /// <summary>
+        /// Shows the settings for the specified key.
+        /// </summary>
+        /// <param name="key">The settings key.</param>
+        public void ShowSettings(string key)
         {
             if (chart == null) throw new InvalidOperationException(ExceptionMessages.InvalidState);
 
-            Debug.Assert(groupManagers.ContainsKey(group));
-
             View.Clear();
 
-            groupManager = groupManagers[group];
+            switch (key)
+            {
+                case Constants.Chart:
+                    View.AppendColourSection(chart);
+                    break;
 
-            groupManager.ShowSettings(chart);
-        }
+                case Constants.ChartPlotArea:
+                    View.AppendColourSection(chart.PlotArea);
+                    break;
 
-        /// <summary>
-        /// Updates the chart settings.
-        /// </summary>
-        /// <param name="document">The <see cref="IChartDocument"/> that contains the chart.</param>
-        public void UpdateSettings(IChartDocument document)
-        {
-            chart = new ChartSettings(document.Chart);
-        }
-
-        /// <summary>
-        /// Adds the <see cref="SettingsGroupManager{TView}"/> to the dictionary.
-        /// </summary>
-        /// <param name="manager">The <see cref="SettingsGroupManager{TView}"/> to add.</param>
-        private void AddGroupManager(SettingsGroupManager<IChartSettingsView> manager)
-        {
-            groupManagers.Add(manager.Group, manager);
+                default:
+                    AppendSettings(chart.GetSettings(key));
+                    break;
+            }
         }
 
         /// <summary>
@@ -195,55 +194,193 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// Creates the axis settings group nodes and their respective group managers.
+        /// TODO
         /// </summary>
-        private void CreateAxisSettingsGroups(string name, string parentKey, string text)
+        /// <param name="settings"></param>
+        private void AppendSettings(IAxesSettings settings)
         {
-            var axis = View.AddNode(name, parentKey, text);
-
-            AddGroupManager(new AxisSettingsGroupManager(View, axis));
-
-            AddGroupManager(new LabelSettingsGroupManager(View, View.AddNode(Constants.Label, axis, StringResources.Label)));
-
-            var scale = View.AddNode(Constants.Scale, axis, StringResources.Scale);
-
-            AddGroupManager(new ScaleSettingsGroupManager(View, scale));
-
-            AddGroupManager(new TickMarkSettingsGroupManager(View, View.AddNode(Constants.MinorTickMarks, scale, StringResources.MinorTickMarks)));
-            AddGroupManager(new TickMarkSettingsGroupManager(View, View.AddNode(Constants.MajorTickMarks, scale, StringResources.MajorTickMarks)));
-            AddGroupManager(new TickLabelSettingsGroupManager(View, View.AddNode(Constants.TickLabels, scale, StringResources.TickLabels)));
+            View.AppendColourSection(settings);
+            View.AppendVisibleSection(settings);
         }
 
         /// <summary>
-        /// Creates the settings group nodes and their respective group managers.
+        /// TODO
         /// </summary>
-        private void CreateSettingsGroups()
+        /// <param name="settings"></param>
+        private void AppendSettings(IChartElementSettings settings)
         {
-            AddGroupManager(new ChartSettingsGroupManager(View, View.AddNode(Constants.Chart, StringResources.Chart)));
+            // TODO - Replace with commands or lambdas?
 
-            AddGroupManager(new LabelSettingsGroupManager(View, View.AddNode(Constants.Title, Constants.Chart, StringResources.Title)));
+            if (settings is IAxesSettings axes)
+            {
+                AppendSettings(axes);
+            }
+            if (settings is IAxisSettings axis)
+            {
+                AppendSettings(axis);
+            }
+            else if (settings is IGridSettings grid)
+            {
+                AppendSettings(grid);
+            }
+            else if (settings is IGridLineSettings gridLines)
+            {
+                AppendSettings(gridLines);
+            }
+            else if (settings is ILabelSettings label)
+            {
+                AppendSettings(label);
+            }
+            else if (settings is IOverlaySettings overlays)
+            {
+                AppendSettings(overlays);
+            }
+            else if (settings is IPointSettings points)
+            {
+                AppendSettings(points);
+            }
+            else if (settings is IScaleSettings scale)
+            {
+                AppendSettings(scale);
+            }
+            else if (settings is ITickLabelSettings tickLabels)
+            {
+                AppendSettings(tickLabels);
+            }
+            else if (settings is ITickMarkSettings tickMarks)
+            {
+                AppendSettings(tickMarks);
+            }
+        }
+
+        /// <summary>
+        /// TODO
+        /// </summary>
+        /// <param name="settings"></param>
+        private void AppendSettings(IAxisSettings settings)
+        {
+            View.AppendColourSection(settings);
+            View.AppendVisibleSection(settings);
+        }
+
+        /// <summary>
+        /// TODO
+        /// </summary>
+        /// <param name="settings"></param>
+        private void AppendSettings(IGridSettings settings)
+        {
+            View.AppendColourSection(settings);
+            View.AppendVisibleSection(settings);
+        }
+
+        /// <summary>
+        /// TODO
+        /// </summary>
+        /// <param name="settings"></param>
+        private void AppendSettings(IGridLineSettings settings)
+        {
+            View.AppendColourSection(settings);
+            View.AppendVisibleSection(settings);
+        }
+
+        /// <summary>
+        /// Appends the sections required to configure the settings for a label.
+        /// </summary>
+        /// <param name="settings"></param>
+        private void AppendSettings(ILabelSettings settings)
+        {
+            View.AppendTextSection(settings);
+            View.AppendFontSection(settings);
+            View.AppendColourSection(settings);
+            View.AppendVisibleSection(settings);
+        }
+
+        /// <summary>
+        /// TODO
+        /// </summary>
+        /// <param name="settings"></param>
+        private void AppendSettings(IPointSettings settings)
+        {
+            View.AppendColourSection(settings);
+            View.AppendSizeSection(settings);
+            View.AppendVisibleSection(settings);
+        }
+
+        /// <summary>
+        /// TODO
+        /// </summary>
+        /// <param name="settings"></param>
+        private void AppendSettings(IScaleSettings settings)
+        {
+            View.AppendColourSection(settings);
+            View.AppendScaleSection(settings);
+            View.AppendVisibleSection(settings);
+        }
+
+        /// <summary>
+        /// TODO
+        /// </summary>
+        /// <param name="settings"></param>
+        private void AppendSettings(ITickLabelSettings settings)
+        {
+            View.AppendFontSection(settings);
+            View.AppendColourSection(settings);
+            View.AppendVisibleSection(settings);
+        }
+
+        /// <summary>
+        /// TODO
+        /// </summary>
+        /// <param name="settings"></param>
+        private void AppendSettings(ITickMarkSettings settings)
+        {
+            View.AppendColourSection(settings);
+            View.AppendVisibleSection(settings);
+        }
+
+        /// <summary>
+        /// Creates the nodes that provide access to the axis settings.
+        /// </summary>
+        /// <param name="name">The node name.</param>
+        /// <param name="parent">The parent node key.</param>
+        /// <param name="text">The node text.</param>
+        private void CreateAxisNodes(string name, string parent, string text)
+        {
+            var axis = View.AddNode(name, parent, text);
+
+            View.AddNode(Constants.Label, axis, StringResources.Label);
+
+            var scale = View.AddNode(Constants.Scale, axis, StringResources.Scale);
+
+            View.AddNode(Constants.MinorTickMarks, scale, StringResources.MinorTickMarks);
+            View.AddNode(Constants.MajorTickMarks, scale, StringResources.MajorTickMarks);
+            View.AddNode(Constants.TickLabels, scale, StringResources.TickLabels);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private void CreateSettingsNavigator()
+        {
+            View.AddNode(Constants.Chart, StringResources.Chart);
+
+            View.AddNode(Constants.Title, Constants.Chart, StringResources.Title);
 
             var axes = View.AddNode(Constants.Axes, Constants.Chart, StringResources.Axes);
 
-            AddGroupManager(new AxesSettingsGroupManager(View, axes));
-
-            CreateAxisSettingsGroups(Constants.AxisX1, axes, StringResources.AxisX1);
-            CreateAxisSettingsGroups(Constants.AxisX2, axes, StringResources.AxisX2);
-            CreateAxisSettingsGroups(Constants.AxisY1, axes, StringResources.AxisY1);
-            CreateAxisSettingsGroups(Constants.AxisY2, axes, StringResources.AxisY2);
+            CreateAxisNodes(Constants.AxisX1, axes, StringResources.AxisX1);
+            CreateAxisNodes(Constants.AxisX2, axes, StringResources.AxisX2);
+            CreateAxisNodes(Constants.AxisY1, axes, StringResources.AxisY1);
+            CreateAxisNodes(Constants.AxisY2, axes, StringResources.AxisY2);
 
             var plotArea = View.AddNode(Constants.PlotArea, Constants.Chart, StringResources.PlotArea);
 
-            AddGroupManager(new PlotAreaSettingsGroupManager(View, plotArea));
-
             var grid = View.AddNode(Constants.Grid, plotArea, StringResources.Grid);
 
-            AddGroupManager(new GridSettingsGroupManager(View, grid));
+            View.AddNode(Constants.MinorGridLines, grid, StringResources.MinorGridLines);
+            View.AddNode(Constants.MajorGridLines, grid, StringResources.MajorGridLines);
 
-            AddGroupManager(new GridLineSettingsGroupManager(View, View.AddNode(Constants.MinorGridLines, grid, StringResources.MinorGridLines)));
-            AddGroupManager(new GridLineSettingsGroupManager(View, View.AddNode(Constants.MajorGridLines, grid, StringResources.MajorGridLines)));
-
-            AddGroupManager(new PointsSettingsGroupManager(View, View.AddNode(Constants.Points, plotArea, StringResources.Points)));
+            View.AddNode(Constants.Points, plotArea, StringResources.Points);
 
             var overlays = View.AddNode(Constants.Overlays, Constants.Chart, StringResources.Overlays);
         }

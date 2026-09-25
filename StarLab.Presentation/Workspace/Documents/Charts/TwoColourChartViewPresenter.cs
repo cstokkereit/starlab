@@ -51,6 +51,11 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
+        /// Gets the current state of the chart.
+        /// </summary>
+        public IChart? Chart => chart;
+
+        /// <summary>
         /// Releases all resources used by the <see cref="TwoColourChartViewPresenter"/> object.
         /// </summary>
         public override void Dispose()

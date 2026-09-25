@@ -314,7 +314,7 @@ namespace StarLab.UI
 
             try
             {
-                controller.Run(new AddDocumentViewContext(path, type));
+                controller.Run(new NamedArguments().Add(Constants.Type, type).Add(Constants.Path, path));
 
                 this.controller?.Show(view);
             }

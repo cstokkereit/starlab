@@ -10,22 +10,24 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// <summary>
         /// Initialises a new instance of the <see cref="Chart"> class.
         /// </summary>
-        /// <param name="dto">A data transfer object that specifies the initial state of the <see cref="Chart"/>.</param>
+        /// <param name="dto">A data transfer object that specifies the initial state of the chart.</param>
         public Chart(ChartDTO dto)
         {
             ArgumentNullException.ThrowIfNull(dto, nameof(dto));
 
+            Font = dto.Font == null ? new Font() : new Font(dto.Font);
+
             BackColour = string.IsNullOrEmpty(dto.BackColour) ? Constants.DefaultBackColour : dto.BackColour;
             ForeColour = string.IsNullOrEmpty(dto.ForeColour) ? Constants.DefaultForeColour : dto.ForeColour;
 
-            PlotArea = dto.PlotArea == null ? new PlotArea() : new PlotArea(dto.PlotArea);
-            Title = dto.Title == null ? new Label() : new Label(dto.Title);
-            Font = dto.Font == null ? new Font() : new Font(dto.Font);
+            Title = dto.Title == null ? new Label(ForeColour, Font) : new Label(dto.Title);
+
+            PlotArea = dto.PlotArea == null ? new PlotArea(BackColour, ForeColour) : new PlotArea(dto.PlotArea);
             
-            X1 = dto.X1 == null ? new Axis() : new Axis(dto.X1);
-            X2 = dto.X2 == null ? new Axis() : new Axis(dto.X2);
-            Y1 = dto.Y1 == null ? new Axis() : new Axis(dto.Y1);
-            Y2 = dto.Y2 == null ? new Axis() : new Axis(dto.Y2);
+            X1 = dto.X1 == null ? new Axis(ForeColour, Font, true) : new Axis(Font, dto.X1);
+            X2 = dto.X2 == null ? new Axis(ForeColour, Font, false) : new Axis(Font, dto.X2);
+            Y1 = dto.Y1 == null ? new Axis(ForeColour, Font,true) : new Axis(Font, dto.Y1);
+            Y2 = dto.Y2 == null ? new Axis(ForeColour, Font, false) : new Axis(Font, dto.Y2);
         }
 
         /// <summary>
@@ -33,17 +35,19 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// </summary>
         public Chart()
         {
+            Font = new Font();
+
             BackColour = Constants.DefaultBackColour;
             ForeColour = Constants.DefaultForeColour;
 
-            PlotArea = new PlotArea();
-            Title = new Label();
-            Font = new Font();
+            Title = new Label(ForeColour, Font);
 
-            X1 = new Axis();
-            X2 = new Axis();
-            Y1 = new Axis();
-            Y2 = new Axis();
+            PlotArea = new PlotArea(BackColour, ForeColour);
+
+            X1 = new Axis(ForeColour, Font, true);
+            X2 = new Axis(ForeColour, Font, false);
+            Y1 = new Axis(ForeColour, Font, true);
+            Y2 = new Axis(ForeColour, Font, false);
         }
 
         /// <summary>
@@ -67,7 +71,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         public IPlotArea PlotArea { get; }
 
         /// <summary>
-        /// Gets the chart title <see cref="Label"/>.
+        /// Gets the chart title.
         /// </summary>
         public ILabel Title { get; }
 

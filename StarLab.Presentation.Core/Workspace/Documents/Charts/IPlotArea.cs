@@ -1,19 +1,19 @@
 ﻿namespace StarLab.Presentation.Workspace.Documents.Charts
 {
     /// <summary>
-    /// Represents the chart plot area.
+    /// Represents the plot area of a chart.
     /// </summary>
     public interface IPlotArea
     {
         /// <summary>
-        /// Gets the background colour.
+        /// Gets the background colour of the plot area.
         /// </summary>
-        string BackColour { get; }
+        public string BackColour { get; }
 
         /// <summary>
-        /// Gets the foreground colour.
+        /// Gets the foreground colour of the plot area.
         /// </summary>
-        string ForeColour { get; }
+        public string ForeColour { get; }
 
         /// <summary>
         /// Gets the chart grid.
@@ -24,5 +24,10 @@
         /// Gets the chart data points.
         /// </summary>
         IPoints Points { get; }
+
+        /// <summary>
+        /// A flag indicating that the plot area is visible.
+        /// </summary>
+        bool Visible { get; }
     }
 }

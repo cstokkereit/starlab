@@ -8,7 +8,7 @@
         /// <summary>
         /// Initialises a new instance of the <see cref="Axis"> class.
         /// </summary>
-        /// <param name="dto">A data transfer object that specifies the initial state of the <see cref="Axis"/>.</param>
+        /// <param name="dto">A data transfer object that specifies the initial state of the axis.</param>
         public Axis(AxisDTO dto)
         {
             ArgumentNullException.ThrowIfNull(dto, nameof(dto));

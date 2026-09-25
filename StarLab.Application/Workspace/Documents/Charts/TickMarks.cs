@@ -8,7 +8,7 @@
         /// <summary>
         /// Initialises a new instance of the <see cref="TickMarks"> class.
         /// </summary>
-        /// <param name="dto">A data transfer object that specifies the initial state of the <see cref="TickMarks"/>.</param>
+        /// <param name="dto">A data transfer object that specifies the initial state of the tick marks.</param>
         public TickMarks(TickMarksDTO dto)
         {
             ArgumentNullException.ThrowIfNull(dto, nameof(dto));
@@ -26,8 +26,9 @@
         public TickMarks(int length)
         {
             Colour = Constants.DefaultForeColour;
-            Visible = true;
+
             Length = length;
+            Visible = true;
         }
 
         /// <summary>

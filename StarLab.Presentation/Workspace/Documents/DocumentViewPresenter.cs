@@ -3,7 +3,6 @@ using StarLab.Application;
 using StarLab.Presentation.Configuration;
 using StarLab.Presentation.Workspace.Documents.Charts;
 using StarLab.Shared;
-using StarLab.Shared.Properties;
 using Stratosoft.Commands;
 
 namespace StarLab.Presentation.Workspace.Documents
@@ -15,7 +14,7 @@ namespace StarLab.Presentation.Workspace.Documents
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(DocumentViewPresenter)); // The logger that will be used for writing log messages.
 
-        private readonly List<IChildViewController> controllers = new List<IChildViewController>(); // A list containing the child controllers.
+        private readonly Dictionary<ControllerID, IChildViewController> controllers = new Dictionary<ControllerID, IChildViewController>(); // A dictionary containing the child controllers indexed by ID.
 
         private IDocument document; // The document that the view represents.
 
@@ -43,7 +42,7 @@ namespace StarLab.Presentation.Workspace.Documents
             foreach (var controller in controllers)
             {
                 controller.RegisterController(this);
-                this.controllers.Add(controller);
+                this.controllers.Add(controller.ID, controller);
             }
 
             Location = Constants.Document;
@@ -60,7 +59,7 @@ namespace StarLab.Presentation.Workspace.Documents
         /// <summary>
         /// Gets an <see cref="IEnumerable{IChildViewController}"/> containing the child controllers.
         /// </summary>
-        public IEnumerable<IChildViewController> ChildControllers => controllers;
+        public IEnumerable<IChildViewController> ChildControllers => controllers.Values;
 
         /// <summary>
         /// Gets the controller ID.
@@ -104,18 +103,17 @@ namespace StarLab.Presentation.Workspace.Documents
         }
 
         /// <summary>
-        /// Gets the specified controller.
+        /// Gets the controller with the specified <see cref="ControllerID"/>.
         /// </summary>
-        /// <typeparam name="TController">The type of the required controller.</typeparam>
+        /// <typeparam name="T">The type of the required controller.</typeparam>
+        /// <param name="id">The ID of the required controller.</param>
         /// <returns>The specified controller.</returns>
-        public TController GetController<TController>()
+        /// <exception cref="Exception"></exception>
+        public T GetController<T>(ControllerID id)
         {
-            foreach (var controller in controllers)
-            {
-                if (controller is TController required) return required;
-            }
+            if (controllers[id] is T required) return required;
 
-            throw new Exception(ExceptionMessages.UnknownType(typeof(TController)));
+            throw new Exception(ExceptionMessages.UnknownType(typeof(T)));
         }
 
         /// <summary>
@@ -137,7 +135,7 @@ namespace StarLab.Presentation.Workspace.Documents
 
             base.Initialise(controller);
 
-            foreach (var childController in controllers)
+            foreach (var childController in controllers.Values)
             {
                 childController.Initialise(controller);
             }
@@ -207,6 +205,10 @@ namespace StarLab.Presentation.Workspace.Documents
         /// <param name="name">The name of the content to be shown.</param>
         public void ShowSplitContent(string name)
         {
+            var controller = controllers[new ControllerID(name)];
+
+            controller.Run();
+
             View.ShowSplitContent(name);
         }
 
@@ -251,11 +253,13 @@ namespace StarLab.Presentation.Workspace.Documents
         /// <param name="document">An <see cref="IChartDocument"/> that contains the chart configuration.</param>
         private void UpdateChartControllers(IChartDocument document)
         {
-            var chartController = GetController<IChartController>();
+            // TODO - Run the primary view when the document changes then run the other views as they are shown
+
+            var chartController = GetController<IChartController>(new ControllerID(Constants.Chart));
             chartController.UpdateChart(document.Chart);
 
-            var settingsController = GetController<IChartSettingsController>();
-            settingsController.UpdateSettings(document);
+            //var settingsController = GetController<IChartSettingsController>(new ControllerID(Constants.ChartSettings));
+            //settingsController.UpdateSettings(document);
         }
 
         /// <summary>
@@ -263,7 +267,8 @@ namespace StarLab.Presentation.Workspace.Documents
         /// </summary>
         private void UpdateChildControllers()
         {
-            // Consider using strategy pattern if more document types are added in the future.
+            // TODO - This should go
+
             if (document is IChartDocument chartDocument)
             {
                 UpdateChartControllers(chartDocument);

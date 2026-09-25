@@ -8,7 +8,7 @@
         /// <summary>
         /// Initialises a new instance of the <see cref="PlotArea"> class.
         /// </summary>
-        /// <param name="dto">A data transfer object that specifies the initial state of the <see cref="PlotArea"/>.</param>
+        /// <param name="dto">A data transfer object that specifies the initial state of the plot area.</param>
         public PlotArea(PlotAreaDTO dto)
         {
             ArgumentNullException.ThrowIfNull(dto, nameof(dto));
@@ -53,5 +53,10 @@
         /// Gets the chart data points.
         /// </summary>
         public Points Points { get; }
+
+        /// <summary>
+        /// A flag indicating that the plot area is visible.
+        /// </summary>
+        public bool Visible { get; }
     }
 }

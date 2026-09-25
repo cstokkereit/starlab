@@ -8,32 +8,25 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
     internal class Points : ChartElement, IPoints
     {
         /// <summary>
-        /// Initialises a new instance of the <see cref="PlotArea"> class.
+        /// Initialises a new instance of the <see cref="Points"> class.
         /// </summary>
-        /// <param name="dto">A data transfer object that specifies the initial state of the <see cref="Points"/>.</param>
+        /// <param name="backColour">A <see cref="string"/> value that specifies the background colour of the points.</param>
+        /// <param name="dto">A <see cref="PointsDTO"/> that specifies the initial state of the points.</param>
         public Points(PointsDTO dto)
-            : base(dto.Visible)
+            : base(dto.Colour, dto.Visible)
         {
-            Colour = string.IsNullOrEmpty(dto.Colour) ? Constants.DefaultBackColour : dto.Colour;
-
             Size = dto.Size;
         }
 
         /// <summary>
         /// Initialises a new instance of the <see cref="Points"> class.
         /// </summary>
-        public Points()
-            : base(true)
+        /// <param name="colour">A <see cref="string"/> value that specifies the foreground colour of the points.</param>
+        public Points(string colour)
+            : base(colour, true)
         {
-            Colour = Constants.DefaultForeColour;
-
             Size = 1;
         }
-
-        /// <summary>
-        /// Gets the colour.
-        /// </summary>
-        public string Colour { get; }
 
         /// <summary>
         /// Gets the size.

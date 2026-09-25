@@ -10,7 +10,7 @@ namespace StarLab.UI.Core.Workspace.Documents.Charts
         /// <summary>
         /// An event that gets fired whenever any of the section settings is changed.
         /// </summary>
-        event EventHandler<IChartSettings>? SectionChanged; // An event that gets fired whenever any of the section settings is changed.
+        event EventHandler? SectionChanged; // An event that gets fired whenever any of the section settings is changed.
 
         /// <summary>
         /// Gets or sets the top coordinate of this section.

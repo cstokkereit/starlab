@@ -18,9 +18,14 @@
         void RegisterController(IViewController controller);
 
         /// <summary>
-        /// Runs the <see cref="IChildView">.
+        /// Runs the child view.
         /// </summary>
-        /// <param name="context">An <see cref="IViewContext"/> that contains the contextual information required to configure the <see cref="IChildView">.</param>
-        void Run(IViewContext context);
+        /// <param name="args">An <see cref="INamedArguments"/> that contains information required to run the view.</param>
+        void Run(INamedArguments args);
+
+        /// <summary>
+        /// Runs the child view.
+        /// </summary>
+        void Run();
     }
 }

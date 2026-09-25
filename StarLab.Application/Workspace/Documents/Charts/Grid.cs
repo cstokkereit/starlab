@@ -8,7 +8,7 @@
         /// <summary>
         /// Initialises a new instance of the <see cref="Grid"> class.
         /// </summary>
-        /// <param name="dto">A data transfer object that specifies the initial state of the <see cref="Grid"/>.</param>
+        /// <param name="dto">A data transfer object that specifies the initial state of the grid.</param>
         public Grid(GridDTO dto)
         {
             ArgumentNullException.ThrowIfNull(dto, nameof(dto));

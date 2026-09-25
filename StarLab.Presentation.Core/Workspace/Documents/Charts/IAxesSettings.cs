@@ -3,8 +3,13 @@
     /// <summary>
     /// Represents the current state of the chart axes while the chart is being configured.
     /// </summary>
-    public interface IAxesSettings : ITextElementSettings
+    public interface IAxesSettings : IChartElementSettings
     {
+        /// <summary>
+        /// Gets or sets the font for the axes.
+        /// </summary>
+        public IFont Font { get; set; }
+
         /// <summary>
         /// Gets the settings for the bottom axis.
         /// </summary>

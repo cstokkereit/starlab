@@ -1,5 +1,4 @@
-﻿using StarLab.Presentation;
-using StarLab.Presentation.Workspace.Documents.Charts;
+﻿using StarLab.Presentation.Workspace.Documents.Charts;
 
 namespace StarLab.UI.Core.Workspace.Documents.Charts
 {
@@ -8,47 +7,23 @@ namespace StarLab.UI.Core.Workspace.Documents.Charts
     /// </summary>
     public partial class LabelSection : UserControl, ISettingsSection
     {
-        private readonly IDictionary<string, ILabelSettings> settingsByGroup = new Dictionary<string, ILabelSettings>(); // A dictionary containing the label settings indexed by settings group.
+        private readonly ILabelSettings settings; // The label settings that are bound to this control.
 
-        private readonly IChartSettings settings; // The chart settings that are bound to this control.
-
-        private readonly string group; // The name of the settings group that this control represents.
-
-        public event EventHandler<IChartSettings>? SectionChanged; // An event that gets fired whenever any of the section settings is changed.
+        public event EventHandler? SectionChanged; // An event that gets fired whenever any of the section settings is changed.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="LabelSection"/> class.
         /// </summary>
         /// <param name="settings">The <see cref="IChartSettings"/> that are bound to this control.</param>
-        /// <param name="group">The name of the settings group that this control represents.</param>
-        public LabelSection(IChartSettings settings, string group)
+        public LabelSection(ILabelSettings settings)
         {
             InitializeComponent();
 
-            this.group = group;
             this.settings = settings;
             
-            textLabel.Text = GetSettings().Text;
+            textLabel.Text = settings.Text;
 
             textLabel.TextChanged += OnTextChanged;
-        }
-
-        /// <summary>
-        /// Gets the <see cref="ILabelSettings"/> for the specified settings group within the bound <see cref="IChartSettings"/>.
-        /// </summary>
-        /// <returns>The required <see cref="ILabelSettings"/>.</returns>
-        private ILabelSettings GetSettings()
-        {
-            if (settingsByGroup.Count == 0)
-            {
-                settingsByGroup.Add(Constants.ChartAxisX1Label, settings.Axes.X1.Label);
-                settingsByGroup.Add(Constants.ChartAxisX2Label, settings.Axes.X2.Label);
-                settingsByGroup.Add(Constants.ChartAxisY1Label, settings.Axes.Y1.Label);
-                settingsByGroup.Add(Constants.ChartAxisY2Label, settings.Axes.Y2.Label);
-                settingsByGroup.Add(Constants.ChartTitle, settings.Title);
-            }
-
-            return settingsByGroup[group];
         }
 
         /// <summary>
@@ -58,9 +33,9 @@ namespace StarLab.UI.Core.Workspace.Documents.Charts
         /// <param name="e">An <see cref="EventArgs"/> that provides context for the event.</param>
         private void OnTextChanged(object? sender, EventArgs e)
         {
-            GetSettings().Text = textLabel.Text;
+            settings.Text = textLabel.Text;
 
-            SectionChanged?.Invoke(this, settings);
+            SectionChanged?.Invoke(this, new EventArgs());
         }
     }
 }
