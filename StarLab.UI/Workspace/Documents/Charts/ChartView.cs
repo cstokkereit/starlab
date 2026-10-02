@@ -4,6 +4,7 @@ using ScottPlot.Plottables;
 using StarLab.Presentation;
 using StarLab.Presentation.Workspace.Documents.Charts;
 using StarLab.Shared;
+using StarLab.UI.Workspace.Documents.Charts.Overlays;
 
 namespace StarLab.UI.Workspace.Documents.Charts
 {
@@ -106,6 +107,23 @@ namespace StarLab.UI.Workspace.Documents.Charts
 
             ConfigurePoints(config.PlotArea.Points);
 
+
+
+
+            var overlay = new MultiLineOverlay();
+            overlay.AddLine(new double[] { -0.330, -0.318, -0.307 }, new double[] { -5.80, -4.80, -4.05 });
+            overlay.AddLine(new double[] { 0.595, 0.680, 0.775 }, new double[] { 4.48, 4.98, 5.55 });
+            overlay.AddLine(new double[] { 1.420, 1.69 }, new double[] { 8.80, 9.52 });
+
+            overlay.Colour = GetColour("Yellow");
+
+            overlay.Visible = true;
+
+            overlay.Render(chart.Plot);
+
+
+
+
             chart.Refresh();
         }
 
@@ -153,6 +171,8 @@ namespace StarLab.UI.Workspace.Documents.Charts
             ConfigureAxis(plot.Axes.Top, config.X2);
 
             ConfigurePlotArea(plot, config);
+
+            //ConfigureOverlays(config);
         }
 
         /// <summary>

@@ -294,6 +294,17 @@ namespace StarLab.Shared
         }
 
         /// <summary>
+        /// Builds an UnexpectedType exception message for the expected and actual types.
+        /// </summary>
+        /// <param name="expected">The expected type.</param>
+        /// <param name="actual">The actual type.</param>
+        /// <returns>The required exception message.</returns>
+        public static string UnexpectedType(Type expected, Type actual)
+        {
+            return $"Unexpected type. Expected {expected.Name} but was {actual.Name}";
+        }
+
+        /// <summary>
         /// Builds an UnknownType exception message for the specified type.
         /// </summary>
         /// <param name="type">The unknown type.</param>

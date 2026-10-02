@@ -86,16 +86,6 @@ namespace StarLab.Data.MongoDB
             GC.SuppressFinalize(this);
         }
 
-        ///// <summary>
-        ///// Gets a list containing the names of the available databases.
-        ///// </summary>
-        ///// <returns>A list containing the names of the available databases.</returns>
-        //public List<string> GetDatabaseNames()
-        //{
-        //    if (client == null) throw new InvalidOperationException(); // TODO Connection not open
-        //    return client.ListDatabaseNames().ToList() ?? [];
-        //}
-
         /// <summary>
         /// Releases all resources used by the <see cref="DatabaseManager"/> object.
         /// </summary>

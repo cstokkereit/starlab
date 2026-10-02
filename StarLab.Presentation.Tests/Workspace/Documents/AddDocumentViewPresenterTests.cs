@@ -1,6 +1,5 @@
 ﻿#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
 
-using Castle.MicroKernel.Registration;
 using StarLab.Application;
 using StarLab.Application.Workspace;
 using StarLab.Presentation.Configuration;
@@ -80,13 +79,13 @@ namespace StarLab.Presentation.Workspace.Documents
 
             presenter.OnEvent(new WorkspaceChangedEventArgs(workspace));
 
-            presenter.Run(new AddDocumentViewContext("Workspace/Project-1/Charts", DocumentTypes.Chart));
+            presenter.Run(new NamedArguments().Add(Constants.Path, "Workspace/Project-1/Charts").Add(Constants.Type, DocumentTypes.Chart));
 
             presenter.AddDocument("Document1", "Chart1");
 
-            interactor.Received(1).Execute(Arg.Is<AddDocumentUseCaseArgs>(args => args.Workspace.FileName == @"C:\Workspace-1" 
-                && args.Document.Name == "Document1" 
-                && args.Document.Path == "Workspace/Project-1/Charts" 
+            interactor.Received(1).Execute(Arg.Is<AddDocumentUseCaseArgs>(args => args.Workspace.FileName == @"C:\Workspace-1"
+                && args.Document.Name == "Document1"
+                && args.Document.Path == "Workspace/Project-1/Charts"
                 && args.Document.View == "ChartView"));
         }
 
@@ -185,7 +184,7 @@ namespace StarLab.Presentation.Workspace.Documents
         }
 
         /// <summary>
-        /// Test that the <see cref="AddDocumentViewPresenter.Run(IViewContext)"/> method works correctly.
+        /// Test that the <see cref="AddDocumentViewPresenter.Run(INamedArguments)"/> method works correctly.
         /// </summary>
         [Test]
         public void TestRun()
@@ -196,7 +195,7 @@ namespace StarLab.Presentation.Workspace.Documents
 
             var presenter = CreatePresenter(true);
 
-            presenter.Run(new AddDocumentViewContext("Workspace/Project-1/Charts", DocumentTypes.Chart));
+            presenter.Run(new NamedArguments().Add(Constants.Path, "Workspace/Project-1/Charts").Add(Constants.Type, DocumentTypes.Chart));
 
             view.Received(1).ClearDocumentTypes();
             view.Received(1).AddDocumentType("Chart1", "  Chart-1", "ChartImage1");
@@ -204,14 +203,14 @@ namespace StarLab.Presentation.Workspace.Documents
         }
 
         /// <summary>
-        /// Test that the <see cref="AddDocumentViewPresenter.Run(IViewContext)"/> method throws an exception for an invalid context type.
+        /// Test that the <see cref="AddDocumentViewPresenter.Run(INamedArguments)"/> method throws an exception when provided with a null value.
         /// </summary>
         [Test]
         public void TestRunThrowsExceptionForInvalidContextType()
         {
             var presenter = CreatePresenter(true);
 
-            Assert.Throws<ArgumentException>(() => presenter.Run(Substitute.For<IViewContext>()));
+            Assert.Throws<ArgumentNullException>(() => presenter.Run(null));
         }
 
         /// <summary>

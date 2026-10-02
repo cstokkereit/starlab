@@ -123,13 +123,11 @@ namespace StarLab.Presentation.Options
         [Test]
         public void TestRun()
         {
-            var wf = Substitute.For<IViewContext>();
-
             var presenter = CreatePresenter(true);
 
-            presenter.Run(wf);
+            presenter.Run();
 
-            // TODO - Modify for implementation
+            //// TODO - Modify for implementation
         }
 
         /// <summary>

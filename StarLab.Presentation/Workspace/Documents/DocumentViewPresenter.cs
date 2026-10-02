@@ -111,9 +111,16 @@ namespace StarLab.Presentation.Workspace.Documents
         /// <exception cref="Exception"></exception>
         public T GetController<T>(ControllerID id)
         {
-            if (controllers[id] is T required) return required;
+            if (controllers.TryGetValue(id, out var controller))
+            {
+                if (controller is T required) return required;
 
-            throw new Exception(ExceptionMessages.UnknownType(typeof(T)));
+                throw new Exception(ExceptionMessages.UnexpectedType(controller.GetType(), typeof(T)));
+            }
+            else
+            {
+                throw new Exception(ExceptionMessages.ControllerNotFound(id));
+            }
         }
 
         /// <summary>
@@ -140,7 +147,7 @@ namespace StarLab.Presentation.Workspace.Documents
                 childController.Initialise(controller);
             }
 
-            UpdateChildControllers();
+            UpdateDocumentController();
 
             log.Debug(LogEntries.PresenterInitialised(GetType(), View.Name, ID));
         }
@@ -220,7 +227,7 @@ namespace StarLab.Presentation.Workspace.Documents
         {
             this.document = document;
 
-            UpdateChildControllers();
+            UpdateDocumentController();
 
             View.SetName(document.Name);
         }
@@ -248,30 +255,14 @@ namespace StarLab.Presentation.Workspace.Documents
         }
 
         /// <summary>
-        /// Updates the chart controllers.
+        /// Update the document controller.
         /// </summary>
-        /// <param name="document">An <see cref="IChartDocument"/> that contains the chart configuration.</param>
-        private void UpdateChartControllers(IChartDocument document)
+        private void UpdateDocumentController()
         {
-            // TODO - Run the primary view when the document changes then run the other views as they are shown
-
-            var chartController = GetController<IChartController>(new ControllerID(Constants.Chart));
-            chartController.UpdateChart(document.Chart);
-
-            //var settingsController = GetController<IChartSettingsController>(new ControllerID(Constants.ChartSettings));
-            //settingsController.UpdateSettings(document);
-        }
-
-        /// <summary>
-        /// Updates the child controllers.
-        /// </summary>
-        private void UpdateChildControllers()
-        {
-            // TODO - This should go
-
             if (document is IChartDocument chartDocument)
             {
-                UpdateChartControllers(chartDocument);
+                var chartController = GetController<IChartController>(new ControllerID(Constants.Chart));
+                chartController.UpdateChart(chartDocument.Chart);
             }
         }
     }

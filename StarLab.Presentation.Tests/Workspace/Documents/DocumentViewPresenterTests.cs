@@ -134,34 +134,58 @@ namespace StarLab.Presentation.Workspace.Documents
         public void TestGetController()
         {
             var settingsController = Substitute.For<IChartSettingsController>();
+            settingsController.ID.Returns(new ControllerID(ViewIDs.ChartSettings));
+
             controllers.Add(settingsController);
 
             var chartController = Substitute.For<IChartController>();
+            chartController.ID.Returns(new ControllerID(ViewIDs.Chart));
             controllers.Add(chartController);
 
             var presenter = CreatePresenter(true);
 
-            var controller = presenter.GetController<IChartSettingsController>();
+            var controller = presenter.GetController<IChartSettingsController>(new ControllerID(ViewIDs.ChartSettings));
 
             Assert.That(controller, Is.Not.Null);
             Assert.That(controller, Is.SameAs(settingsController));
         }
 
         /// <summary>
-        /// Test that the <see cref="DocumentViewPresenter.GetController{TController}()"/> method works correctly when the required controller type exists.
+        /// Test that the <see cref="DocumentViewPresenter.GetController{TController}()"/> method throws an exception when a controller with the specified <see cref="ControllerID"> does not exist.
         /// </summary>
         [Test]
         public void TestGetControllerThrowsExceptionWhenControllerNotFound()
         {
             var settingsController = Substitute.For<IChartSettingsController>();
+            settingsController.ID.Returns(new ControllerID(ViewIDs.ChartSettings));
             controllers.Add(settingsController);
 
             var chartController = Substitute.For<IChartController>();
+            chartController.ID.Returns(new ControllerID(ViewIDs.Chart));
             controllers.Add(chartController);
 
             var presenter = CreatePresenter(true);
 
-            Assert.Throws<Exception>(() => presenter.GetController<ITableController>());
+            Assert.Throws<Exception>(() => presenter.GetController<ITableController>(new ControllerID(ViewIDs.Table)));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="DocumentViewPresenter.GetController{TController}()"/> method throws an exception when a controller with the specified <see cref="ControllerID"> does not exist.
+        /// </summary>
+        [Test]
+        public void TestGetControllerThrowsExceptionWhenControllerTypeUnknown()
+        {
+            var settingsController = Substitute.For<IChartSettingsController>();
+            settingsController.ID.Returns(new ControllerID(ViewIDs.ChartSettings));
+            controllers.Add(settingsController);
+
+            var chartController = Substitute.For<IChartController>();
+            chartController.ID.Returns(new ControllerID(ViewIDs.Chart));
+            controllers.Add(chartController);
+
+            var presenter = CreatePresenter(true);
+
+            Assert.Throws<Exception>(() => presenter.GetController<ITableController>(new ControllerID(ViewIDs.Chart)));
         }
 
         /// <summary>
@@ -183,9 +207,9 @@ namespace StarLab.Presentation.Workspace.Documents
         {
             var presenter = CreatePresenter(true);
             
-            presenter.HideSplitContent("ContentName");
+            presenter.HideSplitContent(Constants.ChartSettings);
 
-            view.Received(1).HideSplitContent("ContentName");
+            view.Received(1).HideSplitContent(Constants.ChartSettings);
         }
 
         /// <summary>
@@ -218,15 +242,14 @@ namespace StarLab.Presentation.Workspace.Documents
         [Test]
         public void TestOnEventWhenDocumentIsChart()
         {
-            IDocument? document = null;
-
             var settingsController = Substitute.For<IChartSettingsController>();
-            settingsController.UpdateSettings(Arg.Do<IChartDocument>(d => document = d));
+            settingsController.ID.Returns(new ControllerID(ViewIDs.ChartSettings));
             controllers.Add(settingsController);
 
             IChart? chart = null;
 
             var chartController = Substitute.For<IChartController>();
+            chartController.ID.Returns(new ControllerID(ViewIDs.Chart));
             chartController.UpdateChart(Arg.Do<IChart>(c => chart = c));
             controllers.Add(chartController);
 
@@ -248,16 +271,12 @@ namespace StarLab.Presentation.Workspace.Documents
                 .CreateWorkspace());
 
             var presenter = CreatePresenter(true);
-            
+
             presenter.OnEvent(new WorkspaceChangedEventArgs(workspace));
 
             chartController.Received(1).UpdateChart(Arg.Any<IChart>());
-            settingsController.Received(1).UpdateSettings(Arg.Any<IChartDocument>());
+            settingsController.Received(0).ApplySettings();
             view.Received(1).SetName("Chart-1.1");
-
-            Assert.That(document, Is.Not.Null);
-            Assert.That(document.Name, Is.EqualTo("Chart-1.1"));
-            Assert.That(document.ID.ToString, Is.EqualTo("19542B1A-36A5-494F-B6B0-CB562FA36CAB"));
 
             Assert.That(chart, Is.Not.Null);
             Assert.That(chart.Title.Text, Is.EqualTo("Chart-1.1"));
@@ -316,16 +335,21 @@ namespace StarLab.Presentation.Workspace.Documents
         }
 
         /// <summary>
-        /// Test that the <see cref="DocumentViewPresenter.HideSplitContent(string)"/> method works correctly.
+        /// Test that the <see cref="DocumentViewPresenter.ShowSplitContent(string)"/> method works correctly.
         /// </summary>
         [Test]
         public void TestShowSplitContent()
         {
+            var settings = Substitute.For<IChartSettingsController>();
+            settings.ID.Returns(new ControllerID(Constants.ChartSettings));
+
+            controllers.Add(settings);
+
             var presenter = CreatePresenter(true);
 
-            presenter.ShowSplitContent("ContentName");
+            presenter.ShowSplitContent(Constants.ChartSettings);
 
-            view.Received(1).ShowSplitContent("ContentName");
+            view.Received(1).ShowSplitContent(Constants.ChartSettings);
         }
 
         /// <summary>
@@ -335,9 +359,11 @@ namespace StarLab.Presentation.Workspace.Documents
         public void TestUpdateDocumentWhenDocumentIsChart()
         {
             var settingsController = Substitute.For<IChartSettingsController>();
+            settingsController.ID.Returns(new ControllerID(ViewIDs.ChartSettings));
             controllers.Add(settingsController);
 
             var chartController = Substitute.For<IChartController>();
+            chartController.ID.Returns(new ControllerID(ViewIDs.Chart));
             controllers.Add(chartController);
 
             var document = Substitute.For<IChartDocument, IDocument>();
@@ -349,7 +375,7 @@ namespace StarLab.Presentation.Workspace.Documents
             presenter.UpdateDocument(document);
 
             chartController.Received(1).UpdateChart(document.Chart);
-            settingsController.Received(1).UpdateSettings(document);
+
             view.Received(1).SetName("Chart-1.1");
         }
 
@@ -375,7 +401,7 @@ namespace StarLab.Presentation.Workspace.Documents
             presenter.UpdateDocument(document);
 
             tableController.Received(1).UpdateTable(document.Table);
-            settingsController.Received(1).UpdateSettings(document);
+
             view.Received(1).SetName("Table-1.1");
         }
 

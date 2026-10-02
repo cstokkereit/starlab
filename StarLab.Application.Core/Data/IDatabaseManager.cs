@@ -1,7 +1,7 @@
 ﻿namespace StarLab.Application.Data
 {
     /// <summary>
-    /// TODO
+    /// Manages the available database connections.
     /// </summary>
     public interface IDatabaseManager : IDisposable
     {

@@ -21,6 +21,8 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
 
         private IDocument? document; // The document that contains the chart.
 
+        private string key = Constants.Chart; // The current settings key.
+
         private IWorkspace? workspace; // The workspace that contains the document.
 
         /// <summary>
@@ -123,9 +125,9 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// <param name="args">A <see cref="WorkspaceChangedEventArgs"/> that provides context for the event.</param>
         public void OnEvent(WorkspaceChangedEventArgs args)
         {
-            View.SelectNode(Constants.Chart);
-
             workspace = args.Workspace;
+
+            View.SelectNode(key);
         }
 
         /// <summary>
@@ -148,9 +150,11 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             if (controller.Chart != null)
             {
                 chart = new ChartSettings(controller.Chart);
+
+                ShowSettings(key);
             }
 
-            View.ExpandNode(Constants.Chart);
+            View.ExpandNode(key);
         }
 
         /// <summary>
@@ -177,6 +181,8 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
                     AppendSettings(chart.GetSettings(key));
                     break;
             }
+
+            this.key = key;
         }
 
         /// <summary>
@@ -194,9 +200,9 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// TODO
+        /// Appends the sections required to configure the settings for the axes.
         /// </summary>
-        /// <param name="settings"></param>
+        /// <param name="settings">An <see cref="IAxesSettings"/> that specifies the axes settings.</param>
         private void AppendSettings(IAxesSettings settings)
         {
             View.AppendColourSection(settings);
@@ -204,9 +210,9 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// TODO
+        /// Appends the sections required to configure the settings for a chart element.
         /// </summary>
-        /// <param name="settings"></param>
+        /// <param name="settings">An <see cref="IChartElementSettings"/> that specifies the chart element settings.</param>
         private void AppendSettings(IChartElementSettings settings)
         {
             // TODO - Replace with commands or lambdas?
@@ -254,9 +260,9 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// TODO
+        /// Appends the sections required to configure the settings for an axis.
         /// </summary>
-        /// <param name="settings"></param>
+        /// <param name="settings">An <see cref="IAxisSettings"/> that specifies the axis settings.</param>
         private void AppendSettings(IAxisSettings settings)
         {
             View.AppendColourSection(settings);
@@ -264,9 +270,9 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// TODO
+        /// Appends the sections required to configure the settings for the grid.
         /// </summary>
-        /// <param name="settings"></param>
+        /// <param name="settings">An <see cref="IGridSettings"/> that specifies the grid settings.</param>
         private void AppendSettings(IGridSettings settings)
         {
             View.AppendColourSection(settings);
@@ -274,9 +280,9 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// TODO
+        /// Appends the sections required to configure the settings for the grid lines.
         /// </summary>
-        /// <param name="settings"></param>
+        /// <param name="settings">An <see cref="IGridLineSettings"/> that specifies the grid line settings.</param>
         private void AppendSettings(IGridLineSettings settings)
         {
             View.AppendColourSection(settings);
@@ -286,7 +292,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// <summary>
         /// Appends the sections required to configure the settings for a label.
         /// </summary>
-        /// <param name="settings"></param>
+        /// <param name="settings">An <see cref="ILabelSettings"/> that specifies the label settings.</param>
         private void AppendSettings(ILabelSettings settings)
         {
             View.AppendTextSection(settings);
@@ -296,9 +302,9 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// TODO
+        /// Appends the sections required to configure the settings for the data points.
         /// </summary>
-        /// <param name="settings"></param>
+        /// <param name="settings">An <see cref="IPointSettings"/> that specifies the data point settings.</param>
         private void AppendSettings(IPointSettings settings)
         {
             View.AppendColourSection(settings);
@@ -307,9 +313,9 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// TODO
+        /// Appends the sections required to configure the settings for an axis scale.
         /// </summary>
-        /// <param name="settings"></param>
+        /// <param name="settings">An <see cref="IScaleSettings"/> that specifies the scale settings.</param>
         private void AppendSettings(IScaleSettings settings)
         {
             View.AppendColourSection(settings);
@@ -318,9 +324,9 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// TODO
+        /// Appends the sections required to configure the settings for the tick labels.
         /// </summary>
-        /// <param name="settings"></param>
+        /// <param name="settings">An <see cref="ITickLabelSettings"/> that specifies the tick label settings.</param>
         private void AppendSettings(ITickLabelSettings settings)
         {
             View.AppendFontSection(settings);
@@ -329,9 +335,9 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// TODO
+        /// Appends the sections required to configure the settings for the tick marks.
         /// </summary>
-        /// <param name="settings"></param>
+        /// <param name="settings">An <see cref="ITickMarkSettings"/> that specifies the tick mark settings.</param>
         private void AppendSettings(ITickMarkSettings settings)
         {
             View.AppendColourSection(settings);
@@ -358,7 +364,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// 
+        /// Adds the nodes that will be used to navigate to the sections containing the configuration settings for the individual chart elements.
         /// </summary>
         private void CreateSettingsNavigator()
         {

@@ -167,12 +167,12 @@ namespace StarLab.Presentation
         [Test]
         public void TestRun()
         {
-            var wf = Substitute.For<IViewContext>();
+            var wf = Substitute.For<INamedArguments>();
 
             var presenter = CreatePresenter(true);
 
             presenter.Run(wf);
-            
+
             child.Received(1).Run(wf);
         }
 

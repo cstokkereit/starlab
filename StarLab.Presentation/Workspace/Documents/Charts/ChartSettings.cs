@@ -151,9 +151,7 @@
         /// </summary>
         private void PopulateSettingsByKey()
         {
-            // TODO - Fix XML mapping and save/load workspace
-            // Switch from chart.Backcolour to dto.Backcolour now it has one
-            // Get rid of settings groups and managers etc if no longer needed
+            // TODO
             // Clean out unused path constants
             // Fix tests that have changed - lots
             // Debug and Tidy up
