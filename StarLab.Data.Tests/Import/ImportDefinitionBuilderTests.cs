@@ -3,7 +3,7 @@
 namespace StarLab.Data.Import
 {
     /// <summary>
-    /// A class for performing unit tests on the <see cref="ImportDefinition"/> class.
+    /// A class for performing unit tests on the <see cref="ImportDefinition"/> class. TODO : first header rows and reset not tested yet.
     /// </summary>
     public class ImportDefinitionBuilderTests
     {
@@ -60,8 +60,24 @@ namespace StarLab.Data.Import
             var e = Assert.Throws<InvalidOperationException>(() => ImportDefinitionBuilder.GetInstance(",")
                 .AddField(0, "Field-1", DataTypes.Decimal)
                 .AddField(1, "Field-1", DataTypes.Decimal));
+        }
 
-            //Assert.That(e.Message, Is.EqualTo(""));
+        /// <summary>
+        /// Test that the <see cref="ImportDefinitionBuilder.Build()"/> method works correctly for a file with header rows.
+        /// </summary>
+        [Test]
+        public void TestBuildImportDefinitionForAFileWithHeaderRows()
+        {
+            var builder = ImportDefinitionBuilder.GetInstance()
+                .AddHeaderRows(1);
+
+            var importDef = builder.Build();
+
+            Assert.That(importDef, Is.Not.Null);
+            Assert.That(importDef.FileType, Is.EqualTo(FileTypes.FixedWidthText));
+            Assert.That(importDef.TextDelimiter, Is.EqualTo(string.Empty));
+            Assert.That(importDef.Delimiter, Is.EqualTo(string.Empty));
+            Assert.That(importDef.HeaderRows, Is.EqualTo(1));
         }
 
         /// <summary>

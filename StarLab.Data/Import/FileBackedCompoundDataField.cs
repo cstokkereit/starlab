@@ -16,19 +16,19 @@ namespace StarLab.Data.Import
         /// Initialises a new instance of the <see cref="FileBackedCompoundDataField"/> class.
         /// </summary>
         /// <param name="fieldDefinition">An <see cref="IFieldDefinition"/> that configures the <see cref="FileBackedCompoundDataField"/>.</param>
-        /// <param name="parser">An <see cref="IFileParser"/> that will be used to read data from a file.</param>
-        public FileBackedCompoundDataField(ICompoundFieldDefinition fieldDefinition, IFileParser parser)
-            : base(fieldDefinition.Name, parser)
+        public FileBackedCompoundDataField(ICompoundFieldDefinition fieldDefinition)
+            : base(fieldDefinition)
         { 
             components = fieldDefinition.Components;
             format = fieldDefinition.Format;
         }
 
         /// <summary>
-        /// Gets the value of the field by combining the values of the component fields from the current row in the dataset.
+        /// Gets the compound field value.
         /// </summary>
-        /// <returns>An <see cref="object"/> that holds the value of the field.</returns>
-        protected override object GetValue()
+        /// <param name="parser">The file parser that extracts the field values from the data file.</param>
+        /// <returns>A <see cref="string"/> representation of the compound field value.</returns>
+        public string GetValue(IFileParser parser)
         {
             var values = new string[components.Length];
 

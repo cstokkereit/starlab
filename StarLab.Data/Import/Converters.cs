@@ -2,6 +2,8 @@
 
 namespace StarLab.Data.Import
 {
+    // TODO : Remove if no longer needed.
+
     /// <summary>
     /// A static factory that creates instances of <see cref="IConverter"/> that can be used to convert a <see cref="string"/> value to a specified data type.
     /// </summary>

@@ -69,9 +69,7 @@ namespace StarLab.Data.Import
         /// <returns>A reference to this instance that allows the calling code to be written in the fluent style.</returns>
         public IImportDefinitionBuilder AddCompoundField(string name, string format, int[] components)
         {
-            Debug.Assert(importDefinition != null);
-
-            importDefinition.AddCompoundField(name, format, components);
+            importDefinition?.AddCompoundField(name, format, components);
 
             return this;
         }
@@ -80,13 +78,11 @@ namespace StarLab.Data.Import
         /// Adds a compound field to the import definition.
         /// </summary>
         /// <param name="name">The name of the field.</param>
-        /// <param name="components">The indices of the component fields.</param>
+        /// <param name="components">The indices of the source fields.</param>
         /// <returns>A reference to this instance that allows the calling code to be written in the fluent style.</returns>
         public IImportDefinitionBuilder AddCompoundField(string name, int[] components)
         {
-            Debug.Assert(importDefinition != null);
-
-            importDefinition.AddCompoundField(name, components);
+            importDefinition?.AddCompoundField(name, components);
 
             return this;
         }
@@ -94,15 +90,13 @@ namespace StarLab.Data.Import
         /// <summary>
         /// Adds a field to the import definition.
         /// </summary>
-        /// <param name="index">The index of the field.</param>
-        /// <param name="name">The name of the field.</param>
+        /// <param name="index">The index of the source field.</param>
+        /// <param name="name">The name that will be used to identify the field.</param>
         /// <param name="dataType">An <see cref="DataTypes"/> that specifies the data type of the field.</param>
         /// <returns>A reference to this instance that allows the calling code to be written in the fluent style.</returns>
         public IDelimitedTextImportDefinitionBuilder AddField(int index, string name, DataTypes dataType)
         {
-            Debug.Assert(importDefinition != null);
-
-            importDefinition.AddField(index, name, dataType);
+            importDefinition?.AddField(index, name, dataType);
 
             return this;
         }
@@ -110,22 +104,32 @@ namespace StarLab.Data.Import
         /// <summary>
         /// Adds a field to the import definition.
         /// </summary>
-        /// <param name="index">The index of the field.</param>
-        /// <param name="name">The name of the field.</param>
+        /// <param name="index">The index of the source field.</param>
+        /// <param name="name">The name that will be used to identify the field.</param>
         /// <param name="width">The width of the field.</param>
         /// <param name="dataType">An <see cref="DataTypes"/> that specifies the data type of the field.</param>
         /// <returns>A reference to this instance that allows the calling code to be written in the fluent style.</returns>
         public IFixedWidthImportDefinitionBuilder AddField(int index, string name, int width, DataTypes dataType)
         {
-            Debug.Assert(importDefinition != null);
-
-            importDefinition.AddField(index, name, width, dataType);
+            importDefinition?.AddField(index, name, width, dataType);
 
             return this;
         }
 
         /// <summary>
-        /// Builds the import definition.
+        /// Specifies the number of header rows that the data file contains. The header rows will be skipped when the data is imported.
+        /// </summary>
+        /// <param name="rows">The number of header rows.</param>
+        /// <returns>A reference to this instance that allows the calling code to be written in the fluent style.</returns>
+        public IImportDefinitionBuilder AddHeaderRows(int rows)
+        {
+            importDefinition?.AddHeaderRows(rows);
+
+            return this;
+        }
+
+        /// <summary>
+        /// Builds the import definition and resets the builder so that it can be used to construct another import definition.
         /// </summary>
         /// <returns>The specified <see cref="IImportDefinition"/>.</returns>
         public IImportDefinition Build()
@@ -133,7 +137,8 @@ namespace StarLab.Data.Import
             Debug.Assert(importDefinition != null);
 
             var retval = importDefinition;
-            importDefinition = null;
+
+            importDefinition = new ImportDefinition(retval.FileType, retval.Delimiter, retval.TextDelimiter);
 
             return retval;
         }
@@ -141,14 +146,12 @@ namespace StarLab.Data.Import
         /// <summary>
         /// Excludes a field from the import definition.
         /// </summary>
-        /// <param name="index">The index of the field.</param>
+        /// <param name="index">The index of the source field.</param>
         /// <param name="width">The width of the field.</param>
         /// <returns>A reference to this instance that allows the calling code to be written in the fluent style.</returns>
         public IFixedWidthImportDefinitionBuilder ExcludeField(int index, int width)
         {
-            Debug.Assert(importDefinition != null);
-
-            importDefinition.ExcludeField(index, width);
+            importDefinition?.ExcludeField(index, width);
 
             return this;
         }

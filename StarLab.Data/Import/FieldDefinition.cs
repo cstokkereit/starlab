@@ -88,6 +88,21 @@ namespace StarLab.Data.Import
         }
 
         /// <summary>
+        /// Initialises a new instance of the <see cref="FieldDefinition"/> class.
+        /// </summary>
+        /// <param name="name">The name of the field.</param>
+        /// <param name="dataType">A <see cref="DataTypes"/> enum that specifies the data type.</param>
+        protected FieldDefinition(string name, DataTypes dataType)
+        {
+            ArgumentException.ThrowIfNullOrEmpty(name, nameof(name));
+
+            this.dataType = dataType;
+            this.name = name;
+
+            include = true;
+        }
+
+        /// <summary>
         /// Returns a <see cref="DataTypes"/> value that specifies the data type of the field.
         /// </summary>
         public DataTypes DataType => dataType;

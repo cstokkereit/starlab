@@ -28,7 +28,7 @@ namespace StarLab.Data.Import
         /// <param name="textDelimiter">The delimiter used to identify text fields in a delimited text file.</param>
         public ImportDefinition(FileTypes fileType, string delimiter, string textDelimiter)
         {
-            ArgumentException.ThrowIfNullOrEmpty(delimiter, nameof(delimiter));
+            if (fileType == FileTypes.DelimitedText) ArgumentException.ThrowIfNullOrEmpty(delimiter, nameof(delimiter));
 
             this.textDelimiter = textDelimiter;
             this.delimiter = delimiter;
@@ -42,11 +42,8 @@ namespace StarLab.Data.Import
         /// </summary>
         /// <param name="fileType">A <see cref="FileTypes"/> value specifying the type of data file being imported.</param>
         public ImportDefinition(FileTypes fileType)
+            : this(fileType, string.Empty, string.Empty)
         {
-            textDelimiter = string.Empty;
-            delimiter = string.Empty;
-            this.fileType = fileType;
-
             Name = Constants.NewImportDefinition;
         }
 
@@ -80,6 +77,11 @@ namespace StarLab.Data.Import
         /// Specifies the type of data file being imported.
         /// </summary>
         public FileTypes FileType => fileType;
+
+        /// <summary>
+        /// Specifies the number of header rows that the data file contains.
+        /// </summary>
+        public int HeaderRows { get; private set; }
 
         /// <summary>
         /// Gets the name of the import definition.
@@ -125,7 +127,7 @@ namespace StarLab.Data.Import
         /// <summary>
         /// Adds a field to the import definition.
         /// </summary>
-        /// <param name="index">The index of the field.</param>
+        /// <param name="index">The index of the source field.</param>
         /// <param name="name">The name of the field.</param>
         /// <param name="width">The width of the field.</param>
         /// <param name="dataType">The data type of the field.</param>
@@ -147,7 +149,7 @@ namespace StarLab.Data.Import
         /// <summary>
         /// Adds a field to the import definition.
         /// </summary>
-        /// <param name="index">The index of the field.</param>
+        /// <param name="index">The index of the source field.</param>
         /// <param name="name">The name of the field.</param>
         /// <param name="dataType">The data type of the field.</param>
         /// <exception cref="InvalidOperationException"></exception>
@@ -166,9 +168,21 @@ namespace StarLab.Data.Import
         }
 
         /// <summary>
+        /// Sets the number of header rows that the data file contains.
+        /// </summary>
+        /// <param name="rows">The number of header rows.</param>
+        /// <exception cref="ArgumentException"></exception>
+        public void AddHeaderRows(int rows)
+        {
+            ArgumentOutOfRangeException.ThrowIfNegative(rows, nameof(rows));
+
+            HeaderRows = rows;
+        }
+
+        /// <summary>
         /// Adds an excluded field to the import definition.
         /// </summary>
-        /// <param name="index">The index of the field to exclude.</param>
+        /// <param name="index">The index of the source field to exclude.</param>
         /// <param name="width">The width of the field to exclude.</param>
         public void ExcludeField(int index, int width)
         {
