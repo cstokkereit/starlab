@@ -45,12 +45,12 @@ namespace StarLab.Data.MongoDB
         [OneTimeSetUp]
         public void SetUp()
         {
-            var provider = new ImportManager(manager);
+            var provider = new DatabaseImportProvider(manager);
 
-            using (var dataset = new FileBackedDataset(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "Stars.dat"), importDefinition))
-            {
-                provider.Import(dataset, DATABASE, COLLECTION);
-            }
+            //using (var dataset = new FileBackedDataset(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "Stars.dat"), importDefinition))
+            //{
+            //    provider.Import(dataset, DATABASE, COLLECTION);
+            //}
         }
 
         /// <summary>

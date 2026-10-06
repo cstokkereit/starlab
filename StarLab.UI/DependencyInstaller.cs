@@ -6,13 +6,12 @@ using Castle.Windsor;
 using Microsoft.Extensions.Logging;
 using StarLab.Application;
 using StarLab.Application.Data;
+using StarLab.Application.Data.Import;
+using StarLab.Data.Import;
 using StarLab.Data.MongoDB;
+using StarLab.Data.MongoDB.Import;
 using StarLab.Presentation;
 using StarLab.Presentation.Configuration;
-using StarLab.Presentation.Workspace.Documents;
-using StarLab.Presentation.Workspace.Documents.Charts;
-using StarLab.Presentation.Workspace.Documents.Tables;
-using StarLab.Presentation.Workspace.WorkspaceExplorer;
 using StarLab.Serialisation;
 using Stratosoft.Commands;
 
@@ -47,7 +46,6 @@ namespace StarLab.UI
         private void InstallApplicationClasses(IWindsorContainer container)
         {
             container.Register(
-                Component.For<IDatabaseManager>().ImplementedBy<DatabaseManager>(),
                 Component.For<IEventAggregator>().ImplementedBy<EventAggregator>(),
                 Classes.FromAssemblyNamed("StarLab.Application").Where(t => t.Name.EndsWith("Factory")).WithServiceDefaultInterfaces(),
                 Classes.FromAssemblyNamed("StarLab.Application").BasedOn<Profile>().WithServiceBase()
@@ -61,7 +59,7 @@ namespace StarLab.UI
         private void InstallInfrastructureClasses(IWindsorContainer container)
         {
             container.Register(
-                Component.For<ISerialisationProvider>().ImplementedBy<SerialisationProvider>(),
+                Component.For<ISerialisationService>().ImplementedBy<SerialisationService>(),
                 Classes.FromAssemblyNamed("StarLab.Serialisation").BasedOn<Profile>().WithServiceBase()
             );
         }
@@ -92,7 +90,14 @@ namespace StarLab.UI
         /// <param name="container">The <see cref="IWindsorContainer"/> that will be used to register the dependencies.</param>
         private void InstallPersistenceClasses(IWindsorContainer container)
         {
-            container.Register(Component.For<IQueryBuilder>().ImplementedBy<QueryBuilder>());
+            container.Register(
+                Component.For<IDatabaseImportProvider>().ImplementedBy<DatabaseImportProvider>(),
+                Component.For<IFileImportProvider>().ImplementedBy<FileImportProvider>(),
+                Component.For<IDatabaseManager>().ImplementedBy<DatabaseManager>(), 
+                Component.For<IQueryBuilder>().ImplementedBy<QueryBuilder>(),
+                Classes.FromAssemblyNamed("StarLab.Data.MongoDB").Where(t => t.Name.EndsWith("Provider")).WithServiceDefaultInterfaces(),
+                Classes.FromAssemblyNamed("StarLab.Data").Where(t => t.Name.EndsWith("Provider")).WithServiceDefaultInterfaces()
+            );
         }
 
         /// <summary>
@@ -104,16 +109,10 @@ namespace StarLab.UI
             container.Register(
                 Component.For<IApplicationConfiguration>().ImplementedBy<ApplicationConfiguration>(),
                 Component.For<IFactoryConfiguration>().ImplementedBy<FactoryConfiguration>(),
-                Component.For<IUseCaseService>().ImplementedBy<AddDocumentUseCaseService>(),
-                Component.For<IUseCaseService>().ImplementedBy<ApplicationUseCaseService>(),
-                Component.For<IUseCaseService>().ImplementedBy<ChartUseCaseService>(),
-                Component.For<IUseCaseService>().ImplementedBy<ChartSettingsUseCaseService>(),
-                Component.For<IUseCaseService>().ImplementedBy<TableUseCaseService>(),
-                Component.For<IUseCaseService>().ImplementedBy<TableSettingsUseCaseService>(),
-                Component.For<IUseCaseService>().ImplementedBy<WorkspaceExplorerUseCaseService>(),
                 Component.For<IServiceRegistry>().ImplementedBy<ServiceRegistry>(),
                 Component.For<ISessionContext>().ImplementedBy<SessionContext>(),
                 Classes.FromAssemblyNamed("StarLab.Presentation").Where(t => t.Name.EndsWith("Factory")).WithServiceDefaultInterfaces(),
+                Classes.FromAssemblyNamed("StarLab.Presentation").Where(t => t.Name.EndsWith("UseCaseService")).WithServiceDefaultInterfaces(),
                 Classes.FromAssemblyNamed("StarLab.Presentation").BasedOn<Profile>().WithServiceBase()
             );
         }

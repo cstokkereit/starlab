@@ -26,6 +26,11 @@
         FileTypes FileType {  get; }
 
         /// <summary>
+        /// Specifies the number of header rows that the data file contains.
+        /// </summary>
+        int HeaderRows { get; }
+
+        /// <summary>
         /// Gets the name of the import definition.
         /// </summary>
         string Name { get; }

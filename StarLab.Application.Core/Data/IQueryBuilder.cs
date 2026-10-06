@@ -53,9 +53,9 @@
         /// <summary>
         /// Adds the specified table to the select statement.
         /// </summary>
-        /// <param name="table">The name of the table that is to be added to the select statement.</param>
+        /// <param name="name">The name of the table that is to be added to the select statement.</param>
         /// <returns>A reference to this <see cref="IQueryBuilder"/> object to allow fluent modification of the query.</returns>
-        IQueryBuilder AddTable(string table);
+        IQueryBuilder AddTable(string name);
 
         /// <summary>
         /// Builds an instance of <see cref="IQuery"/> that specifies the data that will be returned from a database.
@@ -77,18 +77,18 @@
         IAndPredicate CreateAndPredicate(IEnumerable<IPredicate> predicates);
 
         /// <summary>
-        /// Creates an instance of <see cref="IField"/> with the specified parent table and name.
+        /// Creates an <see cref="IField"/> with the specified parent table and name.
         /// </summary>
         /// <param name="table">The name of the table that contains the field.</param>
         /// <param name="name">The name of the field.</param>
-        /// <returns>An instance of the <see cref="IOrPredicate"/> interface.</returns>
+        /// <returns>An instance of the <see cref="IField"/> interface.</returns>
         IField CreateField(string table, string name);
 
         /// <summary>
         /// Creates an instance of <see cref="IField"/> with the specified name.
         /// </summary>
         /// <param name="name">The name of the field.</param>
-        /// <returns>An instance of the <see cref="IOrPredicate"/> interface.</returns>
+        /// <returns>An instance of the <see cref="IField"/> interface.</returns>
         IField CreateField(string name);
 
         /// <summary>
@@ -113,5 +113,20 @@
         /// <param name="type">A <see cref="ComparisonOperators"/> that specifies how the value of the field is to be compared to the comparison value.</param>
         /// <returns>An instance of the required <see cref="IPredicate"/>.</returns>
         IPredicate CreatePredicate<T>(IField field, T value, ComparisonOperators type);
+
+        /// <summary>
+        /// Creates an <see cref="ITable"/> with the specified name and fields.
+        /// </summary>
+        /// <param name="name">The name of the table.</param>
+        /// <param name="fields">An <see cref="IEnumerable{string}"/> containing the names of the fields.</param>
+        /// <returns>An instance of the <see cref="ITable"/> interface.</returns>
+        ITable CreateTable(string name, IEnumerable<string> fields);
+
+        /// <summary>
+        /// Creates an <see cref="ITable"/> with the specified name.
+        /// </summary>
+        /// <param name="name">The name of the table.</param>
+        /// <returns>An instance of the <see cref="ITable"/> interface.</returns>
+        ITable CreateTable(string name);
     }
 }

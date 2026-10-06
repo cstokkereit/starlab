@@ -73,10 +73,46 @@ namespace StarLab.Data.MongoDB
         }
 
         /// <summary>
+        /// Test that the <see cref="TableFragment.AddField(string)"/> method throws an <see cref="InvalidOperationException"/> when a duplicate field is added.
+        /// </summary>
+        [Test]
+        public void TestAddDuplicateFieldThrowsException()
+        {
+            var builder = new QueryBuilder();
+
+            var table = builder.CreateTable("Table-1");
+
+            table.AddField("Field-1");
+
+            Assert.Throws<InvalidOperationException>(() => table.AddField("Field-1"));
+        }
+
+        /// <summary>
         /// Test that the <see cref="QueryBuilderBase.AddField(IField)"/> method works correctly.
         /// </summary>
         [Test]
         public void TestAddField()
+        {
+            var field = Substitute.For<IField>();
+            field.FullName.Returns("Table-1.Field-1");
+            field.Table.Returns("Table-1");
+            field.Name.Returns("Field-1");
+
+            var query = new QueryBuilder()
+                .AddTable("Table-1")
+                .AddTable("Table-2")
+                .AddField(field)
+                .BuildQuery();
+
+            Assert.That(query, Is.Not.Null);
+            Assert.That(query.ToString(), Is.EqualTo("SELECT Table-1.Field-1, Table-2.* FROM Table-1, Table-2"));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="QueryBuilderBase.AddField(IField)"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestAddFieldWhenTableDoesNotExist()
         {
             var builder = new QueryBuilder();
 
@@ -84,11 +120,37 @@ namespace StarLab.Data.MongoDB
             field.Table.Returns("Table-1");
             field.Name.Returns("Field-1");
 
-            var query = builder.AddField(field)
-                               .BuildQuery();
+            var query = builder.AddField(field).BuildQuery();
 
             Assert.That(query, Is.Not.Null);
             Assert.That(query.ToString(), Is.EqualTo("SELECT Field-1 FROM Table-1"));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="QueryBuilderBase.AddField(IField)"/> method throws an exception when no table name is specified but more than one table has been added.
+        /// </summary>
+        [Test]
+        public void TestAddFieldWithoutTableNameThrowsExceptionWhenMultipleTablesExist()
+        {
+            var builder = new QueryBuilder();
+
+            builder.AddTable(builder.CreateTable("Table-1")).AddTable(builder.CreateTable("Table-2"));
+
+            Assert.Throws<InvalidOperationException>(() => builder.CreateField("Field-1"));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="QueryBuilderBase.AddField(IField)"/> method throws an exception when no table name is specified but more than one table has been created.
+        /// </summary>
+        [Test]
+        public void TestAddFieldWithoutTableNameThrowsExceptionWhenMultipleTablesHaveBeenCreated()
+        {
+            var builder = new QueryBuilder();
+
+            builder.CreateTable("Table-1");
+            builder.CreateTable("Table-2");
+
+            Assert.Throws<InvalidOperationException>(() => builder.CreateField("Field-1"));
         }
 
         /// <summary>
@@ -462,6 +524,7 @@ namespace StarLab.Data.MongoDB
                                .BuildQuery();
 
             Assert.That(query, Is.Not.Null);
+
             Assert.That(query.ToString(), Is.EqualTo("SELECT Field-1, Field-2, Field-3 FROM Table-1 WHERE Field-1 = 'Value-1'"));
         }
 
@@ -639,40 +702,10 @@ namespace StarLab.Data.MongoDB
         }
 
         /// <summary>
-        /// Test that the <see cref="QueryBuilder.CreateField(string)"/> method correctly creates an <see cref="IField"> and adds it to the table.
+        /// Test that the <see cref="QueryBuilderBase.CreateField(string, string)"/> method works correctly.
         /// </summary>
         [Test]
         public void TestCreateField()
-        {
-            var builder = new QueryBuilder().AddTable("Table-1");
-
-            var field = builder.CreateField("Field-1");
-
-            Assert.That(field, Is.Not.Null);
-
-            Assert.That(field.FullName, Is.EqualTo(".Field-1"));
-            Assert.That(field.Table, Is.EqualTo("Table-1"));
-            Assert.That(field.Name, Is.EqualTo("Field-1"));
-
-            Assert.That(field.ToString, Is.EqualTo("Table-1.Field-1"));
-        }
-
-        /// <summary>
-        /// Test that the <see cref="QueryBuilder.CreateField(string)"/> method throws an exception if the database contains more than one table.
-        /// </summary>
-        [Test]
-        public void TestCreateFieldThrowsExceptionIfMoreThanOneTable()
-        {
-            var builder = new QueryBuilder().AddTable("Table-1").AddTable("Table-2");
-
-            Assert.Throws<InvalidOperationException>(() => builder.CreateField("Field-1"));
-        }
-
-        /// <summary>
-        /// Test that the <see cref="QueryBuilder.CreateField(string, string)"/> method correctly creates an <see cref="IField">.
-        /// </summary>
-        [Test]
-        public void TestCreateFieldWithTable()
         {
             var builder = new QueryBuilder();
 
@@ -683,8 +716,59 @@ namespace StarLab.Data.MongoDB
             Assert.That(field.FullName, Is.EqualTo("Table-1.Field-1"));
             Assert.That(field.Table, Is.EqualTo("Table-1"));
             Assert.That(field.Name, Is.EqualTo("Field-1"));
+        }
 
-            Assert.That(field.ToString, Is.EqualTo("Table-1.Field-1"));
+        /// <summary>
+        /// Test that the <see cref="QueryBuilder.CreateField(string)"/> method works correctly when only one table exists.
+        /// </summary>
+        [Test]
+        public void TestCreateFieldWithoutTableName()
+        {
+            var builder = new QueryBuilder().AddTable("Table-1");
+
+            var field = builder.CreateField("Field-1");
+
+            Assert.That(field, Is.Not.Null);
+
+            Assert.That(field.FullName, Is.EqualTo("Table-1.Field-1"));
+            Assert.That(field.Table, Is.EqualTo("Table-1"));
+            Assert.That(field.Name, Is.EqualTo("Field-1"));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="QueryBuilder.CreateField(string)"/> method throws an exception if the query contains more than one table.
+        /// </summary>
+        [Test]
+        public void TestCreateFieldThrowsExceptionWhenMultipleTablesHaveBeenAdded()
+        {
+            var builder = new QueryBuilder().AddTable("Table-1").AddTable("Table-2");
+
+            Assert.Throws<InvalidOperationException>(() => builder.CreateField("Field-1"));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="QueryBuilder.CreateField(string)"/> method throws an exception if more than one table has been created.
+        /// </summary>
+        [Test]
+        public void TestCreateFieldThrowsExceptionWhenMultipleTablesHaveBeenCreated()
+        {
+            var builder = new QueryBuilder();
+
+            builder.CreateTable("Table-1");
+            builder.CreateTable("Table-2");
+
+            Assert.Throws<InvalidOperationException>(() => builder.CreateField("Field-1"));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="QueryBuilderBase.AddField(string)"/> method throws an exception if the query contains no tables.
+        /// </summary>
+        [Test]
+        public void TestCreateFieldThrowsExceptionWhenNoTablesHaveBeenCreated()
+        {
+            var builder = new QueryBuilder();
+
+            Assert.Throws<InvalidOperationException>(() => builder.CreateField("Field-1"));
         }
 
         /// <summary>
@@ -886,17 +970,29 @@ namespace StarLab.Data.MongoDB
         }
 
         /// <summary>
-        /// Test that the <see cref="QueryBuilder.CreateTable(string)"/> method works correctly with fluent addition of fields.
+        /// Test that the <see cref="QueryBuilder.CreateTable(string)"/> method throws an <see cref="ArgumentException"/> when a duplicate field is added.
         /// </summary>
         [Test]
-        public void TestCreateTableWithFluentAdditionOfFields()
+        public void TestCreateTableWithDuplicateFieldsThrowsException()
         {
             var builder = new QueryBuilder();
 
-            var table = builder.CreateTable("Table-1")
-                .AddField(builder.CreateField("Field-1"))
-                .AddField(builder.CreateField("Field-2"))
-                .AddField(builder.CreateField("Field-3"));
+            var table = builder.CreateTable("Table-1");
+
+            table.AddField("Field-1");
+
+            Assert.Throws<InvalidOperationException>(() => table.AddField("Field-1"));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="QueryBuilder.CreateTable(string, IEnumerable{string})"/> method works correctly.
+        /// </summary>
+        [Test]
+        public void TestCreateTableWithFields()
+        {
+            var builder = new QueryBuilder();
+
+            var table = builder.CreateTable("Table-1", ["Field-1", "Field-2", "Field-3"]);
 
             Assert.That(table, Is.Not.Null);
             Assert.That(table.Name, Is.EqualTo("Table-1"));
@@ -907,51 +1003,28 @@ namespace StarLab.Data.MongoDB
 
             var fields = new List<IField>(table.Fields);
 
+            Assert.That(fields[0].FullName, Is.EqualTo("Table-1.Field-1"));
             Assert.That(fields[0].Name, Is.EqualTo("Field-1"));
+
+            Assert.That(fields[1].FullName, Is.EqualTo("Table-1.Field-2"));
             Assert.That(fields[1].Name, Is.EqualTo("Field-2"));
+
+            Assert.That(fields[2].FullName, Is.EqualTo("Table-1.Field-3"));
             Assert.That(fields[2].Name, Is.EqualTo("Field-3"));
         }
 
         /// <summary>
-        /// Test that the <see cref="QueryBuilder.CreateTable(string)"/> method throws an <see cref="ArgumentException"/> when a duplicate field is added.
+        /// Test that the <see cref="QueryBuilder.CreateTable(string)"/> method works correctly with fluent addition of fields.
         /// </summary>
         [Test]
-        public void TestCreateTableWithDuplicateFieldsThrowsException()
+        public void TestCreateTableWithFluentAdditionOfFields()
         {
             var builder = new QueryBuilder();
 
-            var field1 = Substitute.For<IField>();
-            field1.Table.Returns("Table-1");
-            field1.Name.Returns("Field-1");
-
-            var field2 = Substitute.For<IField>();
-            field2.Table.Returns("Table-1");
-            field2.Name.Returns("Field-1");
-
-            Assert.Throws<InvalidOperationException>(() => builder.CreateTable("Table-1", [field1, field2]));
-        }
-
-        /// <summary>
-        /// Test that the <see cref="QueryBuilder.CreateTable(string, IEnumerable{IField})"/> method works correctly.
-        /// </summary>
-        [Test]
-        public void TestCreateTableWithFields()
-        {
-            var builder = new QueryBuilder();
-
-            var field1 = Substitute.For<IField>();
-            field1.Table.Returns("Table-1");
-            field1.Name.Returns("Field-1");
-
-            var field2 = Substitute.For<IField>();
-            field2.Table.Returns("Table-1");
-            field2.Name.Returns("Field-2");
-
-            var field3 = Substitute.For<IField>();
-            field3.Table.Returns("Table-1");
-            field3.Name.Returns("Field-3");
-
-            var table = builder.CreateTable("Table-1", [field1, field2, field3]);
+            var table = builder.CreateTable("Table-1")
+                .AddField("Field-1")
+                .AddField("Field-2")
+                .AddField("Field-3");
 
             Assert.That(table, Is.Not.Null);
             Assert.That(table.Name, Is.EqualTo("Table-1"));
@@ -960,45 +1033,29 @@ namespace StarLab.Data.MongoDB
             Assert.That(table.Fields, Is.Not.Null);
             Assert.That(table.Fields.Count, Is.EqualTo(3));
 
-            foreach (var field in table.Fields)
-            {
-                Assert.That(field.Table, Is.EqualTo("Table-1"));
-            }
+            var fields = new List<IField>(table.Fields);
+
+            Assert.That(fields[0].FullName, Is.EqualTo("Table-1.Field-1"));
+            Assert.That(fields[0].Name, Is.EqualTo("Field-1"));
+            
+            Assert.That(fields[1].FullName, Is.EqualTo("Table-1.Field-2"));
+            Assert.That(fields[1].Name, Is.EqualTo("Field-2"));
+
+            Assert.That(fields[2].FullName, Is.EqualTo("Table-1.Field-3"));
+            Assert.That(fields[2].Name, Is.EqualTo("Field-3"));
         }
 
         /// <summary>
-        /// Test that the <see cref="QueryBuilder.CreateTable(string, IEnumerable{IField})"/> method works correctly when provided with fields from another table.
+        /// Test that the <see cref="QueryBuilder.CreateTable(string)"/> method throws an exception if a table with the same name has already been created.
         /// </summary>
         [Test]
-        public void TestCreateTableWithFieldsFromAnotherTable()
+        public void TestCreateTableWithSamneNameAsExistingTableThrowsException()
         {
             var builder = new QueryBuilder();
 
-            var field1 = Substitute.For<IField>();
-            field1.Table.Returns("Table-2");
-            field1.Name.Returns("Field-1");
+            var table = builder.CreateTable("Table-1");
 
-            var field2 = Substitute.For<IField>();
-            field2.Table.Returns("Table-2");
-            field2.Name.Returns("Field-2");
-
-            var field3 = Substitute.For<IField>();
-            field3.Table.Returns("Table-2");
-            field3.Name.Returns("Field-3");
-
-            var table = builder.CreateTable("Table-1", [field1, field2, field3]);
-
-            Assert.That(table, Is.Not.Null);
-            Assert.That(table.Name, Is.EqualTo("Table-1"));
-            Assert.That(table.SelectAll, Is.False);
-
-            Assert.That(table.Fields, Is.Not.Null);
-            Assert.That(table.Fields.Count, Is.EqualTo(3));
-
-            foreach (var field in table.Fields)
-            {
-                Assert.That(field.Table, Is.EqualTo("Table-1"));
-            }
+            Assert.Throws<InvalidOperationException>(() => builder.CreateTable("Table-1"));
         }
     }
 }

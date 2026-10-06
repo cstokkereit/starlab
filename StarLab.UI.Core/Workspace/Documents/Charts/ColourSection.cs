@@ -16,9 +16,9 @@ namespace StarLab.UI.Core.Workspace.Documents.Charts
 
         private readonly IColourSettings settings; // The colour settings that are bound to this control.
 
-        private string customBackColour; // The custom background colour.
+        private string customBackColour = string.Empty; // The custom background colour.
 
-        private string customForeColour; // The custom foreground colour.
+        private string customForeColour = string.Empty; // The custom foreground colour.
 
         public event EventHandler? SectionChanged; // An event that gets fired whenever any of the section settings is changed.
 
@@ -57,7 +57,7 @@ namespace StarLab.UI.Core.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// TODO
+        /// Configures the <see cref="UserControl"/> to display the foreground only or foreground and background controls.
         /// </summary>
         private void ConfigureSection()
         {

@@ -21,6 +21,13 @@ namespace StarLab.Data
         /// <summary>
         /// Initialises a new instance of the <see cref="FieldFragment"/> class.
         /// </summary>
+        /// <param name="name">The name of the field.</param>
+        public FieldFragment(string name)
+            : this(string.Empty, name) { }
+
+        /// <summary>
+        /// Initialises a new instance of the <see cref="FieldFragment"/> class.
+        /// </summary>
         /// <param name="table">The name of the table that contains the field.</param>
         /// <param name="name">The name of the field.</param>
         public FieldFragment(string table, string name)

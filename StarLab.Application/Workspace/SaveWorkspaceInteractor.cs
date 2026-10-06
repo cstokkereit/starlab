@@ -7,15 +7,15 @@ namespace StarLab.Application.Workspace
     /// </summary>
     internal class SaveWorkspaceInteractor : UseCaseInteractor<IApplicationOutputPort>, IUseCase<WorkspaceDTO>
     {
-        private readonly ISerialisationProvider serialiser; // Used to serialise the workspace to a file.
+        private readonly ISerialisationService serialiser; // Used to serialise the workspace to a file.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="SaveWorkspaceInteractor"/> class.
         /// </summary>
-        /// <param name="serialiser">An <see cref="ISerialisationProvider"/> that will be used to serialise the <see cref="WorkspaceDTO"/>.</param>
+        /// <param name="serialiser">An <see cref="ISerialisationService"/> that will be used to serialise the <see cref="WorkspaceDTO"/>.</param>
         /// <param name="outputPort">An <see cref="IApplicationOutputPort"/> that updates the UI in response to the execution of the use case.</param>
         /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
-        public SaveWorkspaceInteractor(ISerialisationProvider serialiser, IApplicationOutputPort outputPort, IMapper mapper)
+        public SaveWorkspaceInteractor(ISerialisationService serialiser, IApplicationOutputPort outputPort, IMapper mapper)
             : base(outputPort, mapper)
         {
             this.serialiser = serialiser;

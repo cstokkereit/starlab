@@ -1,5 +1,4 @@
 ﻿using StarLab.Application.Data;
-using StarLab.Shared;
 
 namespace StarLab.Data.MongoDB
 {
@@ -25,29 +24,6 @@ namespace StarLab.Data.MongoDB
         public override IAndPredicate CreateAndPredicate(IEnumerable<IPredicate> predicates)
         {
             return new AndFilter(predicates);
-        }
-
-        /// <summary>
-        /// Creates an instance of <see cref="IField"/> with the specified parent table and name.
-        /// </summary>
-        /// <param name="table">The name of the table that contains the field.</param>
-        /// <param name="name">The name of the field.</param>
-        /// <returns>An instance of the <see cref="IOrPredicate"/> interface.</returns>
-        public override IField CreateField(string table, string name)
-        {
-            return new FieldFragment(table, name);
-        }
-
-        /// <summary>
-        /// Creates an instance of <see cref="IField"/> with the specified name.
-        /// </summary>
-        /// <param name="name">The name of the field.</param>
-        /// <returns>An instance of the <see cref="IOrPredicate"/> interface.</returns>
-        public override IField CreateField(string name)
-        {
-            if (Tables.Count > 1) throw new InvalidOperationException(ExceptionMessages.CannotCreateField(name));
-            
-            return new FieldFragment(Tables[0], name);
         }
 
         /// <summary>
@@ -103,27 +79,6 @@ namespace StarLab.Data.MongoDB
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type));
             }
-        }
-
-        /// <summary>
-        /// Creates an instance of <see cref="ITable"/> with the specified name and fields.
-        /// </summary>
-        /// <param name="name">The name of the table.</param>
-        /// <param name="fields">An <see cref="IEnumerable{IField}"/> containing the table fields.</param>
-        /// <returns>An instance of the <see cref="ITable"/> interface containing the fields provided.</returns>
-        public ITable CreateTable(string name, IEnumerable<IField> fields)
-        {
-            return new TableFragment(name, fields);
-        }
-
-        /// <summary>
-        /// Creates an instance of <see cref="ITable"/> with the specified name.
-        /// </summary>
-        /// <param name="name">The name of the table.</param>
-        /// <returns>An instance of the <see cref="ITable"/> interface.</returns>
-        public ITable CreateTable(string name)
-        {
-            return new TableFragment(name);
         }
 
         /// <summary>

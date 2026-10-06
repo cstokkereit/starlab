@@ -3,7 +3,7 @@
 namespace StarLab.Data.Import
 {
     /// <summary>
-    /// A class for performing unit tests on the <see cref="ImportDefinition"/> class. TODO : first header rows and reset not tested yet.
+    /// A class for performing unit tests on the <see cref="ImportDefinition"/> class. TODO : header rows and reset not tested yet.
     /// </summary>
     public class ImportDefinitionBuilderTests
     {

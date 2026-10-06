@@ -114,14 +114,14 @@ namespace StarLab.Data.MongoDB
         }
 
         /// <summary>
-        /// 
+        /// TODO : Class documentation
         /// </summary>
         /// <param name="manager"></param>
         /// <param name="database"></param>
         /// <param name="collection"></param>
         private void ImportData(IDatabaseManager manager, string database, string collection)
         {
-            var provider = new ImportManager(manager);
+            var provider = new DatabaseImportProvider(manager);
 
             using (var dataset = new FileBackedDataset(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "Stars.dat"), importDefinition))
             {

@@ -7,7 +7,7 @@ using StarLab.Data.Import;
 namespace StarLab.Data.MongoDB.Import
 {
     /// <summary>
-    /// A class for performing unit tests on the <see cref="ImportManager"/> class.
+    /// A class for performing unit tests on the <see cref="DatabaseImportProvider"/> class.
     /// </summary>
     public class ImportProviderTests
     {
@@ -67,18 +67,18 @@ namespace StarLab.Data.MongoDB.Import
         [Test]
         public void TestConstructor()
         {
-            var provider = new ImportManager(databases);
+            var provider = new DatabaseImportProvider(databases);
 
             Assert.That(provider, Is.Not.Null);
         }
 
         /// <summary>
-        /// Test that the <see cref="ImportManager.Import(IDataset, string, string)"/> method works correctly when provided with a <see cref="FileBackedDataset"/> containing data for 1000 stars.
+        /// Test that the <see cref="DatabaseImportProvider.Import(IDataset, string, string)"/> method works correctly when provided with a <see cref="FileBackedDataset"/> containing data for 1000 stars.
         /// </summary>
         [Test]
         public void TestImport()
         {
-            var provider = new ImportManager(databases);
+            var provider = new DatabaseImportProvider(databases);
 
             using (var dataset = new FileBackedDataset(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "Stars.dat"), importDefinition))
             {

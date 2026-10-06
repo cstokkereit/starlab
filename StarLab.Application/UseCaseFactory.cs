@@ -13,7 +13,7 @@ namespace StarLab.Application
     {
         private readonly IMapper mapper; // Copies data from model objects to data transfer objects and vice versa.
 
-        private readonly ISerialisationProvider serialiser; // Used to serialise and deserialise model objects.
+        private readonly ISerialisationService serialiser; // Used to serialise and deserialise model objects.
 
         private readonly IDatabaseManager dataProvider; // Used to retrieve data from the database.
 
@@ -25,8 +25,8 @@ namespace StarLab.Application
         /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
         /// <param name="dataProvider">An <see cref="IDatabaseManager"/> that will be used to retrieve data from the database.</param>
         /// <param name="builder">An <see cref="IQueryBuilder"/> that will be used to build database queries.</param>
-        /// <param name="serialiser">An <see cref="ISerialisationProvider"/> that will be used for serialise and deserialisation of model objects.</param>
-        public UseCaseFactory(IMapper mapper, IDatabaseManager dataProvider, IQueryBuilder builder, ISerialisationProvider serialiser)
+        /// <param name="serialiser">An <see cref="ISerialisationService"/> that will be used to serialise and deserialise model objects.</param>
+        public UseCaseFactory(IMapper mapper, IDatabaseManager dataProvider, IQueryBuilder builder, ISerialisationService serialiser)
         {
             this.dataProvider = dataProvider ?? throw new ArgumentNullException(nameof(dataProvider));
             this.serialiser = serialiser ?? throw new ArgumentNullException(nameof(serialiser));

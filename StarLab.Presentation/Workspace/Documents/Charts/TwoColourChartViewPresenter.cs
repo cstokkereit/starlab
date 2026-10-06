@@ -83,12 +83,12 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// 
+        /// Sets the chart data.
         /// </summary>
-        /// <param name="stars"></param>
+        /// <param name="stars">A <see cref="List{StarDTO}"> containing the chart data.</param>
         public void SetData(List<StarDTO> stars)
         {
-            // TODO
+            
         }
 
         /// <summary>

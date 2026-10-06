@@ -18,38 +18,8 @@
         public const string AxisY2 = "AxisY2";
 
         public const string Chart = "Chart";
-        public const string ChartAxes = $"{Chart}/{Axes}";
-        public const string ChartAxisX1 = $"{Chart}/{Axes}/{AxisX1}";
-        public const string ChartAxisX1Label = $"{ChartAxisX1}/{Label}";
-        public const string ChartAxisX1MajorTickMarks = $"{Chart}/{Axes}/{AxisX1}/{Scale}/{MajorTickMarks}";
-        public const string ChartAxisX1MinorTickMarks = $"{Chart}/{Axes}/{AxisX1}/{Scale}/{MinorTickMarks}";
-        public const string ChartAxisX1Scale = $"{Chart}/{Axes}/{AxisX1}/{Scale}";
-        public const string ChartAxisX1TickLabels = $"{Chart}/{Axes}/{AxisX1}/{Scale}/{TickLabels}";
-        public const string ChartAxisX2 = $"{Chart}/{Axes}/{AxisX2}";
-        public const string ChartAxisX2Label = $"{ChartAxisX2}/{Label}";
-        public const string ChartAxisX2MajorTickMarks = $"{Chart}/{Axes}/{AxisX2}/{Scale}/{MajorTickMarks}";
-        public const string ChartAxisX2MinorTickMarks = $"{Chart}/{Axes}/{AxisX2}/{Scale}/{MinorTickMarks}";
-        public const string ChartAxisX2Scale = $"{Chart}/{Axes}/{AxisX2}/{Scale}";
-        public const string ChartAxisX2TickLabels = $"{Chart}/{Axes}/{AxisX2}/{Scale}/{TickLabels}";
-        public const string ChartAxisY1 = $"{Chart}/{Axes}/{AxisY1}";
-        public const string ChartAxisY1Label = $"{ChartAxisY1}/{Label}";
-        public const string ChartAxisY1MajorTickMarks = $"{Chart}/{Axes}/{AxisY1}/{Scale}/{MajorTickMarks}";
-        public const string ChartAxisY1MinorTickMarks = $"{Chart}/{Axes}/{AxisY1}/{Scale}/{MinorTickMarks}";
-        public const string ChartAxisY1Scale = $"{Chart}/{Axes}/{AxisY1}/{Scale}";
-        public const string ChartAxisY1TickLabels = $"{Chart}/{Axes}/{AxisY1}/{Scale}/{TickLabels}";
-        public const string ChartAxisY2 = $"{Chart}/{Axes}/{AxisY2}";
-        public const string ChartAxisY2Label = $"{ChartAxisY2}/{Label}";
-        public const string ChartAxisY2MajorTickMarks = $"{Chart}/{Axes}/{AxisY2}/{Scale}/{MajorTickMarks}";
-        public const string ChartAxisY2MinorTickMarks = $"{Chart}/{Axes}/{AxisY2}/{Scale}/{MinorTickMarks}";
-        public const string ChartAxisY2Scale = $"{Chart}/{Axes}/{AxisY2}/{Scale}";
-        public const string ChartAxisY2TickLabels = $"{Chart}/{Axes}/{AxisY2}/{Scale}/{TickLabels}";
         public const string ChartPlotArea = "Chart/PlotArea";
-        public const string ChartPlotAreaGrid = $"{Chart}/{PlotArea}/{Grid}";
-        public const string ChartPlotAreaMajorGridLines = $"{Chart}/{PlotArea}/{Grid}/{MajorGridLines}";
-        public const string ChartPlotAreaMinorGridLines = $"{Chart}/{PlotArea}/{Grid}/{MinorGridLines}";
-        public const string ChartPlotAreaPoints = $"{Chart}/{PlotArea}/{Points}";
         public const string ChartSettings = "ChartSettings";
-        public const string ChartTitle = $"{Chart}/{Title}";
         public const string CollapseAll = "CollapseAll";
         public const string Copy = "Copy";
         public const string Cut = "Cut";
@@ -94,10 +64,6 @@
         public const string HelpViewHelp = "HelpViewHelp";
 
         public const string Label = "Label";
-        public const string LabelX1 = $"{AxisX1}.{Label}";
-        public const string LabelX2 = $"{AxisX2}.{Label}";
-        public const string LabelY1 = $"{AxisY1}.{Label}";
-        public const string LabelY2 = $"{AxisY2}.{Label}";
 
         public const string MajorGridLines = "MajorGridLines";
         public const string MajorTickMarks = "MajorTickMarks";

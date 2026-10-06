@@ -1,7 +1,7 @@
 ﻿namespace StarLab.Presentation.Workspace.Documents.Charts
 {
     /// <summary>
-    /// TODO while the chart is being configured.
+    /// Represents the current font settings while the chart is being configured.
     /// </summary>
     public interface IFontSettings
     {

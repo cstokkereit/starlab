@@ -1,4 +1,6 @@
 ﻿using StarLab.Application.Data;
+using StarLab.Shared;
+using System.Xml.Linq;
 
 namespace StarLab.Data
 {
@@ -7,7 +9,9 @@ namespace StarLab.Data
     /// </summary>
     public abstract class QueryBuilderBase : IQueryBuilder
     {
-        private List<string> tables = new List<string>(); // A list that contains the names of the tables.
+        private readonly Dictionary<string, TableFragment> tablesByName = new Dictionary<string, TableFragment>(); // A dictionary that contains the tables that have been created indexed by name.
+
+        private readonly List<string> tables = new List<string>(); // A list that contains the names of the tables that have been added to the query.
 
         private IQuery query; // The query being constructed.
 
@@ -26,7 +30,21 @@ namespace StarLab.Data
         /// <returns>A reference to this <see cref="QueryBuilderBase"/> object to allow fluent modification of the query.</returns>
         public IQueryBuilder AddField(IField field)
         {
-            query.SelectStatement.AddField(field.Table, field);
+            if (!tablesByName.ContainsKey(field.Table))
+            {
+                var table = (TableFragment)CreateTable(field.Table);
+
+                table.AddField(field);
+
+                AddTable(table);
+            }
+
+            if (!tablesByName[field.Table].HasField(field.Name))
+            {
+                tablesByName[field.Table].AddField(field);
+            }
+
+            //query.SelectStatement.AddField(field.Table, field);
 
             if (!tables.Contains(field.Table))
             {
@@ -95,22 +113,21 @@ namespace StarLab.Data
         {
             query.SelectStatement.AddTable(table);
 
-            if (!tables.Contains(table.Name))
-            {
-                tables.Add(table.Name);
-            }
-            
+            if (!tables.Contains(table.Name)) tables.Add(table.Name);
+
             return this;
         }
 
         /// <summary>
         /// Adds the specified table to the select statement.
         /// </summary>
-        /// <param name="table">The name of the table that is to be added to the select statement.</param>
+        /// <param name="name">The name of the table that is to be added to the select statement.</param>
         /// <returns>A reference to this <see cref="QueryBuilderBase"/> object to allow fluent modification of the query.</returns>
-        public IQueryBuilder AddTable(string table)
+        public IQueryBuilder AddTable(string name)
         {
-            return AddTable(new TableFragment(table));
+            if (!tablesByName.ContainsKey(name)) CreateTable(name);
+
+            return AddTable(tablesByName[name]);
         }
 
         /// <summary>
@@ -119,6 +136,7 @@ namespace StarLab.Data
         /// <returns>An instance of <see cref="IQuery"/> that specifies the data that will be returned from a database.</returns>
         public IQuery BuildQuery()
         {
+            tablesByName.Clear();
             tables.Clear();
 
             var temp = query;
@@ -142,19 +160,39 @@ namespace StarLab.Data
         public abstract IAndPredicate CreateAndPredicate(IEnumerable<IPredicate> predicates);
 
         /// <summary>
-        /// Creates an instance of <see cref="IField"/> with the specified parent table and name.
+        /// Creates an <see cref="IField"/> with the specified parent table and name.
         /// </summary>
         /// <param name="table">The name of the table that contains the field.</param>
         /// <param name="name">The name of the field.</param>
-        /// <returns>An instance of the <see cref="IOrPredicate"/> interface.</returns>
-        public abstract IField CreateField(string table, string name);
+        /// <returns>An instance of the <see cref="IField"/> interface.</returns>
+        public virtual IField CreateField(string table, string name)
+        {
+            var field = new FieldFragment(table, name);
+
+            if (!tablesByName.ContainsKey(table)) CreateTable(table);
+
+            var fragment = tablesByName[table];
+
+            fragment.AddField(field);
+
+            return field;
+        }
 
         /// <summary>
         /// Creates an instance of <see cref="IField"/> with the specified name.
         /// </summary>
         /// <param name="name">The name of the field.</param>
         /// <returns>An instance of the <see cref="IOrPredicate"/> interface.</returns>
-        public abstract IField CreateField(string name);
+        public virtual IField CreateField(string name)
+        {
+            if (Tables.Count > 1) throw new InvalidOperationException(ExceptionMessages.CannotCreateField(name, Tables.Count));
+             
+            var table = Tables.Count == 1 ? Tables[0] : GetTableName();
+
+            if (string.IsNullOrEmpty(table)) throw new InvalidOperationException(ExceptionMessages.CannotCreateField(name, tablesByName.Count));
+
+            return new FieldFragment(table, name);
+        }
 
         /// <summary>
         /// Creates an empty instance of the <see cref="IOrPredicate"/> interface.
@@ -180,6 +218,44 @@ namespace StarLab.Data
         public abstract IPredicate CreatePredicate<T>(IField field, T value, ComparisonOperators type);
 
         /// <summary>
+        /// Creates an <see cref="ITable"/> with the specified name and fields.
+        /// </summary>
+        /// <param name="name">The name of the table.</param>
+        /// <param name="fields">An <see cref="IEnumerable{string}"/> containing the names of the fields.</param>
+        /// <returns>An instance of the <see cref="ITable"/> interface.</returns>
+        public virtual ITable CreateTable(string name, IEnumerable<string> fields)
+        {
+            if (tablesByName.ContainsKey(name)) throw new InvalidOperationException(ExceptionMessages.TableAlreadyCreated(name));
+
+            var table = new TableFragment(name);
+
+            tablesByName.Add(table.Name, table);
+
+            foreach (var field in fields)
+            {
+                table.AddField(field);
+            }
+
+            return table;
+        }
+
+        /// <summary>
+        /// Creates an <see cref="ITable"/> with the specified name.
+        /// </summary>
+        /// <param name="name">The name of the table.</param>
+        /// <returns>An instance of the <see cref="ITable"/> interface.</returns>
+        public virtual ITable CreateTable(string name)
+        {
+            if (tablesByName.ContainsKey(name)) throw new InvalidOperationException(ExceptionMessages.TableAlreadyCreated(name));
+
+            var table = new TableFragment(name);
+
+            tablesByName.Add(table.Name, table);
+
+            return table;
+        }
+
+        /// <summary>
         /// Gets the names of the tables.
         /// </summary>
         protected List<string> Tables => tables;
@@ -189,5 +265,14 @@ namespace StarLab.Data
         /// </summary>
         /// <returns>An instance of <see cref="IQuery"/> that contains no fields, filter criteria or sort ordering.</returns>
         protected abstract IQuery CreateQuery();
+
+        /// <summary>
+        /// Gets the name of the table currently being constructed assuming that there is only one such table.
+        /// </summary>
+        /// <returns>The name of the table if only one table is being constructed; an empty string otherwise.</returns>
+        private string GetTableName()
+        {
+            return tablesByName.Count == 1 ? tablesByName.Keys.First() : string.Empty;
+        }
     }
 }

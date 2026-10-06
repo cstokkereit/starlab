@@ -69,7 +69,7 @@ namespace StarLab.Application
             container.Register(
                 Component.For<IQueryBuilder>().ImplementedBy<QueryBuilder>(),
                 Component.For<IDatabaseManager>().ImplementedBy<DatabaseManager>(),
-                Component.For<ISerialisationProvider>().ImplementedBy<SerialisationProvider>(),
+                Component.For<ISerialisationService>().ImplementedBy<SerialisationService>(),
                 Classes.FromAssemblyNamed("StarLab.Serialisation").BasedOn<Profile>().WithServiceBase(),
                 Classes.FromAssemblyNamed("StarLab.Application").Where(t => t.Name.EndsWith("Factory")).WithServiceDefaultInterfaces(),
                 Classes.FromAssemblyNamed("StarLab.Application").BasedOn<Profile>().WithServiceBase()

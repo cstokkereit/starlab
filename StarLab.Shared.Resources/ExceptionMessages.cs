@@ -16,11 +16,15 @@ namespace StarLab.Shared
 
         public static string DocumentNotSet = "The document has not been set.";
 
+        public static string ImportDefinitionNotInitialised = "The import definition has not been initialised.";
+
         public const string InvalidFieldIndex = "The field index must be a non-negative integer.";
 
         public const string InvalidPath = "The path cannot be an empty string.";
 
         public const string InvalidState = "One or more state variables have not been initialised.";
+
+        public const string InvalidTableName = "Invalid table name.";
 
         public static string PresenterAlreadyAttached = "The presenter has already been attached to this view.";
 
@@ -34,10 +38,13 @@ namespace StarLab.Shared
         /// Builds a CannotCreateField exception message for the specified field.
         /// </summary>
         /// <param name="name">The field name.</param>
+        /// <param name="tables">The number of tables.</param>
         /// <returns>The required exception message.</returns>
-        public static string CannotCreateField(string name)
+        public static string CannotCreateField(string name, int tables)
         {
-            return $"The field '{name}' cannot be created because the database contains more than one table.";
+            var ending = tables == 0 ? "no tables." : $"{tables} tables and the table name was not specified.";
+
+            return $"The field '{name}' cannot be created because the query contains {ending}";
         }
 
         /// <summary>
@@ -61,6 +68,16 @@ namespace StarLab.Shared
         }
 
         /// <summary>
+        /// Builds a ControllerNotInitialised exception message for the specified controller.
+        /// </summary>
+        /// <param name="controller">The name of the controller.</param>
+        /// <returns>The required exception message.</returns>
+        public static string ControllerNotInitialised(string controller)
+        {
+            return $"The {controller} controller has not been initialised.";
+        }
+
+        /// <summary>
         /// Builds a DocumentCouldNotBeDeleted exception message for the specified document name and id.
         /// </summary>
         /// <param name="name">The document name.</param>
@@ -69,6 +86,16 @@ namespace StarLab.Shared
         public static string DocumentCouldNotBeDeleted(string name, object id)
         {
             return $"The document {name} ({id}) could not be deleted.";
+        }
+
+        /// <summary>
+        /// Builds a DocumentAlreadyExists exception message for the specified document.
+        /// </summary>
+        /// <param name="name">The document name.</param>
+        /// <returns>The required exception message.</returns>
+        public static string DocumentExists(string name)
+        {
+            return $"A document with the name '{name}' already exists.";
         }
 
         /// <summary>
@@ -140,26 +167,6 @@ namespace StarLab.Shared
         public static string FolderCouldNotBeDeleted(string folder)
         {
             return $"The folder {folder} could not be deleted.";
-        }
-
-        /// <summary>
-        /// Builds a ControllerNotInitialised exception message for the specified controller.
-        /// </summary>
-        /// <param name="controller">The name of the controller.</param>
-        /// <returns>The required exception message.</returns>
-        public static string ControllerNotInitialised(string controller)
-        {
-            return $"The {controller} controller has not been initialised.";
-        }
-
-        /// <summary>
-        /// Builds a DocumentAlreadyExists exception message for the specified document.
-        /// </summary>
-        /// <param name="name">The document name.</param>
-        /// <returns>The required exception message.</returns>
-        public static string DocumentExists(string name)
-        {
-            return $"A document with the name '{name}' already exists.";
         }
 
         /// <summary>
@@ -270,6 +277,16 @@ namespace StarLab.Shared
         public static string TableAlreadyAdded(string name)
         {
             return $"A table with the name '{name}' has already been added.";
+        }
+
+        /// <summary>
+        /// Builds a TableAlreadyCreated exception message for the specified table.
+        /// </summary>
+        /// <param name="name">The name of the table.</param>
+        /// <returns>The required exception message.</returns>
+        public static string TableAlreadyCreated(string name)
+        {
+            return $"A table with the name '{name}' has already been created.";
         }
 
         /// <summary>

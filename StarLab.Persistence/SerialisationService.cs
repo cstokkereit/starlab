@@ -9,20 +9,20 @@ using System.Xml.Serialization;
 namespace StarLab.Serialisation
 {
     /// <summary>
-    /// Serialises and deserialises data transfer objects (DTOs).
+    /// A service that can serialise and deserialise data transfer objects (DTOs).
     /// </summary>
-    public class SerialisationProvider : ISerialisationProvider
+    public class SerialisationService : ISerialisationService
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(SerialisationProvider)); // The logger that will be used for writing log messages.
+        private static readonly ILog log = LogManager.GetLogger(typeof(SerialisationService)); // The logger that will be used for writing log messages.
 
         private readonly IMapper mapper; // Maps POCOs to DTOs and vice versa.
 
         /// <summary>
-        /// Initialises a new instance of the <see cref="SerialisationProvider"/> class.
+        /// Initialises a new instance of the <see cref="SerialisationService"/> class.
         /// </summary>
         /// <param name="mapper">An <see cref="IMapper"/> that will be used to map POCOs to DTOs and vice versa.</param>
         /// <exception cref="ArgumentNullException"></exception>
-        public SerialisationProvider(IMapper mapper)
+        public SerialisationService(IMapper mapper)
         {
             this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }

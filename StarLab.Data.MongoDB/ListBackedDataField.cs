@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using StarLab.Application.Data;
+using StarLab.Application.Data.Import;
 using StarLab.Shared;
 using StarLab.Shared.Properties;
 
@@ -15,6 +16,8 @@ namespace StarLab.Data.MongoDB
         private readonly int index; // The field index.
 
         private BsonDocument? document; // The document that contains the current value of the field.
+
+        private readonly int width; // The width of the field (only used for fixed width files).
 
         /// <summary>
         /// Initialises a new instance of the <see cref="ListBackedDataField"/> class.
@@ -38,6 +41,11 @@ namespace StarLab.Data.MongoDB
         public string Name => name;
 
         /// <summary>
+        /// Gets the data type of the field.
+        /// </summary>
+        public DataTypes DataType { get; }
+
+        /// <summary>
         /// Gets the current value of the field.
         /// </summary>
         public object Value
@@ -49,6 +57,11 @@ namespace StarLab.Data.MongoDB
                 return document.GetElement(Index).Value;
             }
         }
+
+        /// <summary>
+        /// Gets the width of the field. If the field is of variable length, this property will return -1.
+        /// </summary>
+        public int Width { get => width; }
 
         /// <summary>
         /// Sets the <see cref="BsonDocument"/> that contains the current value of the field.

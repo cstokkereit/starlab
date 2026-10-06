@@ -23,6 +23,13 @@
         IImportDefinitionBuilder AddCompoundField(string name, int[] components);
 
         /// <summary>
+        /// Specifies the number of header rows that the data file contains. The header rows will be skipped when the data is imported.
+        /// </summary>
+        /// <param name="rows">The number of header rows.</param>
+        /// <returns>A reference to this instance that allows the calling code to be written in the fluent style.</returns>
+        IImportDefinitionBuilder AddHeaderRows(int rows);
+
+        /// <summary>
         /// Builds the import definition.
         /// </summary>
         /// <returns>The specified <see cref="IImportDefinition"/>.</returns>

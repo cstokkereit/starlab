@@ -1,7 +1,7 @@
 ﻿namespace StarLab.Domain.Entities
 {
     /// <summary>
-    /// 
+    /// TODO: Add a summary for the IStar interface. 
     /// </summary>
     public interface IStar
     {
@@ -18,9 +18,9 @@
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="type"></param>
+        /// <param name="name"></param>
         /// <returns></returns>
-        double ColourIndex(ColourIndexTypes type);
+        double ColourIndex(string name);
 
         /// <summary>
         /// 

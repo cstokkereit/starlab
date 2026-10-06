@@ -26,6 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Workspace\Documents\Charts\Overlays\" />
     <Folder Include="Workspace\Documents\Tables\" />
   </ItemGroup>
 

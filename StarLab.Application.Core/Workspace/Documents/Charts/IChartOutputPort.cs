@@ -6,9 +6,9 @@
     public interface IChartOutputPort : IOutputPort
     {
         /// <summary>
-        /// TODO
+        /// Sets the chart data.
         /// </summary>
-        /// <param name=""></param>
+        /// <param name="stars">A <see cref="List{StarDTO}"> containing the chart data.</param>
         void SetData(List<StarDTO> stars);
 
 

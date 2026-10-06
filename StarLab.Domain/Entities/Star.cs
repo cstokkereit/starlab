@@ -6,11 +6,11 @@ namespace StarLab.Domain.Entities
     // https://en.wikipedia.org/wiki/Color_index
 
     /// <summary>
-    /// 
+    /// TODO: Add a summary for the Star class.
     /// </summary>
     public class Star : IStar
     {
-        private readonly Dictionary<ColourIndexTypes, double> colourIndices = new Dictionary<ColourIndexTypes, double>();
+        private readonly Dictionary<string, double> colourIndices = new Dictionary<string, double>();
 
         private readonly IAstrometricData astrometry;
 
@@ -35,12 +35,12 @@ namespace StarLab.Domain.Entities
                 data.GetDoubleValue("ProperMotionInDeclination")
             );
 
-            colourIndices.Add(ColourIndexTypes.UB, data.GetDoubleValue("U-B"));
-            colourIndices.Add(ColourIndexTypes.BV, data.GetDoubleValue("B-V"));
-            colourIndices.Add(ColourIndexTypes.VR, data.GetDoubleValue("V-R"));
-            colourIndices.Add(ColourIndexTypes.RI, data.GetDoubleValue("R-I"));
+            colourIndices.Add("U-B", data.GetDoubleValue("U-B"));
+            colourIndices.Add("B-V", data.GetDoubleValue("B-V"));
+            colourIndices.Add("V-R", data.GetDoubleValue("V-R"));
+            colourIndices.Add("R-I", data.GetDoubleValue("R-I"));
 
-            EffectiveTemperature = CalculateEffectiveTemperature(colourIndices[ColourIndexTypes.BV]);
+            EffectiveTemperature = CalculateEffectiveTemperature(colourIndices["B-V"]);
         }
 
         public Star(IAstrometricData astrometry)
@@ -52,9 +52,9 @@ namespace StarLab.Domain.Entities
 
         public double ApparentMagnitude { get; }
 
-        public double ColourIndex(ColourIndexTypes type)
+        public double ColourIndex(string name)
         {
-            return colourIndices[type];
+            return colourIndices[name];
         }
 
         public double Declination => astrometry.Declination;

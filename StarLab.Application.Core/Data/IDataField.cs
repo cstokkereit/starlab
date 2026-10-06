@@ -1,4 +1,6 @@
-﻿namespace StarLab.Application.Data
+﻿using StarLab.Application.Data.Import;
+
+namespace StarLab.Application.Data
 {
     /// <summary>
     /// Represents a field from a dataset.
@@ -16,8 +18,13 @@
         string Name { get; }
 
         /// <summary>
-        /// Gets the value of the field from the current row in the dataset.
+        /// Gets the data type of the field.
         /// </summary>
-        object Value { get; }
+        DataTypes DataType { get; }
+
+        /// <summary>
+        /// Gets the width of the field. If the field is of variable length, this property will return -1.
+        /// </summary>
+        int Width { get; }
     }
 }

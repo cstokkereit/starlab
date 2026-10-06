@@ -67,8 +67,8 @@ namespace StarLab.Application.Workspace.Documents.Charts
                             dto.Add(new StarDTO
                             {
                                 AbsoluteMagnitude = star.ApparentMagnitude + 5 * (Math.Log10(star.Parallax / 1000) + 1),
-                                ColourIndex = star.ColourIndex(ColourIndexTypes.BV)
-                            });
+                                ColourIndex = star.ColourIndex("B-V")
+                            }); 
                         }
 
                         rows++;
