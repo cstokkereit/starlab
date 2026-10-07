@@ -1,5 +1,8 @@
 ﻿namespace StarLab.Application.Data
 {
+    /// <summary>
+    /// Provides a fluent way to construct database queries.
+    /// </summary>
     public interface IQueryBuilder
     {
         /// <summary>

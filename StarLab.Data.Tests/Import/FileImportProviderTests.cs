@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace StarLab.Data.Import
+﻿namespace StarLab.Data.Import
 {
+    /// <summary>
+    /// Implement tests first.
+    /// </summary>
     internal class FileImportProviderTests
     {
     }

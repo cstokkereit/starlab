@@ -127,7 +127,7 @@ namespace StarLab.Presentation.Options
 
             presenter.Run();
 
-            //// TODO - Modify for implementation
+            // TODO - Modify for implementation
         }
 
         /// <summary>
