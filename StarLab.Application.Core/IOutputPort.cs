@@ -5,6 +5,6 @@
     /// </summary>
     public interface IOutputPort
     {
-        // TODO - If this turns out to not be needed it can be deleted.
+        
     }
 }

@@ -1,21 +1,20 @@
 ﻿using AutoMapper;
 using log4net;
 using StarLab.Application.Data;
-using StarLab.Domain;
 using StarLab.Shared;
 
 namespace StarLab.Application.Workspace.Documents.Charts
 {
     /// <summary>
-    /// A use case that .
+    /// A use case that retrieves the specified data from the database and updates the chart.
     /// </summary>
     internal class UpdateChartInteractor : UseCaseInteractor<IChartOutputPort>, IUseCaseAsync<UpdateChartUseCaseArgs>
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(UpdateChartInteractor)); // The logger that will be used for writing log messages.
 
-        private readonly IDatabaseManager databases; // TODO
+        private readonly IDatabaseManager databases; // Provides access to the database containing the data.
 
-        private readonly IQueryBuilder builder; // TODO
+        private readonly IQueryBuilder builder; // A fluent builder for creating database queries.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="ApplyChartSettingsInteractor"/> class.
@@ -44,6 +43,8 @@ namespace StarLab.Application.Workspace.Documents.Charts
 
             var database = databases.GetDatabase(args.DatabaseName);
 
+            // TODO : This should not be hard coded.
+
             var query = builder.AddTable("stars")
                                .AddField(builder.CreateField("ApparentMagnitude"))
                                .AddField(builder.CreateField("Parallax"))
@@ -67,7 +68,7 @@ namespace StarLab.Application.Workspace.Documents.Charts
                             dto.Add(new StarDTO
                             {
                                 AbsoluteMagnitude = star.ApparentMagnitude + 5 * (Math.Log10(star.Parallax / 1000) + 1),
-                                ColourIndex = star.ColourIndex("B-V")
+                                ColourIndex = star.ColourIndex("B-V") 
                             }); 
                         }
 

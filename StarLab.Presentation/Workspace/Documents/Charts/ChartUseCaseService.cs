@@ -28,10 +28,6 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             ArgumentNullException.ThrowIfNull(workspace, nameof(workspace));
             ArgumentNullException.ThrowIfNull(id, nameof(id));
 
-            // TODO
-            // 1. Sort out initial population of chart with data when a document is first displayed
-            // 2. This will need to change or other methods created to handle searching and filtering etc.
-
             var interactor = Factory.CreateUpdateChartUseCase(ApplicationController.GetOutputPort<IChartOutputPort>(new ControllerID(id)));
 
             var database = workspace.GetProject(workspace.GetDocument(id).Project).Database;

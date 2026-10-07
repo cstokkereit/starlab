@@ -112,11 +112,11 @@
         }
 
         /// <summary>
-        /// TODO
+        /// Adds the settings for the specified axis to the dictionary.
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="parent"></param>
-        /// <param name="settings"></param>
+        /// <param name="name">The name of the axis.</param>
+        /// <param name="parent">The parent settings key.</param>
+        /// <param name="settings">An <see cref="IAxisSettings"/> that holds axis settings.</param>
         private void AddAxisSettings(string name, string parent, IAxisSettings settings)
         {
             var axis = AddSettings(name, parent, settings);
@@ -131,12 +131,12 @@
         }
 
         /// <summary>
-        /// TODO
+        /// Adds the settings for the specified chart element to the dictionary.
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="parent"></param>
-        /// <param name="settings"></param>
-        /// <returns></returns>
+        /// <param name="name">The name of the chart element.</param>
+        /// <param name="parent">The parent settings key.</param>
+        /// <param name="settings">An <see cref="IChartElementSettings"/> that holds chart element settings.</param>
+        /// <returns>The chart element settings key.</returns>
         private string AddSettings(string name, string parent, IChartElementSettings settings)
         {
             var key = $"{parent}/{name}";
@@ -147,15 +147,10 @@
         }
 
         /// <summary>
-        /// TODO
+        /// Adds the chart settings to the dictionary.
         /// </summary>
         private void PopulateSettingsByKey()
         {
-            // TODO
-            // Clean out unused path constants
-            // Fix tests that have changed - lots
-            // Debug and Tidy up
-
             AddSettings(Constants.Title, Constants.Chart, Title);
 
             var axes = AddSettings(Constants.Axes, Constants.Chart, Axes);

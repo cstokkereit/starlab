@@ -97,13 +97,6 @@ namespace StarLab.UI.Workspace
         {
             Debug.Assert(presenter != null);
 
-            if (DockState == DockState.Hidden || DockState == DockState.Unknown)
-            {
-                // TODO - Finish this or remove it
-                //Height = presenter.Height;
-                //Width = presenter.Width;
-            }
-
             Show(dockPanel, (DockState)Enum.Parse(DockState.GetType(), presenter.Location));
         }
 

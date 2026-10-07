@@ -54,10 +54,10 @@ namespace StarLab.Data.MongoDB
         {
             var provider = new DatabaseImportProvider(manager);
 
-            //using (var dataset = new FileBackedDataset(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "Stars.dat"), importDefinition))
-            //{
-            //    provider.Import(dataset, DATABASE, COLLECTION);
-            //}
+            using (var dataset = new FileBackedDataset(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "Stars.dat"), importDefinition))
+            {
+                provider.Import(dataset, DATABASE, COLLECTION);
+            }
         }
 
         /// <summary>
@@ -140,7 +140,7 @@ namespace StarLab.Data.MongoDB
             var builder = new QueryBuilder();
 
             var query = builder.AddTable(COLLECTION)
-                               .AddPredicate(builder.CreateField("Apparent Magnitude"), 8.55, ComparisonOperators.Equals)
+                               .AddPredicate(builder.CreateField("ApparentMagnitude"), 8.55, ComparisonOperators.Equals)
                                .BuildQuery();
 
             var collection = database.GetCollection(COLLECTION);
@@ -159,7 +159,7 @@ namespace StarLab.Data.MongoDB
             var builder = new QueryBuilder();
 
             var query = builder.AddTable(COLLECTION)
-                               .AddPredicate(builder.CreateField("Apparent Magnitude"), 8.55, ComparisonOperators.NotEquals)
+                               .AddPredicate(builder.CreateField("ApparentMagnitude"), 8.55, ComparisonOperators.NotEquals)
                                .BuildQuery();
 
             var collection = database.GetCollection(COLLECTION);

@@ -10,6 +10,8 @@ namespace StarLab.Shared
     {
         public const string ComponentFieldIndicesRequired = "The indices of the component fields are required.";
 
+        public const string ConnectionNotOpened = "The database connection has not been opened.";
+
         public const string CursorAtBeginningOfFile = "The cursor is already positioned at the beginning of the file.";
 
         public const string CursorAtEndOfFile = "The cursor is already positioned at the end of the file.";

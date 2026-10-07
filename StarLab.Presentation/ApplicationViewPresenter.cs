@@ -383,7 +383,7 @@ namespace StarLab.Presentation
         /// <param name="id">The ID of the document that was modified.</param>
         public void UpdateDocument(WorkspaceDTO dto, string id)
         {
-            workspace = new Workspace.Workspace(dto); // TODO - Can this be split into two separate calls - one to update the workspace and one to update the document?
+            workspace = new Workspace.Workspace(dto);
 
             var documentId = new DocumentID(id);
 

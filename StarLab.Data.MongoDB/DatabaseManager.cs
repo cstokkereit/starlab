@@ -1,6 +1,7 @@
 ﻿using log4net;
 using MongoDB.Driver;
 using StarLab.Application.Data;
+using StarLab.Shared;
 
 namespace StarLab.Data.MongoDB
 {
@@ -13,7 +14,7 @@ namespace StarLab.Data.MongoDB
 
         private readonly Dictionary<string, MongoClient> clients = new Dictionary<string, MongoClient>(); // A dictionary containing the available MongoDB clients.
 
-        private MongoClient? client; //
+        private MongoClient? client; // Provides access to the MongoDB database server.
 
         /// <summary>
         /// Drops the database with the specified name.
@@ -22,7 +23,9 @@ namespace StarLab.Data.MongoDB
         /// <exception cref="InvalidOperationException"></exception>
         public void DropDatabase(string database)
         {
-            if (client == null) throw new InvalidOperationException(); // TODO Connection not open
+            ArgumentException.ThrowIfNullOrEmpty(database, nameof(database));
+
+            if (client == null) throw new InvalidOperationException(ExceptionMessages.ConnectionNotOpened);
 
             client.DropDatabase(database);
         }
@@ -35,7 +38,9 @@ namespace StarLab.Data.MongoDB
         /// <exception cref="InvalidOperationException"></exception>
         public IDatabase GetDatabase(string database)
         {
-            if (client == null) throw new InvalidOperationException(); // TODO Connection not open
+            ArgumentException.ThrowIfNullOrEmpty(database, nameof(database));
+
+            if (client == null) throw new InvalidOperationException(ExceptionMessages.ConnectionNotOpened);
 
             return new Database(client.GetDatabase(database));
         }
@@ -46,7 +51,7 @@ namespace StarLab.Data.MongoDB
         /// <returns>A <see cref="List{string}"/> containing the database names.</returns>
         public List<string> GetDatabaseNames()
         {
-            if (client == null) throw new InvalidOperationException(); // TODO Connection not open
+            if (client == null) throw new InvalidOperationException(ExceptionMessages.ConnectionNotOpened);
 
             return client.ListDatabaseNames().ToList();
         }
@@ -58,6 +63,8 @@ namespace StarLab.Data.MongoDB
         /// <param name="port">The port number.</param>
         public void OpenConnection(string host, int port)
         {
+            ArgumentException.ThrowIfNullOrEmpty(host, nameof(host));
+
             var connection = new Connection(host, port);
 
             if (!clients.ContainsKey(connection.Name))

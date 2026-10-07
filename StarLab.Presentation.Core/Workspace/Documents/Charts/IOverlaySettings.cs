@@ -1,7 +1,7 @@
 ﻿namespace StarLab.Presentation.Workspace.Documents.Charts
 {
     /// <summary>
-    /// TODO
+    /// Represents the current state of a chart overlay while the chart is being configured.
     /// </summary>
     public interface IOverlaySettings : IChartElementSettings
     {

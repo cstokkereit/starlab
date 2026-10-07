@@ -2,11 +2,12 @@
 using StarLab.Application.Data.Import;
 using StarLab.Data.Import;
 using StarLab.Data.MongoDB.Import;
+using StarLab.Domain.Entities;
 
 namespace StarLab.Data.MongoDB
 {
     /// <summary>
-    /// 
+    /// A class for performing unit tests on the <see cref="Database"/> class.
     /// </summary>
     public class DatabaseTests
     {
@@ -47,10 +48,10 @@ namespace StarLab.Data.MongoDB
         {
             var provider = new DatabaseImportProvider(manager);
 
-            //using (var dataset = new FileBackedDataset(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "Stars.dat"), importDefinition))
-            //{
-            //    provider.Import(dataset, DATABASE, COLLECTION);
-            //}
+            using (var dataset = new FileBackedDataset(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "Stars.dat"), importDefinition))
+            {
+                provider.Import(dataset, DATABASE, COLLECTION);
+            }
         }
 
         /// <summary>
@@ -63,7 +64,7 @@ namespace StarLab.Data.MongoDB
 
             manager.DropDatabase(DATABASE);
 
-            // TODO
+            // TODO : Future work
             // Finish the ForwardOnlyCursor
             // Implement a BufferedDataset and implement the DataSource interface so it can be used in a table
             // Make the star object generic so it can have fixed and bespoke fields
@@ -127,232 +128,198 @@ namespace StarLab.Data.MongoDB
             Assert.That(stars, Is.Not.Null);
         }
 
+        /// <summary>
+        /// Test that the <see cref="DatabaseManager.GetStars(IQuery)"/> method works correctly when all stars are included in the query.
+        /// </summary>
+        [Test]
+        public void TestGetStarsReturnsAllStarsAsCursor()
+        {
+            var database = manager.GetDatabase(DATABASE);
 
+            var builder = new QueryBuilder();
 
-        ///// <summary>
-        ///// Test that the <see cref="DatabaseManager.GetStars(IQuery)"/> method works correctly when all stars are included in the query.
-        ///// </summary>
-        //[Test]
-        //public void TestGetStarsReturnsAllStarsAsCursor()
-        //{
-        //    var provider = new DatabaseManager(connection);
+            var query = builder.AddTable(COLLECTION)
+                               .BuildQuery();
 
-        //    provider.OpenDatabase(DATABASE);
+            var stars = database.GetStars(query);
 
-        //    var builder = new QueryBuilder();
+            Assert.That(stars, Is.Not.Null);
 
-        //    var query = builder.AddTable(COLLECTION)
-        //                       .BuildQuery();
+            Validate(stars, 1000);
+        }
 
-        //    var stars = provider.GetStars(query);
+        /// <summary>
+        /// Test that the <see cref="DatabaseManager.GetStars(IQuery, int, int)"/> method works correctly when all stars are included in the query.
+        /// </summary>
+        [Test]
+        public void TestGetStarsReturnsAllStarsAsList()
+        {
+            var database = manager.GetDatabase(DATABASE);
 
-        //    Assert.That(stars, Is.Not.Null);
+            var builder = new QueryBuilder();
 
-        //    Validate(stars, 1000);
-        //}
+            var query = builder.AddTable(COLLECTION)
+                               .BuildQuery();
 
-        ///// <summary>
-        ///// Test that the <see cref="DatabaseManager.GetStars(IQuery, int, int)"/> method works correctly when all stars are included in the query.
-        ///// </summary>
-        //[Test]
-        //public void TestGetStarsReturnsAllStarsAsList()
-        //{
-        //    var provider = new DatabaseManager(connection);
+            var stars = database.GetStars(query, 0, 2000);
 
-        //    provider.OpenDatabase(DATABASE);
+            Assert.That(stars, Is.Not.Null);
 
-        //    var builder = new QueryBuilder();
+            Validate(stars, 1000, s => {});
+        }
 
-        //    var query = builder.AddTable(COLLECTION)
-        //                       .BuildQuery();
+        /// <summary>
+        /// Test that the <see cref="DatabaseManager.GetStars(IQuery, int, int)"/> method works correctly when provided with an <see cref="IQuery"/> containing an equals predicate.
+        /// </summary>
+        [Test]
+        public void TestGetStarsWithEqualsQuery()
+        {
+            var database = manager.GetDatabase(DATABASE);
 
-        //    var stars = provider.GetStars(query, 0, 2000);
+            var builder = new QueryBuilder();
 
-        //    Assert.That(stars, Is.Not.Null);
+            var query = builder.AddTable(COLLECTION)
+                               .AddPredicate(builder.CreateField("ApparentMagnitude"), 8.55, ComparisonOperators.Equals)
+                               .BuildQuery();
 
-        //    Validate(stars, 1000, s => {});
-        //}
+            var stars = database.GetStars(query, 0, 1000);
 
-        ///// <summary>
-        ///// Test that the <see cref="DatabaseManager.GetStars(IQuery, int, int)"/> method throws an <see cref="InvalidOperationException"/> if the database has not been opened.
-        ///// </summary>
-        //[Test]
-        //public void TestGetStarsThrowsExceptionIfDatabaseNotOpened()
-        //{
-        //    var provider = new DatabaseManager(connection);
+            Validate(stars, 10, s => Assert.That(s.ApparentMagnitude, Is.EqualTo(8.55)));
+        }
 
-        //    var builder = new QueryBuilder();
+        /// <summary>
+        /// Test that the <see cref="DatabaseManager.GetStars(IQuery, int, int)"/> method works correctly when provided with an <see cref="IQuery"/> containing a greater than predicate.
+        /// </summary>
+        [Test]
+        public void TestGetStarsWithGreaterThanQuery()
+        {
+            var database = manager.GetDatabase(DATABASE);
 
-        //    var query = builder.AddTable(COLLECTION)
-        //                       .BuildQuery();
+            var builder = new QueryBuilder();
 
-        //    Assert.Throws<InvalidOperationException>(() => provider.GetStars(query, 0, 20));
-        //}
+            var query = builder.AddTable(COLLECTION)
+                               .AddPredicate(builder.CreateField("B-V"), 1.67, ComparisonOperators.GreaterThan)
+                               .BuildQuery();
 
-        ///// <summary>
-        ///// Test that the <see cref="DatabaseManager.GetStars(IQuery, int, int)"/> method works correctly when provided with an <see cref="IQuery"/> containing an equals predicate.
-        ///// </summary>
-        //[Test]
-        //public void TestGetStarsWithEqualsQuery()
-        //{
-        //    var provider = new DatabaseManager(connection);
+            var stars = database.GetStars(query, 0, 1000);
 
-        //    provider.OpenDatabase(DATABASE);
+            Validate(stars, 13, s => Assert.That(s.ColourIndex("B-V"), Is.GreaterThan(1.67)));
+        }
 
-        //    var builder = new QueryBuilder();
+        /// <summary>
+        /// Test that the <see cref="DatabaseManager.GetStars(IQuery, int, int)"/> method works correctly when provided with an <see cref="IQuery"/> containing a greater than or equals predicate.
+        /// </summary>
+        [Test]
+        public void TestGetStarsWithGreaterThanOrEqualsQuery()
+        {
+            var database = manager.GetDatabase(DATABASE);
 
-        //    var query = builder.AddTable(COLLECTION)
-        //                       .AddPredicate(builder.CreateField("Apparent Magnitude"), 8.55, ComparisonOperators.Equals)
-        //                       .BuildQuery();
+            var builder = new QueryBuilder();
 
-        //    var stars = provider.GetStars(query, 0, 1000);
+            var query = builder.AddTable(COLLECTION)
+                               .AddPredicate(builder.CreateField("B-V"), 1.67, ComparisonOperators.GreaterThanOrEquals)
+                               .BuildQuery();
 
-        //    Validate(stars, 10, s => Assert.That(s.ApparentMagnitude, Is.EqualTo(8.55)));
-        //}
+            var stars = database.GetStars(query, 0, 1000);
 
-        ///// <summary>
-        ///// Test that the <see cref="DatabaseManager.GetStars(IQuery, int, int)"/> method works correctly when provided with an <see cref="IQuery"/> containing a greater than predicate.
-        ///// </summary>
-        //[Test]
-        //public void TestGetStarsWithGreaterThanQuery()
-        //{
-        //    var provider = new DatabaseManager(connection);
+            Validate(stars, 14, s => Assert.That(s.ColourIndex("B-V"), Is.GreaterThanOrEqualTo(1.67)));
+        }
 
-        //    provider.OpenDatabase(DATABASE);
+        /// <summary>
+        /// Test that the <see cref="DatabaseManager.GetStars(IQuery, int, int)"/> method works correctly when provided with an <see cref="IQuery"/> containing a less than predicate.
+        /// </summary>
+        [Test]
+        public void TestGetStarsWithLessThanQuery()
+        {
+            var database = manager.GetDatabase(DATABASE);
 
-        //    var builder = new QueryBuilder();
+            var builder = new QueryBuilder();
 
-        //    var query = builder.AddTable(COLLECTION)
-        //                       .AddPredicate(builder.CreateField("B-V"), 1.67, ComparisonOperators.GreaterThan)
-        //                       .BuildQuery();
+            var query = builder.AddTable(COLLECTION)
+                               .AddPredicate(builder.CreateField("B-V"), -0.089, ComparisonOperators.LessThan)
+                               .BuildQuery();
 
-        //    var stars = provider.GetStars(query, 0, 1000);
+            var stars = database.GetStars(query, 0, 1000);
 
-        //    Validate(stars, 13, s => Assert.That(s.BVColourIndex, Is.GreaterThan(1.67)));
-        //}
+            Validate(stars, 8, s => Assert.That(s.ColourIndex("B-V"), Is.LessThan(-0.089)));
+        }
 
-        ///// <summary>
-        ///// Test that the <see cref="DatabaseManager.GetStars(IQuery, int, int)"/> method works correctly when provided with an <see cref="IQuery"/> containing a greater than or equals predicate.
-        ///// </summary>
-        //[Test]
-        //public void TestGetStarsWithGreaterThanOrEqualsQuery()
-        //{
-        //    var provider = new DatabaseManager(connection);
+        /// <summary>
+        /// Test that the <see cref="DatabaseManager.GetStars(IQuery, int, int)"/> method works correctly when provided with an <see cref="IQuery"/> containing a less than or equals predicate.
+        /// </summary>
+        [Test]
+        public void TestGetStarsWithLessThanOrEqualsQuery()
+        {
+            var database = manager.GetDatabase(DATABASE);
 
-        //    provider.OpenDatabase(DATABASE);
+            var builder = new QueryBuilder();
 
-        //    var builder = new QueryBuilder();
+            var query = builder.AddTable(COLLECTION)
+                               .AddPredicate(builder.CreateField("B-V"), -0.089, ComparisonOperators.LessThanOrEquals)
+                               .BuildQuery();
 
-        //    var query = builder.AddTable(COLLECTION)
-        //                       .AddPredicate(builder.CreateField("B-V"), 1.67, ComparisonOperators.GreaterThanOrEquals)
-        //                       .BuildQuery();
+            var stars = database.GetStars(query, 0, 1000);
 
-        //    var stars = provider.GetStars(query, 0, 1000);
+            Validate(stars, 9, s => Assert.That(s.ColourIndex("B-V"), Is.LessThanOrEqualTo(-0.089)));
+        }
 
-        //    Validate(stars, 14, s => Assert.That(s.BVColourIndex, Is.GreaterThanOrEqualTo(1.67)));
-        //}
+        /// <summary>
+        /// Test that the <see cref="DatabaseManager.GetStars(IQuery, int, int)"/> method works correctly when provided with an <see cref="IQuery"/> containing a not equals predicate.
+        /// </summary>
+        [Test]
+        public void TestGetStarsWithNotEqualsQuery()
+        {
+            var database = manager.GetDatabase(DATABASE);
 
-        ///// <summary>
-        ///// Test that the <see cref="DatabaseManager.GetStars(IQuery, int, int)"/> method works correctly when provided with an <see cref="IQuery"/> containing a less than predicate.
-        ///// </summary>
-        //[Test]
-        //public void TestGetStarsWithLessThanQuery()
-        //{
-        //    var provider = new DatabaseManager(connection);
+            var builder = new QueryBuilder();
 
-        //    provider.OpenDatabase(DATABASE);
+            var query = builder.AddTable(COLLECTION)
+                               .AddPredicate(builder.CreateField("ApparentMagnitude"), 8.55, ComparisonOperators.NotEquals)
+                               .BuildQuery();
 
-        //    var builder = new QueryBuilder();
+            var stars = database.GetStars(query, 0, 1000);
 
-        //    var query = builder.AddTable(COLLECTION)
-        //                       .AddPredicate(builder.CreateField("B-V"), -0.089, ComparisonOperators.LessThan)
-        //                       .BuildQuery();
+            Validate(stars, 990, s => Assert.That(s.ApparentMagnitude, Is.Not.EqualTo(8.55)));
+        }
 
-        //    var stars = provider.GetStars(query, 0, 1000);
+        // TODO - And and Or queries
 
-        //    Validate(stars, 8, s => Assert.That(s.BVColourIndex, Is.LessThan(-0.089)));
-        //}
+        /// <summary>
+        /// Validates the <see cref="IForwardOnlyCursor{IStar}"/> provided.
+        /// </summary>
+        /// <param name="stars">The <see cref="IForwardOnlyCursor{IStar}"/> being validated.</param>
+        /// <param name="count">The expected number of items returned by the cursor.</param>
+        private void Validate(IForwardOnlyCursor<IStar> stars, int count)
+        {
+            Assert.That(stars, Is.Not.Null);
 
-        ///// <summary>
-        ///// Test that the <see cref="DatabaseManager.GetStars(IQuery, int, int)"/> method works correctly when provided with an <see cref="IQuery"/> containing a less than or equals predicate.
-        ///// </summary>
-        //[Test]
-        //public void TestGetStarsWithLessThanOrEqualsQuery()
-        //{
-        //    var provider = new DatabaseManager(connection);
+            var n = 0;
 
-        //    provider.OpenDatabase(DATABASE);
+            while (stars.MoveNext())
+            {
+                Assert. That(stars.Current, Is.Not.Null);
+                n++;
+            }
 
-        //    var builder = new QueryBuilder();
+            Assert.That(n, Is.EqualTo(count));
+        }
 
-        //    var query = builder.AddTable(COLLECTION)
-        //                       .AddPredicate(builder.CreateField("B-V"), -0.089, ComparisonOperators.LessThanOrEquals)
-        //                       .BuildQuery();
+        /// <summary>
+        /// Validates the <see cref="IList{IStar}"/> provided.
+        /// </summary>
+        /// <param name="stars">The <see cref="IList{IStar}"/> being validated.</param>
+        /// <param name="count">The expected number of items in the list.</param>
+        /// <param name="validate">An <see cref="Action{IStar}"/> that validates the items in the list.</param>
+        private void Validate(IList<IStar> stars, int count, Action<IStar> validate)
+        {
+            Assert.That(stars, Is.Not.Null);
 
-        //    var stars = provider.GetStars(query, 0, 1000);
+            Assert.That(stars, Has.Count.EqualTo(count));
 
-        //    Validate(stars, 9, s => Assert.That(s.BVColourIndex, Is.LessThanOrEqualTo(-0.089)));
-        //}
-
-        ///// <summary>
-        ///// Test that the <see cref="DatabaseManager.GetStars(IQuery, int, int)"/> method works correctly when provided with an <see cref="IQuery"/> containing a not equals predicate.
-        ///// </summary>
-        //[Test]
-        //public void TestGetStarsWithNotEqualsQuery()
-        //{
-        //    var provider = new DatabaseManager(connection);
-
-        //    provider.OpenDatabase(DATABASE);
-
-        //    var builder = new QueryBuilder();
-
-        //    var query = builder.AddTable(COLLECTION)
-        //                       .AddPredicate(builder.CreateField("Apparent Magnitude"), 8.55, ComparisonOperators.NotEquals)
-        //                       .BuildQuery();
-
-        //    var stars = provider.GetStars(query, 0, 1000);
-
-        //    Validate(stars, 990, s => Assert.That(s.ApparentMagnitude, Is.Not.EqualTo(8.55)));
-        //}
-
-        //// TODO - And and Or queries
-
-        ///// <summary>
-        ///// Validates the <see cref="IForwardOnlyCursor{IStar}"/> provided.
-        ///// </summary>
-        ///// <param name="stars">The <see cref="IForwardOnlyCursor{IStar}"/> being validated.</param>
-        ///// <param name="count">The expected number of items returned by the cursor.</param>
-        //private void Validate(IForwardOnlyCursor<IStar> stars, int count)
-        //{
-        //    Assert.That(stars, Is.Not.Null);
-
-        //    var n = 0;
-
-        //    while (stars.MoveNext())
-        //    {
-        //        Assert. That(stars.Current, Is.Not.Null);
-        //        n++;
-        //    }
-
-        //    Assert.That(n, Is.EqualTo(count));
-        //}
-
-        ///// <summary>
-        ///// Validates the <see cref="IList{IStar}"/> provided.
-        ///// </summary>
-        ///// <param name="stars">The <see cref="IList{IStar}"/> being validated.</param>
-        ///// <param name="count">The expected number of items in the list.</param>
-        ///// <param name="validate">An <see cref="Action{IStar}"/> that validates the items in the list.</param>
-        //private void Validate(IList<IStar> stars, int count, Action<IStar> validate)
-        //{
-        //    Assert.That(stars, Is.Not.Null);
-
-        //    Assert.That(stars, Has.Count.EqualTo(count));
-
-        //    for (int n = 0; n < count; n++)
-        //    {
-        //        validate(stars[n]);
-        //    }
-        //}
+            for (int n = 0; n < count; n++)
+            {
+                validate(stars[n]);
+            }
+        }
     }
 }
