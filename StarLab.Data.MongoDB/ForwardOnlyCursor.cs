@@ -76,7 +76,7 @@ namespace StarLab.Data.MongoDB
         }
 
         /// <summary>
-        /// Releases any resources used by the <see cref="ColourMagnitudeChartViewPresenter"/> object.
+        /// Releases any resources used by the <see cref="ForwardOnlyCursor{T}"/> object.
         /// </summary>
         /// <param name="disposing">true if managed resources can be disposed of; false otherwise.</param>
         protected void Dispose(bool disposing)

@@ -10,7 +10,7 @@ namespace StarLab.Application.Workspace.Documents.Charts
         /// <summary>
         /// Initialises a new instance of the <see cref="ApplyChartSettingsInteractor"/> class.
         /// </summary>
-        /// <param name="outputPort">An <see cref="IAddDocumentOutputPort"/> that updates the UI in response to the execution of the use case.</param>
+        /// <param name="outputPort">An <see cref="IChartOutputPort"/> that updates the UI in response to the execution of the use case.</param>
         /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
         public ApplyChartSettingsInteractor(IChartOutputPort outputPort, IMapper mapper)
             : base(outputPort, mapper) { }

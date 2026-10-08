@@ -6,7 +6,7 @@ namespace StarLab.Data.Import
     /// <summary>
     /// A field containing composite data that is being imported from a file.
     /// </summary>
-    internal sealed class FileBackedCompoundDataField : FileBackedDataField
+    internal sealed class FileBackedCompoundDataField : DataField
     {
         private readonly int[] components; // An array containing the indices of the component fields.
 

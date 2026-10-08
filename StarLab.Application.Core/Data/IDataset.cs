@@ -6,25 +6,9 @@
     public interface IDataset : IForwardOnlyDataset
     {
         /// <summary>
-        /// Gets the value of the field with the specified index.
+        /// Gets the number of rows of data.
         /// </summary>
-        /// <param name="index">The index of the field.</param>
-        /// <returns>An <see cref="object"/> that holds the value of the field with the specified index.</returns>
-        object GetValue(int index);
-
-        /// <summary>
-        /// Gets the value of the field with the specified name.
-        /// </summary>
-        /// <param name="name">The name of the field.</param>
-        /// <returns>An <see cref="object"/> that holds the value of the field with the specified name.</returns>
-        object GetValue(string name);
-
-        /// <summary>
-        /// Gets the value of the specified field.
-        /// </summary>
-        /// <param name="field">The <see cref="IDataField"/> that contains the required value.</param>
-        /// <returns>An <see cref="object"/> that holds the value of the field with the specified name.</returns>
-        object GetValue(IDataField field);
+        int Rows { get; }
 
         /// <summary>
         /// Moves the pointer to the specified row index.

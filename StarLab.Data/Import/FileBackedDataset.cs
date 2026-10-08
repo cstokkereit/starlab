@@ -35,7 +35,7 @@ namespace StarLab.Data.Import
 
             foreach (var field in importDefinition.Fields)
             {
-                if (field.Include) fields.Add(new FileBackedDataField(field));
+                if (field.Include) fields.Add(new DataField(field));
             }
 
             foreach (var field in importDefinition.CompoundFields)

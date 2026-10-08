@@ -1,20 +1,17 @@
-﻿using System.Configuration;
-using System.Security.Policy;
-
-namespace StarLab.Shared
+﻿namespace StarLab.Shared
 {
     /// <summary>
     /// A static class containing the string constants used to create exception messages.
     /// </summary>
     public static class ExceptionMessages
     {
+        public const string AlreadyAtBeginningOfFile = "The cursor is already positioned at the beginning of the file.";
+
+        public const string AlreadyAtEndOfFile = "The cursor is already positioned at the end of the file.";
+
         public const string ComponentFieldIndicesRequired = "The indices of the component fields are required.";
 
         public const string ConnectionNotOpened = "The database connection has not been opened.";
-
-        public const string CursorAtBeginningOfFile = "The cursor is already positioned at the beginning of the file.";
-
-        public const string CursorAtEndOfFile = "The cursor is already positioned at the end of the file.";
 
         public static string DocumentNotSet = "The document has not been set.";
 

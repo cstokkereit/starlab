@@ -31,7 +31,7 @@ namespace StarLab.Data.Import
         }
 
         /// <summary>
-        /// Creates an <see cref="IDelimitedTextImportDefinitionBuilder"/>.
+        /// Creates an <see cref="IDelimitedTextImportDefinitionBuilder"/> that can be used to construct an import definition for a delimited text file.
         /// </summary>
         /// <param name="delimiter">The delimiter that is used to separate fields in the source data file.</param>
         /// <param name="textDelimiter">The delimiter that is used to identify text in the source data file.</param>
@@ -42,7 +42,7 @@ namespace StarLab.Data.Import
         }
 
         /// <summary>
-        /// Creates an <see cref="IDelimitedTextImportDefinitionBuilder"/>.
+        /// Creates an <see cref="IDelimitedTextImportDefinitionBuilder"/> that can be used to construct an import definition for a delimited text file.
         /// </summary>
         /// <param name="delimiter">The delimiter that is used to separate fields in the source data file.</param>
         /// <returns>An <see cref="IDelimitedTextImportDefinitionBuilder"/> that can be used to construct an import definition for a delimited text file.</returns>
@@ -52,7 +52,7 @@ namespace StarLab.Data.Import
         }
 
         /// <summary>
-        /// Creates an <see cref="IFixedWidthImportDefinitionBuilder"/>.
+        /// Creates an <see cref="IFixedWidthImportDefinitionBuilder"/> that can be used to construct an import definition for a fixed width text file.
         /// </summary>
         /// <returns>An <see cref="IFixedWidthImportDefinitionBuilder"/> that can be used to construct an import definition for a fixed width text file.</returns>
         public static IFixedWidthImportDefinitionBuilder GetInstance()
