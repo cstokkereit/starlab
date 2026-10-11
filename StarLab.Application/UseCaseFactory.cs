@@ -3,6 +3,7 @@ using StarLab.Application.Data;
 using StarLab.Application.Workspace;
 using StarLab.Application.Workspace.Documents;
 using StarLab.Application.Workspace.Documents.Charts;
+using StarLab.Application.Workspace.Documents.Charts.Overlays;
 
 namespace StarLab.Application
 {
@@ -112,6 +113,16 @@ namespace StarLab.Application
         public IUseCase<DeleteFolderUseCaseArgs> CreateDeleteFolderUseCase(IWorkspaceOutputPort outputPort)
         {
             return new DeleteFolderInteractor(outputPort, mapper);
+        }
+
+        /// <summary>
+        /// Creates a use case interactor that manages the chart overlays.
+        /// </summary>
+        /// <param name="outputPort">An <see cref="IChartOutputPort"/> that updates the UI in response to the outputs of the use case.</param>
+        /// <returns>An instance of <see cref="IUseCase{ChartOverlayUseCaseArgs}"/> that implements the use case.</returns>
+        public IUseCase<ChartOverlayUseCaseArgs> ManageChartOverlayInteractor(IChartOutputPort outputPort)
+        {
+            return new ManageChartOverlayInteractor(outputPort, mapper, null);
         }
 
         /// <summary>

@@ -484,6 +484,25 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
+        /// Test that the <see cref="ChartSettingsViewPresenter.ShowSettings(string)"/> method correctly shows the data settings.
+        /// </summary>
+        [Test]
+        public void TestShowDataSettings()
+        {
+            var presenter = CreatePresenter(true);
+
+            presenter.Run();
+
+            view.ClearReceivedCalls();
+
+            presenter.ShowSettings("Data");
+
+            view.Received(1).Clear();
+
+            view.Received(1).AppendDataSourceSection(Arg.Any<IChartSettings>());
+        }
+
+        /// <summary>
         /// Test that the <see cref="ChartSettingsViewPresenter.ShowSettings(string)"/> method correctly shows the grid settings.
         /// </summary>
         [Test]

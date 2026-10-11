@@ -293,6 +293,16 @@ namespace StarLab.Presentation.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap Overlays {
+            get {
+                object obj = ResourceManager.GetObject("Overlays", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap PageSetup {
             get {
                 object obj = ResourceManager.GetObject("PageSetup", resourceCulture);

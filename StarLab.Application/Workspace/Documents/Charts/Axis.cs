@@ -19,6 +19,8 @@
             Scale = new Scale(dto.Scale);
 
             Visible = dto.Visible;
+
+            Data = dto.Data;
         }
 
         /// <summary>
@@ -38,6 +40,11 @@
         /// Gets the colour.
         /// </summary>
         public string Colour { get; }
+
+        /// <summary>
+        /// Gets the name of the data field the axis represents.
+        /// </summary>
+        public string Data { get; }
 
         /// <summary>
         /// Gets the axis label.

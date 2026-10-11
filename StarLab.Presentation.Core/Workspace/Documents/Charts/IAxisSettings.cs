@@ -6,6 +6,11 @@
     public interface IAxisSettings : IChartElementSettings
     {
         /// <summary>
+        /// Gets the name of the data field the axis represents.
+        /// </summary>
+        string Data { get; set; }
+
+        /// <summary>
         /// Gets the axis label settings.
         /// </summary>
         ILabelSettings Label { get; }

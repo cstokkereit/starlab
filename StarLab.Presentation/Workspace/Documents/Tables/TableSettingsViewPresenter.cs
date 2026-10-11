@@ -82,7 +82,7 @@ namespace StarLab.Presentation.Workspace.Documents.Tables
 
             base.Initialise(controller);
 
-            ParentController.AddToolbarButton(Constants.ShowSettings, StringResources.Settings, ImageResources.Settings, CreateCommand(Actions.ShowSplitContent, () => ParentController.ShowSplitContent(View.Name)));
+            ParentController.AddToolbarButton(Constants.ShowSettings, StringResources.Settings, ImageResources.Settings, CreateCommand(Actions.ShowSettings, () => ParentController.ShowSplitContent(View.Name)));
 
             View.AttachOKButtonCommand(CreateCommand(Actions.ApplySettings, () =>
             {

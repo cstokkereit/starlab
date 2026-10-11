@@ -1,6 +1,7 @@
 ﻿using StarLab.Application.Workspace;
 using StarLab.Application.Workspace.Documents;
 using StarLab.Application.Workspace.Documents.Charts;
+using StarLab.Application.Workspace.Documents.Charts.Overlays;
 
 namespace StarLab.Application
 {
@@ -70,6 +71,13 @@ namespace StarLab.Application
         /// <param name="outputPort">An <see cref="IWorkspaceOutputPort"/> that updates the UI in response to the outputs of the use case.</param>
         /// <returns>An instance of <see cref="IUseCase{DeleteFolderUseCaseArgs}"/> that implements the use case.</returns>
         IUseCase<DeleteFolderUseCaseArgs> CreateDeleteFolderUseCase(IWorkspaceOutputPort outputPort);
+
+        /// <summary>
+        /// Creates a use case interactor that manages the chart overlays.
+        /// </summary>
+        /// <param name="outputPort">An <see cref="IChartOutputPort"/> that updates the UI in response to the outputs of the use case.</param>
+        /// <returns>An instance of <see cref="IUseCase{ChartOverlayUseCaseArgs}"/> that implements the use case.</returns>
+        IUseCase<ChartOverlayUseCaseArgs> ManageChartOverlayInteractor(IChartOutputPort outputPort);
 
         /// <summary>
         /// Creates a use case interactor that loads a workspace from a file.

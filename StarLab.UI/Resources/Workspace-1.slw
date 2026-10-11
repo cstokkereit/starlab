@@ -17,7 +17,7 @@
             <Title colour="Green" text="HR-Diagram 1" visible="true">
               <Font bold="true" family="Segoe UI" italic="false" size="20" underline="false" />
             </Title>
-            <X1 colour="Green" visible="true">
+            <X1 data="ColourIndex(B-V)" colour="Green" visible="true">
               <Label colour="Green" text="Colour Index (B-V)" visible="true">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
@@ -29,7 +29,7 @@
                 </TickLabels>
               </Scale>
             </X1>
-            <X2 colour="Green" visible="false">
+            <X2 data=""  colour="Green" visible="false">
               <Label colour="Green" text="" visible="false">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
@@ -41,7 +41,7 @@
                 </TickLabels>
               </Scale>
             </X2>
-            <Y1 colour="Green" visible="true">
+            <Y1 data="AbsoluteMagnitude" colour="Green" visible="true">
               <Label colour="Green" text="Absolute Magnitude" visible="true">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
@@ -53,7 +53,7 @@
                 </TickLabels>
               </Scale>
             </Y1>
-            <Y2 colour="Green" visible="false">
+            <Y2 data="" colour="Green" visible="false">
               <Label colour="Green" text="" visible="false">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
@@ -80,7 +80,7 @@
             <Title colour="Green" text="HR-Diagram 2" visible="true">
               <Font bold="true" family="Segoe UI" italic="false" size="20" underline="false" />
             </Title>
-            <X1 colour="Green" visible="true">
+            <X1 data="ColourIndex(B-V)" colour="Green" visible="true">
               <Label colour="Green" text="Colour Index (B-V)" visible="true">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
@@ -92,7 +92,7 @@
                 </TickLabels>
               </Scale>
             </X1>
-            <X2 colour="Green" visible="false">
+            <X2 data="" colour="Green" visible="false">
               <Label colour="Green" text="" visible="false">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
@@ -104,7 +104,7 @@
                 </TickLabels>
               </Scale>
             </X2>
-            <Y1 colour="Green" visible="true">
+            <Y1 data="AbsoluteMagnitude" colour="Green" visible="true">
               <Label colour="Green" text="Absolute Magnitude" visible="true">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
@@ -116,7 +116,7 @@
                 </TickLabels>
               </Scale>
             </Y1>
-            <Y2 colour="Green" visible="false">
+            <Y2 dat="" colour="Green" visible="false">
               <Label colour="Green" text="" visible="false">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
@@ -143,7 +143,7 @@
             <Title colour="Green" text="HR-Diagram 3" visible="true">
               <Font bold="true" family="Segoe UI" italic="false" size="20" underline="false" />
             </Title>
-            <X1 colour="Green" visible="true">
+            <X1 data="ColourIndex(B-V)" colour="Green" visible="true">
               <Label colour="Green" text="Colour Index (B-V)" visible="true">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
@@ -155,7 +155,7 @@
                 </TickLabels>
               </Scale>
             </X1>
-            <X2 colour="Green" visible="false">
+            <X2 data="" colour="Green" visible="false">
               <Label colour="Green" text="" visible="false">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
@@ -167,7 +167,7 @@
                 </TickLabels>
               </Scale>
             </X2>
-            <Y1 colour="Green" visible="true">
+            <Y1 data="AbsoluteMagnitude" colour="Green" visible="true">
               <Label colour="Green" text="Absolute Magnitude" visible="true">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
@@ -179,7 +179,7 @@
                 </TickLabels>
               </Scale>
             </Y1>
-            <Y2 colour="Green" visible="false">
+            <Y2 data="" colour="Green" visible="false">
               <Label colour="Green" text="" visible="false">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
@@ -220,7 +220,7 @@
             <Title colour="Green" text="HR-Diagram 1" visible="true">
               <Font bold="true" family="Segoe UI" italic="false" size="20" underline="false" />
             </Title>
-            <X1 colour="Green" visible="true">
+            <X1 data="ColourIndex(B-V)" colour="Green" visible="true">
               <Label colour="Green" text="Colour Index (B-V)" visible="true">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
@@ -232,7 +232,7 @@
                 </TickLabels>
               </Scale>
             </X1>
-            <X2 colour="Green" visible="false">
+            <X2 data="" colour="Green" visible="false">
               <Label colour="Green" text="" visible="false">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
@@ -244,7 +244,7 @@
                 </TickLabels>
               </Scale>
             </X2>
-            <Y1 colour="Green" visible="true">
+            <Y1 data="AbsoluteMagnitude" colour="Green" visible="true">
               <Label colour="Green" text="Absolute Magnitude" visible="true">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
@@ -256,7 +256,7 @@
                 </TickLabels>
               </Scale>
             </Y1>
-            <Y2 colour="Green" visible="false">
+            <Y2 data="" colour="Green" visible="false">
               <Label colour="Green" text="" visible="false">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
@@ -283,7 +283,7 @@
             <Title colour="Green" text="HR-Diagram 2" visible="true">
               <Font bold="true" family="Segoe UI" italic="false" size="20" underline="false" />
             </Title>
-            <X1 colour="Green" visible="true">
+            <X1 data="ColourIndex(B-V)" colour="Green" visible="true">
               <Label colour="Green" text="Colour Index (B-V)" visible="true">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
@@ -295,7 +295,7 @@
                 </TickLabels>
               </Scale>
             </X1>
-            <X2 colour="Green" visible="false">
+            <X2 data="" colour="Green" visible="false">
               <Label colour="Green" text="" visible="false">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
@@ -307,7 +307,7 @@
                 </TickLabels>
               </Scale>
             </X2>
-            <Y1 colour="Green" visible="true">
+            <Y1 data="AbsoluteMagnitude" colour="Green" visible="true">
               <Label colour="Green" text="Absolute Magnitude" visible="true">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
@@ -319,7 +319,7 @@
                 </TickLabels>
               </Scale>
             </Y1>
-            <Y2 colour="Green" visible="false">
+            <Y2 data="" colour="Green" visible="false">
               <Label colour="Green" text="" visible="false">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
@@ -346,7 +346,7 @@
             <Title colour="Green" text="HR-Diagram 3" visible="true">
               <Font bold="true" family="Segoe UI" italic="false" size="20" underline="false" />
             </Title>
-            <X1 colour="Green" visible="true">
+            <X1 data="ColourIndex(B-V)" colour="Green" visible="true">
               <Label colour="Green" text="Colour Index (B-V)" visible="true">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
@@ -358,7 +358,7 @@
                 </TickLabels>
               </Scale>
             </X1>
-            <X2 colour="Green" visible="false">
+            <X2 data="" colour="Green" visible="false">
               <Label colour="Green" text="" visible="false">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
@@ -370,7 +370,7 @@
                 </TickLabels>
               </Scale>
             </X2>
-            <Y1 colour="Green" visible="true">
+            <Y1 data="AbsoluteMagnitude" colour="Green" visible="true">
               <Label colour="Green" text="Absolute Magnitude" visible="true">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
@@ -382,7 +382,7 @@
                 </TickLabels>
               </Scale>
             </Y1>
-            <Y2 colour="Green" visible="false">
+            <Y2 data="" colour="Green" visible="false">
               <Label colour="Green" text="" visible="false">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>

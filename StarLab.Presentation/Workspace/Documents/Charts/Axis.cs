@@ -20,6 +20,8 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             Label = dto.Label == null ? new Label(Colour, new Font(font)) : new Label(dto.Label);
 
             Scale = new Scale(dto.Scale);
+
+            Data = dto.Data;
         }
 
         /// <summary>
@@ -34,7 +36,14 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             Label = new Label(Colour, font);
 
             Scale = new Scale(Colour, font);
+
+            Data = string.Empty;
         }
+
+        /// <summary>
+        /// Gets the name of the data field the axis represents.
+        /// </summary>
+        public string Data { get; }
 
         /// <summary>
         /// Gets the axis <see cref="ILabel"/>.

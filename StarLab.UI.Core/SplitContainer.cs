@@ -4,11 +4,11 @@ using Stratosoft.Commands;
 namespace StarLab.UI.Controls
 {
     /// <summary>
-    /// A <see cref="UserControl"/> that combines a <see cref="System.Windows.Forms.SplitContainer"/> with a <see cref="ToolStrip"/>.
+    /// A <see cref="UserControl"/> that combines a <see cref="SplitContainer"/> with a <see cref="ToolStrip"/>.
     /// </summary>
     public partial class SplitContainer : UserControl, IToolbarManager
     {
-        private readonly Dictionary<string, Control> views = new Dictionary<string, Control>(); // A dictionary containing the contained controls indexed by name.
+        private readonly Dictionary<SplitViewPanels, PanelManager> panels = new Dictionary<SplitViewPanels, PanelManager>(); // TODO
 
         /// <summary>
         /// Initialises a new instance of the <see cref="SplitContainer"/> class.
@@ -17,19 +17,22 @@ namespace StarLab.UI.Controls
         {
             InitializeComponent();
 
+            panels[SplitViewPanels.Panel1] = new PanelManager(container.Panel1);
+            panels[SplitViewPanels.Panel2] = new PanelManager(container.Panel2);
+
             container.FixedPanel = FixedPanel.Panel1;
             container.Panel1Collapsed = true;
         }
 
-        /// <summary>
-        /// Gets the left or top panel of the <see cref="SplitContainer"/> depending on the <see cref="Orientation"/>.
-        /// </summary>
-        public SplitterPanel Panel1 => container.Panel1;
+        ///// <summary>
+        ///// Gets the left or top panel of the <see cref="SplitContainer"/> depending on the <see cref="Orientation"/>.
+        ///// </summary>
+        //public SplitterPanel Panel1 => container.Panel1;
 
-        /// <summary>
-        /// Gets the right or bottom panel of the <see cref="SplitContainer"/> depending on the <see cref="Orientation"/>.
-        /// </summary>
-        public SplitterPanel Panel2 => container.Panel2;
+        ///// <summary>
+        ///// Gets the right or bottom panel of the <see cref="SplitContainer"/> depending on the <see cref="Orientation"/>.
+        ///// </summary>
+        //public SplitterPanel Panel2 => container.Panel2;
 
         /// <summary>
         /// Adds a button to the tool bar.
@@ -40,9 +43,10 @@ namespace StarLab.UI.Controls
         /// <param name="command">The <see cref="ICommand"> to invoke when the button is clicked.</param>
         public void AddToolbarButton(string name, string tooltip, Image? image, ICommand command)
         {
-            var button = new ToolStripButton(image);
-
-            button.ToolTipText = tooltip;
+            var button = new ToolStripButton(image)
+            {
+                ToolTipText = tooltip
+            };
 
             toolStrip.Items.Add(button);
 
@@ -59,18 +63,10 @@ namespace StarLab.UI.Controls
         /// <param name="panel">The panel that the control should be added to.</param>
         public void AddControl(Control control, SplitViewPanels panel)
         {
-            switch (panel)
-            {
-                case SplitViewPanels.Panel1:
-                    container.Panel1.Controls.Add(control);
-                    break;
+            panels[panel].Add(control);
 
-                case SplitViewPanels.Panel2:
-                    container.Panel2.Controls.Add(control);
-                    break;
-            }
 
-            views.Add(control.Name, control);
+
 
             var size1 = GetMinimumSize(container.Panel1.Controls);
             var size2 = GetMinimumSize(container.Panel2.Controls);
@@ -89,9 +85,6 @@ namespace StarLab.UI.Controls
             }
 
             MinimumSize = GetMinimumSize(size1, size2);
-
-            control.Dock = DockStyle.Fill;
-            control.Visible = true;
         }
 
         /// <summary>
@@ -100,17 +93,15 @@ namespace StarLab.UI.Controls
         /// <param name="name">The name of the <see cref="Control"/> to hide.</param>
         public void HideSplitContent(string name)
         {
-            if (views.ContainsKey(name))
+            if (panels[SplitViewPanels.Panel1].Contains(name))
             {
-                if (container.Panel1.Controls.Contains(views[name]))
-                {
-                    container.Panel1Collapsed = true;
-                }
-
-                if (container.Panel2.Controls.Contains(views[name]))
-                {
-                    container.Panel2Collapsed = true;
-                }
+                panels[SplitViewPanels.Panel1].HideContent(name);
+                container.Panel1Collapsed = true;
+            }
+            else if (panels[SplitViewPanels.Panel2].Contains(name))
+            {
+                panels[SplitViewPanels.Panel2].HideContent(name);
+                container.Panel2Collapsed = true;
             }
         }
 
@@ -120,19 +111,15 @@ namespace StarLab.UI.Controls
         /// <param name="name">The name of the <see cref="Control"/> to show.</param>
         public void ShowSplitContent(string name)
         {
-            if (views.ContainsKey(name))
+            if (panels[SplitViewPanels.Panel1].Contains(name))
             {
-                var view = views[name];
-
-                if (container.Panel1.Controls.Contains(view))
-                {
-                    container.Panel1Collapsed = false;
-                }
-
-                if (container.Panel2.Controls.Contains(view))
-                {
-                    container.Panel2Collapsed = false;
-                }
+                panels[SplitViewPanels.Panel1].ShowContent(name);
+                container.Panel1Collapsed = false;
+            }
+            else if (panels[SplitViewPanels.Panel2].Contains(name))
+            {
+                panels[SplitViewPanels.Panel2].ShowContent(name);
+                container.Panel2Collapsed = false;
             }
 
             container.SplitterDistance = container.Panel1MinSize;
@@ -198,6 +185,56 @@ namespace StarLab.UI.Controls
                     e.Graphics.DrawLine(Pens.DarkGray, container.SplitterDistance + (container.SplitterWidth / 2), 0,
                     container.SplitterDistance + (container.SplitterWidth / 2), container.Height);
                     break;
+            }
+        }
+
+        private class PanelManager
+        {
+            private readonly Dictionary<string, Control> controls = new Dictionary<string, Control>();
+
+            private readonly SplitterPanel panel;
+
+            private Control? control; // The active control.
+
+            public PanelManager(SplitterPanel panel)
+            {
+                this.panel = panel;
+            }
+
+            public void Add(Control control)
+            {
+                controls.Add(control.Name, control);
+
+                if (controls.Count == 1)
+                {
+                    control.Dock = DockStyle.Fill;
+                    panel.Controls.Add(control);
+                    this.control = control;
+                }
+            }
+
+            public bool Contains(string name)
+            {
+                return controls.ContainsKey(name);
+            }
+
+            public void HideContent(string name)
+            {
+                panel.Controls.Remove(control);
+            }
+
+            public void ShowContent(string name)
+            {
+                if (control != null) panel.Controls.Remove(control);
+
+                if (controls.TryGetValue(name, out Control? content))
+                {
+                    content.Dock = DockStyle.Fill;
+
+                    panel.Controls.Add(content);
+
+                    control = content;
+                }
             }
         }
     }

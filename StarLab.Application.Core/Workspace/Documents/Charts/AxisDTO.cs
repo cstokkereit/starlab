@@ -7,6 +7,8 @@
     {
         public string Colour = string.Empty;
 
+        public string Data = string.Empty;
+
         public LabelDTO Label = new LabelDTO();
 
         public ScaleDTO Scale = new ScaleDTO();

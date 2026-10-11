@@ -14,6 +14,7 @@
         public const string ColourMagnitudeDiagram = "ColourMagnitudeDiagram";
 
         public const string Options = "Options";
+        public const string OverlayManager = "OverlayManager";
 
         public const string Split = "Split";
 

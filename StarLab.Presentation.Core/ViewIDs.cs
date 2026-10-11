@@ -14,6 +14,7 @@
         public static readonly ViewID ColourMagnitudeDiagram = new ViewID(ViewNames.ColourMagnitudeDiagram);
 
         public static readonly ViewID Options = new ViewID(ViewNames.Options);
+        public static readonly ViewID OverlayManager = new ViewID(ViewNames.OverlayManager);
 
         public static readonly ViewID Split = new ViewID(ViewNames.Split);
 

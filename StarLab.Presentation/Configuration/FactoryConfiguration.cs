@@ -1,5 +1,4 @@
 ﻿using StarLab.Shared;
-using StarLab.Shared.Properties;
 
 namespace StarLab.Presentation.Configuration
 {
@@ -83,6 +82,7 @@ namespace StarLab.Presentation.Configuration
         private void CreateDocumentViewConfigurations()
         {
             Add(new ViewConfiguration(ViewNames.ColourMagnitudeDiagram, ViewTypes.Document)
+                .AddChild(ViewNames.OverlayManager, SplitViewPanels.Panel1, "StarLab.UI.Workspace.Documents.Charts.Overlays.OverlayManagerView, StarLab.UI", "StarLab.Presentation.Workspace.Documents.Charts.Overlays.OverlayManagerViewPresenter, StarLab.Presentation")
                 .AddChild(ViewNames.ChartSettings, SplitViewPanels.Panel1, "StarLab.UI.Workspace.Documents.Charts.ChartSettingsView, StarLab.UI", "StarLab.Presentation.Workspace.Documents.Charts.ChartSettingsViewPresenter, StarLab.Presentation")
                 .AddChild(ViewNames.Chart, SplitViewPanels.Panel2, "StarLab.UI.Workspace.Documents.Charts.ChartView, StarLab.UI", "StarLab.Presentation.Workspace.Documents.Charts.ColourMagnitudeChartViewPresenter, StarLab.Presentation"));
 

@@ -41,6 +41,12 @@
         void AppendColourSection(IPlotAreaSettings settings);
 
         /// <summary>
+        /// Appends a data source settings section to the settings panel.
+        /// </summary>
+        /// <param name="settings">An <see cref="IChartSettings"/> that represents the current state of the chart.</param>
+        void AppendDataSourceSection(IChartSettings settings);
+
+        /// <summary>
         /// Appends a font settings section to the settings panel.
         /// </summary>
         /// <param name="settings">An <see cref="IFontSettings"/> that TODO.</param>

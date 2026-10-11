@@ -101,6 +101,7 @@
             MainMenuStrip = menuStrip;
             Name = "ApplicationView";
             Text = "StarLab";
+            WindowState = FormWindowState.Maximized;
             Activated += Form_Activated;
             FormClosing += Form_Closing;
             toolStripContainer.ContentPanel.ResumeLayout(false);

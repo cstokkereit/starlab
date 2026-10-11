@@ -104,6 +104,17 @@ namespace StarLab.UI.Workspace.Documents.Charts
         }
 
         /// <summary>
+        /// Appends a data source settings section to the settings panel.
+        /// </summary>
+        /// <param name="settings">An <see cref="IPlotAreaSettings"/> that represents the current state of the chart.</param>
+        public void AppendDataSourceSection(IChartSettings settings)
+        {
+            var section = new DataSourceSection(settings);
+            section.SectionChanged += OnSettingsChanged;
+            AppendSection(section);
+        }
+
+        /// <summary>
         /// Appends a font settings section to the settings panel.
         /// </summary>
         /// <param name="settings">An <see cref="IFontSettings"/> that TODO.</param>

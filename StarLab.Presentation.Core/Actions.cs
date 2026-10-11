@@ -38,7 +38,8 @@
 
         public const string SaveWorkspace = "SaveWorkspace";
         public const string Show = "Show";
-        public const string ShowSplitContent = "ShowSplitContent";
+        public const string ShowOverlays = "ShowOverlays";
+        public const string ShowSettings = "ShowSettings";
         public const string Synchronise = "Synchronise";
     }
 }

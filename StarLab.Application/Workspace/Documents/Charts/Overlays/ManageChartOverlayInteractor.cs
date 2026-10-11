@@ -26,7 +26,22 @@ namespace StarLab.Application.Workspace.Documents.Charts.Overlays
         /// <param name="args">The <see cref="ChartOverlayUseCaseArgs"/> that provide all of the information required to execute the use case.</param>
         public void Execute(ChartOverlayUseCaseArgs args)
         {
-            
+            provider.GetNamedStarsOverlayData();
+
+            // The provider holds the cached overlay data (everything that is available from the source data files) This should be loaded on demand ideally.
+            // The interactor will serve up just the data that is requested in the args e.g. name, absolute magnitude and B-V for a specified overlay type via DTOs to the chart output port 
+            // and or toggle the state of the overlay in the wrokspace/chart hierarchy
+
+            // Colour and format of the overlays is controlled via the settings. Not here.
+
+            switch(args.Overlay)
+            {
+
+
+
+
+            }
+
         }
     }
 }

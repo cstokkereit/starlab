@@ -14,6 +14,8 @@
         {
             Label = new LabelSettings(axis.Label);
             Scale = new ScaleSettings(axis.Scale);
+
+            Data = axis.Data;
         }
 
         /// <summary>
@@ -34,6 +36,11 @@
                 base.Colour = value;
             }
         }
+
+        /// <summary>
+        /// Gets the name of the data field the axis represents.
+        /// </summary>
+        public string Data { get; set; }
 
         /// <summary>
         /// Gets the label settings.

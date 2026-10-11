@@ -6,6 +6,11 @@
     public interface IAxis : IChartElement
     {
         /// <summary>
+        /// Gets the name of the data field the axis represents.
+        /// </summary>
+        string Data { get; }
+
+        /// <summary>
         /// Gets the axis <see cref="ILabel"/>.
         /// </summary>
         ILabel Label { get; }

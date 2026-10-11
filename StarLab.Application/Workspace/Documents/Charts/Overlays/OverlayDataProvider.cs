@@ -55,15 +55,13 @@ namespace StarLab.Application.Workspace.Documents.Charts.Overlays
         /// </summary>
         private void LoadNamedStars()
         {
-            
+            var definition = provider.CreateImportDefinitionBuilder(",")
+                .AddField(0, "Name", DataTypes.Text)
+                .AddField(1, "AbsoluteMagnitude", DataTypes.Decimal)
+                .AddField(2, "ColourIndex(B-V)", DataTypes.Decimal)
+                .Build();
 
-
-
-
-            // Load the named stars data from a data source (e.g., a file, database, or API).
-            // For demonstration purposes, we'll add some sample labels.
-            namedStars.AddLabel("Achernar");
-            namedStars.AddValue("AbsoluteMagnitude", -2.3);
+            provider.ImportData("", definition);
         }
     }
 }

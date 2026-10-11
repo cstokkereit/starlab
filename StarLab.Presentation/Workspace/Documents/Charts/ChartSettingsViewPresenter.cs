@@ -100,7 +100,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
 
             base.Initialise(controller);
 
-            ParentController.AddToolbarButton(Constants.ShowSettings, StringResources.Settings, ImageResources.Settings, CreateCommand(Actions.ShowSplitContent, () => ParentController.ShowSplitContent(View.Name)));
+            ParentController.AddToolbarButton(Constants.ShowSettings, StringResources.Settings, ImageResources.Settings, CreateCommand(Actions.ShowSettings, () => ParentController.ShowSplitContent(View.Name)));
 
             View.AttachOKButtonCommand(CreateCommand(Actions.ApplySettings, () => {
                 ParentController.HideSplitContent(View.Name);
@@ -175,6 +175,10 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
 
                 case Constants.ChartPlotArea:
                     View.AppendColourSection(chart.PlotArea);
+                    break;
+
+                case Constants.Data:
+                    View.AppendDataSourceSection(chart);
                     break;
 
                 default:
@@ -369,6 +373,8 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         private void CreateSettingsNavigator()
         {
             View.AddNode(Constants.Chart, StringResources.Chart);
+
+            View.AddNode(Constants.Data, StringResources.Data);
 
             View.AddNode(Constants.Title, Constants.Chart, StringResources.Title);
 

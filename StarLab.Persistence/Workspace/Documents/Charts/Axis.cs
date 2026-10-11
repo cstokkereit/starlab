@@ -9,7 +9,10 @@ namespace StarLab.Serialisation.Workspace.Documents.Charts
     public class Axis
     {
         [XmlAttribute("colour")]
-        public string? Colour;
+        public string Colour = string.Empty;
+
+        [XmlAttribute("data")]
+        public string Data = string.Empty;
 
         [XmlElement]
         public Label? Label;
