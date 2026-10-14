@@ -1,4 +1,5 @@
-﻿using StarLab.Presentation.Workspace.Documents.Charts;
+﻿using StarLab.Presentation;
+using StarLab.Presentation.Workspace.Documents.Charts;
 using StarLab.Shared.Properties;
 
 namespace StarLab.UI.Core.Workspace.Documents.Charts
@@ -174,13 +175,11 @@ namespace StarLab.UI.Core.Workspace.Documents.Charts
                         break;
                 }
 
-                var converter = new ColorConverter();
-
-                var colours = converter.GetStandardValues();
-
-                if (colours != null)
+                foreach (KnownColor value in Enum.GetValues(typeof(KnownColor)))
                 {
-                    foreach (var colour in colours)
+                    var colour = Color.FromKnownColor(value);
+
+                    if (!colour.IsSystemColor && colour.Name != Constants.Transparent)
                     {
                         combo.Items.Add(colour);
                     }

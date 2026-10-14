@@ -16,6 +16,8 @@
         public const int DefaultMajorTickMarkLength = 4;
         public const int DefaultMinorTickMarkLength = 2;
 
+        
+
         public const string Table = "Table";
 
         public const string Workspace = "Workspace";

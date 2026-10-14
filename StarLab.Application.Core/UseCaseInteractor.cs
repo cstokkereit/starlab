@@ -4,10 +4,10 @@ using System.Diagnostics;
 namespace StarLab.Application
 {
     /// <summary>
-    /// The base class for all use case interactors.
+    /// The base class for all use cases.
     /// </summary>
     /// <typeparam name="TOutputPort">The <see cref="IOutputPort"/> that updates the UI in response to the outputs of the use case.</typeparam>
-    public abstract class UseCaseInteractor<TOutputPort> where TOutputPort : IOutputPort
+    public abstract class UseCaseUseCase<TOutputPort> where TOutputPort : IOutputPort
     {
         private readonly IMapper mapper; // Copies data from model objects to data transfer objects and vice versa.
 
@@ -16,12 +16,12 @@ namespace StarLab.Application
         private readonly Stopwatch stopwatch = new Stopwatch(); // A stopwatch that can be used for benchmarking code execution.
 
         /// <summary>
-        /// Initialises a new instance of the <see cref="UseCaseInteractor{TOutputPort}"/> class.
+        /// Initialises a new instance of the <see cref="UseCaseUseCase{TOutputPort}"/> class.
         /// </summary>
         /// <param name="outputPort">The <see cref="IOutputPort"/> that updates the UI in response to the outputs of the use case.</param>
         /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
         /// <exception cref="ArgumentNullException"></exception>
-        protected UseCaseInteractor(TOutputPort outputPort, IMapper mapper)
+        protected UseCaseUseCase(TOutputPort outputPort, IMapper mapper)
         {
             this.outputPort = outputPort ?? throw new ArgumentNullException(nameof(outputPort));
             this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));

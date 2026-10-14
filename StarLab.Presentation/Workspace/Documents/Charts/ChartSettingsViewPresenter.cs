@@ -1,5 +1,7 @@
 ﻿using log4net;
+using StarLab.Domain.Data;
 using StarLab.Presentation.Configuration;
+using StarLab.Presentation.Workspace.Documents.Charts.Overlays;
 using StarLab.Shared;
 using Stratosoft.Commands;
 
@@ -57,18 +59,6 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// Applies the preview settings to the chart view.
-        /// </summary>
-        /// <param name="chart">The <see cref="IChartSettings"/> that specifies the state of the chart.</param>
-        public void ApplyPreviewSettings()
-        {
-            if (document == null) throw new InvalidOperationException(ExceptionMessages.InvalidState); 
-            if (chart == null) throw new InvalidOperationException(ExceptionMessages.InvalidState);
-
-            useCaseService.UpdateChart(document.ID, chart);
-        }
-
-        /// <summary>
         /// Applies the chart settings to the document.
         /// </summary>
         public void ApplySettings()
@@ -77,7 +67,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             if (document == null) throw new InvalidOperationException(ExceptionMessages.InvalidState);
             if (chart == null) throw new InvalidOperationException(ExceptionMessages.InvalidState);
 
-            useCaseService.UpdateDocument(workspace, document.ID, chart);
+            useCaseService.UpdateChart(workspace, document.ID, chart);
         }
 
         /// <summary>
@@ -102,12 +92,14 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
 
             ParentController.AddToolbarButton(Constants.ShowSettings, StringResources.Settings, ImageResources.Settings, CreateCommand(Actions.ShowSettings, () => ParentController.ShowSplitContent(View.Name)));
 
-            View.AttachOKButtonCommand(CreateCommand(Actions.ApplySettings, () => {
+            View.AttachOKButtonCommand(CreateCommand(Actions.ApplySettings, () =>
+            {
                 ParentController.HideSplitContent(View.Name);
                 ApplySettings();
             }));
 
-            View.AttachCancelButtonCommand(CreateCommand(Actions.RevertSettings, () => {
+            View.AttachCancelButtonCommand(CreateCommand(Actions.RevertSettings, () =>
+            {
                 ParentController.HideSplitContent(View.Name);
                 RevertSettings();
             }));
@@ -178,7 +170,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
                     break;
 
                 case Constants.Data:
-                    View.AppendDataSourceSection(chart);
+                    View.AppendDataSourceSection(chart, GetAvailableHorizontalAxisParameters(), GetAvailableVerticalAxisParameters());
                     break;
 
                 default:
@@ -187,6 +179,18 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             }
 
             this.key = key;
+        }
+
+        /// <summary>
+        /// Updates the chart preview following a change to the chart settings.
+        /// </summary>
+        /// <param name="chart">The <see cref="IChartSettings"/> that specifies the state of the chart.</param>
+        public void UpdateChartPreview()
+        {
+            if (document == null) throw new InvalidOperationException(ExceptionMessages.InvalidState);
+            if (chart == null) throw new InvalidOperationException(ExceptionMessages.InvalidState);
+
+            useCaseService.UpdateChartPreview(document.ID, chart);
         }
 
         /// <summary>
@@ -395,6 +399,41 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             View.AddNode(Constants.Points, plotArea, StringResources.Points);
 
             var overlays = View.AddNode(Constants.Overlays, Constants.Chart, StringResources.Overlays);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        private List<IDisplayField> GetAvailableHorizontalAxisParameters()
+        {
+            // TODO : These should be checked against the available data
+
+            var parameters = new List<IDisplayField>()
+            {
+                new DisplayField(StellarParameters.EffectiveTemperature, StringResources.EffectiveTemperature),
+                new DisplayField(StellarParameters.ColourIndex("B", "V"), string.Format(StringResources.ColourIndex, "B", "V")),
+                new DisplayField(StellarParameters.SpectralClass, StringResources.SpectralClass)
+            };
+
+            return parameters;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        private List<IDisplayField> GetAvailableVerticalAxisParameters()
+        {
+            // TODO : These should be checked against the available data
+
+            var parameters = new List<IDisplayField>()
+            {
+                new DisplayField(StellarParameters.AbsoluteMagnitude, StringResources.AbsoluteMagnitude),
+                new DisplayField(StellarParameters.Luminosity, StringResources.Luminosity)
+            };
+
+            return parameters;
         }
     }
 }

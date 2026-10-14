@@ -5,6 +5,8 @@
     /// </summary>
     internal class ChartSettings : IChartSettings
     {
+        //private readonly Dictionary<string, IOverlaySettings> overlays = new Dictionary<string, IOverlaySettings>(); // A dictionary that holds the chart overlays indexed by name.
+
         private readonly Dictionary<string, IChartElementSettings> settingsByKey = new Dictionary<string, IChartElementSettings>(); // A dictionary that holds the settings for the chart elements indexed by key.
 
         private string backColour; // The chart background colour.
@@ -28,7 +30,7 @@
 
             font = new Font(chart.Font);
 
-            PopulateSettingsByKey();
+            PopulateSettingsByKey(); // TODO Overlays
         }
 
         /// <summary>
@@ -39,15 +41,13 @@
         /// <summary>
         /// Gets or sets the chart background colour.
         /// </summary>
-        public string BackColour 
+        public string BackColour
         {
             get => backColour;
 
             set
             {
                 PlotArea.BackColour = value;
-                Title.Colour = value;
-                Axes.Colour = value;
 
                 backColour = value;
             }
@@ -168,6 +168,10 @@
 
             AddSettings(Constants.MajorGridLines, grid, PlotArea.Grid.MajorGridLines);
             AddSettings(Constants.MinorGridLines, grid, PlotArea.Grid.MinorGridLines);
+
+            var overlays = $"{Constants.Chart}/{Constants.Overlays}";
+
+
         }
     }
 }

@@ -8,7 +8,7 @@
         /// <summary>
         /// Applies the preview settings to the chart view.
         /// </summary>
-        void ApplyPreviewSettings();
+        void UpdateChartPreview();
 
         /// <summary>
         /// Shows the settings for the specified key.

@@ -14,8 +14,6 @@ namespace StarLab.UI.Workspace.Documents.Charts
     /// </summary>
     public partial class ChartSettingsView : ChildView, IChartSettingsView
     {
-        private const int SECTION_MARGIN = 15; // The gap to leave between settings sections.
-
         private static readonly ILog log = LogManager.GetLogger(typeof(ChartSettingsView)); // The logger that will be used for writing log messages.
 
         private readonly Dictionary<string, TreeNode> nodes = []; // A dictionary containing the tree nodes indexed by node key.
@@ -106,10 +104,12 @@ namespace StarLab.UI.Workspace.Documents.Charts
         /// <summary>
         /// Appends a data source settings section to the settings panel.
         /// </summary>
-        /// <param name="settings">An <see cref="IPlotAreaSettings"/> that represents the current state of the chart.</param>
-        public void AppendDataSourceSection(IChartSettings settings)
+        /// <param name="settings">An <see cref="IChartSettings"/> that represents the current state of the chart.</param>
+        /// <param name="horizontalAxisFields">The fields that can be represented on a horizontal axis.</param>
+        /// <param name="verticalAxisFields">The fields that can be represented on a vertical axis.</param>
+        public void AppendDataSourceSection(IChartSettings settings, IEnumerable<IDisplayField> horizontalAxisFields, IEnumerable<IDisplayField> verticalAxisFields)
         {
-            var section = new DataSourceSection(settings);
+            var section = new DataSourceSection(settings, horizontalAxisFields, verticalAxisFields);
             section.SectionChanged += OnSettingsChanged;
             AppendSection(section);
         }
@@ -207,21 +207,6 @@ namespace StarLab.UI.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// Detaches the presenter that controls the view.
-        /// </summary>
-        public override void Detach()
-        {
-            if (presenter != null)
-            {
-                var type = presenter.GetType();
-
-                presenter = null;
-
-                log.Debug(LogEntries.PresenterDetached(type));
-            }
-        }
-
-        /// <summary>
         /// Clears the settings panel.
         /// </summary>
         public void Clear()
@@ -234,6 +219,21 @@ namespace StarLab.UI.Workspace.Documents.Charts
             panelSettings.Controls.Clear();
 
             sections.Clear();
+        }
+
+        /// <summary>
+        /// Detaches the presenter that controls the view.
+        /// </summary>
+        public override void Detach()
+        {
+            if (presenter != null)
+            {
+                var type = presenter.GetType();
+
+                presenter = null;
+
+                log.Debug(LogEntries.PresenterDetached(type));
+            }
         }
 
         /// <summary>
@@ -275,7 +275,7 @@ namespace StarLab.UI.Workspace.Documents.Charts
 
             foreach (Control control in panelSettings.Controls)
             {
-                top += SECTION_MARGIN + control.Height;
+                top += LayoutConstants.SectionSpacing + control.Height;
             }
 
             sections.Add(section);
@@ -294,7 +294,7 @@ namespace StarLab.UI.Workspace.Documents.Charts
         {
             Debug.Assert(presenter != null);
 
-            presenter.ApplyPreviewSettings();
+            presenter.UpdateChartPreview();
         }
 
         /// <summary>

@@ -1,10 +1,14 @@
-﻿namespace StarLab.Application.Workspace.Documents.Charts
+﻿using StarLab.Application.Workspace.Documents.Charts.Overlays;
+
+namespace StarLab.Application.Workspace.Documents.Charts
 {
     /// <summary>
     /// Application model representation of a chart.
     /// </summary>
     internal class Chart
     {
+        private readonly Dictionary<string, Overlay> overlays = new Dictionary<string, Overlay>(); // A dictionary containing the chart overlays.
+
         /// <summary>
         /// Initialises a new instance of the <see cref="Chart"> class.
         /// </summary>
@@ -23,6 +27,8 @@
             X2 = new Axis(dto.X2);
             Y1 = new Axis(dto.Y1);
             Y2 = new Axis(dto.Y2);
+
+            CreateOverlays(dto.Overlays);
         }
 
         /// <summary>
@@ -39,6 +45,11 @@
         /// Gets the foreground colour.
         /// </summary>
         public string ForeColour { get; }
+
+        /// <summary>
+        /// Gets an <see cref="IEnumerable{IFolder}"/> containing all of the folders within the project hierarchy.
+        /// </summary>
+        public IEnumerable<Overlay> Overlays => overlays.Values;
 
         /// <summary>
         /// Gets the plot area.
@@ -69,5 +80,19 @@
         /// Gets the right axis.
         /// </summary>
         public Axis Y2 { get; }
+
+        /// <summary>
+        /// Creates the overlays that belong to this chart from the <see cref="OverlayDTO"/>s provided.
+        /// </summary>
+        /// <param name="dtos">An <see cref="IEnumerable{OverlayDTO}"/> that contains the dtos.</param>
+        private void CreateOverlays(IEnumerable<OverlayDTO> dtos)
+        {
+            foreach (var dto in dtos)
+            {
+                var overlay = new Overlay(dto);
+
+                overlays.Add(overlay.Name, overlay);
+            }
+        }
     }
 }

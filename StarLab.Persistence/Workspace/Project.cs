@@ -6,6 +6,7 @@ namespace StarLab.Serialisation.Workspace
     /// <summary>
     /// A POCO representation of a project used for XML serialisation/deserialisation.
     /// </summary>
+    [XmlType]
     public class Project
     {
         [XmlElement("Database")]

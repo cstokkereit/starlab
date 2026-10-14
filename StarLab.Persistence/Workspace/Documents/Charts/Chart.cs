@@ -1,4 +1,5 @@
-﻿using System.Xml.Serialization;
+﻿using StarLab.Serialisation.Workspace.Documents.Charts.Overlays;
+using System.Xml.Serialization;
 
 namespace StarLab.Serialisation.Workspace.Documents.Charts
 {
@@ -16,6 +17,9 @@ namespace StarLab.Serialisation.Workspace.Documents.Charts
 
         [XmlAttribute("foreColour")]
         public string? ForeColour;
+
+        [XmlArray]
+        public List<Overlay>? Overlays;
 
         [XmlElement]
         public PlotArea? PlotArea;

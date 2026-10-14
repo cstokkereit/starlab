@@ -2,6 +2,7 @@
 using StarLab.Application.Workspace;
 using StarLab.Application.Workspace.Documents;
 using StarLab.Application.Workspace.Documents.Charts;
+using StarLab.Application.Workspace.Documents.Charts.Overlays;
 using StarLab.Application.Workspace.Documents.Tables;
 
 namespace StarLab.Application
@@ -25,6 +26,7 @@ namespace StarLab.Application
             CreateMap<Grid, GridDTO>();
             CreateMap<GridLines, GridLinesDTO>();
             CreateMap<Label, LabelDTO>();
+            CreateMap<Overlay, OverlayDTO>();
             CreateMap<PlotArea, PlotAreaDTO>();
             CreateMap<Points, PointsDTO>();
             CreateMap<Project, ProjectDTO>().ForMember(dest => dest.Documents, opt => opt.MapFrom(src => src.AllDocuments))

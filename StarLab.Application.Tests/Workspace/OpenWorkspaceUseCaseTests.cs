@@ -1,0 +1,81 @@
+using System.Runtime.Serialization;
+
+namespace StarLab.Application.Workspace
+{
+    /// <summary>
+    /// A class for performing unit tests on the <see cref="OpenWorkspaceUseCase"/> class.
+    /// </summary>
+    public class OpenWorkspaceUseCaseTests : ApplicationTests
+    {
+        /// <summary>
+        /// This will be run after each test.
+        /// </summary>
+        [TearDown]
+        public override void TearDown()
+        {
+            try
+            {
+                DeleteFile(Path.Combine(folder, "Invalid.slw"));
+            }
+            catch (Exception)
+            {
+                Assert.Fail("TearDown Failed.");
+            }
+
+            base.TearDown();
+        }
+
+        /// <summary>
+        /// Test that the <see cref="OpenWorkspaceuseCase.Execute"/> method throws an exception if the workspace file cannot be loaded.
+        /// </summary>
+        [Test]
+        public void TestOpenInvalidWorkspaceFileThrowsException()
+        {
+            var port = Substitute.For<IApplicationOutputPort>();
+
+            var useCase = factory.CreateOpenWorkspaceUseCase(port);
+
+            var filename = Path.Combine(folder, "Invalid.slw");
+
+            CopyFile(Path.Combine(resources, "Invalid.slw"), filename);
+
+            Assert.Throws<SerializationException>(() => useCase.Execute(filename));
+        }
+
+        /// <summary>
+        /// Test that the <see cref="OpenWorkspaceuseCase.Execute"/> method throws an exception if the workspace file does not exist.
+        /// </summary>
+        [Test]
+        public void TestOpenNonExistentWorkspaceFileThrowsException()
+        {
+            var port = Substitute.For<IApplicationOutputPort>();
+
+            var useCase = factory.CreateOpenWorkspaceUseCase(port);
+
+            var filename = Path.Combine(folder, "Missing.slw");
+
+            Assert.Throws<FileNotFoundException>(() => useCase.Execute(filename));
+
+            port.DidNotReceive().UpdateWorkspace(Arg.Any<WorkspaceDTO>());
+        }
+
+        /// <summary>
+        /// Test that the <see cref="OpenWorkspaceuseCase.Execute"/> method correctly opens a workspace.
+        /// </summary>
+        [Test]
+        public void TestOpenWorkspace()
+        {
+            var port = Substitute.For<IApplicationOutputPort>();
+
+            var useCase = factory.CreateOpenWorkspaceUseCase(port);
+
+            var filename = Path.Combine(folder, "Workspace1.slw");
+
+            CopyFile(Path.Combine(resources, "Workspace1.slw"), filename);
+
+            useCase.Execute(filename);
+
+            port.Received().SetWorkspace(Arg.Is<WorkspaceDTO>(ws => ws.FileName == Path.Combine(folder, "Workspace1.slw")));
+        }
+    }
+}

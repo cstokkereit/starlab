@@ -70,6 +70,15 @@ namespace StarLab.Shared.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Absolute Magnitude.
+        /// </summary>
+        public static string AbsoluteMagnitude {
+            get {
+                return ResourceManager.GetString("AbsoluteMagnitude", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add.
         /// </summary>
         public static string Add {
@@ -241,6 +250,15 @@ namespace StarLab.Shared.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Colour Index ({0}-{1}).
+        /// </summary>
+        public static string ColourIndex {
+            get {
+                return ResourceManager.GetString("ColourIndex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A command with the name &apos;{1}&apos; already exists..
         /// </summary>
         public static string CommandAlreadyExists {
@@ -403,6 +421,15 @@ namespace StarLab.Shared.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Effective Temperature.
+        /// </summary>
+        public static string EffectiveTemperature {
+            get {
+                return ResourceManager.GetString("EffectiveTemperature", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exit.
         /// </summary>
         public static string Exit {
@@ -559,6 +586,24 @@ namespace StarLab.Shared.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Luminosity.
+        /// </summary>
+        public static string Luminosity {
+            get {
+                return ResourceManager.GetString("Luminosity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Magnitude Classes.
+        /// </summary>
+        public static string MagnitudeClasses {
+            get {
+                return ResourceManager.GetString("MagnitudeClasses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Major Grid Lines.
         /// </summary>
         public static string MajorGridLines {
@@ -623,6 +668,15 @@ namespace StarLab.Shared.Properties {
         public static string NameContainsIllegalCharacters {
             get {
                 return ResourceManager.GetString("NameContainsIllegalCharacters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Named Stars.
+        /// </summary>
+        public static string NamedStars {
+            get {
+                return ResourceManager.GetString("NamedStars", resourceCulture);
             }
         }
         
@@ -852,11 +906,29 @@ namespace StarLab.Shared.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Spectral Class.
+        /// </summary>
+        public static string SpectralClass {
+            get {
+                return ResourceManager.GetString("SpectralClass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to StarLab.
         /// </summary>
         public static string StarLab {
             get {
                 return ResourceManager.GetString("StarLab", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sun.
+        /// </summary>
+        public static string Sun {
+            get {
+                return ResourceManager.GetString("Sun", resourceCulture);
             }
         }
         
@@ -902,6 +974,15 @@ namespace StarLab.Shared.Properties {
         public static string Tools {
             get {
                 return ResourceManager.GetString("Tools", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Variable Types.
+        /// </summary>
+        public static string VariableTypes {
+            get {
+                return ResourceManager.GetString("VariableTypes", resourceCulture);
             }
         }
         

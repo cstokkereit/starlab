@@ -1,4 +1,6 @@
-﻿namespace StarLab.Application.Workspace.Documents.Charts
+﻿using StarLab.Application.Workspace.Documents.Charts.Overlays;
+
+namespace StarLab.Application.Workspace.Documents.Charts
 {
     /// <summary>
     /// A data transfer object that represents a chart.
@@ -10,6 +12,8 @@
         public FontDTO Font = new FontDTO();
 
         public string ForeColour = string.Empty;
+
+        public List<OverlayDTO> Overlays = new List<OverlayDTO>();
 
         public PlotAreaDTO PlotArea = new PlotAreaDTO();
 

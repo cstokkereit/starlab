@@ -94,9 +94,9 @@ namespace StarLab.Presentation
 
             commands.GetCommand("CloseWorkspace").Returns((ICommand)command);
 
-            var interactor = Substitute.For<IUseCase<WorkspaceDTO>>();
+            var useCase = Substitute.For<IUseCase<WorkspaceDTO>>();
 
-            factory.CreateSaveWorkspaceUseCase(Arg.Any<IApplicationOutputPort>()).Returns(interactor);
+            factory.CreateSaveWorkspaceUseCase(Arg.Any<IApplicationOutputPort>()).Returns(useCase);
 
             var presenter = CreatePresenter(true);
 
@@ -104,7 +104,7 @@ namespace StarLab.Presentation
 
             presenter.SaveWorkspace();
 
-            interactor.ClearReceivedCalls();
+            useCase.ClearReceivedCalls();
             commands.ClearReceivedCalls();
 
             IWorkspace? workspace1 = null;
@@ -116,7 +116,7 @@ namespace StarLab.Presentation
             presenter.CloseWorkspace();
 
             controller.Received(0).ShowMessage(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<InteractionResponses>());
-            interactor.Received(0).Execute(Arg.Any<WorkspaceDTO>());
+            useCase.Received(0).Execute(Arg.Any<WorkspaceDTO>());
             command.Received(1).Enabled = false;
             controller.Received(1).CloseDocument(Arg.Is<IDocument>(d => d.Name == "Chart-1"));
             controller.Received(1).CloseDocument(Arg.Is<IDocument>(d => d.Name == "Chart-2"));
@@ -142,9 +142,9 @@ namespace StarLab.Presentation
 
             commands.GetCommand("CloseWorkspace").Returns((ICommand)command);
 
-            var interactor = Substitute.For<IUseCase<WorkspaceDTO>>();
+            var useCase = Substitute.For<IUseCase<WorkspaceDTO>>();
 
-            factory.CreateSaveWorkspaceUseCase(Arg.Any<IApplicationOutputPort>()).Returns(interactor);
+            factory.CreateSaveWorkspaceUseCase(Arg.Any<IApplicationOutputPort>()).Returns(useCase);
 
             controller.ShowMessage(Resources.WorkspaceClosing, InteractionResponses.YesNoCancel).Returns(InteractionResult.No);
 
@@ -160,7 +160,7 @@ namespace StarLab.Presentation
 
             presenter.CloseWorkspace();
 
-            interactor.Received(0).Execute(Arg.Any<WorkspaceDTO>());
+            useCase.Received(0).Execute(Arg.Any<WorkspaceDTO>());
             command.Received(1).Enabled = false;
             controller.Received(1).CloseDocument(Arg.Is<IDocument>(d => d.Name == "Chart-1"));
             controller.Received(1).CloseDocument(Arg.Is<IDocument>(d => d.Name == "Chart-2"));
@@ -186,9 +186,9 @@ namespace StarLab.Presentation
 
             commands.GetCommand("CloseWorkspace").Returns((ICommand)command);
 
-            var interactor = Substitute.For<IUseCase<WorkspaceDTO>>();
+            var useCase = Substitute.For<IUseCase<WorkspaceDTO>>();
 
-            factory.CreateSaveWorkspaceUseCase(Arg.Any<IApplicationOutputPort>()).Returns(interactor);
+            factory.CreateSaveWorkspaceUseCase(Arg.Any<IApplicationOutputPort>()).Returns(useCase);
 
             controller.ShowMessage(Resources.WorkspaceClosing, InteractionResponses.YesNoCancel).Returns(InteractionResult.Yes);
 
@@ -204,7 +204,7 @@ namespace StarLab.Presentation
 
             presenter.CloseWorkspace();
 
-            interactor.Received(1).Execute(Arg.Is<WorkspaceDTO>(e => e.FileName == @"C:\Workspace-1"));
+            useCase.Received(1).Execute(Arg.Is<WorkspaceDTO>(e => e.FileName == @"C:\Workspace-1"));
             command.Received(1).Enabled = false;
             controller.Received(1).CloseDocument(Arg.Is<IDocument>(d => d.Name == "Chart-1"));
             controller.Received(1).CloseDocument(Arg.Is<IDocument>(d => d.Name == "Chart-2"));
@@ -226,9 +226,9 @@ namespace StarLab.Presentation
         [Test]
         public void TestCloseWorkspaceWhenCancelled()
         {
-            var interactor = Substitute.For<IUseCase<WorkspaceDTO>>();
+            var useCase = Substitute.For<IUseCase<WorkspaceDTO>>();
 
-            factory.CreateSaveWorkspaceUseCase(Arg.Any<IApplicationOutputPort>()).Returns(interactor);
+            factory.CreateSaveWorkspaceUseCase(Arg.Any<IApplicationOutputPort>()).Returns(useCase);
 
             controller.ShowMessage(Resources.WorkspaceClosing, InteractionResponses.YesNoCancel).Returns(InteractionResult.Cancel);
 
@@ -240,7 +240,7 @@ namespace StarLab.Presentation
 
             presenter.CloseWorkspace();
 
-            interactor.Received(0).Execute(Arg.Any<WorkspaceDTO>());
+            useCase.Received(0).Execute(Arg.Any<WorkspaceDTO>());
             commands.Received(0).GetCommand("CloseWorkspace");
             controller.Received(0).CloseDocument(Arg.Any<IDocument>());
             events.Received(0).Publish(Arg.Any<WorkspaceClosedEventArgs>(), true);
@@ -404,9 +404,9 @@ namespace StarLab.Presentation
         [Test]
         public void TestInitialise()
         {
-            var interactor = Substitute.For<IUseCase<string>>();
+            var useCase = Substitute.For<IUseCase<string>>();
 
-            factory.CreateOpenWorkspaceUseCase(Arg.Any<IApplicationOutputPort>()).Returns(interactor);
+            factory.CreateOpenWorkspaceUseCase(Arg.Any<IApplicationOutputPort>()).Returns(useCase);
 
             context.Settings.Workspace.Returns(@"C:\Workspace-1");
 
@@ -428,7 +428,7 @@ namespace StarLab.Presentation
 
             view.Received(2).AddToolbarButton(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<Image>(), Arg.Any<ICommand>());
 
-            interactor.Received(1).Execute(@"C:\Workspace-1");
+            useCase.Received(1).Execute(@"C:\Workspace-1");
         }
 
         /// <summary>
@@ -502,9 +502,9 @@ namespace StarLab.Presentation
 
             commands.GetCommand("CloseWorkspace").Returns((ICommand)command);
 
-            var interactor = Substitute.For<IUseCase<string>>();
+            var useCase = Substitute.For<IUseCase<string>>();
 
-            factory.CreateOpenWorkspaceUseCase(Arg.Any<IApplicationOutputPort>()).Returns(interactor);
+            factory.CreateOpenWorkspaceUseCase(Arg.Any<IApplicationOutputPort>()).Returns(useCase);
 
             view.ShowOpenFileDialog(Arg.Any<string>(), Arg.Any<string>()).Returns(@"C:\Workspace-1");
 
@@ -512,7 +512,7 @@ namespace StarLab.Presentation
 
             presenter.OpenWorkspace();
 
-            interactor.Received(1).Execute(@"C:\Workspace-1");
+            useCase.Received(1).Execute(@"C:\Workspace-1");
             command.Received(1).Enabled = true;
         }
 
@@ -535,13 +535,13 @@ namespace StarLab.Presentation
         [Test]
         public void TestSaveWorkspace()
         {
-            var interactor = Substitute.For<IUseCase<WorkspaceDTO>>();
+            var useCase = Substitute.For<IUseCase<WorkspaceDTO>>();
 
-            factory.CreateSaveWorkspaceUseCase(Arg.Any<IApplicationOutputPort>()).Returns(interactor);
+            factory.CreateSaveWorkspaceUseCase(Arg.Any<IApplicationOutputPort>()).Returns(useCase);
 
             WorkspaceDTO? dto = null;
 
-            interactor.Execute(Arg.Do<WorkspaceDTO>(e => dto = e));
+            useCase.Execute(Arg.Do<WorkspaceDTO>(e => dto = e));
 
             var presenter = CreatePresenter(true);
 
@@ -549,7 +549,7 @@ namespace StarLab.Presentation
 
             presenter.SaveWorkspace();
 
-            interactor.Received(1).Execute(Arg.Any<WorkspaceDTO>());
+            useCase.Received(1).Execute(Arg.Any<WorkspaceDTO>());
 
             Assert.That(dto, Is.Not.Null);
             Assert.That(dto.FileName, Is.EqualTo(@"C:\Workspace-1"));

@@ -238,9 +238,9 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
 
             view.Clipboard.GetText().Returns("19542B1A-36A5-494F-B6B0-CB562FA36CAC");
 
-            var interactor = Substitute.For<IUseCase<ClipboardUseCaseArgs>>();
+            var useCase = Substitute.For<IUseCase<ClipboardUseCaseArgs>>();
 
-            factory.CreateCopyAndPasteUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
+            factory.CreateCopyAndPasteUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(useCase);
 
             var presenter = CreatePresenter(true);
 
@@ -252,7 +252,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
 
             view.Clipboard.Received(1).SetText("19542B1A-36A5-494F-B6B0-CB562FA36CAC");
 
-            interactor.Received(1).Execute(Arg.Is<ClipboardUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-2" && args.Source == "19542B1A-36A5-494F-B6B0-CB562FA36CAC" && args.Destination == "Workspace/Project-1/Folder-2"));
+            useCase.Received(1).Execute(Arg.Is<ClipboardUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-2" && args.Source == "19542B1A-36A5-494F-B6B0-CB562FA36CAC" && args.Destination == "Workspace/Project-1/Folder-2"));
         }
 
         /// <summary>
@@ -269,9 +269,9 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
 
             view.Clipboard.GetText().Returns("Workspace/Project-1/Folder-2");
 
-            var interactor = Substitute.For<IUseCase<ClipboardUseCaseArgs>>();
+            var useCase = Substitute.For<IUseCase<ClipboardUseCaseArgs>>();
 
-            factory.CreateCopyAndPasteUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
+            factory.CreateCopyAndPasteUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(useCase);
 
             var presenter = CreatePresenter(true);
 
@@ -283,7 +283,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
 
             view.Clipboard.Received(1).SetText("Workspace/Project-1/Folder-2");
 
-            interactor.Received(1).Execute(Arg.Is<ClipboardUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-2" && args.Source == "Workspace/Project-1/Folder-2" && args.Destination == "Workspace/Project-1/Folder-1"));
+            useCase.Received(1).Execute(Arg.Is<ClipboardUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-2" && args.Source == "Workspace/Project-1/Folder-2" && args.Destination == "Workspace/Project-1/Folder-1"));
         }
 
         /// <summary>
@@ -426,9 +426,9 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
 
             view.Clipboard.GetText().Returns("19542B1A-36A5-494F-B6B0-CB562FA36CAC");
 
-            var interactor = Substitute.For<IUseCase<ClipboardUseCaseArgs>>();
+            var useCase = Substitute.For<IUseCase<ClipboardUseCaseArgs>>();
 
-            factory.CreateCutAndPasteUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
+            factory.CreateCutAndPasteUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(useCase);
 
             var presenter = CreatePresenter(true);
 
@@ -440,7 +440,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
 
             view.Clipboard.Received(1).SetText("19542B1A-36A5-494F-B6B0-CB562FA36CAC");
 
-            interactor.Received(1).Execute(Arg.Is<ClipboardUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-2" 
+            useCase.Received(1).Execute(Arg.Is<ClipboardUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-2" 
                 && args.Source == "19542B1A-36A5-494F-B6B0-CB562FA36CAC" 
                 && args.Destination == "Workspace/Project-1/Folder-2"));
         }
@@ -459,9 +459,9 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
 
             view.Clipboard.GetText().Returns("Workspace/Project-1/Folder-2");
 
-            var interactor = Substitute.For<IUseCase<ClipboardUseCaseArgs>>();
+            var useCase = Substitute.For<IUseCase<ClipboardUseCaseArgs>>();
 
-            factory.CreateCutAndPasteUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
+            factory.CreateCutAndPasteUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(useCase);
 
             var presenter = CreatePresenter(true);
 
@@ -473,7 +473,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
 
             view.Clipboard.Received(1).SetText("Workspace/Project-1/Folder-2");
 
-            interactor.Received(1).Execute(Arg.Is<ClipboardUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-2" 
+            useCase.Received(1).Execute(Arg.Is<ClipboardUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-2" 
                 && args.Source == "Workspace/Project-1/Folder-2" 
                 && args.Destination == "Workspace/Project-1/Folder-1"));
         }
@@ -499,13 +499,13 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
 
             var id = new DocumentID(document);
 
-            var interactor = Substitute.For<IUseCase<DeleteDocumentUseCaseArgs>>();
+            var useCase = Substitute.For<IUseCase<DeleteDocumentUseCaseArgs>>();
 
             workspace.HasDocument(id).Returns(false);
 
             controller.ShowMessage(Arg.Any<string>(), InteractionType.Warning, InteractionResponses.OKCancel).Returns(InteractionResult.Cancel);
 
-            factory.CreateDeleteDocumentUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
+            factory.CreateDeleteDocumentUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(useCase);
 
             var presenter = CreatePresenter(true);
 
@@ -513,7 +513,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
 
             workspace.DidNotReceive().GetDocument(id);
             controller.DidNotReceive().ShowMessage(Arg.Any<string>(), InteractionType.Warning, InteractionResponses.OKCancel);
-            interactor.DidNotReceive().Execute(Arg.Is<DeleteDocumentUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.DocumentID == document));
+            useCase.DidNotReceive().Execute(Arg.Is<DeleteDocumentUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.DocumentID == document));
         }
 
         /// <summary>
@@ -526,19 +526,19 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
 
             var id = new DocumentID(document);
 
-            var interactor = Substitute.For<IUseCase<DeleteDocumentUseCaseArgs>>();
+            var useCase = Substitute.For<IUseCase<DeleteDocumentUseCaseArgs>>();
 
             workspace.HasDocument(id).Returns(true);
 
             controller.ShowMessage(Arg.Any<string>(), InteractionType.Warning, InteractionResponses.OKCancel).Returns(InteractionResult.OK);
 
-            factory.CreateDeleteDocumentUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
+            factory.CreateDeleteDocumentUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(useCase);
 
             var presenter = CreatePresenter(true);
 
             presenter.DeleteDocument(document);
 
-            interactor.Received(1).Execute(Arg.Is<DeleteDocumentUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.DocumentID == document));
+            useCase.Received(1).Execute(Arg.Is<DeleteDocumentUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.DocumentID == document));
         }
 
         /// <summary>
@@ -551,19 +551,19 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
 
             var id = new DocumentID(document);
 
-            var interactor = Substitute.For<IUseCase<DeleteDocumentUseCaseArgs>>();
+            var useCase = Substitute.For<IUseCase<DeleteDocumentUseCaseArgs>>();
 
             workspace.HasDocument(id).Returns(true);
 
             controller.ShowMessage(Arg.Any<string>(), InteractionType.Warning, InteractionResponses.OKCancel).Returns(InteractionResult.Cancel);
 
-            factory.CreateDeleteDocumentUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
+            factory.CreateDeleteDocumentUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(useCase);
 
             var presenter = CreatePresenter(true);
 
             presenter.DeleteDocument(document);
 
-            interactor.DidNotReceive().Execute(Arg.Is<DeleteDocumentUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.DocumentID == document));
+            useCase.DidNotReceive().Execute(Arg.Is<DeleteDocumentUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.DocumentID == document));
         }
 
         /// <summary>
@@ -574,12 +574,12 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         {
             var folder = "Workspace/Project-1/Documents";
 
-            var interactor = Substitute.For<IUseCase<DeleteFolderUseCaseArgs>>();
+            var useCase = Substitute.For<IUseCase<DeleteFolderUseCaseArgs>>();
 
             workspace.HasFolder(folder).Returns(true);
             workspace.IsEmpty(folder).Returns(true);
 
-            factory.CreateDeleteFolderUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
+            factory.CreateDeleteFolderUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(useCase);
 
             var presenter = CreatePresenter(true);
 
@@ -587,7 +587,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
 
             controller.DidNotReceive().ShowMessage(Arg.Any<string>(), InteractionType.Warning, InteractionResponses.OKCancel);
 
-            interactor.Received(1).Execute(Arg.Is<DeleteFolderUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.Path == folder));
+            useCase.Received(1).Execute(Arg.Is<DeleteFolderUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.Path == folder));
         }
 
         /// <summary>
@@ -598,11 +598,11 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         {
             var folder = "Workspace/Project-1/Documents";
 
-            var interactor = Substitute.For<IUseCase<DeleteFolderUseCaseArgs>>();
+            var useCase = Substitute.For<IUseCase<DeleteFolderUseCaseArgs>>();
 
             workspace.HasFolder(folder).Returns(false);
 
-            factory.CreateDeleteFolderUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
+            factory.CreateDeleteFolderUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(useCase);
 
             var presenter = CreatePresenter(true);
 
@@ -610,7 +610,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
 
             workspace.DidNotReceive().GetFolder(folder);
             controller.DidNotReceive().ShowMessage(Arg.Any<string>(), InteractionType.Warning, InteractionResponses.OKCancel);
-            interactor.DidNotReceive().Execute(Arg.Is<DeleteFolderUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.Path == folder));
+            useCase.DidNotReceive().Execute(Arg.Is<DeleteFolderUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.Path == folder));
         }
 
         /// <summary>
@@ -621,20 +621,20 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         {
             var folder = "Workspace/Project-1/Documents";
 
-            var interactor = Substitute.For<IUseCase<DeleteFolderUseCaseArgs>>();
+            var useCase = Substitute.For<IUseCase<DeleteFolderUseCaseArgs>>();
 
             workspace.HasFolder(folder).Returns(true);
             workspace.IsEmpty(folder).Returns(false);
 
             controller.ShowMessage(Arg.Any<string>(), InteractionType.Warning, InteractionResponses.OKCancel).Returns(InteractionResult.OK);
 
-            factory.CreateDeleteFolderUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
+            factory.CreateDeleteFolderUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(useCase);
 
             var presenter = CreatePresenter(true);
 
             presenter.DeleteFolder(folder);
 
-            interactor.Received(1).Execute(Arg.Is<DeleteFolderUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.Path == folder));
+            useCase.Received(1).Execute(Arg.Is<DeleteFolderUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.Path == folder));
         }
 
         /// <summary>
@@ -645,20 +645,20 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         {
             var folder = "Workspace/Project-1/Documents";
 
-            var interactor = Substitute.For<IUseCase<DeleteFolderUseCaseArgs>>();
+            var useCase = Substitute.For<IUseCase<DeleteFolderUseCaseArgs>>();
 
             workspace.HasFolder(folder).Returns(true);
             workspace.IsEmpty(folder).Returns(false);
 
             controller.ShowMessage(Arg.Any<string>(), InteractionType.Warning, InteractionResponses.OKCancel).Returns(InteractionResult.Cancel);
 
-            factory.CreateDeleteFolderUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
+            factory.CreateDeleteFolderUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(useCase);
 
             var presenter = CreatePresenter(true);
 
             presenter.DeleteFolder(folder);
 
-            interactor.DidNotReceive().Execute(Arg.Is<DeleteFolderUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.Path == folder));
+            useCase.DidNotReceive().Execute(Arg.Is<DeleteFolderUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.Path == folder));
         }
 
         /// <summary>
@@ -680,11 +680,11 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         {
             var project = "Workspace/Project-1/Documents";
 
-            var interactor = Substitute.For<IUseCase<DeleteFolderUseCaseArgs>>();
+            var useCase = Substitute.For<IUseCase<DeleteFolderUseCaseArgs>>();
 
             workspace.HasProject(project).Returns(false);
 
-            factory.CreateDeleteFolderUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
+            factory.CreateDeleteFolderUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(useCase);
 
             var presenter = CreatePresenter(true);
 
@@ -692,7 +692,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
 
             workspace.DidNotReceive().GetFolder(project);
             controller.DidNotReceive().ShowMessage(Arg.Any<string>(), InteractionType.Warning, InteractionResponses.OKCancel);
-            interactor.DidNotReceive().Execute(Arg.Is<DeleteFolderUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.Path == project));
+            useCase.DidNotReceive().Execute(Arg.Is<DeleteFolderUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.Path == project));
         }
 
         /// <summary>
@@ -703,20 +703,20 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         {
             var project = "Workspace/Project-1/Documents";
 
-            var interactor = Substitute.For<IUseCase<DeleteFolderUseCaseArgs>>();
+            var useCase = Substitute.For<IUseCase<DeleteFolderUseCaseArgs>>();
 
             workspace.HasProject(project).Returns(true);
             workspace.IsEmpty(project).Returns(false);
 
             controller.ShowMessage(Arg.Any<string>(), InteractionType.Warning, InteractionResponses.OKCancel).Returns(InteractionResult.OK);
 
-            factory.CreateDeleteFolderUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
+            factory.CreateDeleteFolderUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(useCase);
 
             var presenter = CreatePresenter(true);
 
             presenter.DeleteProject(project);
 
-            interactor.Received(1).Execute(Arg.Is<DeleteFolderUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.Path == project));
+            useCase.Received(1).Execute(Arg.Is<DeleteFolderUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.Path == project));
         }
 
         /// <summary>
@@ -727,20 +727,20 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         {
             var project = "Workspace/Project-1/Documents";
 
-            var interactor = Substitute.For<IUseCase<DeleteFolderUseCaseArgs>>();
+            var useCase = Substitute.For<IUseCase<DeleteFolderUseCaseArgs>>();
 
             workspace.HasFolder(project).Returns(true);
             workspace.IsEmpty(project).Returns(false);
 
             controller.ShowMessage(Arg.Any<string>(), InteractionType.Warning, InteractionResponses.OKCancel).Returns(InteractionResult.Cancel);
 
-            factory.CreateDeleteFolderUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
+            factory.CreateDeleteFolderUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(useCase);
 
             var presenter = CreatePresenter(true);
 
             presenter.DeleteProject(project);
 
-            interactor.DidNotReceive().Execute(Arg.Is<DeleteFolderUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.Path == project));
+            useCase.DidNotReceive().Execute(Arg.Is<DeleteFolderUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.Path == project));
         }
 
         /// <summary>
@@ -946,9 +946,9 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         [Test]
         public void TestRenameDocument()
         {
-            var interactor = Substitute.For<IUseCase<RenameDocumentUseCaseArgs>>();
+            var useCase = Substitute.For<IUseCase<RenameDocumentUseCaseArgs>>();
 
-            factory.CreateRenameDocumentUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
+            factory.CreateRenameDocumentUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(useCase);
 
             var presenter = CreatePresenter(true);
 
@@ -956,7 +956,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
 
             Assert.True(presenter.RenameDocument("19542B1A-36A5-494F-B6B0-CB562FA36CAC", "Document-2"));
 
-            interactor.Received(1).Execute(Arg.Is<RenameDocumentUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.DocumentID == "19542B1A-36A5-494F-B6B0-CB562FA36CAC" && args.Name == "Document-2"));
+            useCase.Received(1).Execute(Arg.Is<RenameDocumentUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.DocumentID == "19542B1A-36A5-494F-B6B0-CB562FA36CAC" && args.Name == "Document-2"));
         }
 
         /// <summary>
@@ -976,11 +976,11 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         [Test]
         public void TestRenameDocumentWhenNameIsInvalid()
         {
-            var interactor = Substitute.For<IUseCase<RenameDocumentUseCaseArgs>>();
+            var useCase = Substitute.For<IUseCase<RenameDocumentUseCaseArgs>>();
 
-            interactor.When(x => x.Execute(Arg.Any<RenameDocumentUseCaseArgs>())).Do(x => throw new InvalidNameException(string.Empty));
+            useCase.When(x => x.Execute(Arg.Any<RenameDocumentUseCaseArgs>())).Do(x => throw new InvalidNameException(string.Empty));
 
-            factory.CreateRenameDocumentUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
+            factory.CreateRenameDocumentUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(useCase);
 
             var presenter = CreatePresenter(true);
 
@@ -988,7 +988,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
 
             Assert.False(presenter.RenameDocument("19542B1A-36A5-494F-B6B0-CB562FA36CAC", string.Empty));
 
-            interactor.Received(1).Execute(Arg.Is<RenameDocumentUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.DocumentID == "19542B1A-36A5-494F-B6B0-CB562FA36CAC" && args.Name == string.Empty));
+            useCase.Received(1).Execute(Arg.Is<RenameDocumentUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.DocumentID == "19542B1A-36A5-494F-B6B0-CB562FA36CAC" && args.Name == string.Empty));
         }
 
         /// <summary>
@@ -997,11 +997,11 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         [Test]
         public void TestRenameDocumentWhenDocumentAlreadyExists()
         {
-            var interactor = Substitute.For<IUseCase<RenameDocumentUseCaseArgs>>();
+            var useCase = Substitute.For<IUseCase<RenameDocumentUseCaseArgs>>();
 
-            interactor.When(x => x.Execute(Arg.Any<RenameDocumentUseCaseArgs>())).Do(x => throw new DocumentExistsException(new DocumentID("19542B1A-36A5-494F-B6B0-CB562FA36CAC"), "Document-1", "Workspace/Project-1/Documents"));
+            useCase.When(x => x.Execute(Arg.Any<RenameDocumentUseCaseArgs>())).Do(x => throw new DocumentExistsException(new DocumentID("19542B1A-36A5-494F-B6B0-CB562FA36CAC"), "Document-1", "Workspace/Project-1/Documents"));
 
-            factory.CreateRenameDocumentUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
+            factory.CreateRenameDocumentUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(useCase);
 
             var presenter = CreatePresenter(true);
 
@@ -1009,7 +1009,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
 
             Assert.False(presenter.RenameDocument("19542B1A-36A5-494F-B6B0-CB562FA36CAC", "Document-1"));
 
-            interactor.Received(1).Execute(Arg.Is<RenameDocumentUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.DocumentID == "19542B1A-36A5-494F-B6B0-CB562FA36CAC" && args.Name == "Document-1"));
+            useCase.Received(1).Execute(Arg.Is<RenameDocumentUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.DocumentID == "19542B1A-36A5-494F-B6B0-CB562FA36CAC" && args.Name == "Document-1"));
         }
 
         /// <summary>
@@ -1018,9 +1018,9 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         [Test]
         public void TestRenameFolder()
         {
-            var interactor = Substitute.For<IUseCase<RenameFolderUseCaseArgs>>();
+            var useCase = Substitute.For<IUseCase<RenameFolderUseCaseArgs>>();
 
-            factory.CreateRenameFolderUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
+            factory.CreateRenameFolderUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(useCase);
 
             var presenter = CreatePresenter(true);
 
@@ -1028,7 +1028,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
 
             Assert.True(presenter.RenameFolder("Workspace-1/Project-1/Folder-1", "Folder-2"));
 
-            interactor.Received(1).Execute(Arg.Is<RenameFolderUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.Path == "Workspace-1/Project-1/Folder-1" && args.Name == "Folder-2"));
+            useCase.Received(1).Execute(Arg.Is<RenameFolderUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.Path == "Workspace-1/Project-1/Folder-1" && args.Name == "Folder-2"));
         }
 
         /// <summary>
@@ -1048,11 +1048,11 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         [Test]
         public void TestRenameFolderWhenFolderAlreadyExists()
         {
-            var interactor = Substitute.For<IUseCase<RenameFolderUseCaseArgs>>();
+            var useCase = Substitute.For<IUseCase<RenameFolderUseCaseArgs>>();
 
-            interactor.When(x => x.Execute(Arg.Any<RenameFolderUseCaseArgs>())).Do(x => throw new FolderExistsException("Workspace/Project-1/Folder-2"));
+            useCase.When(x => x.Execute(Arg.Any<RenameFolderUseCaseArgs>())).Do(x => throw new FolderExistsException("Workspace/Project-1/Folder-2"));
 
-            factory.CreateRenameFolderUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
+            factory.CreateRenameFolderUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(useCase);
 
             var presenter = CreatePresenter(true);
 
@@ -1060,7 +1060,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
 
             Assert.False(presenter.RenameFolder("Workspace-1/Project-1/Folder-1", "Folder-2"));
 
-            interactor.Received(1).Execute(Arg.Is<RenameFolderUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.Path == "Workspace-1/Project-1/Folder-1" && args.Name == "Folder-2"));
+            useCase.Received(1).Execute(Arg.Is<RenameFolderUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.Path == "Workspace-1/Project-1/Folder-1" && args.Name == "Folder-2"));
         }
 
         /// <summary>
@@ -1069,11 +1069,11 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         [Test]
         public void TestRenameFolderWhenNameIsInvalid()
         {
-            var interactor = Substitute.For<IUseCase<RenameFolderUseCaseArgs>>();
+            var useCase = Substitute.For<IUseCase<RenameFolderUseCaseArgs>>();
 
-            interactor.When(x => x.Execute(Arg.Any<RenameFolderUseCaseArgs>())).Do(x => throw new InvalidNameException(string.Empty));
+            useCase.When(x => x.Execute(Arg.Any<RenameFolderUseCaseArgs>())).Do(x => throw new InvalidNameException(string.Empty));
 
-            factory.CreateRenameFolderUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
+            factory.CreateRenameFolderUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(useCase);
 
             var presenter = CreatePresenter(true);
 
@@ -1081,7 +1081,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
 
             Assert.False(presenter.RenameFolder("Workspace-1/Project-1/Folder-1", string.Empty));
 
-            interactor.Received(1).Execute(Arg.Is<RenameFolderUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.Path == "Workspace-1/Project-1/Folder-1" && args.Name == string.Empty));
+            useCase.Received(1).Execute(Arg.Is<RenameFolderUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.Path == "Workspace-1/Project-1/Folder-1" && args.Name == string.Empty));
         }
 
         /// <summary>
@@ -1119,9 +1119,9 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         [Test]
         public void TestRenameWorkspace()
         {
-            var interactor = Substitute.For<IUseCase<RenameWorkspaceUseCaseArgs>>();
+            var useCase = Substitute.For<IUseCase<RenameWorkspaceUseCaseArgs>>();
 
-            factory.CreateRenameWorkspaceUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
+            factory.CreateRenameWorkspaceUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(useCase);
 
             var presenter = CreatePresenter(true);
 
@@ -1129,7 +1129,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
 
             Assert.True(presenter.RenameWorkspace("Workspace-2"));
 
-            interactor.Received(1).Execute(Arg.Is<RenameWorkspaceUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.Name == "Workspace-2"));
+            useCase.Received(1).Execute(Arg.Is<RenameWorkspaceUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.Name == "Workspace-2"));
         }
 
         /// <summary>
@@ -1138,11 +1138,11 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         [Test]
         public void TestRenameWorkspaceWhenNameIsInvalid()
         {
-            var interactor = Substitute.For<IUseCase<RenameWorkspaceUseCaseArgs>>();
+            var useCase = Substitute.For<IUseCase<RenameWorkspaceUseCaseArgs>>();
 
-            interactor.When(x => x.Execute(Arg.Any<RenameWorkspaceUseCaseArgs>())).Do(x => throw new InvalidNameException(string.Empty));
+            useCase.When(x => x.Execute(Arg.Any<RenameWorkspaceUseCaseArgs>())).Do(x => throw new InvalidNameException(string.Empty));
 
-            factory.CreateRenameWorkspaceUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
+            factory.CreateRenameWorkspaceUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(useCase);
 
             var presenter = CreatePresenter(true);
 
@@ -1150,7 +1150,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
 
             Assert.False(presenter.RenameWorkspace(string.Empty));
 
-            interactor.Received(1).Execute(Arg.Is<RenameWorkspaceUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.Name == string.Empty));
+            useCase.Received(1).Execute(Arg.Is<RenameWorkspaceUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.Name == string.Empty));
         }
 
         /// <summary>
@@ -1159,11 +1159,11 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         [Test]
         public void TestRenameWorkspaceWhenWorkspaceAlreadyExists()
         {
-            var interactor = Substitute.For<IUseCase<RenameWorkspaceUseCaseArgs>>();
+            var useCase = Substitute.For<IUseCase<RenameWorkspaceUseCaseArgs>>();
 
-            interactor.When(x => x.Execute(Arg.Any<RenameWorkspaceUseCaseArgs>())).Do(x => throw new IOException());
+            useCase.When(x => x.Execute(Arg.Any<RenameWorkspaceUseCaseArgs>())).Do(x => throw new IOException());
 
-            factory.CreateRenameWorkspaceUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
+            factory.CreateRenameWorkspaceUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(useCase);
 
             var presenter = CreatePresenter(true);
 
@@ -1171,7 +1171,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
 
             Assert.False(presenter.RenameWorkspace("Workspace-2"));
 
-            interactor.Received(1).Execute(Arg.Is<RenameWorkspaceUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.Name == "Workspace-2"));
+            useCase.Received(1).Execute(Arg.Is<RenameWorkspaceUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace-1" && args.Name == "Workspace-2"));
         }
 
         /// <summary>

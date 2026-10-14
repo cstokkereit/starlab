@@ -13,7 +13,7 @@ namespace StarLab.Presentation.Workspace.Documents
         /// <summary>
         /// Initialises a new instance of the <see cref="AddDocumentUseCaseService"/>.
         /// </summary>
-        /// <param name="factory">An <see cref="IUseCaseFactory"/> that will be used to create use case interactors.</param>
+        /// <param name="factory">An <see cref="IUseCaseFactory"/> that will be used to create use cases.</param>
         /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
         public AddDocumentUseCaseService(IUseCaseFactory factory, IMapper mapper)
             : base(factory, mapper) { }
@@ -29,9 +29,9 @@ namespace StarLab.Presentation.Workspace.Documents
             ArgumentNullException.ThrowIfNull(workspace, nameof(workspace));
             ArgumentNullException.ThrowIfNull(document, nameof(document));
             
-            var interactor = Factory.CreateAddDocumentUseCase(ApplicationController.GetOutputPort<IWorkspaceOutputPort>());
+            var useCase = Factory.CreateAddDocumentUseCase(ApplicationController.GetOutputPort<IWorkspaceOutputPort>());
 
-            interactor.Execute(new AddDocumentUseCaseArgs(Mapper.Map<WorkspaceDTO>(workspace), document));
+            useCase.Execute(new AddDocumentUseCaseArgs(Mapper.Map<WorkspaceDTO>(workspace), document));
         }
     }
 }

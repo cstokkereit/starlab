@@ -125,9 +125,9 @@
 //        [Test]
 //        public void TestApplyPreviewSettings()
 //        {
-//            var interactor = Substitute.For<IUseCase<TableDTO>>();
+//            var useCase = Substitute.For<IUseCase<TableDTO>>();
 
-//            //factory.ApplyTableSettingsUseCase(Arg.Any<ITableOutputPort>()).Returns(interactor);
+//            //factory.ApplyTableSettingsUseCase(Arg.Any<ITableOutputPort>()).Returns(useCase);
 
 //            var presenter = CreatePresenter(true);
 
@@ -135,7 +135,7 @@
 
 //            //presenter.ApplyPreviewSettings(settings);
 
-//            //interactor.Received(1).Execute(Arg.Is<ChartDTO>(chart => chart.Title.Text == "New Title"));
+//            //useCase.Received(1).Execute(Arg.Is<ChartDTO>(chart => chart.Title.Text == "New Title"));
 //        }
 
 //        /// <summary>
@@ -144,9 +144,9 @@
 //        [Test]
 //        public void TestApplySettings()
 //        {
-//            var interactor = Substitute.For<IUseCase<UpdateDocumentUseCaseArgs>>();
+//            var useCase = Substitute.For<IUseCase<UpdateDocumentUseCaseArgs>>();
 
-//            //factory.CreateUpdateDocumentUseCase(Arg.Any<IApplicationOutputPort>()).Returns(interactor);
+//            //factory.CreateUpdateDocumentUseCase(Arg.Any<IApplicationOutputPort>()).Returns(useCase);
 
 //            var presenter = CreatePresenter(true);
 //            //presenter.OnEvent(new WorkspaceChangedEventArgs(workspace));
@@ -158,7 +158,7 @@
 
 //            //presenter.ApplySettings();
 
-//            //interactor.Received(1).Execute(Arg.Is<WorkspaceDTO>(ws => ws.FileName == @"C:\Test\Workspace"), documentID.ToString(), Arg.Is<ChartDTO>(chart => chart.Title.Text == "New Title"));
+//            //useCase.Received(1).Execute(Arg.Is<WorkspaceDTO>(ws => ws.FileName == @"C:\Test\Workspace"), documentID.ToString(), Arg.Is<ChartDTO>(chart => chart.Title.Text == "New Title"));
 //        }
 
 //        /// <summary>

@@ -15,6 +15,8 @@ namespace StarLab.Presentation.Workspace.Documents.Charts.Overlays
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(OverlayManagerViewPresenter)); // The logger that will be used for writing log messages.
 
+        private IChart chart; //
+
         /// <summary>
         /// Initialises a new instance of the <see cref="OverlayManagerViewPresenter"> class.
         /// </summary>
@@ -60,35 +62,69 @@ namespace StarLab.Presentation.Workspace.Documents.Charts.Overlays
 
             ParentController.AddToolbarButton(Constants.ShowOverlays, StringResources.Overlays, ImageResources.Overlays, CreateCommand(Actions.ShowOverlays, () => ParentController.ShowSplitContent(View.Name)));
 
-            //View.AttachOKButtonCommand(CreateCommand(Actions.ApplySettings, () => {
-            //    ParentController.HideSplitContent(View.Name);
-            //    ApplySettings();
-            //}));
+            View.AttachOKButtonCommand(CreateCommand(Actions.ApplySettings, () =>
+            {
+                ParentController.HideSplitContent(View.Name);
+                ApplySettings();
+            }));
 
-            //View.AttachCancelButtonCommand(CreateCommand(Actions.RevertSettings, () => {
-            //    ParentController.HideSplitContent(View.Name);
-            //    RevertSettings();
-            //}));
+            View.AttachCancelButtonCommand(CreateCommand(Actions.RevertSettings, () =>
+            {
+                ParentController.HideSplitContent(View.Name);
+                RevertSettings();
+            }));
 
             View.Initialise();
 
-            //CreateSettingsNavigator();
+            AddAvailableOverlays();
 
             log.Debug(LogEntries.PresenterInitialised(GetType()));
         }
 
-        // Overlays:
-        // Magnitude classes
-        // Named stars
-        // Brightest stars
-        // Variable types
-        // Stellar types e.g. Wolf rayet, brown dwarf
-        // Evolutionary tracks (could prove difficult - can they be calculated?)
-        // Standard stars for spectral and magnitude classes
-        // Our sun
-        // Radius lines (R/Rsun)
-        // Mass lines (M/Msun)
+        /// <summary>
+        /// Runs the child view.
+        /// </summary>
+        public override void Run()
+        {
+            var controller = ParentController.GetController<IChartController>(new ControllerID(Constants.Chart));
 
-        // Custom overlays - for the future
+            if (controller.Chart != null)
+            {
+                chart = controller.Chart;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private void AddAvailableOverlays()
+        {
+            foreach(var name in OverlayNames.ToList())
+            {
+                View.AddOverlay(name, OverlayNames.GetCaption(name), false);
+            }
+        }
+
+        /// <summary>
+        /// Applies the chart settings to the document.
+        /// </summary>
+        private void ApplySettings()
+        {
+            //if (workspace == null) throw new InvalidOperationException(ExceptionMessages.InvalidState);
+            //if (document == null) throw new InvalidOperationException(ExceptionMessages.InvalidState);
+            //if (chart == null) throw new InvalidOperationException(ExceptionMessages.InvalidState);
+
+            //useCaseService.UpdateDocument(workspace, document.ID, chart);
+        }
+
+        /// <summary>
+        /// Reverts the changes to the settings.
+        /// </summary>
+        private void RevertSettings()
+        {
+            var controller = ParentController.GetController<IChartController>(new ControllerID(Constants.Chart));
+
+            controller.UpdatePreview();
+        }
     }
 }

@@ -13,7 +13,7 @@ namespace StarLab.Presentation
         /// <summary>
         /// Initialises a new instance of the <see cref="ApplicationUseCaseService"/>.
         /// </summary>
-        /// <param name="factory">An <see cref="IUseCaseFactory"/> that will be used to create use case interactors.</param>
+        /// <param name="factory">An <see cref="IUseCaseFactory"/> that will be used to create use cases.</param>
         /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
         public ApplicationUseCaseService(IUseCaseFactory factory, IMapper mapper)
             : base(factory, mapper) { }
@@ -28,9 +28,9 @@ namespace StarLab.Presentation
             ArgumentNullException.ThrowIfNull(workspace, nameof(workspace));
             ArgumentException.ThrowIfNullOrEmpty(key, nameof(key));
 
-            var interactor = Factory.CreateAddFolderUseCase(ApplicationController.GetOutputPort<IWorkspaceOutputPort>());
+            var useCase = Factory.CreateAddFolderUseCase(ApplicationController.GetOutputPort<IWorkspaceOutputPort>());
 
-            interactor.Execute(new AddFolderUseCaseArgs(Mapper.Map<WorkspaceDTO>(workspace), key));
+            useCase.Execute(new AddFolderUseCaseArgs(Mapper.Map<WorkspaceDTO>(workspace), key));
         }
 
         /// <summary>
@@ -39,9 +39,9 @@ namespace StarLab.Presentation
         /// <param name="filename">The fully qualified path to the workspace file.</param>
         public void OpenWorkspace(string filename)
         {
-            var interactor = Factory.CreateOpenWorkspaceUseCase(ApplicationController.GetOutputPort<IApplicationOutputPort>());
+            var useCase = Factory.CreateOpenWorkspaceUseCase(ApplicationController.GetOutputPort<IApplicationOutputPort>());
 
-            interactor.Execute(filename);
+            useCase.Execute(filename);
         }
 
         /// <summary>
@@ -50,9 +50,9 @@ namespace StarLab.Presentation
         /// <param name="workspace">The current workspace.</param>
         public void SaveWorkspace(IWorkspace workspace)
         {
-            var interactor = Factory.CreateSaveWorkspaceUseCase(ApplicationController.GetOutputPort<IApplicationOutputPort>());
+            var useCase = Factory.CreateSaveWorkspaceUseCase(ApplicationController.GetOutputPort<IApplicationOutputPort>());
 
-            interactor.Execute(Mapper.Map<WorkspaceDTO>(workspace));
+            useCase.Execute(Mapper.Map<WorkspaceDTO>(workspace));
         }
     }
 }

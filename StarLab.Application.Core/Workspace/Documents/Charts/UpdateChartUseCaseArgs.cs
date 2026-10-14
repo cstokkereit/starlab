@@ -1,31 +1,27 @@
 ﻿namespace StarLab.Application.Workspace.Documents.Charts
 {
     /// <summary>
-    /// A POCO that provides all of the information required to execute the UpdateChartUseCase.
+    /// A POCO that provides all of the information required to execute the UpdateChartUseCaseArgs.
     /// </summary>
     public readonly struct UpdateChartUseCaseArgs
     {
         /// <summary>
-        /// Initialises a new instance of the <see cref="UpdateChartUseCaseArgs"/> struct.
+        /// Initialises a new instance of the <see cref="RenameDocumentUseCaseArgs"/> struct.
         /// </summary>
-        /// <param name="document">Thew document ID.</param>
-        /// <param name="host">The host name.</param>
-        /// <param name="port">The port number.</param>
-        /// <param name="database">The database name.</param>
-        public UpdateChartUseCaseArgs(string document, string host, int port, string database)
+        /// <param name="workspace">A <see cref="WorkspaceDTO"/> that holds the details of the workspace.</param>
+        /// <param name="document">The document ID.</param>
+        /// <param name="chart">A <see cref="ChartDTO"/> that holds the details of the chart.</param>
+        public UpdateChartUseCaseArgs(WorkspaceDTO workspace, string document, ChartDTO chart)
         {
-            DatabaseName = database;
+            Workspace = workspace;
             DocumentID = document;
-            Host = host;
-            Port = port;
+            Chart = chart;
         }
 
-        public readonly string DatabaseName;
+        public readonly ChartDTO Chart;
 
         public readonly string DocumentID;
 
-        public readonly string Host;
-
-        public readonly int Port;
+        public readonly WorkspaceDTO Workspace;
     }
 }

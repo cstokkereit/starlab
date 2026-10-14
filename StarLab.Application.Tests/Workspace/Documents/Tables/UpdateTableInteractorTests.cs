@@ -1,6 +1,6 @@
 ﻿namespace StarLab.Application.Workspace.Documents.Tables
 {
-    public class UpdateTableInteractorTests
+    public class UpdateTableUseCaseTests
     {
     }
 }

@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using StarLab.Application;
 using StarLab.Application.Workspace;
-using StarLab.Application.Workspace.Documents;
 using StarLab.Application.Workspace.Documents.Charts;
 
 namespace StarLab.Presentation.Workspace.Documents.Charts
@@ -14,28 +13,10 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// <summary>
         /// Initialises a new instance of the <see cref="ChartSettingsUseCaseService"/> class.
         /// </summary>
-        /// <param name="factory">An <see cref="IUseCaseFactory"/> that will be used to create use case interactors.</param>
+        /// <param name="factory">An <see cref="IUseCaseFactory"/> that will be used to create use cases.</param>
         /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
         public ChartSettingsUseCaseService(IUseCaseFactory factory, IMapper mapper)
             : base(factory, mapper) { }
-
-        /// <summary>
-        /// Executes the UpdateChart use case.
-        /// </summary>
-        /// <param name="id">The <see cref="DocumentID"> that identifies the document.</param>
-        /// <param name="chart">A <see cref="IChartSettings"/> that specifies the current state of the chart.</param>
-        /// <exception cref="ArgumentNullException"></exception>
-        public void UpdateChart(DocumentID id, IChartSettings chart)
-        {
-            ArgumentNullException.ThrowIfNull(chart, nameof(chart));
-            ArgumentNullException.ThrowIfNull(id, nameof(id));
-
-            var interactor = Factory.CreateApplyChartSettingsUseCase(ApplicationController.GetOutputPort<IChartOutputPort>(new ControllerID(id)));
-
-            var dto = Mapper.Map<ChartDTO>(chart);
-
-            interactor.Execute(dto);
-        }
 
         /// <summary>
         /// Executes the UpdateDocument use case.
@@ -45,15 +26,33 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// <param name="chart">A <see cref="IChartSettings"/> that specifies the current state of the chart.</param>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="ArgumentException"></exception>
-        public void UpdateDocument(IWorkspace workspace, DocumentID id, IChartSettings chart)
+        public void UpdateChart(IWorkspace workspace, DocumentID id, IChartSettings chart)
         {
             ArgumentNullException.ThrowIfNull(workspace, nameof(workspace));
             ArgumentNullException.ThrowIfNull(chart, nameof(chart));
             ArgumentNullException.ThrowIfNull(id, nameof(id));
 
-            var interactor = Factory.CreateUpdateDocumentUseCase(ApplicationController.GetOutputPort<IApplicationOutputPort>());
+            var useCase = Factory.CreateUpdateChartUseCase(ApplicationController.GetOutputPort<IApplicationOutputPort>());
 
-            interactor.Execute(new UpdateDocumentUseCaseArgs(Mapper.Map<WorkspaceDTO>(workspace), id.ToString(), Mapper.Map<ChartDTO>(chart)));
+            useCase.Execute(new UpdateChartUseCaseArgs(Mapper.Map<WorkspaceDTO>(workspace), id.ToString(), Mapper.Map<ChartDTO>(chart)));
+        }
+
+        /// <summary>
+        /// Executes the ApplyChartSettings use case.
+        /// </summary>
+        /// <param name="id">The <see cref="DocumentID"> that identifies the document.</param>
+        /// <param name="chart">A <see cref="IChartSettings"/> that specifies the current state of the chart.</param>
+        /// <exception cref="ArgumentNullException"></exception>
+        public void UpdateChartPreview(DocumentID id, IChartSettings chart)
+        {
+            ArgumentNullException.ThrowIfNull(chart, nameof(chart));
+            ArgumentNullException.ThrowIfNull(id, nameof(id));
+
+            var useCase = Factory.CreateUpdateChartPreviewUseCase(ApplicationController.GetOutputPort<IChartOutputPort>(new ControllerID(id)));
+
+            var dto = Mapper.Map<ChartDTO>(chart);
+
+            useCase.Execute(dto);
         }
     }
 }

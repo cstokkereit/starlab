@@ -12,7 +12,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// <summary>
         /// Initialises a new instance of the <see cref="ChartUseCaseService"/>.
         /// </summary>
-        /// <param name="factory">An <see cref="IUseCaseFactory"/> that will be used to create use case interactors.</param>
+        /// <param name="factory">An <see cref="IUseCaseFactory"/> that will be used to create use cases.</param>
         /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
         public ChartUseCaseService(IUseCaseFactory factory, IMapper mapper)
             : base(factory, mapper) { }
@@ -28,11 +28,11 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             ArgumentNullException.ThrowIfNull(workspace, nameof(workspace));
             ArgumentNullException.ThrowIfNull(id, nameof(id));
 
-            var interactor = Factory.CreateUpdateChartUseCase(ApplicationController.GetOutputPort<IChartOutputPort>(new ControllerID(id)));
+            var useCase = Factory.CreatePlotChartUseCase(ApplicationController.GetOutputPort<IChartOutputPort>(new ControllerID(id)));
 
             var database = workspace.GetProject(workspace.GetDocument(id).Project).Database;
 
-            interactor.ExecuteAsync(new UpdateChartUseCaseArgs(id.ToString(), database.Host, database.Port, database.Name));
+            useCase.ExecuteAsync(new CreateChartUseCaseArgs(id.ToString(), database.Host, database.Port, database.Name));
         }
     }
 }

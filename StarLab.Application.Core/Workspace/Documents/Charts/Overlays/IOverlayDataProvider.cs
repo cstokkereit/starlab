@@ -16,5 +16,11 @@
         /// </summary>
         /// <returns>An <see cref="ILabelledPointsOverlayData"/> that contains the overlay data.</returns>
         ILabelledPointsOverlayData GetNamedStarsOverlayData();
+
+        /// <summary>
+        /// Gets the data for the sun overlay.
+        /// </summary>
+        /// <returns>An <see cref="ILabelledPointsOverlayData"/> that contains the overlay data.</returns>
+        ILabelledPointsOverlayData GetSunOverlayData();
     }
 }

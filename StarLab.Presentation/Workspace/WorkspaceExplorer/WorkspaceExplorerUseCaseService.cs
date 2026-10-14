@@ -14,7 +14,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <summary>
         /// Initialises a new instance of the <see cref="WorkspaceExplorerUseCaseService"/>.
         /// </summary>
-        /// <param name="factory">An <see cref="IUseCaseFactory"/> that will be used to create use case interactors.</param>
+        /// <param name="factory">An <see cref="IUseCaseFactory"/> that will be used to create use cases.</param>
         /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
         public WorkspaceExplorerUseCaseService(IUseCaseFactory factory, IMapper mapper)
             : base(factory, mapper) { }
@@ -31,9 +31,9 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
             ArgumentNullException.ThrowIfNull(workspace, nameof(workspace));
             ArgumentException.ThrowIfNullOrEmpty(path, nameof(path));
 
-            var interactor = Factory.CreateAddFolderUseCase(ApplicationController.GetOutputPort<IWorkspaceOutputPort>());
+            var useCase = Factory.CreateAddFolderUseCase(ApplicationController.GetOutputPort<IWorkspaceOutputPort>());
 
-            interactor.Execute(new AddFolderUseCaseArgs(Mapper.Map<WorkspaceDTO>(workspace), path));
+            useCase.Execute(new AddFolderUseCaseArgs(Mapper.Map<WorkspaceDTO>(workspace), path));
         }
 
         /// <summary>
@@ -48,9 +48,9 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
             ArgumentNullException.ThrowIfNull(workspace, nameof(workspace));
             ArgumentException.ThrowIfNullOrEmpty(source, nameof(source));
             
-            var interactor = Factory.CreateCopyAndPasteUseCase(ApplicationController.GetOutputPort<IWorkspaceOutputPort>());
+            var useCase = Factory.CreateCopyAndPasteUseCase(ApplicationController.GetOutputPort<IWorkspaceOutputPort>());
 
-            interactor.Execute(new ClipboardUseCaseArgs(Mapper.Map<WorkspaceDTO>(workspace), source, destination));
+            useCase.Execute(new ClipboardUseCaseArgs(Mapper.Map<WorkspaceDTO>(workspace), source, destination));
         }
 
         /// <summary>
@@ -66,9 +66,9 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
             ArgumentNullException.ThrowIfNull(workspace, nameof(workspace));
             ArgumentException.ThrowIfNullOrEmpty(source, nameof(source));
 
-            var interactor = Factory.CreateCutAndPasteUseCase(ApplicationController.GetOutputPort<IWorkspaceOutputPort>());
+            var useCase = Factory.CreateCutAndPasteUseCase(ApplicationController.GetOutputPort<IWorkspaceOutputPort>());
 
-            interactor.Execute(new ClipboardUseCaseArgs(Mapper.Map<WorkspaceDTO>(workspace), source, destination, replace));
+            useCase.Execute(new ClipboardUseCaseArgs(Mapper.Map<WorkspaceDTO>(workspace), source, destination, replace));
         }
 
         /// <summary>
@@ -95,9 +95,9 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
             ArgumentNullException.ThrowIfNull(workspace, nameof(workspace));
             ArgumentNullException.ThrowIfNull(id, nameof(id));
 
-            var interactor = Factory.CreateDeleteDocumentUseCase(ApplicationController.GetOutputPort<IWorkspaceOutputPort>());
+            var useCase = Factory.CreateDeleteDocumentUseCase(ApplicationController.GetOutputPort<IWorkspaceOutputPort>());
 
-            interactor.Execute(new DeleteDocumentUseCaseArgs(Mapper.Map<WorkspaceDTO>(workspace), id.ToString()));
+            useCase.Execute(new DeleteDocumentUseCaseArgs(Mapper.Map<WorkspaceDTO>(workspace), id.ToString()));
         }
 
         /// <summary>
@@ -112,9 +112,9 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
             ArgumentNullException.ThrowIfNull(workspace, nameof(workspace));
             ArgumentException.ThrowIfNullOrEmpty(path, nameof(path));
 
-            var interactor = Factory.CreateDeleteFolderUseCase(ApplicationController.GetOutputPort<IWorkspaceOutputPort>());
+            var useCase = Factory.CreateDeleteFolderUseCase(ApplicationController.GetOutputPort<IWorkspaceOutputPort>());
 
-            interactor.Execute(new DeleteFolderUseCaseArgs(Mapper.Map<WorkspaceDTO>(workspace), path));
+            useCase.Execute(new DeleteFolderUseCaseArgs(Mapper.Map<WorkspaceDTO>(workspace), path));
         }
 
         /// <summary>
@@ -130,9 +130,9 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
             ArgumentNullException.ThrowIfNull(workspace, nameof(workspace));
             ArgumentNullException.ThrowIfNull(id, nameof(id));
 
-            var interactor = Factory.CreateRenameDocumentUseCase(ApplicationController.GetOutputPort<IWorkspaceOutputPort>());
+            var useCase = Factory.CreateRenameDocumentUseCase(ApplicationController.GetOutputPort<IWorkspaceOutputPort>());
 
-            interactor.Execute(new RenameDocumentUseCaseArgs(Mapper.Map<WorkspaceDTO>(workspace), id.ToString(), name));
+            useCase.Execute(new RenameDocumentUseCaseArgs(Mapper.Map<WorkspaceDTO>(workspace), id.ToString(), name));
         }
 
         /// <summary>
@@ -148,9 +148,9 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
             ArgumentNullException.ThrowIfNull(workspace, nameof(workspace));
             ArgumentException.ThrowIfNullOrEmpty(path, nameof(path));
 
-            var interactor = Factory.CreateRenameFolderUseCase(ApplicationController.GetOutputPort<IWorkspaceOutputPort>());
+            var useCase = Factory.CreateRenameFolderUseCase(ApplicationController.GetOutputPort<IWorkspaceOutputPort>());
 
-            interactor.Execute(new RenameFolderUseCaseArgs(Mapper.Map<WorkspaceDTO>(workspace), path, name));
+            useCase.Execute(new RenameFolderUseCaseArgs(Mapper.Map<WorkspaceDTO>(workspace), path, name));
         }
 
         /// <summary>
@@ -163,9 +163,9 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         {
             ArgumentNullException.ThrowIfNull(workspace, nameof(workspace));
 
-            var interactor = Factory.CreateRenameWorkspaceUseCase(ApplicationController.GetOutputPort<IWorkspaceOutputPort>());
+            var useCase = Factory.CreateRenameWorkspaceUseCase(ApplicationController.GetOutputPort<IWorkspaceOutputPort>());
 
-            interactor.Execute(new RenameWorkspaceUseCaseArgs(Mapper.Map<WorkspaceDTO>(workspace), name));
+            useCase.Execute(new RenameWorkspaceUseCaseArgs(Mapper.Map<WorkspaceDTO>(workspace), name));
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿namespace StarLab.Application.Workspace.Documents.Charts
 {
     /// <summary>
-    /// Used by a <see cref="UseCaseInteractor{TOutputPort}"/> to update the document.
+    /// Used by a <see cref="UseCaseUseCase{TOutputPort}"/> to update the document.
     /// </summary>
     public interface IChartOutputPort : IOutputPort
     {

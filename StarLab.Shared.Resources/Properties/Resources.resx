@@ -443,4 +443,31 @@ Please enter a valid name.</value>
   <data name="Overlays" xml:space="preserve">
     <value>Overlays</value>
   </data>
+  <data name="Sun" xml:space="preserve">
+    <value>Sun</value>
+  </data>
+  <data name="NamedStars" xml:space="preserve">
+    <value>Named Stars</value>
+  </data>
+  <data name="MagnitudeClasses" xml:space="preserve">
+    <value>Magnitude Classes</value>
+  </data>
+  <data name="VariableTypes" xml:space="preserve">
+    <value>Variable Types</value>
+  </data>
+  <data name="EffectiveTemperature" xml:space="preserve">
+    <value>Effective Temperature</value>
+  </data>
+  <data name="SpectralClass" xml:space="preserve">
+    <value>Spectral Class</value>
+  </data>
+  <data name="ColourIndex" xml:space="preserve">
+    <value>Colour Index ({0}-{1})</value>
+  </data>
+  <data name="AbsoluteMagnitude" xml:space="preserve">
+    <value>Absolute Magnitude</value>
+  </data>
+  <data name="Luminosity" xml:space="preserve">
+    <value>Luminosity</value>
+  </data>
 </root>

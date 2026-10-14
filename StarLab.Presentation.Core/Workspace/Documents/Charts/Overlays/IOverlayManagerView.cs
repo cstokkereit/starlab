@@ -3,7 +3,7 @@
     /// <summary>
     /// Defines the properties and methods used by the <see cref="IOverlayManagerViewPresenter"/> to control the behaviour of the Overlay Manager panel.
     /// </summary>
-    public interface IOverlayManagerView : IChildView
+    public interface IOverlayManagerView : IChildView, ICancellableView
     {
         /// <summary>
         /// Adds an overlay check box to the view.

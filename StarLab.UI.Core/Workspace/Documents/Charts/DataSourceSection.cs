@@ -1,4 +1,5 @@
-﻿using StarLab.Presentation.Workspace.Documents.Charts;
+﻿using StarLab.Presentation;
+using StarLab.Presentation.Workspace.Documents.Charts;
 
 namespace StarLab.UI.Core.Workspace.Documents.Charts
 {
@@ -14,24 +15,32 @@ namespace StarLab.UI.Core.Workspace.Documents.Charts
         /// <summary>
         /// Initialises a new instance of the <see cref="DataSourceSection"> class.
         /// </summary>
-        public DataSourceSection(IChartSettings settings)
+        /// <param name="settings">An <see cref="IChartSettings"/> that represents the current state of the chart.</param>
+        /// <param name="horizontalAxisFields">The fields that can be represented on a horizontal axis.</param>
+        /// <param name="verticalAxisFields">The fields that can be represented on a vertical axis.</param>
+        public DataSourceSection(IChartSettings settings, IEnumerable<IDisplayField> horizontalAxisFields, IEnumerable<IDisplayField> verticalAxisFields)
         {
             InitializeComponent();
 
             this.settings = settings;
 
-            string[] xData = [ "", "ColourIndex(U-B)", "ColourIndex(B-V)", "ColourIndex(V-I)", "Effective Temperature", "SpectralClass" ]; // TODO : This needs to be generated from the available data
-            string[] yData = [ "", "AbsoluteMagnitude", "Luminosity" ]; // TODO : This needs to be generated from the available data
+            foreach (var field in horizontalAxisFields)
+            {
+                comboX1Data.Items.Add(new ComboBoxItem(field));
+                comboX2Data.Items.Add(new ComboBoxItem(field));
 
-            comboX1Data.Items.AddRange(xData);
-            comboX2Data.Items.AddRange(xData);
-            comboY1Data.Items.AddRange(yData);
-            comboY2Data.Items.AddRange(yData);
+                if (settings.Axes.X1.Data == field.Name) comboX1Data.SelectedText = field.Caption;
+                if (settings.Axes.X2.Data == field.Name) comboX2Data.SelectedText = field.Caption;
+            }
 
-            comboX1Data.SelectedText = settings.Axes.X1.Data;
-            comboX2Data.SelectedText = settings.Axes.X2.Data;
-            comboY1Data.SelectedText = settings.Axes.Y1.Data;
-            comboY2Data.SelectedText = settings.Axes.Y2.Data;
+            foreach (var field in verticalAxisFields)
+            {
+                comboY1Data.Items.Add(new ComboBoxItem(field));
+                comboY2Data.Items.Add(new ComboBoxItem(field));
+
+                if (settings.Axes.Y1.Data == field.Name) comboY1Data.SelectedText = field.Caption;
+                if (settings.Axes.Y2.Data == field.Name) comboY2Data.SelectedText = field.Caption;
+            }
 
             AttachEventHandlers();
         }
@@ -78,6 +87,30 @@ namespace StarLab.UI.Core.Workspace.Documents.Charts
                 // TODO : Set the axis min and max based on the range of the chosen data
                 axis.Label.Text = data;
                 axis.Visible = true;
+            }
+        }
+
+        /// <summary>
+        /// TODO : Documentation
+        /// </summary>
+        private class ComboBoxItem
+        {
+            private readonly IDisplayField field;
+
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="field"></param>
+            public ComboBoxItem(IDisplayField field)
+            {
+                this.field = field;
+            }
+
+            public string Name => @field.Name;
+
+            public override string ToString()
+            {
+                return @field.Caption;
             }
         }
     }

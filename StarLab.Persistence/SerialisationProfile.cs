@@ -2,10 +2,12 @@
 using StarLab.Application.Workspace;
 using StarLab.Application.Workspace.Documents;
 using StarLab.Application.Workspace.Documents.Charts;
+using StarLab.Application.Workspace.Documents.Charts.Overlays;
 using StarLab.Application.Workspace.Documents.Tables;
 using StarLab.Serialisation.Workspace;
 using StarLab.Serialisation.Workspace.Documents;
 using StarLab.Serialisation.Workspace.Documents.Charts;
+using StarLab.Serialisation.Workspace.Documents.Charts.Overlays;
 using StarLab.Serialisation.Workspace.Documents.Tables;
 
 namespace StarLab.Serialisation
@@ -29,6 +31,7 @@ namespace StarLab.Serialisation
             CreateMap<Grid, GridDTO>().ReverseMap();
             CreateMap<GridLines, GridLinesDTO>().ReverseMap();
             CreateMap<Label, LabelDTO>().ReverseMap();
+            CreateMap<Overlay, OverlayDTO>().ReverseMap();
             CreateMap<PlotArea, PlotAreaDTO>().ReverseMap();
             CreateMap<Points, PointsDTO>().ReverseMap();
             CreateMap<Project, ProjectDTO>().ReverseMap();

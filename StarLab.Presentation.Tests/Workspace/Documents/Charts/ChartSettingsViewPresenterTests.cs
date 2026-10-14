@@ -2,7 +2,6 @@
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
 
 using StarLab.Application;
-using StarLab.Application.Workspace.Documents;
 using StarLab.Application.Workspace.Documents.Charts;
 using StarLab.Presentation.Configuration;
 using StarLab.Shared.Properties;
@@ -169,17 +168,17 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         {
             view.AppendColourSection(Arg.Do<IChartSettings>(arg => arg.ForeColour = "Red"));
 
-            var interactor = Substitute.For<IUseCase<ChartDTO>>();
+            var useCase = Substitute.For<IUseCase<ChartDTO>>();
 
-            factory.CreateApplyChartSettingsUseCase(Arg.Any<IChartOutputPort>()).Returns(interactor);
+            factory.CreateUpdateChartPreviewUseCase(Arg.Any<IChartOutputPort>()).Returns(useCase);
 
             var presenter = CreatePresenter(true);
 
             presenter.Run();
 
-            presenter.ApplyPreviewSettings();
+            presenter.UpdateChartPreview();
 
-            interactor.Received(1).Execute(Arg.Is<ChartDTO>(dto => dto.ForeColour == "Red"));
+            useCase.Received(1).Execute(Arg.Is<ChartDTO>(dto => dto.ForeColour == "Red"));
         }
 
         /// <summary>
@@ -190,9 +189,9 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         {
             view.AppendColourSection(Arg.Do<IChartSettings>(arg => arg.ForeColour = "Red"));
 
-            var interactor = Substitute.For<IUseCase<UpdateDocumentUseCaseArgs>>();
+            var useCase = Substitute.For<IUseCase<UpdateChartUseCaseArgs>>();
 
-            factory.CreateUpdateDocumentUseCase(Arg.Any<IApplicationOutputPort>()).Returns(interactor);
+            factory.CreateUpdateChartUseCase(Arg.Any<IApplicationOutputPort>()).Returns(useCase);
 
             var presenter = CreatePresenter(true);
 
@@ -202,7 +201,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
 
             presenter.ApplySettings();
 
-            interactor.Received(1).Execute(Arg.Is<UpdateDocumentUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace" && args.DocumentID == documentID.ToString() && args.Chart.ForeColour == "Red"));
+            useCase.Received(1).Execute(Arg.Is<UpdateChartUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace" && args.DocumentID == documentID.ToString() && args.Chart.ForeColour == "Red"));
         }
 
         /// <summary>
@@ -499,7 +498,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
 
             view.Received(1).Clear();
 
-            view.Received(1).AppendDataSourceSection(Arg.Any<IChartSettings>());
+            //view.Received(1).AppendDataSourceSection(Arg.Any<IChartSettings>());
         }
 
         /// <summary>

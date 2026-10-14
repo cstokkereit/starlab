@@ -1,4 +1,8 @@
 ﻿using StarLab.Application.Data.Import;
+using StarLab.Domain.Data;
+using StarLab.Presentation.Workspace.Documents;
+using StarLab.Shared;
+using StarLab.Shared.Properties;
 
 namespace StarLab.Application.Workspace.Documents.Charts.Overlays
 {
@@ -7,9 +11,9 @@ namespace StarLab.Application.Workspace.Documents.Charts.Overlays
     /// </summary>
     public class OverlayDataProvider : IOverlayDataProvider
     {
-        private readonly IFileImportProvider provider;
+        private readonly Dictionary<string, IOverlayData> dataByOverlay = new Dictionary<string, IOverlayData>(); //
 
-        private readonly LabelledPointsOverlayData namedStars = new LabelledPointsOverlayData(); //
+        private readonly IFileImportProvider provider; //
 
         /// <summary>
         /// 
@@ -19,9 +23,10 @@ namespace StarLab.Application.Workspace.Documents.Charts.Overlays
         {
             this.provider = provider ?? throw new ArgumentNullException(nameof(provider));
 
+            //var sunSymbol = "\u2A00";
 
-
-
+            
+            
         }
 
 
@@ -42,12 +47,30 @@ namespace StarLab.Application.Workspace.Documents.Charts.Overlays
         /// <returns>An <see cref="ILabelledPointsOverlayData"/> that contains the overlay data.</returns>
         public ILabelledPointsOverlayData GetNamedStarsOverlayData()
         {
-            if (namedStars.Labels.Length == 0)
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public ILabelledPointsOverlayData GetSunOverlayData()
+        {
+            if (!dataByOverlay.ContainsKey(OverlayNames.Sun))
             {
-                LoadNamedStars();
+                var data = new LabelledPointsOverlayData();
+
+                data.AddLabel(Resources.Sun);
+                data.AddValue(StellarParameters.AbsoluteMagnitude, 4.83);
+                data.AddValue(StellarParameters.Luminosity, 1); // TODO : This is L/Lsun
+                data.AddValue(StellarParameters.EffectiveTemperature, 5778);
+                data.AddValue(StellarParameters.ColourIndex("B", "V"), 0.626);
+                data.AddValue(StellarParameters.SpectralClass, SpectralClasses.ToDouble("G5"));
+
+                dataByOverlay.Add(OverlayNames.Sun, data);
             }
 
-            return namedStars;
+            return (ILabelledPointsOverlayData)dataByOverlay[OverlayNames.Sun];
         }
 
         /// <summary>

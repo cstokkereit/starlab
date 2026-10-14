@@ -80,9 +80,10 @@ namespace StarLab.Presentation
         /// <param name="name"></param>
         /// <param name="action"></param>
         /// <returns></returns>
-        /// <exception cref="InvalidOperationException"></exception>
         protected ICommand CreateCommand(string name, Action action)
         {
+            name = $"{ID}.{name}";
+
             if (!commands.ContainsCommand(name))
             {
                 commands.AddCommand(name, new ComponentCommand(commands, action));
@@ -110,7 +111,7 @@ namespace StarLab.Presentation
         /// <returns>The required <see cref="ICommand"/>.</returns>
         protected ICommand GetCommand(string name)
         {
-            return commands.GetCommand(name);
+            return commands.GetCommand($"{ID}.{name}");
         }
 
         /// <summary>

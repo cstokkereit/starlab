@@ -24,16 +24,6 @@ namespace StarLab.UI.Controls
             container.Panel1Collapsed = true;
         }
 
-        ///// <summary>
-        ///// Gets the left or top panel of the <see cref="SplitContainer"/> depending on the <see cref="Orientation"/>.
-        ///// </summary>
-        //public SplitterPanel Panel1 => container.Panel1;
-
-        ///// <summary>
-        ///// Gets the right or bottom panel of the <see cref="SplitContainer"/> depending on the <see cref="Orientation"/>.
-        ///// </summary>
-        //public SplitterPanel Panel2 => container.Panel2;
-
         /// <summary>
         /// Adds a button to the tool bar.
         /// </summary>
@@ -64,9 +54,6 @@ namespace StarLab.UI.Controls
         public void AddControl(Control control, SplitViewPanels panel)
         {
             panels[panel].Add(control);
-
-
-
 
             var size1 = GetMinimumSize(container.Panel1.Controls);
             var size2 = GetMinimumSize(container.Panel2.Controls);
@@ -188,11 +175,14 @@ namespace StarLab.UI.Controls
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         private class PanelManager
         {
-            private readonly Dictionary<string, Control> controls = new Dictionary<string, Control>();
+            private readonly Dictionary<string, Control> controls = new Dictionary<string, Control>(); //
 
-            private readonly SplitterPanel panel;
+            private readonly SplitterPanel panel; //
 
             private Control? control; // The active control.
 

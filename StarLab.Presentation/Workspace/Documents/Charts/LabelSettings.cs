@@ -8,7 +8,7 @@
         /// <summary>
         /// Initialises a new instance of the <see cref="LabelSettings"/> class.
         /// </summary>
-        /// <param name="label">An <see cref="ILabel"/> TODO.</param>
+        /// <param name="label">TODO</param>
         public LabelSettings(ILabel label)
             : base(label)
         {

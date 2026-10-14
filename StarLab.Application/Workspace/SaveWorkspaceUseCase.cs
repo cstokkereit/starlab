@@ -1,0 +1,35 @@
+﻿using AutoMapper;
+
+namespace StarLab.Application.Workspace
+{
+    /// <summary>
+    /// A use case that saves the current workspace to a file.
+    /// </summary>
+    internal class SaveWorkspaceUseCase : UseCaseUseCase<IApplicationOutputPort>, IUseCase<WorkspaceDTO>
+    {
+        private readonly ISerialisationService serialiser; // Used to serialise the workspace to a file.
+
+        /// <summary>
+        /// Initialises a new instance of the <see cref="SaveWorkspaceUseCase"/> class.
+        /// </summary>
+        /// <param name="serialiser">An <see cref="ISerialisationService"/> that will be used to serialise the <see cref="WorkspaceDTO"/>.</param>
+        /// <param name="outputPort">An <see cref="IApplicationOutputPort"/> that updates the UI in response to the execution of the use case.</param>
+        /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
+        public SaveWorkspaceUseCase(ISerialisationService serialiser, IApplicationOutputPort outputPort, IMapper mapper)
+            : base(outputPort, mapper)
+        {
+            this.serialiser = serialiser;
+        }
+
+        /// <summary>
+        /// Executes the use case.
+        /// </summary>
+        /// <param name="dto">A <see cref="WorkspaceDTO"/> that specifies the current state of the workspace.</param>
+        public void Execute(WorkspaceDTO dto)
+        {
+            ArgumentNullException.ThrowIfNull(dto, nameof(dto));
+
+            if (!string.IsNullOrEmpty(dto.FileName)) serialiser.SerialiseWorkspace(dto, dto.FileName);
+        }
+    }
+}

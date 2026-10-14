@@ -1,0 +1,127 @@
+﻿using StarLab.Tests;
+
+namespace StarLab.Application.Workspace
+{
+    /// <summary>
+    /// A class for performing unit tests on the <see cref="SaveWorkspaceUseCase"/> class.
+    /// </summary>
+    public class SaveWorkspaceUseCaseTests : ApplicationTests
+    {
+        /// <summary>
+        /// This will be run after each test.
+        /// </summary>
+        [TearDown]
+        public override void TearDown()
+        {
+            try
+            {
+                DeleteFile(Path.Combine(folder, "Workspace1.slw"));
+            }
+            catch (Exception)
+            {
+                Assert.Fail("TearDown Failed.");
+            }
+
+            base.TearDown();
+        }
+
+        /// <summary>
+        /// Test that the <see cref="SaveWorkspaceuseCase.Execute"/> method correctly saves a workspace.
+        /// </summary>
+        [Test]
+        public void TestSaveWorkspace()
+        {
+            var port = Substitute.For<IApplicationOutputPort>();
+
+            var useCase = factory.CreateSaveWorkspaceUseCase(port);
+
+            var filename = Path.Combine(folder, "Workspace1.slw");
+
+            var dto = new WorkspaceDtoBuilder(filename)
+                .AddProject("Project1")
+                .AddFolder("Workspace1/Project1/Folder1")
+                .AddChart("1", "Document1", "Workspace1/Project1/Folder1")
+                .CreateWorkspace();
+
+            useCase.Execute(dto);
+
+            Assert.That(File.Exists(filename), Is.True);
+        }
+
+        /// <summary>
+        /// Test that the <see cref="SaveWorkspaceuseCase.Execute"/> method correctly saves over an existing workspace with the same name.
+        /// </summary>
+        [Test]
+        public void TestSaveExistingWorkspace()
+        {
+            var port = Substitute.For<IApplicationOutputPort>();
+
+            var useCase = factory.CreateSaveWorkspaceUseCase(port);
+
+            var filename = Path.Combine(folder, "Workspace1.slw");
+
+            var dto = new WorkspaceDtoBuilder(filename)
+                .AddProject("Project1")
+                .AddFolder("Workspace1/Project1/Folder1")
+                .AddChart("1", "Document1", "Workspace1/Project1/Folder1")
+                .CreateWorkspace();
+
+            CopyFile(Path.Combine(resources, "Workspace1.slw"), filename);
+
+            useCase.Execute(dto);
+
+            Assert.That(File.Exists(filename), Is.True);
+        }
+
+        /// <summary>
+        /// Test that the <see cref="SaveWorkspaceuseCase.Execute"/> method saves a workspace that can subsequently be reopened.
+        /// </summary>
+        [Test]
+        public void TestSavedWorkspaceCanBeOpened()
+        {
+            var port = Substitute.For<IApplicationOutputPort>();
+
+            var saveUseCase = factory.CreateSaveWorkspaceUseCase(port);
+
+            var filename = Path.Combine(folder, "Workspace1.slw");
+
+            var dto = new WorkspaceDtoBuilder(filename)
+                .AddProject("Project1")
+                .AddFolder("Workspace1/Project1/Folder1")
+                .AddChart("1", "Document1", "Workspace1/Project1/Folder1")
+                .AddChart("2", "Document2", "Workspace1/Project1/Folder1")
+                .AddProject("Project2")
+                .AddFolder("Workspace1/Project2/Folder1")
+                .AddChart("3", "Document3", "Workspace1/Project2/Folder1")
+                .AddChart("4", "Document4", "Workspace1/Project2/Folder1")
+                .CreateWorkspace();
+
+            saveUseCase.Execute(dto);
+
+            var openUseCase = factory.CreateOpenWorkspaceUseCase(port);
+
+            openUseCase.Execute(filename);
+
+            port.Received().SetWorkspace(Arg.Is<WorkspaceDTO>(ws =>
+                ws.Projects.Count == 2 &&
+                ws.Projects[0].Folders.Count == 1 &&
+                ws.Projects[0].Folders[0].Path == "Workspace1/Project1/Folder1" &&
+                ws.Projects[0].Documents.Count == 2 &&
+                ws.Projects[0].Documents[0].ID == "1" &&
+                ws.Projects[0].Documents[0].Name == "Document1" &&
+                ws.Projects[0].Documents[0].Path == "Workspace1/Project1/Folder1" &&
+                ws.Projects[0].Documents[1].ID == "2" &&
+                ws.Projects[0].Documents[1].Name == "Document2" &&
+                ws.Projects[0].Documents[1].Path == "Workspace1/Project1/Folder1" &&
+                ws.Projects[1].Folders.Count == 1 &&
+                ws.Projects[1].Folders[0].Path == "Workspace1/Project2/Folder1" &&
+                ws.Projects[1].Documents.Count == 2 &&
+                ws.Projects[1].Documents[0].ID == "3" &&
+                ws.Projects[1].Documents[0].Name == "Document3" &&
+                ws.Projects[1].Documents[0].Path == "Workspace1/Project2/Folder1" &&
+                ws.Projects[1].Documents[1].ID == "4" &&
+                ws.Projects[1].Documents[1].Name == "Document4" &&
+                ws.Projects[1].Documents[1].Path == "Workspace1/Project2/Folder1"));
+        }
+    }
+}

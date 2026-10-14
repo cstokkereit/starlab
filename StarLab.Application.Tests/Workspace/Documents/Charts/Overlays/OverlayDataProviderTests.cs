@@ -1,4 +1,8 @@
-﻿namespace StarLab.Application.Workspace.Documents.Charts.Overlays
+﻿using StarLab.Data.Import;
+using StarLab.Domain.Data;
+using StarLab.Presentation.Workspace.Documents;
+
+namespace StarLab.Application.Workspace.Documents.Charts.Overlays
 {
     /// <summary>
     /// A class for performing unit tests on the <see cref="OverlayDataProvider"/> class.
@@ -83,6 +87,41 @@
             //var data = provider.GetMagnitudeClassesOverlayData();
 
             //Assert.That(data, Is.Not.Null);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [Test]
+        public void TestGetSunOverlayData()
+        {
+            var provider = new OverlayDataProvider(new FileImportProvider());
+
+            var data = provider.GetSunOverlayData();
+
+            Assert.That(data.Labels.Count, Is.EqualTo(1));
+
+            Assert.That(data.Labels[0], Is.EqualTo("Sun"));
+
+            var absoluteMagnitudes = data.GetValues(StellarParameters.AbsoluteMagnitude);
+            Assert.That(absoluteMagnitudes.Count, Is.EqualTo(1));
+            Assert.That(absoluteMagnitudes[0], Is.EqualTo(4.83));
+
+            var colourIndices = data.GetValues(StellarParameters.ColourIndex("B", "V"));
+            Assert.That(colourIndices.Count, Is.EqualTo(1));
+            Assert.That(colourIndices[0], Is.EqualTo(0.626));
+
+            var effectiveTemperature = data.GetValues(StellarParameters.EffectiveTemperature);
+            Assert.That(effectiveTemperature.Count, Is.EqualTo(1));
+            Assert.That(effectiveTemperature[0], Is.EqualTo(5778));
+
+            var luminosities = data.GetValues(StellarParameters.Luminosity);
+            Assert.That(luminosities.Count, Is.EqualTo(1));
+            Assert.That(luminosities[0], Is.EqualTo(1));
+
+            var spectralClasses = data.GetValues(StellarParameters.SpectralClass);
+            Assert.That(spectralClasses.Count, Is.EqualTo(1));
+            Assert.That(spectralClasses[0], Is.EqualTo(45));
         }
     }
 }

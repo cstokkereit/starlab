@@ -97,6 +97,7 @@
         public const string Tool = "Tool";
         public const string Tools = "Tools";
         public const string ToolsOptions = "ToolsOptions";
+        public const string Transparent = "Transparent";
         public const string Type = "Type";
 
         public const string View = "View";

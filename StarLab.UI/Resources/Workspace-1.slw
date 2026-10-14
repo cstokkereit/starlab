@@ -12,12 +12,12 @@
                 <MajorGridLines colour="Green" opacity="0.3" visible="true" />
                 <MinorGridLines colour="Green" opacity="0.1" visible="true" />
               </Grid>
-              <Points size ="1" colour="Red" visible="true"/>
+              <Points colour="Red" size="1" visible="true" />
             </PlotArea>
             <Title colour="Green" text="HR-Diagram 1" visible="true">
               <Font bold="true" family="Segoe UI" italic="false" size="20" underline="false" />
             </Title>
-            <X1 data="ColourIndex(B-V)" colour="Green" visible="true">
+            <X1 colour="Green" data="ColourIndex(B-V)" visible="true">
               <Label colour="Green" text="Colour Index (B-V)" visible="true">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
@@ -29,7 +29,7 @@
                 </TickLabels>
               </Scale>
             </X1>
-            <X2 data=""  colour="Green" visible="false">
+            <X2 colour="Green" data="" visible="false">
               <Label colour="Green" text="" visible="false">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
@@ -41,7 +41,7 @@
                 </TickLabels>
               </Scale>
             </X2>
-            <Y1 data="AbsoluteMagnitude" colour="Green" visible="true">
+            <Y1 colour="Green" data="AbsoluteMagnitude" visible="true">
               <Label colour="Green" text="Absolute Magnitude" visible="true">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
@@ -53,7 +53,7 @@
                 </TickLabels>
               </Scale>
             </Y1>
-            <Y2 data="" colour="Green" visible="false">
+            <Y2 colour="Green" data="" visible="false">
               <Label colour="Green" text="" visible="false">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
@@ -65,6 +65,11 @@
                 </TickLabels>
               </Scale>
             </Y2>
+            <Overlays>
+              <Overlay name="SunOverlay" colour="Yellow" visible="true">
+                <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
+              </Overlay>
+            </Overlays>
           </Chart>
         </Document>
         <Document id="E24FA5BD-FB27-41C9-AED1-25B837A6C152" name="HR-Diagram 2" path="Workspace/Henry Draper Catalog/Charts/HRDiagrams/HRDiagrams" type="Chart" view="ColourMagnitudeDiagram">
@@ -75,12 +80,12 @@
                 <MajorGridLines colour="Green" opacity="0.3" visible="true" />
                 <MinorGridLines colour="Green" opacity="0.1" visible="true" />
               </Grid>
-              <Points size ="1" colour="Red" visible="true"/>
+              <Points colour="Red" size="1" visible="true" />
             </PlotArea>
             <Title colour="Green" text="HR-Diagram 2" visible="true">
               <Font bold="true" family="Segoe UI" italic="false" size="20" underline="false" />
             </Title>
-            <X1 data="ColourIndex(B-V)" colour="Green" visible="true">
+            <X1 colour="Green" data="ColourIndex(B-V)" visible="true">
               <Label colour="Green" text="Colour Index (B-V)" visible="true">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
@@ -92,7 +97,7 @@
                 </TickLabels>
               </Scale>
             </X1>
-            <X2 data="" colour="Green" visible="false">
+            <X2 colour="Green" data="" visible="false">
               <Label colour="Green" text="" visible="false">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
@@ -104,7 +109,7 @@
                 </TickLabels>
               </Scale>
             </X2>
-            <Y1 data="AbsoluteMagnitude" colour="Green" visible="true">
+            <Y1 colour="Green" data="AbsoluteMagnitude" visible="true">
               <Label colour="Green" text="Absolute Magnitude" visible="true">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
@@ -116,7 +121,7 @@
                 </TickLabels>
               </Scale>
             </Y1>
-            <Y2 dat="" colour="Green" visible="false">
+            <Y2 colour="Green" data="" visible="false">
               <Label colour="Green" text="" visible="false">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
@@ -128,6 +133,7 @@
                 </TickLabels>
               </Scale>
             </Y2>
+            <Overlays/>
           </Chart>
         </Document>
         <Document id="6E82FF05-3C75-4A59-95D3-AF176EF2571E" name="HR-Diagram 3" path="Workspace/Henry Draper Catalog/Charts/HRDiagrams/HRDiagrams" type="Chart" view="ColourMagnitudeDiagram">
@@ -138,12 +144,12 @@
                 <MajorGridLines colour="Green" opacity="0.2" visible="false" />
                 <MinorGridLines colour="Green" opacity="0.2" visible="false" />
               </Grid>
-              <Points size ="1" colour="Red" visible="true"/>
+              <Points colour="Red" size="1" visible="true" />
             </PlotArea>
             <Title colour="Green" text="HR-Diagram 3" visible="true">
               <Font bold="true" family="Segoe UI" italic="false" size="20" underline="false" />
             </Title>
-            <X1 data="ColourIndex(B-V)" colour="Green" visible="true">
+            <X1 colour="Green" data="ColourIndex(B-V)" visible="true">
               <Label colour="Green" text="Colour Index (B-V)" visible="true">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
@@ -155,7 +161,7 @@
                 </TickLabels>
               </Scale>
             </X1>
-            <X2 data="" colour="Green" visible="false">
+            <X2 colour="Green" data="" visible="false">
               <Label colour="Green" text="" visible="false">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
@@ -167,7 +173,7 @@
                 </TickLabels>
               </Scale>
             </X2>
-            <Y1 data="AbsoluteMagnitude" colour="Green" visible="true">
+            <Y1 colour="Green" data="AbsoluteMagnitude" visible="true">
               <Label colour="Green" text="Absolute Magnitude" visible="true">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
@@ -179,7 +185,7 @@
                 </TickLabels>
               </Scale>
             </Y1>
-            <Y2 data="" colour="Green" visible="false">
+            <Y2 colour="Green" data="" visible="false">
               <Label colour="Green" text="" visible="false">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
@@ -191,6 +197,7 @@
                 </TickLabels>
               </Scale>
             </Y2>
+            <Overlays/>
           </Chart>
         </Document>
       </Documents>
@@ -215,12 +222,12 @@
                 <MajorGridLines colour="Green" opacity="0.3" visible="true" />
                 <MinorGridLines colour="Green" opacity="0.1" visible="true" />
               </Grid>
-              <Points size ="10" colour="Red" visible="true"/>
+              <Points colour="Red" size="10" visible="true" />
             </PlotArea>
             <Title colour="Green" text="HR-Diagram 1" visible="true">
               <Font bold="true" family="Segoe UI" italic="false" size="20" underline="false" />
             </Title>
-            <X1 data="ColourIndex(B-V)" colour="Green" visible="true">
+            <X1 colour="Green" data="ColourIndex(B-V)" visible="true">
               <Label colour="Green" text="Colour Index (B-V)" visible="true">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
@@ -232,7 +239,7 @@
                 </TickLabels>
               </Scale>
             </X1>
-            <X2 data="" colour="Green" visible="false">
+            <X2 colour="Green" data="" visible="false">
               <Label colour="Green" text="" visible="false">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
@@ -244,7 +251,7 @@
                 </TickLabels>
               </Scale>
             </X2>
-            <Y1 data="AbsoluteMagnitude" colour="Green" visible="true">
+            <Y1 colour="Green" data="AbsoluteMagnitude" visible="true">
               <Label colour="Green" text="Absolute Magnitude" visible="true">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
@@ -256,7 +263,7 @@
                 </TickLabels>
               </Scale>
             </Y1>
-            <Y2 data="" colour="Green" visible="false">
+            <Y2 colour="Green" data="" visible="false">
               <Label colour="Green" text="" visible="false">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
@@ -268,6 +275,7 @@
                 </TickLabels>
               </Scale>
             </Y2>
+            <Overlays/>
           </Chart>
         </Document>
         <Document id="F7F6EC62-39D9-411E-AB6A-AF547DCA8DC5" name="HR-Diagram 2" path="Workspace/Yale Bright Star Catalog/Charts/HRDiagrams" type="Chart" view="ColourMagnitudeDiagram">
@@ -278,12 +286,12 @@
                 <MajorGridLines colour="Green" opacity="0.3" visible="true" />
                 <MinorGridLines colour="Green" opacity="0.1" visible="true" />
               </Grid>
-              <Points size ="1" colour="Red" visible="true"/>
+              <Points colour="Red" size="1" visible="true" />
             </PlotArea>
             <Title colour="Green" text="HR-Diagram 2" visible="true">
               <Font bold="true" family="Segoe UI" italic="false" size="20" underline="false" />
             </Title>
-            <X1 data="ColourIndex(B-V)" colour="Green" visible="true">
+            <X1 colour="Green" data="ColourIndex(B-V)" visible="true">
               <Label colour="Green" text="Colour Index (B-V)" visible="true">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
@@ -295,7 +303,7 @@
                 </TickLabels>
               </Scale>
             </X1>
-            <X2 data="" colour="Green" visible="false">
+            <X2 colour="Green" data="" visible="false">
               <Label colour="Green" text="" visible="false">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
@@ -307,7 +315,7 @@
                 </TickLabels>
               </Scale>
             </X2>
-            <Y1 data="AbsoluteMagnitude" colour="Green" visible="true">
+            <Y1 colour="Green" data="AbsoluteMagnitude" visible="true">
               <Label colour="Green" text="Absolute Magnitude" visible="true">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
@@ -319,7 +327,7 @@
                 </TickLabels>
               </Scale>
             </Y1>
-            <Y2 data="" colour="Green" visible="false">
+            <Y2 colour="Green" data="" visible="false">
               <Label colour="Green" text="" visible="false">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
@@ -331,6 +339,7 @@
                 </TickLabels>
               </Scale>
             </Y2>
+            <Overlays/>
           </Chart>
         </Document>
         <Document id="C46D67B8-78B6-4D34-9527-3F479131F5F3" name="HR-Diagram 3" path="Workspace/Yale Bright Star Catalog/Charts/HRDiagrams" type="Chart" view="ColourMagnitudeDiagram">
@@ -341,12 +350,12 @@
                 <MajorGridLines colour="Green" opacity="0.2" visible="false" />
                 <MinorGridLines colour="Green" opacity="0.2" visible="false" />
               </Grid>
-              <Points size ="1" colour="Red" visible="true"/>
+              <Points colour="Red" size="1" visible="true" />
             </PlotArea>
             <Title colour="Green" text="HR-Diagram 3" visible="true">
               <Font bold="true" family="Segoe UI" italic="false" size="20" underline="false" />
             </Title>
-            <X1 data="ColourIndex(B-V)" colour="Green" visible="true">
+            <X1 colour="Green" data="ColourIndex(B-V)" visible="true">
               <Label colour="Green" text="Colour Index (B-V)" visible="true">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
@@ -358,7 +367,7 @@
                 </TickLabels>
               </Scale>
             </X1>
-            <X2 data="" colour="Green" visible="false">
+            <X2 colour="Green" data="" visible="false">
               <Label colour="Green" text="" visible="false">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
@@ -370,7 +379,7 @@
                 </TickLabels>
               </Scale>
             </X2>
-            <Y1 data="AbsoluteMagnitude" colour="Green" visible="true">
+            <Y1 colour="Green" data="AbsoluteMagnitude" visible="true">
               <Label colour="Green" text="Absolute Magnitude" visible="true">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
@@ -382,7 +391,7 @@
                 </TickLabels>
               </Scale>
             </Y1>
-            <Y2 data="" colour="Green" visible="false">
+            <Y2 colour="Green" data="" visible="false">
               <Label colour="Green" text="" visible="false">
                 <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
               </Label>
@@ -394,6 +403,7 @@
                 </TickLabels>
               </Scale>
             </Y2>
+            <Overlays/>
           </Chart>
         </Document>
       </Documents>
@@ -413,12 +423,12 @@
 <DockPanel FormatVersion="1.0" DockLeftPortion="0.25" DockRightPortion="0.25" DockTopPortion="0.25" DockBottomPortion="0.25" ActiveDocumentPane="1" ActivePane="1">
   <Contents Count="7">
     <Content ID="0" PersistString="WorkspaceExplorer" AutoHidePortion="0.25" IsHidden="False" IsFloat="False" />
-    <Content ID="1" PersistString="fb97ba9c-7b51-43f9-9025-ed54a90db990" AutoHidePortion="0.25" IsHidden="False" IsFloat="False" />
-    <Content ID="2" PersistString="e24fa5bd-fb27-41c9-aed1-25b837a6c152" AutoHidePortion="0.25" IsHidden="False" IsFloat="False" />
-    <Content ID="3" PersistString="6e82ff05-3c75-4a59-95d3-af176ef2571e" AutoHidePortion="0.25" IsHidden="False" IsFloat="False" />
-    <Content ID="4" PersistString="577cb05b-c02f-499c-bc36-deb47aff9029" AutoHidePortion="0.25" IsHidden="True" IsFloat="False" />
-    <Content ID="5" PersistString="f7f6ec62-39d9-411e-ab6a-af547dca8dc5" AutoHidePortion="0.25" IsHidden="False" IsFloat="False" />
-    <Content ID="6" PersistString="c46d67b8-78b6-4d34-9527-3f479131f5f3" AutoHidePortion="0.25" IsHidden="True" IsFloat="False" />
+    <Content ID="1" PersistString="FB97BA9C-7B51-43F9-9025-ED54A90DB990" AutoHidePortion="0.25" IsHidden="False" IsFloat="False" />
+    <Content ID="2" PersistString="E24FA5BD-FB27-41C9-AED1-25B837A6C152" AutoHidePortion="0.25" IsHidden="False" IsFloat="False" />
+    <Content ID="3" PersistString="6E82FF05-3C75-4A59-95D3-AF176EF2571E" AutoHidePortion="0.25" IsHidden="False" IsFloat="False" />
+    <Content ID="4" PersistString="577CB05B-C02F-499C-BC36-DEB47AFF9029" AutoHidePortion="0.25" IsHidden="True" IsFloat="False" />
+    <Content ID="5" PersistString="F7F6EC62-39D9-411E-AB6A-AF547DCA8DC5" AutoHidePortion="0.25" IsHidden="False" IsFloat="False" />
+    <Content ID="6" PersistString="C46D67B8-78B6-4D34-9527-3F479131F5F3" AutoHidePortion="0.25" IsHidden="True" IsFloat="False" />
   </Contents>
   <Panes Count="2">
     <Pane ID="0" DockState="DockRight" ActiveContent="0">

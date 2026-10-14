@@ -166,7 +166,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// <param name="dto">A <see cref="ChartDTO"/> that specifies the state of the chart.</param>
         public void UpdatePreview(ChartDTO dto)
         {
-            View.UpdateChart(new Chart(dto));
+           View.UpdateChart(new Chart(dto));
         }
 
         /// <summary>

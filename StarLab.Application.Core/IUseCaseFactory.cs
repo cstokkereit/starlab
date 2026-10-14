@@ -12,120 +12,120 @@ namespace StarLab.Application
     // https://www.google.com/search?sca_esv=f7c375419f60a470&sca_upv=1&rlz=1C1ASUM_enGB894GB894&q=clean+architecture&udm=2&fbs=AEQNm0B2yzHMOEf_Yi0v5EYEWbKOCio4_914wq6ufX8pGLlmAryrUrheWY_IoupTN8gakBp5DNxj4sqXIaMhouUHzuVQl9m-o5eJNmtaklRgHL6TWsp5CYTO9THZ4ad6blX5CKzChvyGw1w1auABFngTQM7PvGpXLHC-u82MuCnek6KDeTh8WFYaauER5Nc6ml-30s0Zz72mGswt5KqVaMjZz-I8HrtSbw&sa=X&ved=2ahUKEwjbpqz1ju2HAxVuSkEAHZG8MHgQtKgLegQIDhAB&biw=1920&bih=919&dpr=1#vhid=nPr36GbgH40TfM&vssid=mosaic
 
     /// <summary>
-    /// Represents a factory for creating use case interactors.
+    /// Represents a factory for creating use cases.
     /// </summary>
     public interface IUseCaseFactory
     {
         /// <summary>
-        /// Creates a use case interactor that adds a document to the workspace.
+        /// Creates a use case UseCase that adds a document to the workspace.
         /// </summary>
         /// <param name="outputPort">An <see cref="IWorkspaceOutputPort"/> that updates the UI in response to the outputs of the use case.</param>
         /// <returns>An instance of <see cref="IUseCase{AddDocumentUseCaseArgs}"/> that implements the use case.</returns>
         IUseCase<AddDocumentUseCaseArgs> CreateAddDocumentUseCase(IWorkspaceOutputPort outputPort);
 
         /// <summary>
-        /// Creates a use case interactor that adds a folder to the workspace.
+        /// Creates a use case UseCase that adds a folder to the workspace.
         /// </summary>
         /// <param name="outputPort">An <see cref="IWorkspaceOutputPort"/> that updates the UI in response to the outputs of the use case.</param>
         /// <returns>An instance of <see cref="IUseCase{AddFolderUseCaseArgs}"/> that implements the use case.</returns>
         IUseCase<AddFolderUseCaseArgs> CreateAddFolderUseCase(IWorkspaceOutputPort outputPort);
 
         /// <summary>
-        /// Creates a use case interactor that adds a project to the workspace.
+        /// Creates a use case UseCase that adds a project to the workspace.
         /// </summary>
         /// <param name="outputPort">An <see cref="IWorkspaceOutputPort"/> that updates the UI in response to the outputs of the use case.</param>
         /// <returns>An instance of <see cref="IUseCase{AddProjectUseCaseArgs}"/> that implements the use case.</returns>
         IUseCase<AddProjectUseCaseArgs> CreateAddProjectUseCase(IWorkspaceOutputPort outputPort);
 
         /// <summary>
-        /// Creates a use case interactor that updates a chart in response to a settings change.
-        /// </summary>
-        /// <param name="outputPort">An <see cref="IChartOutputPort"/> that updates the UI in response to the outputs of the use case.</param>
-        /// <returns>An instance of <see cref="IUseCase{ChartDTO}"/> that implements the use case.</returns>
-        IUseCase<ChartDTO> CreateApplyChartSettingsUseCase(IChartOutputPort outputPort);
-
-        /// <summary>
-        /// Creates a use case interactor that copies a folder in the workspace hierarchy. 
+        /// Creates a use case UseCase that copies a folder in the workspace hierarchy. 
         /// </summary>
         /// <param name="outputPort">An <see cref="IWorkspaceOutputPort"/> that updates the UI in response to the outputs of the use case.</param>
         /// <returns>An instance of <see cref="IUseCase{ClipboardUseCaseArgs}"/> that implements the use case.</returns>
         IUseCase<ClipboardUseCaseArgs> CreateCopyAndPasteUseCase(IWorkspaceOutputPort outputPort);
 
         /// <summary>
-        /// Creates a use case interactor that copies a folder in the workspace hierarchy. 
+        /// Creates a use case UseCase that copies a folder in the workspace hierarchy. 
         /// </summary>
         /// <param name="outputPort">An <see cref="IWorkspaceOutputPort"/> that updates the UI in response to the outputs of the use case.</param>
         /// <returns>An instance of <see cref="IUseCase{ClipboardUseCaseArgs}"/> that implements the use case.</returns>
         IUseCase<ClipboardUseCaseArgs> CreateCutAndPasteUseCase(IWorkspaceOutputPort outputPort);
 
         /// <summary>
-        /// Creates a use case interactor that deletes a document from the workspace.
+        /// Creates a use case UseCase that deletes a document from the workspace.
         /// </summary>
         /// <param name="outputPort">An <see cref="IWorkspaceOutputPort"/> that updates the UI in response to the outputs of the use case.</param>
         /// <returns>An instance of <see cref="IUseCase{DeleteDocumentUseCaseArgs}"/> that implements the use case.</returns>
         IUseCase<DeleteDocumentUseCaseArgs> CreateDeleteDocumentUseCase(IWorkspaceOutputPort outputPort);
 
         /// <summary>
-        /// Creates a use case interactor that deletes a folder from the workspace.
+        /// Creates a use case UseCase that deletes a folder from the workspace.
         /// </summary>
         /// <param name="outputPort">An <see cref="IWorkspaceOutputPort"/> that updates the UI in response to the outputs of the use case.</param>
         /// <returns>An instance of <see cref="IUseCase{DeleteFolderUseCaseArgs}"/> that implements the use case.</returns>
         IUseCase<DeleteFolderUseCaseArgs> CreateDeleteFolderUseCase(IWorkspaceOutputPort outputPort);
 
         /// <summary>
-        /// Creates a use case interactor that manages the chart overlays.
+        /// Creates a use case UseCase that manages the chart overlays.
         /// </summary>
         /// <param name="outputPort">An <see cref="IChartOutputPort"/> that updates the UI in response to the outputs of the use case.</param>
         /// <returns>An instance of <see cref="IUseCase{ChartOverlayUseCaseArgs}"/> that implements the use case.</returns>
-        IUseCase<ChartOverlayUseCaseArgs> ManageChartOverlayInteractor(IChartOutputPort outputPort);
+        IUseCase<ChartOverlayUseCaseArgs> ManageChartOverlayUseCase(IChartOutputPort outputPort);
 
         /// <summary>
-        /// Creates a use case interactor that loads a workspace from a file.
+        /// Creates a use case UseCase that loads a workspace from a file.
         /// </summary>
         /// <param name="outputPort">An <see cref="IWorkspaceOutputPort"/> that updates the UI in response to the outputs of the use case.</param>
         /// <returns>An instance of <see cref="IUseCase{string}"/> that implements the use case.</returns>
         IUseCase<string> CreateOpenWorkspaceUseCase(IApplicationOutputPort outputPort);
 
         /// <summary>
-        /// Creates a use case interactor that renames a document in the workspace hierarchy.
+        /// Creates a use case UseCase that TODO
+        /// </summary>
+        /// <param name="outputPort">An <see cref="IChartOutputPort"/> that updates the UI in response to the outputs of the use case.</param>
+        /// <returns>An instance of <see cref="IUseCase{WorkspaceDTO}"/> that implements the use case.</returns>
+        IUseCaseAsync<CreateChartUseCaseArgs> CreatePlotChartUseCase(IChartOutputPort outputPort);
+
+        /// <summary>
+        /// Creates a use case UseCase that renames a document in the workspace hierarchy.
         /// </summary>
         /// <param name="outputPort">An <see cref="IWorkspaceOutputPort"/> that updates the UI in response to the outputs of the use case.</param>
         /// <returns>An instance of <see cref="IUseCase{RenameDocumentUseCaseArgs}"/> that implements the use case.</returns>
         IUseCase<RenameDocumentUseCaseArgs> CreateRenameDocumentUseCase(IWorkspaceOutputPort outputPort);
 
         /// <summary>
-        /// Creates a use case interactor that renames a folder in the workspace hierarchy.
+        /// Creates a use case UseCase that renames a folder in the workspace hierarchy.
         /// </summary>
         /// <param name="outputPort">An <see cref="IWorkspaceOutputPort"/> that updates the UI in response to the outputs of the use case.</param>
         /// <returns>An instance of <see cref="IUseCase{RenameFolderUseCaseArgs}"/> that implements the use case.</returns>
         IUseCase<RenameFolderUseCaseArgs> CreateRenameFolderUseCase(IWorkspaceOutputPort outputPort);
 
         /// <summary>
-        /// Creates a use case interactor that renames the workspace.
+        /// Creates a use case UseCase that renames the workspace.
         /// </summary>
         /// <param name="outputPort">An <see cref="IWorkspaceOutputPort"/> that updates the UI in response to the outputs of the use case.</param>
         /// <returns>An instance of <see cref="IUseCase{RenameWorkspaceUseCaseArgs}"/> that implements the use case.</returns>
         IUseCase<RenameWorkspaceUseCaseArgs> CreateRenameWorkspaceUseCase(IWorkspaceOutputPort outputPort);
 
         /// <summary>
-        /// Creates a use case interactor that saves the current workspace to a file.
+        /// Creates a use case UseCase that saves the current workspace to a file.
         /// </summary>
         /// <param name="outputPort">An <see cref="IWorkspaceOutputPort"/> that updates the UI in response to the outputs of the use case.</param>
         /// <returns>An instance of <see cref="IUseCase{WorkspaceDTO}"/> that implements the use case.</returns>
         IUseCase<WorkspaceDTO> CreateSaveWorkspaceUseCase(IApplicationOutputPort outputPort);
 
         /// <summary>
-        /// Creates a use case interactor that TODO
+        /// Creates a use case UseCase that updates a chart in response to a settings change.
         /// </summary>
         /// <param name="outputPort">An <see cref="IChartOutputPort"/> that updates the UI in response to the outputs of the use case.</param>
-        /// <returns>An instance of <see cref="IUseCase{WorkspaceDTO}"/> that implements the use case.</returns>
-        IUseCaseAsync<UpdateChartUseCaseArgs> CreateUpdateChartUseCase(IChartOutputPort outputPort);
+        /// <returns>An instance of <see cref="IUseCase{ChartDTO}"/> that implements the use case.</returns>
+        IUseCase<ChartDTO> CreateUpdateChartPreviewUseCase(IChartOutputPort outputPort);
 
         /// <summary>
-        /// Creates a use case interactor that updates a document in response to a settings change.
+        /// Creates a use case UseCase that updates a document in response to a settings change.
         /// </summary>
         /// <param name="outputPort">An <see cref="IChartOutputPort"/> that updates the UI in response to the outputs of the use case.</param>
         /// <returns>An instance of <see cref="IUseCase{UpdateDocumentUseCaseArgs}"/> that implements the use case.</returns>
-        IUseCase<UpdateDocumentUseCaseArgs> CreateUpdateDocumentUseCase(IApplicationOutputPort outputPort);
+        IUseCase<UpdateChartUseCaseArgs> CreateUpdateChartUseCase(IApplicationOutputPort outputPort);
     }
 }

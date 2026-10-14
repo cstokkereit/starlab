@@ -66,9 +66,9 @@ namespace StarLab.Presentation.Workspace.Documents
         [Test]
         public void TestAddDocument()
         {
-            var interactor = Substitute.For<IUseCase<AddDocumentUseCaseArgs>>();
+            var useCase = Substitute.For<IUseCase<AddDocumentUseCaseArgs>>();
 
-            factory.CreateAddDocumentUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
+            factory.CreateAddDocumentUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(useCase);
 
             var workspace = CreateWorkspace(new WorkspaceDtoBuilder(@"C:\Workspace-1")
                 .AddProject("Project-1")
@@ -83,7 +83,7 @@ namespace StarLab.Presentation.Workspace.Documents
 
             presenter.AddDocument("Document1", "Chart1");
 
-            interactor.Received(1).Execute(Arg.Is<AddDocumentUseCaseArgs>(args => args.Workspace.FileName == @"C:\Workspace-1"
+            useCase.Received(1).Execute(Arg.Is<AddDocumentUseCaseArgs>(args => args.Workspace.FileName == @"C:\Workspace-1"
                 && args.Document.Name == "Document1"
                 && args.Document.Path == "Workspace/Project-1/Charts"
                 && args.Document.View == "ChartView"));
@@ -189,9 +189,9 @@ namespace StarLab.Presentation.Workspace.Documents
         [Test]
         public void TestRun()
         {
-            var interactor = Substitute.For<IUseCase<AddDocumentUseCaseArgs>>();
+            var useCase = Substitute.For<IUseCase<AddDocumentUseCaseArgs>>();
 
-            factory.CreateAddDocumentUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(interactor);
+            factory.CreateAddDocumentUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(useCase);
 
             var presenter = CreatePresenter(true);
 

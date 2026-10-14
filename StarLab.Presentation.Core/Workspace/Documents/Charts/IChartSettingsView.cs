@@ -3,7 +3,7 @@
     /// <summary>
     /// Defines the properties and methods used by an <see cref="IChartSettingsViewPresenter"/> to control the behaviour of a chart settings panel.
     /// </summary>
-    public interface IChartSettingsView : IChildView, ISettingsView
+    public interface IChartSettingsView : IChildView, ICancellableView
     {
         /// <summary>
         /// Adds a node to the tree view that displays the chart property groups.
@@ -44,7 +44,9 @@
         /// Appends a data source settings section to the settings panel.
         /// </summary>
         /// <param name="settings">An <see cref="IChartSettings"/> that represents the current state of the chart.</param>
-        void AppendDataSourceSection(IChartSettings settings);
+        /// <param name="horizontalAxisFields">The fields that can be represented on a horizontal axis.</param>
+        /// <param name="verticalAxisFields">The fields that can be represented on a vertical axis.</param>
+        void AppendDataSourceSection(IChartSettings settings, IEnumerable<IDisplayField> horizontalAxisFields, IEnumerable<IDisplayField> verticalAxisFields);
 
         /// <summary>
         /// Appends a font settings section to the settings panel.

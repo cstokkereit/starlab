@@ -2,10 +2,12 @@
 using StarLab.Application.Workspace;
 using StarLab.Application.Workspace.Documents;
 using StarLab.Application.Workspace.Documents.Charts;
+using StarLab.Application.Workspace.Documents.Charts.Overlays;
 using StarLab.Application.Workspace.Documents.Tables;
 using StarLab.Presentation.Workspace;
 using StarLab.Presentation.Workspace.Documents;
 using StarLab.Presentation.Workspace.Documents.Charts;
+using StarLab.Presentation.Workspace.Documents.Charts.Overlays;
 using StarLab.Presentation.Workspace.Documents.Tables;
 
 namespace StarLab.Presentation
@@ -41,6 +43,8 @@ namespace StarLab.Presentation
             CreateMap<IGridSettings, GridDTO>();
             CreateMap<ILabel, LabelDTO>();
             CreateMap<ILabelSettings, LabelDTO>();
+            CreateMap<IOverlay, OverlayDTO>();
+            CreateMap<IOverlaySettings, OverlayDTO>();
             CreateMap<IPlotArea, PlotAreaDTO>();
             CreateMap<IPlotAreaSettings, PlotAreaDTO>();
             CreateMap<IDatabase, DatabaseDTO>();
