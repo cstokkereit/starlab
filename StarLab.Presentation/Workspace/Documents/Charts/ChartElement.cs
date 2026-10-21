@@ -12,7 +12,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// </summary>
         /// <param name="colour">A <see cref="string"/> value that specifies the colour of the chart element.</param>
         /// <param name="visible">Specifies whether the chart element is visble or not.</param>
-        public ChartElement(string colour, bool visible)
+        public ChartElement(string? colour, bool visible)
         {
             Visible = visible;
             Colour = colour;

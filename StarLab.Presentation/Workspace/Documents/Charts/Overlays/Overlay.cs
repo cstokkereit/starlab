@@ -17,6 +17,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts.Overlays
             Font = new Font(dto.Font);
 
             Name = dto.Name;
+            Type = dto.Type;
         }
 
         /// <summary>
@@ -28,5 +29,10 @@ namespace StarLab.Presentation.Workspace.Documents.Charts.Overlays
         /// Gets the overlay name.
         /// </summary>
         public string Name { get; }
+
+        /// <summary>
+        /// Gets the overlay type.
+        /// </summary>
+        public OverlayType Type { get; }
     }
 }

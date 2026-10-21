@@ -84,6 +84,11 @@
         void Clear();
 
         /// <summary>
+        /// 
+        /// </summary>
+        void ClearOverlays();
+
+        /// <summary>
         /// Expands the specified tree view node.
         /// </summary>
         /// <param name="key">The node key.</param>

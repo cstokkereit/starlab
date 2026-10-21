@@ -7,7 +7,7 @@ namespace StarLab.Application.Workspace
     /// <summary>
     /// A use case that loads a workspace from a file.
     /// </summary>
-    internal class OpenWorkspaceUseCase : UseCaseUseCase<IApplicationOutputPort>, IUseCase<string>
+    internal class OpenWorkspaceUseCase : UseCase<IApplicationOutputPort>, IUseCase<string>
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(OpenWorkspaceUseCase)); // The logger that will be used for writing log messages.
 
@@ -31,6 +31,8 @@ namespace StarLab.Application.Workspace
         /// <param name="filename">The name of the file that defines the workspace.</param>
         public void Execute(string filename)
         {
+            log.Debug(LogEntries.OpeningWorkspace(filename));
+
             if (File.Exists(filename))
             {
                 var dto = serialiser.DeserialiseWorkspace(filename);

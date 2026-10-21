@@ -8,7 +8,7 @@
         private readonly List<string> labels = new List<string>(); // A list containing the labels for the points in the overlay.
 
         /// <summary>
-        /// Gets a <see cref="string[]"/> containing the labels for the points in the overlay.
+        /// Gets a <see cref="string[]"/> containing the labels for the points in the overlay. // TODO this shouild be a collection of LabelledPoint objects
         /// </summary>
         public string[] Labels => labels.ToArray();
 

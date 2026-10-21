@@ -1,4 +1,5 @@
-﻿using System.Xml.Serialization;
+﻿using StarLab.Application.Workspace.Documents.Charts.Overlays;
+using System.Xml.Serialization;
 
 namespace StarLab.Serialisation.Workspace.Documents.Charts.Overlays
 {
@@ -16,6 +17,9 @@ namespace StarLab.Serialisation.Workspace.Documents.Charts.Overlays
 
         [XmlAttribute("name")]
         public string? Name;
+
+        [XmlAttribute("type")]
+        public OverlayType Type;
 
         [XmlAttribute("visible")]
         public bool Visible;

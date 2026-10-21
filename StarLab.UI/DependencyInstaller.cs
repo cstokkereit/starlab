@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using StarLab.Application;
 using StarLab.Application.Data;
 using StarLab.Application.Data.Import;
+using StarLab.Application.Workspace.Documents.Charts.Overlays;
 using StarLab.Data.Import;
 using StarLab.Data.MongoDB;
 using StarLab.Data.MongoDB.Import;
@@ -47,6 +48,7 @@ namespace StarLab.UI
         {
             container.Register(
                 Component.For<IEventAggregator>().ImplementedBy<EventAggregator>(),
+                Component.For<IOverlayDataProvider>().ImplementedBy<OverlayDataProvider>(),
                 Classes.FromAssemblyNamed("StarLab.Application").Where(t => t.Name.EndsWith("Factory")).WithServiceDefaultInterfaces(),
                 Classes.FromAssemblyNamed("StarLab.Application").BasedOn<Profile>().WithServiceBase()
             );

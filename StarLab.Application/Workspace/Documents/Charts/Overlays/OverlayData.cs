@@ -3,7 +3,7 @@
     /// <summary>
     /// The data required to generate an overlay that contains one or more data points.
     /// </summary>
-    internal class OverlayData : IOverlayData
+    public class OverlayData : IOverlayData
     {
         private readonly Dictionary<string, List<double>> data = new Dictionary<string, List<double>>(); // A dictionary containing the lists of data values indexed by field name.
 

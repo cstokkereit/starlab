@@ -1,12 +1,16 @@
 ﻿using AutoMapper;
+using log4net;
+using StarLab.Shared;
 
 namespace StarLab.Application.Workspace
 {
     /// <summary>
     /// A use case that saves the current workspace to a file.
     /// </summary>
-    internal class SaveWorkspaceUseCase : UseCaseUseCase<IApplicationOutputPort>, IUseCase<WorkspaceDTO>
+    internal class SaveWorkspaceUseCase : UseCase<IApplicationOutputPort>, IUseCase<WorkspaceDTO>
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(SaveWorkspaceUseCase)); // The logger that will be used for writing log messages.
+
         private readonly ISerialisationService serialiser; // Used to serialise the workspace to a file.
 
         /// <summary>
@@ -28,6 +32,8 @@ namespace StarLab.Application.Workspace
         public void Execute(WorkspaceDTO dto)
         {
             ArgumentNullException.ThrowIfNull(dto, nameof(dto));
+
+            log.Debug(LogEntries.OpeningWorkspace(dto.FileName));
 
             if (!string.IsNullOrEmpty(dto.FileName)) serialiser.SerialiseWorkspace(dto, dto.FileName);
         }

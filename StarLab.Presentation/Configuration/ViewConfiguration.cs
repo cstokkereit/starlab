@@ -3,7 +3,7 @@
     /// <summary>
     /// The configuration for an <see cref="IView"/>.
     /// </summary>
-    internal class ViewConfiguration : IViewConfiguration
+    internal struct ViewConfiguration : IViewConfiguration
     {
         private readonly Dictionary<string, IChildViewConfiguration> configurations = new Dictionary<string, IChildViewConfiguration>(); // A dictionary containing the child view configurations indexed by name.
 

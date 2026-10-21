@@ -4,7 +4,7 @@ using System.ComponentModel;
 namespace StarLab.UI.Core
 {
     [Designer("System.Windows.Forms.Design.ParentControlDesigner, System.Design")]
-    public partial class ChildView : UserControl
+    public partial class ChildView : UserControl, IChildView
     {
         /// <summary>
         /// Initialises a new instance of the <see cref="ChildView"/> class.

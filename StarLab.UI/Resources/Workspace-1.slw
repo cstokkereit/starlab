@@ -66,8 +66,8 @@
               </Scale>
             </Y2>
             <Overlays>
-              <Overlay name="SunOverlay" colour="Yellow" visible="true">
-                <Font bold="false" family="Segoe UI" italic="false" size="16" underline="false" />
+              <Overlay name="SunOverlay" type="Point" colour="Yellow" visible="true">
+                <Font bold="false" family="Segoe UI" italic="false" size="12" underline="false" />
               </Overlay>
             </Overlays>
           </Chart>
@@ -133,7 +133,11 @@
                 </TickLabels>
               </Scale>
             </Y2>
-            <Overlays/>
+            <Overlays>
+              <Overlay name="SunOverlay" type="Point" colour="Yellow" visible="true">
+                <Font bold="false" family="Segoe UI" italic="false" size="12" underline="false" />
+              </Overlay>
+            </Overlays>
           </Chart>
         </Document>
         <Document id="6E82FF05-3C75-4A59-95D3-AF176EF2571E" name="HR-Diagram 3" path="Workspace/Henry Draper Catalog/Charts/HRDiagrams/HRDiagrams" type="Chart" view="ColourMagnitudeDiagram">
@@ -197,7 +201,11 @@
                 </TickLabels>
               </Scale>
             </Y2>
-            <Overlays/>
+            <Overlays>
+              <Overlay name="SunOverlay" type="Point" colour="Yellow" visible="true">
+                <Font bold="false" family="Segoe UI" italic="false" size="12" underline="false" />
+              </Overlay>
+            </Overlays>
           </Chart>
         </Document>
       </Documents>
@@ -275,7 +283,11 @@
                 </TickLabels>
               </Scale>
             </Y2>
-            <Overlays/>
+            <Overlays>
+              <Overlay name="SunOverlay" type="Point" colour="Yellow" visible="true">
+                <Font bold="false" family="Segoe UI" italic="false" size="12" underline="false" />
+              </Overlay>
+            </Overlays>
           </Chart>
         </Document>
         <Document id="F7F6EC62-39D9-411E-AB6A-AF547DCA8DC5" name="HR-Diagram 2" path="Workspace/Yale Bright Star Catalog/Charts/HRDiagrams" type="Chart" view="ColourMagnitudeDiagram">
@@ -339,7 +351,11 @@
                 </TickLabels>
               </Scale>
             </Y2>
-            <Overlays/>
+            <Overlays>
+              <Overlay name="SunOverlay" type="Point" colour="Yellow" visible="true">
+                <Font bold="false" family="Segoe UI" italic="false" size="12" underline="false" />
+              </Overlay>
+            </Overlays>
           </Chart>
         </Document>
         <Document id="C46D67B8-78B6-4D34-9527-3F479131F5F3" name="HR-Diagram 3" path="Workspace/Yale Bright Star Catalog/Charts/HRDiagrams" type="Chart" view="ColourMagnitudeDiagram">
@@ -403,7 +419,11 @@
                 </TickLabels>
               </Scale>
             </Y2>
-            <Overlays/>
+            <Overlays>
+              <Overlay name="SunOverlay" type="Point" colour="Yellow" visible="true">
+                <Font bold="false" family="Segoe UI" italic="false" size="12" underline="false" />
+              </Overlay>
+            </Overlays>
           </Chart>
         </Document>
       </Documents>

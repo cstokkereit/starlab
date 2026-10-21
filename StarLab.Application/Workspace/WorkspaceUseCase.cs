@@ -5,7 +5,7 @@ namespace StarLab.Application.Workspace
     /// <summary>
     /// An abstract base class that provides functions required by workspace UseCases. TODO
     /// </summary>
-    public abstract class WorkspaceUseCase : UseCaseUseCase<IWorkspaceOutputPort>
+    public abstract class WorkspaceUseCase : UseCase<IWorkspaceOutputPort>
     {
         /// <summary>
         /// Initialises a new instance of the <see cref="WorkspaceUseCase"/> class.

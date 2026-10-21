@@ -1,9 +1,12 @@
 ﻿using log4net;
 using ScottPlot;
 using ScottPlot.Plottables;
+using StarLab.Application.Workspace.Documents.Charts.Overlays;
 using StarLab.Presentation;
 using StarLab.Presentation.Workspace.Documents.Charts;
+using StarLab.Presentation.Workspace.Documents.Charts.Overlays;
 using StarLab.Shared;
+using StarLab.UI.Core;
 using StarLab.UI.Workspace.Documents.Charts.Overlays;
 
 namespace StarLab.UI.Workspace.Documents.Charts
@@ -15,22 +18,28 @@ namespace StarLab.UI.Workspace.Documents.Charts
     /// <summary>
     /// A <see cref="UserControl"/> that implements the <see cref="IChartView"/> interface used to control the behaviour that is specific to a chart document.
     /// </summary>
-    public partial class ChartView : UserControl, IChartView
+    public partial class ChartView : ChildView, IChartView
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(ChartView)); // The logger that will be used for writing log messages.
 
-        readonly ScottPlot.Plottables.Rectangle selector; //
+        private readonly Dictionary<string, Overlay> overlays = new Dictionary<string, Overlay>(); //
+
+        private readonly ScottPlot.Plottables.Rectangle selector; //
 
         private IChartViewPresenter? presenter; // The presenter that controls the view.
+
+        private readonly IOverlayFactory factory; //
 
         private Scatter? points; //
 
         /// <summary>
         /// Initialises a new instance of the <see cref="ChartView"> class.
         /// </summary>
-        public ChartView()
+        public ChartView(IOverlayFactory factory)
         {
             InitializeComponent();
+
+            this.factory = factory ?? throw new ArgumentNullException(nameof(factory));
 
             ID = ViewIDs.Chart;
             Name = ViewNames.Chart;
@@ -61,10 +70,22 @@ namespace StarLab.UI.Workspace.Documents.Charts
         public SplitViewPanels Panel => SplitViewPanels.Panel2;
 
         /// <summary>
+        /// Adds the specified point overlay to the chart.
+        /// </summary>
+        /// <param name="name">The overlay name.</param>
+        /// <param name="x">The x coordinate.</param>
+        /// <param name="y">The y coordinate.</param>
+        /// <param name="text">The label text.</param>
+        public void AddOverlay(string name, double x, double y, string text)
+        {
+            overlays.Add(name, new PointOverlay(chart.Plot, name, x, y, text));
+        }
+
+        /// <summary>
         /// Attaches the <see cref="IChildViewPresenter"/> that controls the view.
         /// </summary>
         /// <param name="presenter">The <see cref="IChildViewPresenter"/> that controls the view.</param>
-        public void Attach(IChildViewPresenter presenter)
+        public override void Attach(IChildViewPresenter presenter)
         {
             if (this.presenter != null) throw new InvalidOperationException(ExceptionMessages.PresenterAlreadyAttached);
 
@@ -76,7 +97,7 @@ namespace StarLab.UI.Workspace.Documents.Charts
         /// <summary>
         /// Detaches the presenter that controls the view.
         /// </summary>
-        public void Detach()
+        public override void Detach()
         {
             if (presenter != null)
             {
@@ -91,40 +112,47 @@ namespace StarLab.UI.Workspace.Documents.Charts
         /// <summary>
         /// Initialises the view.
         /// </summary>
-        public void Initialise()
+        public override void Initialise()
         {
+            if (factory is OverlayFactory overlayFactory)
+            {
+                overlayFactory.Attach(chart.Plot);
+            }
+
             selector.FillStyle.Color = Colors.Red.WithAlpha(.2);
         }
 
         /// <summary>
-        /// Updates the chart following a change to the chart data.
+        /// Plots the chart.
         /// </summary>
         /// <param name="config">An <see cref="IChart"/> used to configure the chart.</param>
         /// <param name="data">An <see cref="IChartData"> that holds data that will be used to generate the chart.</param>
-        public void UpdateChart(IChart config, IChartData data)
+        public void PlotChart(IChart config, IChartData data)
         {
-            points = chart.Plot.Add.ScatterPoints(data.GetSeries("B-V"), data.GetSeries("Absolute Magnitude"));
+            points = chart.Plot.Add.ScatterPoints(data.GetSeries(config.X1.Data), data.GetSeries(config.Y1.Data));
 
             ConfigurePoints(config.PlotArea.Points);
+            ConfigureOverlays(config);
 
-
-
-
-            //var overlay = new MultiLineOverlay();
-            //overlay.AddLine(new double[] { -0.330, -0.318, -0.307 }, new double[] { -5.80, -4.80, -4.05 });
-            //overlay.AddLine(new double[] { 0.595, 0.680, 0.775 }, new double[] { 4.48, 4.98, 5.55 });
-            //overlay.AddLine(new double[] { 1.420, 1.69 }, new double[] { 8.80, 9.52 });
-
-            //overlay.Colour = GetColour("Yellow");
-
-            //overlay.Visible = true;
-
-            //overlay.Render(chart.Plot);
-
-
-
+            foreach (var overlay in overlays.Values)
+            {
+                overlay.Render();
+            }
 
             chart.Refresh();
+        }
+
+        /// <summary>
+        /// Removes the specified overlay from the chart.
+        /// </summary>
+        /// <param name="name">The overlay name.</param>
+        public void RemoveOverlay(string name)
+        {
+            if (overlays.TryGetValue(name, out Overlay? overlay))
+            {
+                overlays.Remove(name);
+                overlay.Clear();
+            }
         }
 
         /// <summary>
@@ -171,8 +199,6 @@ namespace StarLab.UI.Workspace.Documents.Charts
             ConfigureAxis(plot.Axes.Top, config.X2);
 
             ConfigurePlotArea(plot, config);
-
-            //ConfigureOverlays(config);
         }
 
         /// <summary>
@@ -193,6 +219,32 @@ namespace StarLab.UI.Workspace.Documents.Charts
             label.FontSize = font.Size;
             label.Italic = font.Italic;
             label.Bold = font.Bold;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="config"></param>
+        private void ConfigureOverlay(IOverlay config)
+        {
+            if (overlays.TryGetValue(config.Name, out Overlay? overlay))
+            {
+                overlay.Font = new Font(config.Font.Family, config.Font.Size);
+                overlay.Colour = GetColour(config.Colour);
+                overlay.Visible = config.Visible;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="config"></param>
+        private void ConfigureOverlays(IChart config)
+        {
+            foreach (var overlay in config.Overlays)
+            {
+                ConfigureOverlay(overlay);
+            }
         }
 
         /// <summary>
@@ -227,6 +279,7 @@ namespace StarLab.UI.Workspace.Documents.Charts
             }
 
             ConfigurePoints(config.PlotArea.Points);
+            ConfigureOverlays(config);
         }
 
         /// <summary>

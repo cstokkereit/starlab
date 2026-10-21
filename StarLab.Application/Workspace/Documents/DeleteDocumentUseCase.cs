@@ -6,7 +6,7 @@ namespace StarLab.Application.Workspace.Documents
     /// <summary>
     /// A use case that removes a document from the workspace hierarchy.
     /// </summary>
-    internal class DeleteDocumentUseCase : UseCaseUseCase<IWorkspaceOutputPort>, IUseCase<DeleteDocumentUseCaseArgs>
+    internal class DeleteDocumentUseCase : UseCase<IWorkspaceOutputPort>, IUseCase<DeleteDocumentUseCaseArgs>
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(DeleteDocumentUseCase)); // The logger that will be used for writing log messages.
 

@@ -1,4 +1,6 @@
-﻿namespace StarLab.Presentation.Workspace.Documents.Charts.Overlays
+﻿using StarLab.Application.Workspace.Documents.Charts.Overlays;
+
+namespace StarLab.Presentation.Workspace.Documents.Charts.Overlays
 {
     /// <summary>
     /// Represents a chart overlay.
@@ -14,5 +16,10 @@
         /// Gets the overlay name.
         /// </summary>
         string Name { get; }
+
+        /// <summary>
+        /// Gets the overlay type.
+        /// </summary>
+        OverlayType Type { get; }
     }
 }

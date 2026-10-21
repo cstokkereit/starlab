@@ -23,6 +23,7 @@ namespace StarLab.Application.Workspace.Documents
         /// Executes the use case.
         /// </summary>
         /// <param name="args">The <see cref="AddDocumentUseCaseArgs"/> that provide all of the information required to execute the use case.</param>
+        /// <exception cref="InvalidNameException"></exception>
         public void Execute(AddDocumentUseCaseArgs args)
         {
             var workspace = new Workspace(args.Workspace);

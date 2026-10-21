@@ -11,6 +11,8 @@
 
         public string Name = string.Empty;
 
+        public OverlayType Type;
+
         public bool Visible;
     }
 }

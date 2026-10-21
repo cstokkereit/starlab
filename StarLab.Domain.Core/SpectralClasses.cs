@@ -1,7 +1,7 @@
-﻿namespace StarLab.Presentation.Workspace.Documents
+﻿namespace StarLab.Domain.Core
 {
     /// <summary>
-    /// 
+    /// TODO : Documentation
     /// </summary>
     public class SpectralClasses
     {

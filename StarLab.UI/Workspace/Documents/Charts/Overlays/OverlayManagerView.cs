@@ -16,8 +16,6 @@ namespace StarLab.UI.Workspace.Documents.Charts.Overlays
 
         private IOverlayManagerViewPresenter? presenter; // The presenter that controls the view.
 
-        private int top = LayoutConstants.ControlSpacing; //
-
         /// <summary>
         /// Initialises a new instance of the <see cref="OverlayManagerView"> class.
         /// </summary>
@@ -30,18 +28,19 @@ namespace StarLab.UI.Workspace.Documents.Charts.Overlays
         }
 
         /// <summary>
-        /// 
+        /// Adds the specified overlay to the list of available overlays.
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="caption"></param>
-        /// <param name="shown"></param>
-        /// <exception cref="NotImplementedException"></exception>
+        /// <param name="name">The overlay name.</param>
+        /// <param name="caption">The overlay caption.</param>
+        /// <param name="shown">true if the overlay is currently shown on the chart; false otherwise.</param>
         public void AddOverlay(string name, string caption, bool shown)
         {
             var overlay = listOverlays.Items.Add(caption);
 
             overlay.Checked = shown;
             overlay.Tag = name;
+
+            listOverlays.ItemChecked += OnItemChecked;
         }
 
         /// <summary>
@@ -82,6 +81,14 @@ namespace StarLab.UI.Workspace.Documents.Charts.Overlays
         }
 
         /// <summary>
+        /// Clears the list of overlays.
+        /// </summary>
+        public void Clear()
+        {
+            listOverlays.Clear();
+        }
+
+        /// <summary>
         /// Detaches the presenter that controls the view.
         /// </summary>
         public override void Detach()
@@ -97,14 +104,25 @@ namespace StarLab.UI.Workspace.Documents.Charts.Overlays
         }
 
         /// <summary>
-        /// Event handler for the <see cref="CheckBox.CheckStateChanged"/> and <see cref="ComboBox.TextChanged"> events.
+        /// Event handler for the <see cref="ListView.ItemChecked"/> event.
         /// </summary>
         /// <param name="sender">The <see cref="object"> that was the originator of the event.</param>
-        /// <param name="e">An <see cref="EventArgs"/> that provides context for the event.</param>
-        private void OnStateChanged(object? sender, EventArgs e)
+        /// <param name="e">An <see cref="ItemCheckedEventArgs"/> that provides context for the event.</param>
+        private void OnItemChecked(object? sender, ItemCheckedEventArgs e)
         {
+            var item = e.Item;
 
-
+            if (item.Focused && item.Tag is string name)
+            {
+                if (item.Checked)
+                {
+                    presenter?.AddOverlay(name);
+                }
+                else
+                {
+                    presenter?.RemoveOverlay(name);
+                }
+            }
         }
     }
 }

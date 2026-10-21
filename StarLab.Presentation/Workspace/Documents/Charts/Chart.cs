@@ -1,4 +1,6 @@
 ﻿using StarLab.Application.Workspace.Documents.Charts;
+using StarLab.Application.Workspace.Documents.Charts.Overlays;
+using StarLab.Presentation.Workspace.Documents.Charts.Overlays;
 
 namespace StarLab.Presentation.Workspace.Documents.Charts
 {
@@ -7,6 +9,8 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
     /// </summary>
     internal class Chart : IChart
     {
+        private readonly List<IOverlay> overlays = new List<IOverlay>(); // A list that holds the charet overlays.
+
         /// <summary>
         /// Initialises a new instance of the <see cref="Chart"> class.
         /// </summary>
@@ -28,6 +32,8 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             X2 = dto.X2 == null ? new Axis(ForeColour, Font, false) : new Axis(Font, dto.X2);
             Y1 = dto.Y1 == null ? new Axis(ForeColour, Font,true) : new Axis(Font, dto.Y1);
             Y2 = dto.Y2 == null ? new Axis(ForeColour, Font, false) : new Axis(Font, dto.Y2);
+
+            CreateOverlays(dto.Overlays);
         }
 
         /// <summary>
@@ -66,6 +72,11 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         public string ForeColour { get; }
 
         /// <summary>
+        /// Gets the chart overlays.
+        /// </summary>
+        public IEnumerable<IOverlay> Overlays => overlays;
+
+        /// <summary>
         /// Gets the plot area.
         /// </summary>
         public IPlotArea PlotArea { get; }
@@ -94,5 +105,20 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// Gets the right <see cref="Axis"/>.
         /// </summary>
         public IAxis Y2 { get; }
+
+        /// <summary>
+        /// Creates the chart overlays from the <see cref="OverlayDTO"/>s provided.
+        /// </summary>
+        /// <param name="dtos">An <see cref="IEnumerable{OverlayDTO}"/> that contains the dtos.</param>
+        private void CreateOverlays(IEnumerable<OverlayDTO> dtos)
+        {
+            if (dtos != null)
+            {
+                foreach (var dto in dtos)
+                {
+                    overlays.Add(new Overlay(dto));
+                }
+            }
+        }
     }
 }

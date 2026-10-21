@@ -1,13 +1,15 @@
-﻿namespace StarLab.Presentation.Workspace.Documents.Charts
+﻿using StarLab.Presentation.Workspace.Documents.Charts.Overlays;
+
+namespace StarLab.Presentation.Workspace.Documents.Charts
 {
     /// <summary>
     /// Represents the current state of a chart while it is being configured.
     /// </summary>
     internal class ChartSettings : IChartSettings
     {
-        //private readonly Dictionary<string, IOverlaySettings> overlays = new Dictionary<string, IOverlaySettings>(); // A dictionary that holds the chart overlays indexed by name.
-
         private readonly Dictionary<string, IChartElementSettings> settingsByKey = new Dictionary<string, IChartElementSettings>(); // A dictionary that holds the settings for the chart elements indexed by key.
+
+        private readonly Dictionary<string, IOverlaySettings> overlaysByName = new Dictionary<string, IOverlaySettings>(); // A dictionary that holds the chart overlays indexed by name.
 
         private string backColour; // The chart background colour.
 
@@ -30,7 +32,9 @@
 
             font = new Font(chart.Font);
 
-            PopulateSettingsByKey(); // TODO Overlays
+            CreateOverlays(chart.Overlays);
+
+            PopulateSettingsByKey();
         }
 
         /// <summary>
@@ -87,6 +91,11 @@
         }
 
         /// <summary>
+        /// Gets the names of the chart overlays.
+        /// </summary>
+        public IReadOnlyList<IOverlaySettings> Overlays => new List<IOverlaySettings>(overlaysByName.Values);
+
+        /// <summary>
         /// Gets the plot area settings.
         /// </summary>
         public IPlotAreaSettings PlotArea { get; }
@@ -100,6 +109,16 @@
         /// Gets or sets a flag indicating that the chart element is visible.
         /// </summary>
         public bool Visible { get => true; set => throw new NotSupportedException(); }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public IOverlaySettings GetOverlay(string name)
+        {
+            return overlaysByName[name];
+        }
 
         /// <summary>
         /// Gets the <see cref="IChartElementSettings"/> with the specified key.
@@ -147,6 +166,18 @@
         }
 
         /// <summary>
+        /// Populates the list of overlays based on the existing chart overlays.
+        /// </summary>
+        /// <param name="overlays">An <see cref="IEnumerable{IOverlay}"/> containing the chart overlays.</param>
+        private void CreateOverlays(IEnumerable<IOverlay> overlays)
+        {
+            foreach (var overlay in overlays)
+            {
+                overlaysByName.Add(overlay.Name, new OverlaySettings(overlay));
+            }
+        }
+
+        /// <summary>
         /// Adds the chart settings to the dictionary.
         /// </summary>
         private void PopulateSettingsByKey()
@@ -171,7 +202,10 @@
 
             var overlays = $"{Constants.Chart}/{Constants.Overlays}";
 
-
+            foreach (var overlay in Overlays)
+            {
+                AddSettings(overlay.Name, overlays, overlay);
+            }
         }
     }
 }

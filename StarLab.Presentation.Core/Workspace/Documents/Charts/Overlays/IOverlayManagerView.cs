@@ -6,11 +6,16 @@
     public interface IOverlayManagerView : IChildView, ICancellableView
     {
         /// <summary>
-        /// Adds an overlay check box to the view.
+        /// Adds the specified overlay to the list of available overlays.
         /// </summary>
         /// <param name="name">The overlay name.</param>
         /// <param name="caption">The overlay caption.</param>
-        /// <param name="shown">true if the overlay is shown on the chart; false otherwise.</param>
+        /// <param name="shown">true if the overlay is currently shown on the chart; false otherwise.</param>
         void AddOverlay(string name, string caption, bool shown);
+
+        /// <summary>
+        /// Clears the list of overlays.
+        /// </summary>
+        void Clear();
     }
 }

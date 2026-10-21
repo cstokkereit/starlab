@@ -7,7 +7,7 @@ namespace StarLab.Application.Workspace
     /// <summary>
     /// A use case that copies a folder at a specified location within the workspace hierarchy.
     /// </summary>
-    internal class CutAndPasteUseCase : UseCaseUseCase<IWorkspaceOutputPort>, IUseCase<ClipboardUseCaseArgs>
+    internal class CutAndPasteUseCase : UseCase<IWorkspaceOutputPort>, IUseCase<ClipboardUseCaseArgs>
     {
         /// <summary>
         /// Initialises a new instance of the <see cref="CutAndPasteUseCase"/> class.

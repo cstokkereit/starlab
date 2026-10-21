@@ -1,5 +1,6 @@
 ﻿using StarLab.Presentation.Configuration;
 using StarLab.Shared;
+using StarLab.Shared.Properties;
 using Stratosoft.Commands;
 using System.Diagnostics;
 
@@ -102,6 +103,18 @@ namespace StarLab.Presentation
             {
                 Events.Unsubscribe(this);
             }
+        }
+
+        /// <summary>
+        /// Gets the caption to use in place of the specified name.
+        /// </summary>
+        /// <param name="name">The name for which a caption is required.</param>
+        /// <returns>The caption applicable to the specified name or, if none exists, the name itself.</returns>
+        protected string GetCaption(string name)
+        {
+            var caption = Resources.ResourceManager.GetString(name);
+
+            return string.IsNullOrEmpty(caption) ? name : caption;
         }
 
         /// <summary>

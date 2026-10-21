@@ -12,8 +12,24 @@
         public OverlaySettings(IOverlay overlay) 
             : base(overlay)
         {
-            Font = overlay.Font;
+            Font = new Font(overlay.Font.Family, overlay.Font.Size, false, false, false);
+
             Name = overlay.Name;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of OverlaySettings with the specified name and the default foreground color and
+        /// enabled state.
+        /// </summary>
+        /// <remarks>Sets the foreground color to Constants.DefaultForeColour and the enabled state to
+        /// true.</remarks>
+        /// <param name="name">The name of the overlay.</param>
+        public OverlaySettings(string name)
+            : base(Constants.DefaultForeColour, true)
+        {
+            SetFont(Constants.DefaultFontFamily, Constants.DefaultFontSize, false, false, false);
+
+            Name = name;
         }
 
         /// <summary>

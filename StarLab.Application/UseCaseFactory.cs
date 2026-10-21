@@ -16,23 +16,36 @@ namespace StarLab.Application
 
         private readonly ISerialisationService serialiser; // Used to serialise and deserialise model objects.
 
-        private readonly IDatabaseManager dataProvider; // Used to retrieve data from the database.
+        private readonly IOverlayDataProvider overlayData; // Used to provide access to the overlay data.
 
-        private readonly IQueryBuilder builder; // Used to build database queries.
+        private readonly IDatabaseManager databases; // Used to retrieve data from the database.
+
+        private readonly IQueryBuilder queries; // Used to build database queries.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="UseCaseFactory"/> class.
         /// </summary>
         /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
-        /// <param name="dataProvider">An <see cref="IDatabaseManager"/> that will be used to retrieve data from the database.</param>
-        /// <param name="builder">An <see cref="IQueryBuilder"/> that will be used to build database queries.</param>
+        /// <param name="databases">An <see cref="IDatabaseManager"/> that will be used to retrieve data from the database.</param>
+        /// <param name="queries">An <see cref="IQueryBuilder"/> that will be used to build database queries.</param>
         /// <param name="serialiser">An <see cref="ISerialisationService"/> that will be used to serialise and deserialise model objects.</param>
-        public UseCaseFactory(IMapper mapper, IDatabaseManager dataProvider, IQueryBuilder builder, ISerialisationService serialiser)
+        public UseCaseFactory(IMapper mapper, IDatabaseManager databases, IQueryBuilder queries, IOverlayDataProvider overlays, ISerialisationService serialiser)
         {
-            this.dataProvider = dataProvider ?? throw new ArgumentNullException(nameof(dataProvider));
+            this.databases = databases ?? throw new ArgumentNullException(nameof(databases));
             this.serialiser = serialiser ?? throw new ArgumentNullException(nameof(serialiser));
-            this.builder = builder ?? throw new ArgumentNullException(nameof(builder));
+            this.overlayData = overlays ?? throw new ArgumentNullException(nameof(overlays));
+            this.queries = queries ?? throw new ArgumentNullException(nameof(queries));
             this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+        }
+
+        /// <summary>
+        /// Creates a use case that adds an overlay to a chart.
+        /// </summary>
+        /// <param name="outputPort">An <see cref="IChartOutputPort"/> that updates the UI in response to the outputs of the use case.</param>
+        /// <returns>An instance of <see cref="IUseCase{AddChartOverlayUseCaseArgs}"/> that implements the use case.</returns>
+        public IUseCase<AddChartOverlayUseCaseArgs> CreateAddChartOverlayUseCase(IChartOutputPort outputPort)
+        {
+            return new AddChartOverlayUseCase(outputPort, mapper, overlayData, this);
         }
 
         /// <summary>
@@ -106,16 +119,6 @@ namespace StarLab.Application
         }
 
         /// <summary>
-        /// Creates a use case that manages the chart overlays.
-        /// </summary>
-        /// <param name="outputPort">An <see cref="IChartOutputPort"/> that updates the UI in response to the outputs of the use case.</param>
-        /// <returns>An instance of <see cref="IUseCase{ChartOverlayUseCaseArgs}"/> that implements the use case.</returns>
-        public IUseCase<ChartOverlayUseCaseArgs> ManageChartOverlayUseCase(IChartOutputPort outputPort)
-        {
-            return new ManageChartOverlaysUseCase(outputPort, mapper, null);
-        }
-
-        /// <summary>
         /// Creates a use case that loads a workspace from a file.
         /// </summary>
         /// <param name="outputPort">An <see cref="IWorkspaceOutputPort"/> that updates the UI in response to the execution of the use case.</param>
@@ -130,9 +133,19 @@ namespace StarLab.Application
         /// </summary>
         /// <param name="outputPort">An <see cref="IChartOutputPort"/> that updates the UI in response to the outputs of the use case.</param>
         /// <returns>An instance of <see cref="IUseCase{WorkspaceDTO}"/> that implements the use case.</returns>
-        public IUseCaseAsync<CreateChartUseCaseArgs> CreatePlotChartUseCase(IChartOutputPort outputPort)
+        public IUseCaseAsync<PlotChartUseCaseArgs> CreatePlotChartUseCase(IChartOutputPort outputPort)
         {
-            return new PlotChartUseCase(outputPort, mapper, dataProvider, builder);
+            return new PlotChartUseCase(outputPort, mapper, databases, queries, overlayData, this);
+        }
+
+        /// <summary>
+        /// Creates a use case that removes an overlay from a chart.
+        /// </summary>
+        /// <param name="outputPort">An <see cref="IChartOutputPort"/> that updates the UI in response to the outputs of the use case.</param>
+        /// <returns>An instance of <see cref="IUseCase{RemoveChartOverlayUseCaseArgs}"/> that implements the use case.</returns>
+        public IUseCase<RemoveChartOverlayUseCaseArgs> CreateRemoveChartOverlayUseCase(IChartOutputPort outputPort)
+        {
+            return new RemoveChartOverlayUseCase(outputPort, mapper, this);
         }
 
         /// <summary>
@@ -176,7 +189,7 @@ namespace StarLab.Application
         }
 
         /// <summary>
-        /// Creates a use case that updates a chart preview in response to a settings change.
+        /// Creates a use case that updates a preview chart in response to a settings change.
         /// </summary>
         /// <param name="outputPort">An <see cref="IChartOutputPort"/> that updates the UI in response to the outputs of the use case.</param>
         /// <returns>An instance of <see cref="IUseCase{ChartDTO}"/> that implements the use case.</returns>
@@ -186,7 +199,7 @@ namespace StarLab.Application
         }
 
         /// <summary>
-        /// Creates a use case that updates a document in response to a settings change.
+        /// Creates a use case that updates a chart in response to a settings change.
         /// </summary>
         /// <param name="outputPort">An <see cref="IChartOutputPort"/> that updates the UI in response to the outputs of the use case.</param>
         /// <returns>An instance of <see cref="IUseCase{UpdateDocumentUseCaseArgs}"/> that implements the use case.</returns>

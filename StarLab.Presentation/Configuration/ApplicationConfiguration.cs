@@ -9,11 +9,15 @@ namespace StarLab.Presentation.Configuration
     {
         private readonly List<IDocumentDefinition> documentDefinitions = new List<IDocumentDefinition>(); // A list containing the available document definitions.
 
+        private readonly List<string> overlays = new List<string>(); // A list containing the names of the available chart overlays.
+
         /// <summary>
         /// Initialises a new instance of the <see cref="ApplicationConfiguration"/> class.
         /// </summary>
-        public ApplicationConfiguration()
+        public ApplicationConfiguration(IFactoryConfiguration configuration)
         {
+            overlays.AddRange(configuration.Overlays);
+
             LoadDocumentTypes();
         }
 
@@ -21,6 +25,11 @@ namespace StarLab.Presentation.Configuration
         /// Gets an <see cref="IEnumerable{IDocumentDefinition}"/> that contains the available document definitions.
         /// </summary>
         public IEnumerable<IDocumentDefinition> DocumentDefinitions => documentDefinitions;
+
+        /// <summary>
+        /// Gets an <see cref="IEnumerable{string}"/> that contains the names of the available chart overlays.
+        /// </summary>
+        public IEnumerable<string> Overlays => overlays;
 
         /// <summary>
         /// Loads the available document definitions.

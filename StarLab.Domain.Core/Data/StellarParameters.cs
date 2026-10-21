@@ -1,7 +1,7 @@
 ﻿namespace StarLab.Domain.Data
 {
     /// <summary>
-    /// 
+    /// TODO : Documentation
     /// </summary>
     public static class StellarParameters
     {

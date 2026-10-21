@@ -7,7 +7,9 @@ namespace StarLab.Presentation.Configuration
     /// </summary>
     public class FactoryConfiguration : IFactoryConfiguration
     {
-        private readonly Dictionary<string, IViewConfiguration> configurations = new Dictionary<string, IViewConfiguration>(); // A dictionary containing the available view configurations indexed by name.
+        private readonly Dictionary<string, IOverlayConfiguration> overlays = new Dictionary<string, IOverlayConfiguration>(); // A dictionary containing the available overlay configurations indexed by name.
+
+        private readonly Dictionary<string, IViewConfiguration> views = new Dictionary<string, IViewConfiguration>(); // A dictionary containing the available view configurations indexed by name.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="FactoryConfiguration"> class.
@@ -17,21 +19,25 @@ namespace StarLab.Presentation.Configuration
             CreateDialogViewConfigurations();
             CreateDocumentViewConfigurations();
             CreateToolViewConfigurations();
+
+            CreateOverlayConfigurations();
         }
 
         /// <summary>
-        /// Gets the specified <see cref="IChildViewConfiguration"/> instance.
+        /// Gets the names of the available overlays.
         /// </summary>
-        /// <param name="name">The name of the required <see cref="IChildViewConfiguration"/> instance.</param>
-        /// <returns>The specified <see cref="IViewConfiguration"/> instance.</returns>
-        /// <exception cref="ArgumentException"></exception>
-        public IChildViewConfiguration GetChildConfiguration(string name)
-        {
-            if (configurations.TryGetValue(name, out IViewConfiguration? configuration))
-            {
-                var childConfigurations = new List<IChildViewConfiguration>(configuration.ChildConfigurations);
+        public IEnumerable<string> Overlays => overlays.Keys;
 
-                return childConfigurations[0];
+        /// <summary>
+        /// Gets the specified <see cref="IOverlayConfiguration"/> instance.
+        /// </summary>
+        /// <param name="name">The name of the required <see cref="IOverlayConfiguration"/> instance.</param>
+        /// <returns>The specified <see cref="IOverlayConfiguration"/> instance.</returns>
+        public IOverlayConfiguration GetOverlayConfiguration(string name)
+        {
+            if (overlays.TryGetValue(name, out IOverlayConfiguration? configuration))
+            {
+                return configuration;
             }
 
             throw new KeyNotFoundException(ExceptionMessages.ConfigurationNotFound(name));
@@ -43,9 +49,9 @@ namespace StarLab.Presentation.Configuration
         /// <param name="name">The name of the required <see cref="IViewConfiguration"/> instance.</param>
         /// <returns>The specified <see cref="IViewConfiguration"/> instance.</returns>
         /// <exception cref="KeyNotFoundException"></exception>
-        public IViewConfiguration GetConfiguration(string name)
+        public IViewConfiguration GetViewConfiguration(string name)
         {
-            if (configurations.TryGetValue(name, out IViewConfiguration? configuration))
+            if (views.TryGetValue(name, out IViewConfiguration? configuration))
             {
                 return configuration;
             }
@@ -54,12 +60,21 @@ namespace StarLab.Presentation.Configuration
         }
 
         /// <summary>
+        /// Adds the <see cref="IOverlayConfiguration"/> provided to the dictionary containing the view configurations.
+        /// </summary>
+        /// <param name="configuration">The <see cref="IOverlayConfiguration"/> to be added.</param>
+        private void Add(IOverlayConfiguration configuration)
+        {
+            overlays.Add(configuration.Name, configuration);
+        }
+
+        /// <summary>
         /// Adds the <see cref="IViewConfiguration"/> provided to the dictionary containing the view configurations.
         /// </summary>
         /// <param name="configuration">The <see cref="IViewConfiguration"/> to be added.</param>
         private void Add(IViewConfiguration configuration)
         {
-            configurations.Add(configuration.Name, configuration);
+            views.Add(configuration.Name, configuration);
         }
 
         /// <summary>
@@ -72,6 +87,7 @@ namespace StarLab.Presentation.Configuration
 
             Add(new ViewConfiguration(ViewNames.AddDocument, ViewTypes.Dialog)
                 .AddChild(ViewNames.AddDocument, "StarLab.UI.Workspace.Documents.AddDocumentView, StarLab.UI", "StarLab.Presentation.Workspace.Documents.AddDocumentViewPresenter, StarLab.Presentation"));
+            
             Add(new ViewConfiguration(ViewNames.Options, ViewTypes.Dialog)
                 .AddChild(ViewNames.Options, "StarLab.UI.Options.OptionsView, StarLab.UI", "StarLab.Presentation.Options.OptionsViewPresenter, StarLab.Presentation"));
         }
@@ -93,6 +109,27 @@ namespace StarLab.Presentation.Configuration
             Add(new ViewConfiguration(ViewNames.TwoColourDiagram, ViewTypes.Document)
                 .AddChild(ViewNames.ChartSettings, SplitViewPanels.Panel1, "StarLab.UI.Workspace.Documents.Charts.ChartSettingsView, StarLab.UI", "StarLab.Presentation.Workspace.Documents.Charts.ChartSettingsViewPresenter, StarLab.Presentation")
                 .AddChild(ViewNames.Chart, SplitViewPanels.Panel2, "StarLab.UI.Workspace.Documents.Charts.ChartView, StarLab.UI", "StarLab.Presentation.Workspace.Documents.Charts.TwoColourChartViewPresenter, StarLab.Presentation"));
+        }
+
+        /// <summary>
+        /// Creates the overlay configurations and adds them to the dictionary.
+        /// </summary>
+        private void CreateOverlayConfigurations()
+        {
+            Add(new OverlayConfiguration(Constants.SunOverlay, "StarLab.UI.Workspace.Documents.Charts.Overlays, StarLab.UI", string.Empty));
+
+
+
+            // Brightest stars
+            // Stellar types e.g. Wolf rayet, brown dwarf
+            // Evolutionary tracks (could prove difficult - can they be calculated?)
+            // Standard stars for spectral and magnitude classes
+
+            // Radius (R/Rsun)
+            // Mass (M/Msun)
+            // Diameter (D/Dsun
+
+            // Custom overlays - for the future
         }
 
         /// <summary>

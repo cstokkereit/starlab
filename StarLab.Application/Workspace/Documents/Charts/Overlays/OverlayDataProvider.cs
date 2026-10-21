@@ -1,7 +1,7 @@
-﻿using StarLab.Application.Data.Import;
+﻿using StarLab.Application.Data;
+using StarLab.Application.Data.Import;
+using StarLab.Domain.Core;
 using StarLab.Domain.Data;
-using StarLab.Presentation.Workspace.Documents;
-using StarLab.Shared;
 using StarLab.Shared.Properties;
 
 namespace StarLab.Application.Workspace.Documents.Charts.Overlays
@@ -13,10 +13,12 @@ namespace StarLab.Application.Workspace.Documents.Charts.Overlays
     {
         private readonly Dictionary<string, IOverlayData> dataByOverlay = new Dictionary<string, IOverlayData>(); //
 
+        private ILabelledPoint? sun;
+
         private readonly IFileImportProvider provider; //
 
         /// <summary>
-        /// 
+        /// Initialises a new instance of the <see cref="OverlayDataProvider"/> class.
         /// </summary>
         /// <param name="provider"></param>
         public OverlayDataProvider(IFileImportProvider provider)
@@ -29,12 +31,10 @@ namespace StarLab.Application.Workspace.Documents.Charts.Overlays
             
         }
 
-
-
-
         /// <summary>
-        /// Gets the data for the magnitude classes overlay.
+        /// Gets the data for the specified overlay.
         /// </summary>
+        /// <param name="filename">The name of the file containing the overlay data.</param>param>
         /// <returns>An <see cref="IMagnitudeClassesOverlayData"/> that contains the overlay data.</returns>
         public IMagnitudeClassesOverlayData GetMagnitudeClassesOverlayData()
         {
@@ -42,35 +42,35 @@ namespace StarLab.Application.Workspace.Documents.Charts.Overlays
         }
 
         /// <summary>
-        /// Gets the data for the named stars overlay.
+        /// Gets the data for the specified overlay.
         /// </summary>
+        /// <param name="filename">The name of the file containing the overlay data.</param>param>
         /// <returns>An <see cref="ILabelledPointsOverlayData"/> that contains the overlay data.</returns>
-        public ILabelledPointsOverlayData GetNamedStarsOverlayData()
+        public ILabelledPointsOverlayData GetMultiplePointsOverlayData(string filename)
         {
             throw new NotImplementedException();
         }
 
         /// <summary>
-        /// 
+        /// Gets the data for the specified overlay.
         /// </summary>
-        /// <returns></returns>
-        public ILabelledPointsOverlayData GetSunOverlayData()
+        /// <returns>An <see cref="ILabelledPoint"/> that contains the data for the sun.</returns>
+        public ILabelledPoint GetPointOverlayData()
         {
-            if (!dataByOverlay.ContainsKey(OverlayNames.Sun))
+            if (sun == null)
             {
-                var data = new LabelledPointsOverlayData();
+                var point = new LabelledPoint(Resources.Sun);
 
-                data.AddLabel(Resources.Sun);
-                data.AddValue(StellarParameters.AbsoluteMagnitude, 4.83);
-                data.AddValue(StellarParameters.Luminosity, 1); // TODO : This is L/Lsun
-                data.AddValue(StellarParameters.EffectiveTemperature, 5778);
-                data.AddValue(StellarParameters.ColourIndex("B", "V"), 0.626);
-                data.AddValue(StellarParameters.SpectralClass, SpectralClasses.ToDouble("G5"));
+                point.SetCoordinate(StellarParameters.AbsoluteMagnitude, 4.83);
+                point.SetCoordinate(StellarParameters.Luminosity, 1); // TODO : This is L/Lsun
+                point.SetCoordinate(StellarParameters.EffectiveTemperature, 5778);
+                point.SetCoordinate(StellarParameters.ColourIndex("B", "V"), 0.626);
+                point.SetCoordinate(StellarParameters.SpectralClass, SpectralClasses.ToDouble("G5"));
 
-                dataByOverlay.Add(OverlayNames.Sun, data);
+                sun = point;
             }
-
-            return (ILabelledPointsOverlayData)dataByOverlay[OverlayNames.Sun];
+            
+            return sun;
         }
 
         /// <summary>

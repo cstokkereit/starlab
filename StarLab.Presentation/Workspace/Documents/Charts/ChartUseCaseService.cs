@@ -18,12 +18,13 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             : base(factory, mapper) { }
 
         /// <summary>
-        /// Executes the UpdateChart use case.
+        /// Executes the PlotChart use case.
         /// </summary>
         /// <param name="workspace">The current <see cref="IWorkspace"/>.</param>
         /// <param name="id">The <see cref="DocumentID"> that identifies the document.</param>
+        /// <param name="chart"/>TODO</param>
         /// <exception cref="ArgumentNullException"></exception>
-        public void UpdateChart(IWorkspace workspace, DocumentID id)
+        public void PlotChart(IWorkspace workspace, DocumentID id, IChart chart)
         {
             ArgumentNullException.ThrowIfNull(workspace, nameof(workspace));
             ArgumentNullException.ThrowIfNull(id, nameof(id));
@@ -32,7 +33,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
 
             var database = workspace.GetProject(workspace.GetDocument(id).Project).Database;
 
-            useCase.ExecuteAsync(new CreateChartUseCaseArgs(id.ToString(), database.Host, database.Port, database.Name));
+            useCase.ExecuteAsync(new PlotChartUseCaseArgs(Mapper.Map<ChartDTO>(chart), id.ToString(), database.Host, database.Port, database.Name));
         }
     }
 }

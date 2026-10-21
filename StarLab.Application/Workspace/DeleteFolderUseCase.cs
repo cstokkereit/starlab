@@ -6,7 +6,7 @@ namespace StarLab.Application.Workspace
     /// <summary>
     /// A use case that removes a folder from the workspace hierarchy.
     /// </summary>
-    public class DeleteFolderUseCase : UseCaseUseCase<IWorkspaceOutputPort>, IUseCase<DeleteFolderUseCaseArgs>
+    public class DeleteFolderUseCase : UseCase<IWorkspaceOutputPort>, IUseCase<DeleteFolderUseCaseArgs>
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(DeleteFolderUseCase)); // The logger that will be used for writing log messages.
 

@@ -19,6 +19,7 @@
 
         public const string Chart = "Chart";
         public const string ChartData = "Chart/Data";
+        public const string ChartOverlays = "Chart/Overlays";
         public const string ChartPlotArea = "Chart/PlotArea";
         public const string ChartSettings = "ChartSettings";
         public const string CollapseAll = "CollapseAll";
@@ -89,6 +90,7 @@
         public const string ShowOverlays = "ShowOverlays";
         public const string ShowSettings = "ShowSettings";
         public const string StarLab = "StarLab";
+        public const string SunOverlay = "SunOverlay";
         public const string Synchronise = "Synchronise";
 
         public const string Table = "Table";

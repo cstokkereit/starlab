@@ -215,7 +215,10 @@ namespace StarLab.UI.Core.Workspace.Documents.Charts
         {
             private readonly IChartElementSettings settings;
 
-            public ChartElementSettingsAdapter(IChartElementSettings settings) { this.settings = settings; }
+            public ChartElementSettingsAdapter(IChartElementSettings settings) 
+            { 
+                this.settings = settings; 
+            }
 
             public string BackColour { get => throw new NotSupportedException(); set => throw new NotSupportedException(); }
 
@@ -231,7 +234,10 @@ namespace StarLab.UI.Core.Workspace.Documents.Charts
         {
             private readonly IChartSettings settings;
 
-            public ChartSettingsAdapter(IChartSettings settings) { this.settings = settings; }
+            public ChartSettingsAdapter(IChartSettings settings) 
+            { 
+                this.settings = settings; 
+            }
 
             public string BackColour { get => settings.BackColour; set { settings.BackColour = value; } }
 
@@ -247,7 +253,10 @@ namespace StarLab.UI.Core.Workspace.Documents.Charts
         {
             private readonly IPlotAreaSettings settings;
 
-            public PlotAreaSettingsAdapter(IPlotAreaSettings settings) { this.settings = settings; }
+            public PlotAreaSettingsAdapter(IPlotAreaSettings settings) 
+            { 
+                this.settings = settings; 
+            }
 
             public string BackColour { get => settings.BackColour; set { settings.BackColour = value; } }
 

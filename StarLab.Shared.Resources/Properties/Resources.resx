@@ -443,8 +443,8 @@ Please enter a valid name.</value>
   <data name="Overlays" xml:space="preserve">
     <value>Overlays</value>
   </data>
-  <data name="Sun" xml:space="preserve">
-    <value>Sun</value>
+  <data name="SunOverlay" xml:space="preserve">
+    <value>The Sun</value>
   </data>
   <data name="NamedStars" xml:space="preserve">
     <value>Named Stars</value>
@@ -469,5 +469,8 @@ Please enter a valid name.</value>
   </data>
   <data name="Luminosity" xml:space="preserve">
     <value>Luminosity</value>
+  </data>
+  <data name="Sun" xml:space="preserve">
+    <value>Sun</value>
   </data>
 </root>

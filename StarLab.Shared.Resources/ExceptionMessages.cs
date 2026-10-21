@@ -1,4 +1,6 @@
-﻿namespace StarLab.Shared
+﻿using System.Xml.Linq;
+
+namespace StarLab.Shared
 {
     /// <summary>
     /// A static class containing the string constants used to create exception messages.
@@ -227,6 +229,16 @@
         public static string InvalidSource(string source)
         {
             return $"{source} is not a valid source.";
+        }
+
+        /// <summary>
+        /// Builds a OverlayExists exception message for the specified overlay.
+        /// </summary>
+        /// <param name="overlay">The overlay name.</param>
+        /// <returns>The required exception message.</returns>
+        public static string OverlayExists(string overlay)
+        {
+            return $"An overlay with the name '{overlay}' has already been added to the chart.";
         }
 
         /// <summary>

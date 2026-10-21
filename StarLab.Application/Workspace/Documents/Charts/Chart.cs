@@ -1,4 +1,5 @@
 ﻿using StarLab.Application.Workspace.Documents.Charts.Overlays;
+using StarLab.Shared;
 
 namespace StarLab.Application.Workspace.Documents.Charts
 {
@@ -80,6 +81,26 @@ namespace StarLab.Application.Workspace.Documents.Charts
         /// Gets the right axis.
         /// </summary>
         public Axis Y2 { get; }
+
+        /// <summary>
+        /// Adds the specified overlay to the chart.
+        /// </summary>
+        /// <param name="name">The overlay name.</param>
+        public void AddOverlay(string name)
+        {
+            if (overlays.ContainsKey(name)) throw new InvalidOperationException(ExceptionMessages.OverlayExists(name));
+
+            overlays.Add(name, new Overlay(name));
+        }
+
+        /// <summary>
+        /// Removes the specified overlay from the chart.
+        /// </summary>
+        /// <param name="name">The overlay name.</param>
+        public void RemoveOverlay(string name)
+        {
+            overlays.Remove(name);
+        }
 
         /// <summary>
         /// Creates the overlays that belong to this chart from the <see cref="OverlayDTO"/>s provided.

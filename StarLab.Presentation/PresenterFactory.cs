@@ -118,7 +118,7 @@ namespace StarLab.Presentation
         /// <returns>An <see cref="IChildViewPresenter"/> that can be used to control the <see cref="IChildView"/> provided.</returns>
         public IChildViewPresenter CreatePresenter(IChildView view, ICommandManager commands)
         {
-            var configuration = GetViewConfiguration(view.Name);
+            var configuration = Configuration.GetViewConfiguration(view.Name);
 
             return (IChildViewPresenter)CreateInstance(configuration.GetChildViewConfiguration(view.Name).Presenter, [view, context, commands, services, events]);
         }
@@ -134,7 +134,7 @@ namespace StarLab.Presentation
         {
             var presenters = new List<IChildViewPresenter>();
 
-            var configuration = GetViewConfiguration(document.View);
+            var configuration = Configuration.GetViewConfiguration(document.View);
 
             foreach (var view in views)
             {

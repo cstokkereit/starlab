@@ -19,6 +19,16 @@
         }
 
         /// <summary>
+        /// Builds an OpeningWorkspace log entry for the specified workspace file.
+        /// </summary>
+        /// <param name="filename">The path to the workspace file.</param>
+        /// <returns>The required log entry.</returns>
+        public static string OpeningWorkspace(string filename)
+        {
+            return $"Opening workspace '{filename}'";
+        }
+
+        /// <summary>
         /// Builds a PresenterAttached log entry for the specified presenter.
         /// </summary>
         /// <param name="type">The presenter type name.</param>
@@ -132,6 +142,16 @@
             }
 
             return $"Performance Benchmarking: {rows} rows retrieved in {time} ms.";
+        }
+
+        /// <summary>
+        /// Builds a SavingWorkspace log entry for the specified workspace file.
+        /// </summary>
+        /// <param name="filename">The path to the workspace file.</param>
+        /// <returns>The required log entry.</returns>
+        public static string SavingWorkspace(string filename)
+        {
+            return $"Saving workspace '{filename}'";
         }
 
         /// <summary>

@@ -5,7 +5,6 @@
     /// </summary>
     internal class AxesSettings : ChartElementSettings, IAxesSettings
     {
-
         private IFont font; // The axis font.
 
         /// <summary>

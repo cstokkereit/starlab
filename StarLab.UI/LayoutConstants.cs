@@ -1,7 +1,7 @@
 ﻿namespace StarLab.UI
 {
     /// <summary>
-    /// 
+    /// TODO : Documentation
     /// </summary>
     internal static class LayoutConstants
     {

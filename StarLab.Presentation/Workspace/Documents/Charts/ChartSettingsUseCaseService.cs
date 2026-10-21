@@ -19,7 +19,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             : base(factory, mapper) { }
 
         /// <summary>
-        /// Executes the UpdateDocument use case.
+        /// Executes the UpdateChart use case.
         /// </summary>
         /// <param name="workspace">A <see cref="IWorkspace"/> that specifies the current state of the workspace.</param>
         /// <param name="id">The <see cref="DocumentID"> that identifies the document.</param>
@@ -38,7 +38,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// Executes the ApplyChartSettings use case.
+        /// Executes the UpdateChartPreview use case.
         /// </summary>
         /// <param name="id">The <see cref="DocumentID"> that identifies the document.</param>
         /// <param name="chart">A <see cref="IChartSettings"/> that specifies the current state of the chart.</param>

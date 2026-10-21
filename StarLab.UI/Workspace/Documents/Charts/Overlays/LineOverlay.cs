@@ -2,7 +2,10 @@
 
 namespace StarLab.UI.Workspace.Documents.Charts.Overlays
 {
-    internal class LineOverlay
+    /// <summary>
+    /// TODO : Documentation
+    /// </summary>
+    internal class LineOverlay : Overlay
     {
         private readonly string label;
 
@@ -10,24 +13,35 @@ namespace StarLab.UI.Workspace.Documents.Charts.Overlays
 
         private readonly double[] ys;
 
-        public LineOverlay(double[] xs, double[] ys, string label)
+        public LineOverlay(Plot plot, string name, double[] xs, double[] ys, string label)
+            : base(plot, name)
         {
             this.label = label;
             this.xs = xs;
             this.ys = ys;
         }
 
-        public LineOverlay(double[] xs, double[] ys)
-            : this(xs, ys, string.Empty) { }
+        //public LineOverlay(double[] xs, double[] ys)
+        //    : this(xs, ys, string.Empty) { }
 
-        public ScottPlot.Color Colour { get; set; }
 
-        public bool Visible { get; set; }
-
-        
-        public void Render(Plot plot)
+        /// <summary>
+        /// Removes the elements that compose the overlay from the chart.
+        /// </summary>
+        /// <param name="plot">The plot that displays the overlay.</param>
+        protected override void Clear(Plot plot)
         {
-            plot.Add.ScatterLine(xs, ys, Colour);
+            throw new NotImplementedException();
+        }
+
+        protected override void Render(Plot plot)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override void UpdateElements()
+        {
+            throw new NotImplementedException();
         }
     }
 }

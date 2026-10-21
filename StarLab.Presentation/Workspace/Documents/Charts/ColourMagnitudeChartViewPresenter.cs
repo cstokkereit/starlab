@@ -84,6 +84,16 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         public IChart? Chart => chart;
 
         /// <summary>
+        /// Adds the specified overlay to the chart.
+        /// </summary>
+        /// <param name="name">The overlay name.</param>
+        /// <param name="data">The overlay data.</param>
+        public void AddOverlay(string name, LabelledPointDTO data)
+        {
+            View.AddOverlay(name, data.X, data.y, data.Label);
+        }
+
+        /// <summary>
         /// Releases all resources used by the <see cref="ColourMagnitudeChartViewPresenter"/> object.
         /// </summary>
         public override void Dispose()
@@ -118,14 +128,14 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         {
             workspace = args.Workspace;
 
-            UpdateChart();
+            PlotChart();
         }
 
         /// <summary>
-        /// Sets the chart data.
+        /// Updates the chart following a change to the chart data.
         /// </summary>
         /// <param name="stars">A <see cref="List{StarDTO}"> containing the chart data.</param>
-        public void SetData(List<StarDTO> stars)
+        public void PlotChart(List<StarDTO> stars)
         {
             if (chart != null)
             {
@@ -140,13 +150,22 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
                     ys[n] = stars[n].AbsoluteMagnitude;
                 }
 
-                data.AddSeries("B-V", xs);
-                data.AddSeries("Absolute Magnitude", ys);
+                data.AddSeries("ColourIndex(B-V)", xs);
+                data.AddSeries("AbsoluteMagnitude", ys);
 
-                View.UpdateChart(chart, data);
+                View.PlotChart(chart, data);
 
                 dirty = false;
             }
+        }
+
+        /// <summary>
+        /// Removes the specified overlay from the chart.
+        /// </summary>
+        /// <param name="name">The overlay name.</param>
+        public void RemoveOverlay(string name)
+        {
+            View.RemoveOverlay(name);
         }
 
         /// <summary>
@@ -192,13 +211,13 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// Updates the chart.
+        /// Plots the chart.
         /// </summary>
-        private void UpdateChart()
+        private void PlotChart()
         {
-            if (dirty && workspace != null && document != null)
+            if (dirty && workspace != null && document != null && chart != null)
             {
-                useCaseService.UpdateChart(workspace, document.ID);
+                useCaseService.PlotChart(workspace, document.ID, chart);
             }
         }
     }

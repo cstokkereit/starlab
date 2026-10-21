@@ -1,4 +1,6 @@
-﻿namespace StarLab.Presentation.Workspace.Documents.Charts
+﻿using StarLab.Presentation.Workspace.Documents.Charts.Overlays;
+
+namespace StarLab.Presentation.Workspace.Documents.Charts
 {
     /// <summary>
     /// Represents a chart.
@@ -19,6 +21,11 @@
         /// Gets the foreground colour.
         /// </summary>
         string ForeColour { get; }
+
+        /// <summary>
+        /// Gets the chart overlays.
+        /// </summary>
+        IEnumerable<IOverlay> Overlays { get; }
 
         /// <summary>
         /// Gets the plot area.

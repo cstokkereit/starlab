@@ -3,7 +3,7 @@
     /// <summary>
     /// The configuration for an <see cref="IChildView"/>.
     /// </summary>
-    internal class ChildViewConfiguration : IChildViewConfiguration
+    internal struct ChildViewConfiguration : IChildViewConfiguration
     {
         /// <summary>
         /// Initialises a new instance of the <see cref="ChildViewConfiguration"/> class.

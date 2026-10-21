@@ -6,7 +6,7 @@ namespace StarLab.Application.Workspace
     /// <summary>
     /// A use case that adds a folder at a specified location within the workspace hierarchy.
     /// </summary>
-    internal class AddFolderUseCase : UseCaseUseCase<IWorkspaceOutputPort>, IUseCase<AddFolderUseCaseArgs>
+    internal class AddFolderUseCase : UseCase<IWorkspaceOutputPort>, IUseCase<AddFolderUseCaseArgs>
     {
         /// <summary>
         /// Initialises a new instance of the <see cref="AddFolderUseCase"/> class.

@@ -66,6 +66,16 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
+        /// Generates the specified overlay.
+        /// </summary>
+        /// <param name="name">The overlay name.</param>
+        /// <param name="data">The overlay data.</param>
+        public void AddOverlay(string name, LabelledPointDTO data)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
         /// Initialises the view.
         /// </summary>
         /// <param name="controller">The <see cref="IApplicationController"/>.</param>
@@ -86,9 +96,18 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// Sets the chart data.
         /// </summary>
         /// <param name="stars">A <see cref="List{StarDTO}"> containing the chart data.</param>
-        public void SetData(List<StarDTO> stars)
+        public void PlotChart(List<StarDTO> stars)
         {
             
+        }
+
+        /// <summary>
+        /// Removes the specified overlay from the chart.
+        /// </summary>
+        /// <param name="name">The overlay name.</param>
+        public void RemoveOverlay(string name)
+        {
+            View.RemoveOverlay(name);
         }
 
         /// <summary>

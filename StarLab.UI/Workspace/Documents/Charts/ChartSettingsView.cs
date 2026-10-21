@@ -5,7 +5,6 @@ using StarLab.Shared;
 using StarLab.UI.Core;
 using StarLab.UI.Core.Workspace.Documents.Charts;
 using Stratosoft.Commands;
-using System.Diagnostics;
 
 namespace StarLab.UI.Workspace.Documents.Charts
 {
@@ -222,6 +221,21 @@ namespace StarLab.UI.Workspace.Documents.Charts
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        public void ClearOverlays()
+        {
+            foreach (var key in nodes.Keys)
+            {
+                if (key.Contains(Constants.Overlays))
+                {
+                    treeView.Nodes.Remove(nodes[key]);
+                    nodes.Remove(key);
+                }
+            }
+        }
+
+        /// <summary>
         /// Detaches the presenter that controls the view.
         /// </summary>
         public override void Detach()
@@ -292,9 +306,7 @@ namespace StarLab.UI.Workspace.Documents.Charts
         /// <param name="e">An <see cref="EventArgs"/> that provides context for the event.</param>
         private void OnSettingsChanged(object? sender, EventArgs e)
         {
-            Debug.Assert(presenter != null);
-
-            presenter.UpdateChartPreview();
+            presenter?.UpdateChartPreview();
         }
 
         /// <summary>
@@ -304,11 +316,9 @@ namespace StarLab.UI.Workspace.Documents.Charts
         /// <param name="e">An <see cref="EventArgs"/> that provides context for the event.</param>
         private void TreeView_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            Debug.Assert(presenter != null);
-
             if (e != null && e.Node != null)
             {
-                presenter.ShowSettings(e.Node.Name);
+                presenter?.ShowSettings(e.Node.Name);
             }
         }
     }

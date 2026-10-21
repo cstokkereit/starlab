@@ -21,7 +21,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
 
         private IChartSettings? chart; // Represents the current state of the chart.
 
-        private IDocument? document; // The document that contains the chart.
+        private readonly IDocument document; // The document that contains the chart.
 
         private string key = Constants.Chart; // The current settings key.
 
@@ -104,9 +104,9 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
                 RevertSettings();
             }));
 
-            View.Initialise();
-
             CreateSettingsNavigator();
+
+            View.Initialise();
 
             log.Debug(LogEntries.PresenterInitialised(GetType()));
         }
@@ -143,6 +143,8 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             {
                 chart = new ChartSettings(controller.Chart);
 
+                AppendOverlays();
+
                 ShowSettings(key);
             }
 
@@ -163,6 +165,10 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             {
                 case Constants.Chart:
                     View.AppendColourSection(chart);
+                    break;
+
+                case Constants.ChartOverlays:
+                    // Do Nothing
                     break;
 
                 case Constants.ChartPlotArea:
@@ -310,6 +316,17 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
+        /// Appends the sections required to configure the settings for an overlay.
+        /// </summary>
+        /// <param name="settings">An <see cref="IOverlaySettings"/> that specifies the overlay settings.</param>
+        private void AppendSettings(IOverlaySettings settings)
+        {
+            View.AppendFontSection(settings);
+            View.AppendColourSection(settings);
+            View.AppendVisibleSection(settings);
+        }
+
+        /// <summary>
         /// Appends the sections required to configure the settings for the data points.
         /// </summary>
         /// <param name="settings">An <see cref="IPointSettings"/> that specifies the data point settings.</param>
@@ -372,6 +389,24 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        private void AppendOverlays()
+        {
+            View.ClearOverlays();
+
+            if (chart != null && chart.Overlays.Count > 0)
+            {
+                var overlays = View.AddNode(Constants.Overlays, Constants.Chart, StringResources.Overlays);
+
+                foreach (var overlay in chart.Overlays)
+                {
+                    View.AddNode(overlay.Name, overlays, GetCaption(overlay.Name));
+                }
+            }
+        }
+
+        /// <summary>
         /// Adds the nodes that will be used to navigate to the sections containing the configuration settings for the individual chart elements.
         /// </summary>
         private void CreateSettingsNavigator()
@@ -397,8 +432,6 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             View.AddNode(Constants.MajorGridLines, grid, StringResources.MajorGridLines);
 
             View.AddNode(Constants.Points, plotArea, StringResources.Points);
-
-            var overlays = View.AddNode(Constants.Overlays, Constants.Chart, StringResources.Overlays);
         }
 
         /// <summary>

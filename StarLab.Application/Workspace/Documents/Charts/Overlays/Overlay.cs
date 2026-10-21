@@ -19,6 +19,23 @@
 
             Visible = dto.Visible;
             Name = dto.Name;
+            Type = dto.Type;
+        }
+
+        /// <summary>
+        /// Initialises a new instance of the <see cref="Overlay"> class.
+        /// </summary>
+        /// <param name="name">The overlay name.</param>
+        public Overlay(string name)
+        {
+            ArgumentException.ThrowIfNullOrEmpty(name, nameof(name));
+
+            Colour = Constants.DefaultForeColour;
+
+            Font = new Font();
+
+            Visible = true;
+            Name = name;
         }
 
         /// <summary>
@@ -35,6 +52,11 @@
         /// Gets the overlay name.
         /// </summary>
         public string Name { get; }
+
+        /// <summary>
+        /// Gets the overlay type.
+        /// </summary>
+        public OverlayType Type { get; }
 
         /// <summary>
         /// A flag indicating whether the overlay is visible.

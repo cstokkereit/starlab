@@ -1,9 +1,7 @@
 ﻿using log4net;
-using MongoDB.Bson;
 using StarLab.Presentation;
 using StarLab.Presentation.Workspace.WorkspaceExplorer;
 using StarLab.Shared;
-using StarLab.Shared.Properties;
 using StarLab.UI.Core;
 using Stratosoft.Commands;
 

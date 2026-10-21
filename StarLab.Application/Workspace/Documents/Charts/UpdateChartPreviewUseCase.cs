@@ -5,7 +5,7 @@ namespace StarLab.Application.Workspace.Documents.Charts
     /// <summary>
     /// A use case that updates the chart preview.
     /// </summary>
-    internal class UpdateChartPreviewUseCase : UseCaseUseCase<IChartOutputPort>, IUseCase<ChartDTO>
+    internal class UpdateChartPreviewUseCase : UseCase<IChartOutputPort>, IUseCase<ChartDTO>
     {
         /// <summary>
         /// Initialises a new instance of the <see cref="UpdateChartPreviewUseCase"/> class.

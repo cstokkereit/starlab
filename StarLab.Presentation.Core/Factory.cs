@@ -1,6 +1,5 @@
 ﻿using StarLab.Presentation.Configuration;
 using StarLab.Shared;
-using StarLab.Shared.Properties;
 
 namespace StarLab.Presentation
 {
@@ -9,8 +8,6 @@ namespace StarLab.Presentation
     /// </summary>
     public abstract class Factory
     {
-        private readonly IFactoryConfiguration configuration; // The type configuration information.
-
         /// <summary>
         /// Initialises a new instance of the <see cref="Factory"/> class.
         /// </summary>
@@ -18,18 +15,13 @@ namespace StarLab.Presentation
         /// <exception cref="ArgumentNullException"></exception>
         protected Factory(IFactoryConfiguration configuration)
         {
-            this.configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            Configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
 
         /// <summary>
-        /// Gets the specified <see cref="IViewConfiguration"/> instance.
+        /// Gets the factory configuration.
         /// </summary>
-        /// <param name="name">The name of the required <see cref="IViewConfiguration"/> instance.</param>
-        /// <returns>The specified <see cref="IViewConfiguration"/> instance.</returns>
-        protected IViewConfiguration GetViewConfiguration(string name)
-        {
-            return configuration.GetConfiguration(name);
-        }
+        protected IFactoryConfiguration Configuration { get; }
 
         /// <summary>
         /// Creates an object instance from the type name and arguments provided.

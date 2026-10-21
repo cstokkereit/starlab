@@ -5,7 +5,7 @@ namespace StarLab.Application.Workspace.Documents.Charts
     /// <summary>
     /// A use case that updates the document following a change to the chart.
     /// </summary>
-    internal class UpdateChartUseCase : UseCaseUseCase<IApplicationOutputPort>, IUseCase<UpdateChartUseCaseArgs>
+    internal class UpdateChartUseCase : UseCase<IApplicationOutputPort>, IUseCase<UpdateChartUseCaseArgs>
     {
         /// <summary>
         /// Initialises a new instance of the <see cref="AddDocumentUseCase"/> class.
@@ -18,7 +18,7 @@ namespace StarLab.Application.Workspace.Documents.Charts
         /// <summary>
         /// Executes the use case.
         /// </summary>
-        /// <param name="args">The <see cref="Charts.UpdateChartUseCaseArgs"/> that provide all of the information required to execute the use case.</param>
+        /// <param name="args">The <see cref="UpdateChartUseCaseArgs"/> that provide all of the information required to execute the use case.</param>
         public void Execute(UpdateChartUseCaseArgs args)
         {
             var workspace = new Workspace(args.Workspace);

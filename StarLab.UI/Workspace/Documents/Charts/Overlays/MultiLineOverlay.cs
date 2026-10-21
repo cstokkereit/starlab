@@ -2,48 +2,43 @@
 
 namespace StarLab.UI.Workspace.Documents.Charts.Overlays
 {
-    internal class MultiLineOverlay
+    /// <summary>
+    /// TODO : Documentation
+    /// </summary>
+    internal class MultiLineOverlay : Overlay
     {
         private readonly List<LineOverlay> lines = new List<LineOverlay>();
 
-        private ScottPlot.Color colour;
-
-        public ScottPlot.Color Colour 
-        { 
-            get => colour;
-
-            set
-            {
-                foreach (var line in lines)
-                {
-                    line.Colour = value;
-                }
-
-                colour = value;
-            }
-        }
-
-        public bool Visible { get; set; }
+        public MultiLineOverlay(Plot plot, string name)
+            : base(plot, name) { }
 
         public void AddLine(double[] xs, double[] ys, string label)
         {
-            lines.Add(new LineOverlay(xs, ys, label));
+            //lines.Add(new LineOverlay(xs, ys, label));
         }
 
         public void AddLine(double[] xs, double[] ys)
         {
-            lines.Add(new LineOverlay(xs, ys));
+            //lines.Add(new LineOverlay(xs, ys));
         }
 
-        public void Render(Plot plot)
+        /// <summary>
+        /// Removes the elements that compose the overlay from the chart.
+        /// </summary>
+        /// <param name="plot">The plot that displays the overlay.</param>
+        protected override void Clear(Plot plot)
         {
-            if (Visible)
-            {
-                foreach (var line in lines)
-                {
-                    line.Render(plot);
-                }
-            }
+            throw new NotImplementedException();
+        }
+
+        protected override void Render(Plot plot)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override void UpdateElements()
+        {
+            throw new NotImplementedException();
         }
     }
 }

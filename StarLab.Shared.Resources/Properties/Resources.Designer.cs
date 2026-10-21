@@ -933,6 +933,15 @@ namespace StarLab.Shared.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The Sun.
+        /// </summary>
+        public static string SunOverlay {
+            get {
+                return ResourceManager.GetString("SunOverlay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sync With Active Document.
         /// </summary>
         public static string SyncWithActiveDocument {

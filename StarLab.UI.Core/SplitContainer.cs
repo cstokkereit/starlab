@@ -8,7 +8,7 @@ namespace StarLab.UI.Controls
     /// </summary>
     public partial class SplitContainer : UserControl, IToolbarManager
     {
-        private readonly Dictionary<SplitViewPanels, PanelManager> panels = new Dictionary<SplitViewPanels, PanelManager>(); // TODO
+        private readonly Dictionary<SplitViewPanels, PanelManager> panels = new Dictionary<SplitViewPanels, PanelManager>(); // TODO : Documentation
 
         /// <summary>
         /// Initialises a new instance of the <see cref="SplitContainer"/> class.

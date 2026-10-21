@@ -1,4 +1,5 @@
 ﻿using log4net;
+using StarLab.Application.Workspace.Documents.Charts.Overlays;
 using StarLab.Presentation;
 using StarLab.Presentation.Configuration;
 using StarLab.Presentation.Workspace.Documents;
@@ -39,7 +40,7 @@ namespace StarLab.UI
         /// <returns>The specified <see cref="IChildView"/>.</returns>
         public IChildView CreateChildView(string parent, string name)
         {
-            var configuration = GetViewConfiguration(parent);
+            var configuration = Configuration.GetViewConfiguration(parent);
 
             return (IChildView)CreateInstance(configuration.GetChildViewConfiguration(name).View);
         }
@@ -53,7 +54,7 @@ namespace StarLab.UI
         {
             var views = new List<IChildView>();
 
-            var configuration = GetViewConfiguration(name);
+            var configuration = Configuration.GetViewConfiguration(name);
 
             foreach (var childConfiguration in configuration.ChildConfigurations)
             {
@@ -72,11 +73,20 @@ namespace StarLab.UI
         {
             var views = new List<IChildView>();
 
-            var configuration = GetViewConfiguration(document.View);
+            var configuration = Configuration.GetViewConfiguration(document.View);
 
             foreach (var childConfiguration in configuration.ChildConfigurations)
             {
-                views.Add((IChildView)CreateInstance(childConfiguration.View));
+                switch (childConfiguration.Name)
+                {
+                    case Constants.Chart:
+                        views.Add((IChildView)CreateInstance(childConfiguration.View, new OverlayFactory(this.Configuration)));
+                        break;
+
+                    default:
+                        views.Add((IChildView)CreateInstance(childConfiguration.View));
+                        break;
+                }
             }
 
             return views;

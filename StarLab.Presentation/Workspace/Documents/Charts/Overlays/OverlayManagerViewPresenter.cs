@@ -11,11 +11,17 @@ namespace StarLab.Presentation.Workspace.Documents.Charts.Overlays
     /// <summary>
     /// Controls the behaviour of a chart overlays panel.
     /// </summary>
-    internal class OverlayManagerViewPresenter : ChildViewPresenter<IOverlayManagerView, IDocumentController>, IChildViewController, IOverlayManagerViewPresenter
+    internal class OverlayManagerViewPresenter : ChildViewPresenter<IOverlayManagerView, IDocumentController>, IChildViewController, IOverlayManagerViewPresenter, ISubscriber<WorkspaceChangedEventArgs>
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(OverlayManagerViewPresenter)); // The logger that will be used for writing log messages.
 
-        private IChart chart; //
+        private readonly IChartOverlaysUseCaseService useCaseService; // A service that executes the use cases that implement the functionality.
+
+        private IChartSettings? chart; // Represents the current state of the chart.
+
+        private readonly IDocument? document; // The document that contains the chart.
+
+        private IWorkspace? workspace; // The workspace that contains the document.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="OverlayManagerViewPresenter"> class.
@@ -31,13 +37,25 @@ namespace StarLab.Presentation.Workspace.Documents.Charts.Overlays
         {
             ArgumentNullException.ThrowIfNull(services, nameof(services));
 
-            //useCaseService = services.GetService<IChartSettingsUseCaseService>();
+            useCaseService = services.GetService<IChartOverlaysUseCaseService>();
 
-            //this.document = document ?? throw new ArgumentNullException(nameof(document));
+            this.document = document ?? throw new ArgumentNullException(nameof(document));
 
             View.MinimumSize = new Size(600, 150);
 
             View.Attach(this);
+        }
+
+        /// <summary>
+        /// Adds the specified overlay to the chart.
+        /// </summary>
+        /// <param name="name">The name of the overlay.</param>
+        public void AddOverlay(string name)
+        {
+            if (document == null) throw new InvalidOperationException(ExceptionMessages.InvalidState);
+            if (chart == null) throw new InvalidOperationException(ExceptionMessages.InvalidState);
+
+            useCaseService.AddChartOverlay(document.ID, chart, name);
         }
 
         /// <summary>
@@ -76,9 +94,28 @@ namespace StarLab.Presentation.Workspace.Documents.Charts.Overlays
 
             View.Initialise();
 
-            AddAvailableOverlays();
-
             log.Debug(LogEntries.PresenterInitialised(GetType()));
+        }
+
+        /// <summary>
+        /// Event handler for the WorkspaceChangedEvent event.
+        /// </summary>
+        /// <param name="args">A <see cref="WorkspaceChangedEventArgs"/> that provides context for the event.</param>
+        public void OnEvent(WorkspaceChangedEventArgs args)
+        {
+            workspace = args.Workspace;
+        }
+
+        /// <summary>
+        /// Removes the specified overlay from the chart.
+        /// </summary>
+        /// <param name="name">The name of the overlay.</param>
+        public void RemoveOverlay(string name)
+        {
+            if (document == null) throw new InvalidOperationException(ExceptionMessages.InvalidState);
+            if (chart == null) throw new InvalidOperationException(ExceptionMessages.InvalidState);
+
+            useCaseService.RemoveChartOverlay(document.ID, chart, name);
         }
 
         /// <summary>
@@ -90,19 +127,32 @@ namespace StarLab.Presentation.Workspace.Documents.Charts.Overlays
 
             if (controller.Chart != null)
             {
-                chart = controller.Chart;
+                chart = new ChartSettings(controller.Chart);
+
+                var overlays = GetOverlayNames(chart);
+
+                foreach (var overlay in SessionContext.Configuration.Overlays)
+                {
+                    View.AddOverlay(overlay, GetCaption(overlay), overlays.Contains(overlay));
+                }
             }
         }
 
         /// <summary>
-        /// 
+        /// Gets the names of the overlays that have been added to a chart.
         /// </summary>
-        private void AddAvailableOverlays()
+        /// <param name="chart">An <see cref="IChartSettings"/> that may have added overlays.</param>
+        /// <returns></returns>
+        private List<string> GetOverlayNames(IChartSettings chart)
         {
-            foreach(var name in OverlayNames.ToList())
+            var names = new List<string>();
+
+            foreach (var overlay in chart.Overlays)
             {
-                View.AddOverlay(name, OverlayNames.GetCaption(name), false);
+                names.Add(overlay.Name);
             }
+
+            return names;
         }
 
         /// <summary>
@@ -114,7 +164,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts.Overlays
             //if (document == null) throw new InvalidOperationException(ExceptionMessages.InvalidState);
             //if (chart == null) throw new InvalidOperationException(ExceptionMessages.InvalidState);
 
-            //useCaseService.UpdateDocument(workspace, document.ID, chart);
+            //useCaseService.UpdateChartOverlays(workspace, document.ID, chart);
         }
 
         /// <summary>

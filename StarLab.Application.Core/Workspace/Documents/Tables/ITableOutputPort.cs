@@ -1,7 +1,7 @@
 ﻿namespace StarLab.Application.Workspace.Documents.Tables
 {
     /// <summary>
-    /// Used by a <see cref="UseCaseUseCase{TOutputPort}"/> to update the document.
+    /// Used by a <see cref="UseCase{TOutputPort}"/> to update the document.
     /// </summary>
     public interface ITableOutputPort : IOutputPort
     {
