@@ -76,6 +76,15 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
+        /// Applies the new chart settings to the preview.
+        /// </summary>
+        /// <param name="dto">A <see cref="ChartDTO"/> that specifies the state of the chart.</param>
+        public void ApplyChanges(ChartDTO dto)
+        {
+            View.UpdateChart(new Chart(dto));
+        }
+
+        /// <summary>
         /// Initialises the view.
         /// </summary>
         /// <param name="controller">The <see cref="IApplicationController"/>.</param>
@@ -111,6 +120,14 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
+        /// Reverts the changes made to the preview.
+        /// </summary>
+        public void RevertChanges()
+        {
+            if (chart != null) View.UpdateChart(chart);
+        }
+
+        /// <summary>
         /// Updates the chart following a change to the document or workspace.
         /// </summary>
         /// <param name="chart">An <see cref="IChart"/> that specifies the state of the chart.</param>
@@ -119,23 +136,6 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             View.UpdateChart(chart);
 
             this.chart = chart;
-        }
-
-        /// <summary>
-        /// Applies the new chart settings to the preview.
-        /// </summary>
-        /// <param name="dto">A <see cref="ChartDTO"/> that specifies the state of the chart.</param>
-        public void UpdatePreview(ChartDTO dto)
-        {
-            View.UpdateChart(new Chart(dto));
-        }
-
-        /// <summary>
-        /// Reverts the preview to the old chart settings.
-        /// </summary>
-        public void UpdatePreview()
-        {
-            if(chart != null) View.UpdateChart(chart);
         }
 
         /// <summary>

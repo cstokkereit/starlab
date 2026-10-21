@@ -23,7 +23,7 @@ namespace StarLab.Application.Workspace.Documents.Charts
         {
             ArgumentNullException.ThrowIfNull(dto, nameof(dto));
 
-            OutputPort.UpdatePreview(dto);
+            OutputPort.ApplyChanges(dto);
         }
     }
 }

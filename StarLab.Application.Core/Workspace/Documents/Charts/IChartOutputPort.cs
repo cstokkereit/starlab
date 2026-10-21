@@ -13,6 +13,12 @@
         void AddOverlay(string name, LabelledPointDTO data);
 
         /// <summary>
+        /// Applies the new chart settings to the preview.
+        /// </summary>
+        /// <param name="dto">A <see cref="ChartDTO"/> that specifies the state of the chart.</param>
+        void ApplyChanges(ChartDTO dto);
+
+        /// <summary>
         /// Plots the chart.
         /// </summary>
         /// <param name="stars">A <see cref="List{StarDTO}"> containing the chart data.</param>
@@ -23,11 +29,5 @@
         /// </summary>
         /// <param name="name">The overlay name.</param>
         void RemoveOverlay(string name);
-
-        /// <summary>
-        /// Applies the new chart settings to the preview.
-        /// </summary>
-        /// <param name="dto">A <see cref="ChartDTO"/> that specifies the state of the chart.</param>
-        void UpdatePreview(ChartDTO dto);
     }
 }

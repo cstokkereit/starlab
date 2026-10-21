@@ -11,7 +11,7 @@ using StarLab.UI.Workspace.Documents.Charts.Overlays;
 
 namespace StarLab.UI.Workspace.Documents.Charts
 {
-    //https://scottplot.net/cookbook/5.0/
+    // https://scottplot.net/cookbook/5.0/
     // https://astronomy.stackexchange.com/questions/39610/is-there-a-formula-for-absolute-magnitude-that-does-not-contain-an-apparent-magn
     // https://github.com/casaluca/bolometric-corrections
 
@@ -167,6 +167,24 @@ namespace StarLab.UI.Workspace.Documents.Charts
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="plot"></param>
+        /// <param name="config"></param>
+        private void ConfigureAxes(Plot plot, IChart config)
+        {
+            plot.Axes.Rules.Clear();
+
+            plot.Axes.Rules.Add(new LockAxisRule(Axis.Bottom, config.X1.Scale.Minimum, config.X1.Scale.Maximum));
+            plot.Axes.Rules.Add(new LockAxisRule(Axis.Left, config.Y1.Scale.Minimum, config.Y1.Scale.Maximum));
+
+            ConfigureAxis(plot.Axes.Bottom, config.X1);
+            ConfigureAxis(plot.Axes.Right, config.Y2);
+            ConfigureAxis(plot.Axes.Left, config.Y1);
+            ConfigureAxis(plot.Axes.Top, config.X2);
+        }
+
+        /// <summary>
         /// Configures a chart axis.
         /// </summary>
         /// <param name="axis">The <see cref="ScottPlot.IAxis"/> being configured.</param>
@@ -193,10 +211,7 @@ namespace StarLab.UI.Workspace.Documents.Charts
 
             ConfigureLabel(plot.Axes.Title.Label, config.Title);
 
-            ConfigureAxis(plot.Axes.Bottom, config.X1);
-            ConfigureAxis(plot.Axes.Right, config.Y2);
-            ConfigureAxis(plot.Axes.Left, config.Y1);
-            ConfigureAxis(plot.Axes.Top, config.X2);
+            ConfigureAxes(plot, config);
 
             ConfigurePlotArea(plot, config);
         }
@@ -437,9 +452,7 @@ namespace StarLab.UI.Workspace.Documents.Charts
 
         //formsPlot.Plot.Axes.Bottom.SetTicks(tickPositions, tickLabels);
 
-       // Lock the X axis min and max
-       //formsPlot.Plot.Axes.Rules.Clear();
-       // formsPlot.Plot.Axes.Rules.Add(new LockAxisRule());
+       
 
 
 
@@ -511,21 +524,6 @@ namespace StarLab.UI.Workspace.Documents.Charts
             MouseNowCoordinates = chart.Plot.GetCoordinates(e.X, e.Y);
             selector.CoordinateRect = MouseSelectionRect;
             chart.Refresh();
-        }
-    }
-
-    public class LockAxisRule : IAxisRule
-    {
-        public void Apply(RenderPack rp, bool beforeLayout)
-        {
-            IXAxis bottom = rp.Plot.Axes.Bottom;
-            if (bottom.Min < -0.5) bottom.Min = -0.5;
-            if (bottom.Max > 2) bottom.Max = 2;
-
-            IYAxis left = rp.Plot.Axes.Left;
-            if (left.Min > 15) left.Min = 15;
-            if (left.Max < -5) left.Max = -5;
-
         }
     }
 }

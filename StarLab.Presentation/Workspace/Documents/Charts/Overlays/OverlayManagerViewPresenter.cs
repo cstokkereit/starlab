@@ -174,7 +174,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts.Overlays
         {
             var controller = ParentController.GetController<IChartController>(new ControllerID(Constants.Chart));
 
-            controller.UpdatePreview();
+            controller.RevertChanges();
         }
     }
 }

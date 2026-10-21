@@ -18,23 +18,23 @@ namespace StarLab.Application
 
         private readonly IOverlayDataProvider overlayData; // Used to provide access to the overlay data.
 
-        private readonly IDatabaseManager databases; // Used to retrieve data from the database.
+        private readonly IDatabaseManager databaseManager; // Used to retrieve data from the database.
 
-        private readonly IQueryBuilder queries; // Used to build database queries.
+        private readonly IQueryBuilder queryBuilder; // Used to build database queries.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="UseCaseFactory"/> class.
         /// </summary>
         /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
-        /// <param name="databases">An <see cref="IDatabaseManager"/> that will be used to retrieve data from the database.</param>
-        /// <param name="queries">An <see cref="IQueryBuilder"/> that will be used to build database queries.</param>
+        /// <param name="databaseManager">An <see cref="IDatabaseManager"/> that will be used to retrieve data from the database.</param>
+        /// <param name="queryBuilder">An <see cref="IQueryBuilder"/> that will be used to build database queries.</param>
         /// <param name="serialiser">An <see cref="ISerialisationService"/> that will be used to serialise and deserialise model objects.</param>
-        public UseCaseFactory(IMapper mapper, IDatabaseManager databases, IQueryBuilder queries, IOverlayDataProvider overlays, ISerialisationService serialiser)
+        public UseCaseFactory(IMapper mapper, IDatabaseManager databaseManager, IQueryBuilder queryBuilder, IOverlayDataProvider overlayData, ISerialisationService serialiser)
         {
-            this.databases = databases ?? throw new ArgumentNullException(nameof(databases));
+            this.databaseManager = databaseManager ?? throw new ArgumentNullException(nameof(databaseManager));
+            this.queryBuilder = queryBuilder ?? throw new ArgumentNullException(nameof(queryBuilder));
+            this.overlayData = overlayData ?? throw new ArgumentNullException(nameof(overlayData));
             this.serialiser = serialiser ?? throw new ArgumentNullException(nameof(serialiser));
-            this.overlayData = overlays ?? throw new ArgumentNullException(nameof(overlays));
-            this.queries = queries ?? throw new ArgumentNullException(nameof(queries));
             this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
@@ -135,7 +135,7 @@ namespace StarLab.Application
         /// <returns>An instance of <see cref="IUseCase{WorkspaceDTO}"/> that implements the use case.</returns>
         public IUseCaseAsync<PlotChartUseCaseArgs> CreatePlotChartUseCase(IChartOutputPort outputPort)
         {
-            return new PlotChartUseCase(outputPort, mapper, databases, queries, overlayData, this);
+            return new PlotChartUseCase(outputPort, mapper, databaseManager, queryBuilder, overlayData, this);
         }
 
         /// <summary>

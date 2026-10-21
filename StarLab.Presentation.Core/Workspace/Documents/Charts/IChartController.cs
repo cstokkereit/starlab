@@ -11,14 +11,16 @@
         IChart? Chart { get; }
 
         /// <summary>
+        /// Reverts the changes made to the preview.
+        /// </summary>
+        void RevertChanges();
+
+        /// <summary>
         /// Updates the view with the new <see cref="IChart"/> definition following a change to the document or workspace.
         /// </summary>
         /// <param name="chart">An <see cref="IChart"/> that specifies the state of the chart.</param>
         void UpdateChart(IChart chart);
 
-        /// <summary>
-        /// Reverts the preview to the old chart settings.
-        /// </summary>
-        void UpdatePreview();
+        
     }
 }

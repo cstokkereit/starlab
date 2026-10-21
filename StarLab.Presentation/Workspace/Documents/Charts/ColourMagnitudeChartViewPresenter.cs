@@ -53,7 +53,6 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             //var converter = new SpectralClassConverter();
 
             // Make the IForwardOnlyCursor implement async methods
-            // Add a Data section to the settings view to choose the data series for the x and y axes
             // Use the nomenclature dictionary to load the names of data fields and series, units, symbols etc
             // Scale points with zoom
             // Dragable axis lines
@@ -91,6 +90,17 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         public void AddOverlay(string name, LabelledPointDTO data)
         {
             View.AddOverlay(name, data.X, data.y, data.Label);
+        }
+
+        /// <summary>
+        /// Applies the new chart settings to the preview.
+        /// </summary>
+        /// <param name="dto">A <see cref="ChartDTO"/> that specifies the state of the chart.</param>
+        public void ApplyChanges(ChartDTO dto)
+        {
+            chart = new Chart(dto);
+
+            View.UpdateChart(chart);
         }
 
         /// <summary>
@@ -132,7 +142,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// Updates the chart following a change to the chart data.
+        /// Plots the chart using the data provided.
         /// </summary>
         /// <param name="stars">A <see cref="List{StarDTO}"> containing the chart data.</param>
         public void PlotChart(List<StarDTO> stars)
@@ -150,7 +160,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
                     ys[n] = stars[n].AbsoluteMagnitude;
                 }
 
-                data.AddSeries("ColourIndex(B-V)", xs);
+                data.AddSeries("ColourIndex(B-V)", xs); // TODO - This logic should be moved to the backend?
                 data.AddSeries("AbsoluteMagnitude", ys);
 
                 View.PlotChart(chart, data);
@@ -169,6 +179,14 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
+        /// Reverts the changes made to the preview.
+        /// </summary>
+        public void RevertChanges()
+        {
+            if (chart != null) View.UpdateChart(chart);
+        }
+
+        /// <summary>
         /// Updates the chart following a change to the document or workspace.
         /// </summary>
         /// <param name="chart">An <see cref="IChart"/> that specifies the state of the chart.</param>
@@ -177,23 +195,6 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             View.UpdateChart(chart);
 
             this.chart = chart;
-        }
-
-        /// <summary>
-        /// Applies the new chart settings to the preview.
-        /// </summary>
-        /// <param name="dto">A <see cref="ChartDTO"/> that specifies the state of the chart.</param>
-        public void UpdatePreview(ChartDTO dto)
-        {
-           View.UpdateChart(new Chart(dto));
-        }
-
-        /// <summary>
-        /// Reverts the preview to the old chart settings.
-        /// </summary>
-        public void UpdatePreview()
-        {
-            if(chart != null) View.UpdateChart(chart);
         }
 
         /// <summary>

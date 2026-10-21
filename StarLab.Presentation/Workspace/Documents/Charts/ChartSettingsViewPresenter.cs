@@ -129,7 +129,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         {
             var controller = ParentController.GetController<IChartController>(new ControllerID(Constants.Chart));
 
-            controller.UpdatePreview();
+            controller.RevertChanges();
         }
 
         /// <summary>
