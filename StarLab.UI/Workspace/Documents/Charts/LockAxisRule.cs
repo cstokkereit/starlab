@@ -3,7 +3,7 @@
 namespace StarLab.UI.Workspace.Documents.Charts
 {
     /// <summary>
-    /// TODO : Documentation
+    /// A rule that constrains the minimum and maximum values for a chart axis.
     /// </summary>
     public class LockAxisRule : IAxisRule
     {
@@ -14,11 +14,11 @@ namespace StarLab.UI.Workspace.Documents.Charts
         private readonly double minimum; // The minimum value
 
         /// <summary>
-        /// 
+        /// Initialises a new instance of the <see cref="LockAxisRule"/> class.
         /// </summary>
-        /// <param name="axis"></param>
-        /// <param name="minimum"></param>
-        /// <param name="maximum"></param>
+        /// <param name="axis">Specifies the axis that is being constrained by the rule.</param>
+        /// <param name="minimum">The minimum allowed value.</param>
+        /// <param name="maximum">The maximum allowed value.</param>
         public LockAxisRule(Axis axis, double minimum, double maximum)
         {
             this.maximum = maximum;
@@ -27,10 +27,10 @@ namespace StarLab.UI.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// 
+        /// Applies the rule.
         /// </summary>
-        /// <param name="rp"></param>
-        /// <param name="beforeLayout"></param>
+        /// <param name="rp">Provides access to the plot whose axis is being constrained.</param>
+        /// <param name="beforeLayout">Determines whether the rule logic executes before or after the data rectangle is calculated.</param>
         public void Apply(RenderPack rp, bool beforeLayout)
         {
             switch (axis)
@@ -54,9 +54,9 @@ namespace StarLab.UI.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// 
+        /// Applies the minimum and maximum value constraints to the horizontal axis provided.
         /// </summary>
-        /// <param name="axis"></param>
+        /// <param name="axis">The <see cref="IXAxis"/> to which the constraints are being applied.</param>
         private void Apply(IXAxis axis)
         {
             if (axis.IsInverted())
@@ -72,9 +72,9 @@ namespace StarLab.UI.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// 
+        /// Applies the minimum and maximum value constraints to the vertical axis provided.
         /// </summary>
-        /// <param name="axis"></param>
+        /// <param name="axis">The <see cref="IYAxis"/> to which the constraints are being applied.</param>
         private void Apply(IYAxis axis)
         {
             if (axis.IsInverted())

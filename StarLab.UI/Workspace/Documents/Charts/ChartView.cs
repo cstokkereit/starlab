@@ -22,52 +22,35 @@ namespace StarLab.UI.Workspace.Documents.Charts
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(ChartView)); // The logger that will be used for writing log messages.
 
-        private readonly Dictionary<string, Overlay> overlays = new Dictionary<string, Overlay>(); //
+        private readonly Dictionary<string, Overlay> overlays = new Dictionary<string, Overlay>(); // A dictionary containing the chart overlays indexed by name.
 
         private readonly ScottPlot.Plottables.Rectangle selector; //
 
         private IChartViewPresenter? presenter; // The presenter that controls the view.
 
-        private readonly IOverlayFactory factory; //
+        private readonly IOverlayFactory factory; // A factory for creating overlays.
 
-        private Scatter? points; //
+        private Scatter? points; // 
 
         /// <summary>
         /// Initialises a new instance of the <see cref="ChartView"> class.
         /// </summary>
         public ChartView(IOverlayFactory factory)
+            : base(ViewIDs.Chart, SplitViewPanels.Panel2)
         {
             InitializeComponent();
 
             this.factory = factory ?? throw new ArgumentNullException(nameof(factory));
 
-            ID = ViewIDs.Chart;
             Name = ViewNames.Chart;
 
             selector = chart.Plot.Add.Rectangle(0, 0, 0, 0);
-
-
 
             // add events to trigger in response to mouse actions
             chart.MouseMove += OnMouseMove;
             chart.MouseDown += OnMouseDown;
             chart.MouseUp += OnMouseUp;
         }
-
-        /// <summary>
-        /// Gets the <see cref="IClipboard"/>.
-        /// </summary>
-        public IClipboard Clipboard { get; }
-
-        /// <summary>
-        /// Gets the view ID.
-        /// </summary>
-        public ViewID ID { get; }
-
-        /// <summary>
-        /// Gets the preferred panel, if any, in which to display the view.
-        /// </summary>
-        public SplitViewPanels Panel => SplitViewPanels.Panel2;
 
         /// <summary>
         /// Adds the specified point overlay to the chart.
