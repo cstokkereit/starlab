@@ -46,13 +46,9 @@ namespace StarLab.Application.Workspace.Documents.Charts.Overlays
 
             OutputPort.AddOverlay(args.Overlay, point);
 
-            // The provider holds the cached overlay data (everything that is available from the source data files) This should be loaded on demand ideally.
-            // The UseCase will serve up just the data that is requested in the args e.g. name, absolute magnitude and B-V for a specified overlay type via DTOs to the chart output port 
-            // and or toggle the state of the overlay in the wrokspace/chart hierarchy
-
             var chart = new Chart(args.Chart);
 
-            chart.AddOverlay(args.Overlay);
+            chart.AddOverlay(args.Overlay, new Font(args.Font, args.FontSize), args.Colour);
 
             var dto = Mapper.Map<ChartDTO>(chart);
 

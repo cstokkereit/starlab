@@ -9,6 +9,9 @@ namespace StarLab.UI.Core.Workspace.Documents.Charts
     /// </summary>
     public partial class ColourSection : UserControl, ISettingsSection
     {
+        private const int HEIGHT_WITHOUT_BACKGROUND = 45; // The height of the control when handling only the foreground colour.
+        private const int HEIGHT_WITH_BACKGROUND = 98; // The height of the control handling the background and foreground colours.
+
         private const string BUTTON_BACKGROUND = "buttonBackground"; // The name of the custom background colour button.
         private const string BUTTON_FOREGROUND = "buttonForeground"; // The name of the custom foreground colour button.
 
@@ -58,7 +61,7 @@ namespace StarLab.UI.Core.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// Configures the <see cref="UserControl"/> to display the foreground only or foreground and background controls.
+        /// Configures the <see cref="UserControl"/> to display the child controls used to set the values of the colour properties.
         /// </summary>
         private void ConfigureSection()
         {
@@ -75,13 +78,13 @@ namespace StarLab.UI.Core.Workspace.Documents.Charts
                 labelForeground.Text = Resources.ForeColour;
                 labelBackground.Text = Resources.BackColour;
 
-                Height = 100;
+                Height = HEIGHT_WITH_BACKGROUND;
             }
             else
             {
                 labelForeground.Text = Resources.Colour;
 
-                Height = 50;
+                Height = HEIGHT_WITHOUT_BACKGROUND;
             }
 
             customForeColour = settings.ForeColour.StartsWith('#') ? settings.ForeColour : string.Empty;
@@ -209,7 +212,7 @@ namespace StarLab.UI.Core.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// The available colour settings for a chart element.
+        /// An adapter that allows IChartElementSettings to treated as IColourSettings.
         /// </summary>
         private class ChartElementSettingsAdapter : IColourSettings
         {
@@ -228,7 +231,7 @@ namespace StarLab.UI.Core.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// The available colour settings for the chart.
+        /// An adapter that allows IChartSettings to treated as IColourSettings.
         /// </summary>
         private class ChartSettingsAdapter : IColourSettings
         {
@@ -247,7 +250,7 @@ namespace StarLab.UI.Core.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// The available colour settings for the plot area.
+        /// An adapter that allows IPlotAreaSettings to treated as IColourSettings.
         /// </summary>
         private class PlotAreaSettingsAdapter : IColourSettings
         {

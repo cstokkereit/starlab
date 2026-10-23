@@ -26,15 +26,15 @@
         /// <summary>
         /// Initialises a new instance of the <see cref="Axis"> class.
         /// </summary>
-        public Axis()
-        {
-            Colour = Constants.DefaultForeColour;
+        //public Axis()
+        //{
+        //    Colour = Constants.DefaultForeColour;
 
-            Label = new Label();
-            Scale = new Scale();
-            
-            Visible = true;
-        }
+        //    Label = new Label();
+        //    Scale = new Scale();
+
+        //    Visible = true;
+        //}
 
         /// <summary>
         /// Gets the colour.

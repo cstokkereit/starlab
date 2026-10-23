@@ -1,5 +1,4 @@
 ﻿using StarLab.Application.Workspace.Documents.Charts.Overlays;
-using StarLab.Shared;
 
 namespace StarLab.Application.Workspace.Documents.Charts
 {
@@ -86,11 +85,16 @@ namespace StarLab.Application.Workspace.Documents.Charts
         /// Adds the specified overlay to the chart.
         /// </summary>
         /// <param name="name">The overlay name.</param>
-        public void AddOverlay(string name)
+        /// <param name="font">The overlay font.</param>
+        /// <param name="colour">The overlay colour.</param>
+        public void AddOverlay(string name, Font font, string colour)
         {
-            if (overlays.ContainsKey(name)) throw new InvalidOperationException(ExceptionMessages.OverlayExists(name));
+            if (!overlays.ContainsKey(name))
+            {
+                //throw new InvalidOperationException(ExceptionMessages.OverlayExists(name)); // TODO : Need to fix this
 
-            overlays.Add(name, new Overlay(name));
+                overlays.Add(name, new Overlay(name, font, colour));
+            }
         }
 
         /// <summary>

@@ -1,7 +1,6 @@
 ﻿using log4net;
 using StarLab.Application;
 using StarLab.Application.Workspace;
-using StarLab.Presentation.Configuration;
 using StarLab.Presentation.Workspace;
 using StarLab.Presentation.Workspace.Documents;
 using StarLab.Shared;
@@ -295,6 +294,7 @@ namespace StarLab.Presentation
             if (!string.IsNullOrEmpty(dto.FileName) && !SessionContext.Settings.Workspace.Equals(dto.FileName))
             {
                 SessionContext.Settings.Workspace = dto.FileName;
+                SessionContext.Settings.Save();
             }
 
             UpdateCommandState(Actions.Close, workspace.ActiveDocument != null);

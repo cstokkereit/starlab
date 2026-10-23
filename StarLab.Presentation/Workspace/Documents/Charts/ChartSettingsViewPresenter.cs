@@ -1,6 +1,5 @@
 ﻿using log4net;
 using StarLab.Domain.Data;
-using StarLab.Presentation.Configuration;
 using StarLab.Presentation.Workspace.Documents.Charts.Overlays;
 using StarLab.Shared;
 using Stratosoft.Commands;
@@ -13,7 +12,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
     /// <summary>
     /// Controls the behaviour of a chart settings panel.
     /// </summary>
-    internal class ChartSettingsViewPresenter : ChildViewPresenter<IChartSettingsView, IDocumentController>, IChartSettingsViewPresenter, IChartSettingsController, ISubscriber<WorkspaceChangedEventArgs>
+    internal class ChartSettingsViewPresenter : ChildViewPresenter<IChartSettingsView, IDocumentController>, IChildViewController, IChartSettingsViewPresenter, ISubscriber<ChartSettingsChangedEventArgs>, ISubscriber<WorkspaceChangedEventArgs>
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(ChartSettingsViewPresenter)); // The logger that will be used for writing log messages.
 
@@ -59,18 +58,6 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// Applies the chart settings to the document.
-        /// </summary>
-        public void ApplySettings()
-        {
-            if (workspace == null) throw new InvalidOperationException(ExceptionMessages.InvalidState);
-            if (document == null) throw new InvalidOperationException(ExceptionMessages.InvalidState);
-            if (chart == null) throw new InvalidOperationException(ExceptionMessages.InvalidState);
-
-            useCaseService.UpdateChart(workspace, document.ID, chart);
-        }
-
-        /// <summary>
         /// Releases all resources used by the <see cref="ChartSettingsViewPresenter"/> object.
         /// </summary>
         public override void Dispose()
@@ -112,7 +99,21 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// Event handler for the WorkspaceChangedEvent event.
+        /// Event handler for the ChartSettingsChanged event.
+        /// </summary>
+        /// <param name="args">A <see cref="WorkspaceChangedEventArgs"/> that provides context for the event.</param>
+        public void OnEvent(ChartSettingsChangedEventArgs args)
+        {
+            if (args.ID == document.ID)
+            {
+                chart = new ChartSettings(args.Chart);
+
+                ShowSettings(key);
+            }
+        }
+
+        /// <summary>
+        /// Event handler for the WorkspaceChanged event.
         /// </summary>
         /// <param name="args">A <see cref="WorkspaceChangedEventArgs"/> that provides context for the event.</param>
         public void OnEvent(WorkspaceChangedEventArgs args)
@@ -123,30 +124,13 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// Reverts the changes to the settings.
-        /// </summary>
-        public void RevertSettings()
-        {
-            var controller = ParentController.GetController<IChartController>(new ControllerID(Constants.Chart));
-
-            controller.RevertChanges();
-        }
-
-        /// <summary>
         /// Runs the child view.
         /// </summary>
         public override void Run()
         {
-            var controller = ParentController.GetController<IChartController>(new ControllerID(Constants.Chart));
+            CreateOverlayNodes();
 
-            if (controller.Chart != null)
-            {
-                chart = new ChartSettings(controller.Chart);
-
-                AppendOverlays();
-
-                ShowSettings(key);
-            }
+            ShowSettings(key);
 
             View.ExpandNode(key);
         }
@@ -180,7 +164,10 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
                     break;
 
                 default:
-                    AppendSettings(chart.GetSettings(key));
+                    if (!key.Contains(Constants.ChartOverlays) || chart.Overlays.Count > 0)
+                    {
+                        AppendSettings(chart.GetSettings(key));
+                    }
                     break;
             }
 
@@ -229,13 +216,11 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// <param name="settings">An <see cref="IChartElementSettings"/> that specifies the chart element settings.</param>
         private void AppendSettings(IChartElementSettings settings)
         {
-            // TODO - Replace with commands or lambdas?
-
             if (settings is IAxesSettings axes)
             {
                 AppendSettings(axes);
             }
-            if (settings is IAxisSettings axis)
+            else if (settings is IAxisSettings axis)
             {
                 AppendSettings(axis);
             }
@@ -321,6 +306,8 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// <param name="settings">An <see cref="IOverlaySettings"/> that specifies the overlay settings.</param>
         private void AppendSettings(IOverlaySettings settings)
         {
+            // Size section for the point
+
             View.AppendFontSection(settings);
             View.AppendColourSection(settings);
             View.AppendVisibleSection(settings);
@@ -370,6 +357,18 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
+        /// Applies the chart settings to the document.
+        /// </summary>
+        private void ApplySettings()
+        {
+            if (workspace == null) throw new InvalidOperationException(ExceptionMessages.InvalidState);
+            if (document == null) throw new InvalidOperationException(ExceptionMessages.InvalidState);
+            if (chart == null) throw new InvalidOperationException(ExceptionMessages.InvalidState);
+
+            useCaseService.UpdateChart(workspace, document.ID, chart);
+        }
+
+        /// <summary>
         /// Creates the nodes that provide access to the axis settings.
         /// </summary>
         /// <param name="name">The node name.</param>
@@ -389,9 +388,9 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// 
+        /// Creates the nodes that provide access to the chart overlay settings.
         /// </summary>
-        private void AppendOverlays()
+        private void CreateOverlayNodes()
         {
             View.ClearOverlays();
 
@@ -435,7 +434,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// 
+        /// TODO : Documentation
         /// </summary>
         /// <returns></returns>
         private List<IDisplayField> GetAvailableHorizontalAxisParameters()
@@ -453,7 +452,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// 
+        /// TODO : Documentation
         /// </summary>
         /// <returns></returns>
         private List<IDisplayField> GetAvailableVerticalAxisParameters()
@@ -467,6 +466,16 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             };
 
             return parameters;
+        }
+
+        /// <summary>
+        /// Reverts the changes to the settings.
+        /// </summary>
+        private void RevertSettings()
+        {
+            var controller = ParentController.GetController<IChartController>(new ControllerID(Constants.Chart));
+
+            controller.RevertChanges();
         }
     }
 }

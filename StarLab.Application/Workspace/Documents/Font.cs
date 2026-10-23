@@ -13,20 +13,36 @@
         {
             ArgumentNullException.ThrowIfNull(dto, nameof(dto));
 
-            Family = string.IsNullOrEmpty(dto.Family) ? Constants.DefaultFontFamily : dto.Family;
-            Size = dto.Size == 0 ? Constants.DefaultFontSize : dto.Size;
             Underline = dto.Underline;
+            Family = dto.Family;
             Italic = dto.Italic;
             Bold = dto.Bold;
+            Size = dto.Size;
         }
+
+        /// <summary>
+        /// Initialises a new instance of the <see cref="Font"> class.
+        /// </summary>
+        /// <param name="family">The name of the font family.</param>
+        /// <param name="size">The size of the font.</param>
+        public Font(string family, int size)
+        {
+            Family = family;
+            Size = size;
+
+            Underline = false;
+            Italic = false;
+            Bold = false;
+        }
+
 
         /// <summary>
         /// Initialises a new instance of the <see cref="Font"> class.
         /// </summary>
         public Font()
         {
-            Family = Constants.DefaultFontFamily;
-            Size = Constants.DefaultFontSize;
+            Family = string.Empty;
+            Size = 0;
             Underline = false;
             Italic = false;
             Bold = false;

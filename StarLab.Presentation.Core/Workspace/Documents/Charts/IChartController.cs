@@ -6,11 +6,6 @@
     public interface IChartController : IChildViewController
     {
         /// <summary>
-        /// Gets the current state of the chart.
-        /// </summary>
-        IChart? Chart { get; }
-
-        /// <summary>
         /// Reverts the changes made to the preview.
         /// </summary>
         void RevertChanges();

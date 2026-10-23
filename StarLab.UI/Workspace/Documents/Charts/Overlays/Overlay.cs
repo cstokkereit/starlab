@@ -16,6 +16,8 @@ namespace StarLab.UI.Workspace.Documents.Charts.Overlays
 
         private Font font; // The overlay font.
 
+        private bool enabled; // A flag that determines whether the overlay is enabled.
+
         /// <summary>
         /// Initialises a new instance of the <see cref="Overlay"> class.
         /// </summary>
@@ -25,11 +27,15 @@ namespace StarLab.UI.Workspace.Documents.Charts.Overlays
         {
             this.plot = plot ?? throw new ArgumentNullException(nameof(plot));
 
-            Colour = ScottPlot.Color.FromColor(System.Drawing.Color.FromName(Constants.DefaultForeColour));
+            colour = ScottPlot.Color.FromColor(System.Drawing.Color.FromName(Constants.DefaultForeColour));
 
-            Font = new Font(Constants.DefaultFontFamily, Constants.DefaultFontSize);
+            font = new Font(Constants.DefaultFontFamily, Constants.DefaultFontSize);
 
-            Visible = true;
+            visible = true;
+
+            UpdateElements();
+
+            Enabled = true;
 
             Name = name;
         }
@@ -45,6 +51,24 @@ namespace StarLab.UI.Workspace.Documents.Charts.Overlays
             {
                 colour = value;
                 UpdateElements();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the enabled status.
+        /// </summary>
+        public bool Enabled 
+        {
+            get => enabled;
+            
+            set
+            {
+                enabled = value;
+
+                if (!enabled)
+                {
+                    Clear(plot);
+                }
             }
         }
 
@@ -82,19 +106,14 @@ namespace StarLab.UI.Workspace.Documents.Charts.Overlays
         }
 
         /// <summary>
-        /// Removes the elements that compose the overlay from the chart.
-        /// </summary>
-        public void Clear()
-        {
-            Clear(plot);
-        }
-
-        /// <summary>
         /// Renders the overlay.
         /// </summary>
         public void Render()
         {
-            if (Visible) Render(plot);
+            if (Enabled && Visible)
+            {
+                Render(plot);
+            }
         }
 
         /// <summary>

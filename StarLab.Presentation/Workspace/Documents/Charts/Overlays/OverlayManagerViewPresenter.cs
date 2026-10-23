@@ -1,5 +1,4 @@
 ﻿using log4net;
-using StarLab.Presentation.Configuration;
 using StarLab.Shared;
 using Stratosoft.Commands;
 
@@ -11,7 +10,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts.Overlays
     /// <summary>
     /// Controls the behaviour of a chart overlays panel.
     /// </summary>
-    internal class OverlayManagerViewPresenter : ChildViewPresenter<IOverlayManagerView, IDocumentController>, IChildViewController, IOverlayManagerViewPresenter, ISubscriber<WorkspaceChangedEventArgs>
+    internal class OverlayManagerViewPresenter : ChildViewPresenter<IOverlayManagerView, IDocumentController>, IChildViewController, IOverlayManagerViewPresenter, ISubscriber<ChartSettingsChangedEventArgs>, ISubscriber<WorkspaceChangedEventArgs>
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(OverlayManagerViewPresenter)); // The logger that will be used for writing log messages.
 
@@ -19,7 +18,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts.Overlays
 
         private IChartSettings? chart; // Represents the current state of the chart.
 
-        private readonly IDocument? document; // The document that contains the chart.
+        private readonly IDocument document; // The document that contains the chart.
 
         private IWorkspace? workspace; // The workspace that contains the document.
 
@@ -98,6 +97,30 @@ namespace StarLab.Presentation.Workspace.Documents.Charts.Overlays
         }
 
         /// <summary>
+        /// Event handler for the ChartSettingsChanged event.
+        /// </summary>
+        /// <param name="args">A <see cref="WorkspaceChangedEventArgs"/> that provides context for the event.</param>
+        public void OnEvent(ChartSettingsChangedEventArgs args)
+        {
+            if (args.ID == document.ID)
+            {
+                chart = new ChartSettings(args.Chart);
+
+                View.Clear();
+
+                if (chart != null)
+                {
+                    var overlays = GetOverlayNames(chart);
+
+                    foreach (var overlay in SessionContext.Configuration.Overlays)
+                    {
+                        View.AddOverlay(overlay, GetCaption(overlay), overlays.Contains(overlay));
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// Event handler for the WorkspaceChangedEvent event.
         /// </summary>
         /// <param name="args">A <see cref="WorkspaceChangedEventArgs"/> that provides context for the event.</param>
@@ -123,12 +146,10 @@ namespace StarLab.Presentation.Workspace.Documents.Charts.Overlays
         /// </summary>
         public override void Run()
         {
-            var controller = ParentController.GetController<IChartController>(new ControllerID(Constants.Chart));
+            View.Clear();
 
-            if (controller.Chart != null)
+            if (chart != null)
             {
-                chart = new ChartSettings(controller.Chart);
-
                 var overlays = GetOverlayNames(chart);
 
                 foreach (var overlay in SessionContext.Configuration.Overlays)
@@ -136,6 +157,18 @@ namespace StarLab.Presentation.Workspace.Documents.Charts.Overlays
                     View.AddOverlay(overlay, GetCaption(overlay), overlays.Contains(overlay));
                 }
             }
+        }
+
+        /// <summary>
+        /// Applies the chart settings to the document.
+        /// </summary>
+        private void ApplySettings()
+        {
+            if (workspace == null) throw new InvalidOperationException(ExceptionMessages.InvalidState);
+            if (document == null) throw new InvalidOperationException(ExceptionMessages.InvalidState);
+            if (chart == null) throw new InvalidOperationException(ExceptionMessages.InvalidState);
+
+            useCaseService.UpdateChart(workspace, document.ID, chart);
         }
 
         /// <summary>
@@ -153,18 +186,6 @@ namespace StarLab.Presentation.Workspace.Documents.Charts.Overlays
             }
 
             return names;
-        }
-
-        /// <summary>
-        /// Applies the chart settings to the document.
-        /// </summary>
-        private void ApplySettings()
-        {
-            //if (workspace == null) throw new InvalidOperationException(ExceptionMessages.InvalidState);
-            //if (document == null) throw new InvalidOperationException(ExceptionMessages.InvalidState);
-            //if (chart == null) throw new InvalidOperationException(ExceptionMessages.InvalidState);
-
-            //useCaseService.UpdateChartOverlays(workspace, document.ID, chart);
         }
 
         /// <summary>

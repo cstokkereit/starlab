@@ -1,6 +1,6 @@
 ﻿using log4net;
 using StarLab.Application;
-using StarLab.Presentation.Configuration;
+using StarLab.Presentation.Options;
 using StarLab.Presentation.Workspace.Documents.Charts;
 using StarLab.Shared;
 using Stratosoft.Commands;

@@ -3,7 +3,16 @@
   <Profiles />
   <Settings>
     <Setting Name="Workspace" Type="System.String" Scope="User">
-      <Value Profile="(Default)">D:\Users\Colin\Documents\GitHub\starlab\StarLab.UI\Resources\Workspace-1.slw</Value>
+      <Value Profile="(Default)">D:\Documents\GitHub\starlab\StarLab.UI\Resources\Workspace-1.slw</Value>
+    </Setting>
+    <Setting Name="DefaultOverlayColour" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Yellow</Value>
+    </Setting>
+    <Setting Name="DefaultOverlayFontSize" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">12</Value>
+    </Setting>
+    <Setting Name="DefaultOverlayFont" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Segoe UI</Value>
     </Setting>
   </Settings>
 </SettingsFile>

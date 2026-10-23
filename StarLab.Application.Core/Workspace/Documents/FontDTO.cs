@@ -9,9 +9,9 @@
 
         public bool Italic;
 
-        public string Family = Constants.DefaultFontFamily;
+        public string Family = string.Empty;
 
-        public int Size = Constants.DefaultFontSize;
+        public int Size = 0;
 
         public bool Underline;
     }

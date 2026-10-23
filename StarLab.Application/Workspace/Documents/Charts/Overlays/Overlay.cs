@@ -26,15 +26,15 @@
         /// Initialises a new instance of the <see cref="Overlay"> class.
         /// </summary>
         /// <param name="name">The overlay name.</param>
-        public Overlay(string name)
+        /// <param name="font">The overlay font.</param>
+        /// <param name="colour">The overlay colour.</param>
+        public Overlay(string name, Font font, string colour)
         {
             ArgumentException.ThrowIfNullOrEmpty(name, nameof(name));
 
-            Colour = Constants.DefaultForeColour;
-
-            Font = new Font();
-
+            Colour = colour;
             Visible = true;
+            Font = font;
             Name = name;
         }
 

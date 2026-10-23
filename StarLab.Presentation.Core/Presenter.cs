@@ -1,5 +1,4 @@
-﻿using StarLab.Presentation.Configuration;
-using StarLab.Shared;
+﻿using StarLab.Shared;
 using StarLab.Shared.Properties;
 using Stratosoft.Commands;
 using System.Diagnostics;

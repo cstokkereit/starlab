@@ -1,6 +1,5 @@
 ﻿using log4net;
 using StarLab.Application.Workspace.Documents.Tables;
-using StarLab.Presentation.Configuration;
 using Stratosoft.Commands;
 
 namespace StarLab.Presentation.Workspace.Documents.Tables

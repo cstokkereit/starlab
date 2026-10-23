@@ -1,4 +1,6 @@
-﻿namespace StarLab.Presentation.Workspace.Documents.Charts.Overlays
+﻿using StarLab.Application.Workspace.Documents.Charts.Overlays;
+
+namespace StarLab.Presentation.Workspace.Documents.Charts.Overlays
 {
     /// <summary>
     /// Represents the current state of an overlay while the chart is being configured.
@@ -15,6 +17,7 @@
             Font = new Font(overlay.Font.Family, overlay.Font.Size, false, false, false);
 
             Name = overlay.Name;
+            Type = overlay.Type;
         }
 
         /// <summary>
@@ -41,6 +44,11 @@
         /// Gets the overlay name.
         /// </summary>
         public string Name { get; }
+
+        /// <summary>
+        /// Gets the overlay name.
+        /// </summary>
+        public OverlayType Type { get; }
 
         /// <summary>
         /// Sets the font for the overlay.

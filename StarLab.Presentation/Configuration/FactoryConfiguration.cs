@@ -116,7 +116,7 @@ namespace StarLab.Presentation.Configuration
         /// </summary>
         private void CreateOverlayConfigurations()
         {
-            Add(new OverlayConfiguration(Constants.SunOverlay, "StarLab.UI.Workspace.Documents.Charts.Overlays, StarLab.UI", string.Empty));
+            Add(new OverlayConfiguration(Constants.SunOverlay, "StarLab.UI.Workspace.Documents.Charts.Overlays.PointOverlay, StarLab.UI", string.Empty));
 
 
 

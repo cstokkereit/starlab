@@ -1,6 +1,5 @@
 ﻿using log4net;
 using StarLab.Application.Workspace.Documents.Charts;
-using StarLab.Presentation.Configuration;
 using StarLab.Shared;
 using Stratosoft.Commands;
 
@@ -78,18 +77,13 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// Gets the current state of the chart.
+        /// Adds an overlay to the chart.
         /// </summary>
-        public IChart? Chart => chart;
-
-        /// <summary>
-        /// Adds the specified overlay to the chart.
-        /// </summary>
-        /// <param name="name">The overlay name.</param>
-        /// <param name="data">The overlay data.</param>
-        public void AddOverlay(string name, LabelledPointDTO data)
+        /// <param name="name">The name of the overlay.</param>
+        /// <param name="dto">A <see cref="LabelledPointDTO"/> that contains the overlay data.</param>
+        public void AddOverlay(string name, LabelledPointDTO dto)
         {
-            View.AddOverlay(name, data.X, data.y, data.Label);
+            View.AddOverlay(name, dto.X, dto.y, dto.Label);
         }
 
         /// <summary>
@@ -98,7 +92,9 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// <param name="dto">A <see cref="ChartDTO"/> that specifies the state of the chart.</param>
         public void ApplyChanges(ChartDTO dto)
         {
-            chart = new Chart(dto);
+            var chart = new Chart(dto);
+
+            if (document != null) Events.Publish(new ChartSettingsChangedEventArgs(document.ID, chart), true);
 
             View.UpdateChart(chart);
         }
@@ -170,9 +166,9 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// Removes the specified overlay from the chart.
+        /// Removes an overlay from the chart.
         /// </summary>
-        /// <param name="name">The overlay name.</param>
+        /// <param name="name">The name of the overlay.</param>
         public void RemoveOverlay(string name)
         {
             View.RemoveOverlay(name);
@@ -183,7 +179,12 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// </summary>
         public void RevertChanges()
         {
-            if (chart != null) View.UpdateChart(chart);
+            if (chart != null)
+            {
+                if (document != null) Events.Publish(new ChartSettingsChangedEventArgs(document.ID, chart), true);
+
+                View.UpdateChart(chart);
+            }
         }
 
         /// <summary>
@@ -192,6 +193,8 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// <param name="chart">An <see cref="IChart"/> that specifies the state of the chart.</param>
         public void UpdateChart(IChart chart)
         {
+            if (document != null) Events.Publish(new ChartSettingsChangedEventArgs(document.ID, chart), true);
+
             View.UpdateChart(chart);
 
             this.chart = chart;

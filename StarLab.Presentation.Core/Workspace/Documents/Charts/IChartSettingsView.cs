@@ -51,7 +51,7 @@
         /// <summary>
         /// Appends a font settings section to the settings panel.
         /// </summary>
-        /// <param name="settings">An <see cref="IFontSettings"/> that TODO.</param>
+        /// <param name="settings">An <see cref="IFontSettings"/> that represents the current state of the label font.</param>
         void AppendFontSection(IFontSettings settings);
 
         /// <summary>
@@ -84,7 +84,7 @@
         void Clear();
 
         /// <summary>
-        /// 
+        /// Clears the overlay settings.
         /// </summary>
         void ClearOverlays();
 

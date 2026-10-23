@@ -8,7 +8,6 @@ using Stratosoft.Commands;
 using System.ComponentModel;
 using System.Text;
 using WeifenLuo.WinFormsUI.Docking;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 namespace StarLab.UI.Workspace
 {

@@ -1,6 +1,5 @@
 ﻿using log4net;
 using StarLab.Application.Workspace.Documents.Charts;
-using StarLab.Presentation.Configuration;
 using StarLab.Shared;
 using Stratosoft.Commands;
 
@@ -51,11 +50,6 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// Gets the current state of the chart.
-        /// </summary>
-        public IChart? Chart => chart;
-
-        /// <summary>
         /// Releases all resources used by the <see cref="TwoColourChartViewPresenter"/> object.
         /// </summary>
         public override void Dispose()
@@ -63,16 +57,6 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             Dispose(true);
 
             GC.SuppressFinalize(this);
-        }
-
-        /// <summary>
-        /// Generates the specified overlay.
-        /// </summary>
-        /// <param name="name">The overlay name.</param>
-        /// <param name="data">The overlay data.</param>
-        public void AddOverlay(string name, LabelledPointDTO data)
-        {
-            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -111,15 +95,6 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// Removes the specified overlay from the chart.
-        /// </summary>
-        /// <param name="name">The overlay name.</param>
-        public void RemoveOverlay(string name)
-        {
-            View.RemoveOverlay(name);
-        }
-
-        /// <summary>
         /// Reverts the changes made to the preview.
         /// </summary>
         public void RevertChanges()
@@ -150,6 +125,20 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             {
                 View.Detach();
             }
+        }
+
+        public void AddOverlay(string name, LabelledPointDTO dto)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Removes an overlay from the chart.
+        /// </summary>
+        /// <param name="name">The name of the overlay.</param>
+        public void RemoveOverlay(string name)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -29,18 +29,18 @@
         /// <summary>
         /// Initialises a new instance of the <see cref="Scale"> class.
         /// </summary>
-        public Scale()
-        {
-            MajorTickMarks = new TickMarks(Constants.DefaultMajorTickMarkLength);
-            MinorTickMarks = new TickMarks(Constants.DefaultMinorTickMarkLength);
-            TickLabels =  new TickLabels();
+        //public Scale()
+        //{
+        //    MajorTickMarks = new TickMarks(Constants.DefaultMajorTickMarkLength);
+        //    MinorTickMarks = new TickMarks(Constants.DefaultMinorTickMarkLength);
+        //    TickLabels =  new TickLabels();
 
-            Colour = Constants.DefaultForeColour;
+        //    Colour = Constants.DefaultForeColour;
 
-            Autoscale = true;
-            Reversed = false;
-            Visible = true;
-        }
+        //    Autoscale = true;
+        //    Reversed = false;
+        //    Visible = true;
+        //}
 
         /// <summary>
         /// A flag indicating that the scale is generated automatically to fit the data.

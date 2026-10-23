@@ -1,4 +1,7 @@
-﻿namespace StarLab.Presentation.Configuration
+﻿using StarLab.Presentation.Configuration;
+using StarLab.Presentation.Options;
+
+namespace StarLab.Presentation
 {
     /// <summary>
     /// Provides contextual information about the current session, including application configuration and user settings.

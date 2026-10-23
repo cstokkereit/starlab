@@ -116,7 +116,7 @@ namespace StarLab.UI.Workspace.Documents.Charts
         /// <summary>
         /// Appends a font settings section to the settings panel.
         /// </summary>
-        /// <param name="settings">An <see cref="IFontSettings"/> that TODO.</param>
+        /// <param name="settings">An <see cref="IFontSettings"/> that represents the current state of the label font.</param>
         public void AppendFontSection(IFontSettings settings)
         {
             var section = new FontSection(settings);
@@ -221,7 +221,7 @@ namespace StarLab.UI.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// 
+        /// Clears the overlays.
         /// </summary>
         public void ClearOverlays()
         {
@@ -289,7 +289,7 @@ namespace StarLab.UI.Workspace.Documents.Charts
 
             foreach (Control control in panelSettings.Controls)
             {
-                top += LayoutConstants.SectionSpacing + control.Height;
+                top += SECTION_SPACING + control.Height;
             }
 
             sections.Add(section);

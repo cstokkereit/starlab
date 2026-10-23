@@ -9,14 +9,10 @@
 
         public const string Chart = "Chart";
 
-        public const string DefaultBackColour = "White";
-        public const string DefaultFontFamily = "Segoe UI";
-        public const int DefaultFontSize = 10;
+        public const string DefaultBackColour = "White"; // TODO : These should all be replaced by user settings
         public const string DefaultForeColour = "Black";
         public const int DefaultMajorTickMarkLength = 4;
         public const int DefaultMinorTickMarkLength = 2;
-
-        
 
         public const string Table = "Table";
 

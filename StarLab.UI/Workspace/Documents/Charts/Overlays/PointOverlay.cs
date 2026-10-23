@@ -40,8 +40,17 @@ namespace StarLab.UI.Workspace.Documents.Charts.Overlays
         /// <param name="plot">The plot that displays the overlay.</param>
         protected override void Clear(Plot plot)
         {
-            if (points != null) plot.Remove(points);
-            if (label != null) plot.Remove(label);
+            if (points != null)
+            {
+                plot.Remove(points);
+                points = null;
+            }
+
+            if (label != null)
+            {
+                plot.Remove(label);
+                label = null;
+            }
         }
 
         /// <summary>
@@ -50,16 +59,22 @@ namespace StarLab.UI.Workspace.Documents.Charts.Overlays
         /// <param name="plot">The plot that displays the overlay.</param>
         protected override void Render(Plot plot)
         {
-            points = plot.Add.ScatterPoints(new[] { new Coordinates(x, y) }, Colour);
+            if (points == null)
+            {
+                points = plot.Add.ScatterPoints(new[] { new Coordinates(x, y) }, Colour);
 
-            points.MarkerShape = MarkerShape.FilledCircle; // TODO Point size and shape 
-            points.MarkerSize = 3;
+                points.MarkerShape = MarkerShape.FilledCircle; // TODO Point size and shape 
+                points.MarkerSize = 3;
+            }
+            
+            if (label == null)
+            {
+                label = plot.Add.Text(text, new Coordinates(x, y));
 
-            label = plot.Add.Text(text, new Coordinates(x, y));
-
-            label.LabelFontColor = Colour;
-            label.LabelFontName = Font.FontFamily.Name;
-            label.LabelFontSize = Font.Size;
+                label.LabelFontColor = Colour;
+                label.LabelFontName = Font.FontFamily.Name;
+                label.LabelFontSize = Font.Size;
+            }
         }
 
         /// <summary>

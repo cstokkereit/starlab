@@ -6,6 +6,8 @@ namespace StarLab.UI.Core
     [Designer("System.Windows.Forms.Design.ParentControlDesigner, System.Design")]
     public partial class ChildView : UserControl, IChildView
     {
+        protected const int SECTION_SPACING = 15; // The spacing between sections.
+
         /// <summary>
         /// Initialises a new instance of the <see cref="ChildView"/> class.
         /// </summary>

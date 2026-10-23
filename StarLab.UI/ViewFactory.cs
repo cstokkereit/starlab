@@ -80,7 +80,7 @@ namespace StarLab.UI
                 switch (childConfiguration.Name)
                 {
                     case Constants.Chart:
-                        views.Add((IChildView)CreateInstance(childConfiguration.View, new OverlayFactory(this.Configuration)));
+                        views.Add((IChildView)CreateInstance(childConfiguration.View, Configuration));
                         break;
 
                     default:

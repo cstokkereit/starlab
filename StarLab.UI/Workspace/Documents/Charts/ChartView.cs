@@ -3,6 +3,7 @@ using ScottPlot;
 using ScottPlot.Plottables;
 using StarLab.Application.Workspace.Documents.Charts.Overlays;
 using StarLab.Presentation;
+using StarLab.Presentation.Configuration;
 using StarLab.Presentation.Workspace.Documents.Charts;
 using StarLab.Presentation.Workspace.Documents.Charts.Overlays;
 using StarLab.Shared;
@@ -28,19 +29,21 @@ namespace StarLab.UI.Workspace.Documents.Charts
 
         private IChartViewPresenter? presenter; // The presenter that controls the view.
 
-        private readonly IOverlayFactory factory; // A factory for creating overlays.
+        private readonly OverlayFactory factory; // A factory for creating overlays.
 
         private Scatter? points; // 
 
         /// <summary>
         /// Initialises a new instance of the <see cref="ChartView"> class.
         /// </summary>
-        public ChartView(IOverlayFactory factory)
+        public ChartView(IFactoryConfiguration configuration)
             : base(ViewIDs.Chart, SplitViewPanels.Panel2)
         {
             InitializeComponent();
 
-            this.factory = factory ?? throw new ArgumentNullException(nameof(factory));
+            ArgumentNullException.ThrowIfNull(configuration, nameof(configuration));
+
+            factory = new OverlayFactory(chart.Plot, configuration);
 
             Name = ViewNames.Chart;
 
@@ -61,7 +64,14 @@ namespace StarLab.UI.Workspace.Documents.Charts
         /// <param name="text">The label text.</param>
         public void AddOverlay(string name, double x, double y, string text)
         {
-            overlays.Add(name, new PointOverlay(chart.Plot, name, x, y, text));
+            if (!overlays.TryGetValue(name, out Overlay? overlay))
+            {
+                overlays.Add(name, factory.CreatePointOverlay(name, x, y, text));
+            }
+            else
+            {
+                overlay.Enabled = true;
+            }
         }
 
         /// <summary>
@@ -97,11 +107,6 @@ namespace StarLab.UI.Workspace.Documents.Charts
         /// </summary>
         public override void Initialise()
         {
-            if (factory is OverlayFactory overlayFactory)
-            {
-                overlayFactory.Attach(chart.Plot);
-            }
-
             selector.FillStyle.Color = Colors.Red.WithAlpha(.2);
         }
 
@@ -133,8 +138,7 @@ namespace StarLab.UI.Workspace.Documents.Charts
         {
             if (overlays.TryGetValue(name, out Overlay? overlay))
             {
-                overlays.Remove(name);
-                overlay.Clear();
+                overlay.Enabled = false;
             }
         }
 
@@ -145,6 +149,11 @@ namespace StarLab.UI.Workspace.Documents.Charts
         public void UpdateChart(IChart config)
         {
             ConfigureChart(config);
+
+            foreach (var overlay in overlays.Values)
+            {
+                overlay.Render();
+            }
 
             chart.Refresh();
         }

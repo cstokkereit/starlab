@@ -1,5 +1,4 @@
 ﻿using log4net;
-using StarLab.Presentation.Configuration;
 using StarLab.Shared;
 using Stratosoft.Commands;
 using System.Reflection;

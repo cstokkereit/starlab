@@ -24,14 +24,14 @@
         /// <summary>
         /// Initialises a new instance of the <see cref="TickLabels"> class.
         /// </summary>
-        public TickLabels()
-        {
-            Colour = Constants.DefaultForeColour;
+        //public TickLabels()
+        //{
+        //    Colour = Constants.DefaultForeColour;
 
-            Font = new Font();
-            Visible = true;
-            Rotation = 0;
-        }
+        //    Font = new Font();
+        //    Visible = true;
+        //    Rotation = 0;
+        //}
 
         /// <summary>
         /// Gets the tick label font.

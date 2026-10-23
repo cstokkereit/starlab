@@ -1,5 +1,4 @@
 ﻿using StarLab.Application;
-using StarLab.Presentation.Configuration;
 using StarLab.Shared;
 using Stratosoft.Commands;
 

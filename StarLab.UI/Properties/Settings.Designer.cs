@@ -12,7 +12,7 @@ namespace StarLab.UI.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.10.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "18.11.0.0")]
     public sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -25,13 +25,49 @@ namespace StarLab.UI.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("D:\\Users\\Colin\\Documents\\GitHub\\starlab\\StarLab.UI\\Resources\\Workspace-1.slw")]
+        [global::System.Configuration.DefaultSettingValueAttribute("D:\\Documents\\GitHub\\starlab\\StarLab.UI\\Resources\\Workspace-1.slw")]
         public string Workspace {
             get {
                 return ((string)(this["Workspace"]));
             }
             set {
                 this["Workspace"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Yellow")]
+        public string DefaultOverlayColour {
+            get {
+                return ((string)(this["DefaultOverlayColour"]));
+            }
+            set {
+                this["DefaultOverlayColour"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("12")]
+        public int DefaultOverlayFontSize {
+            get {
+                return ((int)(this["DefaultOverlayFontSize"]));
+            }
+            set {
+                this["DefaultOverlayFontSize"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Segoe UI")]
+        public string DefaultOverlayFont {
+            get {
+                return ((string)(this["DefaultOverlayFont"]));
+            }
+            set {
+                this["DefaultOverlayFont"] = value;
             }
         }
     }
