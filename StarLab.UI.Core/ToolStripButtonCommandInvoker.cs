@@ -1,7 +1,7 @@
 ﻿using Stratosoft.Commands;
 using System.ComponentModel;
 
-namespace StarLab.UI.Controls
+namespace StarLab.UI
 {
     /// <summary>
     /// Invokes the <see cref="ICommand"> that is associated with a <see cref="ToolStripButton"/>.

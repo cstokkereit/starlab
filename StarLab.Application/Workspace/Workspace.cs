@@ -192,7 +192,7 @@ namespace StarLab.Application.Workspace
         /// Determines if this <see cref="IFolder"> contains a document with the specified name.
         /// </summary>
         /// <param name="name">The name of the document.</param>
-        /// <returns>true if this folder contains a document with the specified name; false otherwise.</returns>
+        /// <returns><c>true</c> if this folder contains a document with the specified name; <c>false</c>.</returns>
         public bool ContainsDocument(string name)
         {
             return false;
@@ -202,7 +202,7 @@ namespace StarLab.Application.Workspace
         /// Determines if this <see cref="IFolder"> contains a child folder with the specified name.
         /// </summary>
         /// <param name="name">The name of the child folder.</param>
-        /// <returns>true if this folder contains a child folder with the specified name; false otherwise.</returns>
+        /// <returns><c>true</c> if this folder contains a child folder with the specified name; <c>false</c>.</returns>
         public bool ContainsFolder(string name)
         {
             return false;
@@ -323,7 +323,7 @@ namespace StarLab.Application.Workspace
         /// Determines if the specified ID refers to a workspace document.
         /// </summary>
         /// <param name="id">A possible document ID.</param>
-        /// <returns>true if the ID refers to a document in the workspace hierarchy; false otherwise.</returns>
+        /// <returns><c>true</c> if the ID refers to a document in the workspace hierarchy; <c>false</c>.</returns>
         public bool IsDocument(DocumentID id)
         {
             return documents.ContainsKey(id);
@@ -333,7 +333,7 @@ namespace StarLab.Application.Workspace
         /// Determines if the specified key refers to a workspace folder.
         /// </summary>
         /// <param name="key">A possible folder key.</param>
-        /// <returns>true if the key refers to a folder in the workspace hierarchy; false otherwise.</returns>
+        /// <returns><c>true</c> if the key refers to a folder in the workspace hierarchy; <c>false</c>.</returns>
         public bool IsFolder(string key)
         {
             return folders.ContainsKey(key);
@@ -343,7 +343,7 @@ namespace StarLab.Application.Workspace
         /// Determines if the specified key refers to a workspace project.
         /// </summary>
         /// <param name="key">A possible project key.</param>
-        /// <returns>true if the key refers to a project in the workspace hierarchy; false otherwise.</returns>
+        /// <returns><c>true</c> if the key refers to a project in the workspace hierarchy; <c>false</c>.</returns>
         public bool IsProject(string key)
         {
             return projects.ContainsKey(key);
@@ -453,7 +453,7 @@ namespace StarLab.Application.Workspace
         /// Determines if the workspace contains a document with the same name and path as the document provided.
         /// </summary>
         /// <param name="document">A <see cref="Document"/> that may have the same name and path as an existing document.</param>
-        /// <returns>true if the workspace contains a document with the same name and path as the document provided; false otherwise.</returns>
+        /// <returns><c>true</c> if the workspace contains a document with the same name and path as the document provided; <c>false</c>.</returns>
         private bool DocumentExists(Document document)
         {
             foreach (var value in documents.Values)

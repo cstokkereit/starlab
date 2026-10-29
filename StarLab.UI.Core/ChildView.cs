@@ -1,7 +1,7 @@
 ﻿using StarLab.Presentation;
 using System.ComponentModel;
 
-namespace StarLab.UI.Core
+namespace StarLab.UI
 {
     [Designer("System.Windows.Forms.Design.ParentControlDesigner, System.Design")]
     public partial class ChildView : UserControl, IChildView

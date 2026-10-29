@@ -12,7 +12,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts.Overlays
     /// </summary>
     public class ChartOverlaysUseCaseService : UseCaseService, IChartOverlaysUseCaseService
     {
-        private readonly IUserSettings settings; // Provides access t othe user settings.
+        private readonly IUserSettings settings; // Provides access to the user settings.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="ChartOverlaysUseCaseService"/> class.

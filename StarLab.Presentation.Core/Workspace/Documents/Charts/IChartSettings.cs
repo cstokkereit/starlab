@@ -5,7 +5,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
     /// <summary>
     /// Represents the current state of the chart while the it is being configured.
     /// </summary>
-    public interface IChartSettings
+    public interface IChartSettings : IColourSettings
     {
         /// <summary>
         /// Gets the chart axis settings.
@@ -13,24 +13,14 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         IAxesSettings Axes { get; }
 
         /// <summary>
-        /// Gets or sets the chart background colour.
-        /// </summary>
-        public string BackColour { get; set; }
-
-        /// <summary>
         /// Gets or sets the chart font.
         /// </summary>
         IFont Font { get; set; }
 
         /// <summary>
-        /// Gets or sets the chart foreground colour.
+        /// Gets the chart overlays.
         /// </summary>
-        public string ForeColour { get; set; }
-
-        /// <summary>
-        /// Gets the names of the chart overlays.
-        /// </summary>
-        IReadOnlyList<IOverlaySettings> Overlays { get; }
+        IOverlayGroupSettings Overlays { get; }
 
         /// <summary>
         /// Gets the plot area settings.
@@ -41,13 +31,6 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// Gets the chart title.
         /// </summary>
         ILabelSettings Title { get; }
-
-        /// <summary>
-        /// Gets the specified <see cref="IOverlay"/>.
-        /// </summary>
-        /// <param name="name">The name of the overlay.</param>
-        /// <returns>TODO</returns>
-        IOverlaySettings GetOverlay(string name);
 
         /// <summary>
         /// Gets the <see cref="IChartElementSettings"/> with the specified key.

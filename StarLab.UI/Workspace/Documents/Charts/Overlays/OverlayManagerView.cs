@@ -2,7 +2,7 @@
 using StarLab.Presentation;
 using StarLab.Presentation.Workspace.Documents.Charts.Overlays;
 using StarLab.Shared;
-using StarLab.UI.Core;
+using StarLab.UI;
 using Stratosoft.Commands;
 
 namespace StarLab.UI.Workspace.Documents.Charts.Overlays
@@ -32,7 +32,7 @@ namespace StarLab.UI.Workspace.Documents.Charts.Overlays
         /// </summary>
         /// <param name="name">The overlay name.</param>
         /// <param name="caption">The overlay caption.</param>
-        /// <param name="shown">true if the overlay is currently shown on the chart; false otherwise.</param>
+        /// <param name="shown">true if the overlay is currently shown on the chart; <c>false</c>.</param>
         public void AddOverlay(string name, string caption, bool shown)
         {
             var overlay = listOverlays.Items.Add(caption);

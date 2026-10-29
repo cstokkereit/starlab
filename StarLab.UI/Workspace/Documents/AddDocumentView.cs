@@ -3,7 +3,7 @@ using StarLab.Presentation;
 using StarLab.Presentation.Workspace.Documents;
 using StarLab.Shared;
 using StarLab.Shared.Properties;
-using StarLab.UI.Core;
+using StarLab.UI;
 using Stratosoft.Commands;
 
 namespace StarLab.UI.Workspace.Documents

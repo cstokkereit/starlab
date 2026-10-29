@@ -18,10 +18,12 @@
         public const string AxisY2 = "AxisY2";
 
         public const string Chart = "Chart";
+        public const string ChartAxes = "Chart/Axes";
         public const string ChartData = "Chart/Data";
         public const string ChartOverlays = "Chart/Overlays";
         public const string ChartPlotArea = "Chart/PlotArea";
         public const string ChartSettings = "ChartSettings";
+
         public const string CollapseAll = "CollapseAll";
         public const string Copy = "Copy";
         public const string Cut = "Cut";

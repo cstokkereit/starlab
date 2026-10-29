@@ -35,7 +35,6 @@
             Bold = false;
         }
 
-
         /// <summary>
         /// Initialises a new instance of the <see cref="Font"> class.
         /// </summary>

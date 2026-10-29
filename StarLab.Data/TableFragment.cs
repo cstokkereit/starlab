@@ -28,7 +28,7 @@ namespace StarLab.Data
         /// Determines whether the specified field exists.
         /// </summary>
         /// <param name="name">The name of the field.</param>
-        /// <returns>true if the field exists; false otherwise.</returns>
+        /// <returns><c>true</c> if the field exists; <c>false</c>.</returns>
         public bool HasField(string name)
         {
             return fields.ContainsKey(name);

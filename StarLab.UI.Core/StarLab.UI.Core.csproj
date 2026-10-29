@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
 	<UseWindowsForms>True</UseWindowsForms>
-	<RootNamespace>StarLab.UI.Core</RootNamespace>
+	<RootNamespace>StarLab.UI</RootNamespace>
 	<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
@@ -26,7 +26,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Workspace\Documents\Charts\Overlays\" />
     <Folder Include="Workspace\Documents\Tables\" />
   </ItemGroup>
 

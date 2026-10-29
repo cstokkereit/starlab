@@ -37,7 +37,7 @@ namespace StarLab.Application.Workspace
         /// Initialises a new instance of the <see cref="Folder"/> class.
         /// </summary>
         /// <param name="name">The name of the folder.</param>
-        /// <param name="expanded">true if the folder is expanded; false otherwise.</param>
+        /// <param name="expanded">true if the folder is expanded; <c>false</c>.</param>
         /// <param name="parent">The <see cref="IFolder"/> that contains the folder.</param>
         /// <exception cref="ArgumentNullException"></exception>
         protected Folder(string? name, bool expanded, IFolder parent)
@@ -124,7 +124,7 @@ namespace StarLab.Application.Workspace
         /// Determines if this <see cref="IFolder"> contains a document with the specified name.
         /// </summary>
         /// <param name="name">The name of the document.</param>
-        /// <returns>true if this folder contains a document with the specified name; false otherwise.</returns>
+        /// <returns><c>true</c> if this folder contains a document with the specified name; <c>false</c>.</returns>
         public bool ContainsDocument(string name)
         {
             foreach (Document document in documents)
@@ -139,7 +139,7 @@ namespace StarLab.Application.Workspace
         /// Determines if this <see cref="IFolder"> contains a child folder with the specified name.
         /// </summary>
         /// <param name="name">The name of the child folder.</param>
-        /// <returns>true if this folder contains a child folder with the specified name; false otherwise.</returns>
+        /// <returns><c>true</c> if this folder contains a child folder with the specified name; <c>false</c>.</returns>
         public bool ContainsFolder(string name)
         {
             foreach (IFolder child in folders)

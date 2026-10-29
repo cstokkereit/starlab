@@ -65,7 +65,7 @@ namespace StarLab.Presentation.Options
         /// <summary>
         /// Releases all resources used by the <see cref="OptionsViewPresenter"/> object.
         /// </summary>
-        /// <param name="disposing">true if managed resources can be disposed of; false otherwise.</param>
+        /// <param name="disposing">true if managed resources can be disposed of; <c>false</c>.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing)

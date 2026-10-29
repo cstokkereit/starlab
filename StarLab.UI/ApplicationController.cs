@@ -6,7 +6,7 @@ using StarLab.Presentation.Workspace;
 using StarLab.Presentation.Workspace.Documents;
 using StarLab.Shared;
 using StarLab.Shared.Properties;
-using StarLab.UI.Controls;
+using StarLab.UI;
 using StarLab.UI.Workspace;
 using Stratosoft.Commands;
 using System.Diagnostics;
@@ -448,7 +448,7 @@ namespace StarLab.UI
         /// <summary>
         /// Releases all resources used by the <see cref="AboutViewPresenter"/> object.
         /// </summary>
-        /// <param name="disposing">true if managed resources can be disposed of; false otherwise.</param>
+        /// <param name="disposing">true if managed resources can be disposed of; <c>false</c>.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing)

@@ -14,7 +14,7 @@
         /// <summary>
         /// Moves the cursor to the next record.
         /// </summary>
-        /// <returns>true if there are more records available; false otherwise.</returns>
+        /// <returns><c>true</c> if there are more records available; <c>false</c>.</returns>
         bool MoveNext();
     }
 }

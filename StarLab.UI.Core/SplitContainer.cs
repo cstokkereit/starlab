@@ -1,7 +1,7 @@
 ﻿using StarLab.Presentation;
 using Stratosoft.Commands;
 
-namespace StarLab.UI.Controls
+namespace StarLab.UI
 {
     /// <summary>
     /// A <see cref="UserControl"/> that combines a <see cref="SplitContainer"/> with a <see cref="ToolStrip"/>.

@@ -53,14 +53,14 @@ namespace StarLab.Application.Workspace
         /// Determines if this <see cref="IFolder"> contains a document with the specified name.
         /// </summary>
         /// <param name="name">The name of the document.</param>
-        /// <returns>true if this folder contains a document with the specified name; false otherwise.</returns>
+        /// <returns><c>true</c> if this folder contains a document with the specified name; <c>false</c>.</returns>
         bool ContainsDocument(string name);
 
         /// <summary>
         /// Determines if this <see cref="IFolder"> contains a child folder with the specified name.
         /// </summary>
         /// <param name="name">The name of the child folder.</param>
-        /// <returns>true if this folder contains a child folder with the specified name; false otherwise.</returns>
+        /// <returns><c>true</c> if this folder contains a child folder with the specified name; <c>false</c>.</returns>
         bool ContainsFolder(string name);
 
         /// <summary>

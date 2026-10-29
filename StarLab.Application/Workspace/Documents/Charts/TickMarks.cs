@@ -20,18 +20,6 @@
         }
 
         /// <summary>
-        /// Initialises a new instance of the <see cref="TickMarks"> class.
-        /// </summary>
-        /// <param name="length">The default length.</param>
-        public TickMarks(int length)
-        {
-            Colour = Constants.DefaultForeColour;
-
-            Length = length;
-            Visible = true;
-        }
-
-        /// <summary>
         /// Gets the colour.
         /// </summary>
         public string Colour { get; }

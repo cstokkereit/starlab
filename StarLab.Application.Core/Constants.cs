@@ -11,9 +11,7 @@
 
         public const string DefaultBackColour = "White"; // TODO : These should all be replaced by user settings
         public const string DefaultForeColour = "Black";
-        public const int DefaultMajorTickMarkLength = 4;
-        public const int DefaultMinorTickMarkLength = 2;
-
+        
         public const string Table = "Table";
 
         public const string Workspace = "Workspace";

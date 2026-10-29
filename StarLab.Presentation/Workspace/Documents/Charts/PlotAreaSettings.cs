@@ -5,7 +5,7 @@
     /// </summary>
     internal class PlotAreaSettings : IPlotAreaSettings
     {
-        private string foreColour;
+        private string foreColour; // The plot area forecolour.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="PlotAreaSettings"/> class.

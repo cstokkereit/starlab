@@ -5,11 +5,18 @@
     /// </summary>
     public class OverlayDTO
     {
-        public string Colour = string.Empty;
+        public OverlayDTO()
+        {
+            Colour = string.Empty;
+            Font = new FontDTO();
+            Name = string.Empty;
+        }
 
-        public FontDTO Font = new FontDTO();
+        public string Colour;
 
-        public string Name = string.Empty;
+        public FontDTO Font;
+
+        public string Name;
 
         public OverlayType Type;
 

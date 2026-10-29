@@ -1,4 +1,4 @@
-﻿namespace StarLab.UI.Core
+﻿namespace StarLab.UI
 {
     partial class ChildView
     {

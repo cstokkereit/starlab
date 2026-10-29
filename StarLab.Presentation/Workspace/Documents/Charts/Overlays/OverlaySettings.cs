@@ -10,7 +10,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts.Overlays
         /// <summary>
         /// Initialises a new instance of the <see cref="OverlaySettings"/> class.
         /// </summary>
-        /// <param name="overlay">TODO</param>
+        /// <param name="overlay">An overlay that specifies the initial state of this instance.</param>
         public OverlaySettings(IOverlay overlay) 
             : base(overlay)
         {
@@ -18,21 +18,6 @@ namespace StarLab.Presentation.Workspace.Documents.Charts.Overlays
 
             Name = overlay.Name;
             Type = overlay.Type;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of OverlaySettings with the specified name and the default foreground color and
-        /// enabled state.
-        /// </summary>
-        /// <remarks>Sets the foreground color to Constants.DefaultForeColour and the enabled state to
-        /// true.</remarks>
-        /// <param name="name">The name of the overlay.</param>
-        public OverlaySettings(string name)
-            : base(Constants.DefaultForeColour, true)
-        {
-            SetFont(Constants.DefaultFontFamily, Constants.DefaultFontSize, false, false, false);
-
-            Name = name;
         }
 
         /// <summary>

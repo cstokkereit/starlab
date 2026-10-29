@@ -95,7 +95,7 @@ namespace StarLab.Presentation
         /// <summary>
         /// Releases all resources used by the <see cref="DocumentViewPresenter"/> object.
         /// </summary>
-        /// <param name="disposing">true if managed resources can be disposed of; false otherwise.</param>
+        /// <param name="disposing">true if managed resources can be disposed of; <c>false</c>.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing)

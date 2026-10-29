@@ -19,8 +19,8 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         {
             ArgumentNullException.ThrowIfNull(dto, nameof(dto));
 
-            MajorTickMarks = dto.MajorTickMarks == null ? new TickMarks(Colour, 4, true) : new TickMarks(dto.MajorTickMarks);
-            MinorTickMarks = dto.MinorTickMarks == null ? new TickMarks(Colour, 2, false) : new TickMarks(dto.MinorTickMarks);
+            MajorTickMarks = dto.MajorTickMarks == null ? new TickMarks(Colour, DEFAULT_LENGTH_MAJOR, true) : new TickMarks(dto.MajorTickMarks);
+            MinorTickMarks = dto.MinorTickMarks == null ? new TickMarks(Colour, DEFAULT_LENGTH_MINOR, false) : new TickMarks(dto.MinorTickMarks);
             TickLabels = new TickLabels(dto.TickLabels);
 
             Autoscale = dto.Autoscale;

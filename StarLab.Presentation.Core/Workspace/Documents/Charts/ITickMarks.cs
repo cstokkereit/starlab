@@ -1,4 +1,6 @@
-﻿namespace StarLab.Presentation.Workspace.Documents.Charts
+﻿using StarLab.Application.Workspace.Documents.Charts;
+
+namespace StarLab.Presentation.Workspace.Documents.Charts
 {
     /// <summary>
     /// Represents the chart axis scale tick marks.
@@ -8,6 +10,6 @@
         /// <summary>
         /// Gets the length of the tickamrks.
         /// </summary>
-        public int Length { get; }
+        int Length { get; }
     }
 }

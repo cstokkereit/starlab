@@ -28,11 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            menuStrip = new StarLab.UI.Controls.ManagedMenuStrip();
+            menuStrip = new StarLab.UI.ManagedMenuStrip();
             statusStrip = new StatusStrip();
             toolStripContainer = new ToolStripContainer();
             dockPanel = new WeifenLuo.WinFormsUI.Docking.DockPanel();
-            toolStrip = new StarLab.UI.Controls.ToolStrip();
+            toolStrip = new StarLab.UI.ToolStrip();
             toolStripContainer.ContentPanel.SuspendLayout();
             toolStripContainer.TopToolStripPanel.SuspendLayout();
             toolStripContainer.SuspendLayout();
@@ -115,10 +115,10 @@
 
         #endregion
 
-        private UI.Controls.ManagedMenuStrip menuStrip;
+        private UI.ManagedMenuStrip menuStrip;
         private StatusStrip statusStrip;
         private ToolStripContainer toolStripContainer;
         private WeifenLuo.WinFormsUI.Docking.DockPanel dockPanel;
-        private UI.Controls.ToolStrip toolStrip;
+        private UI.ToolStrip toolStrip;
     }
 }

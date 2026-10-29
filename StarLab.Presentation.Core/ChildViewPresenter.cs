@@ -82,7 +82,7 @@ namespace StarLab.Presentation
         /// Displays a message box requesting confirmation to proceed with the action described in the message text.
         /// </summary>
         /// <param name="message">The message text.</param>
-        /// <returns>true if the user agrees to proceed with the action; false otherwise.</returns>
+        /// <returns><c>true</c> if the user agrees to proceed with the action; <c>false</c>.</returns>
         protected bool ConfirmAction(string message)
         {
             return ShowMessage(message, InteractionType.Warning, InteractionResponses.OKCancel) == InteractionResult.OK;

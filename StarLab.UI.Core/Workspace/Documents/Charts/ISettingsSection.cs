@@ -1,6 +1,4 @@
-﻿using StarLab.Presentation.Workspace.Documents.Charts;
-
-namespace StarLab.UI.Core.Workspace.Documents.Charts
+﻿namespace StarLab.UI.Workspace.Documents.Charts
 {
     /// <summary>
     /// Represents a section of the user interface that contains a group of releated settings.

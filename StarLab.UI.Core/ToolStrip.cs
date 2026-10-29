@@ -1,6 +1,6 @@
 ﻿using Stratosoft.Commands;
 
-namespace StarLab.UI.Controls
+namespace StarLab.UI
 {
     /// <summary>
     /// Extends the <see cref="System.Windows.Forms.ToolStrip"/> control.

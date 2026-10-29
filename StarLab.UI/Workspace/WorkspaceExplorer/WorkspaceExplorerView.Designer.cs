@@ -1,4 +1,4 @@
-﻿using StarLab.UI.Controls;
+﻿using StarLab.UI;
 
 namespace StarLab.UI.Workspace.WorkspaceExplorer
 {
@@ -32,9 +32,9 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         {
             components = new System.ComponentModel.Container();
             toolStripContainer = new ToolStripContainer();
-            treeView = new StarLab.UI.Controls.TreeView();
+            treeView = new StarLab.UI.TreeView();
             imageList = new ImageList(components);
-            toolStrip = new StarLab.UI.Controls.ToolStrip();
+            toolStrip = new StarLab.UI.ToolStrip();
             toolStripContainer.ContentPanel.SuspendLayout();
             toolStripContainer.TopToolStripPanel.SuspendLayout();
             toolStripContainer.SuspendLayout();
@@ -122,8 +122,8 @@ namespace StarLab.UI.Workspace.WorkspaceExplorer
         #endregion
 
         private ToolStripContainer toolStripContainer;
-        private UI.Controls.ToolStrip toolStrip;
+        private UI.ToolStrip toolStrip;
         private ImageList imageList;
-        private UI.Controls.TreeView treeView;
+        private UI.TreeView treeView;
     }
 }

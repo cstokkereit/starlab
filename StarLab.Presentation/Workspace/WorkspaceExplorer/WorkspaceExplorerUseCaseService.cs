@@ -59,7 +59,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="workspace">The <see cref="IWorkspace"/> being modified.</param>
         /// <param name="source">The key that identifies the source document or folder.</param>
         /// <param name="destination">The key that identifies the destination document or folder.</param>
-        /// <param name="replace">true to replace an existing document or folder; false otherwise.</param>
+        /// <param name="replace">true to replace an existing document or folder; <c>false</c>.</param>
         public void CutAndPaste(IWorkspace workspace, string source, string destination, bool replace)
         {
             ArgumentException.ThrowIfNullOrEmpty(destination, nameof(destination));
@@ -77,7 +77,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <param name="workspace">The <see cref="IWorkspace"/> being modified.</param>
         /// <param name="source">The key that identifies the source document or folder.</param>
         /// <param name="destination">The key that identifies the destination document or folder.</param>
-        /// <param name="replace">true to replace an existing document or folder; false otherwise.</param>
+        /// <param name="replace">true to replace an existing document or folder; <c>false</c>.</param>
         public void CutAndPaste(IWorkspace workspace, string source, string destination)
         {
             CutAndPaste(workspace, source, destination, false);

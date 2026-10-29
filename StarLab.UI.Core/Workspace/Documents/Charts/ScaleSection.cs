@@ -1,25 +1,29 @@
-﻿using StarLab.Presentation.Workspace.Documents.Charts;
-
-namespace StarLab.UI.Core.Workspace.Documents.Charts
+﻿namespace StarLab.UI.Workspace.Documents.Charts
 {
     /// <summary>
     /// A <see cref="UserControl"/> that is used to update the settings that control the axis scale.
     /// </summary>
     public partial class ScaleSection : UserControl, ISettingsSection
     {
-        private readonly IScaleSettings settings; // The chart settings that are bound to this control.
+        private readonly ChartSettings chart; // The chart settings being configured.
+
+        private readonly string key; // A key that identifies the settings by this instance.
 
         public event EventHandler? SectionChanged; // An event that gets fired whenever any of the section settings is changed.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="ScaleSection"> class.
         /// </summary>
-        /// <param name="settings">The <see cref="IChartSettings"/> that are bound to this control.</param>
-        public ScaleSection(IScaleSettings settings)
+        /// <param name="chart">The chart settings being configured.</param>
+        /// <param name="key">A key that identifies the settings by this instance.</param>
+        public ScaleSection(ChartSettings chart, string key)
         {
             InitializeComponent();
 
-            this.settings = settings;
+            this.chart = chart;
+            this.key = key;
+
+            var settings = chart.GetScaleSettings(key);
 
             textMaximum.Text = settings.Maximum.ToString();
             textMinimum.Text = settings.Minimum.ToString();
@@ -47,6 +51,8 @@ namespace StarLab.UI.Core.Workspace.Documents.Charts
         /// <param name="e">An <see cref="EventArgs"/> that provides context for the event.</param>
         private void OnScaleChanged(object? sender, EventArgs e)
         {
+            var settings = chart.GetScaleSettings(key);
+
             if (double.TryParse(textMinimum.Text, out double minimum)) settings.Minimum = minimum;
             if (double.TryParse(textMaximum.Text, out double maximum)) settings.Maximum = maximum;
 

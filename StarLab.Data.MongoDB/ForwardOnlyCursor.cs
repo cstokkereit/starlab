@@ -62,7 +62,7 @@ namespace StarLab.Data.MongoDB
         /// <summary>
         /// Moves the cursor to the next record.
         /// </summary>
-        /// <returns>true if there are more records available; false otherwise.</returns>
+        /// <returns><c>true</c> if there are more records available; <c>false</c>.</returns>
         public bool MoveNext()
         {
             index++;
@@ -78,7 +78,7 @@ namespace StarLab.Data.MongoDB
         /// <summary>
         /// Releases any resources used by the <see cref="ForwardOnlyCursor{T}"/> object.
         /// </summary>
-        /// <param name="disposing">true if managed resources can be disposed of; false otherwise.</param>
+        /// <param name="disposing">true if managed resources can be disposed of; <c>false</c>.</param>
         protected void Dispose(bool disposing)
         {
             if (disposing)

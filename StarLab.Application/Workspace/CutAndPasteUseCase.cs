@@ -87,7 +87,7 @@ namespace StarLab.Application.Workspace
         /// <param name="workspace">The current <see cref="Workspace"/>.</param>
         /// <param name="document">The <see cref="Document"/> that is being moved.</param>
         /// <param name="destination">The destination <see cref="IFolder"/>.</param>
-        /// <param name="replace">true to replace the document in the destination folder with the document being moved; false otherwise.</param>
+        /// <param name="replace">true to replace the document in the destination folder with the document being moved; <c>false</c>.</param>
         private void UpdateWorkspace(Workspace workspace, Document document, IFolder destination, bool replace)
         {
             workspace.DeleteDocument(document);
@@ -127,7 +127,7 @@ namespace StarLab.Application.Workspace
         /// <param name="workspace">The current <see cref="Workspace"/>.</param>
         /// <param name="folder">The <see cref="IFolder"/> that is being moved.</param>
         /// <param name="destination">The <see cref="IFolder"/> that is the destination for the cut folder.</param>
-        /// <param name="replace">true to replace the contents of existing folders with the contents of the cut folder in the event of name collisions; false otherwise.</param>
+        /// <param name="replace">true to replace the contents of existing folders with the contents of the cut folder in the event of name collisions; <c>false</c>.</param>
         private void UpdateWorkspace(Workspace workspace, IFolder folder, IFolder destination, bool replace)
         {
             var documents = new List<Document>(folder.Documents);
@@ -172,7 +172,7 @@ namespace StarLab.Application.Workspace
         /// </summary>
         /// <param name="folder">The <see cref="IFolder"/> being searched.</param>
         /// <param name="name">The name of the document.</param>
-        /// <returns>true if the folder contains a document with the specified name; false otherwise.</returns>
+        /// <returns><c>true</c> if the folder contains a document with the specified name; <c>false</c>.</returns>
         private static bool DocumentNameExists(IFolder folder, string name)
         {
             foreach (var document in folder.Documents)
@@ -188,7 +188,7 @@ namespace StarLab.Application.Workspace
         /// </summary>
         /// <param name="folder">The <see cref="IFolder"/> being searched.</param>
         /// <param name="name">The name of the child folder.</param>
-        /// <returns>true if the folder contains a child folder with the specified name; false otherwise.</returns>
+        /// <returns><c>true</c> if the folder contains a child folder with the specified name; <c>false</c>.</returns>
         private static bool FolderNameExists(IFolder folder, string name)
         {
             foreach (var child in folder.Folders)

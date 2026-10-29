@@ -2,7 +2,7 @@
 using StarLab.Presentation;
 using StarLab.Presentation.Workspace.WorkspaceExplorer;
 using StarLab.Shared;
-using StarLab.UI.Core;
+using StarLab.UI;
 using Stratosoft.Commands;
 
 using Constants = StarLab.Presentation.Constants;

@@ -39,7 +39,7 @@
         public string Colour { get; }
 
         /// <summary>
-        /// Gets the label <see cref="Font"/>.
+        /// Gets the label font.
         /// </summary>
         public Font Font { get; }
 

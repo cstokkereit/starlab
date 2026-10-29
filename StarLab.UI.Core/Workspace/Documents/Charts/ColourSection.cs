@@ -1,8 +1,7 @@
 ﻿using StarLab.Presentation;
-using StarLab.Presentation.Workspace.Documents.Charts;
 using StarLab.Shared.Properties;
 
-namespace StarLab.UI.Core.Workspace.Documents.Charts
+namespace StarLab.UI.Workspace.Documents.Charts
 {
     /// <summary>
     /// A <see cref="UserControl"/> that is used to update the settings that control the foreground and background colour of chart elements.
@@ -18,7 +17,11 @@ namespace StarLab.UI.Core.Workspace.Documents.Charts
         private const string COMBO_BACKGROUND = "comboBackground"; // The name of the background colour combo box.
         private const string COMBO_FOREGROUND = "comboForeground"; // The name of the foreground colour combo box.
 
-        private readonly IColourSettings settings; // The colour settings that are bound to this control.
+        private readonly ChartSettings chart; // The chart settings being configured.
+
+        private readonly bool hideBackGround; // A flag that determines whether the background colour options are displayed.
+
+        private readonly string key; // A key that identifies the settings by this instance.
 
         private string customBackColour = string.Empty; // The custom background colour.
 
@@ -27,47 +30,32 @@ namespace StarLab.UI.Core.Workspace.Documents.Charts
         public event EventHandler? SectionChanged; // An event that gets fired whenever any of the section settings is changed.
 
         /// <summary>
-        /// Initialises a new instance of the <see cref="ColourSection"> class.
-        /// </summary>
-        /// <param name="settings">The <see cref="IChartElementSettings"/> that are bound to this control.</param>
-        public ColourSection(IChartElementSettings settings)
-            : this (new ChartElementSettingsAdapter(settings)) { }
-
-        /// <summary>
-        /// Initialises a new instance of the <see cref="ColourSection"> class.
-        /// </summary>
-        /// <param name="settings">The <see cref="IChartSettings"/> that are bound to this control.</param>
-        public ColourSection(IChartSettings settings)
-            : this (new ChartSettingsAdapter(settings)) { }
-
-        /// <summary>
-        /// Initialises a new instance of the <see cref="ColourSection"> class.
-        /// </summary>
-        /// <param name="settings">The <see cref="IPlotAreaSettings"/> that are bound to this control.</param>
-        public ColourSection(IPlotAreaSettings settings)
-            : this(new PlotAreaSettingsAdapter(settings)) { }
-
-        /// <summary>
-        /// Initialises a new instance of the <see cref="ColourSection"> class.
-        /// </summary>
-        /// <param name="settings">The <see cref="IColourSettings"/> that are bound to this control.</param>
-        private ColourSection(IColourSettings settings)
+        /// 
+        /// </summary>Initialises a new instance of the <see cref="ColourSection"/> class.
+        /// <param name="chart">The chart settings being configured.</param>
+        /// <param name="key">A key that identifies the managed settings.</param>
+        /// <param name="hideBackGround">A flag that determines whether the background colour options are displayed.</param>
+        public ColourSection(ChartSettings chart, string key, bool hideBackGround)
         {
             InitializeComponent();
 
-            this.settings = settings;
+            this.hideBackGround = hideBackGround;
+            this.chart = chart;
+            this.key = key;
 
             ConfigureSection();
         }
 
         /// <summary>
         /// Configures the <see cref="UserControl"/> to display the child controls used to set the values of the colour properties.
-        /// </summary>
+        /// </summary> 
         private void ConfigureSection()
         {
-            // The SelectedText property must be set before wiring up the DropDown event handler.
+            // NOTE - The SelectedText property must be set before wiring up the DropDown event handler.
 
-            if (!settings.ForegroundOnly)
+            var settings = chart.GetColourSettings(key);
+
+            if (!hideBackGround)
             {
                 customBackColour = settings.BackColour.StartsWith('#') ? settings.BackColour : string.Empty;
 
@@ -111,6 +99,8 @@ namespace StarLab.UI.Core.Workspace.Documents.Charts
         /// <param name="e">An <see cref="EventArgs"/> that provides context for the event.</param>
         private void OnClick(object? sender, EventArgs e)
         {
+            var settings = chart.GetColourSettings(key);
+
             if (dialogCustomColour.ShowDialog() == DialogResult.OK && sender is Button button)
             {
                 // TODO - Will need to maintain a list of custom colours and use them to populate the dialog, save to settings etc.
@@ -143,6 +133,8 @@ namespace StarLab.UI.Core.Workspace.Documents.Charts
         {
             if (sender is ComboBox combo)
             {
+                var settings = chart.GetColourSettings(key);
+
                 switch (combo.Name)
                 {
                     case COMBO_BACKGROUND:
@@ -167,6 +159,8 @@ namespace StarLab.UI.Core.Workspace.Documents.Charts
         {
             if (sender is ComboBox combo && combo.Items.Count == 0)
             {
+                var settings = chart.GetColourSettings(key);
+
                 switch (combo.Name)
                 {
                     case COMBO_BACKGROUND:
@@ -188,84 +182,6 @@ namespace StarLab.UI.Core.Workspace.Documents.Charts
                     }
                 }
             }
-        }
-
-        /// <summary>
-        /// Represents the available colour settings.
-        /// </summary>
-        private interface IColourSettings
-        {
-            /// <summary>
-            /// Gets or sets the background colour.
-            /// </summary>
-            string BackColour { get; set; }
-
-            /// <summary>
-            /// Gets or sets the foreground colour.
-            /// </summary>
-            string ForeColour { get; set; }
-
-            /// <summary>
-            /// A flag indicating that only the foreground colour can be modified.
-            /// </summary>
-            bool ForegroundOnly { get; }
-        }
-
-        /// <summary>
-        /// An adapter that allows IChartElementSettings to treated as IColourSettings.
-        /// </summary>
-        private class ChartElementSettingsAdapter : IColourSettings
-        {
-            private readonly IChartElementSettings settings;
-
-            public ChartElementSettingsAdapter(IChartElementSettings settings) 
-            { 
-                this.settings = settings; 
-            }
-
-            public string BackColour { get => throw new NotSupportedException(); set => throw new NotSupportedException(); }
-
-            public string ForeColour { get => settings.Colour; set { settings.Colour = value; } }
-
-            public bool ForegroundOnly => true;
-        }
-
-        /// <summary>
-        /// An adapter that allows IChartSettings to treated as IColourSettings.
-        /// </summary>
-        private class ChartSettingsAdapter : IColourSettings
-        {
-            private readonly IChartSettings settings;
-
-            public ChartSettingsAdapter(IChartSettings settings) 
-            { 
-                this.settings = settings; 
-            }
-
-            public string BackColour { get => settings.BackColour; set { settings.BackColour = value; } }
-
-            public string ForeColour { get => settings.ForeColour; set { settings.ForeColour = value; } }
-
-            public bool ForegroundOnly => false;
-        }
-
-        /// <summary>
-        /// An adapter that allows IPlotAreaSettings to treated as IColourSettings.
-        /// </summary>
-        private class PlotAreaSettingsAdapter : IColourSettings
-        {
-            private readonly IPlotAreaSettings settings;
-
-            public PlotAreaSettingsAdapter(IPlotAreaSettings settings) 
-            { 
-                this.settings = settings; 
-            }
-
-            public string BackColour { get => settings.BackColour; set { settings.BackColour = value; } }
-
-            public string ForeColour { get => settings.ForeColour; set { settings.ForeColour = value; } }
-
-            public bool ForegroundOnly => false;
         }
     }
 }

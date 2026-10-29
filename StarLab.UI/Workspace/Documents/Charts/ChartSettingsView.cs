@@ -2,8 +2,6 @@
 using StarLab.Presentation;
 using StarLab.Presentation.Workspace.Documents.Charts;
 using StarLab.Shared;
-using StarLab.UI.Core;
-using StarLab.UI.Core.Workspace.Documents.Charts;
 using Stratosoft.Commands;
 
 namespace StarLab.UI.Workspace.Documents.Charts
@@ -18,6 +16,8 @@ namespace StarLab.UI.Workspace.Documents.Charts
         private readonly Dictionary<string, TreeNode> nodes = []; // A dictionary containing the tree nodes indexed by node key.
 
         private readonly List<ISettingsSection> sections = []; // A list containing the settings sections applicable to the current settings group.
+
+        private readonly ChartSettings chart = new ChartSettings();
 
         private IChartSettingsViewPresenter? presenter; // The presenter that controls the view.
 
@@ -70,32 +70,11 @@ namespace StarLab.UI.Workspace.Documents.Charts
         /// <summary>
         /// Appends a colour settings section to the settings panel.
         /// </summary>
-        /// <param name="settings">An <see cref="IChartElementSettings"/> that represents the current state of the chart element.</param>
-        public void AppendColourSection(IChartElementSettings settings)
+        /// <param name="key">A key that identifies the settings that are manged by the new settings section.</param>
+        /// <param name="hideBackGround">A flag that controls whether the background colour options are displayed.</param>
+        public void AppendColourSection(string key, bool hideBackGround)
         {
-            var section = new ColourSection(settings);
-            section.SectionChanged += OnSettingsChanged;
-            AppendSection(section);
-        }
-
-        /// <summary>
-        /// Appends a colour settings section to the settings panel.
-        /// </summary>
-        /// <param name="settings">An <see cref="IChartSettings"/> that represents the current state of the chart.</param>
-        public void AppendColourSection(IChartSettings settings)
-        {
-            var section = new ColourSection(settings);
-            section.SectionChanged += OnSettingsChanged;
-            AppendSection(section);
-        }
-
-        /// <summary>
-        /// Appends a colour settings section to the settings panel.
-        /// </summary>
-        /// <param name="settings">An <see cref="IPlotAreaSettings"/> that represents the current state of the chart.</param>
-        public void AppendColourSection(IPlotAreaSettings settings)
-        {
-            var section = new ColourSection(settings);
+            var section = new ColourSection(chart, key, hideBackGround);
             section.SectionChanged += OnSettingsChanged;
             AppendSection(section);
         }
@@ -103,12 +82,12 @@ namespace StarLab.UI.Workspace.Documents.Charts
         /// <summary>
         /// Appends a data source settings section to the settings panel.
         /// </summary>
-        /// <param name="settings">An <see cref="IChartSettings"/> that represents the current state of the chart.</param>
+        /// <param name="key">A key that identifies the settings that are manged by the new settings section.</param>
         /// <param name="horizontalAxisFields">The fields that can be represented on a horizontal axis.</param>
         /// <param name="verticalAxisFields">The fields that can be represented on a vertical axis.</param>
-        public void AppendDataSourceSection(IChartSettings settings, IEnumerable<IDisplayField> horizontalAxisFields, IEnumerable<IDisplayField> verticalAxisFields)
+        public void AppendDataSourceSection(string key, IEnumerable<IDisplayField> horizontalAxisFields, IEnumerable<IDisplayField> verticalAxisFields)
         {
-            var section = new DataSourceSection(settings, horizontalAxisFields, verticalAxisFields);
+            var section = new DataSourceSection(chart, key, horizontalAxisFields, verticalAxisFields);
             section.SectionChanged += OnSettingsChanged;
             AppendSection(section);
         }
@@ -116,10 +95,11 @@ namespace StarLab.UI.Workspace.Documents.Charts
         /// <summary>
         /// Appends a font settings section to the settings panel.
         /// </summary>
-        /// <param name="settings">An <see cref="IFontSettings"/> that represents the current state of the label font.</param>
-        public void AppendFontSection(IFontSettings settings)
+        /// <param name="key">A key that identifies the settings that are manged by the new settings section.</param>
+        /// <param name="hideStyles">A flag that controls whether the font styles are displayed.</param>
+        public void AppendFontSection(string key, bool hideStyles)
         {
-            var section = new FontSection(settings);
+            var section = new FontSection(chart, key, hideStyles);
             section.SectionChanged += OnSettingsChanged;
             AppendSection(section);
         }
@@ -127,10 +107,10 @@ namespace StarLab.UI.Workspace.Documents.Charts
         /// <summary>
         /// Appends a scale settings section to the settings panel.
         /// </summary>
-        /// <param name="settings">An <see cref="IScaleSettings"/> that represents the current state of the axis scale.</param>
-        public void AppendScaleSection(IScaleSettings settings)
+        /// <param name="key">A key that identifies the settings that are manged by the new settings section.</param>
+        public void AppendScaleSection(string key)
         {
-            var section = new ScaleSection(settings);
+            var section = new ScaleSection(chart, key);
             section.SectionChanged += OnSettingsChanged;
             AppendSection(section);
         }
@@ -138,10 +118,10 @@ namespace StarLab.UI.Workspace.Documents.Charts
         /// <summary>
         /// Appends a size settings section to the settings panel.
         /// </summary>
-        /// <param name="settings">An <see cref="IPointSettings"/> that represents the current state of the data points.</param>
-        public void AppendSizeSection(IPointSettings settings)
+        /// <param name="key">A key that identifies the settings that are manged by the new settings section.</param>
+        public void AppendSizeSection(string key)
         {
-            var section = new NumericSection(settings);
+            var section = new NumericSection(chart, key);
             section.SectionChanged += OnSettingsChanged;
             AppendSection(section);
         }
@@ -149,10 +129,10 @@ namespace StarLab.UI.Workspace.Documents.Charts
         /// <summary>
         /// Appends a text settings section to the settings panel.
         /// </summary>
-        /// <param name="settings">An <see cref="ILabelSettings"/> that represents the current state of the label.</param>
-        public void AppendTextSection(ILabelSettings settings)
+        /// <param name="key">A key that identifies the settings that are manged by the new settings section.</param>
+        public void AppendTextSection(string key)
         {
-            var section = new LabelSection(settings);
+            var section = new LabelSection(chart, key);
             section.SectionChanged += OnSettingsChanged;
             AppendSection(section);
         }
@@ -160,10 +140,9 @@ namespace StarLab.UI.Workspace.Documents.Charts
         /// <summary>
         /// Appends a visibility settings section to the settings panel.
         /// </summary>
-        /// <param name="settings">An <see cref="IChartElementSettings"/> that represents the current state of the chart element.</param>
-        public void AppendVisibleSection(IChartElementSettings settings)
+        public void AppendVisibleSection(string key)
         {
-            var section = new VisibleSection(settings);
+            var section = new VisibleSection(chart, key);
             section.SectionChanged += OnSettingsChanged;
             AppendSection(section);
         }
@@ -277,6 +256,15 @@ namespace StarLab.UI.Workspace.Documents.Charts
         public void SelectNode(string key)
         {
             if (nodes.ContainsKey(key)) treeView.SelectedNode = nodes[key];
+        }
+
+        /// <summary>
+        /// Updates the chart settings following a change.
+        /// </summary>
+        /// <param name="chart">The new chart settings.</param>
+        public void UpdateSettings(IChartSettings chart)
+        {
+            this.chart.Update(chart);
         }
 
         /// <summary>

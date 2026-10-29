@@ -1,7 +1,4 @@
-﻿using StarLab.Presentation.Workspace.Documents.Charts;
-using StarLab.Presentation.Workspace.Documents.Charts.Overlays;
-
-namespace StarLab.UI.Core.Workspace.Documents.Charts
+﻿namespace StarLab.UI.Workspace.Documents.Charts
 {
     /// <summary>
     /// A <see cref="UserControl"/> that is used to update the settings that control the font used by chart labels.
@@ -11,19 +8,27 @@ namespace StarLab.UI.Core.Workspace.Documents.Charts
         private const int HEIGHT_WITHOUT_STYLES = 45; // The height of the control when style properties are not being handled.
         private const int HEIGHT_WITH_STYLES = 64; // The height of the control when style properties are being handled.
 
-        private readonly IFontSettings settings; // The font settings that are bound to this control.
+        private readonly ChartSettings chart; // The chart settings being configured.
+
+        private readonly bool hideStyles; // A flag that determines whether the font styles are displayed.
+
+        private readonly string key; // A key that identifies the settings by this instance.
 
         public event EventHandler? SectionChanged; // An event that gets fired whenever any of the section settings is changed.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="FontSection"/> class.
         /// </summary>
-        /// <param name="settings">The <see cref="IFontSettings"/> that are bound to this control.</param>
-        public FontSection(IFontSettings settings)
+        /// <param name="chart">The chart settings being configured.</param>
+        /// <param name="key">A key that identifies the settings by this instance.</param>
+        /// <param name="hideStyles">A flag that determines whether the font styles are displayed.</param>
+        public FontSection(ChartSettings chart, string key, bool hideStyles)
         {
             InitializeComponent();
 
-            this.settings = settings;
+            this.hideStyles = hideStyles;
+            this.chart = chart;
+            this.key = key;
 
             ConfigureSection();
 
@@ -40,12 +45,14 @@ namespace StarLab.UI.Core.Workspace.Documents.Charts
                 comboFontSizes.Items.Add(size.ToString());
             }
 
+            var settings = chart.GetFontSettings(key);
+
             var font = settings.Font;
 
             comboFontFamilies.SelectedText = font.Family;
             comboFontSizes.SelectedIndex = font.Size - 6;
 
-            if (settings is IOverlaySettings)
+            if (hideStyles)
             {
                 Height = HEIGHT_WITHOUT_STYLES;
             }
@@ -94,6 +101,8 @@ namespace StarLab.UI.Core.Workspace.Documents.Charts
         /// <param name="e">An <see cref="EventArgs"/> that provides context for the event.</param>
         private void OnFontChanged(object? sender, EventArgs e)
         {
+            var settings = chart.GetFontSettings(key);
+
             settings.SetFont(comboFontFamilies.Text, int.Parse(comboFontSizes.Text), checkBoxBold.Checked, checkBoxItalic.Checked, checkBoxUnderline.Checked);
 
             SectionChanged?.Invoke(this, new EventArgs());

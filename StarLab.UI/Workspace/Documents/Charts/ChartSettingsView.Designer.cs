@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            treeView = new StarLab.UI.Controls.TreeView();
+            treeView = new StarLab.UI.TreeView();
             buttonCancel = new Button();
             buttonOK = new Button();
             panelSettings = new Panel();
@@ -93,7 +93,7 @@
 
         #endregion
 
-        private UI.Controls.TreeView treeView;
+        private UI.TreeView treeView;
         private Button buttonCancel;
         private Button buttonOK;
         private Panel panelSettings;

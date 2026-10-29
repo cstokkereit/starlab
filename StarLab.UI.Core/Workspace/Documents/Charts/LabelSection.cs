@@ -1,27 +1,33 @@
 ﻿using StarLab.Presentation.Workspace.Documents.Charts;
 
-namespace StarLab.UI.Core.Workspace.Documents.Charts
+namespace StarLab.UI.Workspace.Documents.Charts
 {
     /// <summary>
     /// A <see cref="UserControl"/> that is used to update the settings that control the content and format of text displayed by chart elements.
     /// </summary>
     public partial class LabelSection : UserControl, ISettingsSection
     {
-        private readonly ILabelSettings settings; // The label settings that are bound to this control.
+        private readonly ChartSettings chart; // The chart settings being configured.
+
+        private readonly string key; // A key that identifies the settings by this instance.
 
         public event EventHandler? SectionChanged; // An event that gets fired whenever any of the section settings is changed.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="LabelSection"/> class.
         /// </summary>
-        /// <param name="settings">The <see cref="IChartSettings"/> that are bound to this control.</param>
-        public LabelSection(ILabelSettings settings)
+        /// <param name="chart">The chart settings being configured.</param>
+        /// <param name="key">A key that identifies the settings by this instance.</param>
+        public LabelSection(ChartSettings chart, string key)
         {
             InitializeComponent();
 
-            this.settings = settings;
-            
-            textLabel.Text = settings.Text;
+            this.chart = chart;
+            this.key = key;
+
+            var label = chart.GetLabelSettings(key);
+
+            textLabel.Text = label.Text;
 
             textLabel.TextChanged += OnTextChanged;
         }
@@ -33,7 +39,9 @@ namespace StarLab.UI.Core.Workspace.Documents.Charts
         /// <param name="e">An <see cref="EventArgs"/> that provides context for the event.</param>
         private void OnTextChanged(object? sender, EventArgs e)
         {
-            settings.Text = textLabel.Text;
+            var label = chart.GetLabelSettings(key);
+
+            label.Text = textLabel.Text;
 
             SectionChanged?.Invoke(this, new EventArgs());
         }

@@ -487,7 +487,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// </summary>
         /// <param name="key">The node key.</param>
         /// <param name="name">The new name.</param>
-        /// <returns>true if the document was successfully renamed; false otherwise.</returns>
+        /// <returns><c>true</c> if the document was successfully renamed; <c>false</c>.</returns>
         public bool RenameDocument(string key, string name)
         {
             ArgumentException.ThrowIfNullOrEmpty(key, nameof(key));
@@ -517,7 +517,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// </summary>
         /// <param name="key">The node key.</param>
         /// <param name="name">The new name.</param>
-        /// <returns>true if the folder was successfully renamed; false otherwise.</returns>
+        /// <returns><c>true</c> if the folder was successfully renamed; <c>false</c>.</returns>
         public bool RenameFolder(string key, string name)
         {
             ArgumentException.ThrowIfNullOrEmpty(key, nameof(key));
@@ -570,7 +570,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// Renames the workspace.
         /// </summary>
         /// <param name="name">The new name.</param>
-        /// <returns>true if the workspace was successfully renamed; false otherwise.</returns>
+        /// <returns><c>true</c> if the workspace was successfully renamed; <c>false</c>.</returns>
         public bool RenameWorkspace(string name)
         {
             try
@@ -659,7 +659,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <summary>
         /// Releases any resources used by the <see cref="WorkspaceExplorerViewPresenter"/> object.
         /// </summary>
-        /// <param name="disposing">true if managed resources can be disposed of; false otherwise.</param>
+        /// <param name="disposing">true if managed resources can be disposed of; <c>false</c>.</param>
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
@@ -930,7 +930,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// <summary>
         /// Selects the node that represents the active document.
         /// </summary>
-        /// <param name="highlight">true to set the focus on the selected node; false otherwise.</param>
+        /// <param name="highlight">true to set the focus on the selected node; <c>false</c>.</param>
         private void UpdateSelectedNode(bool highlight)
         {
             if (workspace.ActiveDocument != null)

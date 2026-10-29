@@ -14,6 +14,7 @@ namespace StarLab.Presentation.Configuration
         /// <summary>
         /// Initialises a new instance of the <see cref="ApplicationConfiguration"/> class.
         /// </summary>
+        /// <param name="configuration">An <see cref="IFactoryConfiguration"/> that includes the names of the available overlays.</param>
         public ApplicationConfiguration(IFactoryConfiguration configuration)
         {
             overlays.AddRange(configuration.Overlays);

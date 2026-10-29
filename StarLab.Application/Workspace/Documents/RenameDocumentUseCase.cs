@@ -51,7 +51,7 @@ namespace StarLab.Application.Workspace.Documents
         /// </summary>
         /// <param name="folder">The <see cref="IFolder"/> containing the documents.</param>
         /// <param name="name">The new document name.</param>
-        /// <returns>true if there are no documents with matching names; false otherwise.</returns>
+        /// <returns><c>true</c> if there are no documents with matching names; <c>false</c>.</returns>
         private bool IsValid(IFolder folder, string name)
         {
             var valid = true;

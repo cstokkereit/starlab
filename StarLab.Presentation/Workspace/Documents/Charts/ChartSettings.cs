@@ -9,7 +9,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
     {
         private readonly Dictionary<string, IChartElementSettings> settingsByKey = new Dictionary<string, IChartElementSettings>(); // A dictionary that holds the settings for the chart elements indexed by key.
 
-        private readonly Dictionary<string, IOverlaySettings> overlaysByName = new Dictionary<string, IOverlaySettings>(); // A dictionary that holds the chart overlays indexed by name.
+        private OverlayGroupSettings overlays = new OverlayGroupSettings(); //
 
         private string backColour; // The chart background colour.
 
@@ -93,7 +93,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// <summary>
         /// Gets the names of the chart overlays.
         /// </summary>
-        public IReadOnlyList<IOverlaySettings> Overlays => new List<IOverlaySettings>(overlaysByName.Values);
+        public IOverlayGroupSettings Overlays => overlays;
 
         /// <summary>
         /// Gets the plot area settings.
@@ -109,16 +109,6 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// Gets or sets a flag indicating that the chart element is visible.
         /// </summary>
         public bool Visible { get => true; set => throw new NotSupportedException(); }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public IOverlaySettings GetOverlay(string name)
-        {
-            return overlaysByName[name];
-        }
 
         /// <summary>
         /// Gets the <see cref="IChartElementSettings"/> with the specified key.
@@ -173,7 +163,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         {
             foreach (var overlay in overlays)
             {
-                overlaysByName.Add(overlay.Name, new OverlaySettings(overlay));
+                this.overlays.Add(new OverlaySettings(overlay));
             }
         }
 
@@ -200,7 +190,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             AddSettings(Constants.MajorGridLines, grid, PlotArea.Grid.MajorGridLines);
             AddSettings(Constants.MinorGridLines, grid, PlotArea.Grid.MinorGridLines);
 
-            var overlays = $"{Constants.Chart}/{Constants.Overlays}";
+            var overlays = AddSettings(Constants.Overlays, Constants.Chart, Overlays);
 
             foreach (var overlay in Overlays)
             {

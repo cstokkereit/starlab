@@ -37,7 +37,7 @@ namespace StarLab.Application
         /// Determines whether the specified object is equal to the current instance.
         /// </summary>
         /// <param name="obj">The object to compare with the current instance.</param>
-        /// <returns>true if the specified object is equal to the current instance; false otherwise.</returns>
+        /// <returns><c>true</c> if the specified object is equal to the current instance; <c>false</c>.</returns>
         public override bool Equals(object? obj)
         {
             return (obj is ID<T> id) && Equals(id);
@@ -47,7 +47,7 @@ namespace StarLab.Application
         /// Determines whether the specified <see cref="ID{T}"> is equal to the current instance.
         /// </summary>
         /// <param name="other">The <see cref="ID{T}"> to compare with the current instance.</param>
-        /// <returns>true if the specified <see cref="ID{T}"> is equal to the current instance; false otherwise.</returns>
+        /// <returns><c>true</c> if the specified <see cref="ID{T}"> is equal to the current instance; <c>false</c>.</returns>
         public bool Equals(ID<T>? other)
         {
             if (ReferenceEquals(other, null)) return false;
@@ -80,7 +80,7 @@ namespace StarLab.Application
         /// </summary>
         /// <param name="left">The first <see cref="ID{T}"/> instance to compare.</param>
         /// <param name="right">The second <see cref="ID{T}"/> instance to compare.</param>
-        /// <returns>true if the value of left is equal to the value of right; false otherwise.</returns>
+        /// <returns><c>true</c> if the value of left is equal to the value of right; <c>false</c>.</returns>
         public static bool operator ==(ID<T>? left, ID<T>? right)
         {
             if (ReferenceEquals(left, right)) return true;
@@ -95,7 +95,7 @@ namespace StarLab.Application
         /// </summary>
         /// <param name="left">The first <see cref="ID{T}"/> instance to compare.</param>
         /// <param name="right">The second <see cref="ID{T}"/> instance to compare.</param>
-        /// <returns>true if the value of left is not equal to the value of right; false otherwise.</returns>
+        /// <returns><c>true</c> if the value of left is not equal to the value of right; <c>false</c>.</returns>
         public static bool operator !=(ID<T>? left, ID<T>? right) => !(left == right);
     }
 }

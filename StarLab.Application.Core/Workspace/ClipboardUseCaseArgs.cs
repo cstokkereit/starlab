@@ -11,7 +11,7 @@
         /// <param name="workspace">A <see cref="WorkspaceDTO"/> that holds the details of the workspace.</param>
         /// <param name="source">The source document or folder.</param>
         /// <param name="destination">The destination folder.</param>
-        /// <param name="replace">true to replace an existing document or folder; false otherwise.</param>
+        /// <param name="replace">true to replace an existing document or folder; <c>false</c>.</param>
         public ClipboardUseCaseArgs(WorkspaceDTO workspace, string source, string destination, bool replace = false)
         {
             Destination = destination;

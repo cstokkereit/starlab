@@ -108,7 +108,9 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             {
                 chart = new ChartSettings(args.Chart);
 
-                ShowSettings(key);
+                View.UpdateSettings(chart);
+
+                //ShowSettings(key);
             }
         }
 
@@ -141,37 +143,27 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// <param name="key">The settings key.</param>
         public void ShowSettings(string key)
         {
-            if (chart == null) throw new InvalidOperationException(ExceptionMessages.InvalidState);
+            if (chart == null) throw new InvalidOperationException(ExceptionMessages.ObjectNotInitialised(GetType()));
+
+            this.key = key;
 
             View.Clear();
 
             switch (key)
             {
                 case Constants.Chart:
-                    View.AppendColourSection(chart);
-                    break;
-
-                case Constants.ChartOverlays:
-                    // Do Nothing
-                    break;
-
                 case Constants.ChartPlotArea:
-                    View.AppendColourSection(chart.PlotArea);
+                    View.AppendColourSection(key, false);
                     break;
 
                 case Constants.Data:
-                    View.AppendDataSourceSection(chart, GetAvailableHorizontalAxisParameters(), GetAvailableVerticalAxisParameters());
+                    View.AppendDataSourceSection(Constants.ChartAxes, GetAvailableHorizontalAxisParameters(), GetAvailableVerticalAxisParameters());
                     break;
 
                 default:
-                    if (!key.Contains(Constants.ChartOverlays) || chart.Overlays.Count > 0)
-                    {
-                        AppendSettings(chart.GetSettings(key));
-                    }
+                    AppendSettings(chart.GetSettings(key));
                     break;
             }
-
-            this.key = key;
         }
 
         /// <summary>
@@ -189,7 +181,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// <summary>
         /// Releases any resources used by the <see cref="ChartSettingsViewPresenter"/> object.
         /// </summary>
-        /// <param name="disposing">true if managed resources can be disposed of; false otherwise.</param>
+        /// <param name="disposing">true if managed resources can be disposed of; <c>false</c>.</param>
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
@@ -201,159 +193,35 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// Appends the sections required to configure the settings for the axes.
-        /// </summary>
-        /// <param name="settings">An <see cref="IAxesSettings"/> that specifies the axes settings.</param>
-        private void AppendSettings(IAxesSettings settings)
-        {
-            View.AppendColourSection(settings);
-            View.AppendVisibleSection(settings);
-        }
-
-        /// <summary>
         /// Appends the sections required to configure the settings for a chart element.
         /// </summary>
         /// <param name="settings">An <see cref="IChartElementSettings"/> that specifies the chart element settings.</param>
         private void AppendSettings(IChartElementSettings settings)
         {
-            if (settings is IAxesSettings axes)
+            if (settings is ILabelSettings label)
             {
-                AppendSettings(axes);
+                View.AppendTextSection(key);
+                View.AppendFontSection(key, false);
             }
-            else if (settings is IAxisSettings axis)
+
+            if (settings is IOverlaySettings || settings is IOverlayGroupSettings || settings is ITickLabelSettings)
             {
-                AppendSettings(axis);
+                View.AppendFontSection(key, true);
             }
-            else if (settings is IGridSettings grid)
+
+            View.AppendColourSection(key, true);
+
+            if (settings is IPointSettings points)
             {
-                AppendSettings(grid);
+                View.AppendSizeSection(key);
             }
-            else if (settings is IGridLineSettings gridLines)
+
+            if (settings is IScaleSettings scale)
             {
-                AppendSettings(gridLines);
+                View.AppendScaleSection(key);
             }
-            else if (settings is ILabelSettings label)
-            {
-                AppendSettings(label);
-            }
-            else if (settings is IOverlaySettings overlays)
-            {
-                AppendSettings(overlays);
-            }
-            else if (settings is IPointSettings points)
-            {
-                AppendSettings(points);
-            }
-            else if (settings is IScaleSettings scale)
-            {
-                AppendSettings(scale);
-            }
-            else if (settings is ITickLabelSettings tickLabels)
-            {
-                AppendSettings(tickLabels);
-            }
-            else if (settings is ITickMarkSettings tickMarks)
-            {
-                AppendSettings(tickMarks);
-            }
-        }
 
-        /// <summary>
-        /// Appends the sections required to configure the settings for an axis.
-        /// </summary>
-        /// <param name="settings">An <see cref="IAxisSettings"/> that specifies the axis settings.</param>
-        private void AppendSettings(IAxisSettings settings)
-        {
-            View.AppendColourSection(settings);
-            View.AppendVisibleSection(settings);
-        }
-
-        /// <summary>
-        /// Appends the sections required to configure the settings for the grid.
-        /// </summary>
-        /// <param name="settings">An <see cref="IGridSettings"/> that specifies the grid settings.</param>
-        private void AppendSettings(IGridSettings settings)
-        {
-            View.AppendColourSection(settings);
-            View.AppendVisibleSection(settings);
-        }
-
-        /// <summary>
-        /// Appends the sections required to configure the settings for the grid lines.
-        /// </summary>
-        /// <param name="settings">An <see cref="IGridLineSettings"/> that specifies the grid line settings.</param>
-        private void AppendSettings(IGridLineSettings settings)
-        {
-            View.AppendColourSection(settings);
-            View.AppendVisibleSection(settings);
-        }
-
-        /// <summary>
-        /// Appends the sections required to configure the settings for a label.
-        /// </summary>
-        /// <param name="settings">An <see cref="ILabelSettings"/> that specifies the label settings.</param>
-        private void AppendSettings(ILabelSettings settings)
-        {
-            View.AppendTextSection(settings);
-            View.AppendFontSection(settings);
-            View.AppendColourSection(settings);
-            View.AppendVisibleSection(settings);
-        }
-
-        /// <summary>
-        /// Appends the sections required to configure the settings for an overlay.
-        /// </summary>
-        /// <param name="settings">An <see cref="IOverlaySettings"/> that specifies the overlay settings.</param>
-        private void AppendSettings(IOverlaySettings settings)
-        {
-            // Size section for the point
-
-            View.AppendFontSection(settings);
-            View.AppendColourSection(settings);
-            View.AppendVisibleSection(settings);
-        }
-
-        /// <summary>
-        /// Appends the sections required to configure the settings for the data points.
-        /// </summary>
-        /// <param name="settings">An <see cref="IPointSettings"/> that specifies the data point settings.</param>
-        private void AppendSettings(IPointSettings settings)
-        {
-            View.AppendColourSection(settings);
-            View.AppendSizeSection(settings);
-            View.AppendVisibleSection(settings);
-        }
-
-        /// <summary>
-        /// Appends the sections required to configure the settings for an axis scale.
-        /// </summary>
-        /// <param name="settings">An <see cref="IScaleSettings"/> that specifies the scale settings.</param>
-        private void AppendSettings(IScaleSettings settings)
-        {
-            View.AppendColourSection(settings);
-            View.AppendScaleSection(settings);
-            View.AppendVisibleSection(settings);
-        }
-
-        /// <summary>
-        /// Appends the sections required to configure the settings for the tick labels.
-        /// </summary>
-        /// <param name="settings">An <see cref="ITickLabelSettings"/> that specifies the tick label settings.</param>
-        private void AppendSettings(ITickLabelSettings settings)
-        {
-            View.AppendFontSection(settings);
-            View.AppendColourSection(settings);
-            View.AppendVisibleSection(settings);
-        }
-
-        /// <summary>
-        /// Appends the sections required to configure the settings for the tick marks.
-        /// </summary>
-        /// <param name="settings">An <see cref="ITickMarkSettings"/> that specifies the tick mark settings.</param>
-        private void AppendSettings(ITickMarkSettings settings)
-        {
-            View.AppendColourSection(settings);
-            View.AppendVisibleSection(settings);
+            View.AppendVisibleSection(key);
         }
 
         /// <summary>
@@ -434,9 +302,9 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// TODO : Documentation
+        /// Generates a list containing the stellar parameters that can be represented by the horizontal axes.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A list containing the names of the available stellar parameters.</returns>
         private List<IDisplayField> GetAvailableHorizontalAxisParameters()
         {
             // TODO : These should be checked against the available data
@@ -452,9 +320,9 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// TODO : Documentation
+        /// Generates a list containing the stellar parameters that can be represented by the vertical axes.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A list containing the names of the available stellar parameters.</returns>
         private List<IDisplayField> GetAvailableVerticalAxisParameters()
         {
             // TODO : These should be checked against the available data

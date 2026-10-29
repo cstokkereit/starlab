@@ -25,58 +25,48 @@
         /// <summary>
         /// Appends a colour settings section to the settings panel.
         /// </summary>
-        /// <param name="settings">An <see cref="IChartElementSettings"/> that represents the current state of the chart element.</param>
-        void AppendColourSection(IChartElementSettings settings);
-
-        /// <summary>
-        /// Appends a colour settings section to the settings panel.
-        /// </summary>
-        /// <param name="settings">An <see cref="IChartSettings"/> that represents the current state of the chart.</param>
-        void AppendColourSection(IChartSettings settings);
-
-        /// <summary>
-        /// Appends a colour settings section to the settings panel.
-        /// </summary>
-        /// <param name="settings">An <see cref="IPlotAreaSettings"/> that represents the current state of the plot area.</param>
-        void AppendColourSection(IPlotAreaSettings settings);
+        /// <param name="key">A key that identifies the settings that are manged by the new settings section.</param>
+        /// <param name="hideBackGround">A flag that controls whether the background colour options are displayed.</param>
+        void AppendColourSection(string key, bool hideBackGround);
 
         /// <summary>
         /// Appends a data source settings section to the settings panel.
         /// </summary>
-        /// <param name="settings">An <see cref="IChartSettings"/> that represents the current state of the chart.</param>
+        /// <param name="key">A key that identifies the settings that are manged by the new settings section.</param>
         /// <param name="horizontalAxisFields">The fields that can be represented on a horizontal axis.</param>
         /// <param name="verticalAxisFields">The fields that can be represented on a vertical axis.</param>
-        void AppendDataSourceSection(IChartSettings settings, IEnumerable<IDisplayField> horizontalAxisFields, IEnumerable<IDisplayField> verticalAxisFields);
+        void AppendDataSourceSection(string key, IEnumerable<IDisplayField> horizontalAxisFields, IEnumerable<IDisplayField> verticalAxisFields);
 
         /// <summary>
         /// Appends a font settings section to the settings panel.
         /// </summary>
-        /// <param name="settings">An <see cref="IFontSettings"/> that represents the current state of the label font.</param>
-        void AppendFontSection(IFontSettings settings);
+        /// <param name="key">A key that identifies the settings that are manged by the new settings section.</param>
+        /// <param name="hideStyles">A flag that controls whether the font styles are displayed.</param>
+        void AppendFontSection(string key, bool hideStyles);
 
         /// <summary>
         /// Appends a scale settings section to the settings panel.
         /// </summary>
-        /// <param name="settings">An <see cref="IScaleSettings"/> that represents the current state of the axis scale.</param>
-        void AppendScaleSection(IScaleSettings settings);
+        /// <param name="key">A key that identifies the settings that are manged by the new settings section.</param>
+        void AppendScaleSection(string key);
 
         /// <summary>
         /// Appends a size settings section to the settings panel.
         /// </summary>
-        /// <param name="settings">An <see cref="IPointSettings"/> that represents the current state of the data points.</param>
-        void AppendSizeSection(IPointSettings settings);
+        /// <param name="key">A key that identifies the settings that are manged by the new settings section.</param>
+        void AppendSizeSection(string key);
 
         /// <summary>
         /// Appends a text settings section to the settings panel.
         /// </summary>
-        /// <param name="settings">An <see cref="ILabelSettings"/> that represents the current state of the label.</param>
-        void AppendTextSection(ILabelSettings settings);
+        /// <param name="key">A key that identifies the settings that are manged by the new settings section.</param>
+        void AppendTextSection(string key);
 
         /// <summary>
         /// Appends a visibility settings section to the settings panel.
         /// </summary>
-        /// <param name="settings">An <see cref="IChartElementSettings"/> that represents the current state of the chart element.</param>
-        void AppendVisibleSection(IChartElementSettings settings);
+        /// <param name="key">A key that identifies the settings that are manged by the new settings section.</param>
+        void AppendVisibleSection(string key);
 
         /// <summary>
         /// Clears the settings panel.
@@ -99,5 +89,11 @@
         /// </summary>
         /// <param name="key">The node key.</param>
         void SelectNode(string key);
+
+        /// <summary>
+        /// Updates the chart settings following a change.
+        /// </summary>
+        /// <param name="chart">The new chart settings.</param>
+        void UpdateSettings(IChartSettings chart);
     }
 }

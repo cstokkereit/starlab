@@ -3,18 +3,8 @@
     /// <summary>
     /// Represents the current state of the plot area while the chart is being configured.
     /// </summary>
-    public interface IPlotAreaSettings
+    public interface IPlotAreaSettings : IColourSettings
     {
-        /// <summary>
-        /// Gets or sets the background colour of the plot area.
-        /// </summary>
-        string BackColour { get; set; }
-
-        /// <summary>
-        /// Gets or sets the foreground colour of the plot area.
-        /// </summary>
-        string ForeColour { get; set; }
-
         /// <summary>
         /// Gets the chart grid settings.
         /// </summary>

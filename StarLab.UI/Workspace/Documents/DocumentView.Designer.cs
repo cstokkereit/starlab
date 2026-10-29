@@ -1,4 +1,4 @@
-﻿using StarLab.UI.Controls;
+﻿using StarLab.UI;
 
 namespace StarLab.UI.Workspace.Documents
 {
@@ -30,7 +30,7 @@ namespace StarLab.UI.Workspace.Documents
         /// </summary>
         private void InitializeComponent()
         {
-            splitContainer = new StarLab.UI.Controls.SplitContainer();
+            splitContainer = new StarLab.UI.SplitContainer();
             SuspendLayout();
             // 
             // splitContainer
@@ -58,6 +58,6 @@ namespace StarLab.UI.Workspace.Documents
 
         #endregion
 
-        private UI.Controls.SplitContainer splitContainer;
+        private UI.SplitContainer splitContainer;
     }
 }

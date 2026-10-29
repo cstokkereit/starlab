@@ -1,4 +1,4 @@
-﻿namespace StarLab.UI.Core.Workspace.Documents.Charts
+﻿namespace StarLab.UI.Workspace.Documents.Charts
 {
     partial class FontSection
     {

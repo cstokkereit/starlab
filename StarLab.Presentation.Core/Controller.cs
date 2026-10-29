@@ -34,7 +34,7 @@
         /// <summary>
         /// Releases all resources used by the presenter object.
         /// </summary>
-        /// <param name="disposing">true if managed resources can be disposed of; false otherwise.</param>
+        /// <param name="disposing">true if managed resources can be disposed of; <c>false</c>.</param>
         protected abstract void Dispose(bool disposing);
     }
 }

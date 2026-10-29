@@ -7,24 +7,39 @@ namespace StarLab.Application.Workspace.Documents.Charts
     /// </summary>
     public class ChartDTO
     {
-        public string BackColour = string.Empty;
+        public ChartDTO()
+        {
+            Overlays = new List<OverlayDTO>();
+            PlotArea = new PlotAreaDTO();
+            Title = new LabelDTO();
+            Font = new FontDTO();
+            X1 = new AxisDTO();
+            X2 = new AxisDTO();
+            Y1 = new AxisDTO();
+            Y2 = new AxisDTO();
 
-        public FontDTO Font = new FontDTO();
+            BackColour = string.Empty;
+            ForeColour = string.Empty;
+        }
 
-        public string ForeColour = string.Empty;
+        public string BackColour;
 
-        public List<OverlayDTO> Overlays = new List<OverlayDTO>();
+        public FontDTO Font;
 
-        public PlotAreaDTO PlotArea = new PlotAreaDTO();
+        public string ForeColour;
 
-        public LabelDTO Title = new LabelDTO();
+        public List<OverlayDTO> Overlays;
 
-        public AxisDTO X1 = new AxisDTO();
+        public PlotAreaDTO PlotArea;
 
-        public AxisDTO X2 = new AxisDTO();
+        public LabelDTO Title;
 
-        public AxisDTO Y1 = new AxisDTO();
+        public AxisDTO X1;
 
-        public AxisDTO Y2 = new AxisDTO();
+        public AxisDTO X2;
+
+        public AxisDTO Y1;
+
+        public AxisDTO Y2;
     }
 }

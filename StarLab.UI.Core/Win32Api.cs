@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace StarLab.UI.Controls
+namespace StarLab.UI
 {
     /// <summary>
     /// A static class that contains imported Win32 API functions.

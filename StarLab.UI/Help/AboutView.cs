@@ -2,8 +2,6 @@
 using StarLab.Presentation;
 using StarLab.Presentation.Help;
 using StarLab.Shared;
-using StarLab.Shared.Properties;
-using StarLab.UI.Core;
 
 namespace StarLab.UI.Help
 {

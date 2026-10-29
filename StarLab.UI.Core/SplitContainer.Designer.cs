@@ -1,4 +1,4 @@
-﻿namespace StarLab.UI.Controls
+﻿namespace StarLab.UI
 {
     partial class SplitContainer
     {
@@ -99,6 +99,6 @@
 
         private ToolStripContainer toolStripContainer;
         private System.Windows.Forms.SplitContainer container;
-        private UI.Controls.ToolStrip toolStrip;
+        private UI.ToolStrip toolStrip;
     }
 }

@@ -3,7 +3,7 @@ using StarLab.Presentation;
 using StarLab.Presentation.Workspace.Documents.Tables;
 using StarLab.Shared;
 using StarLab.Shared.Properties;
-using StarLab.UI.Core;
+using StarLab.UI;
 
 namespace StarLab.UI.Workspace.Documents.Tables
 {

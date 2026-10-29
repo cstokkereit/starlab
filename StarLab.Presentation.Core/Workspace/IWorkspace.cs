@@ -79,28 +79,28 @@ namespace StarLab.Presentation.Workspace
         /// Determines if the workspace contains the specified document.
         /// </summary>
         /// <param name="id">The ID of the required document.</param>
-        /// <returns>true if the workspace contains a document with the specified ID; false otherwise.</returns>
+        /// <returns><c>true</c> if the workspace contains a document with the specified ID; <c>false</c>.</returns>
         bool HasDocument(DocumentID id);
 
         /// <summary>
         /// Determines if the workspace contains the specified folder.
         /// </summary>
         /// <param name="key">The key of the required folder.</param>
-        /// <returns>true if the workspace contains a folder with the specified key; false otherwise.</returns>
+        /// <returns><c>true</c> if the workspace contains a folder with the specified key; <c>false</c>.</returns>
         bool HasFolder(string key);
 
         /// <summary>
         /// Determines if the workspace contains the specified project.
         /// </summary>
         /// <param name="key">The key of the required project.</param>
-        /// <returns>true if the workspace contains a project with the specified key; false otherwise.</returns>
+        /// <returns><c>true</c> if the workspace contains a project with the specified key; <c>false</c>.</returns>
         bool HasProject(string key);
 
         /// <summary>
         /// Determines if the folder or project with the specified key is empty.
         /// </summary>
         /// <param name="key">The key of the folder or project.</param>
-        /// <returns>true if the folder or project with the specified key is empty; false otherwise.</returns>
+        /// <returns><c>true</c> if the folder or project with the specified key is empty; <c>false</c>.</returns>
         bool IsEmpty(string key);
 
         /// <summary>

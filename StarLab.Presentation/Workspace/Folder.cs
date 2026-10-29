@@ -41,7 +41,7 @@ namespace StarLab.Presentation.Workspace
         /// Initialises a new instance of the <see cref="Folder"/> class.
         /// </summary>
         /// <param name="name">The name of the folder.</param>
-        /// <param name="expanded">true if the folder is expanded; false otherwise.</param>
+        /// <param name="expanded">true if the folder is expanded; <c>false</c>.</param>
         /// <exception cref="ArgumentException"></exception>
         public Folder(string name, bool expanded)
         {

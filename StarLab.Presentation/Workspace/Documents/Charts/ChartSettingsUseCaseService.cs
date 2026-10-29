@@ -25,7 +25,6 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// <param name="id">The <see cref="DocumentID"> that identifies the document.</param>
         /// <param name="chart">A <see cref="IChartSettings"/> that specifies the current state of the chart.</param>
         /// <exception cref="ArgumentNullException"></exception>
-        /// <exception cref="ArgumentException"></exception>
         public void UpdateChart(IWorkspace workspace, DocumentID id, IChartSettings chart)
         {
             ArgumentNullException.ThrowIfNull(workspace, nameof(workspace));

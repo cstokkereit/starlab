@@ -1,4 +1,5 @@
 ﻿using StarLab.Application.Workspace.Documents.Charts;
+using StarLab.Shared;
 
 namespace StarLab.Presentation.Workspace.Documents.Charts
 {
@@ -36,6 +37,6 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// <summary>
         /// Gets the length of the tickamrks.
         /// </summary>
-        public int Length => Visible ? length : 0;
+        public int Length => length;
     }
 }

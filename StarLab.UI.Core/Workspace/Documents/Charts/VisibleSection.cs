@@ -1,27 +1,31 @@
-﻿using StarLab.Presentation.Workspace.Documents.Charts;
-
-namespace StarLab.UI.Core.Workspace.Documents.Charts
+﻿namespace StarLab.UI.Workspace.Documents.Charts
 {
     /// <summary>
     /// A <see cref="UserControl"/> that is used to update the settings that control the visiblity of chart elements.
     /// </summary>
     public partial class VisibleSection : UserControl, ISettingsSection
     {
-        private readonly IChartElementSettings settings; // The chart element settings that are bound to this control.
+        private readonly ChartSettings chart; // The chart settings being configured.
+
+        private readonly string key; // A key that identifies the settings by this instance.
 
         public event EventHandler? SectionChanged; // An event that gets fired whenever any of the section settings is changed.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="VisibleSection"/> class.
         /// </summary>
-        /// <param name="settings">The <see cref="IChartSettings"/> that are bound to this control.</param>
-        public VisibleSection(IChartElementSettings settings)
+        /// <param name="chart">The chart settings being configured.</param>
+        /// <param name="key">A key that identifies the settings by this instance.</param>
+        public VisibleSection(ChartSettings chart, string key)
         {
             InitializeComponent();
 
-            this.settings = settings;
+            this.chart = chart;
+            this.key = key;
 
-            checkBoxVisible.Checked = settings.Visible;
+            var element = chart.GetSettings(key);
+
+            checkBoxVisible.Checked = element.Visible;
 
             checkBoxVisible.CheckStateChanged += OnCheckStateChanged;
         }
@@ -33,7 +37,9 @@ namespace StarLab.UI.Core.Workspace.Documents.Charts
         /// <param name="e">An <see cref="EventArgs"/> that provides context for the event.</param>
         private void OnCheckStateChanged(object? sender, EventArgs e)
         {
-            settings.Visible = checkBoxVisible.Checked;
+            var element = chart.GetSettings(key);
+
+            element.Visible = checkBoxVisible.Checked;
 
             SectionChanged?.Invoke(this, new EventArgs());
         }

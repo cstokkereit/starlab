@@ -1,4 +1,4 @@
-﻿namespace StarLab.UI.Controls
+﻿namespace StarLab.UI
 {
     /// <summary>
     /// Extends the <see cref="System.Windows.Forms.TreeView"/> control.

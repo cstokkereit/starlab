@@ -19,7 +19,7 @@ namespace StarLab.Application.Workspace
         /// Checks the name provided to make sure that it does not contain any illegal characters.
         /// </summary>
         /// <param name="name">A name that may contain illegal characters.</param>
-        /// <returns>true if the name does not contain illegal characters; false otherwise.</returns>
+        /// <returns><c>true</c> if the name does not contain illegal characters; <c>false</c>.</returns>
         protected static bool IsValid(string name)
         {
             if (string.IsNullOrEmpty(name)) return false;

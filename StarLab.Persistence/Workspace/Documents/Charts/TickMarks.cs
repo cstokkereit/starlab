@@ -1,4 +1,5 @@
-﻿using System.Xml.Serialization;
+﻿using StarLab.Application.Workspace.Documents.Charts;
+using System.Xml.Serialization;
 
 namespace StarLab.Serialisation.Workspace.Documents.Charts
 {

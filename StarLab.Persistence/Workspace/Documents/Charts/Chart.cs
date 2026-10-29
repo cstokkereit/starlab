@@ -9,17 +9,22 @@ namespace StarLab.Serialisation.Workspace.Documents.Charts
     [XmlType]
     public class Chart
     {
+        public Chart()
+        {
+            Overlays = new List<Overlay>();
+        }
+
         [XmlAttribute("backColour")]
-        public string? BackColour;
+        public string BackColour = string.Empty;
 
         [XmlElement]
         public Font? Font;
 
         [XmlAttribute("foreColour")]
-        public string? ForeColour;
+        public string? ForeColour = string.Empty;
 
         [XmlArray]
-        public List<Overlay>? Overlays;
+        public List<Overlay> Overlays;
 
         [XmlElement]
         public PlotArea? PlotArea;

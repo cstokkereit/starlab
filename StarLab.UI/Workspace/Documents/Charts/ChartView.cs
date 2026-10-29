@@ -7,7 +7,7 @@ using StarLab.Presentation.Configuration;
 using StarLab.Presentation.Workspace.Documents.Charts;
 using StarLab.Presentation.Workspace.Documents.Charts.Overlays;
 using StarLab.Shared;
-using StarLab.UI.Core;
+using StarLab.UI;
 using StarLab.UI.Workspace.Documents.Charts.Overlays;
 
 namespace StarLab.UI.Workspace.Documents.Charts
@@ -159,9 +159,9 @@ namespace StarLab.UI.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// 
+        /// Configures the chart axes.
         /// </summary>
-        /// <param name="plot"></param>
+        /// <param name="plot">The </param>
         /// <param name="config"></param>
         private void ConfigureAxes(Plot plot, IChart config)
         {
@@ -229,9 +229,9 @@ namespace StarLab.UI.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// 
+        /// Configures an overlay.
         /// </summary>
-        /// <param name="config"></param>
+        /// <param name="config">The <see cref="IOverlay"/> used to configure the overlay.</param>
         private void ConfigureOverlay(IOverlay config)
         {
             if (overlays.TryGetValue(config.Name, out Overlay? overlay))
@@ -356,7 +356,7 @@ namespace StarLab.UI.Workspace.Documents.Charts
         private void ConfigureTickMarks(TickMarkStyle tickMarks, ITickMarks config)
         {
             tickMarks.Color = GetColour(config.Colour);
-            tickMarks.Length = config.Length;
+            tickMarks.Length = config.Visible ? config.Length : 0;
             tickMarks.Hairline = true;
         }
 
