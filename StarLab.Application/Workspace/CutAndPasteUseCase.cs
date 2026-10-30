@@ -12,8 +12,8 @@ namespace StarLab.Application.Workspace
         /// <summary>
         /// Initialises a new instance of the <see cref="CutAndPasteUseCase"/> class.
         /// </summary>
-        /// <param name="OutputPort">An <see cref="IWorkspaceOutputPort"/> that updates the UI in response to the execution of the use case.</param>
-        /// <param name="Mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
+        /// <param name="outputPort">Updates the UI in response to the execution of the use case.</param>
+        /// <param name="Mapper">Maps model objects to data transfer objects and vice versa.</param>
         public CutAndPasteUseCase(IWorkspaceOutputPort OutputPort, IMapper Mapper)
             : base(OutputPort, Mapper) { }
 
@@ -172,7 +172,7 @@ namespace StarLab.Application.Workspace
         /// </summary>
         /// <param name="folder">The <see cref="IFolder"/> being searched.</param>
         /// <param name="name">The name of the document.</param>
-        /// <returns><c>true</c> if the folder contains a document with the specified name; <c>false</c>.</returns>
+        /// <returns><c>true</c> if the folder contains a document with the specified name; <c>false</c> otherwise.</returns>
         private static bool DocumentNameExists(IFolder folder, string name)
         {
             foreach (var document in folder.Documents)
@@ -188,7 +188,7 @@ namespace StarLab.Application.Workspace
         /// </summary>
         /// <param name="folder">The <see cref="IFolder"/> being searched.</param>
         /// <param name="name">The name of the child folder.</param>
-        /// <returns><c>true</c> if the folder contains a child folder with the specified name; <c>false</c>.</returns>
+        /// <returns><c>true</c> if the folder contains a child folder with the specified name; <c>false</c> otherwise.</returns>
         private static bool FolderNameExists(IFolder folder, string name)
         {
             foreach (var child in folder.Folders)

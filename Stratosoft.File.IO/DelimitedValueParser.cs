@@ -125,7 +125,7 @@ namespace Stratosoft.File.IO
         /// <param name="isText">true if the buffer contains a completed text value that can be added to the list.</param>
         /// <param name="buffer">A <see cref="StringBuilder"/> that contains the growing text value.</param>
         /// <param name="data">A <see cref="List{string}"/> that contains the data values.</param>
-        /// <returns><c>true</c> if a text value is currently being generated; <c>false</c>.</returns>
+        /// <returns><c>true</c> if a text value is currently being generated; <c>false</c> otherwise.</returns>
         private bool AddValue(bool isText, StringBuilder buffer, List<string> data)
         {
             if (isText)
@@ -147,7 +147,7 @@ namespace Stratosoft.File.IO
         /// <param name="value">The value being added.</param>
         /// <param name="buffer">A <see cref="StringBuilder"/> that contains the growing text value.</param>
         /// <param name="data">A <see cref="List{string}"/> that contains the data values.</param>
-        /// <returns><c>true</c> if a text value is currently being generated; <c>false</c>.</returns>
+        /// <returns><c>true</c> if a text value is currently being generated; <c>false</c> otherwise.</returns>
         private bool AddValue(string value, StringBuilder buffer, List<string> data)
         {
             bool inText = false;

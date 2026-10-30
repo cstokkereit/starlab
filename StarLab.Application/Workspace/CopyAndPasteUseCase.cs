@@ -12,8 +12,8 @@ namespace StarLab.Application.Workspace
         /// <summary>
         /// Initialises a new instance of the <see cref="CutAndPasteUseCase"/> class.
         /// </summary>
-        /// <param name="OutputPort">An <see cref="IWorkspaceOutputPort"/> that updates the UI in response to the execution of the use case.</param>
-        /// <param name="Mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
+        /// <param name="outputPort">Updates the UI in response to the execution of the use case.</param>
+        /// <param name="Mapper">Maps model objects to data transfer objects and vice versa.</param>
         public CopyAndPasteUseCase(IWorkspaceOutputPort OutputPort, IMapper Mapper)
             : base(OutputPort, Mapper) { }
 

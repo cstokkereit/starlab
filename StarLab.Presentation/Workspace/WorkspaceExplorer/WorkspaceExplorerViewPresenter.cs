@@ -487,7 +487,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// </summary>
         /// <param name="key">The node key.</param>
         /// <param name="name">The new name.</param>
-        /// <returns><c>true</c> if the document was successfully renamed; <c>false</c>.</returns>
+        /// <returns><c>true</c> if the document was successfully renamed; <c>false</c> otherwise.</returns>
         public bool RenameDocument(string key, string name)
         {
             ArgumentException.ThrowIfNullOrEmpty(key, nameof(key));
@@ -517,7 +517,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// </summary>
         /// <param name="key">The node key.</param>
         /// <param name="name">The new name.</param>
-        /// <returns><c>true</c> if the folder was successfully renamed; <c>false</c>.</returns>
+        /// <returns><c>true</c> if the folder was successfully renamed; <c>false</c> otherwise.</returns>
         public bool RenameFolder(string key, string name)
         {
             ArgumentException.ThrowIfNullOrEmpty(key, nameof(key));
@@ -570,7 +570,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// Renames the workspace.
         /// </summary>
         /// <param name="name">The new name.</param>
-        /// <returns><c>true</c> if the workspace was successfully renamed; <c>false</c>.</returns>
+        /// <returns><c>true</c> if the workspace was successfully renamed; <c>false</c> otherwise.</returns>
         public bool RenameWorkspace(string name)
         {
             try

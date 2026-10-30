@@ -80,7 +80,7 @@
         /// </summary>
         /// <param name="key">The node key.</param>
         /// <param name="name">The new name.</param>
-        /// <returns><c>true</c> if the document was successfully renamed; <c>false</c>.</returns>
+        /// <returns><c>true</c> if the document was successfully renamed; <c>false</c> otherwise.</returns>
         bool RenameDocument(string key, string name);
 
         /// <summary>
@@ -88,14 +88,14 @@
         /// </summary>
         /// <param name="key">The node key.</param>
         /// <param name="name">The new name.</param>
-        /// <returns><c>true</c> if the folder was successfully renamed; <c>false</c>.</returns>
+        /// <returns><c>true</c> if the folder was successfully renamed; <c>false</c> otherwise.</returns>
         bool RenameFolder(string key, string name);
 
         /// <summary>
         /// Renames the workspace.
         /// </summary>
         /// <param name="name">The new name.</param>
-        /// <returns><c>true</c> if the workspace was successfully renamed; <c>false</c>.</returns>
+        /// <returns><c>true</c> if the workspace was successfully renamed; <c>false</c> otherwise.</returns>
         bool RenameWorkspace(string name);
 
         /// <summary>

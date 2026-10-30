@@ -62,7 +62,7 @@ namespace StarLab.Data.MongoDB
         /// <summary>
         /// Moves the cursor to the next record.
         /// </summary>
-        /// <returns><c>true</c> if there are more records available; <c>false</c>.</returns>
+        /// <returns><c>true</c> if there are more records available; <c>false</c> otherwise.</returns>
         public bool MoveNext()
         {
             index++;

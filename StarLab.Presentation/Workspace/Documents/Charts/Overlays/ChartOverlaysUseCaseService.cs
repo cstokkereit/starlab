@@ -18,7 +18,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts.Overlays
         /// Initialises a new instance of the <see cref="ChartOverlaysUseCaseService"/> class.
         /// </summary>
         /// <param name="factory">An <see cref="IUseCaseFactory"/> that will be used to create use cases.</param>
-        /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
+        /// <param name="mapper">Maps model objects to data transfer objects and vice versa.</param>
         /// <param name="context">An <see cref="ISessionContext"/> that provides access to the session context.</param>
         public ChartOverlaysUseCaseService(IUseCaseFactory factory, IMapper mapper, ISessionContext context)
             : base(factory, mapper) 

@@ -8,15 +8,15 @@ namespace StarLab.Presentation.Workspace.Documents
     public interface ICancellableView
     {
         /// <summary>
-        /// Attaches the <see cref="ICommand"/> provided to the Cancel button.
+        /// Attaches the command provided to the Cancel button.
         /// </summary>
-        /// <param name="command">The <see cref="ICommand"/> that will be executed when the Cancel button is clicked.</param>
+        /// <param name="command">The command that will be executed when the Cancel button is clicked.</param>
         void AttachCancelButtonCommand(ICommand command);
 
         /// <summary>
-        /// Attaches the <see cref="ICommand"/> provided to the OK button.
+        /// Attaches the command provided to the OK button.
         /// </summary>
-        /// <param name="command">The <see cref="ICommand"/> that will be executed when the OK button is clicked.</param>
+        /// <param name="command">The command that will be executed when the OK button is clicked.</param>
         void AttachOKButtonCommand(ICommand command);
     }
 }

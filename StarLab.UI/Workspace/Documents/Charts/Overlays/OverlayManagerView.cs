@@ -2,7 +2,6 @@
 using StarLab.Presentation;
 using StarLab.Presentation.Workspace.Documents.Charts.Overlays;
 using StarLab.Shared;
-using StarLab.UI;
 using Stratosoft.Commands;
 
 namespace StarLab.UI.Workspace.Documents.Charts.Overlays
@@ -44,9 +43,9 @@ namespace StarLab.UI.Workspace.Documents.Charts.Overlays
         }
 
         /// <summary>
-        /// Attaches the <see cref="IChildViewPresenter"/> that controls the view.
+        /// Attaches the presenter that controls the view.
         /// </summary>
-        /// <param name="presenter">The <see cref="IChildViewPresenter"/> that controls the view.</param>
+        /// <param name="presenter">The presenter that controls the view.</param>
         public override void Attach(IChildViewPresenter presenter)
         {
             if (this.presenter != null) throw new InvalidOperationException(ExceptionMessages.PresenterAlreadyAttached);
@@ -57,9 +56,9 @@ namespace StarLab.UI.Workspace.Documents.Charts.Overlays
         }
 
         /// <summary>
-        /// Attaches the <see cref="ICommand"/> provided to the Cancel button.
+        /// Attaches the command provided to the Cancel button.
         /// </summary>
-        /// <param name="command">The <see cref="ICommand"/> that will be executed when the Cancel button is clicked.</param>
+        /// <param name="command">The command that will be executed when the Cancel button is clicked.</param>
         public void AttachCancelButtonCommand(ICommand command)
         {
             if (command is IComponentCommand componentCommand)
@@ -69,9 +68,9 @@ namespace StarLab.UI.Workspace.Documents.Charts.Overlays
         }
 
         /// <summary>
-        /// Attaches the <see cref="ICommand"/> provided to the OK button.
+        /// Attaches the command provided to the OK button.
         /// </summary>
-        /// <param name="command">The <see cref="ICommand"/> that will be executed when the OK button is clicked.</param>
+        /// <param name="command">The command that will be executed when the OK button is clicked.</param>
         public void AttachOKButtonCommand(ICommand command)
         {
             if (command is IComponentCommand componentCommand)

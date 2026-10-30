@@ -1,7 +1,7 @@
 ﻿namespace StarLab.Domain.Data
 {
     /// <summary>
-    /// TODO : Documentation
+    /// A static class containing constants used to identify stellar parameters.
     /// </summary>
     public static class StellarParameters
     {

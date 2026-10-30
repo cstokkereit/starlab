@@ -18,8 +18,8 @@ namespace StarLab.Application
         /// <summary>
         /// Initialises a new instance of the <see cref="UseCase{TOutputPort}"/> class.
         /// </summary>
-        /// <param name="outputPort">The <see cref="IOutputPort"/> that updates the UI in response to the outputs of the use case.</param>
-        /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
+        /// <param name="outputPort">Updates the UI in response to the execution of the use case.</param>
+        /// <param name="mapper">Maps model objects to data transfer objects and vice versa.</param>
         /// <exception cref="ArgumentNullException"></exception>
         protected UseCase(TOutputPort outputPort, IMapper mapper)
         {

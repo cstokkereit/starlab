@@ -1,4 +1,6 @@
-﻿namespace StarLab.Domain.Core
+﻿using StarLab.Shared;
+
+namespace StarLab.Domain.Core
 {
     /// <summary>
     /// TODO : Documentation
@@ -19,6 +21,21 @@
             CreateSpectralClasses("G", 40);
             CreateSpectralClasses("K", 50);
             CreateSpectralClasses("M", 60);
+        }
+
+        public static string ToString(double value)
+        {
+            var key = string.Empty;
+
+            foreach (var entry in lookup)
+            {
+                if (entry.Value == value)
+                {
+                    return entry.Key;
+                }
+            }
+
+            throw new ArgumentOutOfRangeException(nameof(value), value, ExceptionMessages.ValidRange(0, 69.9));
         }
 
         /// <summary>

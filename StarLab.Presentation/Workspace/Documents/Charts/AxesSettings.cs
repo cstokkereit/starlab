@@ -146,7 +146,7 @@
         /// <param name="x2">The top axis.</param>
         /// <param name="y1">The left axis.</param>
         /// <param name="y2">The right axis.</param>
-        /// <returns><c>true</c> if any of the axes are visible; <c>false</c>.</returns>
+        /// <returns><c>true</c> if any of the axes are visible; <c>false</c> otherwise.</returns>
         private static bool GetVisible(IAxis x1, IAxis x2, IAxis y1, IAxis y2)
         {
             return x1.Visible || x2.Visible || y1.Visible || y2.Visible;

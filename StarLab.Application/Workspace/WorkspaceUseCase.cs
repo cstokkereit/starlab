@@ -10,8 +10,8 @@ namespace StarLab.Application.Workspace
         /// <summary>
         /// Initialises a new instance of the <see cref="WorkspaceUseCase"/> class.
         /// </summary>
-        /// <param name="outputPort">An <see cref="IWorkspaceOutputPort"/> that updates the UI in response to the execution of the use case.</param>
-        /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
+        /// <param name="outputPort">Updates the UI in response to the execution of the use case.</param>
+        /// <param name="mapper">Maps model objects to data transfer objects and vice versa.</param>
         protected WorkspaceUseCase(IWorkspaceOutputPort outputPort, IMapper mapper)
             : base(outputPort, mapper) { }
 
@@ -19,7 +19,7 @@ namespace StarLab.Application.Workspace
         /// Checks the name provided to make sure that it does not contain any illegal characters.
         /// </summary>
         /// <param name="name">A name that may contain illegal characters.</param>
-        /// <returns><c>true</c> if the name does not contain illegal characters; <c>false</c>.</returns>
+        /// <returns><c>true</c> if the name does not contain illegal characters; <c>false</c> otherwise.</returns>
         protected static bool IsValid(string name)
         {
             if (string.IsNullOrEmpty(name)) return false;

@@ -10,8 +10,8 @@ namespace StarLab.Application.Workspace.Documents
         /// <summary>
         /// Initialises a new instance of the <see cref="AddDocumentUseCase"/> class.
         /// </summary>
-        /// <param name="outputPort">An <see cref="IWorkspaceOutputPort"/> that updates the UI in response to the execution of the use case.</param>
-        /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
+        /// <param name="outputPort">Updates the UI in response to the execution of the use case.</param>
+        /// <param name="mapper">Maps model objects to data transfer objects and vice versa.</param>
         public RenameDocumentUseCase(IWorkspaceOutputPort outputPort, IMapper mapper)
             : base(outputPort, mapper) { }
 
@@ -51,7 +51,7 @@ namespace StarLab.Application.Workspace.Documents
         /// </summary>
         /// <param name="folder">The <see cref="IFolder"/> containing the documents.</param>
         /// <param name="name">The new document name.</param>
-        /// <returns><c>true</c> if there are no documents with matching names; <c>false</c>.</returns>
+        /// <returns><c>true</c> if there are no documents with matching names; <c>false</c> otherwise.</returns>
         private bool IsValid(IFolder folder, string name)
         {
             var valid = true;

@@ -1,7 +1,7 @@
 ﻿namespace StarLab.UI.Workspace.Documents.Charts
 {
     /// <summary>
-    /// TODO
+    /// Specifies constants that represent the chart axes.
     /// </summary>
     public enum Axis
     {

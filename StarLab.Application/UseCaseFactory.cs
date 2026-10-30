@@ -25,7 +25,7 @@ namespace StarLab.Application
         /// <summary>
         /// Initialises a new instance of the <see cref="UseCaseFactory"/> class.
         /// </summary>
-        /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
+        /// <param name="mapper">Maps model objects to data transfer objects and vice versa.</param>
         /// <param name="databaseManager">An <see cref="IDatabaseManager"/> that will be used to retrieve data from the database.</param>
         /// <param name="queryBuilder">An <see cref="IQueryBuilder"/> that will be used to build database queries.</param>
         /// <param name="serialiser">An <see cref="ISerialisationService"/> that will be used to serialise and deserialise model objects.</param>
@@ -41,7 +41,7 @@ namespace StarLab.Application
         /// <summary>
         /// Creates a use case that adds an overlay to a chart.
         /// </summary>
-        /// <param name="outputPort">An <see cref="IChartOutputPort"/> that updates the UI in response to the outputs of the use case.</param>
+        /// <param name="outputPort">Updates the UI in response to the execution of the use case.</param>
         /// <returns>An instance of <see cref="IUseCase{AddChartOverlayUseCaseArgs}"/> that implements the use case.</returns>
         public IUseCase<AddChartOverlayUseCaseArgs> CreateAddChartOverlayUseCase(IChartOutputPort outputPort)
         {
@@ -51,7 +51,7 @@ namespace StarLab.Application
         /// <summary>
         /// Creates a use case that adds a document to the workspace.
         /// </summary>
-        /// <param name="outputPort">An <see cref="IWorkspaceOutputPort"/> that updates the UI in response to the execution of the use case.</param>
+        /// <param name="outputPort">Updates the UI in response to the execution of the use case.</param>
         /// <returns>An instance of <see cref="IUseCase{AddDocumentUseCaseArgs}"/> that implements the use case.</returns>
         public IUseCase<AddDocumentUseCaseArgs> CreateAddDocumentUseCase(IWorkspaceOutputPort outputPort)
         {
@@ -61,7 +61,7 @@ namespace StarLab.Application
         /// <summary>
         /// Creates a use case that adds a folder to the workspace.
         /// </summary>
-        /// <param name="outputPort">An <see cref="IWorkspaceOutputPort"/> that updates the UI in response to the execution of the use case.</param>
+        /// <param name="outputPort">Updates the UI in response to the execution of the use case.</param>
         /// <returns>An instance of <see cref="IUseCase{AddFolderUseCaseArgs}"/> that implements the use case.</returns>
         public IUseCase<AddFolderUseCaseArgs> CreateAddFolderUseCase(IWorkspaceOutputPort outputPort)
         {
@@ -71,7 +71,7 @@ namespace StarLab.Application
         /// <summary>
         /// Creates a use case that adds a project to the workspace.
         /// </summary>
-        /// <param name="outputPort">An <see cref="IWorkspaceOutputPort"/> that updates the UI in response to the execution of the use case.</param>
+        /// <param name="outputPort">Updates the UI in response to the execution of the use case.</param>
         /// <returns>An instance of <see cref="IUseCase{AddProjectUseCaseArgs}"/> that implements the use case.</returns>
         public IUseCase<AddProjectUseCaseArgs> CreateAddProjectUseCase(IWorkspaceOutputPort outputPort)
         {
@@ -81,7 +81,7 @@ namespace StarLab.Application
         /// <summary>
         /// Creates a use case that copies a folder in the workspace hierarchy. 
         /// </summary>
-        /// <param name="outputPort">An <see cref="IWorkspaceOutputPort"/> that updates the UI in response to the outputs of the use case.</param>
+        /// <param name="outputPort">Updates the UI in response to the execution of the use case.</param>
         /// <returns>An instance of <see cref="IUseCase{ClipboardUseCaseArgs}"/> that implements the use case.</returns>
         public IUseCase<ClipboardUseCaseArgs> CreateCopyAndPasteUseCase(IWorkspaceOutputPort outputPort)
         {
@@ -91,7 +91,7 @@ namespace StarLab.Application
         /// <summary>
         /// Creates a use case that copies a folder in the workspace hierarchy. 
         /// </summary>
-        /// <param name="outputPort">An <see cref="IWorkspaceOutputPort"/> that updates the UI in response to the outputs of the use case.</param>
+        /// <param name="outputPort">Updates the UI in response to the execution of the use case.</param>
         /// <returns>An instance of <see cref="IUseCase{ClipboardUseCaseArgs}"/> that implements the use case.</returns>
         public IUseCase<ClipboardUseCaseArgs> CreateCutAndPasteUseCase(IWorkspaceOutputPort outputPort)
         {
@@ -101,7 +101,7 @@ namespace StarLab.Application
         /// <summary>
         /// Creates a use case that deletes a document from the workspace.
         /// </summary>
-        /// <param name="outputPort">An <see cref="IWorkspaceOutputPort"/> that updates the UI in response to the execution of the use case.</param>
+        /// <param name="outputPort">Updates the UI in response to the execution of the use case.</param>
         /// <returns>An instance of <see cref="IUseCase{DeleteDocumentUseCaseArgs}"/> that implements the use case.</returns>
         public IUseCase<DeleteDocumentUseCaseArgs> CreateDeleteDocumentUseCase(IWorkspaceOutputPort outputPort)
         {
@@ -111,7 +111,7 @@ namespace StarLab.Application
         /// <summary>
         /// Creates a use case that deletes a folder from the workspace.
         /// </summary>
-        /// <param name="outputPort">An <see cref="IWorkspaceOutputPort"/> that updates the UI in response to the execution of the use case.</param>
+        /// <param name="outputPort">Updates the UI in response to the execution of the use case.</param>
         /// <returns>An instance of <see cref="IUseCase{DeleteFolderUseCaseArgs}"/> that implements the use case.</returns>
         public IUseCase<DeleteFolderUseCaseArgs> CreateDeleteFolderUseCase(IWorkspaceOutputPort outputPort)
         {
@@ -121,7 +121,7 @@ namespace StarLab.Application
         /// <summary>
         /// Creates a use case that loads a workspace from a file.
         /// </summary>
-        /// <param name="outputPort">An <see cref="IWorkspaceOutputPort"/> that updates the UI in response to the execution of the use case.</param>
+        /// <param name="outputPort">Updates the UI in response to the execution of the use case.</param>
         /// <returns>An instance of <see cref="IUseCase{string}"/> that implements the use case.</returns>
         public IUseCase<string> CreateOpenWorkspaceUseCase(IApplicationOutputPort outputPort)
         {
@@ -131,7 +131,7 @@ namespace StarLab.Application
         /// <summary>
         /// Creates a use case that TODO
         /// </summary>
-        /// <param name="outputPort">An <see cref="IChartOutputPort"/> that updates the UI in response to the outputs of the use case.</param>
+        /// <param name="outputPort">Updates the UI in response to the execution of the use case.</param>
         /// <returns>An instance of <see cref="IUseCase{WorkspaceDTO}"/> that implements the use case.</returns>
         public IUseCaseAsync<PlotChartUseCaseArgs> CreatePlotChartUseCase(IChartOutputPort outputPort)
         {
@@ -141,7 +141,7 @@ namespace StarLab.Application
         /// <summary>
         /// Creates a use case that removes an overlay from a chart.
         /// </summary>
-        /// <param name="outputPort">An <see cref="IChartOutputPort"/> that updates the UI in response to the outputs of the use case.</param>
+        /// <param name="outputPort">Updates the UI in response to the execution of the use case.</param>
         /// <returns>An instance of <see cref="IUseCase{RemoveChartOverlayUseCaseArgs}"/> that implements the use case.</returns>
         public IUseCase<RemoveChartOverlayUseCaseArgs> CreateRemoveChartOverlayUseCase(IChartOutputPort outputPort)
         {
@@ -151,7 +151,7 @@ namespace StarLab.Application
         /// <summary>
         /// Creates a use case that renames a document in the workspace hierarchy.
         /// </summary>
-        /// <param name="outputPort">An <see cref="IWorkspaceOutputPort"/> that updates the UI in response to the execution of the use case.</param>
+        /// <param name="outputPort">Updates the UI in response to the execution of the use case.</param>
         /// <returns>An instance of <see cref="IUseCase{RenameDocumentUseCaseArgs}"/> that implements the use case.</returns>
         public IUseCase<RenameDocumentUseCaseArgs> CreateRenameDocumentUseCase(IWorkspaceOutputPort outputPort)
         {
@@ -161,7 +161,7 @@ namespace StarLab.Application
         /// <summary>
         /// Creates a use case that renames a folder in the workspace hierarchy.
         /// </summary>
-        /// <param name="outputPort">An <see cref="IWorkspaceOutputPort"/> that updates the UI in response to the execution of the use case.</param>
+        /// <param name="outputPort">Updates the UI in response to the execution of the use case.</param>
         /// <returns>An instance of <see cref="IUseCase{RenameFolderUseCaseArgs}"/> that implements the use case.</returns>
         public IUseCase<RenameFolderUseCaseArgs> CreateRenameFolderUseCase(IWorkspaceOutputPort outputPort)
         {
@@ -171,7 +171,7 @@ namespace StarLab.Application
         /// <summary>
         /// Creates a use case that renames the workspace.
         /// </summary>
-        /// <param name="outputPort">An <see cref="IWorkspaceOutputPort"/> that updates the UI in response to the execution of the use case.</param>
+        /// <param name="outputPort">Updates the UI in response to the execution of the use case.</param>
         /// <returns>An instance of <see cref="IUseCase{RenameWorkspaceUseCaseArgs}"/> that implements the use case.</returns>
         public IUseCase<RenameWorkspaceUseCaseArgs> CreateRenameWorkspaceUseCase(IWorkspaceOutputPort outputPort)
         {
@@ -181,7 +181,7 @@ namespace StarLab.Application
         /// <summary>
         /// Creates a use case that saves the current workspace to a file.
         /// </summary>
-        /// <param name="outputPort">An <see cref="IWorkspaceOutputPort"/> that updates the UI in response to the execution of the use case.</param>
+        /// <param name="outputPort">Updates the UI in response to the execution of the use case.</param>
         /// <returns>An instance of <see cref="IUseCase{WorkspaceDTO}"/> that implements the use case.</returns>
         public IUseCase<WorkspaceDTO> CreateSaveWorkspaceUseCase(IApplicationOutputPort outputPort)
         {
@@ -191,7 +191,7 @@ namespace StarLab.Application
         /// <summary>
         /// Creates a use case that updates a preview chart in response to a settings change.
         /// </summary>
-        /// <param name="outputPort">An <see cref="IChartOutputPort"/> that updates the UI in response to the outputs of the use case.</param>
+        /// <param name="outputPort">Updates the UI in response to the execution of the use case.</param>
         /// <returns>An instance of <see cref="IUseCase{ChartDTO}"/> that implements the use case.</returns>
         public IUseCase<ChartDTO> CreateUpdateChartPreviewUseCase(IChartOutputPort outputPort)
         {
@@ -201,7 +201,7 @@ namespace StarLab.Application
         /// <summary>
         /// Creates a use case that updates a chart in response to a settings change.
         /// </summary>
-        /// <param name="outputPort">An <see cref="IChartOutputPort"/> that updates the UI in response to the outputs of the use case.</param>
+        /// <param name="outputPort">Updates the UI in response to the execution of the use case.</param>
         /// <returns>An instance of <see cref="IUseCase{UpdateDocumentUseCaseArgs}"/> that implements the use case.</returns>
         public IUseCase<UpdateChartUseCaseArgs> CreateUpdateChartUseCase(IApplicationOutputPort outputPort)
         {

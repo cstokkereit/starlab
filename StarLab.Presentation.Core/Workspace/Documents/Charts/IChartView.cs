@@ -21,16 +21,16 @@
         void RemoveOverlay(string name);
 
         /// <summary>
-        /// Updates the chart following a change to the chart data.
+        /// Plots the chart.
         /// </summary>
-        /// <param name="config">An <see cref="IChart"/> used to configure the chart.</param>
-        /// <param name="data">An <see cref="IChartData"> that holds data that will be used to generate the chart.</param>
+        /// <param name="config">The chart configuration.</param>
+        /// <param name="data">The chart data.</param>
         void PlotChart(IChart config, IChartData data);
 
         /// <summary>
         /// Updates the chart following a change to the chart configuration.
         /// </summary>
-        /// <param name="config">The <see cref="IChart"/> used to configure the chart.</param>
+        /// <param name="config">The chart configuration.</param>
         void UpdateChart(IChart config);
     }
 }

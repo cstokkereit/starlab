@@ -22,8 +22,8 @@ namespace StarLab.Application.Workspace.Documents.Charts
         /// <summary>
         /// Initialises a new instance of the <see cref="PlotChartUseCase"/> class.
         /// </summary>
-        /// <param name="outputPort">An <see cref="IAddDocumentOutputPort"/> that updates the UI in response to the execution of the use case.</param>
-        /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
+        /// <param name="outputPort">Updates the UI in response to the execution of the use case.</param>
+        /// <param name="mapper">Maps model objects to data transfer objects and vice versa.</param>
         /// <param name="databases">An <see cref="IDatabaseManager"/> that will be used to access the data.</param>
         /// <param name="builder">An <see cref="IQueryBuilder"/> that will be used to build database queries.</param>
         public PlotChartUseCase(IChartOutputPort outputPort, IMapper mapper, IDatabaseManager databases, IQueryBuilder builder, IOverlayDataProvider overlayData, IUseCaseFactory factory)

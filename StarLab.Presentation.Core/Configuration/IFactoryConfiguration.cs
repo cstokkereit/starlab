@@ -1,7 +1,7 @@
 ﻿namespace StarLab.Presentation.Configuration
 {
     /// <summary>
-    /// Defines the functions used to obtain the type configuration information required by the view and presenter factories.
+    /// Defines the functions used to obtain the type configuration information required by the UI and Presentation factories.
     /// </summary>
     public interface IFactoryConfiguration
     {

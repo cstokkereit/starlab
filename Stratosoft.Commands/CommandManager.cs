@@ -30,7 +30,7 @@ namespace Stratosoft.Commands
         /// Determines whether the specified <see cref="ICommand"/> has already been added.
         /// </summary>
         /// <param name="name">The name of the <see cref="ICommand"/>.</param>
-        /// <returns><c>true</c> if the specifed <see cref="ICommand"/> has already been added; <c>false</c>.</returns>
+        /// <returns><c>true</c> if the specifed <see cref="ICommand"/> has already been added; <c>false</c> otherwise.</returns>
         public bool ContainsCommand(string name)
         {
             return commands.ContainsKey(name);

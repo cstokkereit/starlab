@@ -7,7 +7,6 @@ using StarLab.Presentation.Configuration;
 using StarLab.Presentation.Workspace.Documents.Charts;
 using StarLab.Presentation.Workspace.Documents.Charts.Overlays;
 using StarLab.Shared;
-using StarLab.UI;
 using StarLab.UI.Workspace.Documents.Charts.Overlays;
 
 namespace StarLab.UI.Workspace.Documents.Charts
@@ -31,11 +30,12 @@ namespace StarLab.UI.Workspace.Documents.Charts
 
         private readonly OverlayFactory factory; // A factory for creating overlays.
 
-        private Scatter? points; // 
+        private Scatter? points; // The scatter plot used to generate the colour magnitude diagram.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="ChartView"> class.
         /// </summary>
+        /// <param name="configuration">Provides the type configuration required by the <see cref="OverlayFactory"/>.</param>
         public ChartView(IFactoryConfiguration configuration)
             : base(ViewIDs.Chart, SplitViewPanels.Panel2)
         {
@@ -113,8 +113,8 @@ namespace StarLab.UI.Workspace.Documents.Charts
         /// <summary>
         /// Plots the chart.
         /// </summary>
-        /// <param name="config">An <see cref="IChart"/> used to configure the chart.</param>
-        /// <param name="data">An <see cref="IChartData"> that holds data that will be used to generate the chart.</param>
+        /// <param name="config">The chart configuration.</param>
+        /// <param name="data">The chart data.</param>
         public void PlotChart(IChart config, IChartData data)
         {
             points = chart.Plot.Add.ScatterPoints(data.GetSeries(config.X1.Data), data.GetSeries(config.Y1.Data));
@@ -145,7 +145,7 @@ namespace StarLab.UI.Workspace.Documents.Charts
         /// <summary>
         /// Updates the chart following a change to the chart configuration.
         /// </summary>
-        /// <param name="config">The <see cref="IChart"/> used to configure the chart.</param>
+        /// <param name="config">The chart configuration.</param>
         public void UpdateChart(IChart config)
         {
             ConfigureChart(config);
@@ -161,8 +161,8 @@ namespace StarLab.UI.Workspace.Documents.Charts
         /// <summary>
         /// Configures the chart axes.
         /// </summary>
-        /// <param name="plot">The </param>
-        /// <param name="config"></param>
+        /// <param name="plot">The plot displayed in the chart control.</param>
+        /// <param name="config">The chart configuration.</param>
         private void ConfigureAxes(Plot plot, IChart config)
         {
             plot.Axes.Rules.Clear();
@@ -179,8 +179,8 @@ namespace StarLab.UI.Workspace.Documents.Charts
         /// <summary>
         /// Configures a chart axis.
         /// </summary>
-        /// <param name="axis">The <see cref="ScottPlot.IAxis"/> being configured.</param>
-        /// <param name="config">An <see cref="Presentation.Workspace.Documents.Charts.IAxis"/> configuration being applied.</param>
+        /// <param name="axis">The axis being configured.</param>
+        /// <param name="config">The axis configuration.</param>
         private void ConfigureAxis(ScottPlot.IAxis axis, Presentation.Workspace.Documents.Charts.IAxis config)
         {
             axis.FrameLineStyle.Color = GetColour(config.Colour);
@@ -194,7 +194,7 @@ namespace StarLab.UI.Workspace.Documents.Charts
         /// <summary>
         /// Configures a chart.
         /// </summary>
-        /// <param name="config">The <see cref="IChart"/> used to configure the chart.</param>
+        /// <param name="config">The chart configuration.</param>
         private void ConfigureChart(IChart config)
         {
             var plot = chart.Plot;
@@ -211,8 +211,8 @@ namespace StarLab.UI.Workspace.Documents.Charts
         /// <summary>
         /// Configures a label.
         /// </summary>
-        /// <param name="label">The <see cref="LabelStyle"/> being configured.</param>
-        /// <param name="config">The <see cref="ILabel"/> used to configure the label.</param>
+        /// <param name="label">The label being configured.</param>
+        /// <param name="config">The label configuration.</param>
         private void ConfigureLabel(LabelStyle label, ILabel config)
         {
             label.ForeColor = GetColour(config.Colour);
@@ -231,7 +231,7 @@ namespace StarLab.UI.Workspace.Documents.Charts
         /// <summary>
         /// Configures an overlay.
         /// </summary>
-        /// <param name="config">The <see cref="IOverlay"/> used to configure the overlay.</param>
+        /// <param name="config">The overlay configuration.</param>
         private void ConfigureOverlay(IOverlay config)
         {
             if (overlays.TryGetValue(config.Name, out Overlay? overlay))
@@ -243,9 +243,9 @@ namespace StarLab.UI.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// 
+        /// Configures the overlays.
         /// </summary>
-        /// <param name="config"></param>
+        /// <param name="config">The chart configuration.</param>
         private void ConfigureOverlays(IChart config)
         {
             foreach (var overlay in config.Overlays)
@@ -257,8 +257,8 @@ namespace StarLab.UI.Workspace.Documents.Charts
         /// <summary>
         /// Configures the plot area.
         /// </summary>
-        /// <param name="chart">The <see cref="Plot"/> being configured.</param>
-        /// <param name="config">The <see cref="IChart"/> used to configure the plot area.</param>
+        /// <param name="chart">The plot being configured.</param>
+        /// <param name="config">The chart configuration.</param>
         private void ConfigurePlotArea(Plot chart, IChart config)
         {
             chart.DataBackground.Color = GetColour(config.PlotArea.BackColour);
@@ -292,7 +292,7 @@ namespace StarLab.UI.Workspace.Documents.Charts
         /// <summary>
         /// Configures the data points.
         /// </summary>
-        /// <param name="config">The <see cref="IChart"/> used to configure the data points.</param>
+        /// <param name="config">The data point configuration.</param>
         private void ConfigurePoints(IPoints config)
         {
             if (points != null)
@@ -306,8 +306,8 @@ namespace StarLab.UI.Workspace.Documents.Charts
         /// <summary>
         /// Configures the axis scale.
         /// </summary>
-        /// <param name="axis">The <see cref="ScottPlot.IAxis"/> being configured.</param>
-        /// <param name="config">The <see cref="IScale"/> used to configure the scale.</param>
+        /// <param name="axis">The axis being configured.</param>
+        /// <param name="config">The scale configuration.</param>
         private void ConfigureScale(ScottPlot.IAxis axis, IScale config)
         {
             axis.TickLabelStyle.IsVisible = config.Visible;
@@ -331,8 +331,8 @@ namespace StarLab.UI.Workspace.Documents.Charts
         /// <summary>
         /// Configures the tick labels.
         /// </summary>
-        /// <param name="tickLabels">The <see cref="LabelStyle"/> being configured.</param>
-        /// <param name="config">The <see cref="ITickLabels"/> used to configure the tick labels.</param>
+        /// <param name="tickLabels">The tick labels being configured.</param>
+        /// <param name="config">The tick label configuration.</param>
         private void ConfigureTickLabels(LabelStyle tickLabels, ITickLabels config)
         {
             tickLabels.ForeColor = GetColour(config.Colour);
@@ -351,8 +351,8 @@ namespace StarLab.UI.Workspace.Documents.Charts
         /// <summary>
         /// Configures the tick marks.
         /// </summary>
-        /// <param name="tickMarks">The <see cref="TickMarkStyle"/> being configured.</param>
-        /// <param name="config">The <see cref="ITickMarks"/> used to configure the tick marks.</param>
+        /// <param name="tickMarks">The tick marks being configured.</param>
+        /// <param name="config">The tick mark configuration.</param>
         private void ConfigureTickMarks(TickMarkStyle tickMarks, ITickMarks config)
         {
             tickMarks.Color = GetColour(config.Colour);
@@ -361,10 +361,10 @@ namespace StarLab.UI.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// Gets the specifed <see cref="ScottPlot.Color"/> from the colour name or RGB value provided.
+        /// Gets the specifed colour.
         /// </summary>
-        /// <param name="colour">A <see cref="string"/> value that specifies the colour either by name or as an RGB value.</param>
-        /// <returns>The required <see cref="ScottPlot.Color"/>.</returns>
+        /// <param name="colour">The name of the colour or its RGB value.</param>
+        /// <returns>The <see cref="ScottPlot.Color"/> specified by the name or RGB value provided.</returns>
         private static ScottPlot.Color GetColour(string colour)
         {
             colour = colour.StartsWith('#') ? colour.Substring(1) : colour;

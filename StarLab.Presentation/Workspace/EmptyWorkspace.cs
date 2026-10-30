@@ -146,7 +146,7 @@ namespace StarLab.Presentation.Workspace
         /// Determines if the workspace contains the specified document.
         /// </summary>
         /// <param name="id">The ID of the required document.</param>
-        /// <returns><c>true</c> if the workspace contains a document with the specified ID; <c>false</c>.</returns>
+        /// <returns><c>true</c> if the workspace contains a document with the specified ID; <c>false</c> otherwise.</returns>
         public bool HasDocument(DocumentID id)
         {
             return false;
@@ -156,7 +156,7 @@ namespace StarLab.Presentation.Workspace
         /// Determines if the workspace contains the specified folder.
         /// </summary>
         /// <param name="key">The key of the required folder.</param>
-        /// <returns><c>true</c> if the workspace contains a folder with the specified key; <c>false</c>.</returns>
+        /// <returns><c>true</c> if the workspace contains a folder with the specified key; <c>false</c> otherwise.</returns>
         public bool HasFolder(string key)
         {
             return false;
@@ -166,7 +166,7 @@ namespace StarLab.Presentation.Workspace
         /// Determines if the workspace contains the specified project.
         /// </summary>
         /// <param name="key">The key of the required project.</param>
-        /// <returns><c>true</c> if the workspace contains a project with the specified key; <c>false</c>.</returns>
+        /// <returns><c>true</c> if the workspace contains a project with the specified key; <c>false</c> otherwise.</returns>
         public bool HasProject(string key)
         {
             return false;
@@ -176,7 +176,7 @@ namespace StarLab.Presentation.Workspace
         /// Determines if the folder or project with the specified key is empty.
         /// </summary>
         /// <param name="key">The key of the folder or project.</param>
-        /// <returns><c>true</c> if the folder or project with the specified key is empty; <c>false</c>.</returns>
+        /// <returns><c>true</c> if the folder or project with the specified key is empty; <c>false</c> otherwise.</returns>
         public bool IsEmpty(string key)
         {
             return true;

@@ -14,7 +14,7 @@
         /// Determines whether the specified field exists.
         /// </summary>
         /// <param name="name">The name of the field.</param>
-        /// <returns><c>true</c> if the field exists; <c>false</c>.</returns>
+        /// <returns><c>true</c> if the field exists; <c>false</c> otherwise.</returns>
         bool HasField(string name);
 
         /// <summary>

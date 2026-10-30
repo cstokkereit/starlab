@@ -10,11 +10,11 @@ namespace StarLab.Application.Workspace
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(DeleteFolderUseCase)); // The logger that will be used for writing log messages.
 
-        // <summary>
+        /// <summary>
         /// Initialises a new instance of the <see cref="DeleteFolderUseCase"/> class.
         /// </summary>
-        /// <param name="outputPort">An <see cref="IWorkspaceOutputPort"/> that updates the UI in response to the execution of the use case.</param>
-        /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
+        /// <param name="outputPort">Updates the UI in response to the execution of the use case.</param>
+        /// <param name="mapper">Maps model objects to data transfer objects and vice versa.</param>
         public DeleteFolderUseCase(IWorkspaceOutputPort outputPort, IMapper mapper)
             : base(outputPort, mapper) { }
 

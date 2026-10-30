@@ -353,6 +353,17 @@ namespace StarLab.Shared
         }
 
         /// <summary>
+        /// Builds a ValidRange exception message with the specified minimum and maximum values.
+        /// </summary>
+        /// <param name="min">The minimum allowed value.</param>
+        /// <param name="max">The maximum allowed value.</param>
+        /// <returns>The required exception message.</returns>
+        public static string ValidRange(double min, double max)
+        {
+            return $"The value must be in the range {min} - {max}.";
+        }
+
+        /// <summary>
         /// Builds a ViewNotFound exception message for the specified view id.
         /// </summary>
         /// <param name="id">The view ID.</param>

@@ -15,7 +15,7 @@ namespace StarLab.Presentation.Workspace.WorkspaceExplorer
         /// Initialises a new instance of the <see cref="WorkspaceExplorerUseCaseService"/>.
         /// </summary>
         /// <param name="factory">An <see cref="IUseCaseFactory"/> that will be used to create use cases.</param>
-        /// <param name="mapper">An <see cref="IMapper"/> that will be used to map model objects to data transfer objects and vice versa.</param>
+        /// <param name="mapper">Maps model objects to data transfer objects and vice versa.</param>
         public WorkspaceExplorerUseCaseService(IUseCaseFactory factory, IMapper mapper)
             : base(factory, mapper) { }
 
