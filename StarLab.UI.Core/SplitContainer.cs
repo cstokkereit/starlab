@@ -8,7 +8,7 @@ namespace StarLab.UI
     /// </summary>
     public partial class SplitContainer : UserControl, IToolbarManager
     {
-        private readonly Dictionary<SplitViewPanels, PanelManager> panels = new Dictionary<SplitViewPanels, PanelManager>(); // TODO : Documentation
+        private readonly Dictionary<SplitViewPanels, PanelManager> panels = new Dictionary<SplitViewPanels, PanelManager>(); // A dictionary containing the managers that control the panels indexed by location.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="SplitContainer"/> class.
@@ -29,8 +29,8 @@ namespace StarLab.UI
         /// </summary>
         /// <param name="name">The name of the button.</param>
         /// <param name="tooltip">The tooltip text.</param>
-        /// <param name="image">The <see cref="Image"> to use for the button.</param>
-        /// <param name="command">The <see cref="ICommand"> to invoke when the button is clicked.</param>
+        /// <param name="image">The button image.</param>
+        /// <param name="command">The command to invoke when the button is clicked.</param>
         public void AddToolbarButton(string name, string tooltip, Image? image, ICommand command)
         {
             var button = new ToolStripButton(image)
@@ -47,9 +47,9 @@ namespace StarLab.UI
         }
 
         /// <summary>
-        /// Adds a <see cref="Control"/> to the specified <see cref="SplitterPanel">.
+        /// Adds a control to the specified splitter panel.
         /// </summary>
-        /// <param name="control">The <see cref="Control"/> to be added.</param>
+        /// <param name="control">The control to be added.</param>
         /// <param name="panel">The panel that the control should be added to.</param>
         public void AddControl(Control control, SplitViewPanels panel)
         {
@@ -75,19 +75,19 @@ namespace StarLab.UI
         }
 
         /// <summary>
-        /// Hides the specified <see cref="Control"/>.
+        /// Hides the specified control.
         /// </summary>
-        /// <param name="name">The name of the <see cref="Control"/> to hide.</param>
+        /// <param name="name">The name of the control being hidden.</param>
         public void HideSplitContent(string name)
         {
             if (panels[SplitViewPanels.Panel1].Contains(name))
             {
-                panels[SplitViewPanels.Panel1].HideContent(name);
+                panels[SplitViewPanels.Panel1].Remove(name);
                 container.Panel1Collapsed = true;
             }
             else if (panels[SplitViewPanels.Panel2].Contains(name))
             {
-                panels[SplitViewPanels.Panel2].HideContent(name);
+                panels[SplitViewPanels.Panel2].Remove(name);
                 container.Panel2Collapsed = true;
             }
         }
@@ -95,7 +95,7 @@ namespace StarLab.UI
         /// <summary>
         /// Shows the specified <see cref="Control"/>.
         /// </summary>
-        /// <param name="name">The name of the <see cref="Control"/> to show.</param>
+        /// <param name="name">The name of the control being shown.</param>
         public void ShowSplitContent(string name)
         {
             if (panels[SplitViewPanels.Panel1].Contains(name))
@@ -113,9 +113,9 @@ namespace StarLab.UI
         }
 
         /// <summary>
-        /// Gets the minimum <see cref="Size"/> that satisfies the minimum size requirements for all of the controls in the collection provided.
+        /// Calculates the smallest rectangle that satisfies the minimum size requirements for all of the controls in the collection provided.
         /// </summary>
-        /// <param name="controls">A <see cref="System.Windows.Forms.ControlCollection"/> that contains the controls.</param>
+        /// <param name="controls">A collection containing the controls.</param>
         /// <returns>A <see cref="Size"/> struct that specifies the minimum height and width.</returns>
         private Size GetMinimumSize(ControlCollection controls)
         {
@@ -131,7 +131,7 @@ namespace StarLab.UI
         }
 
         /// <summary>
-        /// Gets the minimum <see cref="Size"/> that satisfies the minimum size requirements of the controls in the left and right or top and bottom panels.
+        /// Calculates the smallest rectangle that satisfies the minimum size requirements for all of the controls in the left and right or top and bottom panels.
         /// </summary>
         /// <param name="size1">The left or top panel depending on the orientation of the splitter bar.</param>
         /// <param name="size2">The right or bottom panel depending on the orientation of the splitter bar.</param>
@@ -176,21 +176,29 @@ namespace StarLab.UI
         }
 
         /// <summary>
-        /// 
+        /// A class that manages the controls that can be shown in a splitter panel.
         /// </summary>
         private class PanelManager
         {
-            private readonly Dictionary<string, Control> controls = new Dictionary<string, Control>(); //
+            private readonly Dictionary<string, Control> controls = new Dictionary<string, Control>(); // A dictionary containing the managed controls indexed by name.
 
-            private readonly SplitterPanel panel; //
+            private readonly SplitterPanel panel; // The splitter panel control that contains the managed controls.
 
             private Control? control; // The active control.
 
+            /// <summary>
+            /// Initialises a new instance of the <see cref="PanelManager"/> class.
+            /// </summary>
+            /// <param name="panel">The managed splitter panel.</param>
             public PanelManager(SplitterPanel panel)
             {
                 this.panel = panel;
             }
 
+            /// <summary>
+            /// Adds a control to the managed splitter panel.
+            /// </summary>
+            /// <param name="control">The control to add.</param>
             public void Add(Control control)
             {
                 controls.Add(control.Name, control);
@@ -203,16 +211,29 @@ namespace StarLab.UI
                 }
             }
 
+            /// <summary>
+            /// Determines whether the specified control is managed by this instance.
+            /// </summary>
+            /// <param name="name">The name of the control.</param>
+            /// <returns><c>true</c> if the control is managed by this instance; <c>false</c> otherwise.</returns>
             public bool Contains(string name)
             {
                 return controls.ContainsKey(name);
             }
 
-            public void HideContent(string name)
+            /// <summary>
+            /// Removes the specified control from the splitter panel.
+            /// </summary>
+            /// <param name="name">The name of the control.</param>
+            public void Remove(string name)
             {
                 panel.Controls.Remove(control);
             }
 
+            /// <summary>
+            /// Shows the specified control.
+            /// </summary>
+            /// <param name="name">The name of the control.</param>
             public void ShowContent(string name)
             {
                 if (control != null) panel.Controls.Remove(control);
@@ -220,9 +241,7 @@ namespace StarLab.UI
                 if (controls.TryGetValue(name, out Control? content))
                 {
                     content.Dock = DockStyle.Fill;
-
                     panel.Controls.Add(content);
-
                     control = content;
                 }
             }

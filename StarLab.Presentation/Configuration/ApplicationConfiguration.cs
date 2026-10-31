@@ -23,12 +23,12 @@ namespace StarLab.Presentation.Configuration
         }
 
         /// <summary>
-        /// Gets an <see cref="IEnumerable{IDocumentDefinition}"/> that contains the available document definitions.
+        /// Gets the available document definitions.
         /// </summary>
         public IEnumerable<IDocumentDefinition> DocumentDefinitions => documentDefinitions;
 
         /// <summary>
-        /// Gets an <see cref="IEnumerable{string}"/> that contains the names of the available chart overlays.
+        /// Gets the names of the available chart overlays.
         /// </summary>
         public IEnumerable<string> Overlays => overlays;
 

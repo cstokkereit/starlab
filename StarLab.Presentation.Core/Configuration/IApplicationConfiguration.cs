@@ -1,17 +1,17 @@
 ﻿namespace StarLab.Presentation.Configuration
 {
     /// <summary>
-    /// TODO : Documentation
+    /// Represents the application configuration.
     /// </summary>
     public interface IApplicationConfiguration
     {
         /// <summary>
-        /// Gets an <see cref="IEnumerable{IDocumentDefinition}"/> that contains the available document definitions.
+        /// Gets the available document definitions.
         /// </summary>
         IEnumerable<IDocumentDefinition> DocumentDefinitions { get; }
 
         /// <summary>
-        /// Gets an <see cref="IEnumerable{string}"/> that contains the names of the available chart overlays.
+        /// Gets the names of the available chart overlays.
         /// </summary>
         IEnumerable<string> Overlays { get; }
     }

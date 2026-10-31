@@ -12,7 +12,7 @@ namespace StarLab.UI
         /// </summary>
         /// <param name="name">The name of the <see cref="ToolStripButton">.</param>
         /// <param name="tooltip">The tooltip text.</param>
-        /// <param name="image">The <see cref="Image"> to use for the button.</param>
+        /// <param name="image">The button image.</param>
         /// <param name="command">The <see cref="ICommand"> that will be invoked when the button is clicked.</param>
         public void AddButton(string name, string tooltip, Image? image, ICommand command)
         {

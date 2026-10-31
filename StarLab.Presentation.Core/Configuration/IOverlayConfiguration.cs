@@ -1,12 +1,12 @@
 ﻿namespace StarLab.Presentation.Configuration
 {
     /// <summary>
-    /// TODO : Documentation
+    /// Represents the configuration information required to display a chart overlay.
     /// </summary>
     public interface IOverlayConfiguration
     {
         /// <summary>
-        /// TTODO
+        /// The path to the file containing the overlay data.
         /// </summary>
         string DataSource { get; }
 

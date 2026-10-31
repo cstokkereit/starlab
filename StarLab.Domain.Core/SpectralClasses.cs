@@ -3,7 +3,7 @@
 namespace StarLab.Domain.Core
 {
     /// <summary>
-    /// TODO : Documentation
+    /// A utility class that can be used to convert spectral classes to numerical values so that they can be plotted on a chart.
     /// </summary>
     public class SpectralClasses
     {
@@ -23,6 +23,12 @@ namespace StarLab.Domain.Core
             CreateSpectralClasses("M", 60);
         }
 
+        /// <summary>
+        /// Maps a numeric value to a spectral class that can be used in charts and overlays.
+        /// </summary>
+        /// <param name="value">The numeric value.</param>
+        /// <returns>The spectral class that represented by the numeric value.</returns>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
         public static string ToString(double value)
         {
             var key = string.Empty;
