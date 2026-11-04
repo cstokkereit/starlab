@@ -123,7 +123,7 @@ namespace StarLab.UI.Workspace.Documents.Charts.Overlays
         protected abstract void Clear(Plot plot);
 
         /// <summary>
-        /// Renders the overlay on the specified <see cref="Plot"/>.
+        /// Renders the overlay on the specified plot.
         /// </summary>
         /// <param name="plot">The plot that displays the overlay.</param>
         protected abstract void Render(Plot plot);

@@ -6,18 +6,18 @@ namespace StarLab.Domain.Entities
     // https://en.wikipedia.org/wiki/Color_index
 
     /// <summary>
-    /// TODO: Add a summary for the Star class.
+    /// Provides access to the properties of a star.
     /// </summary>
     public class Star : IStar
     {
-        private readonly Dictionary<string, double> colourIndices = new Dictionary<string, double>();
+        private readonly Dictionary<string, double> colourIndices = new Dictionary<string, double>(); // A dictionary containing the available colour indices.
 
-        private readonly IAstrometricData astrometry;
+        private readonly IAstrometricData astrometry; // The astrometric data for the star.
 
         /// <summary>
-        /// 
+        /// Initialises a new instance of the <see cref="Star"/> class.
         /// </summary>
-        /// <param name="data"></param>
+        /// <param name="data">The entity data for the star.</param>
         public Star(IEntityData data)
         {
             AbsoluteMagnitude = data.GetDoubleValue("AbsoluteMagnitude");
@@ -43,35 +43,69 @@ namespace StarLab.Domain.Entities
             EffectiveTemperature = CalculateEffectiveTemperature(colourIndices["B-V"]);
         }
 
+        /// <summary>
+        /// Initialises a new instance of the <see cref="Star"/> class.
+        /// </summary>
+        /// <param name="astrometry">The astrometric data for the star.</param>
         public Star(IAstrometricData astrometry)
         {
             this.astrometry = astrometry;
         }
 
+        /// <summary>
+        /// Gets the absolute magnitude.
+        /// </summary>
         public double AbsoluteMagnitude { get; }
 
+        /// <summary>
+        /// Gets the apparent magnitude.
+        /// </summary>
         public double ApparentMagnitude { get; }
 
+        /// <summary>
+        /// Gets the specified colour index.
+        /// </summary>
+        /// <param name="name">The name of the colour index.</param>
+        /// <returns>The colour index with the specified name.</returns>
         public double ColourIndex(string name)
         {
             return colourIndices[name];
         }
 
+        /// <summary>
+        /// Gets the declination.
+        /// </summary>
         public double Declination => astrometry.Declination;
 
+        /// <summary>
+        /// Gets the primary designation.
+        /// </summary>
         public string Designation { get; }
 
+        /// <summary>
+        /// Gets the effective temperature.
+        /// </summary>
         public int EffectiveTemperature { get; }
 
+        /// <summary>
+        /// Gets the common name.
+        /// </summary>
         public string Name { get; }
 
+        /// <summary>
+        /// Gets the trigonometric parallax.
+        /// </summary>
         public double Parallax => astrometry.Parallax;
 
+        /// <summary>
+        /// Gets the right ascension.
+        /// </summary>
         public double RightAscension => astrometry.RightAscension;
 
+        /// <summary>
+        /// Gets the spectral type.
+        /// </summary>
         public string SpectralType { get; }
-
-        public double VIColourIndex { get; }
 
         /// <summary>
         /// Calculates the effective temperature in Kelvin using Ballesteros' formula for effective temperature based on B-V colour index

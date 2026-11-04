@@ -4,7 +4,7 @@ using ScottPlot.Plottables;
 namespace StarLab.UI.Workspace.Documents.Charts.Overlays
 {
     /// <summary>
-    /// A chart overlay that contains a single labelled point.
+    /// A chart overlay that consists of a single point.
     /// </summary>
     internal class PointOverlay : Overlay
     {
@@ -21,7 +21,7 @@ namespace StarLab.UI.Workspace.Documents.Charts.Overlays
         /// <summary>
         /// Initialises a new instance of the <see cref="PointOverlay"> class.
         /// </summary>
-        /// <param name="plot">The <see cref="Plot"/> that displays the overlay.</param>
+        /// <param name="plot">The plot that displays the overlay.</param>
         /// <param name="name">The overlay name.</param>
         /// <param name="x">The x coordinate of the labelled point.</param>
         /// <param name="y">The y coordinate of the labelled point.</param>
