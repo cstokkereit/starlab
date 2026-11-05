@@ -13,15 +13,15 @@ namespace StarLab.Presentation
     /// </summary>
     public class PresenterFactoryTests
     {
-        private readonly ICommandManager commands = Substitute.For<ICommandManager>();
+        private readonly ICommandManager commands = Substitute.For<ICommandManager>(); // A mock of the ICommandManager interface for use in the unit tests.
 
-        private readonly IFactoryConfiguration configuration = Substitute.For<IFactoryConfiguration>();
+        private readonly IFactoryConfiguration configuration = Substitute.For<IFactoryConfiguration>(); // A mock of the IFactoryConfiguration interface for use in the unit tests.
 
-        private readonly ISessionContext context = Substitute.For<ISessionContext>();
+        private readonly ISessionContext context = Substitute.For<ISessionContext>(); // A mock of the ISessionContext interface for use in the unit tests.
 
-        private readonly IEventAggregator events = Substitute.For<IEventAggregator>();
+        private readonly IEventAggregator events = Substitute.For<IEventAggregator>(); // A mock of the IEventAggregator interface for use in the unit tests.
 
-        private readonly IServiceRegistry services = Substitute.For<IServiceRegistry>();
+        private readonly IServiceRegistry services = Substitute.For<IServiceRegistry>(); // A mock of the IServiceRegistry interface for use in the unit tests.
 
         /// <summary>
         /// Test that the <see cref="PresenterFactory(IServiceRegistry, IFactoryConfiguration, IUserSettings, IEventAggregator)"/> constructor works correctly.

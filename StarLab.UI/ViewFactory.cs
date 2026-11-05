@@ -1,5 +1,4 @@
 ﻿using log4net;
-using StarLab.Application.Workspace.Documents.Charts.Overlays;
 using StarLab.Presentation;
 using StarLab.Presentation.Configuration;
 using StarLab.Presentation.Workspace.Documents;

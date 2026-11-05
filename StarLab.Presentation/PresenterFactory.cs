@@ -1,5 +1,4 @@
-﻿using log4net;
-using StarLab.Presentation.Configuration;
+﻿using StarLab.Presentation.Configuration;
 using StarLab.Presentation.Workspace;
 using StarLab.Presentation.Workspace.Documents;
 using StarLab.Shared;
@@ -12,8 +11,6 @@ namespace StarLab.Presentation
     /// </summary>
     public class PresenterFactory : Factory, IPresenterFactory
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(PresenterFactory)); // The logger that will be used for writing log messages.
-
         private readonly ISessionContext context; // Provides access to the session context.
 
         private readonly IEventAggregator events; // This can be used for subscribing to and publishing events.
@@ -49,7 +46,7 @@ namespace StarLab.Presentation
             {
                 return new ApplicationViewPresenter(application, context, commands, services, events);
             }
-            
+
             throw new ArgumentException(ExceptionMessages.UnexpectedArgumentType(typeof(IApplicationView), view.GetType()), nameof(view));
         }
 
