@@ -1,7 +1,6 @@
 ﻿#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
 
 using StarLab.Application;
-using StarLab.Presentation.Configuration;
 using Stratosoft.Commands;
 
 namespace StarLab.Presentation.Workspace
@@ -9,7 +8,7 @@ namespace StarLab.Presentation.Workspace
     /// <summary>
     /// A class for performing unit tests on the <see cref="ToolViewPresenter"/> class.
     /// </summary>
-    public class ToolViewPresenterTests : PresentationTests
+    public class ToolViewPresenterTests : PresenterTests
     {
         private IChildViewController childController; // A mock of the IChildViewController interface that can be used in the unit tests.
 
@@ -44,6 +43,10 @@ namespace StarLab.Presentation.Workspace
         [Test]
         public void TestConstruction()
         {
+            var commands = Substitute.For<ICommandManager>();
+            var context = Substitute.For<ISessionContext>();
+            var events = Substitute.For<IEventAggregator>();
+
             var presenter = new ToolViewPresenter(view, childController, context, commands, events);
 
             Assert.That(presenter, Is.Not.Null);
@@ -58,6 +61,10 @@ namespace StarLab.Presentation.Workspace
         [Test]
         public void TestConstructionThrowsExceptionWhenChildControllerIsNull()
         {
+            var commands = Substitute.For<ICommandManager>();
+            var context = Substitute.For<ISessionContext>();
+            var events = Substitute.For<IEventAggregator>();
+
             Assert.Throws<ArgumentNullException>(() => new ToolViewPresenter(view, null, context, commands, events));
         }
 
@@ -67,6 +74,9 @@ namespace StarLab.Presentation.Workspace
         [Test]
         public void TestConstructionThrowsExceptionWhenCommandsIsNull()
         {
+            var context = Substitute.For<ISessionContext>();
+            var events = Substitute.For<IEventAggregator>();
+
             Assert.Throws<ArgumentNullException>(() => new ToolViewPresenter(view, childController, context, null, events));
         }
 
@@ -76,6 +86,9 @@ namespace StarLab.Presentation.Workspace
         [Test]
         public void TestConstructionThrowsExceptionWhenContextIsNull()
         {
+            var commands = Substitute.For<ICommandManager>();
+            var events = Substitute.For<IEventAggregator>();
+
             Assert.Throws<ArgumentNullException>(() => new ToolViewPresenter(view, childController, null, commands, events));
         }
 
@@ -85,6 +98,9 @@ namespace StarLab.Presentation.Workspace
         [Test]
         public void TestConstructionThrowsExceptionWhenEventsIsNull()
         {
+            var commands = Substitute.For<ICommandManager>();
+            var context = Substitute.For<ISessionContext>();
+
             Assert.Throws<ArgumentNullException>(() => new ToolViewPresenter(view, childController, context, commands, null));
         }
 
@@ -94,6 +110,10 @@ namespace StarLab.Presentation.Workspace
         [Test]
         public void TestConstructionThrowsExceptionWhenViewIsNull()
         {
+            var commands = Substitute.For<ICommandManager>();
+            var context = Substitute.For<ISessionContext>();
+            var events = Substitute.For<IEventAggregator>();
+
             Assert.Throws<ArgumentNullException>(() => new ToolViewPresenter(null, childController, context, commands, events));
         }
 
@@ -123,13 +143,28 @@ namespace StarLab.Presentation.Workspace
         }
 
         /// <summary>
+        /// Test that the <see cref="ToolViewPresenter.Location"/> property returns the correct value.
+        /// </summary>
+        [Test]
+        public void TestGetLocation()
+        {
+            var presenter = CreatePresenter(false);
+
+            Assert.That(presenter.Location, Is.EqualTo("DockRight"));
+        }
+
+        /// <summary>
         /// Test that the <see cref="ToolViewPresenter.Initialise(IApplicationController)"/> method works correctly.
         /// </summary>
         [Test]
         public void TestInitialise()
         {
-            var presenter = CreatePresenter(false);
+            var controller = container.Resolve<IApplicationController>();
 
+            var events = Substitute.For<IEventAggregator>();
+
+            var presenter = CreatePresenter(events, false);
+            
             presenter.Initialise(controller);
 
             childController.Received(1).Initialise(controller);
@@ -144,7 +179,9 @@ namespace StarLab.Presentation.Workspace
         {
             var presenter = CreatePresenter(true);
 
-            var e = Assert.Throws<InvalidOperationException>(() => presenter.Initialise(controller));
+            //var e = Assert.Throws<InvalidOperationException>(() => presenter.Initialise(controller));
+
+            Assert.Fail();
         }
 
         /// <summary>
@@ -207,7 +244,9 @@ namespace StarLab.Presentation.Workspace
         [Test]
         public void TestViewActivated()
         {
-            var presenter = CreatePresenter(true);
+            var events = Substitute.For<IEventAggregator>();
+
+            var presenter = CreatePresenter(events, true);
 
             presenter.ViewActivated();
 
@@ -217,13 +256,34 @@ namespace StarLab.Presentation.Workspace
         /// <summary>
         /// A factory method that creates a new instance of the <see cref="ToolViewPresenter"/> class.
         /// </summary>
-        /// <param name="initialise">true to initialise the presenter; false otherwise.</param>
+        /// <param name="initialise">true to initialise the presenter; <c>false</c>.</param>
+        /// <returns>Returns the newly created <see cref="ToolViewPresenter"/>.</returns>
+        private ToolViewPresenter CreatePresenter(IEventAggregator events, bool initialise)
+        {
+            var commands = container.Resolve<ICommandManager>();
+            var context = container.Resolve<ISessionContext>();
+
+            var presenter = new ToolViewPresenter(view, childController, context, commands, events);
+
+            if (initialise) presenter.Initialise(container.Resolve<IApplicationController>());
+
+            return presenter;
+        }
+
+        /// <summary>
+        /// A factory method that creates a new instance of the <see cref="ToolViewPresenter"/> class.
+        /// </summary>
+        /// <param name="initialise">true to initialise the presenter; <c>false</c>.</param>
         /// <returns>Returns the newly created <see cref="ToolViewPresenter"/>.</returns>
         private ToolViewPresenter CreatePresenter(bool initialise)
         {
+            var commands = container.Resolve<ICommandManager>();
+            var context = container.Resolve<ISessionContext>();
+            var events = container.Resolve<IEventAggregator>();
+
             var presenter = new ToolViewPresenter(view, childController, context, commands, events);
 
-            if (initialise) presenter.Initialise(controller);
+            if (initialise) presenter.Initialise(container.Resolve<IApplicationController>());
 
             return presenter;
         }

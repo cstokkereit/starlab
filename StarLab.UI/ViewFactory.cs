@@ -1,5 +1,4 @@
-﻿using log4net;
-using StarLab.Presentation;
+﻿using StarLab.Presentation;
 using StarLab.Presentation.Configuration;
 using StarLab.Presentation.Workspace.Documents;
 using StarLab.UI.Workspace;
@@ -12,8 +11,6 @@ namespace StarLab.UI
     /// </summary>
     public class ViewFactory : Factory, IViewFactory
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(ViewFactory)); // The logger that will be used for writing log messages.
-
         /// <summary>
         /// Initialises a new instance of the <see cref="ViewFactory"/> class.
         /// </summary>
