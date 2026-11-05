@@ -1,5 +1,6 @@
 ﻿using StarLab.Presentation.Configuration;
 using StarLab.Presentation.Help;
+using StarLab.Presentation.Options;
 using StarLab.Presentation.Workspace;
 using StarLab.Presentation.Workspace.Documents;
 using StarLab.Presentation.Workspace.Documents.Charts;
@@ -10,19 +11,17 @@ namespace StarLab.Presentation
     /// <summary>
     /// A class for performing unit tests on the <see cref="PresenterFactory"/> class.
     /// </summary>
-    public class PresenterFactoryTests : PresentationTests
+    public class PresenterFactoryTests
     {
-        private DocumentID documentID;
+        private readonly ICommandManager commands = Substitute.For<ICommandManager>();
 
-        /// <summary>
-        /// Registers the dependencies with the IoC container and initialises the class level variables before each test.
-        /// </summary>
-        public override void SetUp()
-        {
-            base.SetUp();
+        private readonly IFactoryConfiguration configuration = Substitute.For<IFactoryConfiguration>();
 
-            documentID = new DocumentID("19542B1A-36A5-494F-B6B0-CB562FA36CAB");
-        }
+        private readonly ISessionContext context = Substitute.For<ISessionContext>();
+
+        private readonly IEventAggregator events = Substitute.For<IEventAggregator>();
+
+        private readonly IServiceRegistry services = Substitute.For<IServiceRegistry>();
 
         /// <summary>
         /// Test that the <see cref="PresenterFactory(IServiceRegistry, IFactoryConfiguration, IUserSettings, IEventAggregator)"/> constructor works correctly.
@@ -36,7 +35,7 @@ namespace StarLab.Presentation
         }
 
         /// <summary>
-        /// Test that the <see cref="PresenterFactory.CreatePresenter(IChildView, ICommandManger)"/> method works correctly.
+        /// Test that the <see cref="PresenterFactory.CreatePresenter(IChildView, ICommandManager)"/> method works correctly.
         /// </summary>
         [Test]
         public void TestCreateChildViewPresenter()
@@ -47,7 +46,7 @@ namespace StarLab.Presentation
             var viewConfiguration = Substitute.For<IViewConfiguration>();
             viewConfiguration.GetChildViewConfiguration(ViewNames.About).Returns(childConfiguration);
 
-            configuration.GetConfiguration(ViewNames.About).Returns(viewConfiguration);
+            configuration.GetViewConfiguration(ViewNames.About).Returns(viewConfiguration);
 
             var factory = new PresenterFactory(services, context, configuration, events);
             
@@ -63,7 +62,7 @@ namespace StarLab.Presentation
         }
 
         /// <summary>
-        /// Test that the <see cref="PresenterFactory.CreatePresenter(IChildView, ICommandManger)"/> method throws an exception if the view is of an unknown type.
+        /// Test that the <see cref="PresenterFactory.CreatePresenter(IChildView, ICommandManager)"/> method throws an exception if the view is of an unknown type.
         /// </summary>
         [Test]
         public void TestCreateChildViewPresenterThrowsAnExceptionForUnknownType()
@@ -74,7 +73,7 @@ namespace StarLab.Presentation
             var viewConfiguration = Substitute.For<IViewConfiguration>();
             viewConfiguration.GetChildViewConfiguration(ViewNames.About).Returns(childConfiguration);
 
-            configuration.GetConfiguration(ViewNames.About).Returns(viewConfiguration);
+            configuration.GetViewConfiguration(ViewNames.About).Returns(viewConfiguration);
 
             var factory = new PresenterFactory(services, context, configuration, events);
 
@@ -143,6 +142,8 @@ namespace StarLab.Presentation
         {
             var factory = new PresenterFactory(services, context, configuration, events);
 
+            var documentID = new DocumentID("19542B1A-36A5-494F-B6B0-CB562FA36CAB");
+
             var document = Substitute.For<IDocument>();
             document.ID.Returns(documentID);
 
@@ -158,12 +159,14 @@ namespace StarLab.Presentation
         }
 
         /// <summary>
-        /// Test that the <see cref="PresenterFactory.CreatePresenter(IDocument, IDocumentView, IEnumerable{IChildViewPresenter}, ICommandManger)"/> method throws an exception if any of the child view presenters does not implement the <see cref="IChildViewController"/> interface.
+        /// Test that the <see cref="PresenterFactory.CreatePresenter(IDocument, IDocumentView, IEnumerable{IChildViewPresenter}, ICommandManger)"/> method throws an exception if any of the child view presenter does not implement the <see cref="IChildViewController"/> interface.
         /// </summary>
         [Test]
         public void TestCreateDocumentViewPresenterThrowsAnExceptionWhenInterfaceNotImplemented()
         {
             var factory = new PresenterFactory(services, context, configuration, events);
+
+            var documentID = new DocumentID("19542B1A-36A5-494F-B6B0-CB562FA36CAB");
 
             var document = Substitute.For<IDocument>();
             document.ID.Returns(documentID);
@@ -259,7 +262,7 @@ namespace StarLab.Presentation
             viewConfiguration.GetChildViewConfiguration(ViewNames.ChartSettings).Returns(childConfiguration1);
             viewConfiguration.GetChildViewConfiguration(ViewNames.Chart).Returns(childConfiguration2);
 
-            configuration.GetConfiguration(ViewNames.ColourMagnitudeDiagram).Returns(viewConfiguration);
+            configuration.GetViewConfiguration(ViewNames.ColourMagnitudeDiagram).Returns(viewConfiguration);
 
             var factory = new PresenterFactory(services, context, configuration, events);
 
@@ -301,7 +304,7 @@ namespace StarLab.Presentation
             viewConfiguration.GetChildViewConfiguration(ViewNames.ChartSettings).Returns(childConfiguration1);
             viewConfiguration.GetChildViewConfiguration(ViewNames.Chart).Returns(childConfiguration2);
 
-            configuration.GetConfiguration(ViewNames.ColourMagnitudeDiagram).Returns(viewConfiguration);
+            configuration.GetViewConfiguration(ViewNames.ColourMagnitudeDiagram).Returns(viewConfiguration);
 
             var factory = new PresenterFactory(services, context, configuration, events);
 
