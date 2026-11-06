@@ -1,6 +1,5 @@
 ﻿#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
 
-using StarLab.Presentation.Configuration;
 using Stratosoft.Commands;
 
 namespace StarLab.Presentation.Options
@@ -8,7 +7,7 @@ namespace StarLab.Presentation.Options
     /// <summary>
     /// A class for performing unit tests on the <see cref="OptionsViewPresenter"/> class.
     /// </summary>
-    public class OptionsViewPresenterTests : PresentationTests
+    public class OptionsViewPresenterTests : PresenterTests
     {
         private IOptionsView view; // A mock of the IOptionsView interface that can be used in the unit tests.
 
@@ -29,6 +28,11 @@ namespace StarLab.Presentation.Options
         [Test]
         public void TestConstruction()
         {
+            var context = Substitute.For<ISessionContext>();
+            var commands = Substitute.For<ICommandManager>();
+            var events = Substitute.For<IEventAggregator>();
+            var services = Substitute.For<IServiceRegistry>();
+
             var presenter = new OptionsViewPresenter(view, context, commands, services, events);
 
             Assert.That(presenter, Is.Not.Null);
@@ -43,6 +47,10 @@ namespace StarLab.Presentation.Options
         [Test]
         public void TestConstructionThrowsExceptionWhenCommandsIsNull()
         {
+            var context = Substitute.For<ISessionContext>();
+            var events = Substitute.For<IEventAggregator>();
+            var services = Substitute.For<IServiceRegistry>();
+
             Assert.Throws<ArgumentNullException>(() => new OptionsViewPresenter(view, context, null, services, events));
         }
 
@@ -52,6 +60,10 @@ namespace StarLab.Presentation.Options
         [Test]
         public void TestConstructionThrowsExceptionWhenContextIsNull()
         {
+            var commands = Substitute.For<ICommandManager>();
+            var events = Substitute.For<IEventAggregator>();
+            var services = Substitute.For<IServiceRegistry>();
+
             Assert.Throws<ArgumentNullException>(() => new OptionsViewPresenter(view, null, commands, services, events));
         }
 
@@ -61,6 +73,10 @@ namespace StarLab.Presentation.Options
         [Test]
         public void TestConstructionThrowsExceptionWhenEventsIsNull()
         {
+            var context = Substitute.For<ISessionContext>();
+            var commands = Substitute.For<ICommandManager>();
+            var services = Substitute.For<IServiceRegistry>();
+
             Assert.Throws<ArgumentNullException>(() => new OptionsViewPresenter(view, context, commands, services, null));
         }
 
@@ -70,6 +86,10 @@ namespace StarLab.Presentation.Options
         [Test]
         public void TestConstructionThrowsExceptionWhenServicesIsNull()
         {
+            var context = Substitute.For<ISessionContext>();
+            var commands = Substitute.For<ICommandManager>();
+            var events = Substitute.For<IEventAggregator>();
+
             Assert.Throws<ArgumentNullException>(() => new OptionsViewPresenter(view, context, commands, null, events));
         }
 
@@ -79,6 +99,11 @@ namespace StarLab.Presentation.Options
         [Test]
         public void TestConstructionThrowsExceptionWhenViewIsNull()
         {
+            var context = Substitute.For<ISessionContext>();
+            var commands = Substitute.For<ICommandManager>();
+            var events = Substitute.For<IEventAggregator>();
+            var services = Substitute.For<IServiceRegistry>();
+
             Assert.Throws<ArgumentNullException>(() => new OptionsViewPresenter(null, context, commands, services, events));
         }
 
@@ -88,7 +113,7 @@ namespace StarLab.Presentation.Options
         [Test]
         public void TestGetID()
         {
-            var presenter = CreatePresenter(false);
+            var presenter = CreateOptionsViewPresenter(view, false);
 
             Assert.That(presenter.ID.ToString(), Is.EqualTo("Options"));
         }
@@ -99,9 +124,11 @@ namespace StarLab.Presentation.Options
         [Test]
         public void TestInitialise()
         {
-            var presenter = CreatePresenter(false);
+            var events = Substitute.For<IEventAggregator>();
 
-            presenter.Initialise(controller);
+            var presenter = CreateOptionsViewPresenter(view, false);
+
+            presenter.Initialise(ApplicationController);
 
             events.Received(1).Subsribe(presenter);
         }
@@ -112,36 +139,22 @@ namespace StarLab.Presentation.Options
         [Test]
         public void TestInitialiseThrowsAnExceptionWhenAlreadyInitialised()
         {
-            var presenter = CreatePresenter(true);
+            var presenter = CreateOptionsViewPresenter(view, true);
 
-            Assert.Throws<InvalidOperationException>(() => presenter.Initialise(controller));
+            Assert.Throws<InvalidOperationException>(() => presenter.Initialise(ApplicationController));
         }
 
         /// <summary>
-        /// Test that the <see cref="OptionsViewPresenter.Run(IViewContext)"/> method works correctly.
+        /// Test that the <see cref="OptionsViewPresenter.Run()"/> method works correctly.
         /// </summary>
         [Test]
         public void TestRun()
         {
-            var presenter = CreatePresenter(true);
+            var presenter = CreateOptionsViewPresenter(view, true);
 
             presenter.Run();
 
             // TODO - Modify for implementation
-        }
-
-        /// <summary>
-        /// A factory method that creates a new instance of the <see cref="OptionsViewPresenter"/> class.
-        /// </summary>
-        /// <param name="initialise">true to initialise the presenter; false otherwise.</param>
-        /// <returns>Returns the newly created <see cref="OptionsViewPresenter"/>.</returns>
-        private OptionsViewPresenter CreatePresenter(bool initialise)
-        {
-            var presenter = new OptionsViewPresenter(view, context, commands, services, events);
-
-            if (initialise) presenter.Initialise(controller);
-
-            return presenter;
         }
     }
 }
