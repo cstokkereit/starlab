@@ -6,12 +6,15 @@ using Microsoft.Extensions.Logging;
 using StarLab.Application;
 using StarLab.Application.Data;
 using StarLab.Application.Data.Import;
+using StarLab.Application.Workspace;
 using StarLab.Application.Workspace.Documents.Charts.Overlays;
 using StarLab.Data.Import;
 using StarLab.Data.MongoDB;
 using StarLab.Data.MongoDB.Import;
 using StarLab.Presentation.Configuration;
 using StarLab.Presentation.Options;
+using StarLab.Presentation.Workspace;
+using StarLab.Presentation.Workspace.Documents;
 using StarLab.Serialisation;
 using StarLab.UI;
 using StarLab.UI.Options;
@@ -22,13 +25,13 @@ using static WeifenLuo.WinFormsUI.Docking.DockPanelExtender;
 namespace StarLab.Presentation
 {
     /// <summary>
-    /// Base class for integration tests.
+    /// Base class for testing the presenter classes.
     /// </summary>
     public abstract class PresenterTests
     {
-        protected WindsorContainer container; // The Inversion of Control (IoC) container.
+        private WindsorContainer container; // The Inversion of Control (IoC) container.
 
-        protected IViewFactory factory; // The view factory.
+        private IViewFactory factory; // The view factory.
 
         /// <summary>
         /// Registers the dependencies with the IoC container and initialises the class level variables before each test.
@@ -57,6 +60,99 @@ namespace StarLab.Presentation
         public virtual void TearDown()
         {
             container.Dispose();
+        }
+
+        /// <summary>
+        /// Gets the application controller.
+        /// </summary>
+        protected IApplicationController ApplicationController => container.Resolve<IApplicationController>();
+
+        /// <summary>
+        /// A factory method that creates a new instance of the <see cref="DocumentViewPresenter"/> class.
+        /// </summary>
+        /// <param name="view">The managed view.</param>
+        /// <param name="document">The document that the view represents.</param>
+        /// <param name="controllers">A list containing the child controllers.</param>
+        /// <param name="initialise"><c>true</c> to initialise the presenter; <c>false</c> otherwise.</param>
+        /// <returns>The newly created <see cref="DocumentViewPresenter"/>.</returns>
+        protected DocumentViewPresenter CreateDocumentViewPresenter(IDocumentView view, IDocument document, IList<IChildViewController> controllers, bool initialise)
+        {
+            var presenter = new DocumentViewPresenter(view, document, controllers, container.Resolve<ISessionContext>(), container.Resolve<ICommandManager>(), container.Resolve<IEventAggregator>());
+
+            if (initialise) presenter.Initialise(container.Resolve<IApplicationController>());
+
+            return presenter;
+        }
+
+        /// <summary>
+        /// A factory method that creates a new instance of the <see cref="DocumentViewPresenter"/> class.
+        /// </summary>
+        /// <param name="view">The managed view.</param>
+        /// <param name="document">The document that the view represents.</param>
+        /// <param name="controllers">A list containing the child controllers.</param>
+        /// <param name="events">The event aggregator.</param>  
+        /// <param name="initialise"><c>true</c> to initialise the presenter; <c>false</c> otherwise.</param>
+        /// <returns>The newly created <see cref="DocumentViewPresenter"/>.</returns>
+        protected DocumentViewPresenter CreateDocumentViewPresenter(IDocumentView view, IDocument document, IList<IChildViewController> controllers, IEventAggregator events, bool initialise)
+        {
+            var presenter = new DocumentViewPresenter(view, document, controllers, container.Resolve<ISessionContext>(), container.Resolve<ICommandManager>(), events);
+
+            if (initialise) presenter.Initialise(container.Resolve<IApplicationController>());
+
+            return presenter;
+        }
+
+        /// <summary>
+        /// A factory method that creates a new instance of the <see cref="ToolViewPresenter"/> class.
+        /// </summary>
+        /// <param name="view">The managed view.</param>
+        /// <param name="childController">The child controller.</param>
+        /// <param name="initialise"><c>true</c> to initialise the presenter; <c>false</c> otherwise.</param>
+        /// <returns>The newly created <see cref="ToolViewPresenter"/>.</returns>
+        protected ToolViewPresenter CreateToolViewPresenter(IDockableView view, IChildViewController childController, bool initialise)
+        {
+            var presenter = new ToolViewPresenter(view, childController, container.Resolve<ISessionContext>(), container.Resolve<ICommandManager>(), container.Resolve<IEventAggregator>());
+
+            if (initialise) presenter.Initialise(container.Resolve<IApplicationController>());
+
+            return presenter;
+        }
+
+        /// <summary>
+        /// A factory method that creates a new instance of the <see cref="ToolViewPresenter"/> class.
+        /// </summary>
+        /// <param name="view">The managed view.</param>
+        /// <param name="childController">The child controller.</param>
+        /// <param name="events">The event aggregator.</param>
+        /// <param name="initialise"><c>true</c> to initialise the presenter; <c>false</c> otherwise.</param>
+        /// <returns>The newly created <see cref="ToolViewPresenter"/>.</returns>
+        protected ToolViewPresenter CreateToolViewPresenter(IDockableView view, IChildViewController childController, IEventAggregator events, bool initialise)
+        {
+            var presenter = new ToolViewPresenter(view, childController, container.Resolve<ISessionContext>(), container.Resolve<ICommandManager>(), events);
+
+            if (initialise) presenter.Initialise(container.Resolve<IApplicationController>());
+
+            return presenter;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        protected IWorkspace CreateWorkspace(WorkspaceDTO dto)
+        {
+            return new Workspace.Workspace(dto);
+        }
+
+
+        /// <summary>
+        /// Configures the mock factory to return the view provided when <see cref="ViewFactory.CreateApplicationView(string)"/> CreateApplicationView is called.
+        /// </summary>
+        /// <param name="view"></param>
+        protected void RegisterView(IApplicationView view)
+        {
+            factory.CreateApplicationView("StarLab").Returns(view);
         }
 
         /// <summary>
