@@ -126,7 +126,7 @@ namespace StarLab.Presentation.Options
         {
             var events = Substitute.For<IEventAggregator>();
 
-            var presenter = CreateOptionsViewPresenter(view, false);
+            var presenter = CreateOptionsViewPresenter(view, events, false);
 
             presenter.Initialise(ApplicationController);
 

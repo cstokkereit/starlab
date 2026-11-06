@@ -126,7 +126,7 @@ namespace StarLab.Presentation.Help
         {
             var events = Substitute.For<IEventAggregator>();
 
-            var presenter = CreateAboutViewPresenter(view, false);
+            var presenter = CreateAboutViewPresenter(view, events, false);
 
             presenter.Initialise(ApplicationController);
 

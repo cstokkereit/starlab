@@ -3,6 +3,8 @@ using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.Resolvers.SpecializedResolvers;
 using Castle.Windsor;
 using Microsoft.Extensions.Logging;
+using ScottPlot.Statistics;
+using SkiaSharp;
 using StarLab.Application;
 using StarLab.Application.Data;
 using StarLab.Application.Data.Import;
@@ -12,6 +14,7 @@ using StarLab.Data.Import;
 using StarLab.Data.MongoDB;
 using StarLab.Data.MongoDB.Import;
 using StarLab.Presentation.Configuration;
+using StarLab.Presentation.Help;
 using StarLab.Presentation.Options;
 using StarLab.Presentation.Workspace;
 using StarLab.Presentation.Workspace.Documents;
@@ -20,6 +23,7 @@ using StarLab.UI;
 using StarLab.UI.Options;
 using StarLab.UI.Workspace;
 using Stratosoft.Commands;
+using System.Windows.Forms;
 using static WeifenLuo.WinFormsUI.Docking.DockPanelExtender;
 
 namespace StarLab.Presentation
@@ -68,6 +72,70 @@ namespace StarLab.Presentation
         protected IApplicationController ApplicationController => container.Resolve<IApplicationController>();
 
         /// <summary>
+        /// A factory method that creates a new instance of the <see cref="AboutViewPresenter"/> class.
+        /// </summary>
+        /// <param name="view">The managed view.</param>
+        /// <param name="initialise"><c>true</c> to initialise the presenter; <c>false</c> otherwise.</param>
+        /// <returns>The newly created <see cref="AboutViewPresenter"/>.</returns>
+        protected AboutViewPresenter CreateAboutViewPresenter(IAboutView view, bool initialise)
+        {
+            var presenter = new AboutViewPresenter(view, container.Resolve<ISessionContext>(), container.Resolve<ICommandManager>(), container.Resolve<IServiceRegistry>(), container.Resolve<IEventAggregator>());
+
+            if (initialise) presenter.Initialise(ApplicationController);
+
+            return presenter;
+        }
+
+        /// <summary>
+        /// A factory method that creates a new instance of the <see cref="AboutViewPresenter"/> class.
+        /// </summary>
+        /// <param name="view">The managed view.</param>
+        /// <param name="events">The event aggregator.</param>
+        /// <param name="initialise"><c>true</c> to initialise the presenter; <c>false</c> otherwise.</param>
+        /// <returns>The newly created <see cref="AboutViewPresenter"/>.</returns>
+        protected AboutViewPresenter CreateAboutViewPresenter(IAboutView view, IEventAggregator events, bool initialise)
+        {
+            var presenter = new AboutViewPresenter(view, container.Resolve<ISessionContext>(), container.Resolve<ICommandManager>(), container.Resolve<IServiceRegistry>(), events);
+
+            if (initialise) presenter.Initialise(ApplicationController);
+
+            return presenter;
+        }
+
+        /// <summary>
+        /// A factory method that creates a new instance of the <see cref="DialogViewPresenter"/> class.
+        /// </summary>
+        /// <param name="view">The managed view.</param>
+        /// <param name="controller">The child controller.</param>
+        /// <param name="initialise"><c>true</c> to initialise the presenter; <c>false</c> otherwise.</param>
+        /// <returns>Returns the newly created <see cref="DialogViewPresenter"/>.</returns>
+        protected DialogViewPresenter CreateDialogViewPresenter(IDialogView view, IChildViewController controller, bool initialise)
+        {
+            var presenter = new DialogViewPresenter(view, controller, container.Resolve<ISessionContext>(), container.Resolve<ICommandManager>(), container.Resolve<IEventAggregator>());
+
+            if (initialise) presenter.Initialise(ApplicationController);
+
+            return presenter;
+        }
+
+        /// <summary>
+        /// A factory method that creates a new instance of the <see cref="DialogViewPresenter"/> class.
+        /// </summary>
+        /// <param name="view">The managed view.</param>
+        /// <param name="controller">The child controller.</param>
+        /// <param name="events">The event aggregator.</param>
+        /// <param name="initialise"><c>true</c> to initialise the presenter; <c>false</c> otherwise.</param>
+        /// <returns>Returns the newly created <see cref="DialogViewPresenter"/>.</returns>
+        protected DialogViewPresenter CreateDialogViewPresenter(IDialogView view, IChildViewController controller, IEventAggregator events, bool initialise)
+        {
+            var presenter = new DialogViewPresenter(view, controller, container.Resolve<ISessionContext>(), container.Resolve<ICommandManager>(), events);
+
+            if (initialise) presenter.Initialise(ApplicationController);
+
+            return presenter;
+        }
+
+        /// <summary>
         /// A factory method that creates a new instance of the <see cref="DocumentViewPresenter"/> class.
         /// </summary>
         /// <param name="view">The managed view.</param>
@@ -79,7 +147,7 @@ namespace StarLab.Presentation
         {
             var presenter = new DocumentViewPresenter(view, document, controllers, container.Resolve<ISessionContext>(), container.Resolve<ICommandManager>(), container.Resolve<IEventAggregator>());
 
-            if (initialise) presenter.Initialise(container.Resolve<IApplicationController>());
+            if (initialise) presenter.Initialise(ApplicationController);
 
             return presenter;
         }
@@ -97,7 +165,38 @@ namespace StarLab.Presentation
         {
             var presenter = new DocumentViewPresenter(view, document, controllers, container.Resolve<ISessionContext>(), container.Resolve<ICommandManager>(), events);
 
-            if (initialise) presenter.Initialise(container.Resolve<IApplicationController>());
+            if (initialise) presenter.Initialise(ApplicationController);
+
+            return presenter;
+        }
+
+        /// <summary>
+        /// A factory method that creates a new instance of the <see cref="OptionsViewPresenter"/> class.
+        /// </summary>
+        /// <param name="view">The managed view.</param>
+        /// <param name="initialise"><c>true</c> to initialise the presenter; <c>false</c> otherwise.</param>
+        /// <returns>The newly created <see cref="OptionsViewPresenter"/>.</returns>
+        protected OptionsViewPresenter CreateOptionsViewPresenter(IOptionsView view, bool initialise)
+        {
+            var presenter = new OptionsViewPresenter(view, container.Resolve<ISessionContext>(), container.Resolve<ICommandManager>(), container.Resolve<IServiceRegistry>(), container.Resolve<IEventAggregator>());
+
+            if (initialise) presenter.Initialise(ApplicationController);
+
+            return presenter;
+        }
+
+        /// <summary>
+        /// A factory method that creates a new instance of the <see cref="OptionsViewPresenter"/> class.
+        /// </summary>
+        /// <param name="view">The managed view.</param>
+        /// <param name="events">The event aggregator.</param>
+        /// <param name="initialise"><c>true</c> to initialise the presenter; <c>false</c> otherwise.</param>
+        /// <returns>The newly created <see cref="OptionsViewPresenter"/>.</returns>
+        protected OptionsViewPresenter CreateOptionsViewPresenter(IOptionsView view, IEventAggregator events, bool initialise)
+        {
+            var presenter = new OptionsViewPresenter(view, container.Resolve<ISessionContext>(), container.Resolve<ICommandManager>(), container.Resolve<IServiceRegistry>(), events);
+
+            if (initialise) presenter.Initialise(ApplicationController);
 
             return presenter;
         }
@@ -106,14 +205,14 @@ namespace StarLab.Presentation
         /// A factory method that creates a new instance of the <see cref="ToolViewPresenter"/> class.
         /// </summary>
         /// <param name="view">The managed view.</param>
-        /// <param name="childController">The child controller.</param>
+        /// <param name="controller">The child controller.</param>
         /// <param name="initialise"><c>true</c> to initialise the presenter; <c>false</c> otherwise.</param>
         /// <returns>The newly created <see cref="ToolViewPresenter"/>.</returns>
-        protected ToolViewPresenter CreateToolViewPresenter(IDockableView view, IChildViewController childController, bool initialise)
+        protected ToolViewPresenter CreateToolViewPresenter(IDockableView view, IChildViewController controller, bool initialise)
         {
-            var presenter = new ToolViewPresenter(view, childController, container.Resolve<ISessionContext>(), container.Resolve<ICommandManager>(), container.Resolve<IEventAggregator>());
+            var presenter = new ToolViewPresenter(view, controller, container.Resolve<ISessionContext>(), container.Resolve<ICommandManager>(), container.Resolve<IEventAggregator>());
 
-            if (initialise) presenter.Initialise(container.Resolve<IApplicationController>());
+            if (initialise) presenter.Initialise(ApplicationController);
 
             return presenter;
         }
@@ -122,15 +221,15 @@ namespace StarLab.Presentation
         /// A factory method that creates a new instance of the <see cref="ToolViewPresenter"/> class.
         /// </summary>
         /// <param name="view">The managed view.</param>
-        /// <param name="childController">The child controller.</param>
+        /// <param name="controller">The child controller.</param>
         /// <param name="events">The event aggregator.</param>
         /// <param name="initialise"><c>true</c> to initialise the presenter; <c>false</c> otherwise.</param>
         /// <returns>The newly created <see cref="ToolViewPresenter"/>.</returns>
-        protected ToolViewPresenter CreateToolViewPresenter(IDockableView view, IChildViewController childController, IEventAggregator events, bool initialise)
+        protected ToolViewPresenter CreateToolViewPresenter(IDockableView view, IChildViewController controller, IEventAggregator events, bool initialise)
         {
-            var presenter = new ToolViewPresenter(view, childController, container.Resolve<ISessionContext>(), container.Resolve<ICommandManager>(), events);
+            var presenter = new ToolViewPresenter(view, controller, container.Resolve<ISessionContext>(), container.Resolve<ICommandManager>(), events);
 
-            if (initialise) presenter.Initialise(container.Resolve<IApplicationController>());
+            if (initialise) presenter.Initialise(ApplicationController);
 
             return presenter;
         }

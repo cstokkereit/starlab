@@ -1,7 +1,6 @@
 ﻿#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
 
 using StarLab.Application;
-using StarLab.Presentation.Configuration;
 using Stratosoft.Commands;
 using System.ComponentModel;
 
@@ -10,9 +9,9 @@ namespace StarLab.Presentation
     /// <summary>
     /// A class for performing unit tests on the <see cref="DialogViewPresenter"/> class.
     /// </summary>
-    public class DialogViewPresenterTests : PresentationTests
+    public class DialogViewPresenterTests : PresenterTests
     {
-        private IChildViewController child; // A mock of the IChildViewController interface that can be used in the unit tests.
+        private IChildViewController controller; // A mock of the IChildViewController interface that can be used in the unit tests.
 
         private IDialogView view; // A mock of the IDialogView interface that can be used in the unit tests.
 
@@ -23,7 +22,7 @@ namespace StarLab.Presentation
         {
             base.SetUp();
 
-            child = Substitute.For<IChildViewController>();
+            controller = Substitute.For<IChildViewController>();
 
             view = Substitute.For<IDialogView>();
             view.ID.Returns(ViewIDs.About);
@@ -36,7 +35,7 @@ namespace StarLab.Presentation
         {
             base.TearDown();
 
-            child.Dispose();
+            controller.Dispose();
         }
 
         /// <summary>
@@ -45,7 +44,7 @@ namespace StarLab.Presentation
         [Test]
         public void TestClose()
         {
-            var presenter = CreatePresenter(true);
+            var presenter = CreateDialogViewPresenter(view, controller,true);
 
             presenter.Close();
 
@@ -58,12 +57,16 @@ namespace StarLab.Presentation
         [Test]
         public void TestConstruction()
         {
-            var presenter = new DialogViewPresenter(view, child, context, commands, events);
+            var context = Substitute.For<ISessionContext>();
+            var commands = Substitute.For<ICommandManager>();
+            var events = Substitute.For<IEventAggregator>();
+
+            var presenter = new DialogViewPresenter(view, controller, context, commands, events);
 
             Assert.That(presenter, Is.Not.Null);
 
             view.Received().Attach(Arg.Is(presenter));
-            child.Received(1).RegisterController(presenter);
+            controller.Received(1).RegisterController(presenter);
         }
 
         /// <summary>
@@ -72,7 +75,10 @@ namespace StarLab.Presentation
         [Test]
         public void TestConstructionThrowsExceptionWhenCommandsIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new DialogViewPresenter(view, child, context, null, events));
+            var context = Substitute.For<ISessionContext>();
+            var events = Substitute.For<IEventAggregator>();
+
+            Assert.Throws<ArgumentNullException>(() => new DialogViewPresenter(view, controller, context, null, events));
         }
 
         /// <summary>
@@ -81,7 +87,10 @@ namespace StarLab.Presentation
         [Test]
         public void TestConstructionThrowsExceptionWhenContextIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new DialogViewPresenter(view, child, null, commands, events));
+            var commands = Substitute.For<ICommandManager>();
+            var events = Substitute.For<IEventAggregator>();
+
+            Assert.Throws<ArgumentNullException>(() => new DialogViewPresenter(view, controller, null, commands, events));
         }
 
         /// <summary>
@@ -90,7 +99,10 @@ namespace StarLab.Presentation
         [Test]
         public void TestConstructionThrowsExceptionWhenEventsIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new DialogViewPresenter(view, child, context, commands, null));
+            var context = Substitute.For<ISessionContext>();
+            var commands = Substitute.For<ICommandManager>();
+
+            Assert.Throws<ArgumentNullException>(() => new DialogViewPresenter(view, controller, context, commands, null));
         }
 
         /// <summary>
@@ -99,7 +111,11 @@ namespace StarLab.Presentation
         [Test]
         public void TestConstructionThrowsExceptionWhenViewIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new DialogViewPresenter(null, child, context, commands, events));
+            var context = Substitute.For<ISessionContext>();
+            var commands = Substitute.For<ICommandManager>();
+            var events = Substitute.For<IEventAggregator>();
+
+            Assert.Throws<ArgumentNullException>(() => new DialogViewPresenter(null, controller, context, commands, events));
         }
 
         /// <summary>
@@ -108,6 +124,10 @@ namespace StarLab.Presentation
         [Test]
         public void TestConstructionThrowsExceptionWhenChildControllerIsNull()
         {
+            var context = Substitute.For<ISessionContext>();
+            var commands = Substitute.For<ICommandManager>();
+            var events = Substitute.For<IEventAggregator>();
+
             Assert.Throws<ArgumentNullException>(() => new DialogViewPresenter(view, null, context, commands, events));
         }
 
@@ -117,12 +137,12 @@ namespace StarLab.Presentation
         [Test]
         public void TestGetChildControllers()
         {
-            var presenter = CreatePresenter(true);
+            var presenter = CreateDialogViewPresenter(view, controller, true);
 
             var controllers = new List<IChildViewController>(presenter.ChildControllers);
 
             Assert.That(controllers.Count, Is.EqualTo(1));
-            Assert.That(controllers[0], Is.SameAs(child));
+            Assert.That(controllers[0], Is.SameAs(controller));
         }
 
         /// <summary>
@@ -131,8 +151,8 @@ namespace StarLab.Presentation
         [Test]
         public void TestGetID()
         {
-            var presenter = CreatePresenter(false);
-            
+            var presenter = CreateDialogViewPresenter(view, controller, false);
+
             Assert.That(presenter.ID.ToString(), Is.EqualTo("AboutDialog"));
         }
 
@@ -142,11 +162,14 @@ namespace StarLab.Presentation
         [Test]
         public void TestInitialise()
         {
-            var presenter = CreatePresenter(false);
+            var events = Substitute.For<IEventAggregator>();
 
-            presenter.Initialise(controller);
+            var presenter = CreateDialogViewPresenter(view, controller, events, false);
 
-            child.Received(1).Initialise(controller);
+            presenter.Initialise(ApplicationController);
+
+            controller.Received(1).Initialise(ApplicationController);
+
             events.Received(1).Subsribe(presenter);
         }
 
@@ -156,9 +179,9 @@ namespace StarLab.Presentation
         [Test]
         public void TestInitialiseThrowsAnExceptionWhenAlreadyInitialised()
         {
-            var presenter = CreatePresenter(true);
+            var presenter = CreateDialogViewPresenter(view, controller, true);
 
-            Assert.Throws<InvalidOperationException>(() => presenter.Initialise(controller));
+            Assert.Throws<InvalidOperationException>(() => presenter.Initialise(ApplicationController));
         }
 
         /// <summary>
@@ -169,11 +192,11 @@ namespace StarLab.Presentation
         {
             var wf = Substitute.For<INamedArguments>();
 
-            var presenter = CreatePresenter(true);
+            var presenter = CreateDialogViewPresenter(view, controller, true);
 
             presenter.Run(wf);
 
-            child.Received(1).Run(wf);
+            controller.Received(1).Run(wf);
         }
 
         /// <summary>
@@ -184,7 +207,7 @@ namespace StarLab.Presentation
         {
             var child = Substitute.For<IView>();
 
-            var presenter = CreatePresenter(true);
+            var presenter = CreateDialogViewPresenter(view, controller, true);
 
             presenter.Show(child);
 
@@ -197,7 +220,7 @@ namespace StarLab.Presentation
         [Test]
         public void TestShowMessage()
         {
-            var presenter = CreatePresenter(true);
+            var presenter = CreateDialogViewPresenter(view, controller, true);
 
             presenter.ShowMessage("Caption", "Message", InteractionType.Question, InteractionResponses.YesNoCancel);
 
@@ -210,7 +233,7 @@ namespace StarLab.Presentation
         [Test]
         public void TestShowOpenFileDialog()
         {
-            var presenter = CreatePresenter(true);
+            var presenter = CreateDialogViewPresenter(view, controller, true);
 
             presenter.ShowOpenFileDialog("Title", "Filter");
 
@@ -223,7 +246,7 @@ namespace StarLab.Presentation
         [Test]
         public void TestShowSaveFileDialog()
         {
-            var presenter = CreatePresenter(true);
+            var presenter = CreateDialogViewPresenter(view, controller, true);
 
             presenter.ShowSaveFileDialog("Title", "Filter", "Extension");
 
@@ -236,7 +259,9 @@ namespace StarLab.Presentation
         [Test]
         public void TestViewActivated()
         {
-            var presenter = CreatePresenter(true);
+            var events = Substitute.For<IEventAggregator>();
+
+            var presenter = CreateDialogViewPresenter(view, controller, events, true);
 
             presenter.ViewActivated();
 
@@ -249,7 +274,7 @@ namespace StarLab.Presentation
         [Test]
         public void TestViewClosing()
         {
-            var presenter = CreatePresenter(true);
+            var presenter = CreateDialogViewPresenter(view, controller, true);
 
             var e = new CancelEventArgs();
 
@@ -258,20 +283,6 @@ namespace StarLab.Presentation
             view.Received(1).Hide();
 
             Assert.That(e.Cancel, Is.True);
-        }
-
-        /// <summary>
-        /// A factory method that creates a new instance of the <see cref="DialogViewPresenter"/> class.
-        /// </summary>
-        /// <param name="initialise">true to initialise the presenter; false otherwise.</param>
-        /// <returns>Returns the newly created <see cref="DialogViewPresenter"/>.</returns>
-        private DialogViewPresenter CreatePresenter(bool initialise)
-        {
-            var presenter = new DialogViewPresenter(view, child, context, commands, events);
-
-            if (initialise) presenter.Initialise(controller);
-
-            return presenter;
         }
     }
 }
