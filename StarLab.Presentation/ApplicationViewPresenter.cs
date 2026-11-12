@@ -15,7 +15,7 @@ namespace StarLab.Presentation
     /// <summary>
     /// Controls the behaviour of an <see cref="IApplicationView"/>.
     /// </summary>
-    internal sealed class ApplicationViewPresenter : Presenter<IApplicationView>, IApplicationViewPresenter, IApplicationViewController, IApplicationOutputPort, ISubscriber<ActiveDocumentChangedEventArgs>
+    public sealed class ApplicationViewPresenter : Presenter<IApplicationView>, IApplicationViewPresenter, IApplicationViewController, IApplicationOutputPort, ISubscriber<ActiveDocumentChangedEventArgs>
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(ApplicationViewPresenter)); // The logger that will be used for writing log messages.
 
@@ -184,7 +184,7 @@ namespace StarLab.Presentation
         public override void Initialise(IApplicationController controller)
         {
             if (Initialised) throw new InvalidOperationException(ExceptionMessages.PresenterAlreadyInitialised(GetType()));
-                
+
             base.Initialise(controller);
 
             CreateFileMenu();
@@ -229,7 +229,9 @@ namespace StarLab.Presentation
         /// <param name="id">The ID of the document to be opened.</param>
         public void OpenDocument(string id)
         {
-            Show(AppController.GetView(workspace.GetDocument(new DocumentID(id)))); // Required?
+            throw new NotImplementedException();
+
+            // TODO : Show(AppController.GetView(workspace.GetDocument(new DocumentID(id)))); - Is this required?
         }
 
         /// <summary>
@@ -252,6 +254,8 @@ namespace StarLab.Presentation
             try
             {
                 useCaseService.SaveWorkspace(workspace);
+
+                Events.Publish(new WorkspaceSavedEventArgs(workspace));
 
                 dirty = false;
             }
@@ -588,8 +592,6 @@ namespace StarLab.Presentation
         /// <param name="filename">The fully qualified path to the workspace file.</param>
         private void OpenWorkspace(string filename)
         {
-            ArgumentException.ThrowIfNullOrEmpty(filename, nameof(filename));
-
             try
             {
                 useCaseService.OpenWorkspace(filename);

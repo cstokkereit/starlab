@@ -251,7 +251,7 @@
 //        /// <summary>
 //        /// A factory method that creates a new instance of the <see cref="TableSettingsViewPresenter"/> class.
 //        /// </summary>
-//        /// <param name="initialise">true to initialise the presenter; false otherwise.</param>
+//        /// <param name="initialise">true to initialise the presenter; <c>false</c>.</param>
 //        /// <returns>Returns the newly created <see cref="TableSettingsViewPresenter"/>.</returns>
 //        private TableSettingsViewPresenter CreatePresenter(bool initialise)
 //        {

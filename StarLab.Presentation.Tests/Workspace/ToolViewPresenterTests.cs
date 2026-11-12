@@ -10,7 +10,7 @@ namespace StarLab.Presentation.Workspace
     /// </summary>
     public class ToolViewPresenterTests : PresenterTests
     {
-        private IChildViewController controller; // A mock of the IChildViewController interface that can be used in the unit tests.
+        private IChildViewController childController; // A mock of the IChildViewController interface that can be used in the unit tests.
 
         private IDockableView view; // A mock of the IDockableView interface that can be used in the unit tests.
 
@@ -21,7 +21,7 @@ namespace StarLab.Presentation.Workspace
         {
             base.SetUp();
 
-            controller = Substitute.For<IChildViewController>();
+            childController = Substitute.For<IChildViewController>();
 
             view = Substitute.For<IDockableView>();
             view.ID.Returns(ViewIDs.WorkspaceExplorer);
@@ -34,7 +34,7 @@ namespace StarLab.Presentation.Workspace
         {
             base.TearDown();
 
-            controller.Dispose();
+            childController.Dispose();
         }
 
         /// <summary>
@@ -45,13 +45,11 @@ namespace StarLab.Presentation.Workspace
         {
             var commands = Substitute.For<ICommandManager>();
             var context = Substitute.For<ISessionContext>();
-            var events = Substitute.For<IEventAggregator>();
 
-            var presenter = new ToolViewPresenter(view, controller, context, commands, events);
+            var presenter = new ToolViewPresenter(view, childController, context, commands, events);
 
             Assert.That(presenter, Is.Not.Null);
 
-            Assert.That(presenter.ID.ToString(), Is.EqualTo("WorkspaceExplorerTool"));
             view.Received().Attach(Arg.Is(presenter));
         }
 
@@ -63,7 +61,6 @@ namespace StarLab.Presentation.Workspace
         {
             var commands = Substitute.For<ICommandManager>();
             var context = Substitute.For<ISessionContext>();
-            var events = Substitute.For<IEventAggregator>();
 
             Assert.Throws<ArgumentNullException>(() => new ToolViewPresenter(view, null, context, commands, events));
         }
@@ -75,9 +72,8 @@ namespace StarLab.Presentation.Workspace
         public void TestConstructionThrowsExceptionWhenCommandsIsNull()
         {
             var context = Substitute.For<ISessionContext>();
-            var events = Substitute.For<IEventAggregator>();
 
-            Assert.Throws<ArgumentNullException>(() => new ToolViewPresenter(view, controller, context, null, events));
+            Assert.Throws<ArgumentNullException>(() => new ToolViewPresenter(view, childController, context, null, events));
         }
 
         /// <summary>
@@ -87,9 +83,8 @@ namespace StarLab.Presentation.Workspace
         public void TestConstructionThrowsExceptionWhenContextIsNull()
         {
             var commands = Substitute.For<ICommandManager>();
-            var events = Substitute.For<IEventAggregator>();
 
-            Assert.Throws<ArgumentNullException>(() => new ToolViewPresenter(view, controller, null, commands, events));
+            Assert.Throws<ArgumentNullException>(() => new ToolViewPresenter(view, childController, null, commands, events));
         }
 
         /// <summary>
@@ -101,7 +96,7 @@ namespace StarLab.Presentation.Workspace
             var commands = Substitute.For<ICommandManager>();
             var context = Substitute.For<ISessionContext>();
 
-            Assert.Throws<ArgumentNullException>(() => new ToolViewPresenter(view, controller, context, commands, null));
+            Assert.Throws<ArgumentNullException>(() => new ToolViewPresenter(view, childController, context, commands, null));
         }
 
         /// <summary>
@@ -112,9 +107,8 @@ namespace StarLab.Presentation.Workspace
         {
             var commands = Substitute.For<ICommandManager>();
             var context = Substitute.For<ISessionContext>();
-            var events = Substitute.For<IEventAggregator>();
 
-            Assert.Throws<ArgumentNullException>(() => new ToolViewPresenter(null, controller, context, commands, events));
+            Assert.Throws<ArgumentNullException>(() => new ToolViewPresenter(null, childController, context, commands, events));
         }
 
         /// <summary>
@@ -123,12 +117,12 @@ namespace StarLab.Presentation.Workspace
         [Test]
         public void TestGetChildControllers()
         {
-            var presenter = CreateToolViewPresenter(view, controller, true);
+            var presenter = CreatePresenter(view, childController);
 
             var controllers = new List<IChildViewController>(presenter.ChildControllers);
 
             Assert.That(controllers.Count, Is.EqualTo(1));
-            Assert.That(controllers[0], Is.SameAs(controller));
+            Assert.That(controllers[0], Is.SameAs(childController));
         }
 
         /// <summary>
@@ -137,7 +131,7 @@ namespace StarLab.Presentation.Workspace
         [Test]
         public void TestGetID()
         {
-            var presenter = CreateToolViewPresenter(view, controller, false);
+            var presenter = CreatePresenter(view, childController);
 
             Assert.That(presenter.ID.ToString(), Is.EqualTo("WorkspaceExplorerTool"));
         }
@@ -148,7 +142,7 @@ namespace StarLab.Presentation.Workspace
         [Test]
         public void TestGetLocation()
         {
-            var presenter = CreateToolViewPresenter(view, controller, false);
+            var presenter = CreatePresenter(view, childController);
 
             Assert.That(presenter.Location, Is.EqualTo("DockRight"));
         }
@@ -159,13 +153,11 @@ namespace StarLab.Presentation.Workspace
         [Test]
         public void TestInitialise()
         {
-            var events = Substitute.For<IEventAggregator>();
-
-            var presenter = CreateToolViewPresenter(view, controller, events, false);
+            var presenter = new ToolViewPresenter(view, childController, container.Resolve<ISessionContext>(), container.Resolve<ICommandManager>(), events);
             
-            presenter.Initialise(ApplicationController);
+            presenter.Initialise(controller);
 
-            controller.Received(1).Initialise(ApplicationController);
+            childController.Received(1).Initialise(controller);
             events.Received(1).Subsribe(presenter);
         }
 
@@ -175,9 +167,9 @@ namespace StarLab.Presentation.Workspace
         [Test]
         public void TestInitialiseThrowsAnExceptionWhenAlreadyInitialised()
         {
-            var presenter = CreateToolViewPresenter(view, controller, true);
+            var presenter = CreatePresenter(view, childController);
 
-            Assert.Throws<InvalidOperationException>(() => presenter.Initialise(ApplicationController));
+            Assert.Throws<InvalidOperationException>(() => presenter.Initialise(controller));
         }
 
         /// <summary>
@@ -188,7 +180,7 @@ namespace StarLab.Presentation.Workspace
         {
             var dialog = Substitute.For<IView>();
 
-            var presenter = CreateToolViewPresenter(view, controller, true);
+            var presenter = CreatePresenter(view, childController);
 
             presenter.Show(dialog);
 
@@ -201,7 +193,7 @@ namespace StarLab.Presentation.Workspace
         [Test]
         public void TestShowMessage()
         {
-            var presenter = CreateToolViewPresenter(view, controller, true);
+            var presenter = CreatePresenter(view, childController);
 
             presenter.ShowMessage("Caption", "Message", InteractionType.Question, InteractionResponses.YesNoCancel);
 
@@ -214,7 +206,7 @@ namespace StarLab.Presentation.Workspace
         [Test]
         public void TestShowOpenFileDialog()
         {
-            var presenter = CreateToolViewPresenter(view, controller,true);
+            var presenter = CreatePresenter(view, childController);
 
             presenter.ShowOpenFileDialog("Title", "Filter");
 
@@ -227,7 +219,7 @@ namespace StarLab.Presentation.Workspace
         [Test]
         public void TestShowSaveFileDialog()
         {
-            var presenter = CreateToolViewPresenter(view, controller, true);
+            var presenter = CreatePresenter(view, childController);
 
             presenter.ShowSaveFileDialog("Title", "Filter", "Extension");
 
@@ -240,9 +232,7 @@ namespace StarLab.Presentation.Workspace
         [Test]
         public void TestViewActivated()
         {
-            var events = Substitute.For<IEventAggregator>();
-
-            var presenter = CreateToolViewPresenter(view, controller, events, true);
+            var presenter = CreatePresenter(view, childController);
 
             presenter.ViewActivated();
 

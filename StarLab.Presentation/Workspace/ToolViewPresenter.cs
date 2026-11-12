@@ -13,7 +13,7 @@ namespace StarLab.Presentation.Workspace
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(ToolViewPresenter)); // The logger that will be used for writing log messages.
 
-        private readonly IChildViewController childController;
+        private readonly IChildViewController childController; // The controller that controls the child view.
 
         /// <summary>
         /// Initialises a new instance of the <see cref="ToolViewPresenter"> class.

@@ -1,7 +1,7 @@
 ﻿namespace StarLab.Presentation
 {
     /// <summary>
-    /// TODO : Finish
+    /// A field that can be displayed in a view or child view.
     /// </summary>
     internal class DisplayField : IDisplayField
     {

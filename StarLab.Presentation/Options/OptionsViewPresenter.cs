@@ -9,7 +9,7 @@ namespace StarLab.Presentation.Options
     /// <summary>
     /// Controls the behaviour of an <see cref="IOptionsView"/>.
     /// </summary>
-    internal class OptionsViewPresenter : ChildViewPresenter<IOptionsView, IViewController>, IOptionsViewPresenter, IChildViewController
+    public sealed class OptionsViewPresenter : ChildViewPresenter<IOptionsView, IViewController>, IOptionsViewPresenter, IChildViewController
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(OptionsViewPresenter)); // The logger that will be used for writing log messages.
 

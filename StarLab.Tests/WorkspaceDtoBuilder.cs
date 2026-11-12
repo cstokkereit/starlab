@@ -10,6 +10,8 @@ namespace StarLab.Tests
     /// </summary>
     public class WorkspaceDtoBuilder
     {
+        public const string EMPTY_LAYOUT = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<!--DockPanel configuration file. Author: Weifen Luo, all rights reserved.-->\r\n<!--!!! AUTOMATICALLY GENERATED FILE. DO NOT MODIFY !!!-->\r\n<DockPanel FormatVersion=\"1.0\" DockLeftPortion=\"0.25\" DockRightPortion=\"0.25\" DockTopPortion=\"0.25\" DockBottomPortion=\"0.25\" ActiveDocumentPane=\"0\" ActivePane=\"0\"><Contents Count=\"0\"></DockPanel>";
+
         private WorkspaceDTO workspace; // The DTO being constructed.
 
         private string workspaceName; // The workspace name.
@@ -186,6 +188,18 @@ namespace StarLab.Tests
         public WorkspaceDTO CreateWorkspace()
         {
             return workspace;
+        }
+
+        /// <summary>
+        /// Sets the workspace layout.
+        /// </summary>
+        /// <param name="layout">The new workspace layout.</param>
+        /// <returns>This instance so that other methods can be called to continue constructing the <see cref="WorkspaceDTO"/>.</returns>
+        public WorkspaceDtoBuilder SetLayout(string layout)
+        {
+            workspace.Layout = layout;
+
+            return this;
         }
 
         /// <summary>

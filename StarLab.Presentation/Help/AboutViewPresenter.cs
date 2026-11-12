@@ -8,7 +8,7 @@ namespace StarLab.Presentation.Help
     /// <summary>
     /// Controls the behaviour of an <see cref="IAboutView"/>.
     /// </summary>
-    internal class AboutViewPresenter : ChildViewPresenter<IAboutView, IViewController>, IAboutViewPresenter, IChildViewController
+    public sealed class AboutViewPresenter : ChildViewPresenter<IAboutView, IViewController>, IAboutViewPresenter, IChildViewController
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(AboutViewPresenter)); // The logger that will be used for writing log messages.
 

@@ -6,8 +6,6 @@ using StarLab.Presentation.Workspace;
 using StarLab.Presentation.Workspace.Documents;
 using StarLab.Shared;
 using StarLab.Shared.Properties;
-using StarLab.UI;
-using StarLab.UI.Workspace;
 using Stratosoft.Commands;
 using System.Diagnostics;
 
@@ -279,11 +277,11 @@ namespace StarLab.UI
 
             try
             {
-                var application = CreateApplicationView();
+                var view = CreateApplicationView();
 
                 log.Debug(LogEntries.ViewCreated(ViewIDs.Application.ToString()));
 
-                System.Windows.Forms.Application.Run(application);
+                System.Windows.Forms.Application.Run((Form)view);
             }
             catch (Exception e)
             {
@@ -460,7 +458,8 @@ namespace StarLab.UI
         /// <summary>
         /// Creates the main application window. Can only be called after all of the other views have been created.
         /// </summary>
-        private ApplicationView CreateApplicationView()
+        /// <returns>The application view.</returns>
+        private IView CreateApplicationView()
         {
             var commands = CreateCommands();
 
@@ -472,7 +471,7 @@ namespace StarLab.UI
             controllers.Add(controller.ID, controller);
             controller.Initialise(this);
 
-            return (ApplicationView)view;
+            return view;
         }
 
         /// <summary>

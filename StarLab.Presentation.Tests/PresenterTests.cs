@@ -3,8 +3,6 @@ using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.Resolvers.SpecializedResolvers;
 using Castle.Windsor;
 using Microsoft.Extensions.Logging;
-using ScottPlot.Statistics;
-using SkiaSharp;
 using StarLab.Application;
 using StarLab.Application.Data;
 using StarLab.Application.Data.Import;
@@ -19,11 +17,8 @@ using StarLab.Presentation.Options;
 using StarLab.Presentation.Workspace;
 using StarLab.Presentation.Workspace.Documents;
 using StarLab.Serialisation;
-using StarLab.UI;
-using StarLab.UI.Options;
 using StarLab.UI.Workspace;
 using Stratosoft.Commands;
-using System.Windows.Forms;
 using static WeifenLuo.WinFormsUI.Docking.DockPanelExtender;
 
 namespace StarLab.Presentation
@@ -33,9 +28,13 @@ namespace StarLab.Presentation
     /// </summary>
     public abstract class PresenterTests
     {
-        private WindsorContainer container; // The Inversion of Control (IoC) container.
+        protected WindsorContainer container; // The Inversion of Control (IoC) container.
 
-        private IViewFactory factory; // The view factory.
+        protected IApplicationController controller; // The mocked application controller.
+
+        protected IEventAggregator events; // The mocked event aggregator.
+
+        protected IUserSettings settings; // The mocked user settings.
 
         /// <summary>
         /// Registers the dependencies with the IoC container and initialises the class level variables before each test.
@@ -43,18 +42,23 @@ namespace StarLab.Presentation
         [SetUp]
         public virtual void SetUp()
         {
+            controller = Substitute.For<IApplicationController>();
+
+            events = Substitute.For<IEventAggregator>();
+            settings = Substitute.For<IUserSettings>();
+
             container = new WindsorContainer();
 
             container.Kernel.Resolver.AddSubResolver(new CollectionResolver(container.Kernel));
 
-            factory = Substitute.For<IViewFactory>();
+            InstallMapperClasses();
+            InstallInfrastructureClasses();
+            InstallApplicationClasses();
+            InstallPersistenceClasses();
+            InstallPresentationClasses();
+            InstallUserInterfaceClasses();
 
-            InstallMapperClasses(container);
-            InstallInfrastructureClasses(container);
-            InstallApplicationClasses(container);
-            InstallPersistenceClasses(container);
-            InstallPresentationClasses(container);
-            InstallUserInterfaceClasses(container);
+            container.Resolve<IServiceRegistry>().Initialise(controller);
         }
 
         /// <summary>
@@ -63,41 +67,59 @@ namespace StarLab.Presentation
         [TearDown]
         public virtual void TearDown()
         {
+            controller.Dispose();
             container.Dispose();
         }
 
         /// <summary>
-        /// Gets the application controller.
-        /// </summary>
-        protected IApplicationController ApplicationController => container.Resolve<IApplicationController>();
-
-        /// <summary>
         /// A factory method that creates a new instance of the <see cref="AboutViewPresenter"/> class.
         /// </summary>
         /// <param name="view">The managed view.</param>
-        /// <param name="initialise"><c>true</c> to initialise the presenter; <c>false</c> otherwise.</param>
         /// <returns>The newly created <see cref="AboutViewPresenter"/>.</returns>
-        protected AboutViewPresenter CreateAboutViewPresenter(IAboutView view, bool initialise)
+        protected AboutViewPresenter CreatePresenter(IAboutView view)
         {
             var presenter = new AboutViewPresenter(view, container.Resolve<ISessionContext>(), container.Resolve<ICommandManager>(), container.Resolve<IServiceRegistry>(), container.Resolve<IEventAggregator>());
 
-            if (initialise) presenter.Initialise(ApplicationController);
+            presenter.Initialise(controller);
+
+            ClearReceivedCalls(view);
 
             return presenter;
         }
 
         /// <summary>
-        /// A factory method that creates a new instance of the <see cref="AboutViewPresenter"/> class.
+        /// A factory method that creates a new instance of the <see cref="ApplicationViewPresenter"/> class.
         /// </summary>
         /// <param name="view">The managed view.</param>
-        /// <param name="events">The event aggregator.</param>
-        /// <param name="initialise"><c>true</c> to initialise the presenter; <c>false</c> otherwise.</param>
-        /// <returns>The newly created <see cref="AboutViewPresenter"/>.</returns>
-        protected AboutViewPresenter CreateAboutViewPresenter(IAboutView view, IEventAggregator events, bool initialise)
+        /// <param name="port">The use case output port.</param>
+        /// <returns>Returns the newly created <see cref="ApplicationViewPresenter"/>.</returns>
+        protected ApplicationViewPresenter CreatePresenter(IApplicationView view, IApplicationOutputPort port)
         {
-            var presenter = new AboutViewPresenter(view, container.Resolve<ISessionContext>(), container.Resolve<ICommandManager>(), container.Resolve<IServiceRegistry>(), events);
+            var presenter = new ApplicationViewPresenter(view, container.Resolve<ISessionContext>(), container.Resolve<ICommandManager>(), container.Resolve<IServiceRegistry>(), container.Resolve<IEventAggregator>());
 
-            if (initialise) presenter.Initialise(ApplicationController);
+            controller.GetOutputPort<IApplicationOutputPort>().Returns(port);
+
+            presenter.Initialise(controller);
+
+            ClearReceivedCalls(view);
+
+            return presenter;
+        }
+
+        /// <summary>
+        /// A factory method that creates a new instance of the <see cref="ApplicationViewPresenter"/> class.
+        /// </summary>
+        /// <param name="view">The managed view.</param>
+        /// <returns>Returns the newly created <see cref="ApplicationViewPresenter"/>.</returns>
+        protected ApplicationViewPresenter CreatePresenter(IApplicationView view)
+        {
+            var presenter = new ApplicationViewPresenter(view, container.Resolve<ISessionContext>(), container.Resolve<ICommandManager>(), container.Resolve<IServiceRegistry>(), container.Resolve<IEventAggregator>());
+
+            controller.GetOutputPort<IApplicationOutputPort>().Returns(presenter);
+
+            presenter.Initialise(controller);
+
+            ClearReceivedCalls(view);
 
             return presenter;
         }
@@ -106,31 +128,15 @@ namespace StarLab.Presentation
         /// A factory method that creates a new instance of the <see cref="DialogViewPresenter"/> class.
         /// </summary>
         /// <param name="view">The managed view.</param>
-        /// <param name="controller">The child controller.</param>
-        /// <param name="initialise"><c>true</c> to initialise the presenter; <c>false</c> otherwise.</param>
+        /// <param name="childController">The child controller.</param>
         /// <returns>Returns the newly created <see cref="DialogViewPresenter"/>.</returns>
-        protected DialogViewPresenter CreateDialogViewPresenter(IDialogView view, IChildViewController controller, bool initialise)
+        protected DialogViewPresenter CreatePresenter(IDialogView view, IChildViewController childController)
         {
-            var presenter = new DialogViewPresenter(view, controller, container.Resolve<ISessionContext>(), container.Resolve<ICommandManager>(), container.Resolve<IEventAggregator>());
+            var presenter = new DialogViewPresenter(view, childController, container.Resolve<ISessionContext>(), container.Resolve<ICommandManager>(), container.Resolve<IEventAggregator>());
 
-            if (initialise) presenter.Initialise(ApplicationController);
+            presenter.Initialise(controller);
 
-            return presenter;
-        }
-
-        /// <summary>
-        /// A factory method that creates a new instance of the <see cref="DialogViewPresenter"/> class.
-        /// </summary>
-        /// <param name="view">The managed view.</param>
-        /// <param name="controller">The child controller.</param>
-        /// <param name="events">The event aggregator.</param>
-        /// <param name="initialise"><c>true</c> to initialise the presenter; <c>false</c> otherwise.</param>
-        /// <returns>Returns the newly created <see cref="DialogViewPresenter"/>.</returns>
-        protected DialogViewPresenter CreateDialogViewPresenter(IDialogView view, IChildViewController controller, IEventAggregator events, bool initialise)
-        {
-            var presenter = new DialogViewPresenter(view, controller, container.Resolve<ISessionContext>(), container.Resolve<ICommandManager>(), events);
-
-            if (initialise) presenter.Initialise(ApplicationController);
+            ClearReceivedCalls(view);
 
             return presenter;
         }
@@ -140,32 +146,15 @@ namespace StarLab.Presentation
         /// </summary>
         /// <param name="view">The managed view.</param>
         /// <param name="document">The document that the view represents.</param>
-        /// <param name="controllers">A list containing the child controllers.</param>
-        /// <param name="initialise"><c>true</c> to initialise the presenter; <c>false</c> otherwise.</param>
+        /// <param name="childControllers">A list containing the child controllers.</param>
         /// <returns>The newly created <see cref="DocumentViewPresenter"/>.</returns>
-        protected DocumentViewPresenter CreateDocumentViewPresenter(IDocumentView view, IDocument document, IList<IChildViewController> controllers, bool initialise)
+        protected DocumentViewPresenter CreatePresenter(IDocumentView view, IDocument document, IList<IChildViewController> childControllers)
         {
-            var presenter = new DocumentViewPresenter(view, document, controllers, container.Resolve<ISessionContext>(), container.Resolve<ICommandManager>(), container.Resolve<IEventAggregator>());
+            var presenter = new DocumentViewPresenter(view, document, childControllers, container.Resolve<ISessionContext>(), container.Resolve<ICommandManager>(), container.Resolve<IEventAggregator>());
 
-            if (initialise) presenter.Initialise(ApplicationController);
+            presenter.Initialise(controller);
 
-            return presenter;
-        }
-
-        /// <summary>
-        /// A factory method that creates a new instance of the <see cref="DocumentViewPresenter"/> class.
-        /// </summary>
-        /// <param name="view">The managed view.</param>
-        /// <param name="document">The document that the view represents.</param>
-        /// <param name="controllers">A list containing the child controllers.</param>
-        /// <param name="events">The event aggregator.</param>  
-        /// <param name="initialise"><c>true</c> to initialise the presenter; <c>false</c> otherwise.</param>
-        /// <returns>The newly created <see cref="DocumentViewPresenter"/>.</returns>
-        protected DocumentViewPresenter CreateDocumentViewPresenter(IDocumentView view, IDocument document, IList<IChildViewController> controllers, IEventAggregator events, bool initialise)
-        {
-            var presenter = new DocumentViewPresenter(view, document, controllers, container.Resolve<ISessionContext>(), container.Resolve<ICommandManager>(), events);
-
-            if (initialise) presenter.Initialise(ApplicationController);
+            ClearReceivedCalls(view);
 
             return presenter;
         }
@@ -174,29 +163,14 @@ namespace StarLab.Presentation
         /// A factory method that creates a new instance of the <see cref="OptionsViewPresenter"/> class.
         /// </summary>
         /// <param name="view">The managed view.</param>
-        /// <param name="initialise"><c>true</c> to initialise the presenter; <c>false</c> otherwise.</param>
         /// <returns>The newly created <see cref="OptionsViewPresenter"/>.</returns>
-        protected OptionsViewPresenter CreateOptionsViewPresenter(IOptionsView view, bool initialise)
+        protected OptionsViewPresenter CreatePresenter(IOptionsView view)
         {
             var presenter = new OptionsViewPresenter(view, container.Resolve<ISessionContext>(), container.Resolve<ICommandManager>(), container.Resolve<IServiceRegistry>(), container.Resolve<IEventAggregator>());
 
-            if (initialise) presenter.Initialise(ApplicationController);
+            presenter.Initialise(controller);
 
-            return presenter;
-        }
-
-        /// <summary>
-        /// A factory method that creates a new instance of the <see cref="OptionsViewPresenter"/> class.
-        /// </summary>
-        /// <param name="view">The managed view.</param>
-        /// <param name="events">The event aggregator.</param>
-        /// <param name="initialise"><c>true</c> to initialise the presenter; <c>false</c> otherwise.</param>
-        /// <returns>The newly created <see cref="OptionsViewPresenter"/>.</returns>
-        protected OptionsViewPresenter CreateOptionsViewPresenter(IOptionsView view, IEventAggregator events, bool initialise)
-        {
-            var presenter = new OptionsViewPresenter(view, container.Resolve<ISessionContext>(), container.Resolve<ICommandManager>(), container.Resolve<IServiceRegistry>(), events);
-
-            if (initialise) presenter.Initialise(ApplicationController);
+            ClearReceivedCalls(view);
 
             return presenter;
         }
@@ -205,74 +179,102 @@ namespace StarLab.Presentation
         /// A factory method that creates a new instance of the <see cref="ToolViewPresenter"/> class.
         /// </summary>
         /// <param name="view">The managed view.</param>
-        /// <param name="controller">The child controller.</param>
-        /// <param name="initialise"><c>true</c> to initialise the presenter; <c>false</c> otherwise.</param>
+        /// <param name="childController">The child controller.</param>
         /// <returns>The newly created <see cref="ToolViewPresenter"/>.</returns>
-        protected ToolViewPresenter CreateToolViewPresenter(IDockableView view, IChildViewController controller, bool initialise)
+        protected ToolViewPresenter CreatePresenter(IDockableView view, IChildViewController childController)
         {
-            var presenter = new ToolViewPresenter(view, controller, container.Resolve<ISessionContext>(), container.Resolve<ICommandManager>(), container.Resolve<IEventAggregator>());
+            var presenter = new ToolViewPresenter(view, childController, container.Resolve<ISessionContext>(), container.Resolve<ICommandManager>(), container.Resolve<IEventAggregator>());
 
-            if (initialise) presenter.Initialise(ApplicationController);
+            presenter.Initialise(controller);
+
+            ClearReceivedCalls(view);
 
             return presenter;
         }
 
         /// <summary>
-        /// A factory method that creates a new instance of the <see cref="ToolViewPresenter"/> class.
+        /// A factory method that creates a mock of the <see cref="IDocumentView"/> interface.
         /// </summary>
-        /// <param name="view">The managed view.</param>
-        /// <param name="controller">The child controller.</param>
-        /// <param name="events">The event aggregator.</param>
-        /// <param name="initialise"><c>true</c> to initialise the presenter; <c>false</c> otherwise.</param>
-        /// <returns>The newly created <see cref="ToolViewPresenter"/>.</returns>
-        protected ToolViewPresenter CreateToolViewPresenter(IDockableView view, IChildViewController controller, IEventAggregator events, bool initialise)
+        /// <param name="id">The ID of the document that the view represents.</param>
+        /// <returns>The newly created <see cref="IDocumentView"/>.</returns>
+        protected IDocumentView CreateView(DocumentID id)
         {
-            var presenter = new ToolViewPresenter(view, controller, container.Resolve<ISessionContext>(), container.Resolve<ICommandManager>(), events);
+            var view = Substitute.For<IDocumentView>();
 
-            if (initialise) presenter.Initialise(ApplicationController);
+            view.DocumentID.Returns(id);
 
-            return presenter;
+            controller.GetView(Arg.Is<IDocument>(d => d.ID == id)).Returns(view);
+
+            var viewID = new ViewID(id);
+            view.ID.Returns(viewID);
+
+            controller.GetView(viewID).Returns(view);
+
+            return view;
         }
 
         /// <summary>
-        /// 
+        /// A factory method that creates a new instance of the <see cref="IWorkspace"/> class.
         /// </summary>
-        /// <param name="dto"></param>
-        /// <returns></returns>
+        /// <param name="dto">A <see cref="WorkspaceDTO"/> representation of the workspace.</param>
+        /// <returns>The newly created <see cref="IWorkspace"/>.</returns>
         protected IWorkspace CreateWorkspace(WorkspaceDTO dto)
         {
             return new Workspace.Workspace(dto);
         }
 
+        /// <summary>
+        /// TODO : Documentation
+        /// </summary>
+        /// <param name="workspace"></param>
+        /// <returns></returns>
+        protected WorkspaceDTO CreateWorkspaceDTO(IWorkspace workspace)
+        {
+            return container.Resolve<IMapper>().Map<WorkspaceDTO>(workspace);
+        }
 
         /// <summary>
-        /// Configures the mock factory to return the view provided when <see cref="ViewFactory.CreateApplicationView(string)"/> CreateApplicationView is called.
+        /// TODO : Documentation
         /// </summary>
-        /// <param name="view"></param>
-        protected void RegisterView(IApplicationView view)
+        /// <param name="filename"></param>
+        /// <returns></returns>
+        protected IWorkspace? OpenWorkspace(string filename)
         {
-            factory.CreateApplicationView("StarLab").Returns(view);
+            IWorkspace? workspace = null;
+
+            events.Publish(Arg.Do<WorkspaceChangedEventArgs>(args => workspace = args.Workspace));
+
+            container.Resolve<IServiceRegistry>().GetService<IApplicationUseCaseService>().OpenWorkspace(filename);
+
+            return workspace;
+        }
+
+        /// <summary>
+        /// TODO : Documentation
+        /// </summary>
+        private void ClearReceivedCalls(IView view)
+        {
+            events.ClearReceivedCalls();
+            view.ClearReceivedCalls();
         }
 
         /// <summary>
         /// Registers the dependencies from assemblies within the application layer with the <see cref="IWindsorContainer"/>.
         /// </summary>
-        /// <param name="container">The <see cref="IWindsorContainer"/> that will be used to register the dependencies.</param>
-        private void InstallApplicationClasses(IWindsorContainer container)
+        private void InstallApplicationClasses()
         {
             container.Register(
-                Component.For<IEventAggregator>().ImplementedBy<EventAggregator>(),
                 Component.For<IOverlayDataProvider>().ImplementedBy<OverlayDataProvider>(),
                 Classes.FromAssemblyNamed("StarLab.Application").Where(t => t.Name.EndsWith("Factory")).WithServiceDefaultInterfaces(),
-                Classes.FromAssemblyNamed("StarLab.Application").BasedOn<Profile>().WithServiceBase()
+                Classes.FromAssemblyNamed("StarLab.Application").BasedOn<Profile>().WithServiceBase(),
+                Component.For<IEventAggregator>().Instance(events)
             );
         }
 
         /// <summary>
         /// Registers the dependencies from assemblies within the infrastructure layer with the <see cref="IWindsorContainer"/>.
         /// </summary>
-        /// <param name="container">The <see cref="IWindsorContainer"/> that will be used to register the dependencies.</param>
-        private void InstallInfrastructureClasses(IWindsorContainer container)
+        private void InstallInfrastructureClasses()
         {
             container.Register(
                 Component.For<ISerialisationService>().ImplementedBy<SerialisationService>(),
@@ -283,8 +285,7 @@ namespace StarLab.Presentation
         /// <summary>
         /// Registers any AutoMapper profiles that it finds within the solution with the <see cref="IWindsorContainer"/>.
         /// </summary>
-        /// <param name="container">The <see cref="IWindsorContainer"/> that will be used to register the dependencies.</param>
-        private void InstallMapperClasses(IWindsorContainer container)
+        private void InstallMapperClasses()
         {
             // Register IConfigurationProvider with all registered profiles
             container.Register(Component.For<IConfigurationProvider>().UsingFactoryMethod(kernel =>
@@ -303,8 +304,7 @@ namespace StarLab.Presentation
         /// <summary>
         /// Registers the dependencies from assemblies within the persistence layer with the <see cref="IWindsorContainer"/>.
         /// </summary>
-        /// <param name="container">The <see cref="IWindsorContainer"/> that will be used to register the dependencies.</param>
-        private void InstallPersistenceClasses(IWindsorContainer container)
+        private void InstallPersistenceClasses()
         {
             container.Register(
                 Component.For<IDatabaseImportProvider>().ImplementedBy<DatabaseImportProvider>(),
@@ -319,8 +319,7 @@ namespace StarLab.Presentation
         /// <summary>
         /// Registers the dependencies from assemblies within the presentation layer with the <see cref="IWindsorContainer"/>.
         /// </summary>
-        /// <param name="container">The <see cref="IWindsorContainer"/> that will be used to register the dependencies.</param>
-        private void InstallPresentationClasses(IWindsorContainer container)
+        private void InstallPresentationClasses()
         {
             container.Register(
                 Component.For<IApplicationConfiguration>().ImplementedBy<ApplicationConfiguration>(),
@@ -336,16 +335,14 @@ namespace StarLab.Presentation
         /// <summary>
         /// Registers the dependencies from assemblies within the user interface layer with the <see cref="IWindsorContainer"/>.
         /// </summary>
-        /// <param name="container">The <see cref="IWindsorContainer"/> that will be used to register the dependencies.</param>
-        private void InstallUserInterfaceClasses(IWindsorContainer container)
+        private void InstallUserInterfaceClasses()
         {
             container.Register(
-                Component.For<ICommandManager>().ImplementedBy<CommandManager>().LifestyleTransient(),
-                Component.For<IApplicationController>().ImplementedBy<ApplicationController>(),
                 Component.For<IFloatWindowFactory>().ImplementedBy<FloatWindowFactory>(),
-                Component.For<IUserSettings>().ImplementedBy<UserSettings>(),
+                Component.For<ICommandManager>().ImplementedBy<CommandManager>(),
+                Component.For<IApplicationController>().Instance(controller),
                 Component.For<IWindsorContainer>().Instance(container),
-                Component.For<IViewFactory>().Instance(factory)
+                Component.For<IUserSettings>().Instance(settings)
             );
         }
     }

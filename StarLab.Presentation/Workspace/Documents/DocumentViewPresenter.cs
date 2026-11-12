@@ -19,13 +19,13 @@ namespace StarLab.Presentation.Workspace.Documents
         private IDocument document; // The document that the view represents.
 
         /// <summary>
-        /// Initialises a new instance of the <see cref="DocumentViewPresenter"> class.
+        /// Initialises a new instance of the <see cref="DocumentViewPresenter"/> class.
         /// </summary>
         /// <param name="view">The <see cref="IDocumentView"/> controlled by this presenter.</param>
         /// <param name="document">The <see cref="IDocument"/> that the view represents.</param>
         /// <param name="controllers">An <see cref="IEnumerable{IChildViewController}"/> that contains the child controllers.</param>
         /// <param name="context">An <see cref="ISessionContext"/> that provides access to the session context.</param>
-        /// <param name="commands">An <see cref="ICommandManager"/> that is required for the creation of <see cref="ICommand">s.</param>
+        /// <param name="commands">An <see cref="ICommandManager"/> that is required for the creation of <see cref="ICommand"/>s.</param>
         /// <param name="settings">An <see cref="IUserSettings"/> that provides access to the application configuration.</param>
         /// <param name="events">The <see cref="IEventAggregator"/> that manages application events.</param>
         public DocumentViewPresenter(IDocumentView view, IDocument document, IEnumerable<IChildViewController> controllers, ISessionContext context, ICommandManager commands, IEventAggregator events)

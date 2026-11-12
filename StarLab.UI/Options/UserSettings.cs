@@ -18,7 +18,7 @@ namespace StarLab.UI.Options
         public string Workspace
         {
             get => Properties.Settings.Default.Workspace;
-            set => Properties.Settings.Default.Workspace = value;
+            set => Properties.Settings.Default.Workspace = value; // TODO : Check this gets updated when the workspace is renamed or moved.
         }
 
         /// <summary>
