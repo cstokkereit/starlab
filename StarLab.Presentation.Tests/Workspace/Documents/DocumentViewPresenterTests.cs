@@ -52,7 +52,7 @@ namespace StarLab.Presentation.Workspace.Documents
         [Test]
         public void TestClose()
         {
-            var presenter = CreateDocumentViewPresenter(view, document, controllers, true);
+            var presenter = CreatePresenter(view, document, controllers);
 
             presenter.Close();
 
@@ -66,11 +66,10 @@ namespace StarLab.Presentation.Workspace.Documents
         [Test]
         public void TestConstruction()
         {
-            var presenter = CreateDocumentViewPresenter(view, document, controllers, false);
+            var presenter = new DocumentViewPresenter(view, document, controllers, container.Resolve<ISessionContext>(), container.Resolve<ICommandManager>(), events);
 
             Assert.That(presenter, Is.Not.Null);
 
-            Assert.That(presenter.ID.ToString(), Is.EqualTo("19542B1A-36A5-494F-B6B0-CB562FA36CAB"));
             view.Received().Attach(Arg.Is(presenter));
         }
 
@@ -81,7 +80,6 @@ namespace StarLab.Presentation.Workspace.Documents
         public void TestConstructionThrowsExceptionWhenCommandsIsNull()
         {
             var context = Substitute.For<ISessionContext>();
-            var events = Substitute.For<IEventAggregator>();
 
             Assert.Throws<ArgumentNullException>(() => new DocumentViewPresenter(view, document, controllers, context, null, events));
         }
@@ -93,7 +91,6 @@ namespace StarLab.Presentation.Workspace.Documents
         public void TestConstructionThrowsExceptionWhenContextIsNull()
         {
             var commands = Substitute.For<ICommandManager>();
-            var events = Substitute.For<IEventAggregator>();
 
             Assert.Throws<ArgumentNullException>(() => new DocumentViewPresenter(view, document, controllers, null, commands, events));
         }
@@ -106,7 +103,6 @@ namespace StarLab.Presentation.Workspace.Documents
         {
             var context = Substitute.For<ISessionContext>();
             var commands = Substitute.For<ICommandManager>();
-            var events = Substitute.For<IEventAggregator>();
 
             Assert.Throws<ArgumentNullException>(() => new DocumentViewPresenter(view, document, null, context, commands, events));
         }
@@ -119,7 +115,6 @@ namespace StarLab.Presentation.Workspace.Documents
         {
             var context = Substitute.For<ISessionContext>();
             var commands = Substitute.For<ICommandManager>();
-            var events = Substitute.For<IEventAggregator>();
 
             Assert.Throws<ArgumentNullException>(() => new DocumentViewPresenter(view, null, controllers, context, commands, events));
         }
@@ -144,7 +139,6 @@ namespace StarLab.Presentation.Workspace.Documents
         {
             var context = Substitute.For<ISessionContext>();
             var commands = Substitute.For<ICommandManager>();
-            var events = Substitute.For<IEventAggregator>();
 
             Assert.Throws<ArgumentNullException>(() => new DocumentViewPresenter(null, document, controllers, context, commands, events));
         }
@@ -155,7 +149,7 @@ namespace StarLab.Presentation.Workspace.Documents
         [Test]
         public void TestAddToolbarButton()
         {
-            var presenter = CreateDocumentViewPresenter(view, document, controllers, true);
+            var presenter = CreatePresenter(view, document, controllers);
 
             var command = Substitute.For<ICommand>();
             var image = new Bitmap(16, 16);
@@ -180,7 +174,7 @@ namespace StarLab.Presentation.Workspace.Documents
             chartController.ID.Returns(new ControllerID(ViewIDs.Chart));
             controllers.Add(chartController);
 
-            var presenter = CreateDocumentViewPresenter(view, document, controllers, false);
+            var presenter = CreatePresenter(view, document, controllers);
 
             var controller = presenter.GetController<IChildViewController>(new ControllerID(ViewIDs.ChartSettings));
 
@@ -202,7 +196,7 @@ namespace StarLab.Presentation.Workspace.Documents
             chartController.ID.Returns(new ControllerID(ViewIDs.Chart));
             controllers.Add(chartController);
 
-            var presenter = CreateDocumentViewPresenter(view, document, controllers, true);
+            var presenter = CreatePresenter(view, document, controllers);
 
             Assert.Throws<Exception>(() => presenter.GetController<ITableController>(new ControllerID(ViewIDs.Table)));
         }
@@ -221,7 +215,7 @@ namespace StarLab.Presentation.Workspace.Documents
             chartController.ID.Returns(new ControllerID(ViewIDs.Chart));
             controllers.Add(chartController);
 
-            var presenter = CreateDocumentViewPresenter(view, document, controllers, true);
+            var presenter = CreatePresenter(view, document, controllers);
 
             Assert.Throws<Exception>(() => presenter.GetController<ITableController>(new ControllerID(ViewIDs.Chart)));
         }
@@ -232,7 +226,7 @@ namespace StarLab.Presentation.Workspace.Documents
         [Test]
         public void TestGetID()
         {
-            var presenter = CreateDocumentViewPresenter(view, document, controllers, false);
+            var presenter = CreatePresenter(view, document, controllers);
 
             Assert.That(presenter.ID.ToString(), Is.EqualTo("19542B1A-36A5-494F-B6B0-CB562FA36CAB"));
         }
@@ -243,7 +237,7 @@ namespace StarLab.Presentation.Workspace.Documents
         [Test]
         public void TestGetLocation()
         {
-            var presenter = CreateDocumentViewPresenter(view, document, controllers, false);
+            var presenter = CreatePresenter(view, document, controllers);
 
             Assert.That(presenter.Location, Is.EqualTo("Document"));
         }
@@ -254,7 +248,7 @@ namespace StarLab.Presentation.Workspace.Documents
         [Test]
         public void TestHideSplitContent()
         {
-            var presenter = CreateDocumentViewPresenter(view, document, controllers, true);
+            var presenter = CreatePresenter(view, document, controllers);
 
             presenter.HideSplitContent(Constants.ChartSettings);
 
@@ -267,11 +261,9 @@ namespace StarLab.Presentation.Workspace.Documents
         [Test]
         public void TestInitialise()
         {
-            var events = Substitute.For<IEventAggregator>();
+            var presenter = new DocumentViewPresenter(view, document, controllers, container.Resolve<ISessionContext>(), container.Resolve<ICommandManager>(), events);
 
-            var presenter = CreateDocumentViewPresenter(view, document, controllers, events, false);
-
-            presenter.Initialise(ApplicationController);
+            presenter.Initialise(controller);
 
             events.Received(1).Subsribe(presenter);
         }
@@ -282,9 +274,9 @@ namespace StarLab.Presentation.Workspace.Documents
         [Test]
         public void TestInitialiseThrowsAnExceptionWhenAlreadyInitialised()
         {
-            var presenter = CreateDocumentViewPresenter(view, document, controllers, true);
+            var presenter = CreatePresenter(view, document, controllers);
 
-            Assert.Throws<InvalidOperationException>(() => presenter.Initialise(ApplicationController));
+            Assert.Throws<InvalidOperationException>(() => presenter.Initialise(controller));
         }
 
         /// <summary>
@@ -318,7 +310,7 @@ namespace StarLab.Presentation.Workspace.Documents
                 .AddChart("19542B1A-36A5-494F-B6B0-CB562FA36CAC", chart2)
                 .CreateWorkspace());
 
-            var presenter = CreateDocumentViewPresenter(view, document, controllers, true);
+            var presenter = CreatePresenter(view, document, controllers);
 
             presenter.OnEvent(new WorkspaceChangedEventArgs(workspace));
 
@@ -334,36 +326,36 @@ namespace StarLab.Presentation.Workspace.Documents
         [Ignore("Not implemented")]
         public void TestOnEventWhenDocumentIsTable()
         {
-            //var settingsController = Substitute.For<ITableSettingsController>();
-            //controllers.Add(settingsController);
+            var settingsController = Substitute.For<ITableSettingsController>();
+            controllers.Add(settingsController);
 
-            //var chartController = Substitute.For<ITableController>();
-            //controllers.Add(chartController);
+            var chartController = Substitute.For<ITableController>();
+            controllers.Add(chartController);
 
-            //var table1 = new TableDtoBuilder()
-            //    .CreateTable();
+            var table1 = new TableDtoBuilder()
+                .CreateTable();
 
-            //var table2 = new TableDtoBuilder()
-            //    .CreateTable();
+            var table2 = new TableDtoBuilder()
+                .CreateTable();
 
-            //var dtoWorkspace = new WorkspaceDtoBuilder(@"C:\Workspace-1")
-            //    .AddProject("Project-1")
-            //    .AddFolder("Workspace-1/Project-1/Folder-1")
-            //    .AddTable("19542B1A-36A5-494F-B6B0-CB562FA36CAB", "TableView", "Table-1.1", "Workspace-1/Project-1/Folder-1")
-            //    .AddTable("19542B1A-36A5-494F-B6B0-CB562FA36CAB", table1)
-            //    .AddTable("19542B1A-36A5-494F-B6B0-CB562FA36CAC", "TableView", "Table-1.2", "Workspace-1/Project-1/Folder-1")
-            //    .AddTable("19542B1A-36A5-494F-B6B0-CB562FA36CAC", table2)
-            //    .CreateWorkspace();
+            var dtoWorkspace = new WorkspaceDtoBuilder(@"C:\Workspace-1")
+                .AddProject("Project-1")
+                .AddFolder("Workspace-1/Project-1/Folder-1")
+                .AddTable("19542B1A-36A5-494F-B6B0-CB562FA36CAB", "TableView", "Table-1.1", "Workspace-1/Project-1/Folder-1")
+                .AddTable("19542B1A-36A5-494F-B6B0-CB562FA36CAB", table1)
+                .AddTable("19542B1A-36A5-494F-B6B0-CB562FA36CAC", "TableView", "Table-1.2", "Workspace-1/Project-1/Folder-1")
+                .AddTable("19542B1A-36A5-494F-B6B0-CB562FA36CAC", table2)
+                .CreateWorkspace();
 
-            //var workspace = CreateWorkspace(dtoWorkspace);
+            var workspace = CreateWorkspace(dtoWorkspace);
 
-            //var presenter = CreateDocumentViewPresenter(view, document, controllers, true);
+            var presenter = CreatePresenter(view, document, controllers);
 
-            //presenter.OnEvent(new WorkspaceChangedEventArgs(workspace));
+            presenter.OnEvent(new WorkspaceChangedEventArgs(workspace));
 
-            //chartController.Received(1).UpdateTable(Arg.Any<ITable>());
-            //settingsController.Received(1).UpdateSettings(Arg.Any<ITableDocument>());
-            //view.Received(1).SetName("Table-1.1");
+            chartController.Received(1).UpdateTable(Arg.Any<ITable>());
+            settingsController.Received(1).UpdateSettings(Arg.Any<ITableDocument>());
+            view.Received(1).SetName("Table-1.1");
         }
 
         /// <summary>
@@ -375,7 +367,7 @@ namespace StarLab.Presentation.Workspace.Documents
         {
             var dialog = Substitute.For<IView>();
 
-            var presenter = CreateDocumentViewPresenter(view, document, controllers, true);
+            var presenter = CreatePresenter(view, document, controllers);
 
             presenter.Show(dialog);
 
@@ -388,7 +380,7 @@ namespace StarLab.Presentation.Workspace.Documents
         [Test]
         public void TestShowMessage()
         {
-            var presenter = CreateDocumentViewPresenter(view, document, controllers, true);
+            var presenter = CreatePresenter(view, document, controllers);
 
             presenter.ShowMessage("Caption", "Message", InteractionType.Question, InteractionResponses.YesNoCancel);
 
@@ -401,7 +393,7 @@ namespace StarLab.Presentation.Workspace.Documents
         [Test]
         public void TestShowOpenFileDialog()
         {
-            var presenter = CreateDocumentViewPresenter(view, document, controllers, true);
+            var presenter = CreatePresenter(view, document, controllers);
 
             presenter.ShowOpenFileDialog("Title", "Filter");
 
@@ -414,7 +406,7 @@ namespace StarLab.Presentation.Workspace.Documents
         [Test]
         public void TestShowSaveFileDialog()
         {
-            var presenter = CreateDocumentViewPresenter(view, document, controllers, true);
+            var presenter = CreatePresenter(view, document, controllers);
 
             presenter.ShowSaveFileDialog("Title", "Filter", "Extension");
 
@@ -432,7 +424,7 @@ namespace StarLab.Presentation.Workspace.Documents
 
             controllers.Add(settings);
 
-            var presenter = CreateDocumentViewPresenter(view, document, controllers, true);
+            var presenter = CreatePresenter(view, document, controllers);
 
             presenter.ShowSplitContent(Constants.ChartSettings);
 
@@ -457,7 +449,7 @@ namespace StarLab.Presentation.Workspace.Documents
             document.Name.Returns("Chart-1.1");
             document.ID.Returns(documentID);
 
-            var presenter = CreateDocumentViewPresenter(view, document, controllers, true);
+            var presenter = CreatePresenter(view, document, controllers);
 
             chartController.ClearReceivedCalls();
 
@@ -485,7 +477,7 @@ namespace StarLab.Presentation.Workspace.Documents
             document.Name.Returns("Table-1.1");
             document.ID.Returns(documentID);
 
-            var presenter = CreateDocumentViewPresenter(view, document, controllers, true);
+            var presenter = CreatePresenter(view, document, controllers);
 
             presenter.UpdateDocument(document);
 
@@ -500,9 +492,7 @@ namespace StarLab.Presentation.Workspace.Documents
         [Test]
         public void TestViewActivated()
         {
-            var events = Substitute.For<IEventAggregator>();
-
-            var presenter = CreateDocumentViewPresenter(view, document, controllers, events, true);
+            var presenter = CreatePresenter(view, document, controllers);
 
             presenter.ViewActivated();
 

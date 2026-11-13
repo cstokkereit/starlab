@@ -63,7 +63,7 @@ namespace StarLab.UI.Workspace.Documents.Charts.Overlays
             {
                 points = plot.Add.ScatterPoints(new[] { new Coordinates(x, y) }, Colour);
 
-                points.MarkerShape = MarkerShape.FilledCircle; // TODO Point size and shape 
+                points.MarkerShape = MarkerShape.FilledCircle; // TODO Point size and shape should be configurable
                 points.MarkerSize = 3;
             }
             

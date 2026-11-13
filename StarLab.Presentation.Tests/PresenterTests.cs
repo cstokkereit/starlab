@@ -224,20 +224,30 @@ namespace StarLab.Presentation
         }
 
         /// <summary>
-        /// TODO : Documentation
+        /// Converts an <see cref="IWorkspace"/> to the equivalent <see cref="WorkspaceDTO"/> representation.
         /// </summary>
-        /// <param name="workspace"></param>
-        /// <returns></returns>
+        /// <param name="workspace">The <see cref="IWorkspace"/> to convert.</param>
+        /// <returns>The <see cref="WorkspaceDTO"/> representation of the <see cref="IWorkspace"/> provided.</returns>
         protected WorkspaceDTO CreateWorkspaceDTO(IWorkspace workspace)
         {
             return container.Resolve<IMapper>().Map<WorkspaceDTO>(workspace);
         }
 
         /// <summary>
-        /// TODO : Documentation
+        /// Gets the path to the specified test resource file.
         /// </summary>
-        /// <param name="filename"></param>
-        /// <returns></returns>
+        /// <param name="filename">The name of the file.</param>
+        /// <returns>The path to the file.</returns>
+        protected string GetPath(string filename)
+        {
+            return Path.Combine(AppContext.BaseDirectory, "Resources", filename);
+        }
+
+        /// <summary>
+        /// Loads the specified workspace file into an <see cref="IWorkspace"/> that can be used in the tests.
+        /// </summary>
+        /// <param name="filename">The path to the workspace file.</param>
+        /// <returns>An <see cref="IWorkspace"/> that represents the workspace defined in the file.</returns>
         protected IWorkspace? OpenWorkspace(string filename)
         {
             IWorkspace? workspace = null;
@@ -250,7 +260,7 @@ namespace StarLab.Presentation
         }
 
         /// <summary>
-        /// TODO : Documentation
+        /// Clears any calls received by the mock objects.
         /// </summary>
         private void ClearReceivedCalls(IView view)
         {
