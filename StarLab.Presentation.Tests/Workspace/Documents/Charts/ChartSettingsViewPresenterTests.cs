@@ -1,10 +1,11 @@
-﻿#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
+﻿#pragma warning disable CS8601 // Possible null reference assignment.
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
+#pragma warning disable CS8604 // Possible null reference argument.
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
 
 using StarLab.Application;
+using StarLab.Application.Workspace;
 using StarLab.Application.Workspace.Documents.Charts;
-using StarLab.Presentation.Configuration;
-using StarLab.Shared.Properties;
 using Stratosoft.Commands;
 
 namespace StarLab.Presentation.Workspace.Documents.Charts
@@ -12,7 +13,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
     /// <summary>
     /// A class for performing unit tests on the <see cref="ChartSettingsViewPresenter"/> class.
     /// </summary>  
-    public class ChartSettingsViewPresenterTests : PresentationTests
+    public class ChartSettingsViewPresenterTests : PresenterTests
     {
         private IChart chart; // A mock of the IChart interface that can be used in the unit tests.
 
@@ -20,9 +21,9 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
 
         private IChartSettingsView view; // A mock of the IChartSettingsView interface that can be used in the unit tests.
 
-        private IWorkspace workspace; // A mock of the IWorkspace interface that can be used in the unit tests.
-
         private DocumentID documentID; // A DocumentID that can be used in the unit tests.
+
+        private IWorkspace workspace; // An IWorkspace that can be used in the unit tests.
 
         /// <summary>
         /// Registers the dependencies with the IoC container and initialises the class level variables before each test.
@@ -31,7 +32,12 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         {
             base.SetUp();
 
-            documentID = new DocumentID("19542B1A-36A5-494F-B6B0-CB562FA36CAB");
+            workspace = new Workspace(container.Resolve<ISerialisationService>().DeserialiseWorkspace(GetPath("Workspace-2.slw")));
+
+            documentID = new DocumentID("FB97BA9C-7B51-43F9-9025-ED54A90DB990");
+
+            view = Substitute.For<IChartSettingsView>();
+            view.ID.Returns(ViewIDs.ChartSettings);
 
             var title = Substitute.For<ILabel>();
             title.Text.Returns("Test Title");
@@ -39,57 +45,9 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             chart = Substitute.For<IChart>();
             chart.Title.Returns(title);
 
-            workspace = Substitute.For<IWorkspace>();
-            workspace.FileName.Returns(@"C:\Test\Workspace");
-
             document = Substitute.For<IChartDocument>();
-            document.Chart.Returns(chart);
             document.ID.Returns(documentID);
-
-            view = Substitute.For<IChartSettingsView>();
-            view.ID.Returns(ViewIDs.ChartSettings);
-
-            view.AddNode("Chart", Arg.Any<string>()).Returns("Chart");
-            view.AddNode("Title", "Chart", Arg.Any<string>()).Returns("Chart/Title");
-            view.AddNode("Axes", "Chart", Arg.Any<string>()).Returns("Chart/Axes");
-            view.AddNode("AxisX1", "Chart/Axes", Arg.Any<string>()).Returns("Chart/Axes/AxisX1");
-            view.AddNode("Label", "Chart/Axes/AxisX1", Arg.Any<string>()).Returns("Chart/Axes/AxisX1/Label");
-            view.AddNode("Scale", "Chart/Axes/AxisX1", Arg.Any<string>()).Returns("Chart/Axes/AxisX1/Scale");
-            view.AddNode("MajorTickMarks", "Chart/Axes/AxisX1/Scale", Arg.Any<string>()).Returns("Chart/Axes/AxisX1/Scale/MajorTickMarks");
-            view.AddNode("MinorTickMarks", "Chart/Axes/AxisX1/Scale", Arg.Any<string>()).Returns("Chart/Axes/AxisX1/Scale/MinorTickMarks");
-            view.AddNode("TickLabels", "Chart/Axes/AxisX1/Scale", Arg.Any<string>()).Returns("Chart/Axes/AxisX1/Scale/TickLabels");
-            view.AddNode("AxisX2", "Chart/Axes", Arg.Any<string>()).Returns("Chart/Axes/AxisX2");
-            view.AddNode("Label", "Chart/Axes/AxisX2", Arg.Any<string>()).Returns("Chart/Axes/AxisX2/Label");
-            view.AddNode("Scale", "Chart/Axes/AxisX2", Arg.Any<string>()).Returns("Chart/Axes/AxisX2/Scale");
-            view.AddNode("MajorTickMarks", "Chart/Axes/AxisX2/Scale", Arg.Any<string>()).Returns("Chart/Axes/AxisX2/Scale/MajorTickMarks");
-            view.AddNode("MinorTickMarks", "Chart/Axes/AxisX2/Scale", Arg.Any<string>()).Returns("Chart/Axes/AxisX2/Scale/MinorTickMarks");
-            view.AddNode("TickLabels", "Chart/Axes/AxisX2/Scale", Arg.Any<string>()).Returns("Chart/Axes/AxisX2/Scale/TickLabels");
-            view.AddNode("AxisY1", "Chart/Axes", Arg.Any<string>()).Returns("Chart/Axes/AxisY1");
-            view.AddNode("Label", "Chart/Axes/AxisY1", Arg.Any<string>()).Returns("Chart/Axes/AxisY1/Label");
-            view.AddNode("Scale", "Chart/Axes/AxisY1", Arg.Any<string>()).Returns("Chart/Axes/AxisY1/Scale");
-            view.AddNode("MajorTickMarks", "Chart/Axes/AxisY1/Scale", Arg.Any<string>()).Returns("Chart/Axes/AxisY1/Scale/MajorTickMarks");
-            view.AddNode("MinorTickMarks", "Chart/Axes/AxisY1/Scale", Arg.Any<string>()).Returns("Chart/Axes/AxisY1/Scale/MinorTickMarks");
-            view.AddNode("TickLabels", "Chart/Axes/AxisY1/Scale", Arg.Any<string>()).Returns("Chart/Axes/AxisY1/Scale/TickLabels");
-            view.AddNode("AxisY2", "Chart/Axes", Arg.Any<string>()).Returns("Chart/Axes/AxisY2");
-            view.AddNode("Label", "Chart/Axes/AxisY2", Arg.Any<string>()).Returns("Chart/Axes/Axisy2/Label");
-            view.AddNode("Scale", "Chart/Axes/AxisY2", Arg.Any<string>()).Returns("Chart/Axes/AxisY2/Scale");
-            view.AddNode("MajorTickMarks", "Chart/Axes/AxisY2/Scale", Arg.Any<string>()).Returns("Chart/Axes/AxisY2/Scale/MajorTickMarks");
-            view.AddNode("MinorTickMarks", "Chart/Axes/AxisY2/Scale", Arg.Any<string>()).Returns("Chart/Axes/AxisY2/Scale/MinorTickMarks");
-            view.AddNode("TickLabels", "Chart/Axes/AxisY2/Scale", Arg.Any<string>()).Returns("Chart/Axes/AxisY2/Scale/TickLabels");
-            view.AddNode("PlotArea", "Chart", Arg.Any<string>()).Returns("Chart/PlotArea");
-            view.AddNode("Grid", "Chart/PlotArea", Arg.Any<string>()).Returns("Chart/PlotArea/Grid");
-            view.AddNode("MajorGridLines", "Chart/PlotArea/Grid", Arg.Any<string>()).Returns("Chart/PlotArea/Grid/MajorGridLines");
-            view.AddNode("MinorGridLines", "Chart/PlotArea/Grid", Arg.Any<string>()).Returns("Chart/PlotArea/Grid/MinorGridLines");
-        }
-
-        /// <summary>
-        /// Cleans up after each test.
-        /// </summary>
-        public override void TearDown()
-        {
-            view.ClearReceivedCalls();
-
-            base.TearDown();
+            document.Chart.Returns(chart);
         }
 
         /// <summary>
@@ -98,11 +56,10 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         [Test]
         public void TestConstruction()
         {
-            var presenter = new ChartSettingsViewPresenter(view, document, context, commands, services, events);
+            var presenter = new ChartSettingsViewPresenter(view, Substitute.For<IDocument>(), container.Resolve<ISessionContext>(), container.Resolve<ICommandManager>(), container.Resolve<IServiceRegistry>(), events);
 
             Assert.That(presenter, Is.Not.Null);
 
-            Assert.That(presenter.ID.ToString(), Is.EqualTo("ChartSettings"));
             view.Received().Attach(Arg.Is(presenter));
         }
 
@@ -112,7 +69,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         [Test]
         public void TestConstructionThrowsExceptionWhenCommandsIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new ChartSettingsViewPresenter(view, document, context, null, services, events));
+            Assert.Throws<ArgumentNullException>(() => new ChartSettingsViewPresenter(view, Substitute.For<IDocument>(), container.Resolve<ISessionContext>(), null, container.Resolve<IServiceRegistry>(), events));
         }
 
         /// <summary>
@@ -121,7 +78,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         [Test]
         public void TestConstructionThrowsExceptionWhenContextIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new ChartSettingsViewPresenter(view, document, null, commands, services, events));
+            Assert.Throws<ArgumentNullException>(() => new ChartSettingsViewPresenter(view, Substitute.For<IDocument>(), null, container.Resolve<ICommandManager>(), container.Resolve<IServiceRegistry>(), events));
         }
 
         /// <summary>
@@ -130,7 +87,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         [Test]
         public void TestConstructionThrowsExceptionWhenDocumentIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new ChartSettingsViewPresenter(view, null, context, commands, services, events));
+            Assert.Throws<ArgumentNullException>(() => new ChartSettingsViewPresenter(view, null, container.Resolve<ISessionContext>(), container.Resolve<ICommandManager>(), container.Resolve<IServiceRegistry>(), events));
         }
 
         /// <summary>
@@ -139,7 +96,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         [Test]
         public void TestConstructionThrowsExceptionWhenEventsIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new ChartSettingsViewPresenter(view, document, context, commands, services, null));
+            Assert.Throws<ArgumentNullException>(() => new ChartSettingsViewPresenter(view, Substitute.For<IDocument>(), container.Resolve<ISessionContext>(), container.Resolve<ICommandManager>(), container.Resolve<IServiceRegistry>(), null));
         }
 
         /// <summary>
@@ -148,7 +105,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         [Test]
         public void TestConstructionThrowsExceptionWhenServicesIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new ChartSettingsViewPresenter(view, document, context, commands, null, events));
+            Assert.Throws<ArgumentNullException>(() => new ChartSettingsViewPresenter(view, Substitute.For<IDocument>(), container.Resolve<ISessionContext>(), container.Resolve<ICommandManager>(), null, events));
         }
 
         /// <summary>
@@ -157,7 +114,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         [Test]
         public void TestConstructionThrowsExceptionWhenViewIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new ChartSettingsViewPresenter(null, document, context, commands, services, events));
+            Assert.Throws<ArgumentNullException>(() => new ChartSettingsViewPresenter(null, Substitute.For<IDocument>(), container.Resolve<ISessionContext>(), container.Resolve<ICommandManager>(), container.Resolve<IServiceRegistry>(), events));
         }
 
         /// <summary>
@@ -166,19 +123,17 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         [Test]
         public void TestApplyPreviewSettings()
         {
-            view.AppendColourSection(Arg.Do<IChartSettings>(arg => arg.ForeColour = "Red"));
+            var port = Substitute.For<IChartOutputPort>();
 
-            var useCase = Substitute.For<IUseCase<ChartDTO>>();
+            var presenter = CreatePresenter(view, document, port);
 
-            factory.CreateUpdateChartPreviewUseCase(Arg.Any<IChartOutputPort>()).Returns(useCase);
-
-            var presenter = CreatePresenter(true);
+            presenter.OnEvent(new ChartSettingsChangedEventArgs(documentID, chart));
 
             presenter.Run();
 
             presenter.UpdateChartPreview();
 
-            useCase.Received(1).Execute(Arg.Is<ChartDTO>(dto => dto.ForeColour == "Red"));
+            port.Received(1).ApplyChanges(Arg.Any<ChartDTO>());
         }
 
         /// <summary>
@@ -187,49 +142,21 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         [Test]
         public void TestApplySettings()
         {
-            view.AppendColourSection(Arg.Do<IChartSettings>(arg => arg.ForeColour = "Red"));
+            var port = Substitute.For<IApplicationOutputPort>();
 
-            var useCase = Substitute.For<IUseCase<UpdateChartUseCaseArgs>>();
+            var presenter = CreatePresenter(view, document, port);
 
-            factory.CreateUpdateChartUseCase(Arg.Any<IApplicationOutputPort>()).Returns(useCase);
-
-            var presenter = CreatePresenter(true);
+            controller.GetOutputPort<IApplicationOutputPort>().Returns(port);
 
             presenter.OnEvent(new WorkspaceChangedEventArgs(workspace));
+
+            presenter.OnEvent(new ChartSettingsChangedEventArgs(documentID, chart));
 
             presenter.Run();
 
             presenter.ApplySettings();
 
-            useCase.Received(1).Execute(Arg.Is<UpdateChartUseCaseArgs>(args => args.Workspace.FileName == @"C:\Test\Workspace" && args.DocumentID == documentID.ToString() && args.Chart.ForeColour == "Red"));
-        }
-
-        /// <summary>
-        /// Test that the <see cref="ChartSettingsViewPresenter.ApplySettings()"/> method throws an exception when the document ID has not been set.
-        /// </summary>
-        [Test]
-        public void TestApplySettingsThrowsAnExceptionWhenDocumentIDNotSet()
-        {
-            var settings = Substitute.For<IChartSettings>();
-
-            var presenter = CreatePresenter(true);
-
-            presenter.OnEvent(new WorkspaceChangedEventArgs(workspace));
-
-            Assert.Throws<InvalidOperationException>(() => presenter.ApplySettings());
-        }
-
-        /// <summary>
-        /// Test that the <see cref="ChartSettingsViewPresenter.ApplySettings()"/> method throws an exception when the workspace has not been set.
-        /// </summary>
-        [Test]
-        public void TestApplySettingsThrowsAnExceptionWhenWorkspaceNotSet()
-        {
-            var settings = Substitute.For<IChartSettings>();
-
-            var presenter = CreatePresenter(true);
-
-            Assert.Throws<InvalidOperationException>(() => presenter.ApplySettings());
+            port.Received(1).UpdateWorkspace(Arg.Any<WorkspaceDTO>());
         }
 
         /// <summary>
@@ -238,8 +165,8 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         [Test]
         public void TestGetID()
         {
-            var presenter = CreatePresenter(false);
-
+            var presenter = CreatePresenter(view, document);
+            
             Assert.That(presenter.ID.ToString(), Is.EqualTo("ChartSettings"));
         }
 
@@ -249,40 +176,17 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         [Test]
         public void TestInitialise()
         {
-            var presenter = CreatePresenter(false);
+            var presenter = new ChartSettingsViewPresenter(view, document, container.Resolve<ISessionContext>(), container.Resolve<ICommandManager>(), container.Resolve<IServiceRegistry>(), events);
+
+            presenter.RegisterController(Substitute.For<IDocumentController>());
 
             presenter.Initialise(controller);
 
             view.Received(1).AttachOKButtonCommand(Arg.Any<ICommand>());
             view.Received(1).AttachCancelButtonCommand(Arg.Any<ICommand>());
 
-            view.Received(1).AddNode("Chart", Resources.Chart);
-            view.Received(1).AddNode("Title", "Chart", Resources.Title);
-            view.Received(1).AddNode("Axes", "Chart", Resources.Axes);
-            view.Received(1).AddNode("AxisX1", "Chart/Axes", Resources.AxisX1);
-            view.Received(1).AddNode("Label", "Chart/Axes/AxisX1", Resources.Label);
-            view.Received(1).AddNode("MajorTickMarks", "Chart/Axes/AxisX1/Scale", Resources.MajorTickMarks);
-            view.Received(1).AddNode("MinorTickMarks", "Chart/Axes/AxisX1/Scale", Resources.MinorTickMarks);
-            view.Received(1).AddNode("TickLabels", "Chart/Axes/AxisX1/Scale", Resources.TickLabels);
-            view.Received(1).AddNode("AxisX2", "Chart/Axes", Resources.AxisX2);
-            view.Received(1).AddNode("Label", "Chart/Axes/AxisX2", Resources.Label);
-            view.Received(1).AddNode("MajorTickMarks", "Chart/Axes/AxisX2/Scale", Resources.MajorTickMarks);
-            view.Received(1).AddNode("MinorTickMarks", "Chart/Axes/AxisX2/Scale", Resources.MinorTickMarks);
-            view.Received(1).AddNode("TickLabels", "Chart/Axes/AxisX2/Scale", Resources.TickLabels);
-            view.Received(1).AddNode("AxisY1", "Chart/Axes", Resources.AxisY1);
-            view.Received(1).AddNode("Label", "Chart/Axes/AxisY1", Resources.Label);
-            view.Received(1).AddNode("MajorTickMarks", "Chart/Axes/AxisY1/Scale", Resources.MajorTickMarks);
-            view.Received(1).AddNode("MinorTickMarks", "Chart/Axes/AxisY1/Scale", Resources.MinorTickMarks);
-            view.Received(1).AddNode("TickLabels", "Chart/Axes/AxisY1/Scale", Resources.TickLabels);
-            view.Received(1).AddNode("AxisY2", "Chart/Axes", Resources.AxisY2);
-            view.Received(1).AddNode("Label", "Chart/Axes/AxisY2", Resources.Label);
-            view.Received(1).AddNode("MajorTickMarks", "Chart/Axes/AxisY2/Scale", Resources.MajorTickMarks);
-            view.Received(1).AddNode("MinorTickMarks", "Chart/Axes/AxisY2/Scale", Resources.MinorTickMarks);
-            view.Received(1).AddNode("TickLabels", "Chart/Axes/AxisY2/Scale", Resources.TickLabels);
-            view.Received(1).AddNode("PlotArea", "Chart", Resources.PlotArea);
-            view.Received(1).AddNode("Grid", "Chart/PlotArea", Resources.Grid);
-            view.Received(1).AddNode("MajorGridLines", "Chart/PlotArea/Grid", Resources.MajorGridLines);
-            view.Received(1).AddNode("MinorGridLines", "Chart/PlotArea/Grid", Resources.MinorGridLines);
+            view.Received().AddNode(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>());
+            view.Received().AddNode(Arg.Any<string>(), Arg.Any<string>());
 
             view.Received(1).Initialise();
 
@@ -295,7 +199,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         [Test]
         public void TestInitialiseThrowsAnExceptionWhenAlreadyInitialised()
         {
-            var presenter = CreatePresenter(true);
+            var presenter = CreatePresenter(view, document);
 
             Assert.Throws<InvalidOperationException>(() => presenter.Initialise(controller));
         }
@@ -306,7 +210,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         [Test]
         public void TestInitialiseThrowsAnExceptionWhenParentNotRegistered()
         {
-            var presenter = new ChartSettingsViewPresenter(view, document, context, commands, services, events);
+            var presenter = new ChartSettingsViewPresenter(view, document, container.Resolve<ISessionContext>(), container.Resolve<ICommandManager>(), container.Resolve<IServiceRegistry>(), events);
 
             Assert.Throws<InvalidOperationException>(() => presenter.Initialise(controller));
         }
@@ -317,18 +221,19 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         [Test]
         public void TestRevertSettings()
         {
-            view.AppendColourSection(Arg.Do<IChartSettings>(arg => arg.ForeColour = "Red"));
+            var chartController = Substitute.For<IChartController>();
 
-            var chartController = Substitute.For<IChartController, IApplicationOutputPort>();
+            var presenter = CreatePresenter(view, document, chartController);
 
-            var presenter = CreatePresenter(chartController);
+            presenter.OnEvent(new WorkspaceChangedEventArgs(workspace));
+
+            presenter.OnEvent(new ChartSettingsChangedEventArgs(documentID, chart));
 
             presenter.Run();
 
             presenter.RevertSettings();
 
-            chartController.Received(0).UpdateChart(Arg.Any<IChart>());
-            chartController.Received(1).UpdatePreview();
+            chartController.Received(1).RevertChanges();
         }
 
         /// <summary>
@@ -337,15 +242,32 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         [Test]
         public void TestRun()
         {
-            var presenter = CreatePresenter(true);
+            var presenter = CreatePresenter(view, document);
+
+            presenter.OnEvent(new ChartSettingsChangedEventArgs(documentID, chart));
 
             presenter.Run();
 
+            view.Received(1).ClearOverlays();
+
             view.Received(1).Clear();
 
-            view.Received(1).AppendColourSection(Arg.Any<IChartSettings>());
+            view.Received(1).AppendColourSection("Chart", false);
 
             view.Received(1).ExpandNode("Chart");
+        }
+
+        /// <summary>
+        /// Test that the <see cref="ChartSettingsViewPresenter.Run()"/> method throws an exception when the chart has not been set.
+        /// </summary>
+        [Test]
+        public void TestRunThrowsAnExceptionWhenChartNotSet()
+        {
+            var port = Substitute.For<IApplicationOutputPort>();
+
+            var presenter = CreatePresenter(view, document, port);
+
+            Assert.Throws<InvalidOperationException>(() => presenter.Run());
         }
 
         /// <summary>
@@ -354,25 +276,27 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         [Test]
         public void TestShowAxisSettings()
         {
-            var presenter = CreatePresenter(true);
+            var presenter = CreatePresenter(view, document);
+
+            presenter.OnEvent(new ChartSettingsChangedEventArgs(documentID, chart));
 
             presenter.Run();
 
             view.ClearReceivedCalls();
 
-            presenter.ShowSettings("Chart/Axes/AxisX1");
+            var key = "Chart/Axes/AxisX1";
+
+            presenter.ShowSettings(key);
 
             view.Received(1).Clear();
 
-            view.Received(1).AppendColourSection(Arg.Any<IAxisSettings>());
-            view.Received(1).AppendVisibleSection(Arg.Any<IAxisSettings>());
-
-            view.Received(0).AppendColourSection(Arg.Any<IChartSettings>());
-            view.Received(0).AppendColourSection(Arg.Any<IPlotAreaSettings>());
-            view.Received(0).AppendFontSection(Arg.Any<IFontSettings>());
-            view.Received(0).AppendScaleSection(Arg.Any<IScaleSettings>());
-            view.Received(0).AppendSizeSection(Arg.Any<IPointSettings>());
-            view.Received(0).AppendTextSection(Arg.Any<ILabelSettings>());
+            view.Received(1).AppendColourSection(key, true);
+            view.Received(0).AppendDataSourceSection(Arg.Any<string>(), Arg.Any<IEnumerable<IDisplayField>>(), Arg.Any<IEnumerable<IDisplayField>>());
+            view.Received(0).AppendFontSection(Arg.Any<string>(), Arg.Any<bool>());
+            view.Received(0).AppendScaleSection(Arg.Any<string>());
+            view.Received(0).AppendSizeSection(Arg.Any<string>());
+            view.Received(0).AppendTextSection(Arg.Any<string>());
+            view.Received(1).AppendVisibleSection(key);
         }
 
         /// <summary>
@@ -381,25 +305,27 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         [Test]
         public void TestShowAxisLabelSettings()
         {
-            var presenter = CreatePresenter(true);
+            var presenter = CreatePresenter(view, document);
+
+            presenter.OnEvent(new ChartSettingsChangedEventArgs(documentID, chart));
 
             presenter.Run();
 
             view.ClearReceivedCalls();
 
-            presenter.ShowSettings("Chart/Axes/AxisX1/Label");
+            var key = "Chart/Axes/AxisX1/Label";
+
+            presenter.ShowSettings(key);
 
             view.Received(1).Clear();
 
-            view.Received(1).AppendColourSection(Arg.Any<ILabelSettings>());
-            view.Received(1).AppendFontSection(Arg.Any<ILabelSettings>());
-            view.Received(1).AppendTextSection(Arg.Any<ILabelSettings>());
-            view.Received(1).AppendVisibleSection(Arg.Any<ILabelSettings>());
-
-            view.Received(0).AppendColourSection(Arg.Any<IChartSettings>());
-            view.Received(0).AppendColourSection(Arg.Any<IPlotAreaSettings>());
-            view.Received(0).AppendScaleSection(Arg.Any<IScaleSettings>());
-            view.Received(0).AppendSizeSection(Arg.Any<IPointSettings>());
+            view.Received(1).AppendColourSection(key, true);
+            view.Received(0).AppendDataSourceSection(Arg.Any<string>(), Arg.Any<IEnumerable<IDisplayField>>(), Arg.Any<IEnumerable<IDisplayField>>());
+            view.Received(1).AppendFontSection(key, false);
+            view.Received(0).AppendScaleSection(Arg.Any<string>());
+            view.Received(0).AppendSizeSection(Arg.Any<string>());
+            view.Received(1).AppendTextSection(key);
+            view.Received(1).AppendVisibleSection(key);
         }
 
         /// <summary>
@@ -408,25 +334,27 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         [Test]
         public void TestShowAxisScaleSettings()
         {
-            var presenter = CreatePresenter(true);
-            
+            var presenter = CreatePresenter(view, document);
+
+            presenter.OnEvent(new ChartSettingsChangedEventArgs(documentID, chart));
+
             presenter.Run();
 
             view.ClearReceivedCalls();
 
-            presenter.ShowSettings("Chart/Axes/AxisX1/Scale");
+            var key = "Chart/Axes/AxisX1/Scale";
+
+            presenter.ShowSettings(key);
 
             view.Received(1).Clear();
 
-            view.Received(1).AppendColourSection(Arg.Any<IScaleSettings>());
-            view.Received(1).AppendScaleSection(Arg.Any<IScaleSettings>());
-            view.Received(1).AppendVisibleSection(Arg.Any<IScaleSettings>());
-
-            view.Received(0).AppendColourSection(Arg.Any<IChartSettings>());
-            view.Received(0).AppendColourSection(Arg.Any<IPlotAreaSettings>());
-            view.Received(0).AppendFontSection(Arg.Any<IFontSettings>());
-            view.Received(0).AppendTextSection(Arg.Any<ILabelSettings>());
-            view.Received(0).AppendSizeSection(Arg.Any<IPointSettings>());
+            view.Received(1).AppendColourSection(key, true);
+            view.Received(0).AppendDataSourceSection(Arg.Any<string>(), Arg.Any<IEnumerable<IDisplayField>>(), Arg.Any<IEnumerable<IDisplayField>>());
+            view.Received(0).AppendFontSection(Arg.Any<string>(), Arg.Any<bool>());
+            view.Received(1).AppendScaleSection(key);
+            view.Received(0).AppendSizeSection(Arg.Any<string>());
+            view.Received(0).AppendTextSection(Arg.Any<string>());
+            view.Received(1).AppendVisibleSection(key);
         }
 
         /// <summary>
@@ -435,24 +363,27 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         [Test]
         public void TestShowChartSettings()
         {
-            var presenter = CreatePresenter(true);
+            var presenter = CreatePresenter(view, document);
+
+            presenter.OnEvent(new ChartSettingsChangedEventArgs(documentID, chart));
 
             presenter.Run();
 
             view.ClearReceivedCalls();
 
-            presenter.ShowSettings("Chart");
+            var key = "Chart";
+
+            presenter.ShowSettings(key);
 
             view.Received(1).Clear();
 
-            view.Received(1).AppendColourSection(Arg.Any<IChartSettings>());
-
-            view.Received(0).AppendColourSection(Arg.Any<IPlotAreaSettings>());
-            view.Received(0).AppendFontSection(Arg.Any<IFontSettings>());
-            view.Received(0).AppendTextSection(Arg.Any<ILabelSettings>());
-            view.Received(0).AppendScaleSection(Arg.Any<IScaleSettings>());
-            view.Received(0).AppendSizeSection(Arg.Any<IPointSettings>());
-            view.Received(0).AppendVisibleSection(Arg.Any<IScaleSettings>());
+            view.Received(1).AppendColourSection(key, false);
+            view.Received(0).AppendDataSourceSection(Arg.Any<string>(), Arg.Any<IEnumerable<IDisplayField>>(), Arg.Any<IEnumerable<IDisplayField>>());
+            view.Received(0).AppendFontSection(Arg.Any<string>(), Arg.Any<bool>());
+            view.Received(0).AppendScaleSection(Arg.Any<string>());
+            view.Received(0).AppendSizeSection(Arg.Any<string>());
+            view.Received(0).AppendTextSection(Arg.Any<string>());
+            view.Received(0).AppendVisibleSection(Arg.Any<string>());
         }
 
         /// <summary>
@@ -461,25 +392,27 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         [Test]
         public void TestShowChartTitleSettings()
         {
-            var presenter = CreatePresenter(true);
+            var presenter = CreatePresenter(view, document);
+
+            presenter.OnEvent(new ChartSettingsChangedEventArgs(documentID, chart));
 
             presenter.Run();
 
             view.ClearReceivedCalls();
 
-            presenter.ShowSettings("Chart/Title");
+            var key = "Chart/Title";
+
+            presenter.ShowSettings(key);
 
             view.Received(1).Clear();
 
-            view.Received(1).AppendColourSection(Arg.Any<ILabelSettings>());
-            view.Received(1).AppendFontSection(Arg.Any<ILabelSettings>());
-            view.Received(1).AppendTextSection(Arg.Any<ILabelSettings>());
-            view.Received(1).AppendVisibleSection(Arg.Any<ILabelSettings>());
-
-            view.Received(0).AppendColourSection(Arg.Any<IChartSettings>());
-            view.Received(0).AppendColourSection(Arg.Any<IPlotAreaSettings>());
-            view.Received(0).AppendScaleSection(Arg.Any<IScaleSettings>());
-            view.Received(0).AppendSizeSection(Arg.Any<IPointSettings>());
+            view.Received(1).AppendColourSection(key, true);
+            view.Received(0).AppendDataSourceSection(Arg.Any<string>(), Arg.Any<IEnumerable<IDisplayField>>(), Arg.Any<IEnumerable<IDisplayField>>());
+            view.Received(1).AppendFontSection(key, false);
+            view.Received(0).AppendScaleSection(Arg.Any<string>());
+            view.Received(0).AppendSizeSection(Arg.Any<string>());
+            view.Received(1).AppendTextSection(Arg.Any<string>());
+            view.Received(1).AppendVisibleSection(key);
         }
 
         /// <summary>
@@ -488,7 +421,9 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         [Test]
         public void TestShowDataSettings()
         {
-            var presenter = CreatePresenter(true);
+            var presenter = CreatePresenter(view, document);
+
+            presenter.OnEvent(new ChartSettingsChangedEventArgs(documentID, chart));
 
             presenter.Run();
 
@@ -498,7 +433,13 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
 
             view.Received(1).Clear();
 
-            //view.Received(1).AppendDataSourceSection(Arg.Any<IChartSettings>());
+            view.Received(0).AppendColourSection(Arg.Any<string>(), Arg.Any<bool>());
+            view.Received(1).AppendDataSourceSection("Chart/Axes", Arg.Any<IEnumerable<IDisplayField>>(), Arg.Any<IEnumerable<IDisplayField>>());
+            view.Received(0).AppendFontSection(Arg.Any<string>(), Arg.Any<bool>());
+            view.Received(0).AppendScaleSection(Arg.Any<string>());
+            view.Received(0).AppendSizeSection(Arg.Any<string>());
+            view.Received(0).AppendTextSection(Arg.Any<string>());
+            view.Received(0).AppendVisibleSection(Arg.Any<string>());
         }
 
         /// <summary>
@@ -507,25 +448,27 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         [Test]
         public void TestShowGridSettings()
         {
-            var presenter = CreatePresenter(true);
+            var presenter = CreatePresenter(view, document);
+
+            presenter.OnEvent(new ChartSettingsChangedEventArgs(documentID, chart));
 
             presenter.Run();
 
             view.ClearReceivedCalls();
 
-            presenter.ShowSettings("Chart/PlotArea/Grid");
+            var key = "Chart/PlotArea/Grid";
+
+            presenter.ShowSettings(key);
 
             view.Received(1).Clear();
 
-            view.Received(1).AppendColourSection(Arg.Any<IGridSettings>());
-            view.Received(1).AppendVisibleSection(Arg.Any<IGridSettings>());
-
-            view.Received(0).AppendColourSection(Arg.Any<IChartSettings>());
-            view.Received(0).AppendColourSection(Arg.Any<IPlotAreaSettings>());
-            view.Received(0).AppendFontSection(Arg.Any<IFontSettings>());
-            view.Received(0).AppendTextSection(Arg.Any<ILabelSettings>());
-            view.Received(0).AppendScaleSection(Arg.Any<IScaleSettings>());
-            view.Received(0).AppendSizeSection(Arg.Any<IPointSettings>());
+            view.Received(1).AppendColourSection(key, true);
+            view.Received(0).AppendDataSourceSection(Arg.Any<string>(), Arg.Any<IEnumerable<IDisplayField>>(), Arg.Any<IEnumerable<IDisplayField>>());
+            view.Received(0).AppendFontSection(Arg.Any<string>(), Arg.Any<bool>());
+            view.Received(0).AppendScaleSection(Arg.Any<string>());
+            view.Received(0).AppendSizeSection(Arg.Any<string>());
+            view.Received(0).AppendTextSection(Arg.Any<string>());
+            view.Received(1).AppendVisibleSection(key);
         }
 
         /// <summary>
@@ -534,25 +477,27 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         [Test]
         public void TestShowMajorGridLinesSettings()
         {
-            var presenter = CreatePresenter(true);
+            var presenter = CreatePresenter(view, document);
+
+            presenter.OnEvent(new ChartSettingsChangedEventArgs(documentID, chart));
 
             presenter.Run();
 
             view.ClearReceivedCalls();
 
-            presenter.ShowSettings("Chart/PlotArea/Grid/MajorGridLines");
+            var key = "Chart/PlotArea/Grid/MajorGridLines";
+
+            presenter.ShowSettings(key);
 
             view.Received(1).Clear();
 
-            view.Received(1).AppendColourSection(Arg.Any<IGridLineSettings>());
-            view.Received(1).AppendVisibleSection(Arg.Any<IGridLineSettings>());
-
-            view.Received(0).AppendColourSection(Arg.Any<IChartSettings>());
-            view.Received(0).AppendColourSection(Arg.Any<IPlotAreaSettings>());
-            view.Received(0).AppendFontSection(Arg.Any<IFontSettings>());
-            view.Received(0).AppendTextSection(Arg.Any<ILabelSettings>());
-            view.Received(0).AppendScaleSection(Arg.Any<IScaleSettings>());
-            view.Received(0).AppendSizeSection(Arg.Any<IPointSettings>());
+            view.Received(1).AppendColourSection(key, true);
+            view.Received(0).AppendDataSourceSection(Arg.Any<string>(), Arg.Any<IEnumerable<IDisplayField>>(), Arg.Any<IEnumerable<IDisplayField>>());
+            view.Received(0).AppendFontSection(Arg.Any<string>(), Arg.Any<bool>());
+            view.Received(0).AppendScaleSection(Arg.Any<string>());
+            view.Received(0).AppendSizeSection(key);
+            view.Received(0).AppendTextSection(Arg.Any<string>());
+            view.Received(1).AppendVisibleSection(key);
         }
 
         /// <summary>
@@ -561,25 +506,27 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         [Test]
         public void TestShowMajorTickMarkSettings()
         {
-            var presenter = CreatePresenter(true);
+            var presenter = CreatePresenter(view, document);
+
+            presenter.OnEvent(new ChartSettingsChangedEventArgs(documentID, chart));
 
             presenter.Run();
 
             view.ClearReceivedCalls();
 
-            presenter.ShowSettings("Chart/Axes/AxisX1/Scale/MajorTickMarks");
+            var key = "Chart/Axes/AxisX1/Scale/MajorTickMarks";
+
+            presenter.ShowSettings(key);
 
             view.Received(1).Clear();
 
-            view.Received(1).AppendColourSection(Arg.Any<ITickMarkSettings>());
-            view.Received(1).AppendVisibleSection(Arg.Any<ITickMarkSettings>());
-
-            view.Received(0).AppendColourSection(Arg.Any<IChartSettings>());
-            view.Received(0).AppendColourSection(Arg.Any<IPlotAreaSettings>());
-            view.Received(0).AppendFontSection(Arg.Any<IFontSettings>());
-            view.Received(0).AppendTextSection(Arg.Any<ILabelSettings>());
-            view.Received(0).AppendScaleSection(Arg.Any<IScaleSettings>());
-            view.Received(0).AppendSizeSection(Arg.Any<IPointSettings>());
+            view.Received(1).AppendColourSection(key, true);
+            view.Received(0).AppendDataSourceSection(Arg.Any<string>(), Arg.Any<IEnumerable<IDisplayField>>(), Arg.Any<IEnumerable<IDisplayField>>());
+            view.Received(0).AppendFontSection(Arg.Any<string>(), Arg.Any<bool>());
+            view.Received(0).AppendScaleSection(Arg.Any<string>());
+            view.Received(0).AppendSizeSection(Arg.Any<string>());
+            view.Received(0).AppendTextSection(Arg.Any<string>());
+            view.Received(1).AppendVisibleSection(key);
         }
 
         /// <summary>
@@ -588,25 +535,27 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         [Test]
         public void TestShowMinorGridLinesSettings()
         {
-            var presenter = CreatePresenter(true);
+            var presenter = CreatePresenter(view, document);
+
+            presenter.OnEvent(new ChartSettingsChangedEventArgs(documentID, chart));
 
             presenter.Run();
 
             view.ClearReceivedCalls();
 
-            presenter.ShowSettings("Chart/PlotArea/Grid/MinorGridLines");
+            var key = "Chart/PlotArea/Grid/MinorGridLines";
+
+            presenter.ShowSettings(key);
 
             view.Received(1).Clear();
 
-            view.Received(1).AppendColourSection(Arg.Any<IGridLineSettings>());
-            view.Received(1).AppendVisibleSection(Arg.Any<IGridLineSettings>());
-
-            view.Received(0).AppendColourSection(Arg.Any<IChartSettings>());
-            view.Received(0).AppendColourSection(Arg.Any<IPlotAreaSettings>());
-            view.Received(0).AppendFontSection(Arg.Any<IFontSettings>());
-            view.Received(0).AppendTextSection(Arg.Any<ILabelSettings>());
-            view.Received(0).AppendScaleSection(Arg.Any<IScaleSettings>());
-            view.Received(0).AppendSizeSection(Arg.Any<IPointSettings>());
+            view.Received(1).AppendColourSection(key, true);
+            view.Received(0).AppendDataSourceSection(Arg.Any<string>(), Arg.Any<IEnumerable<IDisplayField>>(), Arg.Any<IEnumerable<IDisplayField>>());
+            view.Received(0).AppendFontSection(Arg.Any<string>(), Arg.Any<bool>());
+            view.Received(0).AppendScaleSection(Arg.Any<string>());
+            view.Received(0).AppendSizeSection(Arg.Any<string>());
+            view.Received(0).AppendTextSection(Arg.Any<string>());
+            view.Received(1).AppendVisibleSection(key);
         }
 
         /// <summary>
@@ -615,25 +564,56 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         [Test]
         public void TestShowMinorTickMarkSettings()
         {
-            var presenter = CreatePresenter(true);
+            var presenter = CreatePresenter(view, document);
+
+            presenter.OnEvent(new ChartSettingsChangedEventArgs(documentID, chart));
 
             presenter.Run();
 
             view.ClearReceivedCalls();
 
-            presenter.ShowSettings("Chart/Axes/AxisX1/Scale/MinorTickMarks");
+            var key = "Chart/Axes/AxisX1/Scale/MinorTickMarks";
+
+            presenter.ShowSettings(key);
 
             view.Received(1).Clear();
 
-            view.Received(1).AppendColourSection(Arg.Any<ITickMarkSettings>());
-            view.Received(1).AppendVisibleSection(Arg.Any<ITickMarkSettings>());
+            view.Received(1).AppendColourSection(key, true);
+            view.Received(0).AppendDataSourceSection(Arg.Any<string>(), Arg.Any<IEnumerable<IDisplayField>>(), Arg.Any<IEnumerable<IDisplayField>>());
+            view.Received(0).AppendFontSection(Arg.Any<string>(), Arg.Any<bool>());
+            view.Received(0).AppendScaleSection(Arg.Any<string>());
+            view.Received(0).AppendSizeSection(Arg.Any<string>());
+            view.Received(0).AppendTextSection(Arg.Any<string>());
+            view.Received(1).AppendVisibleSection(key);
+        }
 
-            view.Received(0).AppendColourSection(Arg.Any<IChartSettings>());
-            view.Received(0).AppendColourSection(Arg.Any<IPlotAreaSettings>());
-            view.Received(0).AppendFontSection(Arg.Any<IFontSettings>());
-            view.Received(0).AppendTextSection(Arg.Any<ILabelSettings>());
-            view.Received(0).AppendScaleSection(Arg.Any<IScaleSettings>());
-            view.Received(0).AppendSizeSection(Arg.Any<IPointSettings>());
+        /// <summary>
+        /// Test that the <see cref="ChartSettingsViewPresenter.ShowSettings(string)"/> method correctly shows the tick label settings.
+        /// </summary>
+        [Test]
+        public void TestShowOverlaySettings()
+        {
+            var presenter = CreatePresenter(view, document);
+
+            presenter.OnEvent(new ChartSettingsChangedEventArgs(documentID, chart));
+
+            presenter.Run();
+
+            view.ClearReceivedCalls();
+
+            var key = "Chart/Overlays";
+
+            presenter.ShowSettings(key);
+
+            view.Received(1).Clear();
+
+            view.Received(1).AppendColourSection(key, true);
+            view.Received(0).AppendDataSourceSection(Arg.Any<string>(), Arg.Any<IEnumerable<IDisplayField>>(), Arg.Any<IEnumerable<IDisplayField>>());
+            view.Received(1).AppendFontSection(key, true);
+            view.Received(0).AppendScaleSection(Arg.Any<string>());
+            view.Received(0).AppendSizeSection(Arg.Any<string>());
+            view.Received(0).AppendTextSection(Arg.Any<string>());
+            view.Received(1).AppendVisibleSection(key);
         }
 
         /// <summary>
@@ -642,24 +622,27 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         [Test]
         public void TestShowPlotAreaSettings()
         {
-            var presenter = CreatePresenter(true);
+            var presenter = CreatePresenter(view, document);
+
+            presenter.OnEvent(new ChartSettingsChangedEventArgs(documentID, chart));
 
             presenter.Run();
 
             view.ClearReceivedCalls();
 
-            presenter.ShowSettings("Chart/PlotArea");
+            var key = "Chart/PlotArea";
+
+            presenter.ShowSettings(key);
 
             view.Received(1).Clear();
 
-            view.Received(1).AppendColourSection(Arg.Any<IPlotAreaSettings>());
-
-            view.Received(0).AppendColourSection(Arg.Any<IChartSettings>());
-            view.Received(0).AppendFontSection(Arg.Any<IFontSettings>());
-            view.Received(0).AppendTextSection(Arg.Any<ILabelSettings>());
-            view.Received(0).AppendScaleSection(Arg.Any<IScaleSettings>());
-            view.Received(0).AppendSizeSection(Arg.Any<IPointSettings>());
-            view.Received(0).AppendVisibleSection(Arg.Any<ITickMarkSettings>());
+            view.Received(1).AppendColourSection(key, false);
+            view.Received(0).AppendDataSourceSection(Arg.Any<string>(), Arg.Any<IEnumerable<IDisplayField>>(), Arg.Any<IEnumerable<IDisplayField>>());
+            view.Received(0).AppendFontSection(Arg.Any<string>(), Arg.Any<bool>());
+            view.Received(0).AppendScaleSection(Arg.Any<string>());
+            view.Received(0).AppendSizeSection(Arg.Any<string>());
+            view.Received(0).AppendTextSection(Arg.Any<string>());
+            view.Received(0).AppendVisibleSection(Arg.Any<string>());
         }
 
         /// <summary>
@@ -668,26 +651,27 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         [Test]
         public void TestShowPointSettings()
         {
-            var presenter = CreatePresenter(true);
+            var presenter = CreatePresenter(view, document);
+
+            presenter.OnEvent(new ChartSettingsChangedEventArgs(documentID, chart));
 
             presenter.Run();
 
             view.ClearReceivedCalls();
 
-            presenter.ShowSettings("Chart/PlotArea/Points");
+            var key = "Chart/PlotArea/Points";
+
+            presenter.ShowSettings(key);
 
             view.Received(1).Clear();
 
-            view.Received(1).AppendColourSection(Arg.Any<IPointSettings>());
-            view.Received(1).AppendSizeSection(Arg.Any<IPointSettings>());
-            view.Received(1).AppendVisibleSection(Arg.Any<IPointSettings>());
-
-            view.Received(0).AppendColourSection(Arg.Any<IChartSettings>());
-            view.Received(0).AppendColourSection(Arg.Any<IPlotAreaSettings>());
-            view.Received(0).AppendFontSection(Arg.Any<IFontSettings>());
-            view.Received(0).AppendTextSection(Arg.Any<ILabelSettings>());
-            view.Received(0).AppendScaleSection(Arg.Any<IScaleSettings>());
-            view.Received(0).AppendVisibleSection(Arg.Any<ITickMarkSettings>());
+            view.Received(1).AppendColourSection(key, true);
+            view.Received(0).AppendDataSourceSection(Arg.Any<string>(), Arg.Any<IEnumerable<IDisplayField>>(), Arg.Any<IEnumerable<IDisplayField>>());
+            view.Received(0).AppendFontSection(Arg.Any<string>(), Arg.Any<bool>());
+            view.Received(0).AppendScaleSection(Arg.Any<string>());
+            view.Received(1).AppendSizeSection(key);
+            view.Received(0).AppendTextSection(Arg.Any<string>());
+            view.Received(1).AppendVisibleSection(key);
         }
 
         /// <summary>
@@ -696,75 +680,27 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         [Test]
         public void TestShowTickLabelSettings()
         {
-            var presenter = CreatePresenter(true);
+            var presenter = CreatePresenter(view, document);
+
+            presenter.OnEvent(new ChartSettingsChangedEventArgs(documentID, chart));
 
             presenter.Run();
 
-            view.ClearReceivedCalls();  
+            view.ClearReceivedCalls();
 
-            presenter.ShowSettings("Chart/Axes/AxisX1/Scale/TickLabels");
+            var key = "Chart/Axes/AxisX1/Scale/TickLabels";
+
+            presenter.ShowSettings(key);
 
             view.Received(1).Clear();
 
-            view.Received(1).AppendColourSection(Arg.Any<ITickLabelSettings>());
-            view.Received(1).AppendFontSection(Arg.Any<ITickLabelSettings>());
-            view.Received(1).AppendVisibleSection(Arg.Any<ITickLabelSettings>());
-
-            view.Received(0).AppendColourSection(Arg.Any<IChartSettings>());
-            view.Received(0).AppendColourSection(Arg.Any<IPlotAreaSettings>());
-            view.Received(0).AppendTextSection(Arg.Any<ILabelSettings>());
-            view.Received(0).AppendScaleSection(Arg.Any<IScaleSettings>());
-            view.Received(0).AppendVisibleSection(Arg.Any<ITickMarkSettings>());
-        }
-
-        /// <summary>
-        /// Test that the <see cref="ChartSettingsViewPresenter.ShowSettings(string)"/> method throws an exception when the chart has not been set.
-        /// </summary>
-        [Test]
-        public void TestShowSettingsThrowsAnExceptionWhenChartNotSet()
-        {
-            var presenter = CreatePresenter(true);
-
-            Assert.Throws<InvalidOperationException>(() => presenter.ShowSettings("Chart"));
-        }
-
-        /// <summary>
-        /// A factory method that creates a new instance of the <see cref="ChartSettingsViewPresenter"/> class.
-        /// </summary>
-        /// <param name="chart">The chart controller.</param>
-        /// <returns>Returns the newly created <see cref="ChartSettingsViewPresenter"/>.</returns>
-        private ChartSettingsViewPresenter CreatePresenter(IChartController chartController)
-        {
-            var presenter = new ChartSettingsViewPresenter(view, document, context, commands, services, events);
-
-            var parent = Substitute.For<IDocumentController>();
-            parent.GetController<IChartController>(new ControllerID(Constants.Chart)).Returns(chartController);
-            parent.ID.Returns(new ControllerID(documentID));
-            
-            presenter.RegisterController(parent);
-
-            presenter.Initialise(controller);
-
-            return presenter;
-        }
-
-        /// <summary>
-        /// A factory method that creates a new instance of the <see cref="ChartSettingsViewPresenter"/> class.
-        /// </summary>
-        /// <param name="initialise">true to initialise the presenter; false otherwise.</param>
-        /// <returns>Returns the newly created <see cref="ChartSettingsViewPresenter"/>.</returns>
-        private ChartSettingsViewPresenter CreatePresenter(bool initialise)
-        {
-            var presenter = new ChartSettingsViewPresenter(view, document, context, commands, services, events);
-
-            var parent = Substitute.For<IDocumentController>();
-            parent.ID.Returns(new ControllerID(documentID));
-
-            presenter.RegisterController(parent);
-
-            if (initialise) presenter.Initialise(controller);
-
-            return presenter;
+            view.Received(1).AppendColourSection(key, true);
+            view.Received(0).AppendDataSourceSection(Arg.Any<string>(), Arg.Any<IEnumerable<IDisplayField>>(), Arg.Any<IEnumerable<IDisplayField>>());
+            view.Received(1).AppendFontSection(key, true);
+            view.Received(0).AppendScaleSection(Arg.Any<string>());
+            view.Received(0).AppendSizeSection(Arg.Any<string>());
+            view.Received(0).AppendTextSection(Arg.Any<string>());
+            view.Received(1).AppendVisibleSection(key);
         }
     }
-} 
+}

@@ -12,7 +12,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
     /// <summary>
     /// Controls the behaviour of a chart settings panel.
     /// </summary>
-    internal class ChartSettingsViewPresenter : ChildViewPresenter<IChartSettingsView, IDocumentController>, IChildViewController, IChartSettingsViewPresenter, ISubscriber<ChartSettingsChangedEventArgs>, ISubscriber<WorkspaceChangedEventArgs>
+    public class ChartSettingsViewPresenter : ChildViewPresenter<IChartSettingsView, IDocumentController>, IChildViewController, IChartSettingsViewPresenter, ISubscriber<ChartSettingsChangedEventArgs>, ISubscriber<WorkspaceChangedEventArgs>
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(ChartSettingsViewPresenter)); // The logger that will be used for writing log messages.
 
@@ -30,7 +30,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         /// Initialises a new instance of the <see cref="ChartSettingsViewPresenter"> class.
         /// </summary>
         /// <param name="view">The <see cref="IChartSettingsView"/> controlled by this presenter.</param>
-        /// <param name="document">The <see cref="IDocument"/> that the presenter .</param>
+        /// <param name="document">The <see cref="IDocument"/> that the presenter configures.</param>
         /// <param name="context">An <see cref="ISessionContext"/> that provides access to the session context.</param>
         /// <param name="commands">An <see cref="ICommandManager"/> that is required for the creation of <see cref="ICommand">s.</param>
         /// <param name="services">An <see cref="IServiceRegistry"/> that provides access to the registered services.</param>
@@ -55,6 +55,18 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         ~ChartSettingsViewPresenter()
         {
             Dispose(false);
+        }
+
+        /// <summary>
+        /// Applies the chart settings to the document.
+        /// </summary>
+        public void ApplySettings()
+        {
+            if (workspace == null) throw new InvalidOperationException(ExceptionMessages.InvalidState);
+            if (document == null) throw new InvalidOperationException(ExceptionMessages.InvalidState);
+            if (chart == null) throw new InvalidOperationException(ExceptionMessages.InvalidState);
+
+            useCaseService.UpdateChart(workspace, document.ID, chart);
         }
 
         /// <summary>
@@ -109,8 +121,6 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
                 chart = new ChartSettings(args.Chart);
 
                 View.UpdateSettings(chart);
-
-                //ShowSettings(key);
             }
         }
 
@@ -123,6 +133,16 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             workspace = args.Workspace;
 
             View.SelectNode(key);
+        }
+
+        /// <summary>
+        /// Reverts the changes to the settings.
+        /// </summary>
+        public void RevertSettings()
+        {
+            var controller = ParentController.GetController<IChartController>(new ControllerID(Constants.Chart));
+
+            controller.RevertChanges();
         }
 
         /// <summary>
@@ -225,18 +245,6 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// Applies the chart settings to the document.
-        /// </summary>
-        private void ApplySettings()
-        {
-            if (workspace == null) throw new InvalidOperationException(ExceptionMessages.InvalidState);
-            if (document == null) throw new InvalidOperationException(ExceptionMessages.InvalidState);
-            if (chart == null) throw new InvalidOperationException(ExceptionMessages.InvalidState);
-
-            useCaseService.UpdateChart(workspace, document.ID, chart);
-        }
-
-        /// <summary>
         /// Creates the nodes that provide access to the axis settings.
         /// </summary>
         /// <param name="name">The node name.</param>
@@ -334,16 +342,6 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             };
 
             return parameters;
-        }
-
-        /// <summary>
-        /// Reverts the changes to the settings.
-        /// </summary>
-        private void RevertSettings()
-        {
-            var controller = ParentController.GetController<IChartController>(new ControllerID(Constants.Chart));
-
-            controller.RevertChanges();
         }
     }
 }
