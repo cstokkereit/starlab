@@ -6,14 +6,24 @@
     public interface IChartSettingsViewPresenter : IChildViewPresenter
     {
         /// <summary>
-        /// Applies the preview settings to the chart view.
+        /// Applies the chart settings to the document.
         /// </summary>
-        void UpdateChartPreview();
+        void ApplySettings();
+
+        /// <summary>
+        /// Reverts the changes to the settings.
+        /// </summary>
+        void RevertSettings();
 
         /// <summary>
         /// Shows the settings for the specified key.
         /// </summary>
         /// <param name="key">The settings key.</param>
         void ShowSettings(string key);
+
+        /// <summary>
+        /// Applies the preview settings to the chart view.
+        /// </summary>
+        void UpdateChartPreview();
     }
 }

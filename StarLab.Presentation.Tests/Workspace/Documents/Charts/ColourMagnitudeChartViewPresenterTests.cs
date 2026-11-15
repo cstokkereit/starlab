@@ -1,7 +1,6 @@
 ﻿#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
 
 using StarLab.Application.Workspace.Documents.Charts;
-using StarLab.Presentation.Configuration;
 using StarLab.Tests;
 using Stratosoft.Commands;
 
@@ -10,7 +9,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
     /// <summary>
     /// A class for performing unit tests on the <see cref="ColourMagnitudeChartViewPresenter"/> class.
     /// </summary>
-    public class ColourMagnitudeChartViewPresenterTests : PresentationTests
+    public class ColourMagnitudeChartViewPresenterTests : PresenterTests
     {
         private IChartView view; // A mock of the IChartView interface that can be used in the unit tests.
 
@@ -35,11 +34,10 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         [Test]
         public void TestConstruction()
         {
-            var presenter = new ColourMagnitudeChartViewPresenter(view, document, context, commands, services, events);
+            var presenter = new ColourMagnitudeChartViewPresenter(view, document, container.Resolve<ISessionContext>(), container.Resolve<ICommandManager>(), container.Resolve<IServiceRegistry>(), events);
 
             Assert.That(presenter, Is.Not.Null);
 
-            Assert.That(presenter.ID.ToString(), Is.EqualTo("ColourMagnitudeDiagram"));
             view.Received().Attach(Arg.Is(presenter));
         }
 
@@ -49,7 +47,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         [Test]
         public void TestConstructionThrowsExceptionWhenCommandsIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new ColourMagnitudeChartViewPresenter(view, document, context, null, services, events));
+            Assert.Throws<ArgumentNullException>(() => new ColourMagnitudeChartViewPresenter(view, document, container.Resolve<ISessionContext>(), null, container.Resolve<IServiceRegistry>(), events));
         }
 
         /// <summary>
@@ -58,7 +56,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         [Test]
         public void TestConstructionThrowsExceptionWhenContextIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new ColourMagnitudeChartViewPresenter(view, document, null, commands, services, events));
+            Assert.Throws<ArgumentNullException>(() => new ColourMagnitudeChartViewPresenter(view, document, null, container.Resolve<ICommandManager>(), container.Resolve<IServiceRegistry>(), events));
         }
 
         /// <summary>
@@ -67,7 +65,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         [Test]
         public void TestConstructionThrowsExceptionWhenDocumentIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new ColourMagnitudeChartViewPresenter(view, null, context, commands, services, events));
+            Assert.Throws<ArgumentNullException>(() => new ColourMagnitudeChartViewPresenter(view, null, container.Resolve<ISessionContext>(), container.Resolve<ICommandManager>(), container.Resolve<IServiceRegistry>(), events));
         }
 
         /// <summary>
@@ -76,7 +74,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         [Test]
         public void TestConstructionThrowsExceptionWhenEventsIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new ColourMagnitudeChartViewPresenter(view, document, context, commands, services, null));
+            Assert.Throws<ArgumentNullException>(() => new ColourMagnitudeChartViewPresenter(view, document, container.Resolve<ISessionContext>(), container.Resolve<ICommandManager>(), container.Resolve<IServiceRegistry>(), null));
         }
 
         /// <summary>
@@ -85,7 +83,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         [Test]
         public void TestConstructionThrowsExceptionWhenServicesIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new ColourMagnitudeChartViewPresenter(view, document, context, commands, null, events));
+            Assert.Throws<ArgumentNullException>(() => new ColourMagnitudeChartViewPresenter(view, document, container.Resolve<ISessionContext>(), container.Resolve<ICommandManager>(), null, events));
         }
 
         /// <summary>
@@ -94,7 +92,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         [Test]
         public void TestConstructionThrowsExceptionWhenViewIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new ColourMagnitudeChartViewPresenter(null, document, context, commands, services, events));
+            Assert.Throws<ArgumentNullException>(() => new ColourMagnitudeChartViewPresenter(null, document, container.Resolve<ISessionContext>(), container.Resolve<ICommandManager>(), container.Resolve<IServiceRegistry>(), events));
         }
 
         /// <summary>
@@ -103,7 +101,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         [Test]
         public void TestGetID()
         {
-            var presenter = CreatePresenter(false);
+            var presenter = CreatePresenter(view, document);
 
             Assert.That(presenter.ID.ToString(), Is.EqualTo("ColourMagnitudeDiagram"));
         }
@@ -114,9 +112,11 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         [Test]
         public void TestInitialise()
         {
-            var presenter = CreatePresenter(false);
+            var presenter = new ColourMagnitudeChartViewPresenter(view, document, container.Resolve<ISessionContext>(), container.Resolve<ICommandManager>(), container.Resolve<IServiceRegistry>(), events);
 
             presenter.Initialise(controller);
+
+            view.Received(1).Initialise();
 
             events.Received(1).Subsribe(presenter);
         }
@@ -127,7 +127,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         [Test]
         public void TestInitialiseThrowsAnExceptionWhenAlreadyInitialised()
         {
-            var presenter = CreatePresenter(true);
+            var presenter = CreatePresenter(view, document);
 
             Assert.Throws<InvalidOperationException>(() => presenter.Initialise(controller));
         }
@@ -140,7 +140,7 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         {
             var chart = Substitute.For<IChart>();
 
-            var presenter = CreatePresenter(true);
+            var presenter = CreatePresenter(view, document);
 
             presenter.UpdateChart(chart);
 
@@ -148,26 +148,26 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
         }
 
         /// <summary>
-        /// Test that the <see cref="ColourMagnitudeChartViewPresenter.UpdatePreview()"/> method works correctly.
+        /// Test that the <see cref="ColourMagnitudeChartViewPresenter.RevertChanges()"/> method works correctly.
         /// </summary>
         [Test]
         public void TestUpdatePreview()
         {
             var chart = Substitute.For<IChart>();
 
-            var presenter = CreatePresenter(true);
+            var presenter = CreatePresenter(view, document);
 
             presenter.UpdateChart(chart);
 
             view.ClearReceivedCalls();
 
-            presenter.UpdatePreview();
+            presenter.RevertChanges();
 
             view.Received(1).UpdateChart(chart);
         }
 
         /// <summary>
-        /// Test that the <see cref="ColourMagnitudeChartViewPresenter.UpdatePreview(ChartDTO)"/> method works correctly.
+        /// Test that the <see cref="ColourMagnitudeChartViewPresenter.ApplyChanges(ChartDTO)"/> method works correctly.
         /// </summary>
         [Test]
         public void TestUpdatePreviewWithChartDto()
@@ -175,34 +175,15 @@ namespace StarLab.Presentation.Workspace.Documents.Charts
             var chart = Substitute.For<IChart>();
             chart.Title.Text.Returns("Chart-1");
 
-            var presenter = CreatePresenter(true);
+            var presenter = CreatePresenter(view, document);
 
             presenter.UpdateChart(chart);
 
             view.ClearReceivedCalls();
 
-            presenter.UpdatePreview(new ChartDtoBuilder().AddTitle("Chart-1.1").CreateChart());
+            presenter.ApplyChanges(new ChartDtoBuilder().AddTitle("Chart-1.1").CreateChart());
 
             view.Received(1).UpdateChart(Arg.Is<IChart>(c => c.Title.Text == "Chart-1.1"));
-        }
-
-        /// <summary>
-        /// A factory method that creates a new instance of the <see cref="ColourMagnitudeChartViewPresenter"/> class.
-        /// </summary>
-        /// <param name="initialise">true to initialise the presenter; false otherwise.</param>
-        /// <returns>Returns the newly created <see cref="ColourMagnitudeChartViewPresenter"/>.</returns>
-        private ColourMagnitudeChartViewPresenter CreatePresenter(bool initialise)
-        {
-            var presenter = new ColourMagnitudeChartViewPresenter(view, document, context, commands, services, events);
-            
-            var parent = Substitute.For<IDocumentController>();
-            //parent.ID.Returns("DocumentController(Test)");
-
-            presenter.RegisterController(parent);
-
-            if (initialise) presenter.Initialise(controller);
-
-            return presenter;
         }
     }
 }

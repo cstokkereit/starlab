@@ -30,7 +30,6 @@ namespace StarLab.Presentation.Options
         {
             var context = Substitute.For<ISessionContext>();
             var commands = Substitute.For<ICommandManager>();
-            var events = Substitute.For<IEventAggregator>();
             var services = Substitute.For<IServiceRegistry>();
 
             var presenter = new OptionsViewPresenter(view, context, commands, services, events);
@@ -48,7 +47,6 @@ namespace StarLab.Presentation.Options
         public void TestConstructionThrowsExceptionWhenCommandsIsNull()
         {
             var context = Substitute.For<ISessionContext>();
-            var events = Substitute.For<IEventAggregator>();
             var services = Substitute.For<IServiceRegistry>();
 
             Assert.Throws<ArgumentNullException>(() => new OptionsViewPresenter(view, context, null, services, events));
@@ -61,7 +59,6 @@ namespace StarLab.Presentation.Options
         public void TestConstructionThrowsExceptionWhenContextIsNull()
         {
             var commands = Substitute.For<ICommandManager>();
-            var events = Substitute.For<IEventAggregator>();
             var services = Substitute.For<IServiceRegistry>();
 
             Assert.Throws<ArgumentNullException>(() => new OptionsViewPresenter(view, null, commands, services, events));
@@ -88,7 +85,6 @@ namespace StarLab.Presentation.Options
         {
             var context = Substitute.For<ISessionContext>();
             var commands = Substitute.For<ICommandManager>();
-            var events = Substitute.For<IEventAggregator>();
 
             Assert.Throws<ArgumentNullException>(() => new OptionsViewPresenter(view, context, commands, null, events));
         }
@@ -101,7 +97,6 @@ namespace StarLab.Presentation.Options
         {
             var context = Substitute.For<ISessionContext>();
             var commands = Substitute.For<ICommandManager>();
-            var events = Substitute.For<IEventAggregator>();
             var services = Substitute.For<IServiceRegistry>();
 
             Assert.Throws<ArgumentNullException>(() => new OptionsViewPresenter(null, context, commands, services, events));
@@ -113,7 +108,7 @@ namespace StarLab.Presentation.Options
         [Test]
         public void TestGetID()
         {
-            var presenter = CreateOptionsViewPresenter(view, false);
+            var presenter = CreatePresenter(view);
 
             Assert.That(presenter.ID.ToString(), Is.EqualTo("Options"));
         }
@@ -124,11 +119,9 @@ namespace StarLab.Presentation.Options
         [Test]
         public void TestInitialise()
         {
-            var events = Substitute.For<IEventAggregator>();
+            var presenter = new OptionsViewPresenter(view, container.Resolve<ISessionContext>(), container.Resolve<ICommandManager>(), container.Resolve<IServiceRegistry>(), events);
 
-            var presenter = CreateOptionsViewPresenter(view, events, false);
-
-            presenter.Initialise(ApplicationController);
+            presenter.Initialise(controller);
 
             events.Received(1).Subsribe(presenter);
         }
@@ -139,9 +132,9 @@ namespace StarLab.Presentation.Options
         [Test]
         public void TestInitialiseThrowsAnExceptionWhenAlreadyInitialised()
         {
-            var presenter = CreateOptionsViewPresenter(view, true);
+            var presenter = CreatePresenter(view);
 
-            Assert.Throws<InvalidOperationException>(() => presenter.Initialise(ApplicationController));
+            Assert.Throws<InvalidOperationException>(() => presenter.Initialise(controller));
         }
 
         /// <summary>
@@ -150,7 +143,7 @@ namespace StarLab.Presentation.Options
         [Test]
         public void TestRun()
         {
-            var presenter = CreateOptionsViewPresenter(view, true);
+            var presenter = CreatePresenter(view);
 
             presenter.Run();
 

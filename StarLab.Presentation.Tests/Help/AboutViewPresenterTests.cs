@@ -30,7 +30,6 @@ namespace StarLab.Presentation.Help
         {
             var context = Substitute.For<ISessionContext>();
             var commands = Substitute.For<ICommandManager>();
-            var events = Substitute.For<IEventAggregator>();
             var services = Substitute.For<IServiceRegistry>();
 
             var presenter = new AboutViewPresenter(view, context, commands, services, events);
@@ -48,7 +47,6 @@ namespace StarLab.Presentation.Help
         public void TestConstructionThrowsExceptionWhenCommandsIsNull()
         {
             var context = Substitute.For<ISessionContext>();
-            var events = Substitute.For<IEventAggregator>();
             var services = Substitute.For<IServiceRegistry>();
 
             Assert.Throws<ArgumentNullException>(() => new AboutViewPresenter(view, context, null, services, events));
@@ -61,7 +59,6 @@ namespace StarLab.Presentation.Help
         public void TestConstructionThrowsExceptionWhenContextIsNull()
         {
             var commands = Substitute.For<ICommandManager>();
-            var events = Substitute.For<IEventAggregator>();
             var services = Substitute.For<IServiceRegistry>();
 
             Assert.Throws<ArgumentNullException>(() => new AboutViewPresenter(view, null, commands, services, events));
@@ -88,7 +85,6 @@ namespace StarLab.Presentation.Help
         {
             var context = Substitute.For<ISessionContext>();
             var commands = Substitute.For<ICommandManager>();
-            var events = Substitute.For<IEventAggregator>();
 
             Assert.Throws<ArgumentNullException>(() => new AboutViewPresenter(view, context, commands, null, events));
         }
@@ -101,7 +97,6 @@ namespace StarLab.Presentation.Help
         {
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          var context = Substitute.For<ISessionContext>();
             var commands = Substitute.For<ICommandManager>();
-            var events = Substitute.For<IEventAggregator>();
             var services = Substitute.For<IServiceRegistry>();
 
             Assert.Throws<ArgumentNullException>(() => new AboutViewPresenter(null, context, commands, services, events));
@@ -113,7 +108,7 @@ namespace StarLab.Presentation.Help
         [Test]
         public void TestGetID()
         {
-            var presenter = CreateAboutViewPresenter(view, false);
+            var presenter = CreatePresenter(view);
 
             Assert.That(presenter.ID.ToString(), Is.EqualTo("About"));
         }
@@ -124,11 +119,9 @@ namespace StarLab.Presentation.Help
         [Test]
         public void TestInitialise()
         {
-            var events = Substitute.For<IEventAggregator>();
+            var presenter = new AboutViewPresenter(view, container.Resolve<ISessionContext>(), container.Resolve<ICommandManager>(), container.Resolve<IServiceRegistry>(), events);
 
-            var presenter = CreateAboutViewPresenter(view, events, false);
-
-            presenter.Initialise(ApplicationController);
+            presenter.Initialise(controller);
 
             events.Received(1).Subsribe(presenter);
         }
@@ -139,9 +132,9 @@ namespace StarLab.Presentation.Help
         [Test]
         public void TestInitialiseThrowsAnExceptionWhenAlreadyInitialised()
         {
-            var presenter = CreateAboutViewPresenter(view, true);
+            var presenter = CreatePresenter(view);
 
-            var e = Assert.Throws<InvalidOperationException>(() => presenter.Initialise(ApplicationController));
+            Assert.Throws<InvalidOperationException>(() => presenter.Initialise(controller));
         }
 
         /// <summary>
@@ -150,7 +143,7 @@ namespace StarLab.Presentation.Help
         [Test]
         public void TestRun()
         {
-            var presenter = CreateAboutViewPresenter(view, true);
+            var presenter = CreatePresenter(view);
 
             presenter.Run();
 

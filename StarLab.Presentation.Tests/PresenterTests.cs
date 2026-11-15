@@ -3,6 +3,8 @@ using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.Resolvers.SpecializedResolvers;
 using Castle.Windsor;
 using Microsoft.Extensions.Logging;
+using ScottPlot.Statistics;
+using SkiaSharp;
 using StarLab.Application;
 using StarLab.Application.Data;
 using StarLab.Application.Data.Import;
@@ -117,6 +119,27 @@ namespace StarLab.Presentation
             var presenter = new ApplicationViewPresenter(view, container.Resolve<ISessionContext>(), container.Resolve<ICommandManager>(), container.Resolve<IServiceRegistry>(), container.Resolve<IEventAggregator>());
 
             controller.GetOutputPort<IApplicationOutputPort>().Returns(presenter);
+
+            presenter.Initialise(controller);
+
+            ClearReceivedCalls(view);
+
+            return presenter;
+        }
+
+        /// <summary>
+        /// A factory method that creates a new instance of the <see cref="ColourMagnitudeChartViewPresenter"/> class.
+        /// </summary>
+        /// <param name="view">The managed view.</param>
+        /// <param name="document">The document that contains the chart.</param>
+        /// <returns>Returns the newly created <see cref="ColourMagnitudeChartViewPresenter"/>.</returns>
+        protected ColourMagnitudeChartViewPresenter CreatePresenter(IChartView view, IDocument document)
+        {
+            var presenter = new ColourMagnitudeChartViewPresenter(view, document, container.Resolve<ISessionContext>(), container.Resolve<ICommandManager>(), container.Resolve<IServiceRegistry>(), container.Resolve<IEventAggregator>());
+
+            var parent = Substitute.For<IDocumentController>();
+
+            presenter.RegisterController(parent);
 
             presenter.Initialise(controller);
 
