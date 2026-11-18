@@ -47,8 +47,8 @@ namespace StarLab.Presentation
         /// <summary>
         /// Runs the child view.
         /// </summary>
-        /// <param name="args">An <see cref="INamedArguments"/> that contains information required to run the view.</param>
-        public virtual void Run(INamedArguments args)
+        /// <param name="args">An <see cref="INamedArguments"/> that contains information required to run the view.</param> // TODO
+        public virtual void Run(IRunArguments args)
         {
             ArgumentNullException.ThrowIfNull(args, nameof(args));
 

@@ -184,13 +184,13 @@ namespace StarLab.Presentation
         [Test]
         public void TestRun()
         {
-            var wf = Substitute.For<INamedArguments>();
+            var args = Substitute.For<IRunArguments>();
 
             var presenter = CreatePresenter(view, childController);
 
-            presenter.Run(wf);
+            presenter.Run(args);
 
-            childController.Received(1).Run(wf);
+            childController.Received(1).Run(args);
         }
 
         /// <summary>

@@ -90,8 +90,8 @@ namespace StarLab.Presentation
         /// <summary>
         /// Runs the dialog view.
         /// </summary>
-        /// <param name="args">An <see cref="INamedArguments"/> that contains information required to run the view.</param>
-        public void Run(INamedArguments args)
+        /// <param name="args">An <see cref="INamedArguments"/> that contains information required to run the view.</param> // TODO
+        public void Run(IRunArguments args)
         {
             childController.Run(args);
         }

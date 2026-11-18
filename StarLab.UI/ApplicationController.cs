@@ -300,7 +300,7 @@ namespace StarLab.UI
         /// <summary>
         /// Displays the Add Document dialog.
         /// </summary>
-        /// <param name="workspace">The <see cref="IWorkspace"/> to which the new document will be added.</param>
+        /// <param name="workspace">The <see cref="IWorkspace"/> to which the new document will be added.</param> // TODO : Remove 
         /// <param name="path">The path to the folder.</param>
         /// <param name="type">A <see cref="DocumentTypes"/> that specifies the type of document being added.</param>
         public void ShowAddDocumentDialog(IWorkspace workspace, string path, DocumentTypes type)
@@ -311,7 +311,7 @@ namespace StarLab.UI
 
             try
             {
-                controller.Run(new NamedArguments().Add(Constants.Type, type).Add(Constants.Path, path));
+                controller.Run(new AddDocumentArguments(path, type));
 
                 this.controller?.Show(view);
             }

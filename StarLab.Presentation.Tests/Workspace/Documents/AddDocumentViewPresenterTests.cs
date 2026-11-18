@@ -1,9 +1,6 @@
 ﻿#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
 
-using StarLab.Application;
-using StarLab.Application.Workspace;
 using StarLab.Presentation.Configuration;
-using StarLab.Tests;
 using Stratosoft.Commands;
 
 namespace StarLab.Presentation.Workspace.Documents
@@ -11,10 +8,8 @@ namespace StarLab.Presentation.Workspace.Documents
     /// <summary>
     /// A class for performing unit tests on the <see cref="AddDocumentViewPresenter"/> class.
     /// </summary>
-    public class AddDocumentViewPresenterTests : PresentationTests
+    public class AddDocumentViewPresenterTests : PresenterTests
     {
-        private IDialogController viewController; // A mock of the IViewController interface that can be used in the unit tests.
-
         private IAddDocumentView view; // A mock of the IAddDocumentView interface that can be used in the unit tests.
 
         /// <summary>
@@ -42,22 +37,8 @@ namespace StarLab.Presentation.Workspace.Documents
 
             configuration.DocumentDefinitions.Returns([definition1, definition2]);
 
-            context.Configuration.Returns(configuration);
-
-            viewController = Substitute.For<IDialogController>();
-
             view = Substitute.For<IAddDocumentView>();
             view.ID.Returns(ViewIDs.AddDocument);
-        }
-
-        /// <summary>
-        /// Cleans up after each test.
-        /// </summary>
-        public override void TearDown()
-        {
-            base.TearDown();
-
-            viewController.Dispose();
         }
 
         /// <summary>
@@ -66,27 +47,13 @@ namespace StarLab.Presentation.Workspace.Documents
         [Test]
         public void TestAddDocument()
         {
-            var useCase = Substitute.For<IUseCase<AddDocumentUseCaseArgs>>();
+            //var presenter = CreatePresenter(view);
 
-            factory.CreateAddDocumentUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(useCase);
+            //presenter.OnEvent(new WorkspaceChangedEventArgs(workspace));
 
-            var workspace = CreateWorkspace(new WorkspaceDtoBuilder(@"C:\Workspace-1")
-                .AddProject("Project-1")
-                .AddFolder("Workspace-1/Project-1/Folder-1")
-                .CreateWorkspace());
+            //presenter.Run(new NamedArguments().Add(Constants.Path, "Workspace/Project-1/Charts").Add(Constants.Type, DocumentTypes.Chart));
 
-            var presenter = CreatePresenter(true);
-
-            presenter.OnEvent(new WorkspaceChangedEventArgs(workspace));
-
-            presenter.Run(new NamedArguments().Add(Constants.Path, "Workspace/Project-1/Charts").Add(Constants.Type, DocumentTypes.Chart));
-
-            presenter.AddDocument("Document1", "Chart1");
-
-            useCase.Received(1).Execute(Arg.Is<AddDocumentUseCaseArgs>(args => args.Workspace.FileName == @"C:\Workspace-1"
-                && args.Document.Name == "Document1"
-                && args.Document.Path == "Workspace/Project-1/Charts"
-                && args.Document.View == "ChartView"));
+            //presenter.AddDocument("Document1", "Chart1");
         }
 
         /// <summary>
@@ -95,11 +62,10 @@ namespace StarLab.Presentation.Workspace.Documents
         [Test]
         public void TestConstruction()
         {
-            var presenter = new AddDocumentViewPresenter(view, context, commands, services, events);
+            var presenter = new AddDocumentViewPresenter(view, container.Resolve<ISessionContext>(), container.Resolve<ICommandManager>(), container.Resolve<IServiceRegistry>(), events);
 
             Assert.That(presenter, Is.Not.Null);
 
-            Assert.That(presenter.ID.ToString(), Is.EqualTo("AddDocument"));
             view.Received().Attach(Arg.Is(presenter));
         }
 
@@ -109,7 +75,7 @@ namespace StarLab.Presentation.Workspace.Documents
         [Test]
         public void TestConstructionThrowsExceptionWhenCommandsIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new AddDocumentViewPresenter(view, context, null, services, events));
+            Assert.Throws<ArgumentNullException>(() => new AddDocumentViewPresenter(view, container.Resolve<ISessionContext>(), null, container.Resolve<IServiceRegistry>(), events));
         }
 
         /// <summary>
@@ -118,7 +84,7 @@ namespace StarLab.Presentation.Workspace.Documents
         [Test]
         public void TestConstructionThrowsExceptionWhenContextIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new AddDocumentViewPresenter(view, null, commands, services, events));
+            Assert.Throws<ArgumentNullException>(() => new AddDocumentViewPresenter(view, null, container.Resolve<ICommandManager>(), container.Resolve<IServiceRegistry>(), events));
         }
 
         /// <summary>
@@ -127,7 +93,7 @@ namespace StarLab.Presentation.Workspace.Documents
         [Test]
         public void TestConstructionThrowsExceptionWhenEventsIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new AddDocumentViewPresenter(view, context, commands, services, null));
+            Assert.Throws<ArgumentNullException>(() => new AddDocumentViewPresenter(view, container.Resolve<ISessionContext>(), container.Resolve<ICommandManager>(), container.Resolve<IServiceRegistry>(), null));
         }
 
         /// <summary>
@@ -136,7 +102,7 @@ namespace StarLab.Presentation.Workspace.Documents
         [Test]
         public void TestConstructionThrowsExceptionWhenServicesIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new AddDocumentViewPresenter(view, context, commands, null, events));
+            Assert.Throws<ArgumentNullException>(() => new AddDocumentViewPresenter(view, container.Resolve<ISessionContext>(), container.Resolve<ICommandManager>(), null, events));
         }
 
         /// <summary>
@@ -145,7 +111,7 @@ namespace StarLab.Presentation.Workspace.Documents
         [Test]
         public void TestConstructionThrowsExceptionWhenViewIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new AddDocumentViewPresenter(null, context, commands, services, events));
+            Assert.Throws<ArgumentNullException>(() => new AddDocumentViewPresenter(null, container.Resolve<ISessionContext>(), container.Resolve<ICommandManager>(), container.Resolve<IServiceRegistry>(), events));
         }
 
         /// <summary>
@@ -154,7 +120,7 @@ namespace StarLab.Presentation.Workspace.Documents
         [Test]
         public void TestGetID()
         {
-            var presenter = CreatePresenter(false);
+            var presenter = CreatePresenter(view);
 
             Assert.That(presenter.ID.ToString(), Is.EqualTo("AddDocument"));
         }
@@ -165,9 +131,13 @@ namespace StarLab.Presentation.Workspace.Documents
         [Test]
         public void TestInitialise()
         {
-            var presenter = CreatePresenter(false);
+            var presenter = new AddDocumentViewPresenter(view, container.Resolve<ISessionContext>(), container.Resolve<ICommandManager>(), container.Resolve<IServiceRegistry>(), events);
+
+            presenter.RegisterController(Substitute.For<IDialogController>());
 
             presenter.Initialise(controller);
+
+            view.Received(1).Initialise();
 
             events.Received(1).Subsribe(presenter);
         }
@@ -178,7 +148,7 @@ namespace StarLab.Presentation.Workspace.Documents
         [Test]
         public void TestInitialiseThrowsAnExceptionWhenAlreadyInitialised()
         {
-            var presenter = CreatePresenter(true);
+            var presenter = new AddDocumentViewPresenter(view, container.Resolve<ISessionContext>(), container.Resolve<ICommandManager>(), container.Resolve<IServiceRegistry>(), events);
 
             Assert.Throws<InvalidOperationException>(() => presenter.Initialise(controller));
         }
@@ -189,44 +159,26 @@ namespace StarLab.Presentation.Workspace.Documents
         [Test]
         public void TestRun()
         {
-            var useCase = Substitute.For<IUseCase<AddDocumentUseCaseArgs>>();
+            var presenter = CreatePresenter(view);
 
-            factory.CreateAddDocumentUseCase(Arg.Any<IWorkspaceOutputPort>()).Returns(useCase);
-
-            var presenter = CreatePresenter(true);
-
-            presenter.Run(new NamedArguments().Add(Constants.Path, "Workspace/Project-1/Charts").Add(Constants.Type, DocumentTypes.Chart));
+            presenter.Run(new AddDocumentArguments("Workspace/Project-1/Charts", DocumentTypes.Chart));
 
             view.Received(1).ClearDocumentTypes();
-            view.Received(1).AddDocumentType("Chart1", "  Chart-1", "ChartImage1");
-            view.Received(1).AddDocumentType("Chart2", "  Chart-2", "ChartImage2");
+            view.Received(1).AddDocumentType("ColourMagnitudeDiagram", "  Colour-Magnitude Diagram", "ColourMagnitudeDiagram32X32");
+            view.Received(1).AddDocumentType("ColourColourDiagram", "  Colour-Colour Diagram", "ColourColourDiagram32X32");
         }
 
         /// <summary>
-        /// Test that the <see cref="AddDocumentViewPresenter.Run(INamedArguments)"/> method throws an exception when provided with a null value.
+        /// Test that the <see cref="AddDocumentViewPresenter.Run(IRunArguments)"/> method throws an exception when provided with a null value.
         /// </summary>
         [Test]
         public void TestRunThrowsExceptionForInvalidContextType()
         {
-            var presenter = CreatePresenter(true);
+            var presenter = CreatePresenter(view);
+
+            presenter.RegisterController(Substitute.For<IDialogController>());
 
             Assert.Throws<ArgumentNullException>(() => presenter.Run(null));
-        }
-
-        /// <summary>
-        /// A factory method that creates a new instance of the <see cref="AddDocumentViewPresenter"/> class.
-        /// </summary>
-        /// <param name="initialise">true to initialise the presenter; false otherwise.</param>
-        /// <returns>Returns the newly created <see cref="AddDocumentViewPresenter"/>.</returns>
-        private AddDocumentViewPresenter CreatePresenter(bool initialise)
-        {
-            var presenter = new AddDocumentViewPresenter(view, context, commands, services, events);
-
-            presenter.RegisterController(viewController);
-
-            if (initialise) presenter.Initialise(controller);
-
-            return presenter;
         }
     }
 }

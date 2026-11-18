@@ -91,6 +91,22 @@ namespace StarLab.Presentation
         }
 
         /// <summary>
+        /// A factory method that creates a new instance of the <see cref="AddDocumentViewPresenter"/> class.
+        /// </summary>
+        /// <param name="view">The managed view.</param>
+        /// <returns>Returns the newly created <see cref="AddDocumentViewPresenter"/>.</returns>
+        protected AddDocumentViewPresenter CreatePresenter(IAddDocumentView view)
+        {
+            var presenter = new AddDocumentViewPresenter(view, container.Resolve<ISessionContext>(), container.Resolve<ICommandManager>(), container.Resolve<IServiceRegistry>(), events);
+
+            presenter.RegisterController(Substitute.For<IDialogController>());
+
+            presenter.Initialise(controller);
+
+            return presenter;
+        }
+
+        /// <summary>
         /// A factory method that creates a new instance of the <see cref="ApplicationViewPresenter"/> class.
         /// </summary>
         /// <param name="view">The managed view.</param>

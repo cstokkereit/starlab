@@ -20,8 +20,8 @@
         /// <summary>
         /// Runs the child view.
         /// </summary>
-        /// <param name="args">An <see cref="INamedArguments"/> that contains information required to run the view.</param>
-        void Run(INamedArguments args);
+        /// <param name="args">An <see cref="IRunArguments"/> that contains information required to run the view.</param>
+        void Run(IRunArguments args);
 
         /// <summary>
         /// Runs the child view.
